@@ -24,7 +24,7 @@ final class OrderMetaBox {
 		OrderInfoLayout::boot();
 		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
 		add_action( 'wp_ajax_mo_smilepay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
-		add_action( 'admin_footer', [ __CLASS__, 'print_inline_js' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'print_inline_js' ] );
 	}
 
 	public static function ajax_create_shipment(): void {
@@ -150,8 +150,9 @@ final class OrderMetaBox {
 		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline_js() returns hard-coded JS literal, no user input.
-		echo "<script>\n" . self::inline_js() . "\n</script>\n";
+		wp_register_script( 'mo-smilepay-shipping-admin', false, [ 'jquery' ], MOWC_VERSION, true );
+		wp_enqueue_script( 'mo-smilepay-shipping-admin' );
+		wp_add_inline_script( 'mo-smilepay-shipping-admin', self::inline_js() );
 	}
 
 	private static function inline_js(): string {

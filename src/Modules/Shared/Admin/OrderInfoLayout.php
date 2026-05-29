@@ -15,9 +15,7 @@ final class OrderInfoLayout {
 		}
 		self::$booted = true;
 		add_action( 'add_meta_boxes', [ __CLASS__, 'register_meta_box' ] );
-		add_action( 'admin_print_styles-post.php', [ __CLASS__, 'styles' ] );
-		add_action( 'admin_print_styles-post-new.php', [ __CLASS__, 'styles' ] );
-		add_action( 'admin_print_styles-woocommerce_page_wc-orders', [ __CLASS__, 'styles' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'styles' ] );
 	}
 
 	public static function register_meta_box(): void {
@@ -168,18 +166,23 @@ final class OrderInfoLayout {
 		return '';
 	}
 
-	public static function styles(): void {
-		echo '<style>
-			#mowp_order_info .inside { padding: 0 12px 12px; }
-			.mowp-order-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-			.mowp-order-info-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 16px; min-width: 0; }
-			.mowp-order-info-card__title { margin: 0 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #1d2327; letter-spacing: 0.6px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }
-			.mowp-order-info-card p { margin: 0.3em 0; font-size: 13px; word-break: break-word; }
-			.mowp-order-info-card p:first-of-type { margin-top: 0; }
-			.mowp-order-info-card .button { margin-top: 6px; }
-			@media (max-width: 1280px) { .mowp-order-info-grid { grid-template-columns: 1fr 1fr; } }
-			@media (max-width: 782px) { .mowp-order-info-grid { grid-template-columns: 1fr; } }
-		</style>';
+	public static function styles( string $hook = '' ): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
+			return;
+		}
+		$css = '#mowp_order_info .inside { padding: 0 12px 12px; }'
+			. '.mowp-order-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }'
+			. '.mowp-order-info-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 16px; min-width: 0; }'
+			. '.mowp-order-info-card__title { margin: 0 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #1d2327; letter-spacing: 0.6px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }'
+			. '.mowp-order-info-card p { margin: 0.3em 0; font-size: 13px; word-break: break-word; }'
+			. '.mowp-order-info-card p:first-of-type { margin-top: 0; }'
+			. '.mowp-order-info-card .button { margin-top: 6px; }'
+			. '@media (max-width: 1280px) { .mowp-order-info-grid { grid-template-columns: 1fr 1fr; } }'
+			. '@media (max-width: 782px) { .mowp-order-info-grid { grid-template-columns: 1fr; } }';
+		wp_register_style( 'mo-order-info-layout', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-order-info-layout' );
+		wp_add_inline_style( 'mo-order-info-layout', $css );
 	}
 
 	private static function resolve_order( $context ): ?\WC_Order {

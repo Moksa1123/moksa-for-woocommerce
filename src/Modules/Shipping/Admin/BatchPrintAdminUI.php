@@ -19,9 +19,8 @@ final class BatchPrintAdminUI {
 		add_action( 'manage_woocommerce_page_wc-orders_custom_column', [ __CLASS__, 'render_column' ], 10, 2 );
 		add_filter( 'manage_edit-shop_order_columns', [ __CLASS__, 'register_column' ] );
 		add_action( 'manage_shop_order_posts_custom_column', [ __CLASS__, 'render_column_classic' ], 10, 2 );
-		// Inline CSS 防止訂單列表新 column 跟 WC 預設 column 互擠（總計 / 來源 斷行）
-		add_action( 'admin_head-woocommerce_page_wc-orders', [ __CLASS__, 'admin_columns_css' ] );
-		add_action( 'admin_head-edit.php', [ __CLASS__, 'admin_columns_css' ] );
+		// 防止訂單列表新 column 跟 WC 預設 column 互擠（總計 / 來源 斷行）
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_columns_css' ] );
 
 		// 列印輸出頁 — 基本模式 bulk action redirect 的目標（任何請求都註冊）
 		add_action( 'wp_ajax_mo_shipping_batch_print_output', [ __CLASS__, 'render_print_output' ] );
@@ -46,16 +45,18 @@ final class BatchPrintAdminUI {
 		return 'yes' === get_option( 'mo_shipping_bulk_print_mode_advanced', 'no' );
 	}
 
-	public static function admin_columns_css(): void {
-		?>
-		<style>
-		.wp-list-table .column-mo_shipping_method{width:8em;white-space:nowrap;}
-		.wp-list-table .column-mo_shipping_method .mo-shipping-method{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;}
-		.wp-list-table .column-mo_shipping_label_no{width:7em;white-space:nowrap;}
-		.wp-list-table .column-order_total{white-space:nowrap;}
-		.wp-list-table .column-wc_actions{white-space:nowrap;}
-		</style>
-		<?php
+	public static function admin_columns_css( string $hook = '' ): void {
+		if ( ! self::is_orders_screen( $hook ) ) {
+			return;
+		}
+		$css = '.wp-list-table .column-mo_shipping_method{width:8em;white-space:nowrap;}'
+			. '.wp-list-table .column-mo_shipping_method .mo-shipping-method{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;}'
+			. '.wp-list-table .column-mo_shipping_label_no{width:7em;white-space:nowrap;}'
+			. '.wp-list-table .column-order_total{white-space:nowrap;}'
+			. '.wp-list-table .column-wc_actions{white-space:nowrap;}';
+		wp_register_style( 'mo-shipping-cols', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-shipping-cols' );
+		wp_add_inline_style( 'mo-shipping-cols', $css );
 	}
 
 	public static function register_column( array $cols ): array {

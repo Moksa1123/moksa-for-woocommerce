@@ -173,17 +173,6 @@ final class OrderMetaBox {
 						?>
 					</p>
 				<?php endif; ?>
-				<style>
-					.mo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}
-					.mo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}
-					.mo-ecpay-record summary::-webkit-details-marker{display:none;}
-					.mo-ecpay-record summary::before{content:'▶';margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}
-					.mo-ecpay-record[open] summary::before{transform:rotate(90deg);}
-					.mo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}
-					.mo-ecpay-record summary > * + *{margin-left:0;}
-					.mo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}
-					.mo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}
-				</style>
 				<div class="mo-ecpay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
 					<?php foreach ( $records as $r ) :
 						$id         = (string) ( $r['id'] ?? '' );
@@ -360,6 +349,19 @@ final class OrderMetaBox {
 		wp_enqueue_script( $handle );
 		// 共用 clipboard JS — admin 頁的「複製貨號」按鈕用（由 Shipping\Module::register_admin_assets 註冊）
 		wp_enqueue_script( 'mo-tracking-copy' );
+
+		$css = ".mo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}"
+			. ".mo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}"
+			. ".mo-ecpay-record summary::-webkit-details-marker{display:none;}"
+			. ".mo-ecpay-record summary::before{content:'\\25B6';margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}"
+			. ".mo-ecpay-record[open] summary::before{transform:rotate(90deg);}"
+			. ".mo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}"
+			. ".mo-ecpay-record summary > * + *{margin-left:0;}"
+			. ".mo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}"
+			. ".mo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}";
+		wp_register_style( 'mo-ecpay-shipping-admin', false, [], $ver );
+		wp_enqueue_style( 'mo-ecpay-shipping-admin' );
+		wp_add_inline_style( 'mo-ecpay-shipping-admin', $css );
 	}
 
 	private static function days_since( string $datetime ): ?int {

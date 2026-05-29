@@ -32,6 +32,9 @@ final class SettingsPage extends \WC_Settings_Page {
 		$css_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-polish.css';
 		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOWC_VERSION;
 		wp_enqueue_style( 'mo-settings-polish', MOWC_PLUGIN_URL . 'assets/admin/settings-polish.css', [], $css_ver );
+		$shell_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-shell.css';
+		$shell_ver  = file_exists( $shell_path ) ? (string) filemtime( $shell_path ) : MOWC_VERSION;
+		wp_enqueue_style( 'mo-settings-shell', MOWC_PLUGIN_URL . 'assets/admin/settings-shell.css', [], $shell_ver );
 		$js_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-polish.js';
 		$js_ver  = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
 		wp_enqueue_script( 'mo-settings-polish', MOWC_PLUGIN_URL . 'assets/admin/settings-polish.js', [], $js_ver, true );

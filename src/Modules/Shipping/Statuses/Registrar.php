@@ -37,7 +37,7 @@ final class Registrar {
 		add_filter( 'woocommerce_register_shop_order_post_statuses', [ __CLASS__, 'add_to_shop_order_post_statuses' ] );
 		add_filter( 'woocommerce_order_is_paid_statuses', [ __CLASS__, 'mark_post_payment_statuses_as_paid' ] );
 		add_filter( 'wc_order_is_editable', [ __CLASS__, 'lock_order_editing_after_shipping' ], 10, 2 );
-		add_action( 'admin_head', [ __CLASS__, 'inject_admin_badge_css' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inject_admin_badge_css' ] );
 
 		// WC 不自動將自訂狀態加入 dropdown，需兩個 filter 同時掛（legacy + HPOS DataViews）。
 		add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'add_bulk_actions' ] );
@@ -45,6 +45,7 @@ final class Registrar {
 
 		// Custom field type for compact color picker grid + manual save
 		add_action( 'woocommerce_admin_field_mowp_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_color_grid_assets' ] );
 		add_action( 'woocommerce_update_options_' . \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
 	}
 
@@ -74,11 +75,55 @@ final class Registrar {
 		];
 	}
 
-	public static function render_color_grid_field( array $field ): void {
-		// 確保 wpColorPicker assets 進來（WC 'color' 型別會 enqueue，這裡保險再 enqueue 一次）
+	public static function enqueue_color_grid_assets( string $hook ): void {
+		if ( 'woocommerce_page_wc-settings' !== $hook ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only 畫面判斷，無狀態變更。
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		if ( \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID !== $tab ) {
+			return;
+		}
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( 'wp-color-picker' );
+		$css = <<<'CSS'
+.mo-status-color-grid{border-collapse:collapse;width:auto;}
+.mo-status-color-grid th{text-align:left;padding:6px 24px 6px 0;font-weight:600;color:#1d2327;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #dcdcde;}
+.mo-status-color-grid td{padding:8px 24px 8px 0;border-bottom:1px solid #f0f0f1;vertical-align:middle;}
+.mo-status-color-grid th:last-child,
+.mo-status-color-grid td:last-child{padding-right:0;}
+.mo-status-color-grid tr:last-child td{border-bottom:0;}
+.mo-status-color-grid .mo-status-name{font-weight:500;color:#1d2327;white-space:nowrap;}
+.mo-status-color-grid .wp-picker-container{vertical-align:middle;}
+.mo-status-color-grid .wp-color-result{margin:0;}
+.mo-status-color-grid .mo-preview{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap;min-width:80px;text-align:center;border:1px solid rgba(0,0,0,.04);}
+CSS;
+		wp_register_style( 'mo-status-color-grid', false, [ 'wp-color-picker' ], MOWC_VERSION );
+		wp_enqueue_style( 'mo-status-color-grid' );
+		wp_add_inline_style( 'mo-status-color-grid', $css );
 
+		$js = <<<'JS'
+jQuery(function($){
+	function updatePreview($input){
+		var $row = $input.closest('tr');
+		var bg = $row.find('input[data-target="bg"]').val() || '#dbeafe';
+		var fg = $row.find('input[data-target="fg"]').val() || '#1e40af';
+		$row.find('.mo-preview').css({background: bg, color: fg});
+	}
+	$('.mo-status-color-input').each(function(){
+		var $input = $(this);
+		$input.wpColorPicker({
+			change: function(e, ui){ setTimeout(function(){ updatePreview($(e.target)); }, 0); },
+			clear: function(){ setTimeout(function(){ updatePreview($input); }, 0); }
+		});
+	});
+});
+JS;
+		wp_register_script( 'mo-status-color-grid', false, [ 'jquery', 'wp-color-picker' ], MOWC_VERSION, true );
+		wp_enqueue_script( 'mo-status-color-grid' );
+		wp_add_inline_script( 'mo-status-color-grid', $js );
+	}
+
+	public static function render_color_grid_field( array $field ): void {
 		$labels   = self::color_status_labels();
 		$defaults = self::color_status_defaults();
 		$desc     = isset( $field['desc'] ) ? (string) $field['desc'] : '';
@@ -88,18 +133,6 @@ final class Registrar {
 			echo '<p style="margin:0 0 12px;color:#646970;">' . esc_html( $desc ) . '</p>';
 		}
 		?>
-		<style>
-			.mo-status-color-grid{border-collapse:collapse;width:auto;}
-			.mo-status-color-grid th{text-align:left;padding:6px 24px 6px 0;font-weight:600;color:#1d2327;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #dcdcde;}
-			.mo-status-color-grid td{padding:8px 24px 8px 0;border-bottom:1px solid #f0f0f1;vertical-align:middle;}
-			.mo-status-color-grid th:last-child,
-			.mo-status-color-grid td:last-child{padding-right:0;}
-			.mo-status-color-grid tr:last-child td{border-bottom:0;}
-			.mo-status-color-grid .mo-status-name{font-weight:500;color:#1d2327;white-space:nowrap;}
-			.mo-status-color-grid .wp-picker-container{vertical-align:middle;}
-			.mo-status-color-grid .wp-color-result{margin:0;}
-			.mo-status-color-grid .mo-preview{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap;min-width:80px;text-align:center;border:1px solid rgba(0,0,0,.04);}
-		</style>
 		<table class="mo-status-color-grid">
 			<thead><tr>
 				<th><?php esc_html_e( '訂單狀態', 'mo-ectools' ); ?></th>
@@ -123,28 +156,6 @@ final class Registrar {
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<script>
-		jQuery(function($){
-			function updatePreview($input){
-				var $row = $input.closest('tr');
-				var bg = $row.find('input[data-target="bg"]').val() || '#dbeafe';
-				var fg = $row.find('input[data-target="fg"]').val() || '#1e40af';
-				$row.find('.mo-preview').css({background: bg, color: fg});
-			}
-			$('.mo-status-color-input').each(function(){
-				var $input = $(this);
-				$input.wpColorPicker({
-					change: function(e, ui){
-						// wpColorPicker fires before val update — defer
-						setTimeout(function(){ updatePreview($(e.target)); }, 0);
-					},
-					clear: function(){
-						setTimeout(function(){ updatePreview($input); }, 0);
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 		echo '</td></tr>';
 	}
@@ -310,11 +321,11 @@ final class Registrar {
 
 		$palette = self::status_palette();
 
-		echo '<style>';
+		$css = '';
 		foreach ( $palette as $slug => $colors ) {
 			[ $bg, $fg ] = $colors;
 			// 只 target 真的 badge（有 .order-status class），不波及只帶 .status-X 的 <tr>。
-			printf(
+			$css .= sprintf(
 				'.order-status.status-%s, mark.order-status.status-%s { background:%s !important; color:%s !important; border-color:%s !important; }',
 				esc_attr( $slug ),
 				esc_attr( $slug ),
@@ -323,7 +334,9 @@ final class Registrar {
 				esc_attr( $bg )
 			);
 		}
-		echo '</style>';
+		wp_register_style( 'mo-status-badges', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-status-badges' );
+		wp_add_inline_style( 'mo-status-badges', $css );
 	}
 
 	private static function sanitize_color( string $color ): string {

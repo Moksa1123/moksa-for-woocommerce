@@ -15,6 +15,35 @@ final class ShippingCardSection {
 	public static function init(): void {
 		// priority 21：與 payment(11) / invoice(31) 維持間隔，便於 ECPay 等 priority 10/30 先跑
 		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_shipping_card' ], 21, 2 );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+	}
+
+	public static function enqueue_assets( string $hook ): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
+			return;
+		}
+		$css = '.mo-payuni-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}'
+			. '.mo-payuni-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}'
+			. '.mo-payuni-record summary::-webkit-details-marker{display:none;}'
+			. '.mo-payuni-record summary::before{content:"▶";margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}'
+			. '.mo-payuni-record[open] summary::before{transform:rotate(90deg);}'
+			. '.mo-payuni-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}'
+			. '.mo-payuni-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}'
+			. '.mo-payuni-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}';
+		wp_register_style( 'mo-shipping-card', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-shipping-card' );
+		wp_add_inline_style( 'mo-shipping-card', $css );
+
+		$js = 'jQuery(function($){'
+			. '$(".mo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".mo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".mo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||"無追蹤紀錄");}else{alert(r.data.message);}}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".mo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '});';
+		wp_register_script( 'mo-shipping-card', false, [ 'jquery' ], MOWC_VERSION, true );
+		wp_enqueue_script( 'mo-shipping-card' );
+		wp_add_inline_script( 'mo-shipping-card', $js );
 	}
 
 	public static function add_shipping_card( array $cards, \WC_Order $order ): array {
@@ -95,16 +124,6 @@ final class ShippingCardSection {
 				echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'mo-ectools' ), count( $records ) ) );
 				echo '</p>';
 			}
-			echo '<style>
-				.mo-payuni-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}
-				.mo-payuni-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}
-				.mo-payuni-record summary::-webkit-details-marker{display:none;}
-				.mo-payuni-record summary::before{content:"▶";margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}
-				.mo-payuni-record[open] summary::before{transform:rotate(90deg);}
-				.mo-payuni-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}
-				.mo-payuni-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}
-				.mo-payuni-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}
-			</style>';
 			echo '<div class="mo-payuni-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">';
 			foreach ( $records as $r ) {
 				$temp       = (int) ( $r['temp'] ?? 0 );
@@ -267,12 +286,6 @@ final class ShippingCardSection {
 		}
 		echo '</p>';
 
-		echo '<script>jQuery(function($){' .
-			'$(".mo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});' .
-			'$(".mo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});' .
-			'$(".mo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||"無追蹤紀錄");}else{alert(r.data.message);}}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});' .
-			'});</script>';
-
 		return (string) ob_get_clean();
 	}
 
@@ -349,10 +362,6 @@ final class ShippingCardSection {
 			echo '<span style="color:#00a32a;">' . esc_html__( '已建單', 'mo-ectools' ) . '</span>';
 		}
 		echo '</p>';
-
-		echo '<script>jQuery(function($){' .
-			'$(".mo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});' .
-			'});</script>';
 
 		return (string) ob_get_clean();
 	}

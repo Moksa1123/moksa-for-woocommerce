@@ -22,7 +22,7 @@ final class ProductTempField {
 		add_filter( 'manage_edit-product_columns', [ __CLASS__, 'add_list_column' ], 20 );
 		add_action( 'manage_product_posts_custom_column', [ __CLASS__, 'render_list_column' ], 10, 2 );
 		// column 寬度 / nowrap CSS（避免 column header 直立 wrap 跟相鄰 column 重疊）
-		add_action( 'admin_head-edit.php', [ __CLASS__, 'list_column_styles' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'list_column_styles' ] );
 
 		// 商品列表上方 filter 下拉（依溫層篩選）
 		add_action( 'restrict_manage_posts', [ __CLASS__, 'render_list_filter' ] );
@@ -37,7 +37,7 @@ final class ProductTempField {
 		add_action( 'woocommerce_product_quick_edit_save', [ __CLASS__, 'save_wc_quick_edit' ] );
 		add_action( 'woocommerce_product_bulk_edit_save', [ __CLASS__, 'save_wc_bulk_edit' ] );
 		// 把 row 上的當前 temp 灌進 quick edit form 的 JS（WC core 不自動 prefill custom field）
-		add_action( 'admin_footer-edit.php', [ __CLASS__, 'inline_quick_edit_js' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inline_quick_edit_js' ] );
 
 		// 注意：CSV import / export hooks 由 init_csv_hooks() 在 Module::boot() 直接呼叫
 		// （在 is_admin() guard 外）— WPCLI / cron / REST 不會走進 ProductTempField::init()
@@ -59,10 +59,11 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		echo '<style>
-			.wp-list-table .column-mo_product_temp{width:64px;text-align:center;white-space:nowrap;}
-			.wp-list-table .column-mo_product_temp span{display:inline-block;}
-		</style>';
+		$css = '.wp-list-table .column-mo_product_temp{width:64px;text-align:center;white-space:nowrap;}'
+			. '.wp-list-table .column-mo_product_temp span{display:inline-block;}';
+		wp_register_style( 'mo-product-temp-col', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-product-temp-col' );
+		wp_add_inline_style( 'mo-product-temp-col', $css );
 	}
 
 	public static function add_list_column( array $cols ): array {
@@ -231,29 +232,27 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		?>
-		<style>
-			/* Quick Edit 物流溫層欄位 — 跟 WC 標準 label 對齊 */
-			#woocommerce-fields .mo-product-temp-field-quick { display:block; clear:both; }
-			#woocommerce-fields .mo-product-temp-field-quick .title { width:5em; }
-		</style>
-		<script>
-		(function($){
-			if (typeof inlineEditPost === 'undefined') return;
-			var orig = inlineEditPost.edit;
-			inlineEditPost.edit = function(id){
-				orig.apply(this, arguments);
-				var post_id = typeof id === 'object' ? this.getId(id) : id;
-				if (!post_id) return;
-				var $row  = $('#post-' + post_id);
-				var pill  = $row.find('.mo-product-temp-pill').first();
-				var temp  = pill.length ? pill.data('temp') : '';
-				var $form = $('#edit-' + post_id);
-				$form.find('select[name="mo_product_temp"]').val(temp ? String(temp) : '');
-			};
-		})(jQuery);
-		</script>
-		<?php
+		$css = '#woocommerce-fields .mo-product-temp-field-quick { display:block; clear:both; }'
+			. '#woocommerce-fields .mo-product-temp-field-quick .title { width:5em; }';
+		wp_register_style( 'mo-product-temp-quick', false, [], MOWC_VERSION );
+		wp_enqueue_style( 'mo-product-temp-quick' );
+		wp_add_inline_style( 'mo-product-temp-quick', $css );
+
+		$js = "(function(){"
+			. " if (typeof inlineEditPost === 'undefined') { return; }"
+			. " var orig = inlineEditPost.edit;"
+			. " inlineEditPost.edit = function(id){"
+			. " orig.apply(this, arguments);"
+			. " var post_id = (typeof id === 'object') ? this.getId(id) : id;"
+			. " if (!post_id) { return; }"
+			. " var pill = jQuery('#post-' + post_id).find('.mo-product-temp-pill').first();"
+			. " var temp = pill.length ? pill.data('temp') : '';"
+			. " jQuery('#edit-' + post_id).find('select[name=\"mo_product_temp\"]').val(temp ? String(temp) : '');"
+			. " };"
+			. " })();";
+		wp_register_script( 'mo-product-temp-quick', false, [ 'jquery', 'inline-edit-post' ], MOWC_VERSION, true );
+		wp_enqueue_script( 'mo-product-temp-quick' );
+		wp_add_inline_script( 'mo-product-temp-quick', $js );
 	}
 
 	/* ============== CSV import / export ============== */
