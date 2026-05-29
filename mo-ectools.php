@@ -2,7 +2,7 @@
 /**
  * Plugin Name:        Moksa for WooCommerce
  * Plugin URI:         https://github.com/Moksa1123/moksa-for-woocommerce
- * Description:        難用版台灣電商外掛，非常難用謹慎安裝。結合多家金流物流電子發票，但哪幾間請自行安裝才知道。
+ * Description:        Taiwan payment, shipping and e-invoice toolkit for WooCommerce. Enable the provider modules you need (ECPay, NewebPay, PAYUNi, SmilePay, LINE Pay, PayNow, PChomePay, TapPay, Shopline Payments, ezPay, AMEGO). HPOS-ready, Block Checkout-ready.
  * Version:            1.0.0
  * Requires at least:  6.7
  * Tested up to:       7.0

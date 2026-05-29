@@ -15,7 +15,11 @@ A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping
 
 == Description ==
 
+> 難用版台灣電商外掛，非常難用謹慎安裝。結合多家金流物流電子發票，但哪幾間請自行安裝才知道。😉 （以上純屬玩笑，其實很好用 👇）
+
 A Taiwan-focused WooCommerce extension. Toggleable modules cover ECPay (綠界), NewebPay (藍新), SmilePay (速買配), LINE Pay, PAYUNi (統一金流), PayNow (立即富), PChomePay (支付連), TapPay and Shopline Payments for payments; ECPay, NewebPay, SmilePay, PAYUNi and PayNow for convenience-store + home-delivery shipping; ezPay, ECPay, SmilePay, PayNow and AMEGO for Taiwan e-invoicing.
+
+Enable only the providers you need from a single settings page — payment, shipping and invoice modules are fully independent and can be mixed in any combination.
 
 HPOS-native, Block Checkout-native, PHP 8.2+ strict-typed, GPLv3, no premium gating.
 
