@@ -11,7 +11,7 @@ final class BatchPrintAdminUI {
 
 	private const NONCE_ACTION = 'mo_shipping_batch_print';
 	private const CAPABILITY   = 'edit_shop_orders';
-	private const BULK_PREFIX  = 'mo_batchprint_';
+	private const BULK_ACTION  = 'mo_batchprint_labels';
 
 	public static function init(): void {
 		// 訂單列表 column（HPOS + classic）— 兩種模式都顯示
@@ -392,42 +392,50 @@ final class BatchPrintAdminUI {
 	// ── 基本模式：WooCommerce 內建批次操作下拉 ──────────────────────────────
 
 	public static function register_bulk_actions( array $actions ): array {
-		foreach ( BatchPrintRegistry::all() as $key => $provider ) {
-			$actions[ self::BULK_PREFIX . $key ] = $provider['label'];
+		if ( ! empty( BatchPrintRegistry::all() ) ) {
+			$actions[ self::BULK_ACTION ] = __( '列印物流單（自動判斷物流商）', 'mo-ectools' );
 		}
 		return $actions;
 	}
 
 	public static function handle_bulk_action( $redirect_to, $action, $ids ) {
-		if ( ! is_string( $action ) || ! str_starts_with( $action, self::BULK_PREFIX ) ) {
+		if ( self::BULK_ACTION !== $action ) {
 			return $redirect_to;
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), 403 );
 		}
-		$provider = BatchPrintRegistry::get( substr( $action, strlen( self::BULK_PREFIX ) ) );
-		if ( null === $provider ) {
-			return $redirect_to;
-		}
 
-		// provider = 所選動作；把選取訂單中不符此 provider method_id 的自動跳過。
-		$ids     = array_values( array_filter( array_map( 'absint', (array) $ids ) ) );
-		$matched = [];
+		$ids      = array_values( array_filter( array_map( 'absint', (array) $ids ) ) );
+		$registry = BatchPrintRegistry::all();
+
+		// 每筆訂單自動依運送方式判斷所屬物流商 → 分組（一筆只歸一個 provider）。
+		$by_provider = [];
 		foreach ( $ids as $oid ) {
 			$order = wc_get_order( $oid );
-			if ( $order instanceof \WC_Order && null !== self::detect_method( $order, $provider['method_ids'] ) ) {
-				$matched[] = $oid;
+			if ( ! $order instanceof \WC_Order ) {
+				continue;
+			}
+			foreach ( $registry as $key => $provider ) {
+				if ( null !== self::detect_method( $order, $provider['method_ids'] ) ) {
+					$by_provider[ $key ][] = $oid;
+					break;
+				}
 			}
 		}
-		$skipped = count( $ids ) - count( $matched );
 
-		if ( empty( $matched ) ) {
-			return add_query_arg( [ 'mo_bp_printed' => 0, 'mo_bp_skipped' => $skipped ], $redirect_to );
+		// 各 provider 各自跑 handler（依 subtype 再分桶），forms 合併。
+		$matched = [];
+		$forms   = [];
+		foreach ( $by_provider as $key => $oids ) {
+			$oids    = array_values( array_unique( $oids ) );
+			$matched = array_merge( $matched, $oids );
+			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, '1' ) );  // 基本模式預設 A4
 		}
+		$skipped = count( $ids ) - count( array_unique( $matched ) );
 
-		$forms = self::run_provider( $provider, $matched, '1' );  // 基本模式預設 A4
 		if ( empty( $forms ) ) {
-			return add_query_arg( [ 'mo_bp_printed' => 0, 'mo_bp_skipped' => count( $ids ) ], $redirect_to );
+			return add_query_arg( [ 'mo_bp_printed' => 0, 'mo_bp_skipped' => $skipped ], $redirect_to );
 		}
 
 		$token = wp_generate_password( 24, false );
