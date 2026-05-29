@@ -444,6 +444,10 @@ final class SettingsPage extends \WC_Settings_Page {
 		}
 
 		\WC_Admin_Settings::save_fields( $this->get_settings( $section ) );
+
+		// WC_Settings_Page::save() normally fires this so modules can persist
+		// custom field types; this class overrides save() so we fire it here.
+		do_action( 'woocommerce_update_options_' . $this->id );
 	}
 
 	private function advanced_fields(): array {

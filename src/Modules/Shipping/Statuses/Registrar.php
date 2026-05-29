@@ -45,7 +45,7 @@ final class Registrar {
 
 		// Custom field type for compact color picker grid + manual save
 		add_action( 'woocommerce_admin_field_mowp_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
-		add_action( 'woocommerce_update_options_mowp', [ __CLASS__, 'save_color_grid' ] );
+		add_action( 'woocommerce_update_options_' . \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
 	}
 
 	public static function color_status_labels(): array {
