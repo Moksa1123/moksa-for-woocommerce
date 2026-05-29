@@ -1,0 +1,91 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\Payuni\Blocks;
+
+use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
+
+defined( 'ABSPATH' ) || exit;
+
+final class PayuniBlocksMethod extends AbstractPaymentMethodType {
+
+	public function __construct( string $gateway_id ) {
+		$this->name = $gateway_id;
+	}
+
+	public function initialize(): void {
+		$this->settings = (array) get_option( 'woocommerce_' . $this->name . '_settings', [] );
+	}
+
+	public function is_active(): bool {
+		// Option may not exist yet (admin never opened "Save changes" on the
+		// gateway). Consult the running gateway class so the form-field
+		// defaults still light up the Block adapter.
+		if ( 'yes' === ( $this->settings['enabled'] ?? null ) ) {
+			return true;
+		}
+		if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways ) {
+			return false;
+		}
+		$gateways = WC()->payment_gateways()->payment_gateways();
+		if ( ! is_array( $gateways ) || ! isset( $gateways[ $this->name ] ) ) {
+			return false;
+		}
+		$gateway = $gateways[ $this->name ];
+		return $gateway instanceof \WC_Payment_Gateway && 'yes' === ( $gateway->enabled ?? 'no' );
+	}
+
+	public function get_payment_method_script_handles(): array {
+		$handle    = 'mo-payuni-blocks';
+		$build_dir = MOWC_PLUGIN_DIR . 'assets/blocks/build/methods/payuni/';
+		$build_url = MOWC_PLUGIN_URL . 'assets/blocks/build/methods/payuni/';
+		$asset     = $build_dir . 'index.asset.php';
+
+		$deps    = [ 'wc-blocks-registry', 'wp-element', 'wp-html-entities', 'wp-i18n' ];
+		$version = MOWC_VERSION;
+		if ( file_exists( $asset ) ) {
+			$loaded  = require $asset;
+			$deps    = $loaded['dependencies'] ?? $deps;
+			$version = $loaded['version'] ?? $version;
+		}
+
+		if ( ! wp_script_is( $handle, 'registered' ) ) {
+			wp_register_script( $handle, $build_url . 'index.js', $deps, $version, true );
+			wp_set_script_translations( $handle, 'mo-ectools' );
+		}
+		return [ $handle ];
+	}
+
+	public function get_payment_method_data(): array {
+		$title       = (string) ( $this->settings['title'] ?? '' );
+		$description = (string) ( $this->settings['description'] ?? '' );
+
+		// Option may not exist yet (admin never opened "Save changes"). Fall
+		// back to the running gateway's `method_title` / `method_description`
+		// so the Block label is human-readable from first activation.
+		if ( '' === $title || '' === $description ) {
+			$gateway = function_exists( 'WC' ) && WC()->payment_gateways
+				? ( WC()->payment_gateways()->payment_gateways()[ $this->name ] ?? null )
+				: null;
+			if ( $gateway instanceof \WC_Payment_Gateway ) {
+				if ( '' === $title ) {
+					$title = (string) ( $gateway->title ?: $gateway->method_title );
+				}
+				if ( '' === $description ) {
+					$description = (string) ( $gateway->description ?: $gateway->method_description );
+				}
+			}
+		}
+
+		return [
+			'name'        => $this->name,
+			'title'       => $title,
+			'description' => $description,
+			'supports'    => $this->get_supported_features(),
+		];
+	}
+
+	public function get_supported_features(): array {
+		return [ 'products', 'refunds' ];
+	}
+}

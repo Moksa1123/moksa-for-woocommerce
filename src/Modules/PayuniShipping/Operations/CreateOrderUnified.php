@@ -1,0 +1,354 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\PayuniShipping\Operations;
+
+use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDUnified;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
+use MoksaWeb\Mowc\Modules\Shipping\Order\SplitByTemp;
+use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
+use MoksaWeb\Mowc\Order\Meta\Keys;
+
+defined( 'ABSPATH' ) || exit;
+
+final class CreateOrderUnified {
+
+	public static function detect_method( \WC_Order $order ): ?object {
+		foreach ( $order->get_shipping_methods() as $m ) {
+			$mid         = (string) $m->get_method_id();
+			$instance_id = (int) $m->get_instance_id();
+			$class       = null;
+			if ( HDUnified::ID === $mid ) {
+				$class = HDUnified::class;
+			} elseif ( C2CUnified::ID === $mid ) {
+				$class = C2CUnified::class;
+			} elseif ( B2CUnified::ID === $mid ) {
+				$class = B2CUnified::class;
+			}
+			if ( null === $class ) {
+				continue;
+			}
+			$instance = new $class( $instance_id );
+			$instance->init_form_fields();
+			$instance->init_settings();
+			return $instance;
+		}
+		return null;
+	}
+
+	
+	public static function run( \WC_Order $order ): array {
+		$method = self::detect_method( $order );
+		if ( null === $method ) {
+			return [ 'ok' => false, 'message' => __( '不是 PAYUNi unified method 訂單。', 'mo-ectools' ) ];
+		}
+
+		// 7-11 必須先選店
+		$is_cvs = ShipType::SEVEN === $method->payuni_ship_type();
+		if ( $is_cvs ) {
+			$store_id = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
+			if ( '' === $store_id ) {
+				return [ 'ok' => false, 'message' => __( '尚未選擇取貨門市。', 'mo-ectools' ) ];
+			}
+		}
+
+		$supported_temps = array_map( 'intval', array_keys( $method->supported_temperatures() ) );
+		$packages        = SplitByTemp::for_order( $order, $supported_temps, $method instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
+		if ( empty( $packages ) ) {
+			return [ 'ok' => false, 'message' => __( '訂單沒有商品可建立物流單。', 'mo-ectools' ) ];
+		}
+
+		$existing       = self::get_records( $order );
+		$existing_temps = [];
+		foreach ( $existing as $r ) {
+			$t = (int) ( $r['temp'] ?? 0 );
+			if ( $t > 0 ) {
+				$existing_temps[ $t ] = true;
+			}
+		}
+
+		$created = [];
+		$errors  = [];
+		// 預先算一次時戳 — loop 內 N 次重跑 timezone 換算沒意義。
+		$now = current_time( 'mysql' );
+
+		foreach ( $packages as $pkg ) {
+			$temp = (int) $pkg['temp'];
+			if ( isset( $existing_temps[ $temp ] ) ) {
+				continue;
+			}
+
+			$args     = self::build_request_args_for_package( $order, $pkg, $method );
+			$response = self::call_api( $args, $method );
+			if ( ! $response['ok'] ) {
+				$errors[] = sprintf(
+					/* translators: 1: temp label, 2: msg */
+					__( '溫層 %1$s 建單失敗：%2$s', 'mo-ectools' ),
+					ProductTemp::label( $temp ),
+					$response['message']
+				);
+				continue;
+			}
+
+			$created[] = [
+				'ship_trade_no' => (string) ( $response['data']['ShipTradeNo'] ?? '' ),
+				'mer_trade_no'  => (string) $args['MerTradeNo'],
+				'odno'          => (string) ( $response['data']['Odno'] ?? '' ),
+				'partner_id'    => (string) ( $response['data']['PartnerId'] ?? '' ),
+				'file_no'       => (string) ( $response['data']['FileNo'] ?? '' ),
+				'validation_no' => (string) ( $response['data']['ValidationNo'] ?? '' ),
+				'temp'          => (string) $temp,
+				'goods_type'    => $method::payuni_goods_type_for_temp( $temp ),
+				'lgs_type'      => $method->payuni_lgs_type(),
+				'ship_type'     => $method->payuni_ship_type(),
+				'amount'        => (string) (int) $pkg['amount'],
+				'goods_name'    => (string) $pkg['goods_name'],
+				'rtn_msg'       => (string) ( $response['data']['Message'] ?? 'OK' ),
+				'created_at'    => $now,
+			];
+		}
+
+		if ( empty( $created ) && empty( $existing ) ) {
+			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'mo-ectools' );
+			$order->add_order_note( __( 'PAYUNi 物流單全數建立失敗：', 'mo-ectools' ) . $msg );
+			$order->save();
+			return [ 'ok' => false, 'message' => $msg ];
+		}
+
+		$records = $existing;
+		foreach ( $created as $r ) {
+			$records[] = $r;
+		}
+		$order->update_meta_data( Keys::PAYUNI_SHIPPING_RECORDS, $records );
+
+		// Mirror 最新一筆到既有 PAYUNi single-key meta（向下相容 OrderMetaBox / Admin UI）
+		if ( ! empty( $records ) ) {
+			$last = end( $records );
+			$order->update_meta_data( OrderMeta::ShipTradeNo, (string) $last['ship_trade_no'] );
+			$order->update_meta_data( OrderMeta::Odno, (string) $last['odno'] );
+			$order->update_meta_data( OrderMeta::ShipType, (string) $last['ship_type'] );
+			$order->update_meta_data( OrderMeta::LgsType, (string) $last['lgs_type'] );
+			$order->update_meta_data( OrderMeta::GoodsType, (string) $last['goods_type'] );
+			if ( ! empty( $last['file_no'] ) ) {
+				$order->update_meta_data( OrderMeta::FileNo, (string) $last['file_no'] );
+			}
+		}
+
+		// Order note
+		if ( count( $created ) > 1 ) {
+			$lines = [];
+			foreach ( $created as $r ) {
+				$lines[] = sprintf(
+					'%s（GoodsType=%s）— ShipTradeNo=%s 託運單號=%s',
+					ProductTemp::label( (int) $r['temp'] ),
+					(string) $r['goods_type'],
+					(string) $r['ship_trade_no'],
+					(string) $r['odno']
+				);
+			}
+			$order->add_order_note( sprintf(
+				/* translators: 1: count, 2: list */
+				__( 'PAYUNi 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'mo-ectools' ),
+				count( $created ),
+				"\n" . implode( "\n", $lines )
+			) );
+		} elseif ( ! empty( $created ) ) {
+			$r = $created[0];
+			$order->add_order_note( sprintf(
+				/* translators: 1: temp 2: ShipTradeNo 3: Odno */
+				__( 'PAYUNi 黑貓建單成功 — %1$s（ShipTradeNo=%2$s 託運單號=%3$s）', 'mo-ectools' ),
+				ProductTemp::label( (int) $r['temp'] ),
+				(string) $r['ship_trade_no'],
+				(string) $r['odno']
+			) );
+		}
+
+		if ( ! empty( $errors ) ) {
+			$order->add_order_note( __( '部分溫層建單失敗：', 'mo-ectools' ) . implode( ' / ', $errors ) );
+		}
+
+		$order->save();
+
+		$result = [
+			'ok'              => true,
+			'message'         => 'OK',
+			'records_created' => count( $created ),
+		];
+		if ( ! empty( $errors ) ) {
+			$result['warning'] = implode( ' / ', $errors );
+		}
+		return $result;
+	}
+
+	public static function get_records( \WC_Order $order ): array {
+		$raw = $order->get_meta( Keys::PAYUNI_SHIPPING_RECORDS );
+		if ( is_array( $raw ) && ! empty( $raw ) ) {
+			return array_values( $raw );
+		}
+		return [];
+	}
+
+	
+	private static function build_request_args_for_package( \WC_Order $order, array $pkg, $method ): array {
+		$temp         = (int) $pkg['temp'];
+		$goods_type   = $method::payuni_goods_type_for_temp( $temp );
+		$ship_type    = $method->payuni_ship_type();
+		$lgs_type     = $method->payuni_lgs_type();
+		$is_cvs       = ShipType::SEVEN === $ship_type;
+		$mer_trade_no = self::generate_mer_trade_no( $order, $temp, $is_cvs );
+
+		$consignee_name = trim( $order->get_shipping_last_name() . $order->get_shipping_first_name() );
+		if ( '' === $consignee_name ) {
+			$consignee_name = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
+		}
+		$consignee_mobile = PayuniShipping::payuni_get_shipping_phone( $order );
+		// shipping_phone 常被顧客留空 — fallback 到 billing_phone
+		if ( '' === (string) $consignee_mobile ) {
+			$consignee_mobile = $order->get_billing_phone();
+		}
+
+		$args = [
+			'MerID'           => PayuniShipping::get_mer_id(),
+			'Timestamp'       => time(),
+			'MerTradeNo'      => $mer_trade_no,
+			'GoodsType'       => $goods_type,
+			'LgsType'         => $lgs_type,
+			'ShipType'        => $ship_type,
+			'TradeAmt'        => max( 1, (int) $pkg['amount'] ),
+			'ServiceType'     => ( 'cod' === (string) $order->get_payment_method() ) ? '1' : '3',
+			'Consignee'       => mb_substr( $consignee_name, 0, 10 ),
+			'ConsigneeMail'   => $order->get_billing_email(),
+			'ConsigneeMobile' => $consignee_mobile,
+			'RefundStoreID'   => '',
+			'SenderName'      => (string) get_option( 'mo_payuni_shipping_sender_name', '' ),
+			'SenderMobile'    => (string) get_option( 'mo_payuni_shipping_sender_phone', '' ),
+		];
+
+		if ( $is_cvs ) {
+			// 7-11 取貨：從顧客選店的 store_id 帶入；NotifyURL 走 7-11 callback
+			$args['StoreID']   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
+			$args['NotifyURL'] = wc()->api_request_url( 'mo_payuni_shipping_711_notify' );
+		} else {
+			// 黑貓宅配
+			$args['StoreID']          = '';
+			$args['ConsigneeAddress'] = self::get_shipping_address( $order );
+			$args['DeliveryTimeTag']  = PayuniShipping::get_tcat_delivery_time();
+			$args['ProdDesc']         = mb_substr( (string) $pkg['goods_name'], 0, 50 );
+			$args['NotifyURL']        = wc()->api_request_url( 'mo_payuni_shipping_tcat_notify' );
+		}
+
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
+		return apply_filters( 'mo_payuni_shipping_unified_order_request_args', $args, $order, $pkg, $method );
+	}
+
+	private static function generate_mer_trade_no( \WC_Order $order, int $temp, bool $is_cvs = false ): string {
+		$prefix = $is_cvs ? 'PUC' : 'PUL';
+		$base   = $prefix . str_pad( (string) $order->get_id(), 6, '0', STR_PAD_LEFT ) . 'R' . substr( (string) wp_generate_uuid4(), 0, 4 );
+		return mb_substr( $base, 0, 18 ) . 'T' . $temp;
+	}
+
+	private static function get_shipping_address( \WC_Order $order ): string {
+		// PAYUNi 黑貓需要完整中文地址
+		$state = (string) $order->get_shipping_state();
+		// WC TW state 可能存英文代碼，翻譯
+	static $tw_states = null;
+		if ( null === $tw_states ) {
+			$states_file = MOWC_PLUGIN_DIR . 'src/Modules/Address/Data/states-tw.php';
+			$tw_states   = file_exists( $states_file ) ? ( include $states_file )['TW'] ?? [] : [];
+		}
+		if ( '' !== $state && isset( $tw_states[ $state ] ) ) {
+			$state = (string) $tw_states[ $state ];
+		}
+
+		$district = (string) $order->get_meta( '_shipping_mowp/district' );
+		$city     = (string) $order->get_shipping_city();
+
+		// 避免 state + city 重複（如「台北市台北市」）— 顧客端常有 city = 縣市值的情況
+		if ( '' !== $city && '' !== $state && $city === $state ) {
+			$city = '';
+		}
+
+		return trim( implode( '', [
+			$state,
+			$district,
+			$city,
+			$order->get_shipping_address_1(),
+			$order->get_shipping_address_2(),
+		] ) );
+	}
+
+	
+	private static function call_api( array $args, $method ): array {
+		PayuniShipping::log( 'CreateOrderUnified request: ' . wp_json_encode( $args, JSON_UNESCAPED_UNICODE ), 'info' );
+
+		$encrypted = PayuniShipping::encrypt( $args );
+		$endpoint  = $method->payuni_api_endpoint(); // 'home_delivery' or 'logistics'
+		$url       = PayuniShipping::$api_url . '/' . $endpoint . '/trade';
+
+		$response = wp_remote_post(
+			$url,
+			[
+				'timeout'     => 45,
+				'httpversion' => '1.0',
+				'blocking'    => true,
+				'headers'     => [
+					'Content-Type' => 'application/x-www-form-urlencoded',
+					'User-Agent'   => 'WordPress',
+				],
+				'body'        => [
+					'MerID'       => PayuniShipping::get_mer_id(),
+					'Version'     => '1.0',
+					'EncryptInfo' => $encrypted,
+					'HashInfo'    => PayuniShipping::hash_info( $encrypted ),
+				],
+			]
+		);
+
+		if ( is_wp_error( $response ) ) {
+			$msg = $response->get_error_message();
+			PayuniShipping::log( 'CreateOrderUnified wp_error: ' . $msg, 'error' );
+			return [ 'ok' => false, 'message' => $msg ];
+		}
+
+		$body = (string) wp_remote_retrieve_body( $response );
+		PayuniShipping::log( 'CreateOrderUnified response body: ' . substr( $body, 0, 500 ), 'info' );
+
+		$json = json_decode( $body, true );
+		if ( ! is_array( $json ) ) {
+			return [ 'ok' => false, 'message' => 'Invalid JSON response: ' . substr( $body, 0, 200 ) ];
+		}
+
+		// PAYUNi 回包格式：{ Status, Message, EncryptInfo, HashInfo }
+		// Status=SUCCESS 才解密 EncryptInfo 拿 ShipTradeNo / Odno 等
+		$status = (string) ( $json['Status'] ?? '' );
+		if ( 'SUCCESS' !== $status ) {
+			return [
+				'ok'      => false,
+				'message' => trim( $status . ': ' . ( $json['Message'] ?? 'unknown' ) ),
+			];
+		}
+
+		$encrypt_info = (string) ( $json['EncryptInfo'] ?? '' );
+		if ( '' === $encrypt_info ) {
+			return [ 'ok' => false, 'message' => 'EncryptInfo missing in response' ];
+		}
+
+		$decoded = PayuniShipping::decrypt( $encrypt_info );
+		if ( ! is_array( $decoded ) || empty( $decoded ) ) {
+			return [ 'ok' => false, 'message' => 'Decrypt failed' ];
+		}
+
+		PayuniShipping::log( 'CreateOrderUnified decoded: ' . wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE ), 'info' );
+
+		return [
+			'ok'      => true,
+			'message' => 'OK',
+			'data'    => $decoded,
+		];
+	}
+}

@@ -1,0 +1,138 @@
+/**
+ * mowp 台灣地址工具 — Classic + Block checkout 共用 CSS。
+ *
+ * 為什麼用 !important：
+ * Block 用 flexbox + @container queries 排版，預設規則：
+ *   .wc-block-checkout__{shipping,billing}-fields
+ *   .wc-block-components-address-form
+ *   .wc-block-components-{state-input,text-input}            → flex: 1 0 calc(50% - 12px)（半寬）
+ *   .wc-block-components-{country-input,address-form__address_1,
+ *     address-form__address_2,address-form__company}        → flex: 0 0 100%（全寬）
+ *
+ * 三個 class chain 包在 container query 裡，純 specificity battle 要 4+ classes
+ * 跑 selector chain 才贏，且要重複寫 shipping/billing 兩條 — 既冗長又脆弱。
+ * 直接用 !important 一行解決，且加 body class 限定觸發條件，副作用可控。
+ *
+ * Body classes:
+ *   mo-tw-hide-country         隱藏「國家 / 地區」欄位
+ *   mo-tw-name-swap            姓氏 / 名字 順序對調 (priority 走 PHP)
+ *   mo-tw-disable-<field>      停用某欄位（Block React 元件用 CSS 蓋）
+ *   mo-tw-w-<field>-<50|100>   設定某欄位寬度（蓋 Block 預設 flex）
+ */
+
+/* === Hide country === */
+.mo-tw-hide-country .woocommerce-billing-fields #billing_country_field,
+.mo-tw-hide-country .woocommerce-shipping-fields #shipping_country_field,
+.mo-tw-hide-country .woocommerce-address-fields #billing_country_field,
+.mo-tw-hide-country .woocommerce-address-fields #shipping_country_field,
+.mo-tw-hide-country form.woocommerce-address-form #billing_country_field,
+.mo-tw-hide-country form.woocommerce-address-form #shipping_country_field,
+.mo-tw-hide-country .wc-block-components-address-form__country,
+.mo-tw-hide-country .wc-block-components-country-input {
+	display: none !important;
+}
+
+/* === v0.2.0: 啟用 mowp/district additional field 時隱藏 Block 核心 city ===
+   district 取代核心 city 的角色，core city 走 woocommerce_set_additional_field_value
+   sync 寫入但 UI 不再顯示。Classic 不走這條（Classic 直接 render city as select）。
+   也要隱藏 .wc-block-components-address-card__address-section--secondary 的 city 部分？不，
+   Address card preview 我們不動。只動 form 內的 core city wrapper。*/
+.mo-tw-block-district-enabled .wc-block-components-address-form .wc-block-components-address-form__city {
+	display: none;
+}
+
+/* district wrapper 寬度繼承 city 的 mo-tw-w-city-* body class — 同步 FieldManager 設定。
+   順序由 mo-tw-district-block.js insertBefore 直接調整 DOM 位置（CSS order 不可靠）。*/
+body.mo-tw-w-city-50 .mo-tw-district-wrapper {
+	flex: 1 0 calc(50% - 12px) !important;
+}
+
+body.mo-tw-w-city-100 .mo-tw-district-wrapper {
+	flex: 0 0 100% !important;
+}
+
+/* === FieldManager disabled — PHP unset 不掉 Block React 元件，CSS 補強 === */
+.mo-tw-disable-address_2 .wc-block-components-address-form__address_2,
+.mo-tw-disable-address_2 .wc-block-components-address-form__address_2-toggle,
+.mo-tw-disable-address_2 .wc-block-components-address-form__address_2-hidden-input,
+.mo-tw-disable-address_2 #billing_address_2_field,
+.mo-tw-disable-address_2 #shipping_address_2_field {
+	display: none !important;
+}
+
+.mo-tw-disable-company .wc-block-components-address-form__company,
+.mo-tw-disable-company #billing_company_field,
+.mo-tw-disable-company #shipping_company_field {
+	display: none !important;
+}
+
+.mo-tw-disable-phone .wc-block-components-address-form__phone,
+.mo-tw-disable-phone #billing_phone_field,
+.mo-tw-disable-phone #shipping_phone_field {
+	display: none !important;
+}
+
+.mo-tw-disable-first_name .wc-block-components-address-form__first_name,
+.mo-tw-disable-first_name #billing_first_name_field,
+.mo-tw-disable-first_name #shipping_first_name_field {
+	display: none !important;
+}
+
+.mo-tw-disable-last_name .wc-block-components-address-form__last_name,
+.mo-tw-disable-last_name #billing_last_name_field,
+.mo-tw-disable-last_name #shipping_last_name_field {
+	display: none !important;
+}
+
+/* === Block 寬度 — 50% (本來全寬的欄位改半寬) === */
+.mo-tw-w-country-50    .wc-block-components-country-input,
+.mo-tw-w-address_1-50  .wc-block-components-address-form__address_1,
+.mo-tw-w-address_2-50  .wc-block-components-address-form__address_2,
+.mo-tw-w-company-50    .wc-block-components-address-form__company,
+.mo-tw-w-phone-50      .wc-block-components-address-form__phone {
+	flex: 1 0 calc(50% - 12px) !important;
+}
+
+/* country 有 base .wc-block-components-country-input { margin-top: 16px }，
+   假設 country 自己一行。半寬並排時 margin/padding 全 reset + 強制
+   align-self: flex-start，確保跟 state 同高度對齊。*/
+.mo-tw-w-country-50 .wc-block-components-country-input {
+	margin: 0 !important;
+	padding: 0 !important;
+	align-self: flex-start !important;
+}
+
+/* country 內層 select Block 預設 margin-top: 0（特例規則），但 state 內層 select 是 12px。
+   半寬並排時要對齊，把 country 補到 12px 跟 state 一致。*/
+.mo-tw-w-country-50 .wc-block-components-country-input .wc-blocks-components-select {
+	margin-top: 12px !important;
+}
+
+/* === Block 寬度 — 100% (本來半寬的欄位改全寬) === */
+.mo-tw-w-first_name-100 .wc-block-components-address-form__first_name,
+.mo-tw-w-last_name-100  .wc-block-components-address-form__last_name,
+.mo-tw-w-state-100      .wc-block-components-state-input,
+.mo-tw-w-postcode-100   .wc-block-components-address-form__postcode,
+.mo-tw-w-city-100       .wc-block-components-address-form__city {
+	flex: 0 0 100% !important;
+}
+
+/* === Block: row-gap 統一，避免 country / phone 等 full-width 行貼著上一行 === */
+.wp-block-woocommerce-checkout .wc-block-components-address-form {
+	row-gap: 1em !important;
+}
+
+/* === Classic 結帳 float 隔離 ===
+   PayuniShipping CVS 隱藏 form-row-last 欄位（公司名稱、city 等）後，前面的
+   form-row-first（電話）會留下懸空的 50% 右半部，後面的訂單備註 textarea
+   或發票區塊會被擠進那塊空隙、label 被壓成垂直文字（user-reported bug）。
+   每個 section 容器都建立新 BFC（display:flow-root + clear:both）阻擋
+   floats 跨容器流出。 */
+form.woocommerce-checkout .woocommerce-shipping-fields__field-wrapper,
+form.woocommerce-checkout .woocommerce-billing-fields__field-wrapper,
+form.woocommerce-checkout .woocommerce-additional-fields,
+form.woocommerce-checkout .woocommerce-additional-fields__field-wrapper,
+form.woocommerce-checkout .mo-invoice-section {
+	clear: both;
+	display: flow-root;
+}

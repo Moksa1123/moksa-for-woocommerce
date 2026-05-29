@@ -1,0 +1,440 @@
+<?php
+
+namespace MoksaWeb\Mowc\Modules\Payuni;
+
+use MoksaWeb\Mowc\Modules\Payuni\Admin\OrderList;
+use MoksaWeb\Mowc\Modules\Payuni\Admin\OrderMetaBoxes;
+use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentRequest;
+use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentResponse;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\Aftee;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\ApplePay;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\Atm;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\Credit;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditRed;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\ICash;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\JKoPay;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\Unified;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment6;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment9;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment12;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment18;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment24;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment30;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditUnionPay;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\GooglePay;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\LinePay;
+use MoksaWeb\Mowc\Modules\Payuni\Gateways\SamsungPay;
+use MoksaWeb\Mowc\Modules\Payuni\Settings\SettingsTab;
+use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+
+
+
+defined( 'ABSPATH' ) || exit;
+
+
+class PayuniPayment {
+
+
+	
+	private static $instance;
+
+	
+	public static $log_enabled = false;
+
+	
+	public static $log = false;
+
+	
+	public static $allowed_payments;
+
+	
+	public static $available_installments;
+
+	
+	public static $einvoice_enabled;
+
+	
+	public static $order_metas;
+
+	
+	public static $notify_url;
+
+	
+	public function __construct() {
+		// do nothing.
+	}
+
+	
+	public static function init() {
+
+		self::get_instance();
+
+		add_action( 'after_setup_theme', array( self::get_instance(), 'plugin_i18n' ), 20 );
+		add_action( 'woocommerce_init', array( self::get_instance(), 'plugin_init' ), 30 );
+
+		// Settings render via MoksaWeb\Mowc\Settings\SettingsTab (single Moksa tab)
+		// proxying to Payuni\Settings\SettingsTab::get_settings_for_payment_section().
+
+		add_filter( 'woocommerce_payment_gateways', array( self::get_instance(), 'add_payuni_payment_gateway' ) );
+
+		// Plugin row links 統一由 MoksaWeb\Mowc\Plugin::plugin_action_links() 處理。
+
+		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'payuni_checkout_enqueue_scripts' ), 9 );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'payuni_admin_scripts' ), 9 );
+
+		add_action( 'wp_ajax_payuni_query', array( self::get_instance(), 'payuni_ajax_query_payment' ) );
+	}
+
+	public function plugin_i18n() {
+		// Textdomain is loaded once globally by Plugin::load_textdomain().
+	}
+
+	public function plugin_init() {
+		self::$log_enabled      = 'yes' === get_option( 'payuni_payment_debug_log_enabled', 'no' );
+		self::$einvoice_enabled = 'yes' === get_option( 'payuni_payment_einvoice_enabled', 'no' );
+
+		OrderList::init();
+		OrderMetaBoxes::init();
+		PaymentResponse::init();
+
+		self::$allowed_payments = array(
+			// Single-entry gateway. is_available() suppresses it unless display mode is `single`.
+			Unified::GATEWAY_ID        => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Unified',
+			// Per-method gateways. is_available() suppresses them in `single` mode.
+			Credit::GATEWAY_ID         => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Credit',
+			Cvs::GATEWAY_ID            => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs',
+			Atm::GATEWAY_ID            => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Atm',
+			Aftee::GATEWAY_ID          => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Aftee',
+			ApplePay::GATEWAY_ID       => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\ApplePay',
+			GooglePay::GATEWAY_ID      => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\GooglePay',
+			SamsungPay::GATEWAY_ID     => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\SamsungPay',
+			LinePay::GATEWAY_ID        => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\LinePay',
+			CreditUnionPay::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditUnionPay',
+			ICash::GATEWAY_ID          => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\ICash',
+			JKoPay::GATEWAY_ID         => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\JKoPay',
+			CreditRed::GATEWAY_ID      => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditRed',
+		);
+
+		$number_of_payments = get_option( 'payuni_payment_installment_number_of_payments', array() );
+
+		self::$available_installments = array(
+			CreditInstallment3::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3',
+			CreditInstallment6::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment6',
+			CreditInstallment9::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment9',
+			CreditInstallment12::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment12',
+			CreditInstallment18::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment18',
+			CreditInstallment24::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment24',
+			CreditInstallment30::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment30',
+		);
+
+		foreach ( self::$available_installments as $key => $installment ) {
+			if ( in_array( $key, $number_of_payments, true ) ) {
+				self::$allowed_payments[ $key ] = $installment;
+			}
+		}
+
+		self::$order_metas = array(
+			OrderMeta::UNI_NO       => __( 'Trade No', 'mo-ectools' ),
+			OrderMeta::TRADE_AMOUNT => __( 'Trade Amount', 'mo-ectools' ),
+			OrderMeta::TRADE_STATUS => __( 'Trade Status', 'mo-ectools' ),
+			OrderMeta::MESSAGE      => __( 'Message', 'mo-ectools' ),
+			OrderMeta::PAID_AT      => __( 'Paid At', 'mo-ectools' ),
+			OrderMeta::CLOSE_STATUS => __( 'Close Status', 'mo-ectools' ),
+			OrderMeta::CLOSE_TIME   => __( 'Close Time', 'mo-ectools' ),
+			OrderMeta::CLOSE_AUTH   => __( 'Close Auth', 'mo-ectools' ),
+			OrderMeta::REFUND_NO    => __( 'Refund No', 'mo-ectools' ),
+			OrderMeta::REFUND_AMT   => __( 'Refund Amount', 'mo-ectools' ),
+			OrderMeta::REFUND_TIME  => __( 'Refund Time', 'mo-ectools' ),
+		);
+	}
+
+	
+	public function add_payuni_payment_gateway( $methods ) {
+		if ( ! is_array( self::$allowed_payments ) || empty( self::$allowed_payments ) ) {
+			return $methods;
+		}
+
+		foreach ( self::$allowed_payments as $id => $class ) {
+			if ( ! self::should_register_gateway( $id ) ) {
+				continue;
+			}
+			$methods[ $id ] = $class;
+		}
+		return $methods;
+	}
+
+	
+	public static function should_register_gateway( string $id ): bool {
+		$mode    = get_option( 'mo_payuni_display_mode', 'multi' );
+		$unified = Gateways\Unified::GATEWAY_ID;
+
+		if ( 'single' === $mode ) {
+			return $id === $unified;
+		}
+
+		// `multi` from here on.
+		if ( $id === $unified ) {
+			return false;
+		}
+
+		// Installments are governed by `payuni_payment_installment_number_of_payments`
+		// further down — let those through here unconditionally.
+		if ( strpos( $id, 'mo_payuni_installment_' ) === 0 ) {
+			return true;
+		}
+
+		$allowlist = (array) get_option( 'mo_payuni_enabled_methods', array() );
+		// 空 allowlist → 不註冊任何子方法。
+		return in_array( $id, $allowlist, true );
+	}
+
+	
+	public static function payuni_checkout_enqueue_scripts() {
+
+		if ( ! is_checkout() ) {
+			return;
+		}
+
+		wp_enqueue_style( 'mo-payuni-public', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-public.css', array(), MOWC_VERSION, 'all' );
+
+		wp_enqueue_script( 'mo-payuni-public', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts.js', array(), MOWC_VERSION, true );
+	}
+
+	
+	public function payuni_admin_scripts() {
+
+		//enqueue admin css
+		wp_enqueue_style( 'mo-payuni-admin', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-admin.css', array(), MOWC_VERSION, 'all' );
+
+		wp_enqueue_script( 'mo-payuni-admin', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts-admin.js', array(), MOWC_VERSION, true );
+		wp_localize_script(
+			'mo-payuni-admin',
+			'mo_payuni',
+			array(
+				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'query_nonce' => wp_create_nonce( 'payuni-query' ),
+				'error_msg'   => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
+			)
+		);
+	}
+
+	
+	public function payuni_ajax_query_payment() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- AJAX handler; wp_verify_nonce() called at method entry; nonce token raw read is intentional.
+
+		// Cap before nonce: a valid nonce alone lets any logged-in user query
+		// other people's orders.
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mo-ectools' ) ), 403 );
+		}
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'payuni-query' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Unsecure AJAX call', 'mo-ectools' ) ), 403 );
+		}
+
+		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+		$order    = $order_id ? wc_get_order( $order_id ) : false;
+
+		if ( ! $order ) {
+			wp_send_json_error( array( 'message' => __( 'No such order id', 'mo-ectools' ) ), 404 );
+		}
+
+		$reserved_transaction_id = $order->get_transaction_id();
+		$request                 = new PaymentRequest();
+		try {
+
+			if ( $request->query( $order->get_id() ) !== false ) {
+				$return = array(
+					'success' => true,
+					'message' => __( 'PAYUNi Query Successfully', 'mo-ectools' ),
+				);
+				wp_send_json( $return );
+			} else {
+				// Query returned false - no results found or query failed
+				$return = array(
+					'success' => false,
+					'message' => __( 'PAYUNi query failed. Please check the order notes for details.', 'mo-ectools' ),
+				);
+				wp_send_json( $return );
+			}
+		} catch ( \Exception $e ) {
+
+			$order->add_order_note( __( 'PAYUNi 訂單查詢失敗：', 'mo-ectools' ) . $e->getMessage() );
+			$return = array(
+				'success' => false,
+				'message' => $e->getMessage(),
+			);
+			wp_send_json( $return );
+
+		}
+	}
+
+	
+	public static function encrypt( $encrypt_info ) {
+
+		$hashkey = Credentials::hashkey();
+		$hashiv  = Credentials::hashiv();
+
+		$tag       = '';
+		$encrypted = openssl_encrypt( http_build_query( $encrypt_info ), 'aes-256-gcm', $hashkey, 0, $hashiv, $tag );
+		if ( false === $encrypted ) {
+			throw new \RuntimeException( 'PAYUNi AES-256-GCM encrypt failed' );
+		}
+		// Wire format = bin2hex(raw_ciphertext . ':::' . base64(tag)) — PAYUNi 規格，雙向協議
+		// 不可改。base64(tag) 字符集無 ':'，decrypt 走 strrpos 從右側找最後 ':::' 是 unambiguous
+		// boundary（治原 explode(':::', 2) 在 raw ciphertext 含 ':::' 隨機 byte 時切錯的 bug）。
+		return trim( bin2hex( $encrypted . ':::' . base64_encode( $tag ) ) );
+	}
+
+	
+	public static function decrypt( string $encrypt_str = '' ) {
+
+		$hashkey = Credentials::hashkey();
+		$hashiv  = Credentials::hashiv();
+
+		$blob = @hex2bin( $encrypt_str );
+		if ( false === $blob ) {
+			return [];
+		}
+		// base64(tag) 不含 ':'，strrpos 取最後一個 ':::' 是 unambiguous separator；
+		// 原 explode(':::', 2) 在 raw ciphertext 隨機 byte 含 0x3A3A3A 時會切錯（大 ciphertext 跑久必爆）。
+		$sep_pos = strrpos( $blob, ':::' );
+		if ( false === $sep_pos ) {
+			return [];
+		}
+		$encrypt_data = substr( $blob, 0, $sep_pos );
+		$tag          = base64_decode( substr( $blob, $sep_pos + 3 ), true );
+		if ( false === $tag ) {
+			return [];
+		}
+		$encrypt_info = openssl_decrypt( $encrypt_data, 'aes-256-gcm', $hashkey, 0, $hashiv, $tag );
+		if ( false === $encrypt_info ) {
+			return [];
+		}
+		parse_str( $encrypt_info, $encrypt_arr );
+		return $encrypt_arr;
+	}
+
+	
+	public static function hash_info( string $encrypt_str = '' ) {
+		return strtoupper( hash( 'sha256', Credentials::hashkey() . $encrypt_str . Credentials::hashiv() ) );
+	}
+
+	
+	public static function build_payuni_order_no( $order_id ) {
+
+		$order = wc_get_order( $order_id );
+
+		$payuni_order_no = $order_id;
+
+		$order_serial_no = $order->get_meta( OrderMeta::ORDER_SERIAL_NO );
+
+		if ( $order_serial_no && $order_serial_no < 999 ) {
+			$order_serial_no += 1;
+			$payuni_order_no  = $payuni_order_no . '-' . $order_serial_no;
+		} else {
+			$order_serial_no = 1;
+			$payuni_order_no = $payuni_order_no . '-' . $order_serial_no;
+		}
+
+		$order->update_meta_data( OrderMeta::ORDER_SERIAL_NO, $order_serial_no );
+		$order->save();
+
+		return $payuni_order_no;
+	}
+
+	
+	public static function parse_payuni_order_no_to_woo_order_id( $payuni_order_no ) {
+
+		if ( strpos( $payuni_order_no, '-' ) !== false ) {
+			return explode( '-', $payuni_order_no )[0];
+		}
+
+		return $payuni_order_no;
+	}
+
+	
+	public static function get_refund_api_url( $payment_method ) {
+
+		$base_api_url = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api' : 'https://api.payuni.com.tw/api';
+
+		if ( 'payuni-credit' === $payment_method || 'payuni-applepay' === $payment_method ) {
+			$base_api_url .= '/trade/cancel';
+		} elseif ( 'payuni-aftee' === $payment_method ) {
+			$base_api_url .= '/trade/common/refund/aftee';
+		}
+		return $base_api_url;
+	}
+
+	public static function get_allowed_payments( $order = null ) {
+		if ( ! $order ) {
+			return self::$allowed_payments;
+		}
+
+		$plugin_version = $order->get_meta( OrderMeta::PLUGIN_VERSION );
+		if ( \version_compare( $plugin_version, '1.5.0' ) >= 0 ) {
+			return self::$allowed_payments;
+		} else {
+			// for backward-compatibility.
+			$old_allowed_payments = array();
+			foreach ( self::$allowed_payments as $key => $value ) {
+				$old_payment_id                          = str_replace( 'upp-', '', $key );
+				$old_allowed_payments[ $old_payment_id ] = $value;
+			}
+			return $old_allowed_payments;
+		}
+	}
+
+	
+	public static function get_allowed_install_payments( $order = null ) {
+		if ( ! $order ) {
+			return self::$available_installments;
+		}
+
+		$plugin_version = $order->get_meta( OrderMeta::PLUGIN_VERSION );
+		if ( \version_compare( $plugin_version, '1.5.0' ) >= 0 ) {
+			return self::$available_installments;
+		} else {
+			// for backward-compatibility.
+			$old_available_payments = array();
+			foreach ( self::$available_installments as $key => $value ) {
+				$old_payment_id                            = str_replace( 'upp-', '', $key );
+				$old_available_payments[ $old_payment_id ] = $value;
+			}
+			return $old_available_payments;
+		}
+	}
+
+	
+	public static function get_order_meta_key( $order, $key ) {
+		$plugin_version = $order->get_meta( OrderMeta::PLUGIN_VERSION );
+		if ( \version_compare( $plugin_version, '1.5.0' ) >= 0 ) {
+			return $key;
+		} else {
+			// for backward-compatibility.
+			return str_replace( '_mo_payuni_', '_payuni_', $key );
+		}
+	}
+
+	
+	public static function log( $message, $level = 'info' ) {
+		if ( ! self::$log_enabled ) {
+			return;
+		}
+		// Forward 到 plugin-wide Logger facade (CLAUDE.md §4)，source tag 'payuni-payment'。
+		// v0.5.69：Logger 內部對 message 已走 Redactor，不需 pre-redact。
+		$msg    = is_string( $message ) ? $message : (string) wp_json_encode( $message );
+		$method = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
+		\MoksaWeb\Mowc\Logging\Logger::{$method}( 'payuni-payment', $msg );
+	}
+
+	
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+}

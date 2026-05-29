@@ -1,0 +1,32 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+/* Hide address fields when PAYUNi CVS shipping is selected */
+.payuni-cvs-hide {
+    display: none !important;
+}
+
+/* Ensure name and phone fields are visible for CVS shipping */
+#shipping_first_name_field.payuni-cvs-hide,
+#shipping_last_name_field.payuni-cvs-hide,
+#shipping_phone_field.payuni-cvs-hide {
+    display: block !important;
+}
+
+
+/* Store selector styling */
+/* .payuni-store-selector {
+    margin: 20px 0;
+    padding: 15px;
+} */
+
+.payuni-no-store,
+.payuni-selected-store {
+    margin: 10px 0;
+}
+
+.payuni-store-map-btn {
+    margin-top: 10px;
+}

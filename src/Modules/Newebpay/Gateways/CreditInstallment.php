@@ -1,0 +1,59 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\Newebpay\Gateways;
+
+defined( 'ABSPATH' ) || exit;
+
+final class CreditInstallment extends AbstractNewebpayGateway {
+
+	public function __construct() {
+		$this->id = 'mo_newebpay_credit_installment';
+		parent::__construct();
+	}
+
+	protected function payment_type_flags(): array {
+		// CREDIT=1 (open credit) + InstFlag=逗號分隔期數
+		return [
+			'CREDIT'   => 1,
+			'InstFlag' => $this->build_inst_flag(),
+		];
+	}
+
+	protected function build_method_title(): string {
+		return __( '藍新 信用卡分期', 'mo-ectools' );
+	}
+
+	protected function build_method_description(): string {
+		return __( '信用卡分 3 / 6 / 12 / 18 / 24 / 30 期付款。可開期數依商家後台設定（需先向發卡銀行申請開通）。', 'mo-ectools' );
+	}
+
+	public function init_form_fields(): void {
+		parent::init_form_fields();
+		$this->form_fields['installments'] = [
+			'title'       => __( '允許分期期數', 'mo-ectools' ),
+			'type'        => 'multiselect',
+			'class'       => 'wc-enhanced-select',
+			'default'     => [],
+			'options'     => [
+				'3'  => __( '3 期', 'mo-ectools' ),
+				'6'  => __( '6 期', 'mo-ectools' ),
+				'12' => __( '12 期', 'mo-ectools' ),
+				'18' => __( '18 期', 'mo-ectools' ),
+				'24' => __( '24 期', 'mo-ectools' ),
+				'30' => __( '30 期', 'mo-ectools' ),
+			],
+			'description' => __( '勾選的期數會在結帳頁讓顧客選擇。需先向發卡銀行申請開通。預設不勾選（商家依實際申請開通的期數啟用）。', 'mo-ectools' ),
+			'desc_tip'    => true,
+		];
+	}
+
+	private function build_inst_flag(): string {
+		$selected = $this->get_option( 'installments', [] );
+		if ( ! is_array( $selected ) ) {
+			$selected = [];
+		}
+		$valid = array_intersect( $selected, [ '3', '6', '12', '18', '24', '30' ] );
+		return implode( ',', $valid );
+	}
+}

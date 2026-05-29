@@ -1,0 +1,76 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ #order_data .order_data_column .form-field._shipping_payuni_storename_field {
+	float: right;
+	clear: right;
+}
+#order_data .order_data_column .form-field._shipping_payuni_storeaddress_field,
+#order_data .order_data_column .form-field._shipping_phone_field {
+	width: 100%;
+	clear: both;
+}
+
+
+#payuni-shipping-info .inside {
+	padding: 0px;
+	margin: 0px;
+}
+
+
+#payuni-shipping-info .inside table {
+	width: 100%;
+}
+
+
+#payuni-shipping-info th, #payuni-shipping-info td {
+	text-align: left;
+	padding: 3px;
+}
+
+#payuni-shipping-info tr:nth-child(odd):not(#payuni-action) {
+	background-color: #ccc;
+}
+
+#payuni-shipping-info #payuni-action th, #payuni-shipping-info #payuni-action td {
+	border-top: solid 1px #ccc;
+	padding: 8px 3px;
+}
+
+#payuni-shipping-info #payuni-action button {
+	margin: 3px 2px;
+}
+
+/* Package spec dropdown styling */
+#package-spec-select {
+	max-width: 100px;
+	padding: 2px 5px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: #fff;
+}
+
+#package-spec-select:disabled {
+	background: #f5f5f5;
+	color: #999;
+	cursor: not-allowed;
+}
+
+/* Package spec loading indicator */
+.package-spec-loading {
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 12px;
+	line-height: 1;
+}
+
+.package-spec-loading .spinner {
+	background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle fill='none' stroke='%23555' stroke-width='1.1' cx='10' cy='10' r='9'/%3E%3Cpath fill='none' stroke='%23555' stroke-width='1.1' stroke-linecap='round' d='m10,1 a9,9 0 0,1 9,9'/%3E%3C/svg%3E");
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

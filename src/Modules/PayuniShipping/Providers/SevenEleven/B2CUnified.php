@@ -1,0 +1,62 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven;
+
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
+use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
+use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod;
+use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
+
+defined( 'ABSPATH' ) || exit;
+
+final class B2CUnified extends AbstractCvsShippingMethod {
+
+	public const ID = 'mo_payuni_shipping_711_b2c';
+
+	public function __construct( $instance_id = 0 ) {
+		$this->id                 = self::ID;
+		$this->method_title       = __( 'PAYUNi — 7-11 B2C 大宗取貨（多溫層）', 'mo-ectools' );
+		$this->method_description = __( 'PAYUNi 7-11 大宗 B2C 取貨。商品溫層混合（常溫 / 冷凍）時，後台建單自動拆 N 包送 PAYUNi /logistics/trade API。注意 7-11 不支援冷藏，冷藏商品會以常溫運送。', 'mo-ectools' );
+		parent::__construct( $instance_id );
+	}
+
+	public function carrier(): string {
+		return '711';
+	}
+
+	public function carrier_label(): string {
+		return __( '7-11 B2C', 'mo-ectools' );
+	}
+
+	public function logistics_sub_type(): string {
+		return 'SEVEN_B2C';
+	}
+
+	public function payuni_ship_type(): string {
+		return ShipType::SEVEN;
+	}
+
+	public function payuni_lgs_type(): string {
+		return LgsType::B2C;
+	}
+
+	public function payuni_api_endpoint(): string {
+		return 'logistics';
+	}
+
+	public static function payuni_goods_type_for_temp( int $temp ): string {
+		return match ( $temp ) {
+			ProductTemp::FROZEN => GoodsType::FROZEN,
+			default             => GoodsType::NORMAL,
+		};
+	}
+
+	public function supported_temperatures(): array {
+		return [
+			ProductTemp::NORMAL => __( '常溫', 'mo-ectools' ),
+			ProductTemp::FROZEN => __( '冷凍', 'mo-ectools' ),
+		];
+	}
+}

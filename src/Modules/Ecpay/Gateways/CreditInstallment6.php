@@ -1,0 +1,34 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\Ecpay\Gateways;
+
+defined( 'ABSPATH' ) || exit;
+
+final class CreditInstallment6 extends AbstractEcpayGateway {
+
+	public function __construct() {
+		$this->id = 'mo_ecpay_credit_6';
+		parent::__construct();
+	}
+
+	protected function choose_payment(): string {
+		return 'Credit';
+	}
+
+	protected function build_method_title(): string {
+		return __( '綠界 信用卡分期 6 期', 'mo-ectools' );
+	}
+
+	protected function build_method_description(): string {
+		return __( '信用卡分 6 期付款，跳轉至綠界支付頁完成付款。', 'mo-ectools' );
+	}
+
+	protected function extra_aio_params( \WC_Order $order ): array {
+		return [ 'CreditInstallment' => 6 ];
+	}
+
+	protected function supports_credit_action(): bool {
+		return true;
+	}
+}

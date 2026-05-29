@@ -1,0 +1,54 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\PaynowInvoice\Operations;
+
+use MoksaWeb\Mowc\Modules\PaynowInvoice\Api\Helper;
+use MoksaWeb\Mowc\Modules\PaynowInvoice\Api\Request;
+use MoksaWeb\Mowc\Order\Meta\Keys;
+
+defined( 'ABSPATH' ) || exit;
+
+final class Invalid {
+
+	
+	public static function run( \WC_Order $order, string $reason = '' ): array {
+		$invoice_no = (string) $order->get_meta( Keys::PAYNOW_INVOICE_NUMBER );
+		if ( '' === $invoice_no || 'zero' === $invoice_no || 'negative' === $invoice_no ) {
+			return [ 'ok' => false, 'message' => __( '此訂單沒有可作廢的 PayNow 發票。', 'mo-ectools' ) ];
+		}
+		if ( $order->get_meta( Keys::PAYNOW_INVOICE_INVALID_AT ) ) {
+			return [ 'ok' => false, 'message' => __( '此發票已作廢。', 'mo-ectools' ) ];
+		}
+
+		Helper::log( 'invalid request', [
+			'order_id'   => $order->get_id(),
+			'invoice_no' => $invoice_no,
+			'reason'     => $reason,
+		] );
+
+		$resp = Request::cancel_invoice( Helper::mem_cid(), Helper::mem_password(), $invoice_no );
+		if ( ! $resp['ok'] ) {
+			$msg = sprintf(
+				/* translators: 1: invoice number, 2: error */
+				__( 'PayNow 發票作廢失敗 (#%1$s)：%2$s', 'mo-ectools' ),
+				$invoice_no,
+				$resp['message']
+			);
+			$order->add_order_note( $msg );
+			$order->save();
+			return [ 'ok' => false, 'message' => $msg ];
+		}
+
+		$order->update_meta_data( Keys::PAYNOW_INVOICE_INVALID_AT, current_time( 'mysql' ) );
+		$order->update_meta_data( Keys::PAYNOW_INVOICE_INVALID_REASON, $reason );
+		$order->add_order_note( sprintf(
+			/* translators: 1: invoice number, 2: reason */
+			__( 'PayNow 發票已作廢 (#%1$s)：%2$s', 'mo-ectools' ),
+			$invoice_no,
+			'' !== $reason ? $reason : __( '無原因', 'mo-ectools' )
+		) );
+		$order->save();
+		return [ 'ok' => true, 'message' => $invoice_no ];
+	}
+}

@@ -1,0 +1,58 @@
+# Build & dependencies
+/vendor/
+/node_modules/
+/assets/blocks/build/
+# All payment-method block JS are hand-coded (no webpack), so they must ship via git.
+!/assets/blocks/build/methods/payuni/
+!/assets/blocks/build/methods/ecpay/
+!/assets/blocks/build/methods/newebpay/
+!/assets/blocks/build/methods/pchomepay/
+!/assets/blocks/build/methods/paynow/
+!/assets/blocks/build/methods/smilepay/
+!/assets/blocks/build/methods/tappay/
+!/assets/blocks/build/methods/shopline-payments/
+/.phpunit.cache/
+/.phpcs-cache
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+/wp-content/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer / NPM lock files: keep them
+# (composer.lock and package-lock.json should be committed)
+
+# WP-CLI test artifacts
+/tests/tmp/
+
+# Local config
+.env
+.env.local
+phpunit.xml
+
+# Dev-only docs and tooling (kept local, not shipped to wp.org / not in GitHub repo)
+/CLAUDE.md
+/MEMORY.md
+/CHANGELOG.md
+/phpcs.xml
+/.editorconfig
+/scripts/
+
+# Distribution
+/dist/
+/*.zip
+
+# E2E screenshots (work artifacts, organized in screenshots/)
+/screenshots/
+/.playwright-mcp/
+.wp-org-assets/

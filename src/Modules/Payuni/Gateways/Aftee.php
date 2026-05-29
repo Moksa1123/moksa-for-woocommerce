@@ -1,0 +1,60 @@
+<?php
+namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+
+use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+
+defined( 'ABSPATH' ) || exit;
+
+class Aftee extends GatewayBase {
+
+	const GATEWAY_ID = 'mo_payuni_aftee';
+
+	public static $order_metas;
+
+	public function __construct() {
+
+		parent::__construct();
+
+		$this->id                 = self::GATEWAY_ID;
+		$this->method_title       = __( 'PAYUNi AFTEE Payment', 'mo-ectools' );
+		$this->method_description = __( 'PAYUNi AFTEE Payment', 'mo-ectools' );
+		$this->supports           = array(
+			'products',
+		);
+
+		$this->init_form_fields();
+		$this->init_settings();
+
+		$this->title                      = $this->get_option( 'title' );
+		$this->description                = $this->get_option( 'description' );
+		$this->min_amount                 = $this->get_option( 'min_amount' );
+		$this->incomplete_payment_message = $this->get_option( 'incomplete_payment_message' );
+
+		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
+		add_filter( 'mo_payuni_transaction_args_' . $this->id, array( $this, 'payuni_payment_aftee_transaction_arrgs' ), 10, 2 );
+	}
+
+	public function init_form_fields() {
+		$this->form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/Payuni/Settings/AfteeSetting.php';
+	}
+
+	public function payuni_payment_aftee_transaction_arrgs( $args, $order ) {
+		return array_merge(
+			$args,
+			array(
+				'Aftee' => '1',
+			)
+		);
+	}
+
+	public static function get_payment_order_metas() {
+		$order_metas =
+		array(
+			OrderMeta::AFTEE_PAY_NO   => _x( 'Pay No', 'AFTEE', 'mo-ectools' ),
+			OrderMeta::AFTEE_PAY_TIME => __( 'Pay Time', 'mo-ectools' ),
+		);
+
+		return $order_metas;
+	}
+}

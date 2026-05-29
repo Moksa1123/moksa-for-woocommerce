@@ -1,0 +1,27 @@
+{
+    "name": "mowp",
+    "version": "0.1.0",
+    "description": "MoWP - Taiwan Payment, Shipping & Invoice Toolkit for WooCommerce",
+    "license": "GPL-3.0-or-later",
+    "private": true,
+    "scripts": {
+        "build": "wp-scripts build --webpack-src-dir=assets/blocks/src --output-path=assets/blocks/build",
+        "start": "wp-scripts start --webpack-src-dir=assets/blocks/src --output-path=assets/blocks/build",
+        "lint:js": "wp-scripts lint-js assets/blocks/src",
+        "lint:js:fix": "wp-scripts lint-js assets/blocks/src --fix",
+        "lint:css": "wp-scripts lint-style assets/blocks/src",
+        "format": "wp-scripts format assets/blocks/src",
+        "packages-update": "wp-scripts packages-update"
+    },
+    "devDependencies": {
+        "@woocommerce/blocks-registry": "wp-6.7",
+        "@wordpress/i18n": "^5.0.0",
+        "@wordpress/scripts": "^30.0.0"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "browserslist": [
+        "extends @wordpress/browserslist-config"
+    ]
+}

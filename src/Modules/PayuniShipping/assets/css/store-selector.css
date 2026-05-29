@@ -1,0 +1,229 @@
+/**
+ * PAYUNi 物流選店 UI — Classic + Block 共用樣式。
+ */
+
+.payuni-store-selector-row {
+	border-top: 1px solid #e2e4e7;
+}
+
+.payuni-store-selector-row > th,
+.payuni-store-selector-row > td {
+	padding: 16px 12px 16px 0;
+	vertical-align: top;
+	box-sizing: border-box;
+}
+
+.payuni-layout-two_column .payuni-store-selector-label {
+	width: auto;
+	font-weight: 600;
+	color: #1d2327;
+	white-space: nowrap;
+}
+
+.payuni-layout-single_column .payuni-select-store-heading {
+	margin: 0 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+/* Classic：host 仍是 review-order <tr> 內，需要邊框 + 背景區隔 */
+.payuni-store-selector {
+	display: block;
+	box-sizing: border-box;
+	padding: 12px 14px;
+	background: #fafafa;
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	font-size: 14px;
+	color: #1d2327;
+	/* WC 把 review-order 塞 <tfoot>，<tfoot td> 預設 text-align: right 要 reset */
+	text-align: left;
+	container-type: inline-size;
+}
+
+/* Block：host 現在塞進 .wc-block-components-checkout-step 內部，繼承 step 的
+   card padding + border。不需自己邊框 — 但保留留白讓 store info 跟上方 shipping
+   tabs 有呼吸距離。 */
+.mowp-payuni-block-store {
+	display: block;
+	box-sizing: border-box;
+	padding: 12px 14px;
+	background: #fafafa;
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	font-size: 14px;
+	color: #1d2327;
+	margin-top: 16px;
+	container-type: inline-size;
+}
+
+/* v0.1.22 — Block CVS 細粒度 hide：保留 summary card，只藏 form 內地址欄
+   失敗回顧（避免再犯）：
+   - v0.1.18: 把整段 .wp-block-woocommerce-checkout-shipping-address-block
+     藏掉 → 整段消失含姓名電話，user 看不到 edit 按鈕
+   - v0.1.19: 同時藏 summary card + form 內地址欄 → summary 藏掉時 form
+     根本沒 mount，整段空白
+   - v0.1.20: JS 自動 click edit 強制 form mount → React state 反彈，summary
+     又跑回來
+   - v0.1.21: 全砍 hide rule 走 server-side 清地址 → user 還是看到完整地址，
+     困惑「我選 CVS 為什麼還要填地址」
+
+   v0.1.22 策略（Classic-style 對齊）：
+   - **Summary card 不藏**：user 看得到 edit 入口
+   - **點 edit 展開 form 後**：CSS 個別藏 address_1 / city / state / postcode /
+     country / company，留 first_name / last_name / phone
+   - User 看到的：summary 顯示原貌 → 點編輯 → 只剩姓名電話可改 → save 回 summary
+   - Server-side 清空照舊（v0.1.21 既有），訂單上 shipping address 是空的
+*/
+
+/* shipping + billing address block 都套同一組 hide rule。
+   Block 的「使用相同地址接收帳單」勾選邏輯跟 Classic 相反：勾選=同地址（不顯示
+   billing form），取消=不同地址（billing form 顯示）。當 user 取消勾選時，billing
+   form 顯示出來，跟 shipping 同樣只該保留姓名電話。 */
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__country,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_1,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2-toggle,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__city,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__state,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__postcode,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__company,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__country,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_1,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2-toggle,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__city,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__state,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__postcode,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__company,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .mo-tw-district-wrapper,
+body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .mo-tw-district-wrapper {
+	display: none !important;
+}
+
+.payuni-select-store-heading {
+	text-align: left;
+}
+
+.payuni-store-selector .payuni-selected-store,
+.payuni-store-selector .payuni-no-store,
+.mowp-payuni-block-store > div {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.payuni-selected-store .store-info,
+.mowp-payuni-block-store .mowp-payuni-block-store__name {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.payuni-selected-store .store-name,
+.mowp-payuni-block-store__title {
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+	margin-bottom: 2px;
+}
+
+.payuni-selected-store .store-address,
+.mowp-payuni-block-store__address {
+	display: block;
+	font-size: 12px;
+	color: #50575e;
+	line-height: 1.5;
+	word-break: break-word;
+}
+
+.payuni-selected-store .store-meta,
+.mowp-payuni-block-store__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 4px;
+}
+
+.payuni-selected-store .store-id,
+.payuni-selected-store .store-outside,
+.mowp-payuni-block-store__id {
+	display: inline-block;
+	padding: 1px 8px;
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	color: #50575e;
+	border-radius: 11px;
+	font-size: 11px;
+	line-height: 18px;
+}
+
+.payuni-selected-store .store-outside {
+	background: #fff7d6;
+	color: #6b4f00;
+	border-color: #f0e2a8;
+}
+
+.payuni-no-store p,
+.mowp-payuni-block-store__placeholder {
+	margin: 0;
+	color: #646970;
+	font-size: 13px;
+}
+
+.mowp-payuni-block-store__info {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+/* 主動覆寫主題的 .button — Blocksy 等的 50px 高大按鈕跟選店卡片視覺不協調 */
+.payuni-store-selector .payuni-store-map-btn,
+.mowp-payuni-block-store .mowp-payuni-block-store__btn {
+	flex: 0 0 auto;
+	cursor: pointer;
+	min-height: auto;
+	padding: 6px 14px;
+	font-size: 13px;
+	line-height: 1.4;
+	transition: opacity .15s ease;
+}
+
+.payuni-store-selector .payuni-store-map-btn:focus-visible,
+.mowp-payuni-block-store .mowp-payuni-block-store__btn:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+@container (max-width: 260px) {
+	.payuni-store-selector .payuni-selected-store,
+	.payuni-store-selector .payuni-no-store,
+	.mowp-payuni-block-store > div {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.payuni-selected-store .store-info,
+	.mowp-payuni-block-store .mowp-payuni-block-store__name {
+		width: 100%;
+	}
+}
+
+@supports not (container-type: inline-size) {
+	@media (max-width: 360px) {
+		.payuni-store-selector .payuni-selected-store,
+		.payuni-store-selector .payuni-no-store,
+		.mowp-payuni-block-store > div {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.payuni-selected-store .store-info,
+		.mowp-payuni-block-store .mowp-payuni-block-store__name {
+			width: 100%;
+		}
+	}
+}

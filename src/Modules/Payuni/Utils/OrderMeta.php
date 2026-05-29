@@ -1,0 +1,73 @@
+<?php
+declare( strict_types=1 );
+
+namespace MoksaWeb\Mowc\Modules\Payuni\Utils;
+
+use MoksaWeb\Mowc\Order\Meta\Keys;
+
+defined( 'ABSPATH' ) || exit;
+
+class OrderMeta {
+
+	const PAYUNI_ORDER_NO      = Keys::PAYUNI_ORDER_NO;
+	const UNI_NO               = Keys::PAYUNI_TRADE_NO;
+	const TRADE_STATUS         = Keys::PAYUNI_TRADE_STATUS;
+	const TRADE_AMOUNT         = Keys::PAYUNI_TRADE_AMOUNT;
+	const STATUS               = Keys::PAYUNI_STATUS;
+	const MESSAGE              = Keys::PAYUNI_MESSAGE;
+	const PAY_TYPE             = Keys::PAYUNI_PAYMENT_TYPE;
+
+	const CREDIT_REST_CODE     = Keys::PAYUNI_CREDIT_RESCODE;
+	const CREDIT_REST_CODE_MSG = Keys::PAYUNI_CREDIT_RESCODE_MSG;
+	const CREDIT_AUTH_TYPE     = Keys::PAYUNI_CREDIT_AUTH_TYPE;
+	const CREDIT_CARD_4NO      = Keys::PAYUNI_CREDIT_CARD4NO;
+	const CREDIT_AUTH_DAY      = Keys::PAYUNI_CREDIT_AUTH_DAY;
+	const CREDIT_AUTH_TIME     = Keys::PAYUNI_CREDIT_AUTH_TIME;
+	const CREDIT_AUTH_CODE     = Keys::PAYUNI_CREDIT_AUTH_CODE;
+	const CREDIT_INSTALL       = Keys::PAYUNI_CREDIT_INST;
+	const CREDIT_FIRST_AMT     = Keys::PAYUNI_CREDIT_FIRST_AMT;
+	const CREDIT_EACH_AMT      = Keys::PAYUNI_CREDIT_EACH_AMT;
+	const CREDIT_BANK          = Keys::PAYUNI_CREDIT_BANK;
+	const CREDIT_LOCATION      = Keys::PAYUNI_CREDIT_LOCATION;
+	const CREDIT_ECI           = Keys::PAYUNI_CREDIT_ECI;
+	const CREDIT_RED_AMT       = Keys::PAYUNI_CREDIT_RED_AMT;
+	const CREDIT_RED_NO        = Keys::PAYUNI_CREDIT_RED_NO;
+	const CREDIT_TOKEN_ID      = Keys::PAYUNI_CREDIT_TOKEN_ID;
+	const CREDIT_TOKEN_LIFE    = Keys::PAYUNI_CREDIT_TOKEN_LIFE;
+
+	const AMT_PAY_NO           = Keys::PAYUNI_ATM_PAYNO;
+	const AMT_BANK_TYPE        = Keys::PAYUNI_ATM_BANKTYPE;
+	const AMT_PAY_TIME         = Keys::PAYUNI_ATM_PAYTIME;
+	const AMT_ACCOUNT_5NO      = Keys::PAYUNI_ATM_ACCOUNT5NO;
+	const AMT_PAY_SET          = Keys::PAYUNI_ATM_PAYSET;
+	const AMT_EXPIRE_DATE      = Keys::PAYUNI_ATM_EXPIREDATE;
+
+	const CVS_PAY_NO           = Keys::PAYUNI_CVS_PAYNO;
+	const CVS_STORE            = Keys::PAYUNI_CVS_STORE;
+	const CVS_EXPIRE_DATE      = Keys::PAYUNI_CVS_EXPIREDATE;
+
+	const AFTEE_PAY_NO         = Keys::PAYUNI_AFTEE_PAYNO;
+	const AFTEE_PAY_TIME       = Keys::PAYUNI_AFTEE_PAYTIME;
+
+	const LINE_PAY_NO          = Keys::PAYUNI_LINEPAY_PAYNO;
+
+	const REFUND_NO            = Keys::PAYUNI_REFUND_NO;
+	const REFUND_AMT           = Keys::PAYUNI_REFUND_AMT;
+	const REFUND_TIME          = Keys::PAYUNI_REFUND_TIME;
+
+	const CLOSE_STATUS         = Keys::PAYUNI_CLOSE_STATUS;
+	const CLOSE_TIME           = Keys::PAYUNI_CLOSE_TIME;
+	const CLOSE_AUTH           = Keys::PAYUNI_CLOSE_AUTH;
+
+	const PAID_AT              = Keys::PAYUNI_PAID_AT;
+
+	const EINVOICE_NO          = Keys::PAYUNI_EINVOICE_NO;
+	const EINVOICE_AMT         = Keys::PAYUNI_EINVOICE_AMT;
+	const EINVOICE_TIME        = Keys::PAYUNI_EINVOICE_TIME;
+	const EINVOICE_TYPE        = Keys::PAYUNI_EINVOICE_TYPE;
+	const EINVOICE_INFO        = Keys::PAYUNI_EINVOICE_INFO;
+	const EINVOICE_STATUS      = Keys::PAYUNI_EINVOICE_STATUS;
+
+	const PLUGIN_VERSION       = Keys::PAYUNI_PLUGIN_VERSION;
+	const ORDER_SERIAL_NO      = Keys::PAYUNI_ORDER_SERIAL_NO;
+}

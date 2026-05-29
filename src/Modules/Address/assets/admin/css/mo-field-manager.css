@@ -1,0 +1,122 @@
+/**
+ * mowp Field Manager admin UI.
+ */
+
+.mo-tw-field-list {
+	list-style: none;
+	margin: 0 0 8px;
+	padding: 0;
+	max-width: 640px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.mo-tw-field-list > li {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 14px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #f6f7f7;
+	transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.mo-tw-field-list > li:last-child {
+	border-bottom: none;
+}
+
+.mo-tw-field-list > li:hover {
+	background: #f0f0f1;
+}
+
+.mo-tw-field-list > li.is-disabled {
+	opacity: 0.5;
+	background: #f0f0f1;
+}
+
+.mo-tw-field-list > li.is-disabled .mo-tw-label,
+.mo-tw-field-list > li.is-disabled .mo-tw-width-options {
+	text-decoration: line-through;
+}
+
+.mo-tw-drag {
+	display: inline-block;
+	width: 18px;
+	font-size: 18px;
+	line-height: 1;
+	color: #8c8f94;
+	cursor: move;
+	cursor: grab;
+	user-select: none;
+}
+
+.mo-tw-drag:active {
+	cursor: grabbing;
+}
+
+.mo-tw-enable,
+.mo-tw-required {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	color: #50575e;
+	cursor: pointer;
+	min-width: 60px;
+}
+
+.mo-tw-required {
+	min-width: 56px;
+}
+
+.mo-tw-enable input[type=checkbox],
+.mo-tw-required input[type=checkbox] {
+	margin: 0;
+}
+
+/* disabled 欄位的「必填」checkbox 也要 disable + 變灰 */
+.mo-tw-field-list > li.is-disabled .mo-tw-required {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.mo-tw-label {
+	flex: 1;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.mo-tw-width-options {
+	display: inline-flex;
+	gap: 12px;
+	font-size: 13px;
+	color: #50575e;
+}
+
+.mo-tw-width-options label {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+}
+
+.mo-tw-width-options input[type=radio] {
+	margin: 0;
+}
+
+.mo-tw-placeholder {
+	height: 44px;
+	background: #fffbe6;
+	border: 1px dashed #f0b849;
+	border-radius: 2px;
+	margin: 0;
+	list-style: none;
+}
+
+.ui-sortable-helper {
+	box-shadow: 0 6px 18px rgba( 0, 0, 0, 0.18 );
+	background: #fff !important;
+	border-radius: 4px;
+}

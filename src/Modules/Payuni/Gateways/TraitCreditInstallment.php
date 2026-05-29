@@ -1,0 +1,79 @@
+<?php
+namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+
+use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentRequest;
+use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+
+defined( 'ABSPATH' ) || exit;
+
+trait TraitCreditInstallment {
+
+	public $installs;
+
+	public function init_installment( $installs, $min_amount ) {
+
+		$this->supports = array(
+			'products',
+			'refunds',
+		);
+
+		$this->set_installs( $installs );
+		$this->min_amount = $min_amount;
+	}
+	private function set_installs( $installs ) {
+		$this->installs = $installs;
+	}
+
+	public function set_min_amount( $amount ) {
+		$this->min_amount = $amount;
+	}
+
+	public function init_form_fields() {
+		$this->form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/Payuni/Settings/CreditInstallmentSetting.php';
+		/* translators: %s: number of installments */
+		$this->form_fields['title']['default'] = sprintf( __( 'PAYUNi Installment Payment (%s Installments)', 'mo-ectools' ), $this->installs );
+	}
+
+	public function is_available() {
+		$is_available = ( 'yes' === $this->enabled );
+
+		if ( WC()->cart && 0 < $this->get_order_total() && 0 < $this->max_amount && $this->max_amount < $this->get_order_total() ) {
+			$is_available = false;
+		}
+
+		if ( WC()->cart && 0 < $this->get_order_total() && 0 < $this->min_amount && $this->min_amount > $this->get_order_total() ) {
+			$is_available = false;
+		}
+
+		return $is_available;
+	}
+
+	public function payuni_payment_installment_transaction_arrgs( $args, $order ) {
+		return array_merge(
+			$args,
+			array(
+				'CreditInst' => $this->installs,
+			)
+		);
+	}
+
+	public function process_refund( $order_id, $amount = null, $reason = '' ) {
+		$request = new PaymentRequest();
+		return $request->refund( $order_id, $amount, $reason );
+	}
+
+	public static function get_payment_order_metas() {
+		$order_metas =
+		array(
+			OrderMeta::CREDIT_AUTH_TYPE => __( 'Auth Type', 'mo-ectools' ),
+			OrderMeta::CREDIT_CARD_4NO  => __( 'Card Last 4 No', 'mo-ectools' ),
+			OrderMeta::CREDIT_INSTALL   => __( 'Installments', 'mo-ectools' ),
+			OrderMeta::CREDIT_FIRST_AMT => __( 'First Amount', 'mo-ectools' ),
+			OrderMeta::CREDIT_EACH_AMT  => __( 'Each Amount', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_DAY  => __( 'Auth Date', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_TIME => __( 'Auth Time', 'mo-ectools' ),
+		);
+
+		return $order_metas;
+	}
+}
