@@ -21,7 +21,15 @@ final class CreditLifecycleBox {
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
-	public static function register(): void {
+	public static function register( $post_type = '', $post = null ): void {
+		// 只在「綠界信用卡付款」的訂單註冊；其他付款方式的訂單根本不顯示這個區塊，
+		// 避免後台每張非綠界信用卡訂單都冒一個「無法使用此區塊」的空殼。
+		$order = ( $post instanceof \WC_Order )
+			? $post
+			: ( ( $post instanceof \WP_Post ) ? wc_get_order( $post->ID ) : null );
+		if ( ! $order instanceof \WC_Order || ! self::is_credit_order( $order ) ) {
+			return;
+		}
 		// HPOS-aware screen IDs — 同時 cover legacy CPT shop_order 跟 wc-orders
 		$screens = [ 'shop_order', 'woocommerce_page_wc-orders' ];
 		foreach ( $screens as $screen ) {
