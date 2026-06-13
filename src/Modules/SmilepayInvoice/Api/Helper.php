@@ -94,6 +94,7 @@ final class Helper extends AbstractCredentialHelper {
 		}
 
 		$raw = (string) wp_remote_retrieve_body( $response );
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
 		$xml = @simplexml_load_string( $raw );
 		if ( ! is_object( $xml ) ) {
 			return [ 'ok' => false, 'status' => 'PARSE_FAIL', 'message' => __( 'SmilePay 回傳格式無法解析', 'mo-ectools' ), 'data' => [ 'raw' => $raw ] ];

@@ -66,7 +66,7 @@ These run when an invoice is issued for an order (immediately on payment, on com
 
 = Carrier tracking links =
 
-When a shipment has a tracking number, the order page shows a link to the carrier's own public tracking page (no data is sent by the plugin; the customer clicks the link): T-Cat 黑貓宅配 (t-cat.com.tw), 7-11 (eservice.7-11.com.tw), FamilyMart 全家 (fmec.famiport.com.tw), Hi-Life 萊爾富 (hilife.com.tw), OK Mart (ecservice.okmart.com.tw), Chunghwa Post 中華郵政 (postserv.post.gov.tw).
+When a shipment has a tracking number, the order page shows a link to the carrier's own public tracking page (no data is sent by the plugin; the customer clicks the link): T-Cat 黑貓宅配 (t-cat.com.tw), 7-11 (eservice.7-11.com.tw), 7-11 via PAYUNi logistics (tracking.shopmore.com.tw), FamilyMart 全家 (fmec.famiport.com.tw), Hi-Life 萊爾富 (hilife.com.tw), OK Mart (ecservice.okmart.com.tw), Chunghwa Post 中華郵政 (postserv.post.gov.tw).
 
 == Installation ==
 

@@ -63,6 +63,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function decrypt_trade_info( string $trade_info ): ?array {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (TradeInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$bin = @hex2bin( $trade_info );
 		if ( false === $bin ) {
 			return null;
