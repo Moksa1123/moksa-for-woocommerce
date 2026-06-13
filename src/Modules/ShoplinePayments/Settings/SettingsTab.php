@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class SettingsTab {
 
 	public function get_settings(): array {
-		$callback_url = home_url( '/wc-api/mo_shopline_payments' );
+		$callback_url = home_url( '/wc-api/moksafowo_shopline_payments' );
 
 		return [
 			[

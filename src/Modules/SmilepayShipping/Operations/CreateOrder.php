@@ -263,8 +263,8 @@ final class CreateOrder {
 			'od_sob'           => mb_substr( (string) $pkg['goods_name'], 0, 60 ),
 			'Amount'           => max( 1, (int) $pkg['amount'] ),
 			'Logistics_store'  => '',
-			'Roturl'           => home_url( '/wc-api/smilepay_shipping_status' ),
-			'Logistics_Roturl' => home_url( '/wc-api/smilepay_shipping_status' ),
+			'Roturl'           => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
+			'Logistics_Roturl' => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
 			'Roturl_status'    => 'mowp1.0',
 			'Remark'           => $order->get_customer_note(),
 		];
@@ -306,8 +306,8 @@ final class CreateOrder {
 			'od_sob'           => $products,
 			'Amount'           => $amount,
 			'Logistics_store'  => $is_cvs ? "{$store_id}/{$store_name}/{$store_addr}" : '',
-			'Roturl'           => home_url( '/wc-api/smilepay_shipping_status' ),
-			'Logistics_Roturl' => home_url( '/wc-api/smilepay_shipping_status' ),
+			'Roturl'           => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
+			'Logistics_Roturl' => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
 			'Roturl_status'    => 'mowp1.0',
 			'Remark'           => $order->get_customer_note(),
 		];

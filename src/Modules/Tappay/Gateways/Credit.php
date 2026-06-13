@@ -115,9 +115,9 @@ final class Credit extends \WC_Payment_Gateway {
 		$result_url  = add_query_arg(
 			'order_number',
 			rawurlencode( $order_number ),
-			home_url( '/wc-api/mo_tappay_result' )
+			home_url( '/wc-api/moksafowo_tappay_result' )
 		);
-		$notify_url  = home_url( '/wc-api/mo_tappay_notify' );
+		$notify_url  = home_url( '/wc-api/moksafowo_tappay_notify' );
 
 		$payload = [
 			'prime'               => $prime,
