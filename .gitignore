@@ -1,16 +1,12 @@
 # Build & dependencies
 /vendor/
 /node_modules/
-/assets/blocks/build/
-# All payment-method block JS are hand-coded (no webpack), so they must ship via git.
-!/assets/blocks/build/methods/payuni/
-!/assets/blocks/build/methods/ecpay/
-!/assets/blocks/build/methods/newebpay/
-!/assets/blocks/build/methods/pchomepay/
-!/assets/blocks/build/methods/paynow/
-!/assets/blocks/build/methods/smilepay/
-!/assets/blocks/build/methods/tappay/
-!/assets/blocks/build/methods/shopline-payments/
+# Block bundles ship via git (wp.org needs the built JS). Track everything
+# under methods/; ignore only the top-level build/ dir's other contents.
+# NOTE: a child can't be re-included once its parent dir is excluded, so we
+# exclude build/* (direct children only) and re-include the methods/ subtree.
+/assets/blocks/build/*
+!/assets/blocks/build/methods/
 /.phpunit.cache/
 /.phpcs-cache
 
