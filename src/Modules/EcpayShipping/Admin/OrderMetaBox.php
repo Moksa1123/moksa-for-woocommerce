@@ -385,11 +385,13 @@ final class OrderMetaBox {
 			'FAMIC2C'    => __( '全家取貨', 'mo-ectools' ),
 			'HILIFEC2C'  => __( '萊爾富取貨', 'mo-ectools' ),
 			'OKMARTC2C'  => __( 'OK 取貨', 'mo-ectools' ),
-			'UNIMART'    => __( '7-11 大宗', 'mo-ectools' ),
-			'FAMI'       => __( '全家大宗', 'mo-ectools' ),
-			'HILIFE'     => __( '萊爾富大宗', 'mo-ectools' ),
-			'TCAT'       => __( '黑貓宅配', 'mo-ectools' ),
-			'POST'       => __( '中華郵政', 'mo-ectools' ),
+			'UNIMART'       => __( '7-11 大宗', 'mo-ectools' ),
+			'UNIMARTFREEZE' => __( '7-11 冷凍', 'mo-ectools' ),
+			'FAMI'          => __( '全家大宗', 'mo-ectools' ),
+			'HILIFE'        => __( '萊爾富大宗', 'mo-ectools' ),
+			'OKMART'        => __( 'OK 大宗', 'mo-ectools' ),
+			'TCAT'          => __( '黑貓宅配', 'mo-ectools' ),
+			'POST'          => __( '中華郵政', 'mo-ectools' ),
 		];
 		return $map[ $subtype ] ?? $subtype;
 	}

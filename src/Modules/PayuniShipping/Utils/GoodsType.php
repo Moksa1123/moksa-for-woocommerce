@@ -22,7 +22,8 @@ class GoodsType {
                 return '冷藏';
                 break;
 			default:
-				return '未知的 GoodsType:' . $goods_type_id;
+				// 容忍空值 / 舊版資料（直接存中文溫層名）：原樣顯示，不露 debug 字串。
+				return (string) $goods_type_id;
 		}
 	}
 	
