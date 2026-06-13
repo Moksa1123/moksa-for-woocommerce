@@ -115,7 +115,16 @@
 				if (data.success) {
 					// Update original value to new value
 					$select.data('original-value', package_spec);
-					
+
+					// Prepend the new order note into the notes panel (WC-native pattern) — no reload needed.
+					if (data.note_html) {
+						var $notes = $('ul.order_notes');
+						if ($notes.length) {
+							$notes.find('li.no-items').remove();
+							$notes.prepend(data.note_html);
+						}
+					}
+
 					// Show success indicator briefly
 					$('.package-spec-loading').html('<span style="color: #46b450;">✓ 更新成功</span>');
 					setTimeout(function() {

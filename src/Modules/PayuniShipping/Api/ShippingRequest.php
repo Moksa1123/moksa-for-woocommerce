@@ -298,11 +298,22 @@ class ShippingRequest {
 		);
 		$spec_label = isset( $spec_labels[$package_spec] ) ? $spec_labels[$package_spec] : $package_spec;
 		/* translators: %s: package temperature spec label (e.g. 60cm / 90cm) */
-		$order->add_order_note( sprintf( __( '包裹溫層已更新為：%s', 'mo-ectools' ), $spec_label ) );
+		$note_id = $order->add_order_note( sprintf( __( '包裹溫層已更新為：%s', 'mo-ectools' ), $spec_label ) );
+
+		// 用 WC 原生 view 渲染這則備註，回傳給前端 prepend 進備註面板（免重載）。
+		$note_html = '';
+		$note_view = WC_ABSPATH . 'includes/admin/meta-boxes/views/html-order-note.php';
+		if ( $note_id && is_readable( $note_view ) ) {
+			$note = wc_get_order_note( $note_id );
+			ob_start();
+			include $note_view;
+			$note_html = (string) ob_get_clean();
+		}
 
 		$return = array(
-			'success' => true,
-			'result'  => __( 'Package spec updated successfully.', 'mo-ectools' ),
+			'success'   => true,
+			'result'    => __( 'Package spec updated successfully.', 'mo-ectools' ),
+			'note_html' => $note_html,
 		);
 		wp_send_json( $return );
 	}
