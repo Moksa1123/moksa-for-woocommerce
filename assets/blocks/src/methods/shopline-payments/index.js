@@ -38,7 +38,7 @@ SHOPLINE_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( 'Shopline Payments', 'mowp' )
+			settings.title || __( 'Shopline Payments', 'mo-ectools' )
 		),
 		content: <Content />,
 		edit: <Content />,

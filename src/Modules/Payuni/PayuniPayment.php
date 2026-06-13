@@ -204,6 +204,10 @@ class PayuniPayment {
 
 	
 	public function moksafowo_payuni_admin_scripts() {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders', 'woocommerce_page_wc-settings' ], true ) ) {
+			return;
+		}
 
 		//enqueue admin css
 		wp_enqueue_style( 'moksafowo-payuni-admin', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-admin.css', array(), MOKSAFOWO_VERSION, 'all' );

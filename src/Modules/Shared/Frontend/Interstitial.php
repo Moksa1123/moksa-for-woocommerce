@@ -69,4 +69,26 @@ final class Interstitial {
 			],
 		];
 	}
+
+	/**
+	 * 物流標籤列印頁 kses allowlist — 物流商 print server 回傳的標籤 HTML
+	 * （表格 / 圖片 / 樣式）允許，active content（script / on* / iframe）剔除。
+	 * 各物流 PrintProxy 共用，避免重複定義。
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	public static function label_allowlist(): array {
+		$attrs  = [ 'id' => true, 'class' => true, 'style' => true, 'align' => true, 'valign' => true, 'width' => true, 'height' => true, 'border' => true, 'cellpadding' => true, 'cellspacing' => true, 'colspan' => true, 'rowspan' => true, 'bgcolor' => true ];
+		$tags   = [ 'html', 'head', 'body', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em', 'u', 'br', 'hr', 'center', 'font', 'section', 'header', 'footer' ];
+		$result = [];
+		foreach ( $tags as $tag ) {
+			$result[ $tag ] = $attrs;
+		}
+		$result['meta']  = [ 'charset' => true, 'name' => true, 'content' => true, 'http-equiv' => true ];
+		$result['title'] = [];
+		$result['style'] = [ 'type' => true, 'media' => true ];
+		$result['link']  = [ 'rel' => true, 'href' => true, 'type' => true, 'media' => true ];
+		$result['img']   = array_merge( $attrs, [ 'src' => true, 'alt' => true ] );
+		return $result;
+	}
 }

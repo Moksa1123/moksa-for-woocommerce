@@ -892,7 +892,8 @@ JS
 		if ( ! empty( $store_data_json ) ) {
 			$parsed_data = json_decode( $store_data_json, true );
 			if ( json_last_error() === JSON_ERROR_NONE && $parsed_data ) {
-				$store_data = $parsed_data;
+				// json_decode 不做消毒 — 逐欄 sanitize 後才放進 session / 寫 meta。
+				$store_data = map_deep( $parsed_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 				PayuniShipping::log( 'Successfully parsed store JSON data from POST' );
 			} else {
 				PayuniShipping::log( 'JSON decode error from POST: ' . json_last_error_msg() );

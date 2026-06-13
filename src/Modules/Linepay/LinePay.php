@@ -121,6 +121,10 @@ final class LinePay {
 	}
 
 	public function admin_scripts(): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders', 'woocommerce_page_wc-settings' ], true ) ) {
+			return;
+		}
 
 		wp_enqueue_script( 'moksafowo-linepay-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/js/moksafowo-linepay-admin.js', array(), MOKSAFOWO_VERSION, true );
 		wp_enqueue_style( 'moksafowo-linepay-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/css/moksafowo-linepay-admin.css', array(), MOKSAFOWO_VERSION );

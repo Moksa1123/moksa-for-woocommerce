@@ -163,14 +163,16 @@ final class StoreSelector {
 			exit( 'Unknown trade' );
 		}
 
+		// 解密內容源自遠端輸入 — cast 不等於 sanitize，逐欄 sanitize 後才存 session / 寫 meta。
+		$clean = static fn( $k ) => sanitize_text_field( (string) ( $decrypted[ $k ] ?? '' ) );
 		$store = [
-			'id'        => (string) ( $decrypted['StoreID'] ?? '' ),
-			'name'      => (string) ( $decrypted['StoreName'] ?? '' ),
-			'address'   => (string) ( $decrypted['StoreAddr'] ?? '' ),
-			'telephone' => (string) ( $decrypted['StoreTel'] ?? '' ),
-			'lgs_type'  => (string) ( $decrypted['LgsType'] ?? '' ),
-			'ship_type' => (string) ( $decrypted['ShipType'] ?? '' ),
-			'method_id' => (string) ( $state['method_id'] ?? '' ),
+			'id'        => $clean( 'StoreID' ),
+			'name'      => $clean( 'StoreName' ),
+			'address'   => $clean( 'StoreAddr' ),
+			'telephone' => $clean( 'StoreTel' ),
+			'lgs_type'  => $clean( 'LgsType' ),
+			'ship_type' => $clean( 'ShipType' ),
+			'method_id' => sanitize_text_field( (string) ( $state['method_id'] ?? '' ) ),
 			'mtn'       => $mtn,
 		];
 		if ( '' === $store['id'] ) {

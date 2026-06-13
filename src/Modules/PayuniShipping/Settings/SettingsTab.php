@@ -268,9 +268,9 @@ class SettingsTab extends \WC_Settings_Page {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-		$tab  = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
+		$tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 
 		if ( 'wc-settings' === $page && 'payuni' === $tab ) {
 

@@ -302,18 +302,7 @@ JS;
 	 * @return array<string, array<string, bool>>
 	 */
 	public static function label_allowlist(): array {
-		$attrs  = [ 'id' => true, 'class' => true, 'style' => true, 'align' => true, 'valign' => true, 'width' => true, 'height' => true, 'border' => true, 'cellpadding' => true, 'cellspacing' => true, 'colspan' => true, 'rowspan' => true, 'bgcolor' => true ];
-		$tags   = [ 'html', 'head', 'body', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em', 'u', 'br', 'hr', 'center', 'font', 'section', 'header', 'footer' ];
-		$result = [];
-		foreach ( $tags as $tag ) {
-			$result[ $tag ] = $attrs;
-		}
-		$result['meta']  = [ 'charset' => true, 'name' => true, 'content' => true, 'http-equiv' => true ];
-		$result['title'] = [];
-		$result['style'] = [ 'type' => true, 'media' => true ];
-		$result['link']  = [ 'rel' => true, 'href' => true, 'type' => true, 'media' => true ];
-		$result['img']   = array_merge( $attrs, [ 'src' => true, 'alt' => true ] );
-		return $result;
+		return Interstitial::label_allowlist();
 	}
 
 	private static function ecpay_urlencode( string $s ): string {

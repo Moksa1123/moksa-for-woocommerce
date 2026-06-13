@@ -216,9 +216,9 @@ class SettingsTab extends \WC_Settings_Page {
 		}
 
      // phpcs:disable WordPress.Security.NonceVerification.Recommended
-		$page    = ( array_key_exists( 'page', $_GET ) ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		$tab     = ( array_key_exists( 'tab', $_GET ) ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
-		$section = ( array_key_exists( 'section', $_GET ) ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '';
+		$page    = ( array_key_exists( 'page', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		$tab     = ( array_key_exists( 'tab', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		$section = ( array_key_exists( 'section', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
 
 		if ( 'wc-settings' === $page && 'payuni' === $tab ) {
 

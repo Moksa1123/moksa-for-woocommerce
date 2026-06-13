@@ -241,8 +241,10 @@ CSS;
 		}
 
 		header( 'Content-Type: text/html; charset=utf-8' );
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $html;
+		// 速買配 print server 回傳標籤 HTML — 過 wp_kses 白名單剔除 active content，
+		// 列印觸發改走官方 inline script API（與 EcpayShipping PrintProxy 一致）。
+		echo wp_kses( $html, Interstitial::label_allowlist() );
+		wp_print_inline_script_tag( 'window.addEventListener("load",function(){window.print();});' );
 		exit;
 	}
 }

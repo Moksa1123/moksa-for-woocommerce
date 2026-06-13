@@ -110,9 +110,9 @@ class OrderMetaBox {
 		}
 
 		if ( ! empty( $shipping_no ) && $ship_type === ShipType::TCAT ) {
-			$label_btn = '<button class="button print-label" data-id=' . esc_attr( (string) $oid ) . ' data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_download_label">' . esc_html__( '下載標籤', 'mo-ectools' ) . '</button>';
+			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_download_label">' . esc_html__( '下載標籤', 'mo-ectools' ) . '</button>';
 		} else {
-			$label_btn = '<button class="button print-label" data-id=' . esc_attr( (string) $oid ) . ' data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( '列印標籤', 'mo-ectools' ) . '</button>';
+			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( '列印標籤', 'mo-ectools' ) . '</button>';
 		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label_btn built locally with esc_attr/esc_html applied

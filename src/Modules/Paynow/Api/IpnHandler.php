@@ -219,7 +219,7 @@ final class IpnHandler {
 				if ( '' !== $icash ) {
 					$order->update_meta_data( Keys::PAYNOW_ICASH_NO, $icash );
 				}
-				$icash_url = self::pick( $posted, [ 'icashpayurl' ] );
+				$icash_url = esc_url_raw( self::pick( $posted, [ 'icashpayurl' ] ) );
 				if ( '' !== $icash_url ) {
 					$order->update_meta_data( Keys::PAYNOW_ICASH_PAY_URL, $icash_url );
 				}

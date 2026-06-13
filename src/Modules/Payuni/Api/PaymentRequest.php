@@ -98,7 +98,7 @@ class PaymentRequest {
 			PayuniPayment::log( 'request transaction args:' . wc_print_r( $fields, true ) );
 
 			foreach ( $fields as $key => $value ) {
-				echo '<input type="hidden" name="' . esc_html( $key ) . '" value="' . esc_html( $value ) . '">';
+				echo '<input type="hidden" name="' . esc_attr( (string) $key ) . '" value="' . esc_attr( (string) $value ) . '">';
 			}
 			?>
 			</form>

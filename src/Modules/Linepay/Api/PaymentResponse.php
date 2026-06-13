@@ -24,7 +24,7 @@ final class PaymentResponse {
 		try {
 
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			$order_id     = isset( $_GET['order_id'] ) ? sanitize_text_field( wp_unslash( $_GET['order_id'] ) ) : '';
+			$order_id     = isset( $_GET['order_id'] ) ? absint( wp_unslash( $_GET['order_id'] ) ) : 0;
 			$request_type = isset( $_GET['request_type'] ) ? sanitize_text_field( wp_unslash( $_GET['request_type'] ) ) : '';
 			$posted_token = isset( $_GET['moksafowo_token'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_token'] ) ) : '';
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended

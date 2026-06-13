@@ -54,7 +54,7 @@ ECPAY_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( 'ECPay 綠界付款', 'mowp' )
+			settings.title || __( 'ECPay 綠界付款', 'mo-ectools' )
 		),
 		content: <Content />,
 		edit: <Content />,
