@@ -85,7 +85,7 @@ class OrderMetaBox {
 			$package_spec_options = self::get_package_spec_options( $goods_type );
 
 			echo '<tr><th style="text-align:left;">' . esc_html__( 'Package Spec', 'mo-ectools' ) . '</th><td>';
-			echo '<select id="package-spec-select" style="font-size:12px;height:22px;line-height:20px;padding:0 4px;margin:0;vertical-align:middle;box-sizing:border-box;" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
+			echo '<select id="package-spec-select" style="font-size:12px;line-height:1.4;height:auto;padding:0 16px 0 0;margin:0;border:0;background:transparent;color:#2271b1;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;vertical-align:baseline;max-width:140px;" title="點選可修改包裝規格" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
 			foreach ( $package_spec_options as $value => $label ) {
 				$selected = selected( $package_spec, $value, false );
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- selected() returns escaped HTML attribute
