@@ -116,22 +116,11 @@
 					// Update original value to new value
 					$select.data('original-value', package_spec);
 
-					// Prepend the new order note into the notes panel (WC-native pattern) — no reload needed.
-					if (data.note_html) {
-						var $notes = $('ul.order_notes');
-						if ($notes.length) {
-							$notes.find('li.no-items').remove();
-							$notes.prepend(data.note_html);
-						}
-					}
-
-					// Show success indicator briefly
+					// 顯示成功後強制重載整頁 — 保證備註 / meta / 狀態全部與後端一致（WC metabox 標準做法）。
 					$('.package-spec-loading').html('<span style="color: #46b450;">✓ 更新成功</span>');
 					setTimeout(function() {
-						$('.package-spec-loading').fadeOut(300, function() {
-							$(this).remove();
-						});
-					}, 1500);
+						window.location.reload();
+					}, 600);
 				} else {
 					// Show error and revert selection
 					$('.package-spec-loading').html('<span style="color: #dc3232;">✗ 更新失敗</span>');
