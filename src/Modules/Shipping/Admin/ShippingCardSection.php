@@ -14,7 +14,7 @@ final class ShippingCardSection {
 
 	public static function init(): void {
 		// priority 21：與 payment(11) / invoice(31) 維持間隔，便於 ECPay 等 priority 10/30 先跑
-		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_shipping_card' ], 21, 2 );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_shipping_card' ], 21, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
 	}
 
@@ -23,27 +23,27 @@ final class ShippingCardSection {
 		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		$css = '.mo-payuni-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}'
-			. '.mo-payuni-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}'
-			. '.mo-payuni-record summary::-webkit-details-marker{display:none;}'
-			. '.mo-payuni-record summary::before{content:"▶";margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}'
-			. '.mo-payuni-record[open] summary::before{transform:rotate(90deg);}'
-			. '.mo-payuni-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}'
-			. '.mo-payuni-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}'
-			. '.mo-payuni-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}';
-		wp_register_style( 'mo-shipping-card', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-shipping-card' );
-		wp_add_inline_style( 'mo-shipping-card', $css );
+		$css = '.moksafowo-payuni-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}'
+			. '.moksafowo-payuni-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}'
+			. '.moksafowo-payuni-record summary::-webkit-details-marker{display:none;}'
+			. '.moksafowo-payuni-record summary::before{content:"▶";margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}'
+			. '.moksafowo-payuni-record[open] summary::before{transform:rotate(90deg);}'
+			. '.moksafowo-payuni-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}'
+			. '.moksafowo-payuni-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}'
+			. '.moksafowo-payuni-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}';
+		wp_register_style( 'moksafowo-shipping-card', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-shipping-card' );
+		wp_add_inline_style( 'moksafowo-shipping-card', $css );
 
 		$js = 'jQuery(function($){'
-			. '$(".mo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".mo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".mo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||"無追蹤紀錄");}else{alert(r.data.message);}}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".mo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"mo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||"無追蹤紀錄");}else{alert(r.data.message);}}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
 			. '});';
-		wp_register_script( 'mo-shipping-card', false, [ 'jquery' ], MOWC_VERSION, true );
-		wp_enqueue_script( 'mo-shipping-card' );
-		wp_add_inline_script( 'mo-shipping-card', $js );
+		wp_register_script( 'moksafowo-shipping-card', false, [ 'jquery' ], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-shipping-card' );
+		wp_add_inline_script( 'moksafowo-shipping-card', $js );
 	}
 
 	public static function add_shipping_card( array $cards, \WC_Order $order ): array {
@@ -56,15 +56,15 @@ final class ShippingCardSection {
 		$shipping_provider = '';
 		foreach ( $order->get_shipping_methods() as $m ) {
 			$mid = (string) $m->get_method_id();
-			if ( str_starts_with( $mid, 'mo_payuni_shipping_' ) ) {
-				$shipping_provider = 'payuni';
+			if ( str_starts_with( $mid, 'moksafowo_payuni_shipping_' ) ) {
+				$shipping_provider = 'moksafowo_payuni';
 				break;
 			}
-			if ( str_starts_with( $mid, 'mo_newebpay_shipping_' ) ) {
+			if ( str_starts_with( $mid, 'moksafowo_newebpay_shipping_' ) ) {
 				$shipping_provider = 'newebpay';
 				break;
 			}
-			if ( str_starts_with( $mid, 'mo_smilepay_shipping_' ) ) {
+			if ( str_starts_with( $mid, 'moksafowo_smilepay_shipping_' ) ) {
 				$shipping_provider = 'smilepay';
 				break;
 			}
@@ -124,7 +124,7 @@ final class ShippingCardSection {
 				echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'mo-ectools' ), count( $records ) ) );
 				echo '</p>';
 			}
-			echo '<div class="mo-payuni-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">';
+			echo '<div class="moksafowo-payuni-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">';
 			foreach ( $records as $r ) {
 				$temp       = (int) ( $r['temp'] ?? 0 );
 				$amount     = (int) ( $r['amount'] ?? 0 );
@@ -141,9 +141,9 @@ final class ShippingCardSection {
 				$ship_trade_no = (string) ( $r['ship_trade_no'] ?? '' );
 				$rtn_msg_p     = (string) ( $r['rtn_msg'] ?? '' );
 				$open_attr     = $is_split ? '' : 'open';
-				echo '<details class="mo-payuni-record" ' . esc_attr( $open_attr ) . '>';
+				echo '<details class="moksafowo-payuni-record" ' . esc_attr( $open_attr ) . '>';
 				echo '<summary>';
-				echo '<span class="mo-payuni-record__summary-id">' . esc_html( $ship_trade_no ) . '</span>';
+				echo '<span class="moksafowo-payuni-record__summary-id">' . esc_html( $ship_trade_no ) . '</span>';
 				if ( '' !== $type_label ) {
 					echo '<span style="background:#dbeafe;color:#1e40af;padding:1px 8px;border-radius:3px;font-size:11px;white-space:nowrap;">' . esc_html( $type_label ) . '</span>';
 				}
@@ -151,10 +151,10 @@ final class ShippingCardSection {
 					echo '<span style="background:' . esc_attr( $temp_pill[0] ) . ';color:' . esc_attr( $temp_pill[1] ) . ';padding:1px 8px;border-radius:3px;font-size:11px;white-space:nowrap;">' . esc_html( $temp_label ) . '</span>';
 				}
 				if ( '' !== $rtn_msg_p ) {
-					echo '<span class="mo-payuni-record__summary-status">' . esc_html( $rtn_msg_p ) . '</span>';
+					echo '<span class="moksafowo-payuni-record__summary-status">' . esc_html( $rtn_msg_p ) . '</span>';
 				}
 				echo '</summary>';
-				echo '<div class="mo-payuni-record__body">';
+				echo '<div class="moksafowo-payuni-record__body">';
 				if ( ! empty( $r['odno'] ) ) {
 					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '物流商出貨編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( (string) $r['odno'] ) . '</span></p>';
 				}
@@ -171,7 +171,7 @@ final class ShippingCardSection {
 				}
 				$tracking_info = TrackingLink::for_payuni_record( $r );
 				if ( null !== $tracking_info ) {
-					echo '<div style="margin-top:8px;">' . TrackingLink::render_button_html( $tracking_info ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 				}
 				echo '</div>';
 				echo '</details>';
@@ -220,7 +220,7 @@ final class ShippingCardSection {
 			'odno'      => $odno,
 		] );
 		if ( null !== $tracking_info ) {
-			echo '<div style="margin-top:8px;">' . TrackingLink::render_button_html( $tracking_info ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 		}
 		return (string) ob_get_clean();
 	}
@@ -239,9 +239,9 @@ final class ShippingCardSection {
 			break;
 		}
 
-		$nonce_create = wp_create_nonce( 'mo_newebpay_shipping_create' );
-		$nonce_query  = wp_create_nonce( 'mo_newebpay_shipping_query' );
-		$nonce_trace  = wp_create_nonce( 'mo_newebpay_shipping_trace' );
+		$nonce_create = wp_create_nonce( 'moksafowo_newebpay_shipping_create' );
+		$nonce_query  = wp_create_nonce( 'moksafowo_newebpay_shipping_query' );
+		$nonce_trace  = wp_create_nonce( 'moksafowo_newebpay_shipping_trace' );
 		$order_id     = $order->get_id();
 
 		ob_start();
@@ -278,11 +278,11 @@ final class ShippingCardSection {
 
 		echo '<p style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
 		if ( '' === $lgs_no && '' !== $store_id ) {
-			echo '<button type="button" class="button button-primary mo-newebpay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立藍新物流單', 'mo-ectools' ) . '</button> ';
+			echo '<button type="button" class="button button-primary moksafowo-newebpay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立藍新物流單', 'mo-ectools' ) . '</button> ';
 		}
 		if ( '' !== $lgs_no ) {
-			echo '<button type="button" class="button mo-newebpay-shipping-query" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_query ) . '">' . esc_html__( '查詢即時狀態', 'mo-ectools' ) . '</button> ';
-			echo '<button type="button" class="button mo-newebpay-shipping-trace" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_trace ) . '">' . esc_html__( '物流追蹤', 'mo-ectools' ) . '</button>';
+			echo '<button type="button" class="button moksafowo-newebpay-shipping-query" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_query ) . '">' . esc_html__( '查詢即時狀態', 'mo-ectools' ) . '</button> ';
+			echo '<button type="button" class="button moksafowo-newebpay-shipping-trace" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_trace ) . '">' . esc_html__( '物流追蹤', 'mo-ectools' ) . '</button>';
 		}
 		echo '</p>';
 
@@ -306,7 +306,7 @@ final class ShippingCardSection {
 			break;
 		}
 
-		$nonce_create = wp_create_nonce( 'mo_smilepay_shipping_create' );
+		$nonce_create = wp_create_nonce( 'moksafowo_smilepay_shipping_create' );
 		$order_id     = $order->get_id();
 
 		ob_start();
@@ -347,7 +347,7 @@ final class ShippingCardSection {
 			'track_num' => $track_no,
 		] );
 		if ( null !== $tracking_info ) {
-			echo '<div style="margin-top:8px;">' . TrackingLink::render_button_html( $tracking_info ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 		}
 		if ( '' === $smseid && '' === $store_id ) {
 			echo '<p style="color:#646970;font-size:12px;margin-bottom:10px;">';
@@ -357,7 +357,7 @@ final class ShippingCardSection {
 
 		echo '<p style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
 		if ( '' === $pay_no && '' === $track_no ) {
-			echo '<button type="button" class="button button-primary mo-smilepay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立速買配物流單', 'mo-ectools' ) . '</button>';
+			echo '<button type="button" class="button button-primary moksafowo-smilepay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立速買配物流單', 'mo-ectools' ) . '</button>';
 		} else {
 			echo '<span style="color:#00a32a;">' . esc_html__( '已建單', 'mo-ectools' ) . '</span>';
 		}

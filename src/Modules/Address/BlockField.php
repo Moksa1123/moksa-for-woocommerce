@@ -11,7 +11,7 @@ final class BlockField {
 	private const FIELD_ID = 'mowp/district';
 
 	public static function init(): void {
-		if ( 'yes' !== get_option( 'mo_tw_address_dropdown_enabled', 'no' ) ) {
+		if ( 'yes' !== get_option( 'moksafowo_tw_address_dropdown_enabled', 'no' ) ) {
 			return;
 		}
 		if ( ! function_exists( 'woocommerce_register_additional_checkout_field' ) ) {
@@ -260,10 +260,10 @@ final class BlockField {
 		}
 
 		wp_enqueue_script(
-			'mo-tw-district-block',
-			MOWC_PLUGIN_URL . 'src/Modules/Address/assets/js/mo-tw-district-block.js',
+			'moksafowo-tw-district-block',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/js/moksafowo-tw-district-block.js',
 			[],
-			MOWC_VERSION,
+			MOKSAFOWO_VERSION,
 			true
 		);
 
@@ -291,7 +291,7 @@ final class BlockField {
 			}
 		}
 
-		wp_localize_script( 'mo-tw-district-block', 'mo_tw_district', [
+		wp_localize_script( 'moksafowo-tw-district-block', 'moksafowo_tw_district', [
 			'field_id'   => self::FIELD_ID,
 			'by_state'   => $state_to_cities,
 			'postcodes'  => $postcode_map,
@@ -300,7 +300,7 @@ final class BlockField {
 	}
 
 	public static function add_body_class( array $classes ): array {
-		$classes[] = 'mo-tw-block-district-enabled';
+		$classes[] = 'moksafowo-tw-block-district-enabled';
 		return $classes;
 	}
 }

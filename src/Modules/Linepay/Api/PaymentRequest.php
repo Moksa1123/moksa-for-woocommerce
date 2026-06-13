@@ -50,9 +50,9 @@ final class PaymentRequest {
 							array(
 								'request_type' => Constants::REQUEST_TYPE_CONFIRM,
 								'order_id'     => $order_id,
-								'mo_token'     => $confirm_token,
+								'moksafowo_token'     => $confirm_token,
 							),
-							WC()->api_request_url( 'linepay_payment' )
+							WC()->api_request_url( 'moksafowo_linepay_payment' )
 						)
 					),
 					'confirmUrlType' => Constants::CONFIRM_URLTYPE_CLIENT,
@@ -61,9 +61,9 @@ final class PaymentRequest {
 							array(
 								'request_type' => Constants::REQUEST_TYPE_CANCEL,
 								'order_id'     => $order_id,
-								'mo_token'     => $cancel_token,
+								'moksafowo_token'     => $cancel_token,
 							),
-							WC()->api_request_url( 'linepay_payment' )
+							WC()->api_request_url( 'moksafowo_linepay_payment' )
 						)
 					),
 				),
@@ -73,8 +73,8 @@ final class PaymentRequest {
 				'options' => array(
 					'payment' => array(
 						'payType' => strtoupper( $this->gateway->payment_type ),
-						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-						'capture' => apply_filters( 'Mo_LinePay_payment_capture', true ),
+						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+						'capture' => apply_filters( 'Moksafowo_LinePay_payment_capture', true ),
 					),
 					'extra'   => array(
 						'branchName' => '',
@@ -97,8 +97,8 @@ final class PaymentRequest {
 				throw new Exception( sprintf( 'Execute LINE Pay Request API failed. Return code: %s. Response message: %s', $result->returnCode, $result->returnMessage ) );
 			}
 
-			$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_RESERVED );
-			$order->update_meta_data( '_linepay_reserved_transaction_id', $result->info->transactionId );
+			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_RESERVED );
+			$order->update_meta_data( '_moksafowo_linepay_reserved_transaction_id', $result->info->transactionId );
 			$order->save();
 
 			$this->check_payment_and_update_order_note( $order, 'Check payment status after requested' );
@@ -132,8 +132,8 @@ final class PaymentRequest {
 				throw new Exception( 'Cant find order by order_id:' . $order_id );
 			}
 
-			if ( wc_string_to_bool( $order->get_meta( '_mo_linepay_confirmed' ) ) ) {
-				$payment_status = $order->get_meta( '_linepay_payment_status' );
+			if ( wc_string_to_bool( $order->get_meta( '_moksafowo_linepay_confirmed' ) ) ) {
+				$payment_status = $order->get_meta( '_moksafowo_linepay_payment_status' );
 				if ( Constants::PAYMENT_STATUS_CONFIRMED === $payment_status ) {
 					LinePay::log( sprintf( '[confirm][order_id:%s] Already confirmed, skipping duplicate call', $order_id ) );
 					if ( $is_checkout ) {
@@ -155,10 +155,10 @@ final class PaymentRequest {
 				throw new Exception( sprintf( Constants::LOG_TEMPLATE_CONFIRM_FAILURE_MISMATCH_ORDER_AMOUNT, $std_amount, $reserved_std_amount ) );
 			}
 
-			$order->update_meta_data( '_mo_linepay_confirmed', true );
+			$order->update_meta_data( '_moksafowo_linepay_confirmed', true );
 			$order->save();
 
-			$reserved_transaction_id = $order->get_meta( '_linepay_reserved_transaction_id' );
+			$reserved_transaction_id = $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 			$url                     = Url::request_url( Constants::REQUEST_TYPE_CONFIRM, array( 'transaction_id' => $reserved_transaction_id ) );
 			LinePay::log( sprintf( '[confirm][order_id:%s] http request url : %s', $order_id, $url ) );
 
@@ -187,8 +187,8 @@ final class PaymentRequest {
 			$order->payment_complete( $result->info->transactionId );
 
 			$std_confirmed_amount = Currency::get_standardized( $confirmed_amount );
-			$order->update_meta_data( '_linepay_transaction_balanced_amount', $std_confirmed_amount );
-			$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
+			$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $std_confirmed_amount );
+			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 			$order->save();
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
@@ -206,12 +206,12 @@ final class PaymentRequest {
 			LinePay::log( 'process payment confirm error:' . $e->getMessage() );
 
 			if ( strpos( $e->getMessage(), '1172' ) === false ) {
-				$order->update_meta_data( '_mo_linepay_confirmed', false );
+				$order->update_meta_data( '_moksafowo_linepay_confirmed', false );
 				$order->save();
 			}
 
 			if ( $is_checkout ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 				do_action( 'linepay_process_confirm_failed', $order );
 			} else {
 				throw $e;
@@ -235,14 +235,14 @@ final class PaymentRequest {
 			$order->add_order_note( $check_info );
 
 			if ( StatusCode::COMPLETED === $check_code ) {
-				$url            = Url::request_url( Constants::REQUEST_TYPE_DETAILS, array( 'transaction_id' => $order->get_meta( '_linepay_reserved_transaction_id' ) ) );
+				$url            = Url::request_url( Constants::REQUEST_TYPE_DETAILS, array( 'transaction_id' => $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) );
 				$request_args   = $this->build_execute_request_args( $url, null, 20, 'GET' );
 				$payment_detail = $this->execute( $url, $request_args, 20 );
 				if ( $payment_detail ) {
-					$order->update_meta_data( '_mo_linepay_confirmed', true );
-					$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
+					$order->update_meta_data( '_moksafowo_linepay_confirmed', true );
+					$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 					// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					$order->update_meta_data( '_linepay_transaction_balanced_amount', $payment_detail->info->amount );
+					$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $payment_detail->info->amount );
 					$order->save();
 					$order->payment_complete( $payment_detail->info->transactionId );
 					// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -250,19 +250,19 @@ final class PaymentRequest {
 				wp_safe_redirect( $this->get_return_url( $order ) );
 				exit;
 			} elseif ( StatusCode::AUTHED === $check_code ) {
-				$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_AUTHED );
+				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_AUTHED );
 				$order->save();
 				$order->update_status( 'on-hold' );
 				$order->add_order_note( __( 'LINE Pay 付款已授權，等待確認', 'mo-ectools' ) );
 
 			} elseif ( StatusCode::CANCELLED_EXPIRED === $check_code ) {
-				$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
+				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
 				$order->add_order_note( __( 'LINE Pay 付款已取消或過期', 'mo-ectools' ) );
 
 			} elseif ( StatusCode::FAILED === $check_code ) {
-				$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_FAILED );
+				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_FAILED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
 				$order->add_order_note( __( 'LINE Pay 交易失敗', 'mo-ectools' ) );
@@ -288,7 +288,7 @@ final class PaymentRequest {
 	public function cancel( $order_id ): void {
 
 		$order                   = wc_get_order( $order_id );
-		$reserved_transaction_id = $order->get_meta( '_linepay_reserved_transaction_id' );
+		$reserved_transaction_id = $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 
 		WC()->session->set( 'order_awaiting_payment', false );
 
@@ -329,7 +329,7 @@ final class PaymentRequest {
 
 	public function check( $order ) {
 
-		$reserved_transaction_id = $order->get_meta( '_linepay_reserved_transaction_id' );
+		$reserved_transaction_id = $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 
 		if ( empty( $reserved_transaction_id ) ) {
 			throw new Exception( esc_html__( 'no transaction_id is found', 'mo-ectools' ) );
@@ -418,17 +418,17 @@ final class PaymentRequest {
 			return new WP_Error( 'mowp_linepay_refund_failed', $msg );
 		}
 
-		$refund_ids = $order->get_meta( '_linepay_refund_transaction_id' );
+		$refund_ids = $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
 		if ( empty( $refund_ids ) ) {
 			$refund_ids = array();
 		}
 
 		LinePay::log( sprintf( '[refund][order_id:%s] refund transaction ids:%s', $order_id, wc_print_r( $refund_ids, true ) ) );
 		$refund_ids[] = $resp->info->refundTransactionId;
-		$order->update_meta_data( '_linepay_refund_transaction_id', $refund_ids );
+		$order->update_meta_data( '_moksafowo_linepay_refund_transaction_id', $refund_ids );
 
 		if ( ! $is_partial_refund ) {
-			$order->update_meta_data( '_linepay_payment_status', Constants::PAYMENT_STATUS_REFUNDED );
+			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_REFUNDED );
 		}
 
 		$order->save();
@@ -485,8 +485,8 @@ final class PaymentRequest {
 
 			if ( count( $items ) > 1 ) {
 				$order_name = apply_filters(
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-					'Mo_LinePay_checkout_product_name',
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+					'Moksafowo_LinePay_checkout_product_name',
 					sprintf(
 						/* translators:  %1$s is product name, %2$s is the order item count */
 						__( '%1$s and total %2$s products', 'mo-ectools' ),
@@ -506,8 +506,8 @@ final class PaymentRequest {
 			$thumbnail_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $first_item->get_product_id() ) );
 
 			if ( isset( $thumbnail_image_urls[0] ) ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-				$product['imageUrl'] = apply_filters( 'Mo_LinePay_checkout_product_image', $thumbnail_image_urls[0] );
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+				$product['imageUrl'] = apply_filters( 'Moksafowo_LinePay_checkout_product_image', $thumbnail_image_urls[0] );
 			}
 
 			array_push( $products, $product );
@@ -527,8 +527,8 @@ final class PaymentRequest {
 	}
 
 	private function check_payment_and_update_order_note( $order, $context ): void {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-		if ( LinePay::$detail_payment_status_note_enabled || apply_filters( 'Mo_LinePay_enable_detail_note', false ) ) {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+		if ( LinePay::$detail_payment_status_note_enabled || apply_filters( 'Moksafowo_LinePay_enable_detail_note', false ) ) {
 			$check_status = $this->check( $order );
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$check_code = $check_status->returnCode;
@@ -546,7 +546,7 @@ final class PaymentRequest {
 		} else {
 			$return_url = wc_get_endpoint_url( 'order-received', '', wc_get_checkout_url() );
 		}
-		return apply_filters( 'woocommerce_get_return_url', $return_url, $order );
+		return apply_filters( 'woocommerce_get_return_url', $return_url, $order ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	public static function callback_token( $order_id, $request_type ) {

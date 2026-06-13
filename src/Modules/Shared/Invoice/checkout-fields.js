@@ -4,7 +4,7 @@
 	function findField( namePart ) {
 		const dashed = namePart.replace( /_/g, '-' );
 		const selectors = [
-			'[name="mo_' + namePart + '"]',                // classic
+			'[name="moksafowo_' + namePart + '"]',                // classic
 			'[id$="-mowp-' + dashed + '"]',                // block (location group prefix)
 			'[name$="-mowp-' + dashed + '"]',
 			'[name*="mowp/' + dashed + '"]',
@@ -40,7 +40,7 @@
 	/**
 	 * Block 的 label 把 "(選填)" 直接塞在 text node 裡（非 .optional span）—
 	 * Classic 用 <span class="optional"> 包。所以兩邊都要處理：
-	 *   - .optional / .mo-invoice-optional span 移除（Classic）
+	 *   - .optional / .moksafowo-invoice-optional span 移除（Classic）
 	 *   - text node 內的 "(選填)" / "(optional)" 字串移除（Block）
 	 *
 	 * 必填時加紅星 <abbr>；恢復時還原 "(選填)" 後綴避免 Block label 變空白。
@@ -60,7 +60,7 @@
 		}
 
 		// 1) 拿掉舊的 optional / required marker（不論 Classic 還是 JS-injected）
-		label.querySelectorAll( '.optional, .mo-invoice-optional, .required, .mo-invoice-required' ).forEach( function ( n ) { n.remove(); } );
+		label.querySelectorAll( '.optional, .moksafowo-invoice-optional, .required, .moksafowo-invoice-required' ).forEach( function ( n ) { n.remove(); } );
 
 		// 2) text node 中的 "(選填)" / "(optional)" 也要清乾淨（Block 直接塞 text）
 		label.childNodes.forEach( function ( node ) {
@@ -71,7 +71,7 @@
 
 		if ( required ) {
 			const ab = document.createElement( 'abbr' );
-			ab.className = 'required mo-invoice-required';
+			ab.className = 'required moksafowo-invoice-required';
 			ab.title = 'required';
 			ab.textContent = '*';
 			ab.style.cssText = 'color:#c62828;text-decoration:none;margin-left:4px;font-weight:bold;';
@@ -80,7 +80,7 @@
 		} else {
 			// 重新加上 "(選填)" 後綴（Classic 用 span，Block 直接 text）
 			const sp = document.createElement( 'span' );
-			sp.className = 'optional mo-invoice-optional';
+			sp.className = 'optional moksafowo-invoice-optional';
 			sp.textContent = ' (選填)';
 			sp.style.cssText = 'color:#888;font-weight:normal;margin-left:4px;';
 			label.appendChild( sp );
@@ -94,7 +94,7 @@
 	 * 提示寫進 label 本身（不另開 hint span / 不動 placeholder 避免 Block
 	 * React hydration），單一視覺元素最乾淨。
 	 *
-	 *   mobile → 「手機條碼（/ 開頭 + 7 碼英數）」
+	 *   mobile → 「手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）」
 	 *   cert   → 「自然人憑證（2 大寫字母 + 14 碼數字）」
 	 *   member / paper → row 整個 hidden（不需處理 label）
 	 */
@@ -105,7 +105,7 @@
 		if ( ! label ) return;
 
 		const newText = {
-			mobile: '手機條碼（/ 開頭 + 7 碼英數）',
+			mobile: '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）',
 			cert:   '自然人憑證（2 大寫字母 + 14 碼數字）',
 		}[ carrier ];
 		if ( ! newText ) return;
@@ -121,6 +121,30 @@
 		} );
 		if ( ! touched ) {
 			label.insertBefore( document.createTextNode( newText ), label.firstChild );
+		}
+	}
+
+	/**
+	 * 捐贈：有「捐贈單位」下拉（商家設定了清單）→ 愛心碼欄唯讀，自動帶入選到單位的碼，顧客不能自填。
+	 * 沒有下拉（商家沒設定）→ 愛心碼欄開放自填。
+	 */
+	function syncDonate() {
+		const orgSel    = findField( 'invoice_donate_org' );
+		const loveInput = findField( 'invoice_love_code' );
+		if ( ! loveInput ) {
+			return;
+		}
+		if ( ! orgSel ) {
+			loveInput.readOnly = false;
+			return;
+		}
+		loveInput.readOnly = true;
+		const code = orgSel.value || '';
+		if ( loveInput.value !== code ) {
+			const proto = loveInput.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+			Object.getOwnPropertyDescriptor( proto, 'value' ).set.call( loveInput, code );
+			loveInput.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+			loveInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 		}
 	}
 
@@ -141,14 +165,6 @@
 			Object.getOwnPropertyDescriptor( HTMLSelectElement.prototype, 'value' ).set.call( carrierSel, 'member' );
 			carrierSel.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 		}
-		// 預設捐贈碼 — admin 在「進階設定 → 預設捐贈碼」填了就帶入 love_code 欄位
-		const loveInput   = findField( 'invoice_love_code' );
-		const defaultCode = ( window.mo_ecpay_invoice_defaults && window.mo_ecpay_invoice_defaults.love_code ) || '';
-		if ( loveInput && defaultCode && '' === loveInput.value ) {
-			Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' ).set.call( loveInput, defaultCode );
-			loveInput.dispatchEvent( new Event( 'input',  { bubbles: true } ) );
-			loveInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-		}
 		const type    = typeSel.value || 'b2c_carrier';
 		const carrier = carrierSel ? carrierSel.value : 'member';
 
@@ -157,6 +173,7 @@
 			carrier_num:  rowFor( 'invoice_carrier_num' ),
 			buyer_ubn:    rowFor( 'invoice_buyer_ubn' ),
 			buyer_name:   rowFor( 'invoice_buyer_name' ),
+			donate_org:   rowFor( 'invoice_donate_org' ),
 			love_code:    rowFor( 'invoice_love_code' ),
 		};
 
@@ -167,6 +184,7 @@
 			setRowVisible( rows.carrier_num, needCarrierNum );
 			setRowVisible( rows.buyer_ubn, false );
 			setRowVisible( rows.buyer_name, false );
+			setRowVisible( rows.donate_org, false );
 			setRowVisible( rows.love_code, false );
 
 			// 必填標記：carrier_type 必填；carrier_num 在 mobile/cert 時必填
@@ -181,6 +199,7 @@
 			setRowVisible( rows.carrier_num, false );
 			setRowVisible( rows.buyer_ubn, true );
 			setRowVisible( rows.buyer_name, true );
+			setRowVisible( rows.donate_org, false );
 			setRowVisible( rows.love_code, false );
 			setRequiredLabel( 'invoice_buyer_ubn', true );
 			setRequiredLabel( 'invoice_buyer_name', true );
@@ -189,8 +208,11 @@
 			setRowVisible( rows.carrier_num, false );
 			setRowVisible( rows.buyer_ubn, false );
 			setRowVisible( rows.buyer_name, false );
+			setRowVisible( rows.donate_org, true );
 			setRowVisible( rows.love_code, true );
 			setRequiredLabel( 'invoice_love_code', true );
+			// 有捐贈單位下拉 → 愛心碼欄唯讀並帶入選到的碼；沒下拉 → 開放自填。
+			syncDonate();
 		}
 
 		// 發票類型本身永遠必填（用 user 不能空）
@@ -242,7 +264,10 @@
 				t.matches( '[id*="invoice-type"]' ) ||
 				t.matches( '[id*="invoice-carrier-type"]' ) ||
 				t.matches( '[name*="mowp/invoice-type"]' ) ||
-				t.matches( '[name*="mowp/invoice-carrier-type"]' )
+				t.matches( '[name*="mowp/invoice-carrier-type"]' ) ||
+				t.matches( '[name*="invoice_donate_org"]' ) ||
+				t.matches( '[id*="invoice-donate-org"]' ) ||
+				t.matches( '[name*="mowp/invoice-donate-org"]' )
 			) {
 				applyState();
 			}

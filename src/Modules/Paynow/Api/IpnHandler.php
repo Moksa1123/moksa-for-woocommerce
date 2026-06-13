@@ -15,20 +15,23 @@ final class IpnHandler {
 	private const IMMEDIATE_TYPES = [ '01', '02', '09', '11' ];
 
 	public static function handle(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- IPN webhook; CheckMacValue / HMAC / RSA signature verified inside this method.
-		// phpcs:disable WordPress.Security.NonceVerification.Missing — 匿名 webhook，走 PassCode 驗簽
-		$posted = wp_unslash( $_POST );
-		if ( empty( $posted ) ) {
-			$posted = wp_unslash( $_GET );
-		}
-		// phpcs:enable
+		// 匿名 webhook 無法帶 WP nonce — 走 PassCode（SHA1 + hash_equals）驗簽。
+		// 簽章輸入（OrderNo/TotalPrice/TranStatus）皆為英數字，sanitize_text_field 為恆等轉換。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; PassCode verified below before any state change, all fields sanitized at capture.
+		$source = ! empty( $_POST ) ? wp_unslash( $_POST ) : wp_unslash( $_GET );
 
-		if ( empty( $posted ) || ! is_array( $posted ) ) {
+		if ( empty( $source ) || ! is_array( $source ) ) {
 			Helper::log( 'callback empty — rejected' );
 			self::reply( 400, 'EMPTY' );
 		}
 
-		Helper::log( 'callback raw', [ 'data' => $posted ] );
+		// 全欄位 sanitize 後才允許記錄與使用。
+		$posted = array_map(
+			static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v,
+			$source
+		);
+
+		Helper::log( 'callback received', [ 'data' => $posted ] );
 
 		// OrderNo 大小寫 PayNow 不保證統一（BuysafeNo vs BuySafeNo），統一取值。
 		$order_no   = self::pick( $posted, [ 'OrderNo' ] );

@@ -21,6 +21,6 @@ final class PaymentInfoEmailDispatcher {
 		$order->update_meta_data( Keys::PAYMENT_INFO_EMAIL_SENT, '1' );
 		$order->save();
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		do_action( 'mo_payment_info_email', $order->get_id() );
+		do_action( 'moksafowo_payment_info_email', $order->get_id() );
 	}
 }

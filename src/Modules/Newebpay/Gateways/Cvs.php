@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Cvs extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_cvs';
+		$this->id = 'moksafowo_newebpay_cvs';
 		parent::__construct();
 	}
 
@@ -33,7 +33,7 @@ final class Cvs extends AbstractNewebpayGateway {
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
-		$days = (int) get_option( 'mo_newebpay_cvs_expire_days', 7 );
+		$days = (int) get_option( 'moksafowo_newebpay_cvs_expire_days', 7 );
 		$days = max( 1, min( 180, $days ) );
 		return [ 'ExpireDate' => gmdate( 'Ymd', time() + $days * DAY_IN_SECONDS ) ];
 	}

@@ -3,7 +3,7 @@
  * Plugin Name:        Moksa for WooCommerce
  * Plugin URI:         https://github.com/Moksa1123/moksa-for-woocommerce
  * Description:        Taiwan payment, shipping and e-invoice toolkit for WooCommerce. Enable the provider modules you need (ECPay, NewebPay, PAYUNi, SmilePay, LINE Pay, PayNow, PChomePay, TapPay, Shopline Payments, ezPay, AMEGO). HPOS-ready, Block Checkout-ready.
- * Version:            1.0.0
+ * Version:            1.1.0
  * Requires at least:  6.7
  * Tested up to:       7.0
  * Requires PHP:       8.2
@@ -25,20 +25,20 @@ declare( strict_types=1 );
 defined( 'ABSPATH' ) || exit;
 
 /* Constants */
-const MOWC_VERSION    = '1.0.0';
-const MOWC_MIN_PHP    = '8.2';
-const MOWC_MIN_WP     = '6.7';
-const MOWC_MIN_WC     = '8.0';
-const MOWC_TEXTDOMAIN = 'mo-ectools';
+const MOKSAFOWO_VERSION    = '1.1.0';
+const MOKSAFOWO_MIN_PHP    = '8.2';
+const MOKSAFOWO_MIN_WP     = '6.7';
+const MOKSAFOWO_MIN_WC     = '8.0';
+const MOKSAFOWO_TEXTDOMAIN = 'mo-ectools';
 
-define( 'MOWC_PLUGIN_FILE', __FILE__ );
-define( 'MOWC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'MOWC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'MOWC_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'MOKSAFOWO_PLUGIN_FILE', __FILE__ );
+define( 'MOKSAFOWO_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'MOKSAFOWO_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'MOKSAFOWO_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 /* Composer autoload */
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_autoload = MOWC_PLUGIN_DIR . 'vendor/autoload.php';
+$mo_autoload = MOKSAFOWO_PLUGIN_DIR . 'vendor/autoload.php';
 if ( ! file_exists( $mo_autoload ) ) {
 	add_action(
 		'admin_notices',
@@ -59,12 +59,12 @@ add_action(
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
 				'custom_order_tables',
-				MOWC_PLUGIN_FILE,
+				MOKSAFOWO_PLUGIN_FILE,
 				true
 			);
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
 				'cart_checkout_blocks',
-				MOWC_PLUGIN_FILE,
+				MOKSAFOWO_PLUGIN_FILE,
 				true
 			);
 		}

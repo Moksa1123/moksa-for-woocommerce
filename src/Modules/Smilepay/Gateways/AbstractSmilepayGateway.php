@@ -73,7 +73,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 				'Data_id'      => (string) $order->get_id(),
 				'od_sob'       => Helper::build_products_summary( $order, 49 ),
 				'Amount'       => (string) (int) ceil( (float) $order->get_total() ),
-				'Roturl'       => home_url( '/wc-api/credit_roturl?Payment_title=' . rawurlencode( $this->title ) ),
+				'Roturl'       => home_url( '/wc-api/moksafowo_smilepay_credit_roturl?Payment_title=' . rawurlencode( $this->title ) ),
 				'Roturl_status' => IpnHandler::ROTURL_OK,
 				'Remark'       => (string) $order->get_customer_note(),
 			],
@@ -106,7 +106,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 				'Data_id'      => (string) $order->get_id(),
 				'od_sob'       => Helper::build_products_summary( $order, 45 ),
 				'Amount'       => (string) (int) ceil( (float) $order->get_total() ),
-				'Roturl'       => home_url( '/wc-api/roturl' ),
+				'Roturl'       => home_url( '/wc-api/moksafowo_smilepay_roturl' ),
 				'Roturl_status' => IpnHandler::ROTURL_OK,
 				'Remark'       => (string) $order->get_customer_note(),
 			],
@@ -238,7 +238,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 			$order->save();
 		}
 		return new \WP_Error(
-			'mo_smilepay_manual_refund',
+			'moksafowo_smilepay_manual_refund',
 			__( 'SmilePay 退款請至 SmilePay 商家後台手動操作。', 'mo-ectools' )
 		);
 	}

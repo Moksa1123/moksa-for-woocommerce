@@ -17,7 +17,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'LINE Pay 台灣 — 信用卡付款（fork wpbr-linepay-tw 1.3.3 + 7 安全 patch）', 'mo-ectools' );
+		return __( 'LINE Pay 台灣 — 信用卡付款（fork wpbr-moksafowo-linepay 1.3.3 + 7 安全 patch）', 'mo-ectools' );
 	}
 
 	public function category(): string {
@@ -42,8 +42,8 @@ final class Module extends AbstractModule {
 
 	public function boot(): void {
 		// Patch 7: at-rest encryption for channel secrets.
-		Vault::wrap_option( 'Mo_LinePay_channel_secret' );
-		Vault::wrap_option( 'Mo_LinePay_sandbox_channel_secret' );
+		Vault::wrap_option( 'Moksafowo_LinePay_channel_secret' );
+		Vault::wrap_option( 'Moksafowo_LinePay_sandbox_channel_secret' );
 
 		LinePay::init();
 

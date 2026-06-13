@@ -87,7 +87,7 @@ final class SaveShippingMeta {
 			return;
 		}
 		foreach ( $items['shipping_method'] as $item_id => $shipping_method ) {
-			if ( PayuniShipping::is_mo_payuni_shipping_hd( $shipping_method ) ) {
+			if ( PayuniShipping::is_moksafowo_payuni_shipping_hd( $shipping_method ) ) {
 				$order = wc_get_order( $order_id );
 				if ( $order ) {
 					self::save_hd_shipping_meta( $order, [] );

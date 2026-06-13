@@ -12,26 +12,26 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
 const PAYUNI_IDS = [
-	'mo_payuni_unified',  // single-entry mode: PAYUNi 統一金流
-	'mo_payuni_credit',
-	'mo_payuni_atm',
-	'mo_payuni_cvs',
-	'mo_payuni_aftee',
-	'mo_payuni_applepay',
-	'mo_payuni_googlepay',
-	'mo_payuni_samsungpay',
-	'mo_payuni_linepay',
-	'mo_payuni_unionpay',
-	'mo_payuni_icash',
-	'mo_payuni_jkopay',
-	'mo_payuni_credit_red',
-	'mo_payuni_installment_3',
-	'mo_payuni_installment_6',
-	'mo_payuni_installment_9',
-	'mo_payuni_installment_12',
-	'mo_payuni_installment_18',
-	'mo_payuni_installment_24',
-	'mo_payuni_installment_30',
+	'moksafowo_payuni_unified',  // single-entry mode: PAYUNi 統一金流
+	'moksafowo_payuni_credit',
+	'moksafowo_payuni_atm',
+	'moksafowo_payuni_cvs',
+	'moksafowo_payuni_aftee',
+	'moksafowo_payuni_applepay',
+	'moksafowo_payuni_googlepay',
+	'moksafowo_payuni_samsungpay',
+	'moksafowo_payuni_linepay',
+	'moksafowo_payuni_unionpay',
+	'moksafowo_payuni_icash',
+	'moksafowo_payuni_jkopay',
+	'moksafowo_payuni_credit_red',
+	'moksafowo_payuni_installment_3',
+	'moksafowo_payuni_installment_6',
+	'moksafowo_payuni_installment_9',
+	'moksafowo_payuni_installment_12',
+	'moksafowo_payuni_installment_18',
+	'moksafowo_payuni_installment_24',
+	'moksafowo_payuni_installment_30',
 ];
 
 PAYUNI_IDS.forEach( ( id ) => {

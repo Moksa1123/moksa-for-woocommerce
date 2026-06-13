@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class FamiPort extends AbstractSmilepayGateway {
 
-	public const GATEWAY_ID = 'mo_smilepay_famiport';
+	public const GATEWAY_ID = 'moksafowo_smilepay_famiport';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;
@@ -39,7 +39,7 @@ final class FamiPort extends AbstractSmilepayGateway {
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
-		$days = (int) get_option( 'mo_smilepay_famiport_deadline_days', 6 );
+		$days = (int) get_option( 'moksafowo_smilepay_famiport_deadline_days', 6 );
 		$days = max( 1, min( 6, $days ) );
 		return [ 'Deadline_date' => gmdate( 'Y/m/d', strtotime( "+{$days} days" ) ?: time() ) ];
 	}

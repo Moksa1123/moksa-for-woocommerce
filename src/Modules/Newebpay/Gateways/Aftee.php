@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Aftee extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_aftee';
+		$this->id = 'moksafowo_newebpay_aftee';
 		parent::__construct();
 	}
 

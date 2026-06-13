@@ -1,4 +1,4 @@
-const linepay_settings = window.wc.wcSettings.getSetting( 'linepay-tw_data', {} );
+const linepay_settings = window.wc.wcSettings.getSetting( 'moksafowo-linepay_data', {} );
 const linepay_label = window.wp.htmlEntities.decodeEntities( linepay_settings.title )
 	|| window.wp.i18n.__( 'LINE Pay', 'mo-ectools' );
 
@@ -7,7 +7,7 @@ const linepay_content = () => {
 };
 
 const LINEPay_Options = {
-	name: 'linepay-tw',
+	name: 'moksafowo-linepay',
 	label: linepay_label,
 	content: Object( window.wp.element.createElement )( linepay_content, null ),
 	edit: Object( window.wp.element.createElement )( linepay_content, null ),

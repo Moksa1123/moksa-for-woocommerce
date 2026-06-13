@@ -18,7 +18,7 @@ final class AddressFormatter {
 
 		if ( ! empty( $shipping_methods ) ) {
 			foreach ( $shipping_methods as $shipping_method ) {
-				if ( false !== strpos( $shipping_method->get_method_id(), 'mo_payuni_shipping_711' ) ) {
+				if ( false !== strpos( $shipping_method->get_method_id(), 'moksafowo_payuni_shipping_711' ) ) {
 					$is_payuni_cvs = true;
 					break;
 				}
@@ -28,20 +28,20 @@ final class AddressFormatter {
 			$chosen = WC()->session->get( 'chosen_shipping_methods' );
 			if ( ! empty( $chosen ) ) {
 				$method_id = false !== strpos( $chosen[0], ':' ) ? explode( ':', $chosen[0] )[0] : $chosen[0];
-				if ( false !== strpos( $method_id, 'mo_payuni_shipping_711' ) ) {
+				if ( false !== strpos( $method_id, 'moksafowo_payuni_shipping_711' ) ) {
 					$is_payuni_cvs = true;
 				}
 			}
 		}
 
 		if ( $is_payuni_cvs && $order->get_meta( OrderMeta::StoreId ) ) {
-			$raw_address['payuni_storeid']      = $order->get_meta( OrderMeta::StoreId );
-			$raw_address['payuni_storename']    = $order->get_meta( OrderMeta::StoreName );
-			$raw_address['payuni_storeaddress'] = $order->get_meta( OrderMeta::StoreAddr );
-			$raw_address['phone']               = PayuniShipping::payuni_get_shipping_phone( $order );
+			$raw_address['moksafowo_payuni_storeid']      = $order->get_meta( OrderMeta::StoreId );
+			$raw_address['moksafowo_payuni_storename']    = $order->get_meta( OrderMeta::StoreName );
+			$raw_address['moksafowo_payuni_storeaddress'] = $order->get_meta( OrderMeta::StoreAddr );
+			$raw_address['phone']               = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
 			$raw_address['country']             = 'PNCVS';
 		} else {
-			$phone = PayuniShipping::payuni_get_shipping_phone( $order );
+			$phone = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
 			if ( $phone ) {
 				$raw_address['phone'] = $phone;
 			}
@@ -68,10 +68,10 @@ final class AddressFormatter {
 	}
 
 	public static function address_replacements( $replacements, $args ) {
-		if ( isset( $args['payuni_storeid'] ) ) {
-			$replacements['{payuni_storeid}']      = $args['payuni_storeid'];
-			$replacements['{payuni_storename}']    = $args['payuni_storename'] ?? '';
-			$replacements['{payuni_storeaddress}'] = $args['payuni_storeaddress'] ?? '';
+		if ( isset( $args['moksafowo_payuni_storeid'] ) ) {
+			$replacements['{payuni_storeid}']      = $args['moksafowo_payuni_storeid'];
+			$replacements['{payuni_storename}']    = $args['moksafowo_payuni_storename'] ?? '';
+			$replacements['{payuni_storeaddress}'] = $args['moksafowo_payuni_storeaddress'] ?? '';
 		}
 		if ( isset( $args['phone'] ) ) {
 			$replacements['{phone}'] = $args['phone'];

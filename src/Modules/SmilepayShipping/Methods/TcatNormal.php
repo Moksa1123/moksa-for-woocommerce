@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 final class TcatNormal extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
-		$this->id                 = 'mo_smilepay_shipping_tcat_normal';
+		$this->id                 = 'moksafowo_smilepay_shipping_tcat_normal';
 		$this->method_title       = __( '速買配 — 黑貓常溫', 'mo-ectools' );
 		$this->method_description = __( 'SmilePay 黑貓宅急便（常溫）。', 'mo-ectools' );
 		parent::__construct( $instance_id );

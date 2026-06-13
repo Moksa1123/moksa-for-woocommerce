@@ -14,7 +14,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_PROD    = 'https://www.paynow.com.tw/service/etopm.aspx';
 
 	protected static function option_prefix(): string {
-		return 'mo_paynow';
+		return 'moksafowo_paynow';
 	}
 
 	protected static function log_source(): string {
@@ -22,24 +22,24 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_paynow_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_paynow_sandbox_enabled', 'no' );
 	}
 
 	public static function web_no(): string {
 		$raw = self::is_sandbox()
-			? (string) get_option( 'mo_paynow_sandbox_web_no', '' )
-			: (string) get_option( 'mo_paynow_web_no', '' );
+			? (string) get_option( 'moksafowo_paynow_sandbox_web_no', '' )
+			: (string) get_option( 'moksafowo_paynow_web_no', '' );
 		return trim( $raw );
 	}
 
 	public static function trade_password(): string {
 		return self::is_sandbox()
-			? (string) get_option( 'mo_paynow_sandbox_trade_password', '' )
-			: (string) get_option( 'mo_paynow_trade_password', '' );
+			? (string) get_option( 'moksafowo_paynow_sandbox_trade_password', '' )
+			: (string) get_option( 'moksafowo_paynow_trade_password', '' );
 	}
 
 	public static function ec_platform(): string {
-		$raw = trim( (string) get_option( 'mo_paynow_ec_platform', '' ) );
+		$raw = trim( (string) get_option( 'moksafowo_paynow_ec_platform', '' ) );
 		if ( '' !== $raw ) {
 			return $raw;
 		}
@@ -55,7 +55,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function notify_url(): string {
-		return home_url( '/wc-api/mo_paynow_payment' );
+		return home_url( '/wc-api/moksafowo_paynow_payment' );
 	}
 
 	public static function generate_order_no( int $order_id ): string {

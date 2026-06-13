@@ -18,7 +18,7 @@ abstract class AbstractShippingEmail extends \WC_Email {
 		$this->customer_email = true;
 		$this->template_html  = 'emails/' . $slug . '.php';
 		$this->template_plain = 'emails/plain/' . $slug . '.php';
-		$this->template_base  = MOWC_PLUGIN_DIR . 'templates/';
+		$this->template_base  = MOKSAFOWO_PLUGIN_DIR . 'templates/';
 
 		$this->placeholders = [
 			'{site_title}'   => $this->get_blogname(),
@@ -30,7 +30,7 @@ abstract class AbstractShippingEmail extends \WC_Email {
 
 		parent::__construct();
 
-		add_action( 'mo_shipping_status_' . $slug . '_notification', [ $this, 'trigger' ], 10, 2 );
+		add_action( 'moksafowo_shipping_status_' . $slug . '_notification', [ $this, 'trigger' ], 10, 2 );
 	}
 
 	public function trigger( $order_id, $order = false ): void {

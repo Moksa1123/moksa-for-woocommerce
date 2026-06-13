@@ -1,6 +1,6 @@
 <?php
 /**
- * mo-shipped HTML email — 已出貨通知。
+ * moksa-shipped HTML email — 已出貨通知。
  *
  * @var WC_Order $order
  * @var string   $email_heading
@@ -24,7 +24,7 @@ printf( esc_html__( '%s 您好，', 'mo-ectools' ), esc_html( $order->get_billin
 <?php
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-do_action( 'mo_shipping_email_tracking_info', $order, false );
+do_action( 'moksafowo_shipping_email_tracking_info', $order, false );
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 

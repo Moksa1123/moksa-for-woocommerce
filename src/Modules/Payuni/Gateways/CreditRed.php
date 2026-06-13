@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 
 class CreditRed extends GatewayBase {
 
-	const GATEWAY_ID = 'mo_payuni_credit_red';
+	const GATEWAY_ID = 'moksafowo_payuni_credit_red';
 
 	public function __construct() {
 		parent::__construct();
@@ -23,7 +23,7 @@ class CreditRed extends GatewayBase {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'mo_payuni_transaction_args_' . $this->id, array( $this, 'payuni_payment_credit_red_transaction_arrgs' ), 10, 2 );
+		add_filter( 'moksafowo_payuni_transaction_args_' . $this->id, array( $this, 'moksafowo_payuni_payment_credit_red_transaction_arrgs' ), 10, 2 );
 	}
 
 	public function init_form_fields() {
@@ -47,7 +47,7 @@ class CreditRed extends GatewayBase {
 		);
 	}
 
-	public function payuni_payment_credit_red_transaction_arrgs( $args, $order ) {
+	public function moksafowo_payuni_payment_credit_red_transaction_arrgs( $args, $order ) {
 		return array_merge( $args, array( 'CreditRed' => '1' ) );
 	}
 }

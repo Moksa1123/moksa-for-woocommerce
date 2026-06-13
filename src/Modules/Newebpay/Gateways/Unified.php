@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Unified extends AbstractNewebpayGateway {
 
-	public const GATEWAY_ID = 'mo_newebpay_unified';
+	public const GATEWAY_ID = 'moksafowo_newebpay_unified';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

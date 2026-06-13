@@ -51,8 +51,8 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_mo_tappay_notify', [ Api\IpnHandler::class, 'handle_notify' ] );
-		add_action( 'woocommerce_api_mo_tappay_result', [ Api\IpnHandler::class, 'handle_result' ] );
+		add_action( 'woocommerce_api_moksafowo_tappay_notify', [ Api\IpnHandler::class, 'handle_notify' ] );
+		add_action( 'woocommerce_api_moksafowo_tappay_result', [ Api\IpnHandler::class, 'handle_result' ] );
 	}
 
 	protected function boot_extras(): void {
@@ -70,19 +70,19 @@ final class Module extends AbstractGatewayModule {
 			return;
 		}
 
-		wp_register_script( 'mo-tappay-sdk', Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion,WordPress.WP.EnqueuedResourceParameters.NotInFooter
+		wp_register_script( 'moksafowo-tappay-sdk', Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion,WordPress.WP.EnqueuedResourceParameters.NotInFooter
 
-		$path    = MOWC_PLUGIN_DIR . 'assets/public/mo-tappay-fields.js';
-		$version = file_exists( $path ) ? MOWC_VERSION . '.' . filemtime( $path ) : MOWC_VERSION;
+		$path    = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-tappay-fields.js';
+		$version = file_exists( $path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
-			'mo-tappay-fields',
-			MOWC_PLUGIN_URL . 'assets/public/mo-tappay-fields.js',
-			[ 'jquery', 'mo-tappay-sdk' ],
+			'moksafowo-tappay-fields',
+			MOKSAFOWO_PLUGIN_URL . 'assets/public/moksafowo-tappay-fields.js',
+			[ 'jquery', 'moksafowo-tappay-sdk' ],
 			$version,
 			true
 		);
 		wp_localize_script(
-			'mo-tappay-fields',
+			'moksafowo-tappay-fields',
 			'moTappaySettings',
 			[
 				'gatewayId' => Gateways\Credit::GATEWAY_ID,
@@ -95,7 +95,7 @@ final class Module extends AbstractGatewayModule {
 				],
 			]
 		);
-		wp_enqueue_script( 'mo-tappay-sdk' );
-		wp_enqueue_script( 'mo-tappay-fields' );
+		wp_enqueue_script( 'moksafowo-tappay-sdk' );
+		wp_enqueue_script( 'moksafowo-tappay-fields' );
 	}
 }

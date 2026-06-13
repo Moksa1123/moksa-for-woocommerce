@@ -17,7 +17,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const SANDBOX_APP_KEY    = 'sHeq7t8G1wiQvhAuIM27';
 
 	protected static function option_prefix(): string {
-		return 'mo_amego_invoice';
+		return 'moksafowo_amego_invoice';
 	}
 
 	protected static function log_source(): string {
@@ -26,18 +26,18 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function invoice_id(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_amego_invoice_sandbox_invoice_id', '' );
+			$v = (string) get_option( 'moksafowo_amego_invoice_sandbox_invoice_id', '' );
 			return '' !== $v ? $v : self::SANDBOX_INVOICE_ID;
 		}
-		return (string) get_option( 'mo_amego_invoice_invoice_id', '' );
+		return (string) get_option( 'moksafowo_amego_invoice_invoice_id', '' );
 	}
 
 	public static function app_key(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_amego_invoice_sandbox_app_key', '' );
+			$v = (string) get_option( 'moksafowo_amego_invoice_sandbox_app_key', '' );
 			return '' !== $v ? $v : self::SANDBOX_APP_KEY;
 		}
-		return (string) get_option( 'mo_amego_invoice_app_key', '' );
+		return (string) get_option( 'moksafowo_amego_invoice_app_key', '' );
 	}
 
 	public static function has_credentials(): bool {
@@ -51,7 +51,7 @@ final class Helper extends AbstractCredentialHelper {
 
 	
 	public static function generate_order_id( int $order_id ): string {
-		$prefix = (string) get_option( 'mo_amego_invoice_order_prefix', '' );
+		$prefix = (string) get_option( 'moksafowo_amego_invoice_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';
 		$rand   = bin2hex( random_bytes( 3 ) );
 		return substr( $prefix . $order_id . 'R' . $rand, 0, 40 );

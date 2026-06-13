@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class SamsungPay extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_samsungpay';
+		$this->id = 'moksafowo_newebpay_samsungpay';
 		parent::__construct();
 	}
 

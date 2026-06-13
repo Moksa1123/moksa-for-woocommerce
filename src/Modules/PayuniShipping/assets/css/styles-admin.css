@@ -13,32 +13,32 @@
 }
 
 
-#payuni-shipping-info .inside {
+#moksafowo-payuni-shipping-info .inside {
 	padding: 0px;
 	margin: 0px;
 }
 
 
-#payuni-shipping-info .inside table {
+#moksafowo-payuni-shipping-info .inside table {
 	width: 100%;
 }
 
 
-#payuni-shipping-info th, #payuni-shipping-info td {
+#moksafowo-payuni-shipping-info th, #moksafowo-payuni-shipping-info td {
 	text-align: left;
 	padding: 3px;
 }
 
-#payuni-shipping-info tr:nth-child(odd):not(#payuni-action) {
+#moksafowo-payuni-shipping-info tr:nth-child(odd):not(#moksafowo-payuni-action) {
 	background-color: #ccc;
 }
 
-#payuni-shipping-info #payuni-action th, #payuni-shipping-info #payuni-action td {
+#moksafowo-payuni-shipping-info #moksafowo-payuni-action th, #moksafowo-payuni-shipping-info #moksafowo-payuni-action td {
 	border-top: solid 1px #ccc;
 	padding: 8px 3px;
 }
 
-#payuni-shipping-info #payuni-action button {
+#moksafowo-payuni-shipping-info #moksafowo-payuni-action button {
 	margin: 3px 2px;
 }
 

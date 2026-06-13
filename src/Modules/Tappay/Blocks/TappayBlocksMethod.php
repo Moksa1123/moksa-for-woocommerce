@@ -22,7 +22,7 @@ final class TappayBlocksMethod extends AbstractMowcBlocksMethod {
 	}
 
 	protected function extra_script_handles(): array {
-		$sdk_handle = 'mo-tappay-sdk';
+		$sdk_handle = 'moksafowo-tappay-sdk';
 		if ( ! wp_script_is( $sdk_handle, 'registered' ) ) {
 			wp_register_script( $sdk_handle, Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion,WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		}

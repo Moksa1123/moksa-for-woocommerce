@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Card extends AbstractPchomepayGateway {
 
-	public const GATEWAY_ID = 'mo_pchomepay_card';
+	public const GATEWAY_ID = 'moksafowo_pchomepay_card';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;
@@ -35,7 +35,7 @@ final class Card extends AbstractPchomepayGateway {
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
-		$inst = trim( (string) get_option( 'mo_pchomepay_card_installment', '' ) );
+		$inst = trim( (string) get_option( 'moksafowo_pchomepay_card_installment', '' ) );
 		if ( '' === $inst ) {
 			return [];
 		}

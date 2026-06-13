@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-29T09:15:20+00:00\n"
+"POT-Creation-Date: 2026-06-04T14:57:01+00:00\n"
 "PO-Revision-Date: 2026-05-06 12:00+0800\n"
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1632,209 +1632,261 @@ msgstr "隨機碼"
 msgid "條碼"
 msgstr "條碼"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:43
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:188
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:128
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:48
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:261
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:40
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:186
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:41
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:186
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:186
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:43
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:187
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:47
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:218
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:157
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:51
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:287
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:44
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:216
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:45
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:216
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:216
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:47
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:217
 msgid "個人"
 msgstr "個人"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:45
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:190
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:130
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:51
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:264
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:42
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:188
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:43
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:188
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:117
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:187
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:45
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:189
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:48
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:219
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:159
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:52
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:288
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:45
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:217
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:46
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:217
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:96
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:217
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:48
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:218
 msgid "公司"
 msgstr "公司"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:48
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:193
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:82
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:132
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:219
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:54
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:267
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:45
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:191
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:46
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:191
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:49
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:220
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:80
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:284
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:53
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:289
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:46
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:218
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:47
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:218
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:94
 #: src/Modules/Shared/Admin/CardRenderers.php:314
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:188
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:48
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:192
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:218
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:37
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:49
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:219
 msgid "捐贈"
 msgstr "捐贈"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:51
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:61
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:48
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:49
-#: src/Modules/Payuni/Settings/SettingsTab.php:80
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:51
-msgid "電子發票"
-msgstr "電子發票"
-
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:55
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:198
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:64
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:272
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:52
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:196
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:53
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:196
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:105
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:55
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:197
-msgid "發票類型"
-msgstr "發票類型"
-
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:64
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:206
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:72
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:280
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:61
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:204
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:63
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:204
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:64
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:205
-msgid "載具類型"
-msgstr "載具類型"
-
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:66
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:210
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:57
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:228
 #: src/Modules/AmegoInvoice/Module.php:42
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:73
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:106
 msgid "AMEGO 會員載具"
 msgstr "AMEGO 會員載具"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:67
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:211
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:58
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:229
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:80
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:107
 msgid "手機條碼 (3J0002)"
 msgstr "手機條碼 (3J0002)"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:68
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:212
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:59
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:230
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:87
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:108
 msgid "自然人憑證 (CQ0001)"
 msgstr "自然人憑證 (CQ0001)"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:69
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:213
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:66
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:211
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:67
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:210
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:69
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:212
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:60
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:231
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:94
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:109
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:57
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:229
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:91
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:106
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:58
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:229
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:83
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:97
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:60
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:230
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:97
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:112
 msgid "紙本發票"
 msgstr "紙本發票"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:77
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:219
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:85
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:293
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:74
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:217
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:75
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:216
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:77
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:218
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:67
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:76
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:64
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:65
+#: src/Modules/Payuni/Settings/SettingsTab.php:80
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:67
+msgid "電子發票"
+msgstr "電子發票"
+
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:71
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:240
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:79
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:309
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:68
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:238
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:69
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:238
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:84
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:86
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:71
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:239
+msgid "發票類型"
+msgstr "發票類型"
+
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:80
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:248
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:87
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:317
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:77
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:246
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:78
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:246
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:93
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:80
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:247
+msgid "載具類型"
+msgstr "載具類型"
+
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:88
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:256
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:95
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:325
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:85
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:254
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:86
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:254
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:70
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:88
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:255
 msgid "載具編號"
 msgstr "載具編號"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:84
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:227
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:92
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:301
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:81
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:225
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:82
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:224
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:84
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:226
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:95
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:264
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:102
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:333
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:92
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:262
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:93
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:262
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:103
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:95
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:263
 msgid "統一編號"
 msgstr "統一編號"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:89
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:235
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:97
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:309
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:86
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:233
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:87
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:232
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:89
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:234
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:100
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:272
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:107
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:341
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:97
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:270
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:98
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:270
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:100
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:271
 msgid "公司名稱"
 msgstr "公司名稱"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:97
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:244
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:107
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:318
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:94
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:242
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:95
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:241
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:97
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:243
-msgid "愛心碼"
-msgstr "愛心碼"
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:110
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:283
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:115
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:117
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:352
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:123
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:107
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:281
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:112
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:108
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:281
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:103
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:112
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:110
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:282
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:118
+msgid "捐贈單位"
+msgstr "捐贈單位"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:115
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:259
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:122
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:148
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:112
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:257
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:113
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:256
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:114
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:258
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:116
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:123
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:291
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:300
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:123
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:131
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:360
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:369
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:113
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:120
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:289
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:298
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:114
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:121
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:289
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:298
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:118
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:122
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:116
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:123
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:290
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:299
+msgid "捐贈碼"
+msgstr "捐贈碼"
+
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:142
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:316
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:146
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:172
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:139
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:314
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:140
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:314
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:141
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:315
 msgid "統一編號格式或檢查碼不正確。"
 msgstr "統一編號格式或檢查碼不正確。"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:121
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:270
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:133
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:155
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:118
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:268
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:119
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:267
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:120
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:269
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:148
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:327
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:157
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:179
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:145
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:325
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:146
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:325
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:149
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:147
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:326
 msgid "愛心碼格式錯誤（3-7 碼數字）。"
 msgstr "愛心碼格式錯誤（3-7 碼數字）。"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:128
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:125
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:126
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:127
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:155
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:152
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:153
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:154
 msgid "手機條碼格式錯誤（/ 開頭加 7 碼）。"
 msgstr "手機條碼格式錯誤（/ 開頭加 7 碼）。"
 
-#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:131
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:166
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:128
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:129
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:130
+#: src/Modules/AmegoInvoice/Frontend/CheckoutFields.php:158
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:190
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:155
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:156
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:158
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:157
 msgid "自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。"
 msgstr "自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。"
 
@@ -1884,11 +1936,11 @@ msgid "愛心碼捐贈"
 msgstr "愛心碼捐贈"
 
 #: src/Modules/AmegoInvoice/Module.php:44
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:95
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:105
 #: src/Modules/EcpayInvoice/Module.php:43
 #: src/Modules/EzpayInvoice/Module.php:42
 #: src/Modules/PaynowInvoice/Module.php:43
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:145
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:155
 #: src/Modules/SmilepayInvoice/Module.php:42
 msgid "作廢發票"
 msgstr "作廢發票"
@@ -1954,7 +2006,7 @@ msgid "無原因"
 msgstr "無原因"
 
 #: src/Modules/AmegoInvoice/Operations/Issue.php:18
-#: src/Modules/EcpayInvoice/Operations/Issue.php:17
+#: src/Modules/EcpayInvoice/Operations/Issue.php:20
 msgid "此訂單已開立發票。"
 msgstr "此訂單已開立發票。"
 
@@ -2114,7 +2166,7 @@ msgid "結帳允許捐贈"
 msgstr "結帳允許捐贈"
 
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:66
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:131
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:132
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:63
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:62
 #: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:69
@@ -2122,84 +2174,120 @@ msgid "結帳允許統編（公司用三聯式）"
 msgstr "結帳允許統編（公司用三聯式）"
 
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:72
-#: src/Modules/Ecpay/Settings/SettingsTab.php:111
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:160
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:166
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:139
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:69
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:68
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:75
+msgid "開放的個人載具"
+msgstr "開放的個人載具"
+
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:99
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:166
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:96
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:102
+msgid "勾選要在結帳頁與後台手動開立提供的個人載具。至少留一項；全不勾會自動保留紙本。"
+msgstr "勾選要在結帳頁與後台手動開立提供的個人載具。至少留一項；全不勾會自動保留紙本。"
+
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:102
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:169
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:99
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:91
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:105
+msgid "個人預設載具"
+msgstr "個人預設載具"
+
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:112
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:179
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:109
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:100
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:115
+msgid "結帳頁與後台手動開立的預設選取載具（須是上方有開放的）。"
+msgstr "結帳頁與後台手動開立的預設選取載具（須是上方有開放的）。"
+
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:121
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:129
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:118
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:109
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:124
+msgid "輸入捐贈機構（每行一筆），格式為：社福團體名稱|愛心碼（例：伊甸社會福利基金會|25885）。填了之後顧客結帳與後台手動開立改用下拉選單挑單位（看得到名稱）；留空則由顧客自行輸入愛心碼。"
+msgstr "輸入捐贈機構（每行一筆），格式為：社福團體名稱|愛心碼（例：伊甸社會福利基金會|25885）。填了之後顧客結帳與後台手動開立改用下拉選單挑單位（看得到名稱）；留空則由顧客自行輸入愛心碼。"
+
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:124
+#: src/Modules/Ecpay/Settings/SettingsTab.php:111
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:192
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:166
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:121
 #: src/Modules/Linepay/Settings/SettingsTab.php:46
 #: src/Modules/Newebpay/Settings/SettingsTab.php:108
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:160
 #: src/Modules/Paynow/Settings/SettingsTab.php:96
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:68
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:112
 #: src/Modules/Payuni/Settings/SettingsTab.php:57
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:57
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:79
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:114
 #: src/Modules/Smilepay/Settings/SettingsTab.php:96
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:75
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:127
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:115
 #: src/Modules/Tappay/Settings/SettingsTab.php:99
 msgid "Debug 日誌"
 msgstr "Debug 日誌"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:83
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:135
 msgid "測試環境憑證（選填）"
 msgstr "測試環境憑證（選填）"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:85
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:137
 msgid "留空時使用 Amego 公開測試帳號（統編 12345678 / App Key sHeq7t8G1wiQvhAuIM27）。自家測試環境可在此覆蓋。"
 msgstr "留空時使用 Amego 公開測試帳號（統編 12345678 / App Key sHeq7t8G1wiQvhAuIM27）。自家測試環境可在此覆蓋。"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:89
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:141
 msgid "測試統編"
 msgstr "測試統編"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:94
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:146
 #: src/Modules/Tappay/Settings/SettingsTab.php:32
 msgid "測試 App Key"
 msgstr "測試 App Key"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:104
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:113
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:105
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:109
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:156
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:165
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:149
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:161
 msgid "正式環境憑證"
 msgstr "正式環境憑證"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:106
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:158
 msgid "從 invoice.amego.tw 後台取得貴公司統編對應的 App Key。"
 msgstr "從 invoice.amego.tw 後台取得貴公司統編對應的 App Key。"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:110
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:162
 msgid "正式統編"
 msgstr "正式統編"
 
-#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:115
+#: src/Modules/AmegoInvoice/Settings/SettingsTab.php:167
 #: src/Modules/Tappay/Settings/SettingsTab.php:61
 msgid "正式 App Key"
 msgstr "正式 App Key"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:30
-msgid "綠界信用卡交易動作"
-msgstr "綠界信用卡交易動作"
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:38
+msgid "信用卡交易動作"
+msgstr "信用卡交易動作"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:47
-msgid "此訂單非綠界信用卡付款，無法使用此區塊。"
-msgstr "此訂單非綠界信用卡付款，無法使用此區塊。"
-
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:59
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:41
 msgid "點下方按鈕向綠界查詢即時交易狀態…"
 msgstr "點下方按鈕向綠界查詢即時交易狀態…"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:63
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:45
 msgid "查詢交易狀態"
 msgstr "查詢交易狀態"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:73
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:92
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:172
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:187
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:203
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:56
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:75
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:212
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:230
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:252
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:268
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:400
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:418
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:455
@@ -2210,118 +2298,118 @@ msgstr "查詢交易狀態"
 #: src/Modules/NewebpayShipping/Module.php:154
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:41
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:82
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:265
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:329
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:272
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:353
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:406
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:473
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:485
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:33
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:119
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:188
 msgid "權限不足。"
 msgstr "權限不足。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:78
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:103
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:61
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:86
 msgid "找不到訂單或非信用卡付款。"
 msgstr "找不到訂單或非信用卡付款。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:98
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:81
 msgid "無效的動作。"
 msgstr "無效的動作。"
 
 #. translators: 1: action label, 2: error msg
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:113
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:96
 #, php-format
 msgid "綠界 %1$s 失敗：%2$s"
 msgstr "綠界 %1$s 失敗：%2$s"
 
 #. translators: 1: action label, 2: ECPay msg, 3: code
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:125
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:108
 #, php-format
 msgid "綠界 %1$s 失敗：%2$s（代碼 %3$d）"
 msgstr "綠界 %1$s 失敗：%2$s（代碼 %3$d）"
 
 #. translators: 1: action label, 2: amount
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:136
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:119
 #, php-format
 msgid "綠界 %1$s 成功（金額 NT$%2$d）。"
 msgstr "綠界 %1$s 成功（金額 NT$%2$d）。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:144
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:127
 msgid "動作成功，但查詢最新狀態失敗。請手動重新整理。"
 msgstr "動作成功，但查詢最新狀態失敗。請手動重新整理。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:167
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:150
 msgid "查詢中…"
 msgstr "查詢中…"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:168
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:151
 msgid "確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。"
 msgstr "確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:169
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:152
 msgid "確定要請款？銀行會實際扣顧客款項。"
 msgstr "確定要請款？銀行會實際扣顧客款項。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:170
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:153
 msgid "確定要退款？金額："
 msgstr "確定要退款？金額："
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:171
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:154
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:69
 msgid "退款金額需大於 0。"
 msgstr "退款金額需大於 0。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:172
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:155
 msgid "操作失敗："
 msgstr "操作失敗："
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:195
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:68
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:178
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:48
 msgid "交易狀態"
 msgstr "交易狀態"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:201
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:184
 msgid "授權金額"
 msgstr "授權金額"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:204
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:187
 msgid "已請款金額"
 msgstr "已請款金額"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:208
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:191
 msgid "授權時間"
 msgstr "授權時間"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:214
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:197
 msgid "交易歷史"
 msgstr "交易歷史"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:233
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:216
 msgid "此筆已授權但未請款，可請款後扣顧客款項，或取消授權退回額度。"
 msgstr "此筆已授權但未請款，可請款後扣顧客款項，或取消授權退回額度。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:236
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:313
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:219
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:281
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:77
 msgid "取消授權"
 msgstr "取消授權"
 
 #. translators: %d: 請款金額
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:242
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:225
 #, php-format
 msgid "請款 NT$%d"
 msgstr "請款 NT$%d"
 
 #. translators: %d: 已請款金額
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:249
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:232
 #, php-format
 msgid "已請款 NT$%d，可部分或全額退款。"
 msgstr "已請款 NT$%d，可部分或全額退款。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:257
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:315
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:240
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:283
 #: src/Modules/EzpayInvoice/Operations/Issue.php:204
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:77
 #: src/Modules/Shipping/Statuses/Registrar.php:60
@@ -2329,47 +2417,47 @@ msgstr "已請款 NT$%d，可部分或全額退款。"
 msgid "退款"
 msgstr "退款"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:261
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:244
 msgid "此狀態無可用動作。"
 msgstr "此狀態無可用動作。"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:268
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:251
 msgid "重新查詢"
 msgstr "重新查詢"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:314
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:282
 msgid "請款"
 msgstr "請款"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:321
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:289
 msgid "已授權（未請款）"
 msgstr "已授權（未請款）"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:322
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:59
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:290
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:38
 #: src/Modules/Shared/Admin/CardRenderers.php:467
 msgid "已請款"
 msgstr "已請款"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:323
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:291
 msgid "請款處理中"
 msgstr "請款處理中"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:324
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:292
 msgid "已退刷"
 msgstr "已退刷"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:325
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:293
 msgid "已取消授權"
 msgstr "已取消授權"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:326
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:62
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:294
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:41
 #: src/Modules/Shared/Admin/CardRenderers.php:470
 msgid "失敗"
 msgstr "失敗"
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:328
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:296
 msgid "未知"
 msgstr "未知"
 
@@ -2452,7 +2540,7 @@ msgstr "訂單淨額："
 msgid "全額退款"
 msgstr "全額退款"
 
-#: src/Modules/Ecpay/Admin/OrderMetaBox.php:135
+#: src/Modules/Ecpay/Admin/OrderMetaBox.php:138
 #: src/Modules/Shared/Admin/CardRenderers.php:59
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:83
 msgid "金流資訊"
@@ -2567,16 +2655,17 @@ msgid "條碼第 %d 段"
 msgstr "條碼第 %d 段"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:43
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:177
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:193
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:217
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:235
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:258
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:274
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:339
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:405
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:423
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:461
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:143
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:270
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:334
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:126
 msgid "找不到訂單。"
 msgstr "找不到訂單。"
@@ -3108,7 +3197,7 @@ msgstr "上線前用，勾選後，所有交易走測試環境不會真扣款。
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:28
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:39
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:83
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:91
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:143
 #: src/Modules/Newebpay/Settings/SettingsTab.php:26
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:49
 #: src/Modules/Payuni/Settings/SettingsTab.php:170
@@ -3120,7 +3209,7 @@ msgstr "測試 MerchantID"
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:34
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:45
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:89
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:96
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:148
 #: src/Modules/Newebpay/Settings/SettingsTab.php:31
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:54
 #: src/Modules/Payuni/Settings/SettingsTab.php:175
@@ -3132,7 +3221,7 @@ msgstr "測試 HashKey"
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:40
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:51
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:95
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:102
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:154
 #: src/Modules/Newebpay/Settings/SettingsTab.php:37
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:59
 #: src/Modules/Payuni/Settings/SettingsTab.php:180
@@ -3144,7 +3233,7 @@ msgstr "測試 HashIV"
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:46
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:57
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:101
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:119
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:171
 #: src/Modules/Newebpay/Settings/SettingsTab.php:43
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:75
 #: src/Modules/Payuni/Settings/SettingsTab.php:185
@@ -3156,7 +3245,7 @@ msgstr "正式 MerchantID"
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:51
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:62
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:106
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:124
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:176
 #: src/Modules/Newebpay/Settings/SettingsTab.php:48
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:80
 #: src/Modules/Payuni/Settings/SettingsTab.php:190
@@ -3168,7 +3257,7 @@ msgstr "正式 HashKey"
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:56
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:67
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:111
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:129
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:181
 #: src/Modules/Newebpay/Settings/SettingsTab.php:53
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:85
 #: src/Modules/Payuni/Settings/SettingsTab.php:195
@@ -3304,224 +3393,337 @@ msgstr "行動支付（TWQR Pay）"
 msgid "勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（共 16 種，預設全部未勾選）。「合併顯示」模式下此欄位無效。"
 msgstr "勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（共 16 種，預設全部未勾選）。「合併顯示」模式下此欄位無效。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:71
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:69
 #: src/Modules/Shared/Admin/CardRenderers.php:276
 #: src/Modules/Shared/Admin/CardRenderers.php:350
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:115
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:117
 msgid "發票號碼："
 msgstr "發票號碼："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:73
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:71
 #: src/Modules/Shared/Admin/CardRenderers.php:278
 #: src/Modules/Shared/Admin/CardRenderers.php:352
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:117
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:119
 msgid "開立時間："
 msgstr "開立時間："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:75
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:73
 #: src/Modules/Shared/Admin/CardRenderers.php:281
 #: src/Modules/Shared/Admin/CardRenderers.php:355
 msgid "隨機碼："
 msgstr "隨機碼："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:76
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:74
 msgid "開立方式："
 msgstr "開立方式："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:76
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:74
 msgid "一般開立發票"
 msgstr "一般開立發票"
 
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:76
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:78
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:80
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:82
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:108
 msgid "開立類型："
 msgstr "開立類型："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:80
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:78
 msgid "三聯式發票"
 msgstr "三聯式發票"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:84
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:105
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:119
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:165
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:133
+msgid "愛心碼："
+msgstr "愛心碼："
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:91
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:121
 msgid "發票開立："
 msgstr "發票開立："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:86
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:93
 #: src/Modules/Shared/Admin/CardRenderers.php:288
 #: src/Modules/Shared/Admin/CardRenderers.php:362
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:121
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:123
 msgid "統一編號："
 msgstr "統一編號："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:89
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:96
 #: src/Modules/Shared/Admin/CardRenderers.php:291
 #: src/Modules/Shared/Admin/CardRenderers.php:365
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:127
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:129
 msgid "載具編號："
 msgstr "載具編號："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:92
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:99
 #: src/Modules/Shared/Admin/CardRenderers.php:294
 #: src/Modules/Shared/Admin/CardRenderers.php:368
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:142
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:149
 msgid "已作廢："
 msgstr "已作廢："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:96
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:147
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:101
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:151
+msgid "重新開立發票"
+msgstr "重新開立發票"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:106
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:157
 msgid "開立折讓單"
 msgstr "開立折讓單"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:101
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:155
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:110
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:162
+msgid "作廢原因（最多 20 字）"
+msgstr "作廢原因（最多 20 字）"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:111
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:163
+msgid "確認作廢"
+msgstr "確認作廢"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:112
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:118
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:164
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:171
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:216
+msgid "取消"
+msgstr "取消"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:116
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:169
+msgid "折讓金額（整數）"
+msgstr "折讓金額（整數）"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:117
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:170
+msgid "確認折讓"
+msgstr "確認折讓"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:123
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:179
 msgid "折讓單號："
 msgstr "折讓單號："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:101
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:157
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:123
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:181
 msgid "金額："
 msgstr "金額："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:110
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:170
-msgid "開立發票"
-msgstr "開立發票"
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:118
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:137
 #: src/Modules/Shared/Admin/CardRenderers.php:82
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:85
 msgid "發票資訊"
 msgstr "發票資訊"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:152
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:218
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:146
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:207
+msgid "欄位已修改，請先按「更新」儲存並確認後再開立。"
+msgstr "欄位已修改，請先按「更新」儲存並確認後再開立。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:148
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:209
+msgid "更新"
+msgstr "更新"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:149
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:210
+msgid "開立發票"
+msgstr "開立發票"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:183
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:256
+msgid "更新中…"
+msgstr "更新中…"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:184
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:257
+msgid "已更新，可開立發票。"
+msgstr "已更新，可開立發票。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:185
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:258
+msgid "更新失敗："
+msgstr "更新失敗："
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:186
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:250
 msgid "開立中…"
 msgstr "開立中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:153
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:219
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:187
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:251
 msgid "發票已開立。"
 msgstr "發票已開立。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:154
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:220
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:188
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:252
 msgid "開立失敗："
 msgstr "開立失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:155
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:221
-msgid "請輸入作廢原因（最多 20 字）："
-msgstr "請輸入作廢原因（最多 20 字）："
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:189
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:253
+msgid "請選擇捐贈單位（或輸入愛心碼）。"
+msgstr "請選擇捐贈單位（或輸入愛心碼）。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:156
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:190
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:254
+msgid "請輸入統一編號。"
+msgstr "請輸入統一編號。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:191
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:255
+msgid "請輸入載具編號。"
+msgstr "請輸入載具編號。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:192
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:259
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:72
+msgid "手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）"
+msgstr "手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:193
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:260
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:74
+msgid "自然人憑證（2 大寫字母 + 14 碼數字）"
+msgstr "自然人憑證（2 大寫字母 + 14 碼數字）"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:194
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:261
+msgid "作廢中…"
+msgstr "作廢中…"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:195
+#: src/Modules/EcpayInvoice/Operations/Invalid.php:24
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:262
+msgid "請輸入作廢原因。"
+msgstr "請輸入作廢原因。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:196
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:20
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:222
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:263
 msgid "發票已作廢。"
 msgstr "發票已作廢。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:157
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:223
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:197
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:264
 msgid "作廢失敗："
 msgstr "作廢失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:158
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
-msgid "請輸入折讓金額（整數）："
-msgstr "請輸入折讓金額（整數）："
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:198
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:265
+msgid "折讓中…"
+msgstr "折讓中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:159
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:225
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:199
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:266
+msgid "請輸入折讓金額。"
+msgstr "請輸入折讓金額。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:200
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:267
 msgid "折讓單已開立。"
 msgstr "折讓單已開立。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:160
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:226
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:268
 msgid "折讓失敗："
 msgstr "折讓失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:227
-msgid "確定要作廢這張發票？此動作不可復原。"
-msgstr "確定要作廢這張發票？此動作不可復原。"
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:162
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:228
-msgid "確定要開立折讓單？此動作不可復原。"
-msgstr "確定要開立折讓單？此動作不可復原。"
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:163
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:202
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:345
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:229
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:269
 msgid "未知錯誤，請稍後再試或查看記錄。"
 msgstr "未知錯誤，請稍後再試或查看記錄。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:218
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:224
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:283
+msgid "已更新。"
+msgstr "已更新。"
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:283
 #: src/Modules/Shared/Admin/CardRenderers.php:313
 msgid "公司（三聯式）"
 msgstr "公司（三聯式）"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:220
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:285
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:35
 msgid "個人（載具）"
 msgstr "個人（載具）"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:227
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:76
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:285
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:292
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:63
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:298
 #: src/Modules/EcpayInvoice/Module.php:38
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:64
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:209
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:147
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:55
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:227
 #: src/Modules/EzpayInvoice/Module.php:38
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:65
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:208
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:77
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:104
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:56
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:227
 #: src/Modules/PaynowInvoice/Module.php:40
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:69
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:95
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:88
 #: src/Modules/Shared/Admin/CardRenderers.php:321
 #: src/Modules/Shared/Admin/CardRenderers.php:386
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:195
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:67
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:210
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:225
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:51
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:58
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:228
 #: src/Modules/SmilepayInvoice/Module.php:38
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:83
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:110
 msgid "手機條碼"
 msgstr "手機條碼"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:228
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:77
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:286
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:293
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:64
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:299
 #: src/Modules/EcpayInvoice/Module.php:39
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:65
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:210
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:154
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:56
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:228
 #: src/Modules/EzpayInvoice/Module.php:39
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:66
-#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:209
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:84
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:105
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:57
+#: src/Modules/PaynowInvoice/Frontend/CheckoutFields.php:228
 #: src/Modules/PaynowInvoice/Module.php:41
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:111
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:76
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:96
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:90
 #: src/Modules/Shared/Admin/CardRenderers.php:322
 #: src/Modules/Shared/Admin/CardRenderers.php:387
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:196
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:68
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:211
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:226
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:52
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:59
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:229
 #: src/Modules/SmilepayInvoice/Module.php:39
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:90
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:111
 msgid "自然人憑證"
 msgstr "自然人憑證"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:229
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:78
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:287
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:294
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:65
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:300
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:161
 #: src/Modules/Shared/Admin/CardRenderers.php:323
 #: src/Modules/Shared/Admin/CardRenderers.php:388
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:197
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:227
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:53
 msgid "紙本"
 msgstr "紙本"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:230
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:75
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:284
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:295
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:62
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:297
 #: src/Modules/EcpayInvoice/Module.php:40
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:198
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:228
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:50
 msgid "會員載具"
 msgstr "會員載具"
 
@@ -3562,11 +3764,11 @@ msgstr "財政部系統維護中，已跳過愛心碼驗證。"
 msgid "此愛心碼不存在，請確認是否輸入正確。"
 msgstr "此愛心碼不存在，請確認是否輸入正確。"
 
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:110
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:133
 msgid "3-7 碼數字"
 msgstr "3-7 碼數字"
 
-#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:163
+#: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:187
 msgid "手機條碼格式錯誤（/ 開頭加 7 碼大寫英數）。"
 msgstr "手機條碼格式錯誤（/ 開頭加 7 碼大寫英數）。"
 
@@ -3618,10 +3820,6 @@ msgstr "綠界折讓單 %1$s 開立成功（金額 %2$d）"
 msgid "此訂單沒有可作廢的發票。"
 msgstr "此訂單沒有可作廢的發票。"
 
-#: src/Modules/EcpayInvoice/Operations/Invalid.php:24
-msgid "請輸入作廢原因。"
-msgstr "請輸入作廢原因。"
-
 #. translators: %s: error message
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:38
 #, php-format
@@ -3635,19 +3833,19 @@ msgid "綠界發票 %1$s 已作廢 — 原因：%2$s"
 msgstr "綠界發票 %1$s 已作廢 — 原因：%2$s"
 
 #. translators: %s: error message
-#: src/Modules/EcpayInvoice/Operations/Issue.php:76
+#: src/Modules/EcpayInvoice/Operations/Issue.php:89
 #, php-format
 msgid "綠界發票開立失敗：%s"
 msgstr "綠界發票開立失敗：%s"
 
 #. translators: 1: invoice number, 2: random
-#: src/Modules/EcpayInvoice/Operations/Issue.php:93
+#: src/Modules/EcpayInvoice/Operations/Issue.php:106
 #, php-format
 msgid "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:155
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:155
+#: src/Modules/EcpayInvoice/Operations/Issue.php:168
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:187
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:161
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:110
@@ -3721,39 +3919,28 @@ msgstr "結帳時呼叫綠界 API 真的查財政部資料庫，確認顧客輸�
 msgid "提供「捐贈發票」選項（消費者輸入 3-7 碼捐贈碼）。"
 msgstr "提供「捐贈發票」選項（消費者輸入 3-7 碼捐贈碼）。"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:123
-msgid "預設捐贈碼"
-msgstr "預設捐贈碼"
-
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:127
-msgid "留空 = 顧客自己輸入（一般情況）。填了 = 顧客選捐贈時自動帶入這個碼（適合長期合作公益單位的店家）。"
-msgstr "留空 = 顧客自己輸入（一般情況）。填了 = 顧客選捐贈時自動帶入這個碼（適合長期合作公益單位的店家）。"
-
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:135
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:136
 msgid "提供統一編號欄位，公司行號可開三聯式發票。"
 msgstr "提供統一編號欄位，公司行號可開三聯式發票。"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:138
-msgid "個人預設載具"
-msgstr "個人預設載具"
-
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:142
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:140
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:173
 msgid "會員載具（雲端，免輸入）"
 msgstr "會員載具（雲端，免輸入）"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:143
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:174
 msgid "手機條碼（消費者輸入 8 碼）"
 msgstr "手機條碼（消費者輸入 8 碼）"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:144
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:175
 msgid "自然人憑證（消費者輸入 16 碼）"
 msgstr "自然人憑證（消費者輸入 16 碼）"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:145
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:176
 msgid "紙本（不發載具）"
 msgstr "紙本（不發載具）"
 
-#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:164
+#: src/Modules/EcpayInvoice/Settings/SettingsTab.php:196
 msgid "排查發票異常時開啟。"
 msgstr "排查發票異常時開啟。"
 
@@ -4514,8 +4701,10 @@ msgstr "ezPay 回傳 HTTP %d"
 msgid "ezPay 回傳格式無法解析"
 msgstr "ezPay 回傳格式無法解析"
 
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:63
-#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:208
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:54
+#: src/Modules/EzpayInvoice/Frontend/CheckoutFields.php:226
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:70
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:103
 msgid "ezPay 平台會員載具"
 msgstr "ezPay 平台會員載具"
 
@@ -4663,70 +4852,70 @@ msgstr "手動 — 商家自己在訂單頁按「開立發票」按鈕"
 msgid "預設「手動」最保守。改成「自動」後，訂單變取消 / 退款 / 失敗時會在 2 分鐘後自動觸發作廢（buffer 期間切回正常狀態可救回）。"
 msgstr "預設「手動」最保守。改成「自動」後，訂單變取消 / 退款 / 失敗時會在 2 分鐘後自動觸發作廢（buffer 期間切回正常狀態可救回）。"
 
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:73
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:125
 msgid "排查 API 異常時開啟。"
 msgstr "排查 API 異常時開啟。"
 
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:81
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:79
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:86
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:133
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:123
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:138
 msgid "測試環境憑證"
 msgstr "測試環境憑證"
 
 #. translators: %s: ezPay sandbox URL
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:85
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:137
 #, php-format
 msgid "從 %s 申請取得。ezPay 沒有公開共用測試帳號，每個商家自家測試環境憑證不同。"
 msgstr "從 %s 申請取得。ezPay 沒有公開共用測試帳號，每個商家自家測試環境憑證不同。"
 
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:99
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:151
 #: src/Modules/Newebpay/Settings/SettingsTab.php:34
 msgid "AES-256-CBC 加密金鑰，32 字元。"
 msgstr "AES-256-CBC 加密金鑰，32 字元。"
 
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:105
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:157
 #: src/Modules/Newebpay/Settings/SettingsTab.php:40
 msgid "AES-256-CBC IV，16 字元。"
 msgstr "AES-256-CBC IV，16 字元。"
 
-#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:115
+#: src/Modules/EzpayInvoice/Settings/SettingsTab.php:167
 msgid "從 inv.ezpay.com.tw 申請取得。需 ezPay 審核啟用後才能用。"
 msgstr "從 inv.ezpay.com.tw 申請取得。需 ezPay 審核啟用後才能用。"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:41
-msgid "LINE Pay 交易資訊"
-msgstr "LINE Pay 交易資訊"
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:27
+msgid "金流資訊（LINE Pay）"
+msgstr "金流資訊（LINE Pay）"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:57
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:36
 #: src/Modules/Shared/Admin/CardRenderers.php:465
 msgid "已預授權（待請款）"
 msgstr "已預授權（待請款）"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:58
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:37
 #: src/Modules/Shared/Admin/CardRenderers.php:466
 msgid "已授權（待請款）"
 msgstr "已授權（待請款）"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:60
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:39
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:22
 #: src/Modules/Shared/Admin/CardRenderers.php:468
 msgid "已取消"
 msgstr "已取消"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:61
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:40
 #: src/Modules/Shared/Admin/CardRenderers.php:469
 msgid "已退款"
 msgstr "已退款"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:67
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:47
 msgid "交易編號"
 msgstr "交易編號"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:71
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:51
 msgid "付款動作"
 msgstr "付款動作"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:71
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:51
 msgid "確認請款"
 msgstr "確認請款"
 
@@ -4800,6 +4989,7 @@ msgstr "無法處理 callback。"
 #: src/Modules/ShoplinePayments/Module.php:33
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:107
 #: src/Settings/SettingsPage.php:128
+#: src/Modules/Linepay/assets/js/blocks/linepay.js:3
 msgid "LINE Pay"
 msgstr "LINE Pay"
 
@@ -6140,33 +6330,37 @@ msgstr "送至 PayNow 的 orderno 前綴（限英數，最多 5 字元）。留�
 msgid "付款完成 — 訂單變 processing 就立即開立"
 msgstr "付款完成 — 訂單變 processing 就立即開立"
 
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:88
+msgid "勾選要在結帳頁與後台手動開立提供的個人載具。PayNow 無會員載具。至少留一項；全不勾會自動保留紙本。"
+msgstr "勾選要在結帳頁與後台手動開立提供的個人載具。PayNow 無會員載具。至少留一項；全不勾會自動保留紙本。"
+
 #. translators: %s: PayNow invoice test URL
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:83
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:127
 #, php-format
 msgid "從 %s 申請。PayNow 沒有公開共用測試帳號。"
 msgstr "從 %s 申請。PayNow 沒有公開共用測試帳號。"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:89
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:133
 msgid "測試 mem_cid"
 msgstr "測試 mem_cid"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:94
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:138
 msgid "測試 mem_password"
 msgstr "測試 mem_password"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:97
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:141
 msgid "8 字元（用於 3DES key 推導，spec §2.2）。"
 msgstr "8 字元（用於 3DES key 推導，spec §2.2）。"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:107
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:151
 msgid "從 invoice.paynow.com.tw 申請。需 PayNow 審核啟用。"
 msgstr "從 invoice.paynow.com.tw 申請。需 PayNow 審核啟用。"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:111
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:155
 msgid "正式 mem_cid"
 msgstr "正式 mem_cid"
 
-#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:116
+#: src/Modules/PaynowInvoice/Settings/SettingsTab.php:160
 msgid "正式 mem_password"
 msgstr "正式 mem_password"
 
@@ -6178,71 +6372,72 @@ msgstr "發票號碼"
 msgid "Unissue"
 msgstr "未開立"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:42
-msgid "PAYUNi 交易資訊"
-msgstr "PAYUNi 交易資訊"
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:33
+msgid "金流資訊（PAYUNi）"
+msgstr "金流資訊（PAYUNi）"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:68
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:48
 msgid "交易序號"
 msgstr "交易序號"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:93
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 msgid "發票號碼"
 msgstr "發票號碼"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:94
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:73
 msgid "發票金額"
 msgstr "發票金額"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:74
 msgid "開立時間"
 msgstr "開立時間"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:99
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:78
 msgid "開立"
 msgstr "開立"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:101
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:80
 msgid "作廢"
 msgstr "作廢"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:103
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:82
 msgid "未知類型"
 msgstr "未知類型"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:113
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:92
 msgid "Amego 會員"
 msgstr "Amego 會員"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:119
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:98
 msgid "未知載具"
 msgstr "未知載具"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:121
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:100
 msgid "載具資訊"
 msgstr "載具資訊"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:125
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
 msgid "已開立"
 msgstr "已開立"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:127
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 msgid "開立失敗"
 msgstr "開立失敗"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:129
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
 msgid "已作廢"
 msgstr "已作廢"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:131
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
 msgid "未知狀態"
 msgstr "未知狀態"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:133
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
 msgid "開立狀態"
 msgstr "開立狀態"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:136
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:119
 msgid "查詢"
 msgstr "查詢"
 
@@ -7117,98 +7312,110 @@ msgstr "批次列印超商取貨標籤"
 msgid "批次列印黑貓宅配標籤"
 msgstr "批次列印黑貓宅配標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:57
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:60
 msgid "Store ID"
 msgstr "門市代號"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:61
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:64
 msgid "Store Name"
 msgstr "門市名稱"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:65
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:68
 msgid "Store Address"
 msgstr "門市地址"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:70
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:77
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:73
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:80
 #: src/Modules/PayuniShipping/PayuniShipping.php:349
 msgid "Shipping Phone"
 msgstr "收件人電話"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:92
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:95
 msgid "Create PAYUNi Shipping Order"
 msgstr "建立 PAYUNi 物流訂單"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:94
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:97
 msgid "Re-Create PAYUNi Shipping Order"
 msgstr "重新建立 PAYUNi 物流訂單"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:34
-msgid "PAYUNi Shipping Info"
-msgstr "PAYUNi 物流資訊"
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:33
+msgid "物流資訊（PAYUNi）"
+msgstr "物流資訊（PAYUNi）"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:51
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:63
 msgid "ShipTradeNo"
 msgstr "ShipTradeNo"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:74
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:67
 msgid "ShipNo"
 msgstr "物流編號"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:77
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:70
 msgid "PartnerID"
 msgstr "PartnerID"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:78
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:71
 msgid "Odon"
 msgstr "Odon"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:82
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:75
 msgid "ValidationNo"
 msgstr "ValidationNo"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:85
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:78
 msgid "Ship Type"
 msgstr "物流類型"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:86
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:79
 msgid "Logistic Type"
 msgstr "物流模式"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:87
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:80
 msgid "Goods Type"
 msgstr "商品類型"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:95
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:87
 #: src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php:58
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:58
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:58
 msgid "Package Spec"
 msgstr "包裝規格"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:106
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:98
 msgid "Service Type"
 msgstr "服務類型"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:109
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:101
 msgid "COD Amount"
 msgstr "代收金額"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:112
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:104
 msgid "Status"
 msgstr "狀態"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:113
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:105
 msgid "Status Desc"
 msgstr "狀態說明"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:114
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:106
 msgid "Status Time"
 msgstr "狀態時間"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:117
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:109
 msgid "Print Date"
 msgstr "列印日期"
+
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:113
+msgid "下載標籤"
+msgstr "下載標籤"
+
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:115
+msgid "列印標籤"
+msgstr "列印標籤"
+
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:119
+msgid "物流單動作"
+msgstr "物流單動作"
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:104
 msgid "PAYUNi 物流類型未設定"
@@ -8338,9 +8545,11 @@ msgid "SmilePay"
 msgstr "SmilePay"
 
 #: src/Modules/Shared/Admin/CardRenderers.php:385
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:66
-#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:209
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:57
+#: src/Modules/SmilepayInvoice/Frontend/CheckoutFields.php:227
 #: src/Modules/SmilepayInvoice/Module.php:40
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:76
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:109
 msgid "SmilePay 會員載具"
 msgstr "SmilePay 會員載具"
 
@@ -8461,26 +8670,21 @@ msgstr "前台顯示描述"
 msgid "結帳頁付款方式描述。"
 msgstr "結帳頁付款方式描述。"
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:124
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:168
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:126
 msgid "載具類型："
 msgstr "載具類型："
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:130
-msgid "愛心碼："
-msgstr "愛心碼："
-
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:162
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:186
 msgid "訂單金額為 0 或負，未開立發票。"
 msgstr "訂單金額為 0 或負，未開立發票。"
 
 #. translators: %s: provider label
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:178
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:198
 #, php-format
 msgid "%s 發票資訊"
 msgstr "%s 發票資訊"
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:255
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:319
 msgid "此 provider 不支援折讓。"
 msgstr "此 provider 不支援折讓。"
 
@@ -8517,6 +8721,30 @@ msgstr "訂單失敗（自動作廢）"
 #: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:97
 msgid "訂單狀態變更（自動作廢）"
 msgstr "訂單狀態變更（自動作廢）"
+
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:36
+msgid "公司（統編三聯式）"
+msgstr "公司（統編三聯式）"
+
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:106
+msgid "公司抬頭"
+msgstr "公司抬頭"
+
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:123
+msgid "3-7 碼愛心碼"
+msgstr "3-7 碼愛心碼"
+
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:144
+msgid "統一編號格式或檢查碼不正確（需 8 碼數字且檢查碼正確）。"
+msgstr "統一編號格式或檢查碼不正確（需 8 碼數字且檢查碼正確）。"
+
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:155
+msgid "手機條碼格式錯誤（/ 開頭 + 7 碼，限 0-9 A-Z . + -）。"
+msgstr "手機條碼格式錯誤（/ 開頭 + 7 碼，限 0-9 A-Z . + -）。"
+
+#: src/Modules/Shared/Invoice/InvoiceChannels.php:108
+msgid "請選擇捐贈單位"
+msgstr "請選擇捐贈單位"
 
 #: src/Modules/Shipping/Admin/AbstractAdminActions.php:48
 #: src/Modules/Shipping/Admin/AbstractAdminActions.php:92
@@ -8559,10 +8787,6 @@ msgstr "請至少選擇一筆。"
 #, php-format
 msgid "列印 (%d)"
 msgstr "列印 (%d)"
-
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:216
-msgid "取消"
-msgstr "取消"
 
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:218
 msgid "載入失敗。"
@@ -8608,41 +8832,45 @@ msgstr "請至少選擇一筆訂單。"
 msgid "沒有可列印的內容。"
 msgstr "沒有可列印的內容。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:457
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:396
+msgid "列印物流單（自動判斷物流商）"
+msgstr "列印物流單（自動判斷物流商）"
+
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:470
 msgid "所選訂單沒有符合此物流的可列印標籤（已全部跳過）。"
 msgstr "所選訂單沒有符合此物流的可列印標籤（已全部跳過）。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:470
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:482
 msgid "列印連結已失效，請重試。"
 msgstr "列印連結已失效，請重試。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:478
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:490
 msgid "沒有可列印的內容，或連結已過期。"
 msgstr "沒有可列印的內容，或連結已過期。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:490
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:494
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:502
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:506
 msgid "批次列印物流標籤"
 msgstr "批次列印物流標籤"
 
 #. translators: 1: number of labels produced, 2: number of skipped orders
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:497
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:509
 #, php-format
 msgid "已產生 %1$d 份標籤；略過 %2$d 筆（非此物流的訂單）。"
 msgstr "已產生 %1$d 份標籤；略過 %2$d 筆（非此物流的訂單）。"
 
 #. translators: %d: number of labels produced
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:500
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:512
 #, php-format
 msgid "已產生 %d 份標籤。"
 msgstr "已產生 %d 份標籤。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:504
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:516
 msgid "請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）："
 msgstr "請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）："
 
 #. translators: %d: label sequence number
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:507
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:519
 #, php-format
 msgid "列印第 %d 份"
 msgstr "列印第 %d 份"
@@ -9692,31 +9920,31 @@ msgstr "字軌 TrackSystemID"
 msgid "SmilePay 後台 → 字軌管理頁取得的字軌系統碼。多本字軌時要指定用哪一本。"
 msgstr "SmilePay 後台 → 字軌管理頁取得的字軌系統碼。多本字軌時要指定用哪一本。"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:88
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:140
 msgid "SmilePay 沒有公開測試帳號，需自行向業務窗口申請測試串接。"
 msgstr "SmilePay 沒有公開測試帳號，需自行向業務窗口申請測試串接。"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:92
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:144
 msgid "測試 Grvc"
 msgstr "測試 Grvc"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:95
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:147
 msgid "商家串接代號。"
 msgstr "商家串接代號。"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:98
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:150
 msgid "測試 Verify_key"
 msgstr "測試 Verify_key"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:101
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:153
 msgid "驗證碼。"
 msgstr "驗證碼。"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:114
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:166
 msgid "正式 Grvc"
 msgstr "正式 Grvc"
 
-#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:119
+#: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:171
 msgid "正式 Verify_key"
 msgstr "正式 Verify_key"
 

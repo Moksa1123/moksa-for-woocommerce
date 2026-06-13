@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Barcode extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_barcode';
+		$this->id = 'moksafowo_ecpay_barcode';
 		parent::__construct();
 	}
 
@@ -26,8 +26,8 @@ final class Barcode extends AbstractEcpayGateway {
 
 	protected function extra_aio_params( \WC_Order $order ): array {
 		return [
-			'StoreExpireDate' => max( 1, min( 7, (int) get_option( 'mo_ecpay_barcode_expire_days', 7 ) ) ),
-			'PaymentInfoURL'  => home_url( '/wc-api/mo_ecpay_payment' ),
+			'StoreExpireDate' => max( 1, min( 7, (int) get_option( 'moksafowo_ecpay_barcode_expire_days', 7 ) ) ),
+			'PaymentInfoURL'  => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 		];
 	}
 }

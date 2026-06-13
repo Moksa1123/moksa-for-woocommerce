@@ -11,14 +11,14 @@
 ( function () {
 	'use strict';
 
-	if ( typeof mo_tw_district === 'undefined' ) {
+	if ( typeof moksafowo_tw_district === 'undefined' ) {
 		return;
 	}
 
-	const FIELD_ID    = mo_tw_district.field_id;
-	const BY_STATE    = mo_tw_district.by_state || {};
-	const POSTCODES   = mo_tw_district.postcodes || {};
-	const PLACEHOLDER = mo_tw_district.placeholder || '請選擇…';
+	const FIELD_ID    = moksafowo_tw_district.field_id;
+	const BY_STATE    = moksafowo_tw_district.by_state || {};
+	const POSTCODES   = moksafowo_tw_district.postcodes || {};
+	const PLACEHOLDER = moksafowo_tw_district.placeholder || '請選擇…';
 
 	function fieldKey( prefix ) {
 		// Block 把 mowp/district 渲染成 id="<group>-mowp-district"（slash 換 dash）
@@ -98,8 +98,8 @@
 		while ( node && ! ( node.parentElement && node.parentElement.classList.contains( 'wc-block-components-address-form' ) ) ) {
 			node = node.parentElement;
 		}
-		if ( node && ! node.classList.contains( 'mo-tw-district-wrapper' ) ) {
-			node.classList.add( 'mo-tw-district-wrapper' );
+		if ( node && ! node.classList.contains( 'moksafowo-tw-district-wrapper' ) ) {
+			node.classList.add( 'moksafowo-tw-district-wrapper' );
 		}
 		return node;
 	}

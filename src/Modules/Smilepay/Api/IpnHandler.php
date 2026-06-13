@@ -13,17 +13,18 @@ final class IpnHandler {
 	public const ROTURL_OK = 'woook1.1.23';
 
 	public static function handle_roturl(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- 匿名 webhook，走 Mid_smilepay 簽章 + 金額交叉比對
+		// 匿名 webhook 無法帶 WP nonce — 走 Mid_smilepay 簽章（hash_equals）+ 金額交叉比對。
+		// Big5 欄位須先轉碼再 sanitize（sanitize_text_field 會清空非 UTF-8 位元組）。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; every field is sanitized below and Mid_smilepay is verified before any state change.
 		$req = wp_unslash( $_REQUEST );
-		// phpcs:enable
 
-		$classif      = isset( $req['Classif'] ) ? (string) $req['Classif'] : '';
-		$order_id     = isset( $req['Data_id'] ) ? (int) $req['Data_id'] : 0;
-		$mid_smilepay = isset( $req['Mid_smilepay'] ) ? (string) $req['Mid_smilepay'] : '';
-		$amount       = isset( $req['Amount'] ) ? (string) $req['Amount'] : '';
-		$smseid       = isset( $req['Smseid'] ) ? (string) $req['Smseid'] : '';
-		$process_date = isset( $req['Process_date'] ) ? (string) $req['Process_date'] : '';
-		$process_time = isset( $req['Process_time'] ) ? Helper::big5_to_utf8( (string) $req['Process_time'] ) : '';
+		$classif      = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';
+		$order_id     = isset( $req['Data_id'] ) ? absint( $req['Data_id'] ) : 0;
+		$mid_smilepay = isset( $req['Mid_smilepay'] ) ? sanitize_text_field( (string) $req['Mid_smilepay'] ) : '';
+		$amount       = isset( $req['Amount'] ) ? sanitize_text_field( (string) $req['Amount'] ) : '';
+		$smseid       = isset( $req['Smseid'] ) ? sanitize_text_field( (string) $req['Smseid'] ) : '';
+		$process_date = isset( $req['Process_date'] ) ? sanitize_text_field( (string) $req['Process_date'] ) : '';
+		$process_time = isset( $req['Process_time'] ) ? sanitize_text_field( Helper::big5_to_utf8( (string) $req['Process_time'] ) ) : '';
 
 		if ( '' === $classif ) {
 			self::die_status( __( '無 Classif', 'mo-ectools' ) );
@@ -93,20 +94,21 @@ final class IpnHandler {
 	}
 
 	public static function handle_credit_roturl(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- 匿名 webhook，走 Mid_smilepay 簽章 + 金額交叉比對
+		// 匿名 webhook 無法帶 WP nonce — 走 Mid_smilepay 簽章（hash_equals）+ 金額交叉比對。
+		// Big5 欄位須先轉碼再 sanitize（sanitize_text_field 會清空非 UTF-8 位元組）。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; every field is sanitized below and Mid_smilepay is verified before any state change.
 		$req = wp_unslash( $_REQUEST );
-		// phpcs:enable
 
-		$classif       = isset( $req['Classif'] ) ? (string) $req['Classif'] : '';
-		$response_id   = isset( $req['Response_id'] ) ? (string) $req['Response_id'] : '';
-		$order_id      = isset( $req['Data_id'] ) ? (int) $req['Data_id'] : 0;
-		$smseid        = isset( $req['Smseid'] ) ? (string) $req['Smseid'] : '';
-		$amount        = isset( $req['Amount'] ) ? (string) $req['Amount'] : '';
-		$date          = isset( $req['Process_date'] ) ? (string) $req['Process_date'] : '';
-		$time          = isset( $req['Process_time'] ) ? Helper::big5_to_utf8( (string) $req['Process_time'] ) : '';
-		$payment_title = isset( $req['Payment_title'] ) ? Helper::big5_to_utf8( (string) $req['Payment_title'] ) : '';
-		$err_desc      = isset( $req['Errdesc'] ) ? Helper::big5_to_utf8( (string) $req['Errdesc'] ) : '';
-		$mid_smilepay  = isset( $req['Mid_smilepay'] ) ? (string) $req['Mid_smilepay'] : '';
+		$classif       = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';
+		$response_id   = isset( $req['Response_id'] ) ? sanitize_text_field( (string) $req['Response_id'] ) : '';
+		$order_id      = isset( $req['Data_id'] ) ? absint( $req['Data_id'] ) : 0;
+		$smseid        = isset( $req['Smseid'] ) ? sanitize_text_field( (string) $req['Smseid'] ) : '';
+		$amount        = isset( $req['Amount'] ) ? sanitize_text_field( (string) $req['Amount'] ) : '';
+		$date          = isset( $req['Process_date'] ) ? sanitize_text_field( (string) $req['Process_date'] ) : '';
+		$time          = isset( $req['Process_time'] ) ? sanitize_text_field( Helper::big5_to_utf8( (string) $req['Process_time'] ) ) : '';
+		$payment_title = isset( $req['Payment_title'] ) ? sanitize_text_field( Helper::big5_to_utf8( (string) $req['Payment_title'] ) ) : '';
+		$err_desc      = isset( $req['Errdesc'] ) ? sanitize_text_field( Helper::big5_to_utf8( (string) $req['Errdesc'] ) ) : '';
+		$mid_smilepay  = isset( $req['Mid_smilepay'] ) ? sanitize_text_field( (string) $req['Mid_smilepay'] ) : '';
 
 		if ( '' === $classif && '' === $response_id ) {
 			self::die_status( __( '缺乏參數', 'mo-ectools' ) );

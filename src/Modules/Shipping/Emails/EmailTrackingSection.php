@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class EmailTrackingSection {
 
 	public static function init(): void {
-		add_action( 'mo_shipping_email_tracking_info', [ __CLASS__, 'render' ], 10, 2 );
+		add_action( 'moksafowo_shipping_email_tracking_info', [ __CLASS__, 'render' ], 10, 2 );
 	}
 
 	public static function render( $order, bool $plain_text = false ): void {
@@ -40,7 +40,7 @@ final class EmailTrackingSection {
 
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$entries = apply_filters( 'mo_shipping_tracking_entries', [], $order, $method_id );
+		$entries = apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, $method_id );
 		return is_array( $entries ) ? $entries : [];
 	}
 

@@ -12,23 +12,23 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
 const ECPAY_IDS = [
-	'mo_ecpay_unified',           // single-entry mode：ECPay 綠界（ChoosePayment=ALL）
-	'mo_ecpay_credit',
-	'mo_ecpay_atm',
-	'mo_ecpay_cvs',
-	'mo_ecpay_barcode',
-	'mo_ecpay_webatm',
-	'mo_ecpay_credit_inst3',
-	'mo_ecpay_credit_inst6',
-	'mo_ecpay_credit_inst12',
-	'mo_ecpay_credit_inst18',
-	'mo_ecpay_credit_inst24',
-	'mo_ecpay_applepay',
-	'mo_ecpay_twqr',
-	'mo_ecpay_bnpl',
-	'mo_ecpay_weixin',
-	'mo_ecpay_jkopay',
-	'mo_ecpay_ipass',
+	'moksafowo_ecpay_unified',           // single-entry mode：ECPay 綠界（ChoosePayment=ALL）
+	'moksafowo_ecpay_credit',
+	'moksafowo_ecpay_atm',
+	'moksafowo_ecpay_cvs',
+	'moksafowo_ecpay_barcode',
+	'moksafowo_ecpay_webatm',
+	'moksafowo_ecpay_credit_inst3',
+	'moksafowo_ecpay_credit_inst6',
+	'moksafowo_ecpay_credit_inst12',
+	'moksafowo_ecpay_credit_inst18',
+	'moksafowo_ecpay_credit_inst24',
+	'moksafowo_ecpay_applepay',
+	'moksafowo_ecpay_twqr',
+	'moksafowo_ecpay_bnpl',
+	'moksafowo_ecpay_weixin',
+	'moksafowo_ecpay_jkopay',
+	'moksafowo_ecpay_ipass',
 ];
 
 ECPAY_IDS.forEach( ( id ) => {

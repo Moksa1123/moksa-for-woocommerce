@@ -22,7 +22,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_MTMK              = 'https://ssl.smse.com.tw/ezpos/mtmk_utf.asp';        // 不用，留作參考
 
 	protected static function option_prefix(): string {
-		return 'mo_smilepay_shipping';
+		return 'moksafowo_smilepay_shipping';
 	}
 
 	protected static function log_source(): string {
@@ -30,32 +30,32 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function dcvc(): string {
-		return (string) get_option( 'mo_smilepay_shipping_dcvc', '' );
+		return (string) get_option( 'moksafowo_smilepay_shipping_dcvc', '' );
 	}
 
 	public static function rvg2c(): string {
-		return (string) get_option( 'mo_smilepay_shipping_rvg2c', '' );
+		return (string) get_option( 'moksafowo_smilepay_shipping_rvg2c', '' );
 	}
 
 	public static function verify_key(): string {
-		return (string) get_option( 'mo_smilepay_shipping_verify_key', '' );
+		return (string) get_option( 'moksafowo_smilepay_shipping_verify_key', '' );
 	}
 
 	public static function smseid(): string {
-		return (string) get_option( 'mo_smilepay_shipping_smseid', '' );
+		return (string) get_option( 'moksafowo_smilepay_shipping_smseid', '' );
 	}
 
 	public static function cvs_service_type(): string {
-		return 'B2C' === get_option( 'mo_smilepay_shipping_cvs_service_type', 'C2C' ) ? 'B2C' : 'C2C';
+		return 'B2C' === get_option( 'moksafowo_smilepay_shipping_cvs_service_type', 'C2C' ) ? 'B2C' : 'C2C';
 	}
 
 	
 	public static function sender_info(): array {
 		return [
-			'name'    => trim( (string) get_option( 'mo_smilepay_shipping_sender_name', '' ) ),
-			'phone'   => trim( (string) get_option( 'mo_smilepay_shipping_sender_phone', '' ) ),
-			'email'   => trim( (string) get_option( 'mo_smilepay_shipping_sender_email', '' ) ),
-			'address' => trim( (string) get_option( 'mo_smilepay_shipping_sender_address', '' ) ),
+			'name'    => trim( (string) get_option( 'moksafowo_smilepay_shipping_sender_name', '' ) ),
+			'phone'   => trim( (string) get_option( 'moksafowo_smilepay_shipping_sender_phone', '' ) ),
+			'email'   => trim( (string) get_option( 'moksafowo_smilepay_shipping_sender_email', '' ) ),
+			'address' => trim( (string) get_option( 'moksafowo_smilepay_shipping_sender_address', '' ) ),
 		];
 	}
 }

@@ -28,8 +28,8 @@ final class CustomerOrderView {
 		if ( ! function_exists( 'is_account_page' ) || ! is_account_page() ) {
 			return;
 		}
-		wp_enqueue_style( 'mo-shipping-card' );
-		wp_enqueue_script( 'mo-tracking-copy' );
+		wp_enqueue_style( 'moksafowo-shipping-card' );
+		wp_enqueue_script( 'moksafowo-tracking-copy' );
 	}
 
 	public static function filter_shipping_method_string( string $shipping_method, $order ): string {
@@ -132,19 +132,19 @@ final class CustomerOrderView {
 		$is_split    = count( $records ) > 1;
 
 		?>
-		<section class="mo-shipping-card" aria-label="<?php esc_attr_e( '物流資訊', 'mo-ectools' ); ?>">
+		<section class="moksafowo-shipping-card" aria-label="<?php esc_attr_e( '物流資訊', 'mo-ectools' ); ?>">
 
-			<header class="mo-shipping-card__head">
-				<h2 class="mo-shipping-card__title">
-					<span class="mo-shipping-card__title-text"><?php esc_html_e( '物流資訊', 'mo-ectools' ); ?></span>
-					<span class="mo-shipping-card__subtitle"><?php echo esc_html( $carrier ); ?></span>
+			<header class="moksafowo-shipping-card__head">
+				<h2 class="moksafowo-shipping-card__title">
+					<span class="moksafowo-shipping-card__title-text"><?php esc_html_e( '物流資訊', 'mo-ectools' ); ?></span>
+					<span class="moksafowo-shipping-card__subtitle"><?php echo esc_html( $carrier ); ?></span>
 				</h2>
-				<span class="mo-shipping-card__pill mo-shipping-card__pill--<?php echo esc_attr( $status_tone ); ?>">
+				<span class="moksafowo-shipping-card__pill moksafowo-shipping-card__pill--<?php echo esc_attr( $status_tone ); ?>">
 					<?php echo esc_html( $status_text ); ?>
 				</span>
 			</header>
 
-			<div class="mo-shipping-card__body">
+			<div class="moksafowo-shipping-card__body">
 				<?php
 				// 取貨資訊 (CVS) 或 收件人/地址 (HOME) — 全 records 共用，顯示一次就好
 				if ( $is_cvs ) :
@@ -152,15 +152,15 @@ final class CustomerOrderView {
 					$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 					$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
 					if ( '' !== $store_name || '' !== $store_id ) : ?>
-						<div class="mo-shipping-card__row">
-							<span class="mo-shipping-card__label"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?></span>
-							<span class="mo-shipping-card__value">
+						<div class="moksafowo-shipping-card__row">
+							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?></span>
+							<span class="moksafowo-shipping-card__value">
 								<?php echo esc_html( $store_name ); ?>
 								<?php if ( '' !== $store_id ) : ?>
-									<span class="mo-shipping-card__store-id">#<?php echo esc_html( $store_id ); ?></span>
+									<span class="moksafowo-shipping-card__store-id">#<?php echo esc_html( $store_id ); ?></span>
 								<?php endif; ?>
 								<?php if ( '' !== $store_addr ) : ?>
-									<span class="mo-shipping-card__store-addr"><?php echo esc_html( $store_addr ); ?></span>
+									<span class="moksafowo-shipping-card__store-addr"><?php echo esc_html( $store_addr ); ?></span>
 								<?php endif; ?>
 							</span>
 						</div>
@@ -172,23 +172,23 @@ final class CustomerOrderView {
 						$recipient = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
 					}
 					if ( '' !== $recipient ) : ?>
-						<div class="mo-shipping-card__row">
-							<span class="mo-shipping-card__label"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></span>
-							<span class="mo-shipping-card__value"><?php echo esc_html( $recipient ); ?></span>
+						<div class="moksafowo-shipping-card__row">
+							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></span>
+							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $recipient ); ?></span>
 						</div>
 					<?php endif;
 					if ( '' !== $address ) : ?>
-						<div class="mo-shipping-card__row">
-							<span class="mo-shipping-card__label"><?php esc_html_e( '收件地址', 'mo-ectools' ); ?></span>
-							<span class="mo-shipping-card__value"><?php echo esc_html( $address ); ?></span>
+						<div class="moksafowo-shipping-card__row">
+							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件地址', 'mo-ectools' ); ?></span>
+							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $address ); ?></span>
 						</div>
 					<?php endif;
 				endif;
 
 				// records loop — 多溫層拆單訂單會有多筆，每筆顯示物流編號 + 貨態查詢按鈕
 				if ( $is_split ) : ?>
-					<div class="mo-shipping-card__row" style="grid-template-columns:1fr;border-bottom:1px dashed #f1f5f9;">
-						<span class="mo-shipping-card__label" style="font-size:12px;">
+					<div class="moksafowo-shipping-card__row" style="grid-template-columns:1fr;border-bottom:1px dashed #f1f5f9;">
+						<span class="moksafowo-shipping-card__label" style="font-size:12px;">
 							<?php
 							/* translators: %d: package count */
 							echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單', 'mo-ectools' ), count( $records ) ) );
@@ -206,8 +206,8 @@ final class CustomerOrderView {
 					$temp_label = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_ecpay_record( $r );
 					?>
-					<div class="mo-shipping-card__row">
-						<span class="mo-shipping-card__label">
+					<div class="moksafowo-shipping-card__row">
+						<span class="moksafowo-shipping-card__label">
 							<?php
 							echo esc_html__( '物流編號', 'mo-ectools' );
 							if ( $is_split && '' !== $temp_label ) {
@@ -215,18 +215,18 @@ final class CustomerOrderView {
 							}
 							?>
 						</span>
-						<span class="mo-shipping-card__value" style="display:flex;flex-direction:column;gap:6px;">
+						<span class="moksafowo-shipping-card__value" style="display:flex;flex-direction:column;gap:6px;">
 							<?php if ( '' !== $rec_id ) : ?>
-								<span class="mo-shipping-card__code"><?php echo esc_html( $rec_id ); ?></span>
+								<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_id ); ?></span>
 							<?php endif; ?>
 							<?php if ( $is_cvs && '' !== $rec_pay ) : ?>
 								<span style="font-size:12px;color:#475569;">
 									<?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?>
-									<span class="mo-shipping-card__code"><?php echo esc_html( $rec_pay ); ?><?php if ( '' !== $rec_val ) : ?> / <?php echo esc_html( $rec_val ); ?><?php endif; ?></span>
+									<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_pay ); ?><?php if ( '' !== $rec_val ) : ?> / <?php echo esc_html( $rec_val ); ?><?php endif; ?></span>
 								</span>
 							<?php endif; ?>
 							<?php if ( null !== $tracking_info ) : ?>
-								<?php echo TrackingLink::render_button_html( $tracking_info ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?>
 							<?php endif; ?>
 						</span>
 					</div>
@@ -240,12 +240,12 @@ final class CustomerOrderView {
 
 	private static function carrier_title( string $method_id ): string {
 		$map = [
-			'mo_ecpay_shipping_cvs_711'    => __( '綠界 — 7-11 取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_family' => __( '綠界 — 全家取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_hilife' => __( '綠界 — 萊爾富取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_okmart' => __( '綠界 — OK 取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_home_tcat'  => __( '綠界 — 黑貓宅配', 'mo-ectools' ),
-			'mo_ecpay_shipping_home_post'  => __( '綠界 — 中華郵政', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_711'    => __( '綠界 — 7-11 取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_family' => __( '綠界 — 全家取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_hilife' => __( '綠界 — 萊爾富取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_okmart' => __( '綠界 — OK 取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_home_tcat'  => __( '綠界 — 黑貓宅配', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_home_post'  => __( '綠界 — 中華郵政', 'mo-ectools' ),
 		];
 		return $map[ $method_id ] ?? __( '綠界物流', 'mo-ectools' );
 	}
@@ -253,17 +253,17 @@ final class CustomerOrderView {
 	private static function status_tone( string $status ): string {
 		$status = ltrim( $status, 'wc-' );
 		switch ( $status ) {
-			case 'mo-shipped':
+			case 'moksa-shipped':
 				return 'blue';
-			case 'mo-cvs-arrived':
-			case 'mo-store-closed':
+			case 'moksa-cvs-arrived':
+			case 'moksa-store-closed':
 				return 'amber';
 			case 'completed':
 				return 'green';
 			case 'failed':
 			case 'cancelled':
 			case 'refunded':
-			case 'mo-failed':
+			case 'moksafowo-failed':
 				return 'rose';
 			default:
 				return 'slate';

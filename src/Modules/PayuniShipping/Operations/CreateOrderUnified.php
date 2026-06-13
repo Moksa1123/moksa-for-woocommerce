@@ -49,7 +49,7 @@ final class CreateOrderUnified {
 		}
 
 		// 7-11 必須先選店
-		$is_cvs = ShipType::SEVEN === $method->payuni_ship_type();
+		$is_cvs = ShipType::SEVEN === $method->moksafowo_payuni_ship_type();
 		if ( $is_cvs ) {
 			$store_id = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 			if ( '' === $store_id ) {
@@ -103,9 +103,9 @@ final class CreateOrderUnified {
 				'file_no'       => (string) ( $response['data']['FileNo'] ?? '' ),
 				'validation_no' => (string) ( $response['data']['ValidationNo'] ?? '' ),
 				'temp'          => (string) $temp,
-				'goods_type'    => $method::payuni_goods_type_for_temp( $temp ),
-				'lgs_type'      => $method->payuni_lgs_type(),
-				'ship_type'     => $method->payuni_ship_type(),
+				'goods_type'    => $method::moksafowo_payuni_goods_type_for_temp( $temp ),
+				'lgs_type'      => $method->moksafowo_payuni_lgs_type(),
+				'ship_type'     => $method->moksafowo_payuni_ship_type(),
 				'amount'        => (string) (int) $pkg['amount'],
 				'goods_name'    => (string) $pkg['goods_name'],
 				'rtn_msg'       => (string) ( $response['data']['Message'] ?? 'OK' ),
@@ -196,9 +196,9 @@ final class CreateOrderUnified {
 	
 	private static function build_request_args_for_package( \WC_Order $order, array $pkg, $method ): array {
 		$temp         = (int) $pkg['temp'];
-		$goods_type   = $method::payuni_goods_type_for_temp( $temp );
-		$ship_type    = $method->payuni_ship_type();
-		$lgs_type     = $method->payuni_lgs_type();
+		$goods_type   = $method::moksafowo_payuni_goods_type_for_temp( $temp );
+		$ship_type    = $method->moksafowo_payuni_ship_type();
+		$lgs_type     = $method->moksafowo_payuni_lgs_type();
 		$is_cvs       = ShipType::SEVEN === $ship_type;
 		$mer_trade_no = self::generate_mer_trade_no( $order, $temp, $is_cvs );
 
@@ -206,7 +206,7 @@ final class CreateOrderUnified {
 		if ( '' === $consignee_name ) {
 			$consignee_name = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
 		}
-		$consignee_mobile = PayuniShipping::payuni_get_shipping_phone( $order );
+		$consignee_mobile = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
 		// shipping_phone 常被顧客留空 — fallback 到 billing_phone
 		if ( '' === (string) $consignee_mobile ) {
 			$consignee_mobile = $order->get_billing_phone();
@@ -225,25 +225,25 @@ final class CreateOrderUnified {
 			'ConsigneeMail'   => $order->get_billing_email(),
 			'ConsigneeMobile' => $consignee_mobile,
 			'RefundStoreID'   => '',
-			'SenderName'      => (string) get_option( 'mo_payuni_shipping_sender_name', '' ),
-			'SenderMobile'    => (string) get_option( 'mo_payuni_shipping_sender_phone', '' ),
+			'SenderName'      => (string) get_option( 'moksafowo_payuni_shipping_sender_name', '' ),
+			'SenderMobile'    => (string) get_option( 'moksafowo_payuni_shipping_sender_phone', '' ),
 		];
 
 		if ( $is_cvs ) {
 			// 7-11 取貨：從顧客選店的 store_id 帶入；NotifyURL 走 7-11 callback
 			$args['StoreID']   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
-			$args['NotifyURL'] = wc()->api_request_url( 'mo_payuni_shipping_711_notify' );
+			$args['NotifyURL'] = wc()->api_request_url( 'moksafowo_payuni_shipping_711_notify' );
 		} else {
 			// 黑貓宅配
 			$args['StoreID']          = '';
 			$args['ConsigneeAddress'] = self::get_shipping_address( $order );
 			$args['DeliveryTimeTag']  = PayuniShipping::get_tcat_delivery_time();
 			$args['ProdDesc']         = mb_substr( (string) $pkg['goods_name'], 0, 50 );
-			$args['NotifyURL']        = wc()->api_request_url( 'mo_payuni_shipping_tcat_notify' );
+			$args['NotifyURL']        = wc()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' );
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		return apply_filters( 'mo_payuni_shipping_unified_order_request_args', $args, $order, $pkg, $method );
+		return apply_filters( 'moksafowo_payuni_shipping_unified_order_request_args', $args, $order, $pkg, $method );
 	}
 
 	private static function generate_mer_trade_no( \WC_Order $order, int $temp, bool $is_cvs = false ): string {
@@ -258,7 +258,7 @@ final class CreateOrderUnified {
 		// WC TW state 可能存英文代碼，翻譯
 	static $tw_states = null;
 		if ( null === $tw_states ) {
-			$states_file = MOWC_PLUGIN_DIR . 'src/Modules/Address/Data/states-tw.php';
+			$states_file = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Address/Data/states-tw.php';
 			$tw_states   = file_exists( $states_file ) ? ( include $states_file )['TW'] ?? [] : [];
 		}
 		if ( '' !== $state && isset( $tw_states[ $state ] ) ) {
@@ -287,7 +287,7 @@ final class CreateOrderUnified {
 		PayuniShipping::log( 'CreateOrderUnified request: ' . wp_json_encode( $args, JSON_UNESCAPED_UNICODE ), 'info' );
 
 		$encrypted = PayuniShipping::encrypt( $args );
-		$endpoint  = $method->payuni_api_endpoint(); // 'home_delivery' or 'logistics'
+		$endpoint  = $method->moksafowo_payuni_api_endpoint(); // 'home_delivery' or 'logistics'
 		$url       = PayuniShipping::$api_url . '/' . $endpoint . '/trade';
 
 		$response = wp_remote_post(

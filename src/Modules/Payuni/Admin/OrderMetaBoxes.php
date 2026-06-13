@@ -3,13 +3,13 @@ namespace MoksaWeb\Mowc\Modules\Payuni\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
-use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 use MoksaWeb\Mowc\Modules\Payuni\PayuniPayment;
 use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
 use MoksaWeb\Mowc\Modules\Payuni\Utils\AuthType;
 use MoksaWeb\Mowc\Modules\Payuni\Utils\BankType;
 use MoksaWeb\Mowc\Modules\Payuni\Utils\TradeStatus;
 use MoksaWeb\Mowc\Modules\Payuni\Utils\SingletonTrait;
+use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
 
 class OrderMetaBoxes {
 
@@ -18,54 +18,34 @@ class OrderMetaBoxes {
 	public static function init() {
 		self::get_instance();
 
-		add_action( 'add_meta_boxes', array( self::get_instance(), 'payuni_add_meta_boxes' ), 10, 2 );
+		// PAYUNi 交易資訊整合進統一的「金流 / 物流 / 電子發票」metabox（slot=payment），不再獨立 postbox。
+		OrderInfoLayout::boot();
+		add_filter( 'moksafowo_order_info_cards', array( __CLASS__, 'add_card' ), 10, 2 );
 	}
 
-	public function payuni_add_meta_boxes( $post_type, $post_or_order_object ) {
-
-		$order = ( $post_or_order_object instanceof \WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
-
-		if ( ! $order instanceof \WC_Order ) {
-			return;
-		}
-
+	public static function add_card( array $cards, \WC_Order $order ): array {
 		if ( ! array_key_exists( $order->get_payment_method(), PayuniPayment::get_allowed_payments( $order ) ) ) {
-			return;
+			return $cards;
 		}
 
-		$screen = wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled()
-		? wc_get_page_screen_id( 'shop-order' )
-		: 'shop_order';
-
-		add_meta_box(
-			'payuni-order-meta-boxes',
-			__( 'PAYUNi 交易資訊', 'mo-ectools' ),
-			array(
-				self::get_instance(),
-				'payuni_order_admin_meta_box',
-			),
-			$screen,
-			'side',
-			'high'
-		);
+		$cards[] = [
+			'slot'  => 'payment',
+			'title' => __( '金流資訊（PAYUNi）', 'mo-ectools' ),
+			'html'  => self::card_html( $order ),
+		];
+		return $cards;
 	}
 
-	public function payuni_order_admin_meta_box( $post_or_order_object ) {
-
-		$order = ( $post_or_order_object instanceof \WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
-
-		if ( ! $order ) {
-			return;
-		}
-
+	private static function card_html( \WC_Order $order ): string {
 		$payment_method   = $order->get_payment_method();
 		$allowed_payments = PayuniPayment::get_allowed_payments( $order );
 		$gateway          = $allowed_payments[ $payment_method ];
 
-		echo '<table>';
+		ob_start();
+		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
 
 		$payuni_order_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::PAYUNI_ORDER_NO );
-		echo '<tr><td><strong>' . esc_html__( '交易序號', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $order->get_meta( $payuni_order_no_key ) ) . '</td></tr>';
+		echo '<tr><td><strong>' . esc_html__( '交易序號', 'mo-ectools' ) . '</strong></td><td style="word-break:break-all;">' . esc_html( $order->get_meta( $payuni_order_no_key ) ) . '</td></tr>';
 		foreach ( $gateway::get_order_metas() as $key => $value ) {
 			// for backward compatibility.
 			$key = PayuniPayment::get_order_meta_key( $order, $key );
@@ -76,7 +56,7 @@ class OrderMetaBoxes {
 			} elseif ( $key === OrderMeta::TRADE_STATUS ) {
 				$trade_status = $order->get_meta( $key );
 				if ( isset( $trade_status ) ) {
-					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td><span class="payuni-trade-status-' . esc_attr( $trade_status ) . '">' . esc_html( TradeStatus::get_name( $trade_status, $payment_method ) ) . '</span></td></tr>';
+					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td><span class="moksafowo-payuni-trade-status-' . esc_attr( $trade_status ) . '">' . esc_html( TradeStatus::get_name( $trade_status, $payment_method ) ) . '</span></td></tr>';
 				} else {
 					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td></td></tr>';
 				}
@@ -85,7 +65,6 @@ class OrderMetaBoxes {
 			} else {
 				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td>' . esc_html( $order->get_meta( $key ) ) . '</td></tr>';
 			}
-			
 		}
 
 		if ( PayuniPayment::$einvoice_enabled ) {
@@ -133,10 +112,9 @@ class OrderMetaBoxes {
 			echo '<tr><td><strong>' . esc_html__( '開立狀態', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
 		}// end einvoice enabled
 
-		echo '<tr id="payuni-action"><td colspan="2"><button id="payuni-query-btn" class="button" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '查詢', 'mo-ectools' ) . '</button></td></tr>';
+		echo '<tr id="moksafowo-payuni-action"><td colspan="2"><button id="moksafowo-payuni-query-btn" class="button" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '查詢', 'mo-ectools' ) . '</button></td></tr>';
 		echo '</table>';
 
-		
+		return (string) ob_get_clean();
 	}
-
 }

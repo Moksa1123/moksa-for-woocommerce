@@ -18,7 +18,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const PATH_CLOSE  = '/API/CreditCard/Close';
 
 	protected static function option_prefix(): string {
-		return 'mo_newebpay';
+		return 'moksafowo_newebpay';
 	}
 
 	protected static function log_source(): string {
@@ -27,23 +27,23 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_newebpay_sandbox_merchant_id', '' );
+			return (string) get_option( 'moksafowo_newebpay_sandbox_merchant_id', '' );
 		}
-		return (string) get_option( 'mo_newebpay_merchant_id', '' );
+		return (string) get_option( 'moksafowo_newebpay_merchant_id', '' );
 	}
 
 	public static function hash_key(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_newebpay_sandbox_hash_key', '' );
+			return (string) get_option( 'moksafowo_newebpay_sandbox_hash_key', '' );
 		}
-		return (string) get_option( 'mo_newebpay_hash_key', '' );
+		return (string) get_option( 'moksafowo_newebpay_hash_key', '' );
 	}
 
 	public static function hash_iv(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_newebpay_sandbox_hash_iv', '' );
+			return (string) get_option( 'moksafowo_newebpay_sandbox_hash_iv', '' );
 		}
-		return (string) get_option( 'mo_newebpay_hash_iv', '' );
+		return (string) get_option( 'moksafowo_newebpay_hash_iv', '' );
 	}
 
 	public static function base_url(): string {
@@ -63,7 +63,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function order_prefix(): string {
-		$raw = (string) get_option( 'mo_newebpay_order_prefix', '' );
+		$raw = (string) get_option( 'moksafowo_newebpay_order_prefix', '' );
 		$raw = preg_replace( '/[^A-Za-z0-9]/', '', $raw ) ?? '';
 		return substr( $raw, 0, 5 );
 	}
@@ -176,7 +176,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_newebpay_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_newebpay_sandbox_enabled', 'no' );
 	}
 
 	// log_enabled / log inherited from AbstractCredentialHelper

@@ -44,7 +44,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 			'items'           => $this->build_items( $order ),
 			'return_url'      => $order->get_checkout_order_received_url(),
 			'fail_return_url' => $order->get_checkout_payment_url( false ),
-			'notify_url'      => home_url( '/wc-api/mo_pchomepay_payment' ),
+			'notify_url'      => home_url( '/wc-api/moksafowo_pchomepay_payment' ),
 			'buyer_name'      => $order->get_formatted_billing_full_name(),
 			'buyer_email'     => $order->get_billing_email(),
 			'buyer_mobile'    => $order->get_billing_phone(),
@@ -87,16 +87,16 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'mo_pchomepay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
 		}
 		$pchome_order_id = (string) $order->get_meta( Keys::PCHOMEPAY_ORDER_ID );
 		if ( '' === $pchome_order_id ) {
-			return new \WP_Error( 'mo_pchomepay_missing_order_id', __( '訂單缺少支付連交易編號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_missing_order_id', __( '訂單缺少支付連交易編號。', 'mo-ectools' ) );
 		}
 
 		$amt = (int) ceil( (float) $amount );
 		if ( $amt <= 0 ) {
-			return new \WP_Error( 'mo_pchomepay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
 		}
 
 		// 全額退限制：超商取貨 / 代碼繳費 / 信用卡分期。
@@ -106,7 +106,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		foreach ( $full_only as $ft ) {
 			if ( str_contains( $pay_type, $ft ) && $amt < $order_total ) {
 				return new \WP_Error(
-					'mo_pchomepay_full_refund_only',
+					'moksafowo_pchomepay_full_refund_only',
 					sprintf(
 						/* translators: %s: pay type */
 						__( '此付款方式（%s）僅能全額退款。', 'mo-ectools' ),
@@ -120,7 +120,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		$result    = PaymentRequest::refund( $pchome_order_id, $refund_id, $amt );
 		if ( ! $result['ok'] ) {
 			return new \WP_Error(
-				'mo_pchomepay_refund_fail',
+				'moksafowo_pchomepay_refund_fail',
 				sprintf(
 					/* translators: %s: error message */
 					__( '支付連退款失敗：%s', 'mo-ectools' ),

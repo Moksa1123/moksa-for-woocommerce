@@ -8,10 +8,10 @@
 ( function () {
 	'use strict';
 
-	if ( ! window.mo_payuni_block ) {
+	if ( ! window.moksafowo_payuni_block ) {
 		return;
 	}
-	const cfg = window.mo_payuni_block;
+	const cfg = window.moksafowo_payuni_block;
 	const HOST_ID = 'mowp-payuni-block-store-host';
 
 	function isCvs( methodId ) {
@@ -158,7 +158,7 @@
 			return;
 		}
 		const fd = new FormData();
-		fd.append( 'action', 'payuni_open_store_map' );
+		fd.append( 'action', 'moksafowo_payuni_open_store_map' );
 		fd.append( 'shipping_method', checked.value );
 		fd.append( 'nonce', cfg.search_nonce );
 
@@ -191,7 +191,7 @@
 
 	function readUrlToken() {
 		try {
-			return new URL( window.location.href ).searchParams.get( 'mo_store' ) || '';
+			return new URL( window.location.href ).searchParams.get( 'moksafowo_store' ) || '';
 		} catch ( _ ) {
 			return '';
 		}
@@ -200,7 +200,7 @@
 	function cleanUrlToken() {
 		try {
 			const url = new URL( window.location.href );
-			url.searchParams.delete( 'mo_store' );
+			url.searchParams.delete( 'moksafowo_store' );
 			window.history.replaceState( null, '', url.toString() );
 		} catch ( _ ) { /* noop */ }
 	}
@@ -210,7 +210,7 @@
 		const token = readUrlToken();
 		if ( token ) {
 			const fd = new FormData();
-			fd.append( 'action', 'payuni_resolve_store_token' );
+			fd.append( 'action', 'moksafowo_payuni_resolve_store_token' );
 			fd.append( 'token', token );
 			fd.append( 'nonce', cfg.search_nonce );
 			fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
@@ -231,7 +231,7 @@
 
 	function sessionLookup( cb ) {
 		const fd = new FormData();
-		fd.append( 'action', 'payuni_get_store_data' );
+		fd.append( 'action', 'moksafowo_payuni_get_store_data' );
 		fd.append( 'nonce', cfg.search_nonce );
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( function ( r ) { return r.json(); } )

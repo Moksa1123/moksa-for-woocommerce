@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Atm extends AbstractPaynowGateway {
 
-	public const GATEWAY_ID = 'mo_paynow_atm';
+	public const GATEWAY_ID = 'moksafowo_paynow_atm';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;
@@ -28,7 +28,7 @@ final class Atm extends AbstractPaynowGateway {
 
 	protected function extra_params( \WC_Order $order ): array {
 		$params = [ 'AtmRespost' => '1' ];
-		$days   = (int) get_option( 'mo_paynow_atm_deadline_days', 0 );
+		$days   = (int) get_option( 'moksafowo_paynow_atm_deadline_days', 0 );
 		if ( $days > 0 ) {
 			$params['DeadLine'] = $days;
 		}

@@ -58,8 +58,8 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_roturl', [ Api\IpnHandler::class, 'handle_roturl' ] );
-		add_action( 'woocommerce_api_credit_roturl', [ Api\IpnHandler::class, 'handle_credit_roturl' ] );
+		add_action( 'woocommerce_api_moksafowo_smilepay_roturl', [ Api\IpnHandler::class, 'handle_roturl' ] );
+		add_action( 'woocommerce_api_moksafowo_smilepay_credit_roturl', [ Api\IpnHandler::class, 'handle_credit_roturl' ] );
 	}
 
 	protected function boot_extras(): void {

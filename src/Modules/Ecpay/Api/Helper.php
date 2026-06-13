@@ -22,7 +22,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_PROD_QUERY     = 'https://ecpayment.ecpay.com.tw/1.0.0/CreditDetail/QueryTrade';
 
 	protected static function option_prefix(): string {
-		return 'mo_ecpay';
+		return 'moksafowo_ecpay';
 	}
 
 	protected static function log_source(): string {
@@ -31,26 +31,26 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_sandbox_merchant_id', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_sandbox_merchant_id', '' );
 			return '' !== $v ? $v : self::SANDBOX_MERCHANT_ID;
 		}
-		return (string) get_option( 'mo_ecpay_merchant_id', '' );
+		return (string) get_option( 'moksafowo_ecpay_merchant_id', '' );
 	}
 
 	public static function hash_key(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_sandbox_hash_key', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_sandbox_hash_key', '' );
 			return '' !== $v ? $v : self::SANDBOX_HASH_KEY;
 		}
-		return (string) get_option( 'mo_ecpay_hash_key', '' );
+		return (string) get_option( 'moksafowo_ecpay_hash_key', '' );
 	}
 
 	public static function hash_iv(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_sandbox_hash_iv', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_sandbox_hash_iv', '' );
 			return '' !== $v ? $v : self::SANDBOX_HASH_IV;
 		}
-		return (string) get_option( 'mo_ecpay_hash_iv', '' );
+		return (string) get_option( 'moksafowo_ecpay_hash_iv', '' );
 	}
 
 	public static function aio_endpoint(): string {
@@ -68,7 +68,7 @@ final class Helper extends AbstractCredentialHelper {
 	public static function query_credit_trade( \WC_Order $order ) {
 		$mtn = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
 		if ( '' === $mtn ) {
-			return new \WP_Error( 'mo_ecpay_query_no_mtn', __( '找不到綠界 MerchantTradeNo。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_no_mtn', __( '找不到綠界 MerchantTradeNo。', 'mo-ectools' ) );
 		}
 
 		$inner = wp_json_encode( [
@@ -80,7 +80,7 @@ final class Helper extends AbstractCredentialHelper {
 		$enc_url  = self::v2_urlencode( (string) $inner );
 		$enc_data = openssl_encrypt( $enc_url, 'aes-128-cbc', self::hash_key(), 0, self::hash_iv() );
 		if ( false === $enc_data ) {
-			return new \WP_Error( 'mo_ecpay_query_encrypt', __( 'AES 加密失敗。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_encrypt', __( 'AES 加密失敗。', 'mo-ectools' ) );
 		}
 
 		$body = [
@@ -109,18 +109,18 @@ final class Helper extends AbstractCredentialHelper {
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
 			/* translators: %d: HTTP response code */
-			return new \WP_Error( 'mo_ecpay_query_http', sprintf( __( '綠界回傳 HTTP %d', 'mo-ectools' ), $code ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_http', sprintf( __( '綠界回傳 HTTP %d', 'mo-ectools' ), $code ) );
 		}
 
 		$json = json_decode( (string) wp_remote_retrieve_body( $response ), true );
 		if ( ! is_array( $json ) ) {
-			return new \WP_Error( 'mo_ecpay_query_parse', __( '綠界回傳格式無法解析。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_parse', __( '綠界回傳格式無法解析。', 'mo-ectools' ) );
 		}
 
 		$trans_code = (int) ( $json['TransCode'] ?? 0 );
 		if ( 1 !== $trans_code ) {
 			return new \WP_Error(
-				'mo_ecpay_query_failed',
+				'moksafowo_ecpay_query_failed',
 				/* translators: %s: ECPay TransMsg */
 				sprintf( __( '綠界查詢失敗：%s', 'mo-ectools' ), $json['TransMsg'] ?? '' )
 			);
@@ -128,13 +128,13 @@ final class Helper extends AbstractCredentialHelper {
 
 		$plain_url = openssl_decrypt( (string) ( $json['Data'] ?? '' ), 'aes-128-cbc', self::hash_key(), 0, self::hash_iv() );
 		if ( false === $plain_url ) {
-			return new \WP_Error( 'mo_ecpay_query_decrypt', __( 'AES 解密失敗。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_decrypt', __( 'AES 解密失敗。', 'mo-ectools' ) );
 		}
 
 		$plain  = urldecode( $plain_url );
 		$result = json_decode( $plain, true );
 		if ( ! is_array( $result ) ) {
-			return new \WP_Error( 'mo_ecpay_query_inner_parse', __( '綠界 Data 解碼失敗。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_inner_parse', __( '綠界 Data 解碼失敗。', 'mo-ectools' ) );
 		}
 
 		self::log( 'query_credit_trade response', [
@@ -164,7 +164,7 @@ final class Helper extends AbstractCredentialHelper {
 		}
 		if ( '' === $trade_no || '' === $merchant_trade_no ) {
 			return new \WP_Error(
-				'mo_ecpay_credit_action_missing_meta',
+				'moksafowo_ecpay_credit_action_missing_meta',
 				__( '找不到綠界交易編號，無法退款。請至綠界後台手動處理。', 'mo-ectools' )
 			);
 		}
@@ -198,7 +198,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( 200 !== $code ) {
 			self::log( 'credit_action HTTP ' . $code, [ 'order_id' => $order->get_id() ] );
 			return new \WP_Error(
-				'mo_ecpay_credit_action_http',
+				'moksafowo_ecpay_credit_action_http',
 				/* translators: %d: HTTP status code */
 				sprintf( __( '綠界回傳 HTTP %d，請稍後再試。', 'mo-ectools' ), $code )
 			);
@@ -207,7 +207,7 @@ final class Helper extends AbstractCredentialHelper {
 		$body = (string) wp_remote_retrieve_body( $response );
 		parse_str( $body, $result );
 		if ( ! is_array( $result ) ) {
-			return new \WP_Error( 'mo_ecpay_credit_action_parse', __( '綠界回傳格式無法解析。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_credit_action_parse', __( '綠界回傳格式無法解析。', 'mo-ectools' ) );
 		}
 
 		self::log( 'credit_action response', [ 'order_id' => $order->get_id(), 'rtn_code' => $result['RtnCode'] ?? '', 'rtn_msg' => $result['RtnMsg'] ?? '' ] );
@@ -216,7 +216,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function generate_merchant_trade_no( int $order_id ): string {
-		$prefix = (string) get_option( 'mo_ecpay_order_prefix', '' );
+		$prefix = (string) get_option( 'moksafowo_ecpay_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';
 		$prefix = substr( $prefix, 0, 5 );
 		$random = bin2hex( random_bytes( 3 ) );
@@ -225,7 +225,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function parse_order_id_from_merchant_trade_no( string $merchant_trade_no ): ?int {
-		$prefix = (string) get_option( 'mo_ecpay_order_prefix', '' );
+		$prefix = (string) get_option( 'moksafowo_ecpay_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';
 		$prefix = substr( $prefix, 0, 5 );
 

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class AddFee {
 
 	public static function init(): void {
-		add_shortcode( 'mo_addfee', [ self::class, 'render' ] );
+		add_shortcode( 'moksafowo_addfee', [ self::class, 'render' ] );
 		// RY pro 平移用 alias — 商家從 RY-Tools-Pro 搬過來時，既有設定的
 		// `[ry_addfee ...]` 直接就跑得動。
 		add_shortcode( 'ry_addfee', [ self::class, 'render' ] );
@@ -26,26 +26,26 @@ final class AddFee {
 				'qty'       => '0',
 				'weight'    => '0',
 				// runtime injection from EvaluateCost
-				'mo-temps'  => '',
-				'mo-qty'    => '0',
-				'mo-weight' => '0',
+				'moksafowo-temps'  => '',
+				'moksafowo-qty'    => '0',
+				'moksafowo-weight' => '0',
 			],
 			is_array( $atts ) ? $atts : [],
-			'mo_addfee'
+			'moksafowo_addfee'
 		);
 
-		$temps = '' !== $atts['mo-temps']
-			? array_filter( array_map( 'intval', explode( ',', $atts['mo-temps'] ) ) )
+		$temps = '' !== $atts['moksafowo-temps']
+			? array_filter( array_map( 'intval', explode( ',', $atts['moksafowo-temps'] ) ) )
 			: [];
-		$qty    = max( 0, (int) $atts['mo-qty'] );
-		$weight = max( 0.0, (float) $atts['mo-weight'] );
+		$qty    = max( 0, (int) $atts['moksafowo-qty'] );
+		$weight = max( 0.0, (float) $atts['moksafowo-weight'] );
 
 		$add = 0.0;
 
 		// per-temp 基本費：給「依溫層分別計算運費」用 — 每個溫層各帶一份 base。
 		// 配 AbstractShippingMethod::evaluate_cost_for_temp 模式（mo-temps 只含 1 個 temp）
 		// 時最有意義：常溫 cart → temp_1 fire / 冷藏 cart → temp_2 fire / 冷凍 cart → temp_3 fire。
-		// 老 toggle OFF 模式下 mo-temps 含多 temp，多個 temp_N 會同時 fire（= 各溫層基本費直加）。
+		// 老 toggle OFF 模式下 moksafowo-temps 含多 temp，多個 temp_N 會同時 fire（= 各溫層基本費直加）。
 		if ( in_array( 1, $temps, true ) && (float) $atts['temp_1'] > 0 ) {
 			$add += (float) $atts['temp_1'];
 		}

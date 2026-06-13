@@ -32,13 +32,13 @@ class OrderList {
         $add_index = array_search('shipping_address', array_keys( $columns ) ) + 1;
 		$pre_array = array_splice($columns, 0, $add_index);
 		$new_columns = array(
-			'mo_payuni_invoice_no' => __( 'Invoice No', 'mo-ectools' ),
+			'moksafowo_payuni_invoice_no' => __( 'Invoice No', 'mo-ectools' ),
         );
 		return array_merge($pre_array, $new_columns, $columns);
 	}
 
     public function shop_order_column($column, $post_id) {
-        if ( 'mo_payuni_invoice_no' === $column ) {
+        if ( 'moksafowo_payuni_invoice_no' === $column ) {
             $order = wc_get_order( $post_id );
             $invoice_no = $order->get_meta( OrderMeta::EINVOICE_NO );
             if ( $invoice_no ) {

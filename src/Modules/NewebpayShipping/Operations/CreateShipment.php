@@ -22,7 +22,7 @@ final class CreateShipment {
 			return [ 'ok' => false, 'message' => __( '訂單缺少取貨門市資訊，請顧客先選店或商家手動指定。', 'mo-ectools' ) ];
 		}
 
-		$lgs_type  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: get_option( 'mo_newebpay_shipping_lgs_type', 'C2C' );
+		$lgs_type  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
 		$ship_type = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ) ?: '1'; // default 7-11
 		$is_cod    = 'cod' === $order->get_payment_method();
 		// 藍新規範：UserName 純中文 1-5 字、不可帶空格。WC 預設 last+first 拼接會夾空白，必移除。
@@ -33,10 +33,10 @@ final class CreateShipment {
 		$user_name = preg_replace( '/\s+/u', '', (string) $user_name );
 
 		// 寄件人資料 — 從 settings 讀，CreateShipment 必填（per NDNS 1.0.0 4.1）。
-		$sender_name      = trim( (string) get_option( 'mo_newebpay_shipping_sender_name', '' ) );
-		$sender_phone     = trim( (string) get_option( 'mo_newebpay_shipping_sender_phone', '' ) );
-		$sender_cellphone = trim( (string) get_option( 'mo_newebpay_shipping_sender_cellphone', '' ) );
-		$sender_email     = trim( (string) get_option( 'mo_newebpay_shipping_sender_email', '' ) );
+		$sender_name      = trim( (string) get_option( 'moksafowo_newebpay_shipping_sender_name', '' ) );
+		$sender_phone     = trim( (string) get_option( 'moksafowo_newebpay_shipping_sender_phone', '' ) );
+		$sender_cellphone = trim( (string) get_option( 'moksafowo_newebpay_shipping_sender_cellphone', '' ) );
+		$sender_email     = trim( (string) get_option( 'moksafowo_newebpay_shipping_sender_email', '' ) );
 		if ( '' === $sender_name || ( '' === $sender_phone && '' === $sender_cellphone ) ) {
 			return [
 				'ok'      => false,
@@ -53,7 +53,7 @@ final class CreateShipment {
 			'UserEmail'       => $order->get_billing_email(),
 			'StoreID'         => $store_id,
 			'Amt'             => (int) ceil( (float) $order->get_total() ),
-			'NotifyURL'       => home_url( '/wc-api/mo_newebpay_shipping_status' ),
+			'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_shipping_status' ),
 			'ItemDesc'        => mb_substr( self::build_item_desc( $order ), 0, 50 ),
 			'LgsType'         => $lgs_type,
 			'ShipType'        => $ship_type,
@@ -98,7 +98,7 @@ final class CreateShipment {
 	}
 
 	private static function generate_mtn( int $order_id ): string {
-		$prefix = (string) get_option( 'mo_newebpay_shipping_order_prefix', '' );
+		$prefix = (string) get_option( 'moksafowo_newebpay_shipping_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';
 		$rand   = bin2hex( random_bytes( 3 ) );
 		return substr( $prefix . $order_id . 'R' . $rand, 0, 30 );

@@ -11,7 +11,6 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- IPN webhook; CheckMacValue / HMAC / RSA signature verified inside this method.
 		// 1. IP 白名單 — 第一道防線。
 		$ip = self::client_ip();
 		if ( Helper::NOTIFY_IP !== $ip ) {
@@ -21,12 +20,12 @@ final class IpnHandler {
 			exit;
 		}
 
-		// phpcs:disable WordPress.Security.NonceVerification.Missing — 匿名 webhook，走 IP 白名單 + order_id 對應
-		$posted = wp_unslash( $_POST );
-		// phpcs:enable
-
-		$notify_type = isset( $posted['notify_type'] ) ? (string) $posted['notify_type'] : '';
-		$raw_message = isset( $posted['notify_message'] ) ? (string) $posted['notify_message'] : '';
+		// 匿名 webhook 無法帶 WP nonce — 走 PChomePay 固定來源 IP 白名單 + order_id 對應。
+		// notify_message 為 JSON 原文，sanitize 會破壞結構 — decode 後逐欄 sanitize（見下）。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- IP-allowlisted webhook; fields sanitized after json_decode below.
+		$notify_type = isset( $_POST['notify_type'] ) ? sanitize_text_field( wp_unslash( $_POST['notify_type'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload; structure-preserving capture, decoded then deep-sanitized below.
+		$raw_message = isset( $_POST['notify_message'] ) ? wp_unslash( (string) $_POST['notify_message'] ) : '';
 
 		if ( '' === $notify_type || '' === $raw_message ) {
 			Helper::log( 'webhook missing notify_type / notify_message' );
@@ -42,6 +41,9 @@ final class IpnHandler {
 			echo 'bad request';
 			exit;
 		}
+
+		// json_decode 不做消毒 — 解碼後逐欄 sanitize 才記錄與使用。
+		$message = map_deep( $message, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		Helper::log( 'webhook received', [
 			'notify_type' => $notify_type,

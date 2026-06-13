@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 
 class CreditInstallment6 extends GatewayBase {
 
-	const GATEWAY_ID = 'mo_payuni_installment_6';
+	const GATEWAY_ID = 'moksafowo_payuni_installment_6';
 
 	use TraitCreditInstallment;
 
@@ -29,6 +29,6 @@ class CreditInstallment6 extends GatewayBase {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'mo_payuni_transaction_args_' . $this->id, array( $this, 'payuni_payment_installment_transaction_arrgs' ), 10, 2 );
+		add_filter( 'moksafowo_payuni_transaction_args_' . $this->id, array( $this, 'moksafowo_payuni_payment_installment_transaction_arrgs' ), 10, 2 );
 	}
 }//end class

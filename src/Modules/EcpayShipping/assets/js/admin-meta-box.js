@@ -1,22 +1,22 @@
 ( function ( $ ) {
 	'use strict';
-	if ( ! window.mo_ecpay_shipping_admin ) {
+	if ( ! window.moksafowo_ecpay_shipping_admin ) {
 		return;
 	}
-	const cfg = window.mo_ecpay_shipping_admin;
+	const cfg = window.moksafowo_ecpay_shipping_admin;
 
 	function getNonce( $box ) {
-		return $box.find( '#mo_ecpay_shipping_nonce' ).val();
+		return $box.find( '#moksafowo_ecpay_shipping_nonce' ).val();
 	}
 
 	function getOrderId( $box ) {
 		return $box.data( 'order-id' );
 	}
 
-	$( document ).on( 'click', '.mo-ecpay-shipping-create', function ( e ) {
+	$( document ).on( 'click', '.moksafowo-ecpay-shipping-create', function ( e ) {
 		e.preventDefault();
 		const $btn = $( this );
-		const $box = $btn.closest( '.mo-ecpay-shipping-meta' );
+		const $box = $btn.closest( '.moksafowo-ecpay-shipping-meta' );
 		const orderId = getOrderId( $box );
 		const nonce = getNonce( $box );
 		if ( ! orderId ) {
@@ -30,7 +30,7 @@
 		// 先存原始文字再覆寫，否則錯誤路徑還原時 data('orig') 為 undefined → 按鈕文字被清空。
 		$btn.prop( 'disabled', true ).data( 'orig', $btn.text() ).text( cfg.i18n.creating );
 		$.post( cfg.ajax_url, {
-			action: 'mo_ecpay_shipping_create_order',
+			action: 'moksafowo_ecpay_shipping_create_order',
 			order_id: orderId,
 			nonce: nonce,
 		} ).done( function ( resp ) {
@@ -47,17 +47,17 @@
 		} );
 	} );
 
-	$( document ).on( 'click', '.mo-ecpay-shipping-print', function ( e ) {
+	$( document ).on( 'click', '.moksafowo-ecpay-shipping-print', function ( e ) {
 		e.preventDefault();
 		const $btn = $( this );
-		const $box = $btn.closest( '.mo-ecpay-shipping-meta' );
+		const $box = $btn.closest( '.moksafowo-ecpay-shipping-meta' );
 		const orderId = getOrderId( $box );
 		const nonce = getNonce( $box );
 		const logisticsId = $btn.data( 'logistics-id' ) || '';
 		const mode = String( $btn.data( 'mode' ) || '1' );
 		$btn.prop( 'disabled', true ).data( 'orig', $btn.text() ).text( cfg.i18n.printing || cfg.i18n.creating );
 		$.post( cfg.ajax_url, {
-			action: 'mo_ecpay_shipping_print_label',
+			action: 'moksafowo_ecpay_shipping_print_label',
 			order_id: orderId,
 			nonce: nonce,
 			logistics_id: logisticsId,
@@ -76,19 +76,19 @@
 		} );
 	} );
 
-	$( document ).on( 'click', '.mo-ecpay-shipping-delete-record', function ( e ) {
+	$( document ).on( 'click', '.moksafowo-ecpay-shipping-delete-record', function ( e ) {
 		e.preventDefault();
 		if ( ! window.confirm( cfg.i18n.delete_confirm ) ) {
 			return;
 		}
 		const $btn = $( this );
-		const $box = $btn.closest( '.mo-ecpay-shipping-meta' );
+		const $box = $btn.closest( '.moksafowo-ecpay-shipping-meta' );
 		const orderId = getOrderId( $box );
 		const nonce = getNonce( $box );
 		const logisticsId = $btn.data( 'logistics-id' );
 		$btn.prop( 'disabled', true );
 		$.post( cfg.ajax_url, {
-			action: 'mo_ecpay_shipping_delete_record',
+			action: 'moksafowo_ecpay_shipping_delete_record',
 			order_id: orderId,
 			nonce: nonce,
 			logistics_id: logisticsId,

@@ -5,20 +5,20 @@ jQuery(function ($) {
 	/**
 	 * Object to handle PAYUNi admin functions.
 	 */
-	var mo_payuni_admin = {
+	var moksafowo_payuni_admin = {
 		/**
 		 * Initialize.
 		 */
 		init: function () {
 
-			$(document.body).on('change', '#payuni_payment_testmode_enabled', function () {
-				var sandbox_merchant_id = $('#payuni_payment_merchant_id_test').parents('tr').eq(0),
-					sandbox_hashkey = $('#payuni_payment_hashkey_test').parents('tr').eq(0),
-                    sandbox_ivkey = $('#payuni_payment_hashiv_test').parents('tr').eq(0),
+			$(document.body).on('change', '#moksafowo_payuni_payment_testmode_enabled', function () {
+				var sandbox_merchant_id = $('#moksafowo_payuni_payment_merchant_id_test').parents('tr').eq(0),
+					sandbox_hashkey = $('#moksafowo_payuni_payment_hashkey_test').parents('tr').eq(0),
+                    sandbox_ivkey = $('#moksafowo_payuni_payment_hashiv_test').parents('tr').eq(0),
 
-					merchant_id = $('#payuni_payment_merchant_id').parents('tr').eq(0),
-					hashkey = $('#payuni_payment_hashkey').parents('tr').eq(0),
-                    ivkey = $('#payuni_payment_hashiv').parents('tr').eq(0);
+					merchant_id = $('#moksafowo_payuni_payment_merchant_id').parents('tr').eq(0),
+					hashkey = $('#moksafowo_payuni_payment_hashkey').parents('tr').eq(0),
+                    ivkey = $('#moksafowo_payuni_payment_hashiv').parents('tr').eq(0);
 
 
 				if ($(this).is(':checked')) {
@@ -42,24 +42,24 @@ jQuery(function ($) {
 				}
 			});
 
-			$('#payuni_payment_testmode_enabled').trigger('change');
+			$('#moksafowo_payuni_payment_testmode_enabled').trigger('change');
 
-			$( document ).on( 'click', '#payuni-query-btn', function( event ){
+			$( document ).on( 'click', '#moksafowo-payuni-query-btn', function( event ){
 				event.preventDefault();
 				var $btn = $(this);
 				var order_id = $btn.data('id');
 				$btn.prop('disabled', true);
 				if ($.blockUI) {
-					$('#payuni-order-meta-boxes').block({
+					$('#moksafowo-payuni-order-meta-boxes').block({
 						message: null,
 					});
 				}
 				$.ajax({
-					url: mo_payuni.ajax_url,
+					url: moksafowo_payuni.ajax_url,
 					data: {
-						action: 'payuni_query',
+						action: 'moksafowo_payuni_query',
 						order_id: order_id,
-						security: mo_payuni.query_nonce,
+						security: moksafowo_payuni.query_nonce,
 					},
 					dataType: "json",
 					type: 'post',
@@ -73,12 +73,12 @@ jQuery(function ($) {
 						$btn.prop('disabled', false);
 					},
 					error: function () {
-						alert(mo_payuni.error_msg);
+						alert(moksafowo_payuni.error_msg);
 						$btn.prop('disabled', false);
 					},
 					complete: function () {
 						if ($.blockUI) {
-							$('#payuni-order-meta-boxes').unblock();
+							$('#moksafowo-payuni-order-meta-boxes').unblock();
 						}
 					}
 				});//ajax
@@ -88,5 +88,5 @@ jQuery(function ($) {
         }//init
     };
 
-	mo_payuni_admin.init();
+	moksafowo_payuni_admin.init();
 });

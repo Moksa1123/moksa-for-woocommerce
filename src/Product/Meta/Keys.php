@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Keys {
 
-	public const PRODUCT_TEMP = '_mo_product_temp';
+	public const PRODUCT_TEMP = '_moksafowo_product_temp';
 
 	private function __construct() {}
 }

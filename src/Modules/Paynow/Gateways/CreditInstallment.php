@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class CreditInstallment extends AbstractPaynowGateway {
 
-	public const GATEWAY_ID = 'mo_paynow_credit_installment';
+	public const GATEWAY_ID = 'moksafowo_paynow_credit_installment';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

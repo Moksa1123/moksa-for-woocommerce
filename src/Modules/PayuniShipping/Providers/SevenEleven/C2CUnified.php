@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class C2CUnified extends AbstractCvsShippingMethod {
 
-	public const ID = 'mo_payuni_shipping_711_c2c';
+	public const ID = 'moksafowo_payuni_shipping_711_c2c';
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
@@ -34,19 +34,19 @@ final class C2CUnified extends AbstractCvsShippingMethod {
 		return 'SEVEN_C2C';
 	}
 
-	public function payuni_ship_type(): string {
+	public function moksafowo_payuni_ship_type(): string {
 		return ShipType::SEVEN;
 	}
 
-	public function payuni_lgs_type(): string {
+	public function moksafowo_payuni_lgs_type(): string {
 		return LgsType::C2C;
 	}
 
-	public function payuni_api_endpoint(): string {
+	public function moksafowo_payuni_api_endpoint(): string {
 		return 'logistics';
 	}
 
-	public static function payuni_goods_type_for_temp( int $temp ): string {
+	public static function moksafowo_payuni_goods_type_for_temp( int $temp ): string {
 		return match ( $temp ) {
 			ProductTemp::FROZEN => GoodsType::FROZEN, // '2'
 			default             => GoodsType::NORMAL,  // '1' (含冷藏 fallback)

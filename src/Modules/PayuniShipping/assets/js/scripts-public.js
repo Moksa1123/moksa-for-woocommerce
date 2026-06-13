@@ -1,4 +1,4 @@
-var mo_payuni_shipping_info;
+var moksafowo_payuni_shipping_info;
 var listeners;
 
 (function ($) {
@@ -8,21 +8,21 @@ var listeners;
 		movePayuniAttachToFirstPosition();
 	});
 
-	if (typeof mo_payuni_shipping_object !== 'undefined') {
-       	mo_payuni_shipping_info = mo_payuni_shipping_object;
+	if (typeof moksafowo_payuni_shipping_object !== 'undefined') {
+       	moksafowo_payuni_shipping_info = moksafowo_payuni_shipping_object;
     }
 
 	$(document.body).on('updated_checkout.wpbr_payuni_event_attach', function (e, data) {
 		
-		if ( typeof data.fragments.mo_payuni_shipping_info == 'undefined' || typeof data.fragments.mo_payuni_shipping_info.shipping_data == 'undefined' ) {
+		if ( typeof data.fragments.moksafowo_payuni_shipping_info == 'undefined' || typeof data.fragments.moksafowo_payuni_shipping_info.shipping_data == 'undefined' ) {
 			return;
 		}
 
-		if ( typeof data.fragments.mo_payuni_shipping_info.shipping_data.ShipType == 'undefined' && data.fragments.ecpay_shipping_info == undefined) {
+		if ( typeof data.fragments.moksafowo_payuni_shipping_info.shipping_data.ShipType == 'undefined' && data.fragments.ecpay_shipping_info == undefined) {
 			return;//do nothing
 		}
 
-		if ( typeof data.fragments.mo_payuni_shipping_info.shipping_data.ShipType !== 'undefined' ) {
+		if ( typeof data.fragments.moksafowo_payuni_shipping_info.shipping_data.ShipType !== 'undefined' ) {
 			//detach and reattach the handler setTimout to 500 ms
 			$(document.body).off('updated_checkout.wpbr_payuni_shipping', update_payuni_cvs_shipping_fields);
 			movePayuniShippingToEnd();

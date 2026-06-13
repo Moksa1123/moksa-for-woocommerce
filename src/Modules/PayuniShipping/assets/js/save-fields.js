@@ -31,7 +31,7 @@
 		}
 		
 		// Check if we're returning from CVS selection (has POST data)
-		const returningFromCVS = $('input[name="payuni_selected_store_id"]:not(#payuni_selected_store_id)').length > 0;
+		const returningFromCVS = $('input[name="moksafowo_payuni_selected_store_id"]:not(#moksafowo_payuni_selected_store_id)').length > 0;
 		if (returningFromCVS) {
 			// 減少延遲時間，更快復原
 			setTimeout(function() {
@@ -46,13 +46,13 @@
 
 	// Fields to ignore when saving (CVS related fields and temporary fields)
 	const ignoreFields = [
-		'payuni_storename',
-		'payuni_storeid',
-		'payuni_storeaddress',
-		'payuni_selected_store_id',
-		'payuni_selected_store_name',
-		'payuni_selected_store_address',
-		'payuni_selected_store_data',
+		'moksafowo_payuni_storename',
+		'moksafowo_payuni_storeid',
+		'moksafowo_payuni_storeaddress',
+		'moksafowo_payuni_selected_store_id',
+		'moksafowo_payuni_selected_store_name',
+		'moksafowo_payuni_selected_store_address',
+		'moksafowo_payuni_selected_store_data',
 		'_wpnonce',
 		'_wp_http_referer',
 		'terms',
@@ -71,7 +71,7 @@
 	];
 
 	// Storage key - using sessionStorage (no timestamp needed)
-	const STORAGE_KEY = 'payuni_woo_form';
+	const STORAGE_KEY = 'moksafowo_payuni_woo_form';
 
 	/**
 	 * Check sessionStorage and restore form fields
@@ -312,8 +312,8 @@
 		window.payuniSelectingStore = false;
 		
 		// Check if we have POST data from CVS return (store selector sets these)
-		const hasStoreData = $('#payuni_selected_store_id').length > 0 || 
-							 $('input[name="payuni_selected_store_id"]').length > 0;
+		const hasStoreData = $('#moksafowo_payuni_selected_store_id').length > 0 || 
+							 $('input[name="moksafowo_payuni_selected_store_id"]').length > 0;
 		
 		if (hasStoreData) {
 			// 減少延遲時間，讓 WooCommerce 有時間完成渲染

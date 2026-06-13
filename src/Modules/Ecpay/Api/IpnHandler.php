@@ -10,24 +10,31 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- IPN 走 CheckMacValue 不用 WP nonce
-		$posted = $_POST;
-		// phpcs:enable
+		// IPN 無法帶 WP nonce — 來源真實性由 CheckMacValue（SHA256 + hash_equals）驗證。
+		// 驗章必須用原始值（任何改寫都會使簽章不符），逐欄 sanitize 於驗章通過後進行。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- signature input must be untouched; sanitized below after verification.
+		$raw = $_POST;
 
-		if ( empty( $posted ) ) {
+		if ( empty( $raw ) ) {
 			status_header( 400 );
 			echo 'Empty';
 			exit;
 		}
 
-		Helper::log( 'IPN raw', [ 'data' => $posted ] );
-
-		if ( ! Helper::verify_check_mac_value( $posted ) ) {
+		if ( ! Helper::verify_check_mac_value( $raw ) ) {
 			Helper::log( 'IPN CheckMacValue mismatch — rejected' );
 			status_header( 400 );
 			echo 'CheckMacValue mismatch';
 			exit;
 		}
+
+		// 驗章通過 — 全欄位 sanitize 後才允許記錄與使用。
+		$posted = array_map(
+			static fn( $v ) => is_string( $v ) ? sanitize_text_field( wp_unslash( $v ) ) : $v,
+			$raw
+		);
+
+		Helper::log( 'IPN received', [ 'data' => $posted ] );
 
 		$merchant_trade_no = isset( $posted['MerchantTradeNo'] ) ? wc_clean( wp_unslash( $posted['MerchantTradeNo'] ) ) : '';
 		$order_id          = Helper::parse_order_id_from_merchant_trade_no( $merchant_trade_no );
@@ -122,7 +129,7 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::PAYMENT_INFO_EMAIL_SENT, '1' );
 			$order->save();
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			do_action( 'mo_payment_info_email', $order->get_id() );
+			do_action( 'moksafowo_payment_info_email', $order->get_id() );
 		}
 
 		// ECPay 看到 "1|OK" 就不重發

@@ -13,18 +13,18 @@ final class SettingsTab {
 				'title' => __( '基本設定', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( 'PayNow 立即富電子發票串接（PayNow_EInvoice v1.5）。商家須自行至 invoice.paynow.com.tw 申請會員、取得 mem_cid 與 mem_password。', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_section',
+				'id'    => 'moksafowo_paynow_invoice_section',
 			],
 			[
 				'title'   => __( '啟用測試模式', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_sandbox_enabled',
+				'id'      => 'moksafowo_paynow_invoice_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
 				'desc'    => __( '勾選後走 testinvoice.paynow.com.tw 測試環境。', 'mo-ectools' ),
 			],
 			[
 				'title'   => __( 'orderno 前綴', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_orderno_prefix',
+				'id'      => 'moksafowo_paynow_invoice_orderno_prefix',
 				'type'    => 'text',
 				'default' => '',
 				'desc'    => __( '送至 PayNow 的 orderno 前綴（限英數，最多 5 字元）。留空即無前綴。', 'mo-ectools' ),
@@ -33,7 +33,7 @@ final class SettingsTab {
 			],
 			[
 				'title'   => __( '開立時機', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_issue_when',
+				'id'      => 'moksafowo_paynow_invoice_issue_when',
 				'type'    => 'select',
 				'default' => 'paid',
 				'options' => [
@@ -44,7 +44,7 @@ final class SettingsTab {
 			],
 			[
 				'title'   => __( '訂單退款 / 取消時自動作廢發票', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_auto_cancel',
+				'id'      => 'moksafowo_paynow_invoice_auto_cancel',
 				'type'    => 'select',
 				'default' => 'manual',
 				'options' => [
@@ -54,25 +54,69 @@ final class SettingsTab {
 			],
 			[
 				'title'   => __( '結帳允許捐贈', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_allow_donate',
+				'id'      => 'moksafowo_paynow_invoice_allow_donate',
 				'type'    => 'checkbox',
 				'default' => 'yes',
 			],
 			[
 				'title'   => __( '結帳允許統編（公司用三聯式）', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_allow_b2b',
+				'id'      => 'moksafowo_paynow_invoice_allow_b2b',
 				'type'    => 'checkbox',
 				'default' => 'yes',
 			],
 			[
+				'title'         => __( '開放的個人載具', 'mo-ectools' ),
+				'desc'          => __( '手機條碼', 'mo-ectools' ),
+				'id'            => 'moksafowo_paynow_invoice_channel_mobile',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => 'start',
+			],
+			[
+				'desc'          => __( '自然人憑證', 'mo-ectools' ),
+				'id'            => 'moksafowo_paynow_invoice_channel_cert',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '紙本發票', 'mo-ectools' ),
+				'id'            => 'moksafowo_paynow_invoice_channel_paper',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => 'end',
+				'desc_tip'      => __( '勾選要在結帳頁與後台手動開立提供的個人載具。PayNow 無會員載具。至少留一項；全不勾會自動保留紙本。', 'mo-ectools' ),
+			],
+			[
+				'title'    => __( '個人預設載具', 'mo-ectools' ),
+				'id'       => 'moksafowo_paynow_invoice_default_carrier',
+				'type'     => 'select',
+				'options'  => [
+					'mobile' => __( '手機條碼', 'mo-ectools' ),
+					'cert'   => __( '自然人憑證', 'mo-ectools' ),
+					'paper'  => __( '紙本發票', 'mo-ectools' ),
+				],
+				'default'  => 'mobile',
+				'desc_tip' => __( '結帳頁與後台手動開立的預設選取載具（須是上方有開放的）。', 'mo-ectools' ),
+			],
+			[
+				'title'       => __( '捐贈單位', 'mo-ectools' ),
+				'id'          => 'moksafowo_paynow_invoice_donate_orgs',
+				'type'        => 'textarea',
+				'default'     => '',
+				'css'         => 'min-height:90px;width:100%;',
+				'placeholder' => '伊甸社會福利基金會|25885',
+				'desc_tip'    => __( '輸入捐贈機構（每行一筆），格式為：社福團體名稱|愛心碼（例：伊甸社會福利基金會|25885）。填了之後顧客結帳與後台手動開立改用下拉選單挑單位（看得到名稱）；留空則由顧客自行輸入愛心碼。', 'mo-ectools' ),
+			],
+			[
 				'title'   => __( 'Debug 日誌', 'mo-ectools' ),
-				'id'      => 'mo_paynow_invoice_debug_log_enabled',
+				'id'      => 'moksafowo_paynow_invoice_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_paynow_invoice_section',
+				'id'   => 'moksafowo_paynow_invoice_section',
 			],
 
 			[
@@ -83,43 +127,43 @@ final class SettingsTab {
 					__( '從 %s 申請。PayNow 沒有公開共用測試帳號。', 'mo-ectools' ),
 					'<a href="https://testinvoice.paynow.com.tw" target="_blank">testinvoice.paynow.com.tw</a>'
 				),
-				'id'    => 'mo_paynow_invoice_sandbox_section',
+				'id'    => 'moksafowo_paynow_invoice_sandbox_section',
 			],
 			[
 				'title' => __( '測試 mem_cid', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_sandbox_mem_cid',
+				'id'    => 'moksafowo_paynow_invoice_sandbox_mem_cid',
 				'type'  => 'text',
 			],
 			[
 				'title' => __( '測試 mem_password', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_sandbox_mem_password',
+				'id'    => 'moksafowo_paynow_invoice_sandbox_mem_password',
 				'type'  => 'text',
 				'desc'  => __( '8 字元（用於 3DES key 推導，spec §2.2）。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_paynow_invoice_sandbox_section',
+				'id'   => 'moksafowo_paynow_invoice_sandbox_section',
 			],
 
 			[
 				'title' => __( '正式環境憑證', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( '從 invoice.paynow.com.tw 申請。需 PayNow 審核啟用。', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_prod_section',
+				'id'    => 'moksafowo_paynow_invoice_prod_section',
 			],
 			[
 				'title' => __( '正式 mem_cid', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_mem_cid',
+				'id'    => 'moksafowo_paynow_invoice_mem_cid',
 				'type'  => 'text',
 			],
 			[
 				'title' => __( '正式 mem_password', 'mo-ectools' ),
-				'id'    => 'mo_paynow_invoice_mem_password',
+				'id'    => 'moksafowo_paynow_invoice_mem_password',
 				'type'  => 'text',
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_paynow_invoice_prod_section',
+				'id'   => 'moksafowo_paynow_invoice_prod_section',
 			],
 		];
 	}

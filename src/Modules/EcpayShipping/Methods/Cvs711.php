@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class Cvs711 extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
-		$this->id                 = 'mo_ecpay_shipping_cvs_711';
+		$this->id                 = 'moksafowo_ecpay_shipping_cvs_711';
 		$this->method_title       = __( '綠界 — 7-11 取貨', 'mo-ectools' );
 		$this->method_description = __( '綠界 7-ELEVEN 超商取貨（C2C / B2C 由模組設定切換）。', 'mo-ectools' );
 		parent::__construct( $instance_id );
@@ -26,11 +26,11 @@ final class Cvs711 extends AbstractCvsShippingMethod {
 	}
 
 	public function logistics_sub_type(): string {
-		return 'B2C' === get_option( 'mo_ecpay_shipping_cvs_type', 'C2C' ) ? 'UNIMART' : 'UNIMARTC2C';
+		return 'B2C' === get_option( 'moksafowo_ecpay_shipping_cvs_type', 'C2C' ) ? 'UNIMART' : 'UNIMARTC2C';
 	}
 
 	public function supported_temperatures(): array {
-		if ( 'B2C' === get_option( 'mo_ecpay_shipping_cvs_type', 'C2C' ) ) {
+		if ( 'B2C' === get_option( 'moksafowo_ecpay_shipping_cvs_type', 'C2C' ) ) {
 			return [
 				ProductTemp::NORMAL => __( '常溫', 'mo-ectools' ),
 				ProductTemp::FROZEN => __( '冷凍 (UNIMARTFREEZE)', 'mo-ectools' ),

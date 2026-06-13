@@ -17,7 +17,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const PATH_INVALID = '/SPEinvoice_Storage_Modify.asp';
 
 	protected static function option_prefix(): string {
-		return 'mo_smilepay_invoice';
+		return 'moksafowo_smilepay_invoice';
 	}
 
 	protected static function log_source(): string {
@@ -26,16 +26,16 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function grvc(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_smilepay_invoice_sandbox_grvc', '' );
+			return (string) get_option( 'moksafowo_smilepay_invoice_sandbox_grvc', '' );
 		}
-		return (string) get_option( 'mo_smilepay_invoice_grvc', '' );
+		return (string) get_option( 'moksafowo_smilepay_invoice_grvc', '' );
 	}
 
 	public static function verify_key(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_smilepay_invoice_sandbox_verify_key', '' );
+			return (string) get_option( 'moksafowo_smilepay_invoice_sandbox_verify_key', '' );
 		}
-		return (string) get_option( 'mo_smilepay_invoice_verify_key', '' );
+		return (string) get_option( 'moksafowo_smilepay_invoice_verify_key', '' );
 	}
 
 	public static function base_url(): string {
@@ -43,11 +43,11 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function track_system_id(): string {
-		return (string) get_option( 'mo_smilepay_invoice_track_system_id', '' );
+		return (string) get_option( 'moksafowo_smilepay_invoice_track_system_id', '' );
 	}
 
 	public static function order_prefix(): string {
-		$raw = (string) get_option( 'mo_smilepay_invoice_order_prefix', '' );
+		$raw = (string) get_option( 'moksafowo_smilepay_invoice_order_prefix', '' );
 		$raw = preg_replace( '/[^A-Za-z0-9]/', '', $raw ) ?? '';
 		return substr( $raw, 0, 5 );
 	}
@@ -120,7 +120,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_smilepay_invoice_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_smilepay_invoice_sandbox_enabled', 'no' );
 	}
 
 	// log_enabled / log inherited from AbstractCredentialHelper

@@ -16,7 +16,6 @@ trait TCatHDTrait {
 			'package' => $package,
 		);
 		$this->add_rate( $rate );
-		do_action( 'woocommerce_' . $this->id . '_shipping_add_rate', $this, $rate );
 	}
 
 	public function is_available( $package ) {
@@ -31,13 +30,13 @@ trait TCatHDTrait {
 			$is_available = false;
 		}
 
-		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this );
+		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	public function init() {
 		$this->init_settings();
 
-		$this->instance_form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php';
+		$this->instance_form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php';
 
 		$this->title                    = $this->get_option( 'title' );
 		$this->cost                     = $this->get_option( 'cost', 0 );

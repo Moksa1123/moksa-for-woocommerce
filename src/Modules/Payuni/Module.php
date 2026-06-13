@@ -57,27 +57,27 @@ final class Module extends AbstractModule {
 	}
 
 	public function settings_section(): string {
-		return 'payuni-payment';
+		return 'moksafowo-payuni-payment';
 	}
 
 	public function boot(): void {
 		// At-rest encryption for PAYUNi credentials. Wrap BEFORE PayuniPayment::init()
 		// so the very first get_option() inside PaymentRequest decrypts cleanly.
 		// Existing plain-text values keep working; the next admin save migrates.
-		// Phase B（v0.5.63）：同時 wrap 新舊兩組 key — settings page 寫進 mo_payuni_*
+		// Phase B（v0.5.63）：同時 wrap 新舊兩組 key — settings page 寫進 moksafowo_payuni_*
 		// 新 key 走 wrap encrypt-at-rest；legacy payuni_payment_* 仍 wrap 確保既有
 		// site 的 ciphertext decrypt 仍正常（Credentials helper fallback 讀 legacy）。
 		foreach ( [
 			// New canonical mo_* keys (Phase B SettingsTab 寫入點)
-			'mo_payuni_payment_hashkey',
-			'mo_payuni_payment_hashkey_test',
-			'mo_payuni_payment_hashiv',
-			'mo_payuni_payment_hashiv_test',
+			'moksafowo_payuni_payment_hashkey',
+			'moksafowo_payuni_payment_hashkey_test',
+			'moksafowo_payuni_payment_hashiv',
+			'moksafowo_payuni_payment_hashiv_test',
 			// Legacy keys (Phase A fallback；既有 site credentials 仍保留)
-			'payuni_payment_hashkey',
-			'payuni_payment_hashkey_test',
-			'payuni_payment_hashiv',
-			'payuni_payment_hashiv_test',
+			'moksafowo_payuni_payment_hashkey',
+			'moksafowo_payuni_payment_hashkey_test',
+			'moksafowo_payuni_payment_hashiv',
+			'moksafowo_payuni_payment_hashiv_test',
 		] as $opt ) {
 			Vault::wrap_option( $opt );
 		}
@@ -96,7 +96,7 @@ final class Module extends AbstractModule {
 		$ids = array_values( array_filter( $ids, static function ( $id ): bool {
 			$id = (string) $id;
 			return 'unified' !== $id
-				&& 0 !== strpos( $id, 'mo_payuni_installment_' );
+				&& 0 !== strpos( $id, 'moksafowo_payuni_installment_' );
 		} ) );
 		\MoksaWeb\Mowc\Modules\Shared\Setup\GatewayAllowlistMigrator::seed_if_unseeded( 'payuni', $ids );
 

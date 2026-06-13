@@ -22,11 +22,11 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 	}
 
 	protected static function nonce_action(): string {
-		return 'mo_ezpay_invoice_admin';
+		return 'moksafowo_ezpay_invoice_admin';
 	}
 
 	protected static function ajax_action_prefix(): string {
-		return 'mo_ezpay_invoice';
+		return 'moksafowo_ezpay_invoice';
 	}
 
 	protected static function invoice_number_meta_key(): string {

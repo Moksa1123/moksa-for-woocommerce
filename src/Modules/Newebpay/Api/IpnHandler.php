@@ -11,22 +11,12 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- IPN webhook; CheckMacValue / HMAC / RSA signature verified inside this method.
-		// phpcs:disable WordPress.Security.NonceVerification.Missing — IPN 走 TradeSha 驗簽
-		$posted = wp_unslash( $_POST );
-		// phpcs:enable
-
-		if ( empty( $posted ) ) {
-			Helper::log( 'IPN empty post', [] );
-			status_header( 400 );
-			echo 'Empty';
-			exit;
-		}
-
-		Helper::log( 'IPN raw', [ 'data' => $posted ] );
-
-		$trade_info = isset( $posted['TradeInfo'] ) ? (string) $posted['TradeInfo'] : '';
-		$trade_sha  = isset( $posted['TradeSha'] ) ? (string) $posted['TradeSha'] : '';
+		// IPN 無法帶 WP nonce — 來源真實性由 TradeSha（SHA256 + hash_equals）驗證。
+		// TradeInfo 為 AES 加密 hex 字串，sanitize_text_field 對其為恆等轉換。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
 			Helper::log( 'IPN missing TradeInfo / TradeSha — rejected' );
@@ -49,6 +39,9 @@ final class IpnHandler {
 			echo 'Decrypt fail';
 			exit;
 		}
+
+		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
+		$decoded = map_deep( $decoded, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		Helper::log( 'IPN decoded', [ 'data' => $decoded ] );
 
@@ -189,7 +182,7 @@ final class IpnHandler {
 		// 只有訂單有 NewebPay 物流方式才處理 — 避免污染 ECPay 物流訂單
 		$has_newebpay_shipping = false;
 		foreach ( $order->get_shipping_methods() as $m ) {
-			if ( str_starts_with( (string) $m->get_method_id(), 'mo_newebpay_shipping_' ) ) {
+			if ( str_starts_with( (string) $m->get_method_id(), 'moksafowo_newebpay_shipping_' ) ) {
 				$has_newebpay_shipping = true;
 				break;
 			}

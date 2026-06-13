@@ -57,12 +57,12 @@ abstract class AbstractMowcBlocksMethod extends AbstractPaymentMethodType {
 		$extras = $this->extra_script_handles();
 
 		$handle    = $this->script_handle();
-		$build_dir = MOWC_PLUGIN_DIR . $this->build_subdir();
-		$build_url = MOWC_PLUGIN_URL . $this->build_subdir();
+		$build_dir = MOKSAFOWO_PLUGIN_DIR . $this->build_subdir();
+		$build_url = MOKSAFOWO_PLUGIN_URL . $this->build_subdir();
 		$asset     = $build_dir . 'index.asset.php';
 
 		$deps    = $this->default_deps();
-		$version = MOWC_VERSION;
+		$version = MOKSAFOWO_VERSION;
 		if ( file_exists( $asset ) ) {
 			$loaded  = require $asset;
 			$deps    = $loaded['dependencies'] ?? $deps;

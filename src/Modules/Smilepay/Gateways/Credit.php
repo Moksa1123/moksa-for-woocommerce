@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Credit extends AbstractSmilepayGateway {
 
-	public const GATEWAY_ID = 'mo_smilepay_credit';
+	public const GATEWAY_ID = 'moksafowo_smilepay_credit';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

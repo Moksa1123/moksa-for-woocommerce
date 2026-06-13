@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class EsunWallet extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_esunwallet';
+		$this->id = 'moksafowo_newebpay_esunwallet';
 		parent::__construct();
 	}
 

@@ -17,15 +17,25 @@
 		}
 	});
 
+	// 列印 / 下載標籤 — 開新分頁送 PAYUNi（物流資訊卡片化後從這裡委派，原在 metabox inline JS）。
+	$(document).on('click', '.print-label', function(){
+		var newTab = window.open(ajaxurl + '?' + $.param({
+			action: $(this).data('action'),
+			orderids: $(this).data('id'),
+			service: $(this).data('service')
+		}), '_blank');
+		setTimeout(function(){ if (newTab) { newTab.location.reload(); } }, 5000);
+	});
+
 	$(document).on('click', '.update-delivery-status', function(event){
 		event.preventDefault();
 		var post_id = $(this).data('id');
 		$.ajax({
-			url: mo_payuni_shipping.ajax_url,
+			url: moksafowo_payuni_shipping.ajax_url,
 			data: {
-				action: 'mo_payuni_shipping_delivery_status',
+				action: 'moksafowo_payuni_shipping_delivery_status',
 				post_id: post_id,
-				security: mo_payuni_shipping.security,
+				security: moksafowo_payuni_shipping.security,
 			},
 			dataType: "json",
 			type: 'post',
@@ -34,7 +44,7 @@
 				if (data.success) {
 					window.location.reload();
 				} else {
-					alert(mo_payuni_shipping.translations.shipping_status_update_failed + ' ' + data.result);
+					alert(moksafowo_payuni_shipping.translations.shipping_status_update_failed + ' ' + data.result);
 				}
 
 				window.location.reload();
@@ -50,11 +60,11 @@
 		event.preventDefault();
 		var post_id = $(this).data('id');
 		$.ajax({
-			url: mo_payuni_shipping.ajax_url,
+			url: moksafowo_payuni_shipping.ajax_url,
 			data: {
 				action: 'cancel_shipping_order',
 				post_id: post_id,
-				security: mo_payuni_shipping.security,
+				security: moksafowo_payuni_shipping.security,
 			},
 			dataType: "json",
 			type: 'post',
@@ -63,7 +73,7 @@
 				if (data.success) {
 
 				} else {
-					alert( mo_payuni_shipping.translations.cancel_shipping_failed + ' ' + data.result);
+					alert( moksafowo_payuni_shipping.translations.cancel_shipping_failed + ' ' + data.result);
 				}
 				window.location.reload();
 
@@ -91,12 +101,12 @@
 		$cell.append('<span class="package-spec-loading" style="margin-left: 8px; color: #666;"><span class="spinner" style="visibility: visible; float: none; width: 16px; height: 16px; margin: 0;"></span> 更新中...</span>');
 		
 		$.ajax({
-			url: mo_payuni_shipping.ajax_url,
+			url: moksafowo_payuni_shipping.ajax_url,
 			data: {
-				action: 'mo_payuni_shipping_update_package_spec',
+				action: 'moksafowo_payuni_shipping_update_package_spec',
 				order_id: order_id,
 				package_spec: package_spec,
-				security: mo_payuni_shipping.security,
+				security: moksafowo_payuni_shipping.security,
 			},
 			dataType: "json",
 			type: 'post',
@@ -150,18 +160,18 @@
 	// Batch print functionality
 	$(document).ready(function() {
 		// Check if batch print localization exists
-		if (typeof payuni_batch_print === 'undefined') {
+		if (typeof moksafowo_payuni_batch_print === 'undefined') {
 			return;
 		}
 		
-		var $modal = $('#payuni-batch-print-modal');
+		var $modal = $('#moksafowo-payuni-batch-print-modal');
 		var currentShipType = null;
 		var selectedOrdersForPrint = [];
 		var allOrdersData = []; // Store all orders for filtering
 		var filteredOrdersData = []; // Store filtered orders
 		
 		// Handle batch print button clicks - show modal
-		$(document).on('click', '.payuni-batch-print-btn', function(e) {
+		$(document).on('click', '.moksafowo-payuni-batch-print-btn', function(e) {
 			e.preventDefault();
 			
 			var $button = $(this);
@@ -186,13 +196,13 @@
 				// Fallback - if the value is unexpected
 				shipTypeName = currentShipType;
 			}
-			$modal.find('.payuni-modal-title').text('批次列印 ' + shipTypeName + ' 標籤');
+			$modal.find('.moksafowo-payuni-modal-title').text('批次列印 ' + shipTypeName + ' 標籤');
 			
 			// Reset modal state
-			$modal.find('.payuni-orders-loading').show();
-			$modal.find('.payuni-orders-list').hide();
-			$modal.find('.payuni-no-orders').hide();
-			$modal.find('.payuni-print-confirm').prop('disabled', true);
+			$modal.find('.moksafowo-payuni-orders-loading').show();
+			$modal.find('.moksafowo-payuni-orders-list').hide();
+			$modal.find('.moksafowo-payuni-no-orders').hide();
+			$modal.find('.moksafowo-payuni-print-confirm').prop('disabled', true);
 			$modal.find('.selected-count').text('0');
 			selectedOrdersForPrint = [];
 			
@@ -204,18 +214,18 @@
 			
 			// Load orders
 			$.ajax({
-				url: payuni_batch_print.ajax_url,
+				url: moksafowo_payuni_batch_print.ajax_url,
 				type: 'POST',
 				data: {
-					action: 'payuni_get_unprinted_orders',
-					security: payuni_batch_print.nonce,
+					action: 'moksafowo_payuni_get_unprinted_orders',
+					security: moksafowo_payuni_batch_print.nonce,
 					ship_type: currentShipType,
 					selected_ids: selectedOrders
 				},
 				success: function(response) {
 					if (response.success) {
 						var data = response.data;
-						$modal.find('.payuni-orders-loading').hide();
+						$modal.find('.moksafowo-payuni-orders-loading').hide();
 						
 							if (data.orders.length > 0) {
 							// Store all orders for filtering
@@ -224,27 +234,27 @@
 							
 							// Update description
 							var description = data.ship_type_name + ' 訂單（最多顯示 50 筆）';
-							$modal.find('.payuni-orders-info .description').text(description);
+							$modal.find('.moksafowo-payuni-orders-info .description').text(description);
 							
 							// Show filters for TCat orders only
 							if (currentShipType == '2' || currentShipType == 2) {
-								$modal.find('.payuni-tcat-filters').show();
+								$modal.find('.moksafowo-payuni-tcat-filters').show();
 								
 								// Update package spec options based on temperature selection
 								updatePackageSpecOptions();
 							} else {
-								$modal.find('.payuni-tcat-filters').hide();
+								$modal.find('.moksafowo-payuni-tcat-filters').hide();
 							}
 							
 							// Build table headers based on ship type
-							var thead = $modal.find('.payuni-table-header');
+							var thead = $modal.find('.moksafowo-payuni-table-header');
 							thead.empty();
 							
 							var headerRow;
 							if (currentShipType == '2' || currentShipType == 2) {
 								// TCat orders - include package spec column
 								headerRow = '<tr>' +
-									'<th style="width: 40px;"><input type="checkbox" class="payuni-select-all" /></th>' +
+									'<th style="width: 40px;"><input type="checkbox" class="moksafowo-payuni-select-all" /></th>' +
 									'<th>訂單編號</th>' +
 									'<th>收件人</th>' +
 									'<th>運送方式</th>' +
@@ -255,7 +265,7 @@
 							} else {
 								// CVS orders - no package spec column
 								headerRow = '<tr>' +
-									'<th style="width: 40px;"><input type="checkbox" class="payuni-select-all" /></th>' +
+									'<th style="width: 40px;"><input type="checkbox" class="moksafowo-payuni-select-all" /></th>' +
 									'<th>訂單編號</th>' +
 									'<th>收件人</th>' +
 									'<th>運送方式</th>' +
@@ -269,23 +279,23 @@
 							renderFilteredOrders();
 							
 							// Auto-select all printable orders
-							$modal.find('.payuni-order-checkbox:not(:disabled)').prop('checked', true);
+							$modal.find('.moksafowo-payuni-order-checkbox:not(:disabled)').prop('checked', true);
 							
 							// Also check the "select all" checkbox
-							var total = $modal.find('.payuni-order-checkbox:not(:disabled)').length;
-							var checked = $modal.find('.payuni-order-checkbox:checked').length;
-							$modal.find('.payuni-select-all').prop('checked', checked === total && total > 0);
+							var total = $modal.find('.moksafowo-payuni-order-checkbox:not(:disabled)').length;
+							var checked = $modal.find('.moksafowo-payuni-order-checkbox:checked').length;
+							$modal.find('.moksafowo-payuni-select-all').prop('checked', checked === total && total > 0);
 							
 							updateSelectedCount();
 							
-								$modal.find('.payuni-orders-list').show();
+								$modal.find('.moksafowo-payuni-orders-list').show();
 						} else {
 								// Show empty message when no printable orders are available
 								var emptyMsg = '沒有可列印的 ' + (data.ship_type_name || '') + ' 訂單';
-								$modal.find('.payuni-orders-info .description').text(emptyMsg);
-								$modal.find('.payuni-orders-list').show();
-								$modal.find('.payuni-no-orders').show();
-								$modal.find('.payuni-print-confirm').prop('disabled', true);
+								$modal.find('.moksafowo-payuni-orders-info .description').text(emptyMsg);
+								$modal.find('.moksafowo-payuni-orders-list').show();
+								$modal.find('.moksafowo-payuni-no-orders').show();
+								$modal.find('.moksafowo-payuni-print-confirm').prop('disabled', true);
 								$modal.find('.selected-count').text('0');
 						}
 					} else {
@@ -301,7 +311,7 @@
 		});
 		
 		// Handle package spec display click - convert to dropdown
-		$(document).on('click', '.payuni-package-spec-display', function(event) {
+		$(document).on('click', '.moksafowo-payuni-package-spec-display', function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 			
@@ -326,7 +336,7 @@
 			}
 			
 			// Create select element
-			var $select = $('<select class="payuni-package-spec-select" ' +
+			var $select = $('<select class="moksafowo-payuni-package-spec-select" ' +
 				'data-order-id="' + orderId + '" ' +
 				'data-original-value="' + currentValue + '" ' +
 				'data-goods-type="' + goodsType + '" ' +
@@ -391,8 +401,8 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'mo_payuni_shipping_update_package_spec',
-					security: payuni_batch_print.package_spec_nonce || mo_payuni_shipping_order.nonce,
+					action: 'moksafowo_payuni_shipping_update_package_spec',
+					security: moksafowo_payuni_batch_print.package_spec_nonce || moksafowo_payuni_shipping_order.nonce,
 					order_id: orderId,
 					package_spec: packageSpec
 				},
@@ -444,7 +454,7 @@
 		
 		// Function to convert select back to display
 		function convertSelectToDisplay($select, displayText, value, goodsType) {
-			var $display = $('<span class="payuni-package-spec-display" ' +
+			var $display = $('<span class="moksafowo-payuni-package-spec-display" ' +
 				'data-order-id="' + $select.data('order-id') + '" ' +
 				'data-value="' + value + '" ' +
 				'data-goods-type="' + goodsType + '" ' +
@@ -456,36 +466,36 @@
 		}
 		
 		// Handle select all checkbox
-		$(document).on('change', '.payuni-select-all', function() {
+		$(document).on('change', '.moksafowo-payuni-select-all', function() {
 			var isChecked = $(this).prop('checked');
-			$modal.find('.payuni-order-checkbox:not(:disabled)').prop('checked', isChecked);
+			$modal.find('.moksafowo-payuni-order-checkbox:not(:disabled)').prop('checked', isChecked);
 			updateSelectedCount();
 		});
 		
 		// Handle individual checkbox
-		$(document).on('change', '.payuni-order-checkbox', function() {
+		$(document).on('change', '.moksafowo-payuni-order-checkbox', function() {
 			updateSelectedCount();
 			
 			// Update select all checkbox
-			var total = $modal.find('.payuni-order-checkbox:not(:disabled)').length;
-			var checked = $modal.find('.payuni-order-checkbox:checked').length;
-			$modal.find('.payuni-select-all').prop('checked', checked === total && total > 0);
+			var total = $modal.find('.moksafowo-payuni-order-checkbox:not(:disabled)').length;
+			var checked = $modal.find('.moksafowo-payuni-order-checkbox:checked').length;
+			$modal.find('.moksafowo-payuni-select-all').prop('checked', checked === total && total > 0);
 		});
 		
 		// Update selected count
 		function updateSelectedCount() {
 			selectedOrdersForPrint = [];
-			$modal.find('.payuni-order-checkbox:checked').each(function() {
+			$modal.find('.moksafowo-payuni-order-checkbox:checked').each(function() {
 				selectedOrdersForPrint.push($(this).val());
 			});
 			
 			$modal.find('.selected-count').text(selectedOrdersForPrint.length);
-			$modal.find('.payuni-print-confirm').prop('disabled', selectedOrdersForPrint.length === 0);
+			$modal.find('.moksafowo-payuni-print-confirm').prop('disabled', selectedOrdersForPrint.length === 0);
 		}
 		
 		// Render filtered orders in the table
 		function renderFilteredOrders() {
-			var tbody = $modal.find('.payuni-orders-table-wrapper tbody');
+			var tbody = $modal.find('.moksafowo-payuni-orders-table-wrapper tbody');
 			tbody.empty();
 			
 			if (filteredOrdersData.length === 0) {
@@ -504,7 +514,7 @@
 					// TCat orders - include package spec column
 					var packageSpecDisplay = '';
 					if (order.package_spec && order.package_spec !== '-') {
-						packageSpecDisplay = '<span class="payuni-package-spec-display" ' +
+						packageSpecDisplay = '<span class="moksafowo-payuni-package-spec-display" ' +
 							'data-order-id="' + order.id + '" ' +
 							'data-value="' + (order.package_spec_value || '1') + '" ' +
 							'data-goods-type="' + (order.goods_type || '1') + '" ' +
@@ -516,7 +526,7 @@
 					}
 					
 					row = '<tr data-order-id="' + order.id + '">' +
-						'<td><input type="checkbox" class="payuni-order-checkbox" value="' + order.id + '" ' + 
+						'<td><input type="checkbox" class="moksafowo-payuni-order-checkbox" value="' + order.id + '" ' + 
 						(order.printable ? '' : 'disabled') + ' /></td>' +
 						'<td><a href="' + order.edit_url + '" target="_blank"><strong>#' + order.number + '</strong></a></td>' +
 						'<td>' + order.customer + '</td>' +
@@ -528,7 +538,7 @@
 				} else {
 					// CVS orders - no package spec column
 					row = '<tr data-order-id="' + order.id + '">' +
-						'<td><input type="checkbox" class="payuni-order-checkbox" value="' + order.id + '" ' + 
+						'<td><input type="checkbox" class="moksafowo-payuni-order-checkbox" value="' + order.id + '" ' + 
 						(order.printable ? '' : 'disabled') + ' /></td>' +
 						'<td><a href="' + order.edit_url + '" target="_blank"><strong>#' + order.number + '</strong></a></td>' +
 						'<td>' + order.customer + '</td>' +
@@ -546,8 +556,8 @@
 		
 		// Update package spec options based on goods type selection
 		function updatePackageSpecOptions() {
-			var goodsType = $('#payuni-filter-goods-type').val();
-			var $specSelect = $('#payuni-filter-package-spec');
+			var goodsType = $('#moksafowo-payuni-filter-goods-type').val();
+			var $specSelect = $('#moksafowo-payuni-filter-package-spec');
 			var currentSpec = $specSelect.val();
 			
 			// Clear and rebuild options
@@ -574,8 +584,8 @@
 		
 		// Apply filters to orders
 		function applyFilters() {
-			var goodsType = $('#payuni-filter-goods-type').val();
-			var packageSpec = $('#payuni-filter-package-spec').val();
+			var goodsType = $('#moksafowo-payuni-filter-goods-type').val();
+			var packageSpec = $('#moksafowo-payuni-filter-package-spec').val();
 			
 			// Filter orders
 			filteredOrdersData = allOrdersData.filter(function(order) {
@@ -589,36 +599,36 @@
 			
 			// Show/hide clear button
 			if (goodsType || packageSpec) {
-				$modal.find('.payuni-clear-filter').show();
+				$modal.find('.moksafowo-payuni-clear-filter').show();
 				
 				// Show filtered count
 				var message = '已過濾：顯示 ' + filteredOrdersData.length + ' / ' + allOrdersData.length + ' 筆訂單';
-				$modal.find('.payuni-filter-message').text(message).show();
+				$modal.find('.moksafowo-payuni-filter-message').text(message).show();
 			} else {
-				$modal.find('.payuni-clear-filter').hide();
-				$modal.find('.payuni-filter-message').hide();
+				$modal.find('.moksafowo-payuni-clear-filter').hide();
+				$modal.find('.moksafowo-payuni-filter-message').hide();
 			}
 		}
 		
 		// Handle goods type filter change
-		$(document).on('change', '#payuni-filter-goods-type', function() {
+		$(document).on('change', '#moksafowo-payuni-filter-goods-type', function() {
 			updatePackageSpecOptions();
 		});
 		
 		// Handle apply filter button
-		$(document).on('click', '.payuni-apply-filter', function() {
+		$(document).on('click', '.moksafowo-payuni-apply-filter', function() {
 			applyFilters();
 		});
 		
 		// Handle clear filter button
-		$(document).on('click', '.payuni-clear-filter', function() {
-			$('#payuni-filter-goods-type').val('');
-			$('#payuni-filter-package-spec').val('');
+		$(document).on('click', '.moksafowo-payuni-clear-filter', function() {
+			$('#moksafowo-payuni-filter-goods-type').val('');
+			$('#moksafowo-payuni-filter-package-spec').val('');
 			applyFilters();
 		});
 		
 		// Handle print confirm
-		$(document).on('click', '.payuni-print-confirm', function() {
+		$(document).on('click', '.moksafowo-payuni-print-confirm', function() {
 			if (selectedOrdersForPrint.length === 0) {
 				return;
 			}
@@ -669,11 +679,11 @@
 			
 			// Make AJAX request for batch print
 			$.ajax({
-				url: payuni_batch_print.ajax_url,
+				url: moksafowo_payuni_batch_print.ajax_url,
 				type: 'POST',
 				data: {
-					action: 'payuni_batch_print',
-					security: payuni_batch_print.nonce,
+					action: 'moksafowo_payuni_batch_print',
+					security: moksafowo_payuni_batch_print.nonce,
 					order_ids: selectedOrdersForPrint,
 					ship_type: currentShipType
 				},
@@ -722,36 +732,36 @@
 		});
 		
 		// Handle modal close
-		$(document).on('click', '.payuni-modal-close, .payuni-modal-cancel', function() {
+		$(document).on('click', '.moksafowo-payuni-modal-close, .moksafowo-payuni-modal-cancel', function() {
 			$modal.fadeOut();
 			// Reset filters
-			$('#payuni-filter-goods-type').val('');
-			$('#payuni-filter-package-spec').val('');
-			$modal.find('.payuni-clear-filter').hide();
-			$modal.find('.payuni-filter-message').hide();
+			$('#moksafowo-payuni-filter-goods-type').val('');
+			$('#moksafowo-payuni-filter-package-spec').val('');
+			$modal.find('.moksafowo-payuni-clear-filter').hide();
+			$modal.find('.moksafowo-payuni-filter-message').hide();
 		});
 		
 		// Close modal on background click
-		$(document).on('click', '.payuni-modal', function(e) {
+		$(document).on('click', '.moksafowo-payuni-modal', function(e) {
 			if (e.target === this) {
 				$modal.fadeOut();
 				// Reset filters
-				$('#payuni-filter-goods-type').val('');
-				$('#payuni-filter-package-spec').val('');
-				$modal.find('.payuni-clear-filter').hide();
-				$modal.find('.payuni-filter-message').hide();
+				$('#moksafowo-payuni-filter-goods-type').val('');
+				$('#moksafowo-payuni-filter-package-spec').val('');
+				$modal.find('.moksafowo-payuni-clear-filter').hide();
+				$modal.find('.moksafowo-payuni-filter-message').hide();
 			}
 		});
 		
 		// Add CSS for spinner
-		if ($('#payuni-batch-print-css').length === 0) {
-			$('head').append('<style id="payuni-batch-print-css">' +
-				'.payuni-batch-print-buttons { display: inline-block; }' +
-				'.payuni-batch-print-buttons .button { margin-right: 5px; }' +
-				'.payuni-batch-print-buttons .dashicons { margin-right: 3px; }' +
-				'.payuni-print-status { line-height: 28px; }' +
-				'.payuni-print-status .spinner { margin-top: 3px !important; }' +
-				'.payuni-orders-list .wp-list-table { margin-top: 0px !important; }' +
+		if ($('#moksafowo-payuni-batch-print-css').length === 0) {
+			$('head').append('<style id="moksafowo-payuni-batch-print-css">' +
+				'.moksafowo-payuni-batch-print-buttons { display: inline-block; }' +
+				'.moksafowo-payuni-batch-print-buttons .button { margin-right: 5px; }' +
+				'.moksafowo-payuni-batch-print-buttons .dashicons { margin-right: 3px; }' +
+				'.moksafowo-payuni-print-status { line-height: 28px; }' +
+				'.moksafowo-payuni-print-status .spinner { margin-top: 3px !important; }' +
+				'.moksafowo-payuni-orders-list .wp-list-table { margin-top: 0px !important; }' +
 			'</style>');
 		}
 	});

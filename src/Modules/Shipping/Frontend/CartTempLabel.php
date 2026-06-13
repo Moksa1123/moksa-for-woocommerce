@@ -35,7 +35,7 @@ final class CartTempLabel {
 
 		foreach ( $rates as $rate_id => $rate ) {
 			$method_id = (string) $rate->get_method_id();
-			$is_mowp   = str_starts_with( $method_id, 'mo_' );
+			$is_mowp   = str_starts_with( $method_id, 'moksafowo_' );
 			if ( ! $is_mowp ) {
 				$kept[ $rate_id ] = $rate;
 				continue;
@@ -84,7 +84,7 @@ final class CartTempLabel {
 				continue;
 			}
 			// 非 mowp method 不 mutate label — early-skip 連 build_label_with_breakdown 都不用
-			if ( ! str_starts_with( (string) $rate->get_method_id(), 'mo_' ) ) {
+			if ( ! str_starts_with( (string) $rate->get_method_id(), 'moksafowo_' ) ) {
 				continue;
 			}
 			$new = self::build_label_with_breakdown( $rate, $package );
@@ -98,7 +98,7 @@ final class CartTempLabel {
 	private static function build_label_with_breakdown( \WC_Shipping_Rate $rate, array $package ): ?string {
 		$label     = (string) $rate->get_label();
 		$method_id = (string) $rate->get_method_id();
-		if ( ! str_starts_with( $method_id, 'mo_' ) ) {
+		if ( ! str_starts_with( $method_id, 'moksafowo_' ) ) {
 			return null;
 		}
 

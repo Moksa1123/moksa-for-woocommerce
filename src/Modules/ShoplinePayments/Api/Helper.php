@@ -18,7 +18,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const PATH_REFUND_CREATE  = '/api/v1/trade/refund/create';
 
 	protected static function option_prefix(): string {
-		return 'mo_shopline_payments';
+		return 'moksafowo_shopline_payments';
 	}
 
 	protected static function log_source(): string {
@@ -26,39 +26,39 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_shopline_payments_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_shopline_payments_sandbox_enabled', 'no' );
 	}
 
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_shopline_payments_sandbox_merchant_id', '' );
+			return (string) get_option( 'moksafowo_shopline_payments_sandbox_merchant_id', '' );
 		}
-		return (string) get_option( 'mo_shopline_payments_merchant_id', '' );
+		return (string) get_option( 'moksafowo_shopline_payments_merchant_id', '' );
 	}
 
 	public static function api_key(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_shopline_payments_sandbox_api_key', '' );
+			return (string) get_option( 'moksafowo_shopline_payments_sandbox_api_key', '' );
 		}
-		return (string) get_option( 'mo_shopline_payments_api_key', '' );
+		return (string) get_option( 'moksafowo_shopline_payments_api_key', '' );
 	}
 
 	public static function sign_key(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_shopline_payments_sandbox_sign_key', '' );
+			return (string) get_option( 'moksafowo_shopline_payments_sandbox_sign_key', '' );
 		}
-		return (string) get_option( 'mo_shopline_payments_sign_key', '' );
+		return (string) get_option( 'moksafowo_shopline_payments_sign_key', '' );
 	}
 
 	public static function platform_id(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_shopline_payments_sandbox_platform_id', '' );
+			return (string) get_option( 'moksafowo_shopline_payments_sandbox_platform_id', '' );
 		}
-		return (string) get_option( 'mo_shopline_payments_platform_id', '' );
+		return (string) get_option( 'moksafowo_shopline_payments_platform_id', '' );
 	}
 
 	public static function allowed_payment_methods(): array {
-		$raw = get_option( 'mo_shopline_payments_payment_methods', [] );
+		$raw = get_option( 'moksafowo_shopline_payments_payment_methods', [] );
 		if ( ! is_array( $raw ) ) {
 			return [];
 		}

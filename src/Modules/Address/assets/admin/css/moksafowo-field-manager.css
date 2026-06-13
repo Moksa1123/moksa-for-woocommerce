@@ -2,7 +2,7 @@
  * mowp Field Manager admin UI.
  */
 
-.mo-tw-field-list {
+.moksafowo-tw-field-list {
 	list-style: none;
 	margin: 0 0 8px;
 	padding: 0;
@@ -13,7 +13,7 @@
 	overflow: hidden;
 }
 
-.mo-tw-field-list > li {
+.moksafowo-tw-field-list > li {
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -23,25 +23,25 @@
 	transition: background 0.15s ease, opacity 0.15s ease;
 }
 
-.mo-tw-field-list > li:last-child {
+.moksafowo-tw-field-list > li:last-child {
 	border-bottom: none;
 }
 
-.mo-tw-field-list > li:hover {
+.moksafowo-tw-field-list > li:hover {
 	background: #f0f0f1;
 }
 
-.mo-tw-field-list > li.is-disabled {
+.moksafowo-tw-field-list > li.is-disabled {
 	opacity: 0.5;
 	background: #f0f0f1;
 }
 
-.mo-tw-field-list > li.is-disabled .mo-tw-label,
-.mo-tw-field-list > li.is-disabled .mo-tw-width-options {
+.moksafowo-tw-field-list > li.is-disabled .moksafowo-tw-label,
+.moksafowo-tw-field-list > li.is-disabled .moksafowo-tw-width-options {
 	text-decoration: line-through;
 }
 
-.mo-tw-drag {
+.moksafowo-tw-drag {
 	display: inline-block;
 	width: 18px;
 	font-size: 18px;
@@ -52,12 +52,12 @@
 	user-select: none;
 }
 
-.mo-tw-drag:active {
+.moksafowo-tw-drag:active {
 	cursor: grabbing;
 }
 
-.mo-tw-enable,
-.mo-tw-required {
+.moksafowo-tw-enable,
+.moksafowo-tw-required {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
@@ -67,46 +67,46 @@
 	min-width: 60px;
 }
 
-.mo-tw-required {
+.moksafowo-tw-required {
 	min-width: 56px;
 }
 
-.mo-tw-enable input[type=checkbox],
-.mo-tw-required input[type=checkbox] {
+.moksafowo-tw-enable input[type=checkbox],
+.moksafowo-tw-required input[type=checkbox] {
 	margin: 0;
 }
 
 /* disabled 欄位的「必填」checkbox 也要 disable + 變灰 */
-.mo-tw-field-list > li.is-disabled .mo-tw-required {
+.moksafowo-tw-field-list > li.is-disabled .moksafowo-tw-required {
 	opacity: 0.5;
 	pointer-events: none;
 }
 
-.mo-tw-label {
+.moksafowo-tw-label {
 	flex: 1;
 	font-weight: 600;
 	color: #1d2327;
 }
 
-.mo-tw-width-options {
+.moksafowo-tw-width-options {
 	display: inline-flex;
 	gap: 12px;
 	font-size: 13px;
 	color: #50575e;
 }
 
-.mo-tw-width-options label {
+.moksafowo-tw-width-options label {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 	cursor: pointer;
 }
 
-.mo-tw-width-options input[type=radio] {
+.moksafowo-tw-width-options input[type=radio] {
 	margin: 0;
 }
 
-.mo-tw-placeholder {
+.moksafowo-tw-placeholder {
 	height: 44px;
 	background: #fffbe6;
 	border: 1px dashed #f0b849;

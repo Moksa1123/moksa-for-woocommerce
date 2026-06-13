@@ -4,23 +4,23 @@ declare( strict_types=1 );
 namespace MoksaWeb\Mowc\Modules\EcpayShipping\Operations;
 
 use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
+use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
 use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
 
 defined( 'ABSPATH' ) || exit;
 
 final class PrintProxy {
 
-	private const NONCE_ACTION       = 'mo_ecpay_shipping_print_v2';
-	private const ACTION             = 'mo_ecpay_shipping_print_v2';
-	private const ACTION_QUICK       = 'mo_ecpay_shipping_print_quick';
-	private const NONCE_ACTION_QUICK = 'mo_ecpay_shipping_print_quick';
+	private const NONCE_ACTION       = 'moksafowo_ecpay_shipping_print_v2';
+	private const ACTION             = 'moksafowo_ecpay_shipping_print_v2';
+	private const ACTION_QUICK       = 'moksafowo_ecpay_shipping_print_quick';
+	private const NONCE_ACTION_QUICK = 'moksafowo_ecpay_shipping_print_quick';
 
 	public static function init(): void {
 		add_action( 'admin_post_' . self::ACTION, [ __CLASS__, 'handle' ] );
 		add_action( 'admin_post_' . self::ACTION_QUICK, [ __CLASS__, 'handle_quick' ] );
 		add_filter( 'woocommerce_admin_order_actions', [ __CLASS__, 'add_print_actions' ], 20, 2 );
-		add_action( 'admin_print_styles-woocommerce_page_wc-orders', [ __CLASS__, 'print_action_styles' ] );
-		add_action( 'admin_print_styles-edit-shop_order', [ __CLASS__, 'print_action_styles' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_action_assets' ] );
 		// 純 admin 用，不開 nopriv（browser 已經登入）
 	}
 
@@ -64,70 +64,80 @@ final class PrintProxy {
 			);
 			// name = 完整無障礙描述（會渲染進 aria-label / title）
 			// 可見圖示由 CSS ::before 用 dashicons-printer，文字本體由 text-indent 隱藏
-			$actions[ 'mo_ecpay_print_' . $tone ] = [
+			$actions[ 'moksafowo_ecpay_print_' . $tone ] = [
 				'url'    => $url,
 				'name'   => 'a4' === $tone ? __( '列印物流標籤 A4', 'mo-ectools' ) : __( '列印物流標籤 A6', 'mo-ectools' ),
-				'action' => 'mo-ecpay-print mo-ecpay-print-' . $tone,
+				'action' => 'moksafowo-ecpay-print moksafowo-ecpay-print-' . $tone,
 			];
 		}
 		return $actions;
 	}
 
-	public static function print_action_styles(): void {
-		echo '<style>
-			/* 對標 WC 原生 .wc-action-button-{action} 樣式，icon 走 absolute + 全填滿 + flex 置中 */
-			.wc-action-button.mo-ecpay-print{position:relative;}
-			.wc-action-button.mo-ecpay-print::before{
-				content:"\f193" !important; /* dashicons-printer U+F193 */
-				font-family:dashicons !important;
-				font-size:16px !important;
-				line-height:1 !important;
-				text-indent:0 !important;
-				position:absolute !important;
-				top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;
-				display:flex !important;
-				align-items:center !important;
-				justify-content:center !important;
-				background:none !important;
-				margin:0 !important;
-				padding:0 !important;
-				width:auto !important;height:auto !important;
-				mask:none !important;-webkit-mask:none !important;
-			}
-			.wc-action-button.mo-ecpay-print-a4::before{color:#1d4ed8;}
-			.wc-action-button.mo-ecpay-print-a6::before{color:#7c3aed;}
-			.wc-action-button.mo-ecpay-print:hover{background:#f1f5f9;}
-			.wc-action-button.mo-ecpay-print:focus-visible{outline:2px solid currentColor;outline-offset:1px;}
-			/* native title attribute 走瀏覽器內建 tooltip — JS enrich() 注入，位置自動不會被 column 切到 */
-		</style>
-		<script>
-		(function(){
-			function enrich(){
-				document.querySelectorAll(".mo-ecpay-print-a4,.mo-ecpay-print-a6").forEach(function(a){
-					var aria=a.getAttribute("aria-label")||"";
-					if(aria){a.setAttribute("title",aria);}
-					a.setAttribute("target","_blank");
-					a.setAttribute("rel","noopener");
-				});
-				// 清理 WC HPOS list table 「運送至」column 的 maps.google 連結 — q 參數裡的尾端空 fields
-				// （WC 用 a1+a2+city+state+postcode+country join \", \"，CVS 訂單只有 a1 → 後面 5 個 \", \"）
-				document.querySelectorAll("a[href*=\"maps.google.com\"]").forEach(function(a){
-					try{
-						var u=new URL(a.href);
-						var q=u.searchParams.get("q")||"";
-						var cleaned=q.replace(/(?:,\s*)+$/,"").replace(/(?:,\s*){2,}/g,", ");
-						if(cleaned !== q && cleaned.length){
-							u.searchParams.set("q",cleaned);
-							a.href=u.toString();
-						}
-					}catch(e){}
-				});
-			}
-			if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",enrich);}else{enrich();}
-			// React 可能會 re-render 把 title 拔掉，每 200ms 補一次
-			setInterval(enrich,200);
-		})();
-		</script>';
+	public static function enqueue_action_assets(): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'woocommerce_page_wc-orders', 'edit-shop_order' ], true ) ) {
+			return;
+		}
+		$css = <<<'CSS'
+/* 對標 WC 原生 .wc-action-button-{action} 樣式，icon 走 absolute + 全填滿 + flex 置中 */
+.wc-action-button.moksafowo-ecpay-print{position:relative;}
+.wc-action-button.moksafowo-ecpay-print::before{
+	content:"\f193" !important; /* dashicons-printer U+F193 */
+	font-family:dashicons !important;
+	font-size:16px !important;
+	line-height:1 !important;
+	text-indent:0 !important;
+	position:absolute !important;
+	top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;
+	display:flex !important;
+	align-items:center !important;
+	justify-content:center !important;
+	background:none !important;
+	margin:0 !important;
+	padding:0 !important;
+	width:auto !important;height:auto !important;
+	mask:none !important;-webkit-mask:none !important;
+}
+.wc-action-button.moksafowo-ecpay-print-a4::before{color:#1d4ed8;}
+.wc-action-button.moksafowo-ecpay-print-a6::before{color:#7c3aed;}
+.wc-action-button.moksafowo-ecpay-print:hover{background:#f1f5f9;}
+.wc-action-button.moksafowo-ecpay-print:focus-visible{outline:2px solid currentColor;outline-offset:1px;}
+/* native title attribute 走瀏覽器內建 tooltip — JS enrich() 注入，位置自動不會被 column 切到 */
+CSS;
+		wp_register_style( 'moksafowo-ecpay-print-actions', false, [ 'dashicons' ], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-ecpay-print-actions' );
+		wp_add_inline_style( 'moksafowo-ecpay-print-actions', $css );
+
+		$js = <<<'JS'
+(function(){
+	function enrich(){
+		document.querySelectorAll(".moksafowo-ecpay-print-a4,.moksafowo-ecpay-print-a6").forEach(function(a){
+			var aria=a.getAttribute("aria-label")||"";
+			if(aria){a.setAttribute("title",aria);}
+			a.setAttribute("target","_blank");
+			a.setAttribute("rel","noopener");
+		});
+		/* 清理 WC HPOS list table 「運送至」column 的 maps.google 連結 — q 參數裡的尾端空 fields */
+		document.querySelectorAll('a[href*="maps.google.com"]').forEach(function(a){
+			try{
+				var u=new URL(a.href);
+				var q=u.searchParams.get("q")||"";
+				var cleaned=q.replace(/(?:,\s*)+$/,"").replace(/(?:,\s*){2,}/g,", ");
+				if(cleaned !== q && cleaned.length){
+					u.searchParams.set("q",cleaned);
+					a.href=u.toString();
+				}
+			}catch(e){}
+		});
+	}
+	if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",enrich);}else{enrich();}
+	/* React 可能會 re-render 把 title 拔掉，每 200ms 補一次 */
+	setInterval(enrich,200);
+})();
+JS;
+		wp_register_script( 'moksafowo-ecpay-print-actions', false, [], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-ecpay-print-actions' );
+		wp_add_inline_script( 'moksafowo-ecpay-print-actions', $js );
 	}
 
 	public static function handle_quick(): void {
@@ -168,45 +178,35 @@ final class PrintProxy {
 		$nonce      = wp_create_nonce( self::NONCE_ACTION );
 		$action_url = self::action_url();
 		$bucket_idx = 0;
-		?>
-		<!DOCTYPE html>
-		<html lang="zh-Hant">
-		<head>
-			<meta charset="utf-8">
-			<title>printing…</title>
-			<style>body{font-family:-apple-system,sans-serif;padding:32px;text-align:center;color:#374151;}h2{margin:0 0 8px;}p{margin:4px 0;color:#6b7280;}</style>
-		</head>
-		<body>
-			<?php /* translators: %d: total number of shipping labels across all subtypes */ ?>
-			<h2><?php echo esc_html( sprintf( __( '正在列印 %d 張物流標籤…', 'mo-ectools' ), array_sum( array_map( 'count', $buckets ) ) ) ); ?></h2>
-			<?php if ( count( $buckets ) > 1 ) : ?>
-				<?php /* translators: 1: number of shipping subtypes, 2: number of print windows that will open */ ?>
-				<p><?php echo esc_html( sprintf( __( '此訂單含 %1$d 種物流通路（subtype），會分別開啟 %2$d 個列印視窗。', 'mo-ectools' ), count( $buckets ), count( $buckets ) ) ); ?></p>
-				<p style="font-size:12px;"><?php esc_html_e( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印物流標籤」。', 'mo-ectools' ); ?></p>
-			<?php endif; ?>
-			<?php foreach ( $buckets as $subtype => $ids ) :
-				// 此 subtype 不支援 A6 → 自動降 A4
-				$bucket_mode = ( '2' === $mode && ! in_array( $subtype, $a6_subtypes, true ) ) ? '1' : $mode;
-			?>
-				<form id="f<?php echo (int) $bucket_idx; ?>"
-					method="post"
-					action="<?php echo esc_url( $action_url ); ?>"
-					<?php if ( $bucket_idx > 0 ) : ?>target="_blank"<?php endif; ?>>
-					<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>">
-					<input type="hidden" name="logistics_ids" value="<?php echo esc_attr( implode( ',', $ids ) ); ?>">
-					<input type="hidden" name="subtype" value="<?php echo esc_attr( $subtype ); ?>">
-					<input type="hidden" name="mode" value="<?php echo esc_attr( $bucket_mode ); ?>">
-				</form>
-				<?php ++$bucket_idx; ?>
-			<?php endforeach; ?>
-			<script>
-				// 依序送出：第 1 張在原視窗、其餘 target=_blank 開新分頁，間隔 800ms 避免被瀏覽器擋
-				const forms = document.querySelectorAll('form[id^="f"]');
-				forms.forEach( ( f, i ) => setTimeout( () => f.submit(), i * 800 ) );
-			</script>
-		</body>
-		</html>
-		<?php
+
+		$paragraphs = [];
+		if ( count( $buckets ) > 1 ) {
+			/* translators: 1: number of shipping subtypes, 2: number of print windows that will open */
+			$paragraphs[] = sprintf( __( '此訂單含 %1$d 種物流通路（subtype），會分別開啟 %2$d 個列印視窗。', 'mo-ectools' ), count( $buckets ), count( $buckets ) );
+			$paragraphs[] = __( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印物流標籤」。', 'mo-ectools' );
+		}
+
+		$forms = '';
+		foreach ( $buckets as $subtype => $ids ) {
+			// 此 subtype 不支援 A6 → 自動降 A4
+			$bucket_mode = ( '2' === $mode && ! in_array( $subtype, $a6_subtypes, true ) ) ? '1' : $mode;
+			$forms      .= '<form id="f' . (int) $bucket_idx . '" method="post" action="' . esc_url( $action_url ) . '"' . ( $bucket_idx > 0 ? ' target="_blank"' : '' ) . '>'
+				. '<input type="hidden" name="_wpnonce" value="' . esc_attr( $nonce ) . '">'
+				. '<input type="hidden" name="logistics_ids" value="' . esc_attr( implode( ',', $ids ) ) . '">'
+				. '<input type="hidden" name="subtype" value="' . esc_attr( $subtype ) . '">'
+				. '<input type="hidden" name="mode" value="' . esc_attr( $bucket_mode ) . '">'
+				. '</form>';
+			++$bucket_idx;
+		}
+
+		Interstitial::render(
+			__( '列印物流標籤', 'mo-ectools' ),
+			/* translators: %d: total number of shipping labels across all subtypes */
+			sprintf( __( '正在列印 %d 張物流標籤…', 'mo-ectools' ), array_sum( array_map( 'count', $buckets ) ) ),
+			$paragraphs,
+			$forms,
+			'var forms=document.querySelectorAll("form[id^=f]");forms.forEach(function(f,i){setTimeout(function(){f.submit();},i*800);});'
+		);
 		exit;
 	}
 
@@ -288,11 +288,32 @@ final class PrintProxy {
 			wp_die( esc_html( sprintf( 'ECPay HTTP %d: %s', $code, substr( $body, 0, 200 ) ) ) );
 		}
 
-		// 5) Echo label HTML 給 browser
-		// ECPay V2 Print 直接回 HTML（不像其他 V2 API 回加密 JSON）
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $body;
+		// 5) ECPay V2 Print 直接回標籤 HTML（不像其他 V2 API 回加密 JSON）。
+		// 輸出前過 wp_kses：標籤本體（table/img/style/css）保留、active content（script 等）剔除，
+		// 自動列印改由我們的 wp_print_inline_script_tag 觸發。
+		echo wp_kses( $body, self::label_allowlist() );
+		wp_print_inline_script_tag( 'window.addEventListener("load",function(){window.print();});' );
 		exit;
+	}
+
+	/**
+	 * ECPay 標籤頁 HTML 的 kses allowlist — 結構 / 表格 / 圖片 / 樣式保留，active content 剔除。
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	public static function label_allowlist(): array {
+		$attrs  = [ 'id' => true, 'class' => true, 'style' => true, 'align' => true, 'valign' => true, 'width' => true, 'height' => true, 'border' => true, 'cellpadding' => true, 'cellspacing' => true, 'colspan' => true, 'rowspan' => true, 'bgcolor' => true ];
+		$tags   = [ 'html', 'head', 'body', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em', 'u', 'br', 'hr', 'center', 'font', 'section', 'header', 'footer' ];
+		$result = [];
+		foreach ( $tags as $tag ) {
+			$result[ $tag ] = $attrs;
+		}
+		$result['meta']  = [ 'charset' => true, 'name' => true, 'content' => true, 'http-equiv' => true ];
+		$result['title'] = [];
+		$result['style'] = [ 'type' => true, 'media' => true ];
+		$result['link']  = [ 'rel' => true, 'href' => true, 'type' => true, 'media' => true ];
+		$result['img']   = array_merge( $attrs, [ 'src' => true, 'alt' => true ] );
+		return $result;
 	}
 
 	private static function ecpay_urlencode( string $s ): string {

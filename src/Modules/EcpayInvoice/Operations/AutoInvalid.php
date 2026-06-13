@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class AutoInvalid extends AbstractAutoInvalid {
 
-	public const HOOK = 'mo_ecpay_invoice_auto_invalid';
+	public const HOOK = 'moksafowo_ecpay_invoice_auto_invalid';
 
 	protected static function hook_name(): string {
 		return self::HOOK;
@@ -29,7 +29,7 @@ final class AutoInvalid extends AbstractAutoInvalid {
 	}
 
 	protected static function deferred_issue_hook_name(): string {
-		return 'mo_ecpay_invoice_deferred_issue';
+		return 'moksafowo_ecpay_invoice_deferred_issue';
 	}
 
 	protected static function invoke_invalid( \WC_Order $order, string $reason ): void {

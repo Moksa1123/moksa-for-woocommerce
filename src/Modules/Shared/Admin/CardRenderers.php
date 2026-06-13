@@ -32,7 +32,7 @@ final class CardRenderers {
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		wp_enqueue_script( 'mo-tracking-copy' );
+		wp_enqueue_script( 'moksafowo-tracking-copy' );
 	}
 
 	public static function add_payment_card( array $cards, \WC_Order $order ): array {
@@ -45,11 +45,11 @@ final class CardRenderers {
 
 		$method = (string) $order->get_payment_method();
 		$html   = '';
-		if ( str_starts_with( $method, 'mo_payuni_' ) ) {
+		if ( str_starts_with( $method, 'moksafowo_payuni_' ) ) {
 			$html = self::render_payuni( $order );
-		} elseif ( str_starts_with( $method, 'mo_newebpay_' ) ) {
+		} elseif ( str_starts_with( $method, 'moksafowo_newebpay_' ) ) {
 			$html = self::render_newebpay( $order );
-		} elseif ( 'linepay-tw' === $method ) {
+		} elseif ( 'moksafowo-linepay' === $method ) {
 			$html = self::render_linepay( $order );
 		}
 
@@ -203,15 +203,15 @@ final class CardRenderers {
 	}
 
 	private static function render_linepay( \WC_Order $order ): string {
-		// Linepay 是 fork 模組，meta 用 `_linepay_*`（非 `_mo_linepay_*`）— 已知技術債，
+		// Linepay 是 fork 模組，meta 用 `_linepay_*`（非 `_moksafowo_linepay_*`）— 已知技術債，
 		// 此卡片直接讀 fork 實際寫入的 key，否則永遠顯示「尚未付款」。
-		$tx          = (string) $order->get_meta( '_linepay_reserved_transaction_id' );
+		$tx          = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 		$order_id    = '' !== $tx ? (string) $order->get_id() : '';
-		$status      = (string) $order->get_meta( '_linepay_payment_status' );
+		$status      = (string) $order->get_meta( '_moksafowo_linepay_payment_status' );
 		$pay_type    = '';
-		$auth_amt    = (string) $order->get_meta( '_linepay_transaction_balanced_amount' );
+		$auth_amt    = (string) $order->get_meta( '_moksafowo_linepay_transaction_balanced_amount' );
 		$auth_at     = '';
-		$refund_tx   = (string) $order->get_meta( '_linepay_refund_transaction_id' );
+		$refund_tx   = (string) $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
 
 		// 沒任何 LinePay 交易資料 → 顯示「尚未付款」（含 checkout-draft 訂單）
 		if ( '' === $tx && '' === $status ) {

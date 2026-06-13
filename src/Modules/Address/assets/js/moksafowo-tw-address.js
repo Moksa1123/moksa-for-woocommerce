@@ -3,7 +3,7 @@
  *
  * 流程：
  *   1. 切換 country → state，state_select / state_changing 事件
- *   2. 看 mo_tw_address.cities[country][state] 有沒有對應的 cities 陣列
+ *   2. 看 moksafowo_tw_address.cities[country][state] 有沒有對應的 cities 陣列
  *   3. 有 → 把 #*_city 從 input 改成 select + 填 options
  *      沒 → 改回 input
  *   4. 選 city → 從 selected option 的 data-postcode 帶入 postcode
@@ -13,7 +13,7 @@
 ( function ( $ ) {
 	'use strict';
 
-	if ( typeof wc_country_select_params === 'undefined' || typeof mo_tw_address === 'undefined' ) {
+	if ( typeof wc_country_select_params === 'undefined' || typeof moksafowo_tw_address === 'undefined' ) {
 		return;
 	}
 
@@ -55,8 +55,8 @@
 		$( document.body ).on( 'state_changing', function ( e, country, state, $form ) {
 			const $city = $form.find( '#billing_city, #shipping_city, #calc_shipping_city' );
 
-			if ( mo_tw_address.cities[ country ] && state && mo_tw_address.cities[ country ][ state ] ) {
-				render_city_dropdown( $city, mo_tw_address.cities[ country ][ state ] );
+			if ( moksafowo_tw_address.cities[ country ] && state && moksafowo_tw_address.cities[ country ][ state ] ) {
+				render_city_dropdown( $city, moksafowo_tw_address.cities[ country ][ state ] );
 			} else {
 				render_city_input( $city );
 			}

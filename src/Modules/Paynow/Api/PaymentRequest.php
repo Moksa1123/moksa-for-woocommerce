@@ -58,13 +58,12 @@ final class PaymentRequest {
 		$action = Helper::endpoint();
 		ob_start();
 		?>
-		<form method="post" id="mo-paynow-form" accept-charset="UTF-8" action="<?php echo esc_url( $action ); ?>">
+		<form method="post" id="moksafowo-paynow-form" accept-charset="UTF-8" action="<?php echo esc_url( $action ); ?>">
 			<?php foreach ( $params as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( (string) $k ); ?>" value="<?php echo esc_attr( (string) $v ); ?>">
 			<?php endforeach; ?>
-			<button type="submit" id="mo-paynow-submit" class="button alt"><?php esc_html_e( '前往 PayNow 付款頁', 'mo-ectools' ); ?></button>
+			<button type="submit" id="moksafowo-paynow-submit" class="button alt"><?php esc_html_e( '前往 PayNow 付款頁', 'mo-ectools' ); ?></button>
 		</form>
-		<script>document.getElementById('mo-paynow-form').submit();</script>
 		<?php
 		return (string) ob_get_clean();
 	}

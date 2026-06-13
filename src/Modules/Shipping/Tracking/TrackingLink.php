@@ -108,6 +108,24 @@ final class TrackingLink {
 	}
 
 	
+	/**
+	 * render_button_html 輸出的 kses allowlist — 各 echo 端統一使用。
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	public static function kses_allowlist(): array {
+		return [
+			'span'   => [ 'class' => true, 'style' => true ],
+			'code'   => [ 'class' => true, 'style' => true ],
+			'button' => [ 'type' => true, 'class' => true, 'style' => true, 'title' => true, 'data-tracking' => true ],
+			'a'      => [ 'href' => true, 'target' => true, 'rel' => true, 'class' => true, 'style' => true ],
+			'svg'    => [ 'xmlns' => true, 'viewbox' => true, 'width' => true, 'height' => true, 'fill' => true, 'aria-hidden' => true, 'style' => true ],
+			'path'   => [ 'd' => true, 'fill' => true, 'fill-rule' => true, 'clip-rule' => true ],
+			'strong' => [],
+			'br'     => [],
+		];
+	}
+
 	public static function render_button_html( array $info ): string {
 		$direct = 'direct' === $info['mode'];
 		$url    = (string) $info['url'];
@@ -115,11 +133,11 @@ final class TrackingLink {
 
 		ob_start();
 		?>
-		<span class="mo-tracking-link" style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
+		<span class="moksafowo-tracking-link" style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;">
 			<?php if ( '' !== $tn && ! $direct ) : ?>
-				<code class="mo-tracking-no" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#f1f5f9;padding:2px 8px;border-radius:3px;color:#0f172a;"><?php echo esc_html( $tn ); ?></code>
+				<code class="moksafowo-tracking-no" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:#f1f5f9;padding:2px 8px;border-radius:3px;color:#0f172a;"><?php echo esc_html( $tn ); ?></code>
 				<button type="button"
-	class="mo-tracking-copy"
+	class="moksafowo-tracking-copy"
 					data-tracking="<?php echo esc_attr( $tn ); ?>"
 					title="<?php esc_attr_e( '複製貨號', 'mo-ectools' ); ?>"
 					style="background:#fff;border:1px solid #cbd5e1;border-radius:3px;cursor:pointer;padding:2px 8px;font-size:11px;line-height:1.4;color:#475569;"><?php esc_html_e( '複製', 'mo-ectools' ); ?></button>
@@ -127,7 +145,7 @@ final class TrackingLink {
 			<a href="<?php echo esc_url( $url ); ?>"
 				target="_blank"
 				rel="noopener noreferrer"
-	class="mo-tracking-btn"
+	class="moksafowo-tracking-btn"
 				style="display:inline-flex;align-items:center;background:#fff;color:#1f2937;text-decoration:none;padding:3px 10px;border:1px solid #cbd5e1;border-radius:3px;font-size:12px;line-height:1.4;">
 				<?php
 				if ( $direct ) {
@@ -148,7 +166,7 @@ final class TrackingLink {
 		return <<<'JS'
 ( function () {
 	document.addEventListener( 'click', function ( e ) {
-	const btn = e.target.closest( '.mo-tracking-copy' );
+	const btn = e.target.closest( '.moksafowo-tracking-copy' );
 		if ( ! btn ) { return; }
 		e.preventDefault();
 	const tn = btn.getAttribute( 'data-tracking' ) || '';

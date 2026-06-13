@@ -6,38 +6,38 @@ namespace MoksaWeb\Mowc\Modules\Payuni;
 
 defined( 'ABSPATH' ) || exit;
 
-// 讀兼容 facade — 優先 `mo_payuni_*`，fallback legacy `payuni_payment_*`
+// 讀兼容 facade — 優先 `moksafowo_payuni_*`，fallback legacy `payuni_payment_*`
 final class Credentials {
 
 	public static function test_mode_enabled(): bool {
-		$new = get_option( 'mo_payuni_payment_testmode_enabled' );
+		$new = get_option( 'moksafowo_payuni_payment_testmode_enabled' );
 		if ( false !== $new ) {
 			return (bool) wc_string_to_bool( (string) $new );
 		}
-		return (bool) wc_string_to_bool( (string) get_option( 'payuni_payment_testmode_enabled', 'no' ) );
+		return (bool) wc_string_to_bool( (string) get_option( 'moksafowo_payuni_payment_testmode_enabled', 'no' ) );
 	}
 
 	public static function hashkey(): string {
 		$test = self::test_mode_enabled();
 		return self::read_option(
-			$test ? 'mo_payuni_payment_hashkey_test' : 'mo_payuni_payment_hashkey',
-			$test ? 'payuni_payment_hashkey_test'    : 'payuni_payment_hashkey'
+			$test ? 'moksafowo_payuni_payment_hashkey_test' : 'moksafowo_payuni_payment_hashkey',
+			$test ? 'moksafowo_payuni_payment_hashkey_test'    : 'moksafowo_payuni_payment_hashkey'
 		);
 	}
 
 	public static function hashiv(): string {
 		$test = self::test_mode_enabled();
 		return self::read_option(
-			$test ? 'mo_payuni_payment_hashiv_test' : 'mo_payuni_payment_hashiv',
-			$test ? 'payuni_payment_hashiv_test'    : 'payuni_payment_hashiv'
+			$test ? 'moksafowo_payuni_payment_hashiv_test' : 'moksafowo_payuni_payment_hashiv',
+			$test ? 'moksafowo_payuni_payment_hashiv_test'    : 'moksafowo_payuni_payment_hashiv'
 		);
 	}
 
 	public static function merchant_id(): string {
 		$test = self::test_mode_enabled();
 		return self::read_option(
-			$test ? 'mo_payuni_payment_merchant_id_test' : 'mo_payuni_payment_merchant_id',
-			$test ? 'payuni_payment_merchant_id_test'    : 'payuni_payment_merchant_id'
+			$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id',
+			$test ? 'moksafowo_payuni_payment_merchant_id_test'    : 'moksafowo_payuni_payment_merchant_id'
 		);
 	}
 

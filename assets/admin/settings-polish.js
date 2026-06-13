@@ -13,24 +13,24 @@
 		heads.forEach(function(h2, idx){
 			if(h2.classList.contains('screen-reader-text') || h2.closest('.mowp-section-card') || h2.closest('.mowp-intro') || h2.closest('.mowp-subsection-banner')) return;
 			// 把 h2 內的文字節點包進 span — accent line 跟著文字寬度延伸
-			if(!h2.querySelector('.mo-h2-text')){
+			if(!h2.querySelector('.moksafowo-h2-text')){
 				var span = document.createElement('span');
-				span.className = 'mo-h2-text';
+				span.className = 'moksafowo-h2-text';
 				while(h2.firstChild) span.appendChild(h2.firstChild);
 				h2.appendChild(span);
 			}
 			// chevron icon for collapse indicator
-			if(!h2.querySelector('.mo-h2-chevron')){
+			if(!h2.querySelector('.moksafowo-h2-chevron')){
 				var chev = document.createElement('span');
-				chev.className = 'mo-h2-chevron';
+				chev.className = 'moksafowo-h2-chevron';
 				chev.setAttribute('aria-hidden', 'true');
 				h2.appendChild(chev);
 			}
 			var card = document.createElement('div');
 			card.className = 'mowp-section-card';
 			// 用 heading 文字當 stable key（i18n 後仍同名）
-			var key = h2.querySelector('.mo-h2-text').textContent.trim();
-			card.setAttribute('data-mo-key', key);
+			var key = h2.querySelector('.moksafowo-h2-text').textContent.trim();
+			card.setAttribute('data-moksafowo-key', key);
 			if(collapsedState[key]) card.classList.add('is-collapsed');
 			h2.parentNode.insertBefore(card, h2);
 			card.appendChild(h2);
@@ -66,7 +66,7 @@
 	}
 	// 批次列印介面 — 兩個 checkbox 互斥（XOR：勾一個自動取消另一個）
 	function bindMutualExclusion(){
-		var inputs = document.querySelectorAll('#mo_shipping_bulk_print_mode_basic, #mo_shipping_bulk_print_mode_advanced');
+		var inputs = document.querySelectorAll('#moksafowo_shipping_bulk_print_mode_basic, #moksafowo_shipping_bulk_print_mode_advanced');
 		if(inputs.length < 2) return;
 		inputs.forEach(function(input){
 			input.addEventListener('change', function(){

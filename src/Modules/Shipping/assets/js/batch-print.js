@@ -1,9 +1,9 @@
 ( function ( $ ) {
 	'use strict';
-	if ( ! window.mo_shipping_batch_print ) {
+	if ( ! window.moksafowo_shipping_batch_print ) {
 		return;
 	}
-	const cfg = window.mo_shipping_batch_print;
+	const cfg = window.moksafowo_shipping_batch_print;
 
 	$( function () {
 		injectButtons();
@@ -19,13 +19,13 @@
 		let $cursor = $anchor;
 		cfg.providers.forEach( function ( p ) {
 			const icon = p.category === 'cvs' ? 'dashicons-store' : 'dashicons-car';
-			const $btn = $( '<button type="button" class="page-title-action mo-batch-btn"></button>' )
+			const $btn = $( '<button type="button" class="page-title-action moksafowo-batch-btn"></button>' )
 				.attr( 'data-provider', p.key )
 				.html( '<span class="dashicons ' + icon + '"></span> ' + escapeHtml( p.label ) );
 			$cursor.after( $btn );
 			$cursor = $btn;
 		} );
-		$( document ).on( 'click', '.mo-batch-btn', onClickProvider );
+		$( document ).on( 'click', '.moksafowo-batch-btn', onClickProvider );
 	}
 
 	function escapeHtml( s ) {
@@ -49,16 +49,16 @@
 
 	function openModal( provider, label ) {
 		currentProvider = provider;
-		const $modal = $( '#mo-shipping-batch-print-modal' );
-		$modal.find( '.mo-batch-modal__title' ).text( cfg.i18n.modal_title + '：' + label );
-		$modal.find( '.mo-batch-modal__cancel' ).text( cfg.i18n.cancel );
-		$modal.find( '.mo-batch-modal__print' ).text( cfg.i18n.print.replace( '%d', '0' ) ).prop( 'disabled', true );
-		$modal.find( '.mo-batch-modal__body' ).html( '<p>' + escapeHtml( cfg.i18n.loading ) + '</p>' );
+		const $modal = $( '#moksafowo-shipping-batch-print-modal' );
+		$modal.find( '.moksafowo-batch-modal__title' ).text( cfg.i18n.modal_title + '：' + label );
+		$modal.find( '.moksafowo-batch-modal__cancel' ).text( cfg.i18n.cancel );
+		$modal.find( '.moksafowo-batch-modal__print' ).text( cfg.i18n.print.replace( '%d', '0' ) ).prop( 'disabled', true );
+		$modal.find( '.moksafowo-batch-modal__body' ).html( '<p>' + escapeHtml( cfg.i18n.loading ) + '</p>' );
 
 		// 依 provider 宣告的 paper_modes 反灰 select 選項（A4=1, A6=2）
 		const meta = ( cfg.providers || [] ).find( function ( p ) { return p.key === provider; } );
 		const allowed = meta && meta.paper_modes ? meta.paper_modes : [ '1', '2' ];
-		const $sel = $modal.find( '.mo-batch-mode__select' );
+		const $sel = $modal.find( '.moksafowo-batch-mode__select' );
 		const unsupportedSuffix = '（此物流不支援）';
 		$sel.find( 'option' ).each( function () {
 			const $opt = $( this );
@@ -78,30 +78,30 @@
 		$modal.show();
 
 		$.post( cfg.ajax_url, {
-			action:   'mo_shipping_batch_print_list',
+			action:   'moksafowo_shipping_batch_print_list',
 			nonce:    cfg.nonce,
 			provider: provider,
 		} ).done( function ( resp ) {
 			if ( ! resp || ! resp.success ) {
-				$modal.find( '.mo-batch-modal__body' ).html( '<p>' + escapeHtml( ( resp && resp.data && resp.data.message ) || cfg.i18n.error ) + '</p>' );
+				$modal.find( '.moksafowo-batch-modal__body' ).html( '<p>' + escapeHtml( ( resp && resp.data && resp.data.message ) || cfg.i18n.error ) + '</p>' );
 				return;
 			}
 			currentRows = resp.data.rows || [];
 			renderRows( currentRows );
 		} ).fail( function () {
-			$modal.find( '.mo-batch-modal__body' ).html( '<p>' + escapeHtml( cfg.i18n.error ) + '</p>' );
+			$modal.find( '.moksafowo-batch-modal__body' ).html( '<p>' + escapeHtml( cfg.i18n.error ) + '</p>' );
 		} );
 	}
 
 	function renderRows( rows ) {
-		const $body = $( '#mo-shipping-batch-print-modal .mo-batch-modal__body' );
+		const $body = $( '#moksafowo-shipping-batch-print-modal .moksafowo-batch-modal__body' );
 		if ( ! rows.length ) {
 			$body.html( '<p>' + escapeHtml( cfg.i18n.no_orders ) + '</p>' );
 			return;
 		}
-		const currentMode = $( '.mo-batch-mode__select' ).val() || '1';
-		let html = '<table class="widefat striped mo-batch-table"><thead><tr>';
-		html += '<th class="check-col"><input type="checkbox" class="mo-batch-all"></th>';
+		const currentMode = $( '.moksafowo-batch-mode__select' ).val() || '1';
+		let html = '<table class="widefat striped moksafowo-batch-table"><thead><tr>';
+		html += '<th class="check-col"><input type="checkbox" class="moksafowo-batch-all"></th>';
 		html += '<th style="width:80px;">' + escapeHtml( cfg.i18n.order_no ) + '</th>';
 		html += '<th>' + escapeHtml( cfg.i18n.recipient ) + '</th>';
 		html += '<th>' + escapeHtml( cfg.i18n.method ) + '</th>';
@@ -140,8 +140,8 @@
 			if ( r.printable && ! supportsPaper ) {
 				methodCell += ' <span style="color:#d63638;font-size:11px;">（不支援 ' + ( currentMode === '2' ? 'A6' : 'A4' ) + '）</span>';
 			}
-			html += '<tr class="' + ( printable ? '' : 'mo-batch-disabled' ) + '" data-paper-modes="' + escapeHtml( rowModes.join( ',' ) ) + '">';
-			html += '<td class="check-col"><input type="checkbox" class="mo-batch-row" value="' + r.id + '" ' + disabled + '></td>';
+			html += '<tr class="' + ( printable ? '' : 'moksafowo-batch-disabled' ) + '" data-paper-modes="' + escapeHtml( rowModes.join( ',' ) ) + '">';
+			html += '<td class="check-col"><input type="checkbox" class="moksafowo-batch-row" value="' + r.id + '" ' + disabled + '></td>';
 			html += '<td>#' + escapeHtml( r.id ) + '</td>';
 			html += '<td>' + escapeHtml( r.name ) + '</td>';
 			html += '<td>' + methodCell + '</td>';
@@ -154,38 +154,38 @@
 	}
 
 	// 紙張下拉切換 → 重新算 row printability + 重置「列印 (N)」按鈕
-	$( document ).on( 'change', '.mo-batch-mode__select', function () {
+	$( document ).on( 'change', '.moksafowo-batch-mode__select', function () {
 		renderRows( currentRows );
-		const $btn = $( '.mo-batch-modal__print' );
+		const $btn = $( '.moksafowo-batch-modal__print' );
 		$btn.text( cfg.i18n.print.replace( '%d', '0' ) ).prop( 'disabled', true );
 	} );
 
-	$( document ).on( 'change', '.mo-batch-all', function () {
+	$( document ).on( 'change', '.moksafowo-batch-all', function () {
 		const checked = $( this ).prop( 'checked' );
-		$( '.mo-batch-row:not(:disabled)' ).prop( 'checked', checked ).trigger( 'change' );
+		$( '.moksafowo-batch-row:not(:disabled)' ).prop( 'checked', checked ).trigger( 'change' );
 	} );
 
-	$( document ).on( 'change', '.mo-batch-row', function () {
-		const n = $( '.mo-batch-row:checked' ).length;
-		const $btn = $( '.mo-batch-modal__print' );
+	$( document ).on( 'change', '.moksafowo-batch-row', function () {
+		const n = $( '.moksafowo-batch-row:checked' ).length;
+		const $btn = $( '.moksafowo-batch-modal__print' );
 		$btn.text( cfg.i18n.print.replace( '%d', n ) ).prop( 'disabled', n === 0 );
 	} );
 
-	$( document ).on( 'click', '.mo-batch-modal__close, .mo-batch-modal__cancel', function () {
-		$( '#mo-shipping-batch-print-modal' ).hide();
+	$( document ).on( 'click', '.moksafowo-batch-modal__close, .moksafowo-batch-modal__cancel', function () {
+		$( '#moksafowo-shipping-batch-print-modal' ).hide();
 		currentProvider = null;
 	} );
 
-	$( document ).on( 'click', '.mo-batch-modal__print', function () {
-		const ids = $( '.mo-batch-row:checked' ).map( function () { return $( this ).val(); } ).get();
+	$( document ).on( 'click', '.moksafowo-batch-modal__print', function () {
+		const ids = $( '.moksafowo-batch-row:checked' ).map( function () { return $( this ).val(); } ).get();
 		if ( ! ids.length ) {
 			alert( cfg.i18n.select_one );
 			return;
 		}
 		const $btn = $( this ).prop( 'disabled', true );
-		const mode = $( '.mo-batch-mode__select' ).val() || '1';
+		const mode = $( '.moksafowo-batch-mode__select' ).val() || '1';
 		$.post( cfg.ajax_url, {
-			action:    'mo_shipping_batch_print_run',
+			action:    'moksafowo_shipping_batch_print_run',
 			nonce:     cfg.nonce,
 			provider:  currentProvider,
 			order_ids: ids,
@@ -193,7 +193,7 @@
 		} ).done( function ( resp ) {
 			if ( resp && resp.success && resp.data && Array.isArray( resp.data.forms ) ) {
 				resp.data.forms.forEach( submitInWindow );
-				$( '#mo-shipping-batch-print-modal' ).hide();
+				$( '#moksafowo-shipping-batch-print-modal' ).hide();
 			} else {
 				alert( ( resp && resp.data && resp.data.message ) || cfg.i18n.error );
 			}

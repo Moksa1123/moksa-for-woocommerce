@@ -13,12 +13,12 @@ final class OrderMetaBox {
 	public static function init(): void {
 		OrderInfoLayout::boot();
 		// 三欄 footer：priority 10 = 金流（左）
-		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_card' ], 10, 2 );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 10, 2 );
 	}
 
 	public static function add_card( array $cards, \WC_Order $order ): array {
 		$method = (string) $order->get_payment_method();
-		if ( ! str_starts_with( $method, 'mo_ecpay_' ) ) {
+		if ( ! str_starts_with( $method, 'moksafowo_ecpay_' ) ) {
 			return $cards;
 		}
 
@@ -129,6 +129,9 @@ final class OrderMetaBox {
 			echo '</p>';
 			echo '</div>';
 		}
+
+		// 信用卡交易動作（查詢 / 請款 / 退刷 / 取消授權）— 附在金流資訊下方，僅綠界信用卡訂單顯示。
+		echo CreditLifecycleBox::lifecycle_html( $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML assembled in CreditLifecycleBox with esc_*.
 
 		$cards[] = [
 			'slot'  => 'payment',

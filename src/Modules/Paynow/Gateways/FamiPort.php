@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class FamiPort extends AbstractPaynowGateway {
 
-	public const GATEWAY_ID = 'mo_paynow_famiport';
+	public const GATEWAY_ID = 'moksafowo_paynow_famiport';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;
@@ -31,7 +31,7 @@ final class FamiPort extends AbstractPaynowGateway {
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
-		$days = (int) get_option( 'mo_paynow_code_deadline_days', 0 );
+		$days = (int) get_option( 'moksafowo_paynow_code_deadline_days', 0 );
 		return $days > 0 ? [ 'DeadLine' => $days ] : [];
 	}
 }

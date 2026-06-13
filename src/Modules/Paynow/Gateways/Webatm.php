@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Webatm extends AbstractPaynowGateway {
 
-	public const GATEWAY_ID = 'mo_paynow_webatm';
+	public const GATEWAY_ID = 'moksafowo_paynow_webatm';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Alipay extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_alipay';
+		$this->id = 'moksafowo_newebpay_alipay';
 		parent::__construct();
 	}
 

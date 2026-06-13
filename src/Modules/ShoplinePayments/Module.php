@@ -54,6 +54,6 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_mo_shopline_payments', [ Api\WebhookHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_shopline_payments', [ Api\WebhookHandler::class, 'handle' ] );
 	}
 }

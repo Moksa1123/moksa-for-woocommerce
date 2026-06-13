@@ -21,11 +21,11 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 	}
 
 	protected static function nonce_action(): string {
-		return 'mo_smilepay_invoice_admin';
+		return 'moksafowo_smilepay_invoice_admin';
 	}
 
 	protected static function ajax_action_prefix(): string {
-		return 'mo_smilepay_invoice';
+		return 'moksafowo_smilepay_invoice';
 	}
 
 	protected static function invoice_number_meta_key(): string {

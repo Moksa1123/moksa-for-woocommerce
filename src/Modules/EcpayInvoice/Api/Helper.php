@@ -18,7 +18,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const BASE_PROD    = 'https://einvoice.ecpay.com.tw';
 
 	protected static function option_prefix(): string {
-		return 'mo_ecpay_invoice';
+		return 'moksafowo_ecpay_invoice';
 	}
 
 	protected static function log_source(): string {
@@ -27,26 +27,26 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_invoice_sandbox_merchant_id', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_invoice_sandbox_merchant_id', '' );
 			return '' !== $v ? $v : self::SANDBOX_MERCHANT_ID;
 		}
-		return (string) get_option( 'mo_ecpay_invoice_merchant_id', '' );
+		return (string) get_option( 'moksafowo_ecpay_invoice_merchant_id', '' );
 	}
 
 	public static function hash_key(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_invoice_sandbox_hash_key', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_invoice_sandbox_hash_key', '' );
 			return '' !== $v ? $v : self::SANDBOX_HASH_KEY;
 		}
-		return (string) get_option( 'mo_ecpay_invoice_hash_key', '' );
+		return (string) get_option( 'moksafowo_ecpay_invoice_hash_key', '' );
 	}
 
 	public static function hash_iv(): string {
 		if ( self::is_sandbox() ) {
-			$v = (string) get_option( 'mo_ecpay_invoice_sandbox_hash_iv', '' );
+			$v = (string) get_option( 'moksafowo_ecpay_invoice_sandbox_hash_iv', '' );
 			return '' !== $v ? $v : self::SANDBOX_HASH_IV;
 		}
-		return (string) get_option( 'mo_ecpay_invoice_hash_iv', '' );
+		return (string) get_option( 'moksafowo_ecpay_invoice_hash_iv', '' );
 	}
 
 	public static function base_url(): string {
@@ -84,7 +84,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function generate_relate_number( int $order_id ): string {
-		$user_prefix = preg_replace( '/[^A-Za-z0-9]/', '', (string) get_option( 'mo_ecpay_invoice_prefix', '' ) );
+		$user_prefix = preg_replace( '/[^A-Za-z0-9]/', '', (string) get_option( 'moksafowo_ecpay_invoice_prefix', '' ) );
 		$user_prefix = substr( (string) $user_prefix, 0, 5 );
 		$prefix      = '' !== $user_prefix ? $user_prefix . 'INV' : 'mowpINV';
 		$random      = bin2hex( random_bytes( 4 ) );

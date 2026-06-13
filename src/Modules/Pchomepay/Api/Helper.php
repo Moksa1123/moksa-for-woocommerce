@@ -24,7 +24,7 @@ final class Helper extends AbstractCredentialHelper {
 	private const TOKEN_TTL = 28800; // 8h.
 
 	protected static function option_prefix(): string {
-		return 'mo_pchomepay';
+		return 'moksafowo_pchomepay';
 	}
 
 	protected static function log_source(): string {
@@ -32,21 +32,21 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_pchomepay_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_pchomepay_sandbox_enabled', 'no' );
 	}
 
 	public static function app_id(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_pchomepay_sandbox_app_id', '' );
+			return (string) get_option( 'moksafowo_pchomepay_sandbox_app_id', '' );
 		}
-		return (string) get_option( 'mo_pchomepay_app_id', '' );
+		return (string) get_option( 'moksafowo_pchomepay_app_id', '' );
 	}
 
 	public static function secret(): string {
 		if ( self::is_sandbox() ) {
-			return (string) get_option( 'mo_pchomepay_sandbox_secret', '' );
+			return (string) get_option( 'moksafowo_pchomepay_sandbox_secret', '' );
 		}
-		return (string) get_option( 'mo_pchomepay_secret', '' );
+		return (string) get_option( 'moksafowo_pchomepay_secret', '' );
 	}
 
 	public static function has_credentials(): bool {

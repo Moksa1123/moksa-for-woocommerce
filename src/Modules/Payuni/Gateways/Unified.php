@@ -7,21 +7,21 @@ defined( 'ABSPATH' ) || exit;
 
 final class Unified extends GatewayBase {
 
-	const GATEWAY_ID = 'mo_payuni_unified';
+	const GATEWAY_ID = 'moksafowo_payuni_unified';
 
 	private const METHOD_MAP = array(
-		'mo_payuni_credit'     => 'Credit',
-		'mo_payuni_icash'      => 'ICash',
-		'mo_payuni_aftee'      => 'Aftee',
-		'mo_payuni_linepay'    => 'LinePay',
-		'mo_payuni_jkopay'     => 'JKoPay',
-		'mo_payuni_atm'        => 'ATM',
-		'mo_payuni_cvs'        => 'CVS',
-		'mo_payuni_unionpay'   => 'CreditUnionPay',
-		'mo_payuni_credit_red' => 'CreditRed',
-		'mo_payuni_applepay'   => 'ApplePay',
-		'mo_payuni_googlepay'  => 'GooglePay',
-		'mo_payuni_samsungpay' => 'SamsungPay',
+		'moksafowo_payuni_credit'     => 'Credit',
+		'moksafowo_payuni_icash'      => 'ICash',
+		'moksafowo_payuni_aftee'      => 'Aftee',
+		'moksafowo_payuni_linepay'    => 'LinePay',
+		'moksafowo_payuni_jkopay'     => 'JKoPay',
+		'moksafowo_payuni_atm'        => 'ATM',
+		'moksafowo_payuni_cvs'        => 'CVS',
+		'moksafowo_payuni_unionpay'   => 'CreditUnionPay',
+		'moksafowo_payuni_credit_red' => 'CreditRed',
+		'moksafowo_payuni_applepay'   => 'ApplePay',
+		'moksafowo_payuni_googlepay'  => 'GooglePay',
+		'moksafowo_payuni_samsungpay' => 'SamsungPay',
 	);
 
 	public function __construct() {
@@ -40,7 +40,7 @@ final class Unified extends GatewayBase {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'mo_payuni_transaction_args_' . $this->id, array( $this, 'inject_enabled_methods' ), 10, 2 );
+		add_filter( 'moksafowo_payuni_transaction_args_' . $this->id, array( $this, 'inject_enabled_methods' ), 10, 2 );
 	}
 
 	public function init_form_fields() {
@@ -83,7 +83,7 @@ final class Unified extends GatewayBase {
 	}
 
 	public function is_available() {
-		if ( 'single' !== get_option( 'mo_payuni_display_mode', 'multi' ) ) {
+		if ( 'single' !== get_option( 'moksafowo_payuni_display_mode', 'multi' ) ) {
 			return false;
 		}
 		return parent::is_available();

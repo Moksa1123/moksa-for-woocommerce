@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class Helper extends AbstractCredentialHelper {
 
 	protected static function option_prefix(): string {
-		return 'mo_newebpay_shipping';
+		return 'moksafowo_newebpay_shipping';
 	}
 
 	protected static function log_source(): string {
@@ -19,42 +19,42 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		$raw = get_option( 'mo_newebpay_shipping_sandbox_enabled', null );
+		$raw = get_option( 'moksafowo_newebpay_shipping_sandbox_enabled', null );
 		if ( null === $raw ) {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			return (bool) apply_filters( 'mo_newebpay_shipping_sandbox_fallback', false );
+			return (bool) apply_filters( 'moksafowo_newebpay_shipping_sandbox_fallback', false );
 		}
 		return 'yes' === $raw;
 	}
 
 	public static function merchant_id(): string {
-		$key = self::is_sandbox() ? 'mo_newebpay_shipping_sandbox_merchant_id' : 'mo_newebpay_shipping_merchant_id';
+		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_merchant_id' : 'moksafowo_newebpay_shipping_merchant_id';
 		$val = (string) get_option( $key, '' );
 		if ( '' !== $val ) {
 			return $val;
 		}
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		return (string) apply_filters( 'mo_newebpay_shipping_merchant_id_fallback', '' );
+		return (string) apply_filters( 'moksafowo_newebpay_shipping_merchant_id_fallback', '' );
 	}
 
 	public static function hash_key(): string {
-		$key = self::is_sandbox() ? 'mo_newebpay_shipping_sandbox_hash_key' : 'mo_newebpay_shipping_hash_key';
+		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_hash_key' : 'moksafowo_newebpay_shipping_hash_key';
 		$val = (string) get_option( $key, '' );
 		if ( '' !== $val ) {
 			return $val;
 		}
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		return (string) apply_filters( 'mo_newebpay_shipping_hash_key_fallback', '' );
+		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_key_fallback', '' );
 	}
 
 	public static function hash_iv(): string {
-		$key = self::is_sandbox() ? 'mo_newebpay_shipping_sandbox_hash_iv' : 'mo_newebpay_shipping_hash_iv';
+		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_hash_iv' : 'moksafowo_newebpay_shipping_hash_iv';
 		$val = (string) get_option( $key, '' );
 		if ( '' !== $val ) {
 			return $val;
 		}
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		return (string) apply_filters( 'mo_newebpay_shipping_hash_iv_fallback', '' );
+		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_iv_fallback', '' );
 	}
 
 	public static function verify_trade_sha( string $trade_info, string $trade_sha ): bool {
@@ -82,7 +82,7 @@ final class Helper extends AbstractCredentialHelper {
 	
 	public static function parse_order_id( string $merchant_order_no ): int {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$external = apply_filters( 'mo_newebpay_shipping_parse_order_id', null, $merchant_order_no );
+		$external = apply_filters( 'moksafowo_newebpay_shipping_parse_order_id', null, $merchant_order_no );
 		if ( null !== $external ) {
 			return (int) $external;
 		}

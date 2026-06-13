@@ -27,12 +27,12 @@ abstract class AbstractAdminActions {
 
 		if ( 'advanced' === self::get_ui_mode() ) {
 			add_action( 'admin_footer', [ $this, 'inject_advanced_modal_button' ] );
-			add_action( 'wp_ajax_mo_shipping_unprinted_orders_' . $this->provider->provider_slug(), [ $this, 'ajax_get_unprinted_orders' ] );
+			add_action( 'wp_ajax_moksafowo_shipping_unprinted_orders_' . $this->provider->provider_slug(), [ $this, 'ajax_get_unprinted_orders' ] );
 		}
 	}
 
 	public function register_bulk_actions( array $actions ): array {
-		$prefix = 'mo_' . $this->provider->provider_slug() . '_';
+		$prefix = 'moksafowo_' . $this->provider->provider_slug() . '_';
 		foreach ( $this->get_bulk_action_labels() as $key => $label ) {
 			$actions[ $prefix . $key ] = $label;
 		}
@@ -40,7 +40,7 @@ abstract class AbstractAdminActions {
 	}
 
 	public function dispatch_bulk_action( $redirect_to, string $action, array $order_ids ) {
-		$prefix = 'mo_' . $this->provider->provider_slug() . '_';
+		$prefix = 'moksafowo_' . $this->provider->provider_slug() . '_';
 		if ( ! str_starts_with( $action, $prefix ) ) {
 			return $redirect_to;
 		}
@@ -55,9 +55,9 @@ abstract class AbstractAdminActions {
 	public function find_unprinted_orders( ?string $kind = null, ?string $carrier = null ): array {
 		$orders = wc_get_orders( [
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			'limit'      => apply_filters( 'mo_shipping_bulk_query_limit', 100 ),
+			'limit'      => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			'status'     => apply_filters( 'mo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
+			'status'     => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
 			'meta_query' => [
 				[ 'key' => $this->provider->meta_key_trade_no(), 'value' => '', 'compare' => '!=' ],
@@ -87,7 +87,7 @@ abstract class AbstractAdminActions {
 	}
 
 	public function ajax_get_unprinted_orders(): void {
-		check_ajax_referer( 'mo_shipping_bulk_print', 'security' );
+		check_ajax_referer( 'moksafowo_shipping_bulk_print', 'security' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( __( '權限不足', 'mo-ectools' ), 403 );
 		}
@@ -109,11 +109,11 @@ abstract class AbstractAdminActions {
 	}
 
 	public static function get_ui_mode(): string {
-		if ( 'yes' === get_option( 'mo_shipping_bulk_print_mode_advanced', 'no' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_shipping_bulk_print_mode_advanced', 'no' ) ) {
 			return 'advanced';
 		}
 		// 舊 option fallback
-		$legacy = (string) get_option( 'mo_shipping_bulk_print_ui_mode', 'simple' );
+		$legacy = (string) get_option( 'moksafowo_shipping_bulk_print_ui_mode', 'simple' );
 		return 'advanced' === $legacy ? 'advanced' : 'simple';
 	}
 }

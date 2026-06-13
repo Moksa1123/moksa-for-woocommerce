@@ -15,7 +15,7 @@ final class EmailCvsArrived extends AbstractShippingEmail {
 	}
 
 	protected function get_status_slug(): string {
-		return 'mo-cvs-arrived';
+		return 'moksa-cvs-arrived';
 	}
 
 	public function get_default_subject(): string {

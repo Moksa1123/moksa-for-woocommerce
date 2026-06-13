@@ -20,7 +20,7 @@ final class ModuleRegistry {
 		'shopline_payments'  => Modules\ShoplinePayments\Module::class,
 		'ecpay_shipping'     => Modules\EcpayShipping\Module::class,
 		'newebpay_shipping'  => Modules\NewebpayShipping\Module::class,
-		'payuni_shipping'    => Modules\PayuniShipping\Module::class,
+		'moksafowo_payuni_shipping'    => Modules\PayuniShipping\Module::class,
 		'smilepay_shipping'  => Modules\SmilepayShipping\Module::class,
 		'ezpay_invoice'      => Modules\EzpayInvoice\Module::class,
 		'ecpay_invoice'      => Modules\EcpayInvoice\Module::class,
@@ -46,11 +46,11 @@ final class ModuleRegistry {
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		do_action( 'mo_modules_booted', $this->booted );
+		do_action( 'moksafowo_modules_booted', $this->booted );
 	}
 
 	public function is_enabled( string $key ): bool {
-		$option = sprintf( 'mo_%s_enabled', $key );
+		$option = sprintf( 'moksafowo_%s_enabled', $key );
 		return get_option( $option, 'no' ) === 'yes';
 	}
 

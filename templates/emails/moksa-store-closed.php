@@ -1,12 +1,12 @@
 <?php
 /**
- * mo-store-closed HTML email — 門市關轉，催顧客重選。
+ * moksa-store-closed HTML email — 門市關轉，催顧客重選。
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_store_name = (string) $order->get_meta( '_mo_shipping_cvs_store_name' );
+$mo_store_name = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_name' );
 
 do_action( 'woocommerce_email_header', $email_heading, $email );
 ?>

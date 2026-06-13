@@ -24,7 +24,7 @@
 	background:linear-gradient(180deg,#f1f5f9 0%,#e2e8f0 100%);
 }
 /* Chevron 箭頭 — 點 heading 收合 */
-.mowp-section-card > h2 .mo-h2-chevron{
+.mowp-section-card > h2 .moksafowo-h2-chevron{
 	position:absolute;
 	right:20px;
 	top:50%;
@@ -35,18 +35,18 @@
 	margin-top:-3px;
 	transition:transform .2s ease;
 }
-.mowp-section-card.is-collapsed > h2 .mo-h2-chevron{
+.mowp-section-card.is-collapsed > h2 .moksafowo-h2-chevron{
 	transform:translateY(-50%) rotate(-135deg);
 	margin-top:0;
 }
-.mowp-section-card:not(.is-collapsed) > h2 .mo-h2-chevron{
+.mowp-section-card:not(.is-collapsed) > h2 .moksafowo-h2-chevron{
 	transform:translateY(-50%) rotate(45deg);
 	margin-top:-3px;
 }
 .mowp-section-card.is-collapsed > h2{
 	border-bottom:0;
 }
-.mowp-section-card.is-collapsed > h2 .mo-h2-text::after{
+.mowp-section-card.is-collapsed > h2 .moksafowo-h2-text::after{
 	display:none;
 }
 .mowp-section-card.is-collapsed > p,
@@ -55,11 +55,11 @@
 	display:none !important;
 }
 /* heading 文字外包一層 span（由 JS 加），漸層 accent 跟著文字長度延伸 */
-.mowp-section-card > h2 .mo-h2-text{
+.mowp-section-card > h2 .moksafowo-h2-text{
 	position:relative;
 	display:inline-block;
 }
-.mowp-section-card > h2 .mo-h2-text::after{
+.mowp-section-card > h2 .moksafowo-h2-text::after{
 	content:"";
 	position:absolute;
 	left:0;

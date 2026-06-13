@@ -35,19 +35,19 @@ final class Plugin {
 	}
 
 	public static function version(): string {
-		return MOWC_VERSION;
+		return MOKSAFOWO_VERSION;
 	}
 
 	public static function path( string $relative = '' ): string {
-		return MOWC_PLUGIN_DIR . ltrim( $relative, '/' );
+		return MOKSAFOWO_PLUGIN_DIR . ltrim( $relative, '/' );
 	}
 
 	public static function url( string $relative = '' ): string {
-		return MOWC_PLUGIN_URL . ltrim( $relative, '/' );
+		return MOKSAFOWO_PLUGIN_URL . ltrim( $relative, '/' );
 	}
 
 	public static function file(): string {
-		return MOWC_PLUGIN_FILE;
+		return MOKSAFOWO_PLUGIN_FILE;
 	}
 
 	public function boot(): void {
@@ -62,7 +62,7 @@ final class Plugin {
 		}
 
 		add_action( 'woocommerce_init', [ $this, 'on_woocommerce_init' ] );
-		add_filter( 'plugin_action_links_' . MOWC_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ] );
+		add_filter( 'plugin_action_links_' . MOKSAFOWO_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ] );
 		add_filter( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );
 	}
 
@@ -77,7 +77,7 @@ final class Plugin {
 	}
 
 	public function plugin_row_meta( array $links, string $file ): array {
-		if ( MOWC_PLUGIN_BASENAME !== $file ) {
+		if ( MOKSAFOWO_PLUGIN_BASENAME !== $file ) {
 			return $links;
 		}
 		$links[] = sprintf(

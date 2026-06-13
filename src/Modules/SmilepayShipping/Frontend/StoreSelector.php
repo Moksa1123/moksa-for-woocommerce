@@ -20,7 +20,7 @@ final class StoreSelector {
 		self::$booted = true;
 
 		// callback endpoint — SmilePay 選店後 redirect 回此
-		add_action( 'woocommerce_api_smilepay_shipping_emap', [ __CLASS__, 'handle_emap_callback' ] );
+		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_emap', [ __CLASS__, 'handle_emap_callback' ] );
 
 		// 結帳頁 enqueue JS 注入按鈕
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
@@ -44,12 +44,12 @@ final class StoreSelector {
 		if ( ! is_checkout() && ! self::has_checkout_block() ) {
 			return;
 		}
-		$handle  = 'mo-smilepay-shipping-store';
-		$js_path = MOWC_PLUGIN_DIR . 'src/Modules/SmilepayShipping/assets/js/store-selector.js';
-		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
+		$handle  = 'moksafowo-smilepay-shipping-store';
+		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/SmilepayShipping/assets/js/store-selector.js';
+		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
 			$handle,
-			MOWC_PLUGIN_URL . 'src/Modules/SmilepayShipping/assets/js/store-selector.js',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/SmilepayShipping/assets/js/store-selector.js',
 			[ 'jquery' ],
 			$ver,
 			true
@@ -57,16 +57,16 @@ final class StoreSelector {
 
 		// 預先計算 EMAP URL（per shipping method）讓 JS 直接打開
 		$cvs_service_type = Helper::cvs_service_type(); // C2C or B2C
-		$return_url       = home_url( '/wc-api/smilepay_shipping_emap' );
-		$tempvar          = wp_create_nonce( 'mo_smilepay_emap_' . get_current_user_id() );
+		$return_url       = home_url( '/wc-api/moksafowo_smilepay_shipping_emap' );
+		$tempvar          = wp_create_nonce( 'moksafowo_smilepay_emap_' . get_current_user_id() );
 
 		$emap_urls = [
-			'mo_smilepay_shipping_cvs_711'  => ShippingRequest::build_emap_url(
+			'moksafowo_smilepay_shipping_cvs_711'  => ShippingRequest::build_emap_url(
 				'711' . $cvs_service_type,
 				$tempvar,
 				$return_url
 			),
-			'mo_smilepay_shipping_cvs_fami' => ShippingRequest::build_emap_url(
+			'moksafowo_smilepay_shipping_cvs_fami' => ShippingRequest::build_emap_url(
 				'FAMI' . $cvs_service_type,
 				$tempvar,
 				$return_url
@@ -75,12 +75,12 @@ final class StoreSelector {
 
 		// 顯示已選的店（從 session 取）
 		$selected_store = WC()->session ? [
-			'id'      => (string) WC()->session->get( 'mo_smilepay_shipping_store_id', '' ),
-			'name'    => (string) WC()->session->get( 'mo_smilepay_shipping_store_name', '' ),
-			'address' => (string) WC()->session->get( 'mo_smilepay_shipping_store_address', '' ),
+			'id'      => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_id', '' ),
+			'name'    => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_name', '' ),
+			'address' => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_address', '' ),
 		] : [];
 
-		wp_localize_script( $handle, 'mo_smilepay_shipping', [
+		wp_localize_script( $handle, 'moksafowo_smilepay_shipping', [
 			'emap_urls'      => $emap_urls,
 			'cvs_methods'    => array_keys( $emap_urls ),
 			'selected_store' => $selected_store,
@@ -117,9 +117,9 @@ final class StoreSelector {
 		if ( ! WC()->session ) {
 			WC()->initialize_session();
 		}
-		WC()->session->set( 'mo_smilepay_shipping_store_id', $store_id );
-		WC()->session->set( 'mo_smilepay_shipping_store_name', $store_name );
-		WC()->session->set( 'mo_smilepay_shipping_store_address', $store_address );
+		WC()->session->set( 'moksafowo_smilepay_shipping_store_id', $store_id );
+		WC()->session->set( 'moksafowo_smilepay_shipping_store_name', $store_name );
+		WC()->session->set( 'moksafowo_smilepay_shipping_store_address', $store_address );
 
 		Helper::log( 'EMAP callback ok', [ 'store_id' => $store_id, 'store_name' => $store_name ] );
 
@@ -135,7 +135,7 @@ final class StoreSelector {
 		$is_smilepay_cvs = false;
 		foreach ( $order->get_shipping_methods() as $m ) {
 			$mid = (string) $m->get_method_id();
-			if ( str_contains( $mid, 'mo_smilepay_shipping_cvs_' ) ) {
+			if ( str_contains( $mid, 'moksafowo_smilepay_shipping_cvs_' ) ) {
 				$is_smilepay_cvs = true;
 				break;
 			}
@@ -143,9 +143,9 @@ final class StoreSelector {
 		if ( ! $is_smilepay_cvs ) {
 			return;
 		}
-		$store_id   = (string) WC()->session->get( 'mo_smilepay_shipping_store_id', '' );
-		$store_name = (string) WC()->session->get( 'mo_smilepay_shipping_store_name', '' );
-		$store_addr = (string) WC()->session->get( 'mo_smilepay_shipping_store_address', '' );
+		$store_id   = (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_id', '' );
+		$store_name = (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_name', '' );
+		$store_addr = (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_address', '' );
 		if ( '' === $store_id ) {
 			return;
 		}
@@ -154,8 +154,8 @@ final class StoreSelector {
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STORE_ADDR, $store_addr );
 
 		// 清掉 session（避免下一張訂單沿用）
-		WC()->session->__unset( 'mo_smilepay_shipping_store_id' );
-		WC()->session->__unset( 'mo_smilepay_shipping_store_name' );
-		WC()->session->__unset( 'mo_smilepay_shipping_store_address' );
+		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_id' );
+		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_name' );
+		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_address' );
 	}
 }

@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 final class HomeTcat extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
-		$this->id                 = 'mo_ecpay_shipping_home_tcat';
+		$this->id                 = 'moksafowo_ecpay_shipping_home_tcat';
 		$this->method_title       = __( '綠界 — 黑貓宅配', 'mo-ectools' );
 		$this->method_description = __( '綠界黑貓宅急便。', 'mo-ectools' );
 		parent::__construct( $instance_id );

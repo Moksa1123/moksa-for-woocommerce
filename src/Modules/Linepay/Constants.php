@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Constants {
 
 	// data.
-	const ID           = 'linepay-tw';
+	const ID           = 'moksafowo-linepay';
 	const TITLE        = 'LINE Pay Gateway';
 	const DESC         = 'Payments are received through the LINE Pay gateway.';
 	const METHOD_TITLE = 'LINE Pay';
@@ -21,7 +21,7 @@ final class Constants {
 	const URI_CHECK   = '/v3/payments/requests/{transaction_id}/check';
 	const URI_REFUND  = '/v3/payments/{transaction_id}/refund';
 
-	const URI_CALLBACK_HANDLER = '/wc-api/linepay_payment';
+	const URI_CALLBACK_HANDLER = '/wc-api/moksafowo_linepay_payment';
 
 	// host.
 	const HOST_SANDBOX = 'https://sandbox-api-pay.line.me';

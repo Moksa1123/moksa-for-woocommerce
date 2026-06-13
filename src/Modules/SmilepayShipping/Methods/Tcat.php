@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class Tcat extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
-		$this->id                 = 'mo_smilepay_shipping_tcat';
+		$this->id                 = 'moksafowo_smilepay_shipping_tcat';
 		$this->method_title       = __( '速買配 — 黑貓宅配（多溫層）', 'mo-ectools' );
 		$this->method_description = __( 'SmilePay 黑貓宅急便。商品溫層混合（常溫 / 冷藏 / 冷凍）時，後台建單自動拆 N 包送 SmilePay API（Pay_zg 78/79/80），各取獨立物流單號。', 'mo-ectools' );
 		parent::__construct( $instance_id );

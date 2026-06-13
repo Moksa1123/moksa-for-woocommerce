@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Pi extends AbstractPchomepayGateway {
 
-	public const GATEWAY_ID = 'mo_pchomepay_pi';
+	public const GATEWAY_ID = 'moksafowo_pchomepay_pi';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

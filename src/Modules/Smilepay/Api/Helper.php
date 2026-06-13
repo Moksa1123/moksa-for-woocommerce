@@ -20,7 +20,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const SANDBOX_MID        = '1111';
 
 	protected static function option_prefix(): string {
-		return 'mo_smilepay';
+		return 'moksafowo_smilepay';
 	}
 
 	protected static function log_source(): string {
@@ -28,35 +28,35 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_smilepay_sandbox_enabled', 'no' );
+		return 'yes' === get_option( 'moksafowo_smilepay_sandbox_enabled', 'no' );
 	}
 
 	public static function dcvc(): string {
 		if ( self::is_sandbox() ) {
 			return defined( 'MO_SMILEPAY_SANDBOX_DCVC' ) ? (string) MO_SMILEPAY_SANDBOX_DCVC : self::SANDBOX_DCVC;
 		}
-		return (string) get_option( 'mo_smilepay_dcvc', '' );
+		return (string) get_option( 'moksafowo_smilepay_dcvc', '' );
 	}
 
 	public static function rvg2c(): string {
 		if ( self::is_sandbox() ) {
 			return defined( 'MO_SMILEPAY_SANDBOX_RVG2C' ) ? (string) MO_SMILEPAY_SANDBOX_RVG2C : self::SANDBOX_RVG2C;
 		}
-		return (string) get_option( 'mo_smilepay_rvg2c', '' );
+		return (string) get_option( 'moksafowo_smilepay_rvg2c', '' );
 	}
 
 	public static function verify_key(): string {
 		if ( self::is_sandbox() ) {
 			return defined( 'MO_SMILEPAY_SANDBOX_VERIFY_KEY' ) ? (string) MO_SMILEPAY_SANDBOX_VERIFY_KEY : self::SANDBOX_VERIFY_KEY;
 		}
-		return (string) get_option( 'mo_smilepay_verify_key', '' );
+		return (string) get_option( 'moksafowo_smilepay_verify_key', '' );
 	}
 
 	public static function mid(): string {
 		if ( self::is_sandbox() ) {
 			return defined( 'MO_SMILEPAY_SANDBOX_MID' ) ? (string) MO_SMILEPAY_SANDBOX_MID : self::SANDBOX_MID;
 		}
-		return (string) get_option( 'mo_smilepay_mid', '' );
+		return (string) get_option( 'moksafowo_smilepay_mid', '' );
 	}
 
 	public static function has_credentials(): bool {

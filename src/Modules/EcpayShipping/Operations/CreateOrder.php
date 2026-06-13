@@ -324,7 +324,7 @@ final class CreateOrder {
 			'ReceiverCellPhone'    => self::receiver_cellphone( $order ),
 			'ReceiverEmail'        => $order->get_billing_email(),
 			'TradeDesc'            => '',
-			'ServerReplyURL'       => add_query_arg( 'wc-api', 'mo_ecpay_shipping_status', home_url( '/' ) ),
+			'ServerReplyURL'       => add_query_arg( 'wc-api', 'moksafowo_ecpay_shipping_status', home_url( '/' ) ),
 			'ClientReplyURL'       => '',
 			'LogisticsC2CReplyURL' => '',
 			'Remark'               => '',
@@ -495,25 +495,25 @@ final class CreateOrder {
 	}
 
 	private static function sender_name(): string {
-		return mb_substr( (string) get_option( 'mo_ecpay_shipping_sender_name', '' ), 0, 10 );
+		return mb_substr( (string) get_option( 'moksafowo_ecpay_shipping_sender_name', '' ), 0, 10 );
 	}
 
 	private static function sender_phone(): string {
-		return (string) get_option( 'mo_ecpay_shipping_sender_phone', '' );
+		return (string) get_option( 'moksafowo_ecpay_shipping_sender_phone', '' );
 	}
 
 	private static function sender_cellphone(): string {
-		return (string) get_option( 'mo_ecpay_shipping_sender_cellphone', '' );
+		return (string) get_option( 'moksafowo_ecpay_shipping_sender_cellphone', '' );
 	}
 
 	private static function sender_zip(): string {
 		// 簡化：寄件人地址裡如果有 3 碼數字就抽出來，否則空字串。
-		$addr = (string) get_option( 'mo_ecpay_shipping_sender_address', '' );
+		$addr = (string) get_option( 'moksafowo_ecpay_shipping_sender_address', '' );
 		return preg_match( '/(\d{3,5})/', $addr, $m ) ? $m[1] : '';
 	}
 
 	private static function sender_address(): string {
-		return (string) get_option( 'mo_ecpay_shipping_sender_address', '' );
+		return (string) get_option( 'moksafowo_ecpay_shipping_sender_address', '' );
 	}
 
 	private static function receiver_name( \WC_Order $order ): string {
@@ -536,7 +536,7 @@ final class CreateOrder {
 		// 翻 state 英文代碼 → 中文（只 trans 找得到的，找不到沿用原值不會壞既有訂單）
 	static $tw_states = null;
 		if ( null === $tw_states ) {
-			$tw_states = include MOWC_PLUGIN_DIR . 'src/Modules/Address/Data/states-tw.php';
+			$tw_states = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Address/Data/states-tw.php';
 			$tw_states = $tw_states['TW'] ?? [];
 		}
 		if ( '' !== $state && isset( $tw_states[ $state ] ) ) {

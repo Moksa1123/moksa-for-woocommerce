@@ -54,23 +54,23 @@ final class Module extends AbstractGatewayModule {
 	public static function gateway_map(): array {
 		return [
 			Gateways\Unified::GATEWAY_ID     => Gateways\Unified::class,
-			'mo_newebpay_credit'             => Gateways\Credit::class,
-			'mo_newebpay_credit_installment' => Gateways\CreditInstallment::class,
-			'mo_newebpay_atm'                => Gateways\Atm::class,
-			'mo_newebpay_webatm'             => Gateways\Webatm::class,
-			'mo_newebpay_cvs'                => Gateways\Cvs::class,
-			'mo_newebpay_barcode'            => Gateways\Barcode::class,
-			'mo_newebpay_applepay'           => Gateways\ApplePay::class,
-			'mo_newebpay_googlepay'          => Gateways\GooglePay::class,
-			'mo_newebpay_samsungpay'         => Gateways\SamsungPay::class,
-			'mo_newebpay_linepay'            => Gateways\LinePay::class,
-			'mo_newebpay_esunwallet'         => Gateways\EsunWallet::class,
-			'mo_newebpay_taiwanpay'          => Gateways\TaiwanPay::class,
-			'mo_newebpay_twqr'               => Gateways\Twqr::class,
-			'mo_newebpay_alipay'             => Gateways\Alipay::class,
-			'mo_newebpay_wechatpay'          => Gateways\WeChatPay::class,
-			'mo_newebpay_aftee'              => Gateways\Aftee::class,
-			'mo_newebpay_unionpay'           => Gateways\UnionPay::class,
+			'moksafowo_newebpay_credit'             => Gateways\Credit::class,
+			'moksafowo_newebpay_credit_installment' => Gateways\CreditInstallment::class,
+			'moksafowo_newebpay_atm'                => Gateways\Atm::class,
+			'moksafowo_newebpay_webatm'             => Gateways\Webatm::class,
+			'moksafowo_newebpay_cvs'                => Gateways\Cvs::class,
+			'moksafowo_newebpay_barcode'            => Gateways\Barcode::class,
+			'moksafowo_newebpay_applepay'           => Gateways\ApplePay::class,
+			'moksafowo_newebpay_googlepay'          => Gateways\GooglePay::class,
+			'moksafowo_newebpay_samsungpay'         => Gateways\SamsungPay::class,
+			'moksafowo_newebpay_linepay'            => Gateways\LinePay::class,
+			'moksafowo_newebpay_esunwallet'         => Gateways\EsunWallet::class,
+			'moksafowo_newebpay_taiwanpay'          => Gateways\TaiwanPay::class,
+			'moksafowo_newebpay_twqr'               => Gateways\Twqr::class,
+			'moksafowo_newebpay_alipay'             => Gateways\Alipay::class,
+			'moksafowo_newebpay_wechatpay'          => Gateways\WeChatPay::class,
+			'moksafowo_newebpay_aftee'              => Gateways\Aftee::class,
+			'moksafowo_newebpay_unionpay'           => Gateways\UnionPay::class,
 		];
 	}
 
@@ -83,7 +83,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_mo_newebpay_payment', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_newebpay_payment', [ Api\IpnHandler::class, 'handle' ] );
 	}
 
 	protected function boot_extras(): void {
@@ -94,11 +94,11 @@ final class Module extends AbstractGatewayModule {
 
 		// NewebpayShipping 共用商家憑證 fallback — 物流模組沒設 shipping-specific 憑證時走這條。
 		// 細節見 NewebpayShipping\Api\Helper class docblock。
-		add_filter( 'mo_newebpay_shipping_sandbox_fallback', static fn() => Api\Helper::is_sandbox() );
-		add_filter( 'mo_newebpay_shipping_merchant_id_fallback', static fn() => Api\Helper::merchant_id() );
-		add_filter( 'mo_newebpay_shipping_hash_key_fallback', static fn() => Api\Helper::hash_key() );
-		add_filter( 'mo_newebpay_shipping_hash_iv_fallback', static fn() => Api\Helper::hash_iv() );
-		add_filter( 'mo_newebpay_shipping_parse_order_id', [ Api\Helper::class, 'parse_order_id' ], 10, 2 );
+		add_filter( 'moksafowo_newebpay_shipping_sandbox_fallback', static fn() => Api\Helper::is_sandbox() );
+		add_filter( 'moksafowo_newebpay_shipping_merchant_id_fallback', static fn() => Api\Helper::merchant_id() );
+		add_filter( 'moksafowo_newebpay_shipping_hash_key_fallback', static fn() => Api\Helper::hash_key() );
+		add_filter( 'moksafowo_newebpay_shipping_hash_iv_fallback', static fn() => Api\Helper::hash_iv() );
+		add_filter( 'moksafowo_newebpay_shipping_parse_order_id', [ Api\Helper::class, 'parse_order_id' ], 10, 2 );
 	}
 
 	public static function rebrand_legacy_payment_title( string $title, $order ): string {

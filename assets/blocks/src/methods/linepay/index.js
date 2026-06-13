@@ -11,7 +11,7 @@ import { getSetting } from '@woocommerce/settings';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
-const PAYMENT_METHOD_ID = 'mo_linepay';
+const PAYMENT_METHOD_ID = 'moksafowo_linepay';
 
 const settings = getSetting( `${ PAYMENT_METHOD_ID }_data`, {} );
 const label = decodeEntities( settings.title || __( 'LINE Pay', 'mowp' ) );

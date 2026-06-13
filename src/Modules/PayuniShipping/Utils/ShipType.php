@@ -35,25 +35,25 @@ class ShipType {
 	public static function get_ship_type( $method_id ) {
 
 		switch ( $method_id ) {
-			case 'mo_payuni_shipping_711_b2c_normal':
+			case 'moksafowo_payuni_shipping_711_b2c_normal':
 				return self::SEVEN;
 				break;
-			case 'mo_payuni_shipping_711_b2c_frozen':
+			case 'moksafowo_payuni_shipping_711_b2c_frozen':
 				return self::SEVEN;
 				break;
-			case 'mo_payuni_shipping_711_c2c_normal':
+			case 'moksafowo_payuni_shipping_711_c2c_normal':
 				return self::SEVEN;
 				break;
-			case 'mo_payuni_shipping_711_c2c_frozen':
+			case 'moksafowo_payuni_shipping_711_c2c_frozen':
 				return self::SEVEN;
 				break;
-			case 'mo_payuni_shipping_tcat_normal':
+			case 'moksafowo_payuni_shipping_tcat_normal':
 				return self::TCAT;
 				break;
-			case 'mo_payuni_shipping_tcat_frozen':
+			case 'moksafowo_payuni_shipping_tcat_frozen':
 				return self::TCAT;
 				break;
-			case 'mo_payuni_shipping_tcat_refrigerated':
+			case 'moksafowo_payuni_shipping_tcat_refrigerated':
 				return self::TCAT;
 				break;
 			default:

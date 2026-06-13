@@ -48,9 +48,9 @@ final class Module extends AbstractModule {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
 		// IPN 接 ECPay 物流貨態回傳
-		add_action( 'woocommerce_api_mo_ecpay_shipping_status', [ Webhook\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_ecpay_shipping_status', [ Webhook\IpnHandler::class, 'handle' ] );
 
-		// StatusMapper — listen mo_ecpay_shipping_status_received action
+		// StatusMapper — listen moksafowo_ecpay_shipping_status_received action
 		Webhook\StatusMapper::init();
 
 		// 結帳 CVS 選店流程
@@ -72,7 +72,7 @@ final class Module extends AbstractModule {
 		}
 
 		// 註冊批次列印能力（CVS + HOME 各一條）
-		add_filter( 'mo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 
 		// Email 貨態追蹤 — 自己 register filter callback 提供 entries（Shipping core 解耦）
 		Emails\EmailTrackingProvider::init();
@@ -80,13 +80,13 @@ final class Module extends AbstractModule {
 
 	public static function register_batch_print( array $providers ): array {
 		$titles = [
-			'mo_ecpay_shipping_cvs_711'            => __( '綠界 7-11 取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_711_b2c_freeze' => __( '綠界 7-11 B2C 冷凍', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_family'         => __( '綠界 全家取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_hilife'         => __( '綠界 萊爾富取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_cvs_okmart'         => __( '綠界 OK 取貨', 'mo-ectools' ),
-			'mo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'mo-ectools' ),
-			'mo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_711'            => __( '綠界 7-11 取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( '綠界 7-11 B2C 冷凍', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_family'         => __( '綠界 全家取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_hilife'         => __( '綠界 萊爾富取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_okmart'         => __( '綠界 OK 取貨', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'mo-ectools' ),
 		];
 		$cvs  = [];
 		$home = [];
@@ -156,13 +156,13 @@ final class Module extends AbstractModule {
 	public static function method_map(): array {
 		// 注意：嘉里大榮 (ECAN) 已被 ECPay 於 2022/06/30 終止合作，永不註冊。
 		return [
-			'mo_ecpay_shipping_cvs_711'            => Methods\Cvs711::class,
-			'mo_ecpay_shipping_cvs_711_b2c_freeze' => Methods\Cvs711B2CFreeze::class,
-			'mo_ecpay_shipping_cvs_family'         => Methods\CvsFamily::class,
-			'mo_ecpay_shipping_cvs_hilife'         => Methods\CvsHilife::class,
-			'mo_ecpay_shipping_cvs_okmart'         => Methods\CvsOkmart::class,
-			'mo_ecpay_shipping_home_tcat'          => Methods\HomeTcat::class,
-			'mo_ecpay_shipping_home_post'          => Methods\HomePost::class,
+			'moksafowo_ecpay_shipping_cvs_711'            => Methods\Cvs711::class,
+			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => Methods\Cvs711B2CFreeze::class,
+			'moksafowo_ecpay_shipping_cvs_family'         => Methods\CvsFamily::class,
+			'moksafowo_ecpay_shipping_cvs_hilife'         => Methods\CvsHilife::class,
+			'moksafowo_ecpay_shipping_cvs_okmart'         => Methods\CvsOkmart::class,
+			'moksafowo_ecpay_shipping_home_tcat'          => Methods\HomeTcat::class,
+			'moksafowo_ecpay_shipping_home_post'          => Methods\HomePost::class,
 		];
 	}
 

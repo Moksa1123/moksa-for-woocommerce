@@ -13,6 +13,8 @@ use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ServiceType;
 use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
 use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
 
+use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+
 defined( 'ABSPATH' ) || exit;
 
 class StoreSelector {
@@ -28,8 +30,8 @@ class StoreSelector {
 
 		// Guest-checkout flow needs nopriv. Each handler guards itself with the
 		// `payuni_store_search` nonce + WC session binding (see ajax_open_store_map).
-		add_action( 'wp_ajax_payuni_open_store_map', array( __CLASS__, 'ajax_open_store_map' ) );
-		add_action( 'wp_ajax_nopriv_payuni_open_store_map', array( __CLASS__, 'ajax_open_store_map' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_open_store_map', array( __CLASS__, 'ajax_open_store_map' ) );
+		add_action( 'wp_ajax_nopriv_moksafowo_payuni_open_store_map', array( __CLASS__, 'ajax_open_store_map' ) );
 
 		add_action( 'woocommerce_checkout_create_order', array( __CLASS__, 'save_store_selection' ), 10, 2 );
 
@@ -50,8 +52,8 @@ class StoreSelector {
 			2
 		);
 
-		add_action( 'wp_ajax_payuni_get_store_data', array( __CLASS__, 'ajax_get_store_data' ) );
-		add_action( 'wp_ajax_nopriv_payuni_get_store_data', array( __CLASS__, 'ajax_get_store_data' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_get_store_data', array( __CLASS__, 'ajax_get_store_data' ) );
+		add_action( 'wp_ajax_nopriv_moksafowo_payuni_get_store_data', array( __CLASS__, 'ajax_get_store_data' ) );
 
 		// Token-based fallback for the cross-site cookie problem: PAYUNi
 		// calls wc-api/payuni_store_callback from a cross-site POST that
@@ -60,14 +62,14 @@ class StoreSelector {
 		// the visitor never sees again. We persist the result in a 30-min
 		// transient keyed by a random token, and Block JS resolves it on
 		// the way back via this endpoint.
-		add_action( 'wp_ajax_payuni_resolve_store_token', array( __CLASS__, 'ajax_resolve_store_token' ) );
-		add_action( 'wp_ajax_nopriv_payuni_resolve_store_token', array( __CLASS__, 'ajax_resolve_store_token' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_resolve_store_token', array( __CLASS__, 'ajax_resolve_store_token' ) );
+		add_action( 'wp_ajax_nopriv_moksafowo_payuni_resolve_store_token', array( __CLASS__, 'ajax_resolve_store_token' ) );
 
-		add_action( 'wp_ajax_payuni_clear_store_data', array( __CLASS__, 'ajax_clear_store_data' ) );
-		add_action( 'wp_ajax_nopriv_payuni_clear_store_data', array( __CLASS__, 'ajax_clear_store_data' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_clear_store_data', array( __CLASS__, 'ajax_clear_store_data' ) );
+		add_action( 'wp_ajax_nopriv_moksafowo_payuni_clear_store_data', array( __CLASS__, 'ajax_clear_store_data' ) );
 
-		add_action( 'woocommerce_api_payuni_store_callback', array( __CLASS__, 'handle_store_map_return' ) );
-		add_action( 'woocommerce_api_payuni_admin_store_callback', array( __CLASS__, 'handle_admin_store_map_return' ) );
+		add_action( 'woocommerce_api_moksafowo_payuni_store_callback', array( __CLASS__, 'handle_store_map_return' ) );
+		add_action( 'woocommerce_api_moksafowo_payuni_admin_store_callback', array( __CLASS__, 'handle_admin_store_map_return' ) );
 
 		add_filter( 'woocommerce_update_order_review_fragments', array( __CLASS__, 'add_store_data_fragment' ) );
 
@@ -96,7 +98,7 @@ class StoreSelector {
 	}
 
 	public static function clear_addresses_for_cvs_order( \WC_Order $order, array $data ): void {
-		if ( get_option( 'mo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
+		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
 			return;
 		}
 		// 從 $order 上的 shipping methods 反推是不是 CVS 訂單
@@ -146,7 +148,7 @@ class StoreSelector {
 		$shipping_method = $chosen[0] ?? '';
 		$method_id       = strpos( $shipping_method, ':' ) !== false ? explode( ':', $shipping_method )[0] : $shipping_method;
 		$is_cvs          = $method_id !== '' && PayuniShipping::needs_cvs( $method_id );
-		$hide_billing    = get_option( 'mo_payuni_shipping_hide_billing_address_fields', 'no' ) === 'yes';
+		$hide_billing    = get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) === 'yes';
 
 		// CVS + 隱藏設定開啟：拒 autofill（returning customer 的 saved profile 不灌進隱藏欄位）
 		if ( $is_cvs && $hide_billing ) {
@@ -181,30 +183,30 @@ class StoreSelector {
 			return;
 		}
 
-		wp_enqueue_script( 'mo-payuni-store-selector', ( MOWC_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/store-selector.js', array( 'jquery' ), MOWC_VERSION, true );
-		wp_enqueue_style( 'mo-payuni-store-selector', ( MOWC_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/css/store-selector.css', array(), MOWC_VERSION );
+		wp_enqueue_script( 'moksafowo-payuni-store-selector', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/store-selector.js', array( 'jquery' ), MOKSAFOWO_VERSION, true );
+		wp_enqueue_style( 'moksafowo-payuni-store-selector', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/css/store-selector.css', array(), MOKSAFOWO_VERSION );
 
 		// Block checkout integration — runs only when the page actually hosts
 		// the WC Checkout Block (Classic checkout already works via the
 		// `woocommerce_review_order_after_shipping` hook).
 		if ( $post && has_block( 'woocommerce/checkout', $post ) ) {
 			// filemtime 當版號 — JS 改動每次自動 cache-bust，不靠 plugin VERSION
-			$path    = MOWC_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/block-checkout-store.js';
-			$version = file_exists( $path ) ? (string) filemtime( $path ) : MOWC_VERSION;
+			$path    = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/block-checkout-store.js';
+			$version = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
 			wp_enqueue_script(
-				'mo-payuni-block-checkout-store',
-				( MOWC_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/block-checkout-store.js',
+				'moksafowo-payuni-block-checkout-store',
+				( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/block-checkout-store.js',
 				array(),
 				$version,
 				true
 			);
 			wp_localize_script(
-				'mo-payuni-block-checkout-store',
-				'mo_payuni_block',
+				'moksafowo-payuni-block-checkout-store',
+				'moksafowo_payuni_block',
 				array(
 					'ajax_url'          => admin_url( 'admin-ajax.php' ),
-					'search_nonce'      => wp_create_nonce( 'payuni_store_search' ),
-					'cvs_method_prefix' => 'mo_payuni_shipping_711',
+					'search_nonce'      => wp_create_nonce( 'moksafowo_payuni_store_search' ),
+					'cvs_method_prefix' => 'moksafowo_payuni_shipping_711',
 					'i18n'              => array(
 						'select'         => __( '選擇門市', 'mo-ectools' ),
 						'change'         => __( '更換門市', 'mo-ectools' ),
@@ -223,30 +225,30 @@ class StoreSelector {
 		// changes (CVS pickup options can be COD-only). Block checkout
 		// handles this itself.
 		wp_add_inline_script(
-			'mo-payuni-store-selector',
+			'moksafowo-payuni-store-selector',
 			<<<'JS'
 jQuery(function($){$('form.checkout').on('change','input[name="payment_method"]',function(){$(document.body).trigger('update_checkout');});});
 JS
 		);
 
 		// Enqueue the save-fields script for form preservation
-		wp_enqueue_script( 'mo-payuni-save-fields', ( MOWC_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/save-fields.js', array( 'jquery' ), MOWC_VERSION, true );
+		wp_enqueue_script( 'moksafowo-payuni-save-fields', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/save-fields.js', array( 'jquery' ), MOKSAFOWO_VERSION, true );
 
 		// Get stored store data from session
 		$stored_store_data = null;
 		if ( WC()->session ) {
-			$stored_store_data = WC()->session->get( 'payuni_selected_store_data', null );	
+			$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', null );	
 		} 
 
 		wp_localize_script(
-			'mo-payuni-store-selector',
-			'mo_payuni_store_selector',
+			'moksafowo-payuni-store-selector',
+			'moksafowo_payuni_store_selector',
 			array(
 				'ajax_url'                        => admin_url( 'admin-ajax.php' ),
-				'nonce'                           => wp_create_nonce( 'payuni_store_search' ),
+				'nonce'                           => wp_create_nonce( 'moksafowo_payuni_store_search' ),
 				'return_url'                      => home_url( '/?payuni_store_return=1' ),
 				'stored_store_data'               => $stored_store_data,
-				'hide_billing_address_fields'     => get_option( 'mo_payuni_shipping_hide_billing_address_fields', 'no' ) === 'yes',
+				'hide_billing_address_fields'     => get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) === 'yes',
 				'labels'                          => array(
 					'select_store'        => __( '選擇門市', 'mo-ectools' ),
 					'change_store'        => __( '更換門市', 'mo-ectools' ),
@@ -260,7 +262,7 @@ JS
 	}
 
 	public static function ajax_open_store_map() {
-		check_ajax_referer( 'payuni_store_search', 'nonce' );
+		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 
 		$shipping_method = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : '';
 
@@ -280,17 +282,17 @@ JS
 		}
 
 		// Whitelist must be CVS provider only.
-		if ( empty( $method_id ) || strpos( $method_id, 'mo_payuni_shipping_711' ) === false ) {
+		if ( empty( $method_id ) || strpos( $method_id, 'moksafowo_payuni_shipping_711' ) === false ) {
 			wp_send_json_error( array( 'message' => __( '請選擇超商取貨運送方式', 'mo-ectools' ) ) );
 		}
 
 		// Issue a one-shot token. Persist a placeholder so the callback can
 		// distinguish "valid open_store_map issued this token" from "random
-		// `?mo_token=` injection". 30-minute TTL is plenty for the user to
+		// `?moksafowo_token=` injection". 30-minute TTL is plenty for the user to
 		// pick a store at PAYUNi.
 		$token = wp_generate_password( 24, false, false );
 		set_transient( 'mowp_payuni_store_' . $token, array( 'pending' => true ), 30 * MINUTE_IN_SECONDS );
-		$callback_url = add_query_arg( 'mo_token', $token, WC()->api_request_url( 'payuni_store_callback' ) );
+		$callback_url = add_query_arg( 'moksafowo_token', $token, WC()->api_request_url( 'moksafowo_payuni_store_callback' ) );
 
 		// 準備 API 參數
 		$encrypt_info = array(
@@ -361,12 +363,12 @@ JS
 		// brand new (empty) session that the visitor never sees again. The
 		// transient is keyed by URL token instead, so JS on the way back can
 		// fetch by token regardless of which session ID applies.
-		$incoming_token = isset( $_GET['mo_token'] ) ? sanitize_key( wp_unslash( $_GET['mo_token'] ) ) : '';
+		$incoming_token = isset( $_GET['moksafowo_token'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_token'] ) ) : '';
 		if ( strlen( $incoming_token ) >= 16 && get_transient( 'mowp_payuni_store_' . $incoming_token ) !== false ) {
 			set_transient( 'mowp_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
 			PayuniShipping::log( 'Store data saved to transient; token=' . substr( $incoming_token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
 		} else {
-			PayuniShipping::log( 'Store callback missing/invalid mo_token (' . $incoming_token . ') — falling back to session only' );
+			PayuniShipping::log( 'Store callback missing/invalid moksafowo_token (' . $incoming_token . ') — falling back to session only' );
 		}
 
 		// SECONDARY persistence: still write to session as best-effort. When
@@ -375,7 +377,7 @@ JS
 		// fallback path keeps working without a JS resolve step.
 		$cid_before = WC()->session ? WC()->session->get_customer_id() : '(no session)';
 		if ( WC()->session ) {
-			WC()->session->set( 'payuni_selected_store_data', $store_data );
+			WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
 		}
 		PayuniShipping::log( 'Store data saved to session (best-effort); customer_id=' . $cid_before );
 
@@ -384,41 +386,30 @@ JS
 		// regardless of which session the visitor's browser is now using.
 		$checkout_url = wc_get_checkout_url();
 		if ( $incoming_token !== '' ) {
-			$checkout_url = add_query_arg( 'mo_store', $incoming_token, $checkout_url );
+			$checkout_url = add_query_arg( 'moksafowo_store', $incoming_token, $checkout_url );
 		}
 		
-		// 建立自動提交表單（使用 POST 方式，類似 TCat）
-		$html  = '<!doctype html><html ' . get_language_attributes( 'html' ) . '>';
-		$html .= '<head><meta charset="' . get_bloginfo( 'charset', 'display' ) . '">';
-		$html .= '<title>' . __( '正在返回結帳頁面...', 'mo-ectools' ) . '</title>';
-		$html .= '<style>body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f0f0f0; }</style>';
-		$html .= '</head>';
-		$html .= '<body>';
-		$html .= '<div style="max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">';
-		$html .= '<h3 style="color: #333; margin-bottom: 20px;">' . __( '門市選擇完成', 'mo-ectools' ) . '</h3>';
-		$html .= '<p style="color: #666; margin-bottom: 10px;">選擇的門市：<strong>' . esc_html( $store_data['name'] ) . '</strong></p>';
-		$html .= '<p style="color: #666; margin-bottom: 20px;">門市地址：' . esc_html( $store_data['address'] ) . '</p>';
-		$html .= '<p style="color: #888; font-size: 14px;">正在返回結帳頁面...</p>';
-		$html .= '</div>';
-		
-		$html .= '<form method="post" id="payuni-store-redirect" action="' . esc_url( $checkout_url ) . '">';
-		$html .= '<input type="hidden" name="payuni_selected_store_id" value="' . esc_attr( $store_data['id'] ) . '">';
-		$html .= '<input type="hidden" name="payuni_selected_store_name" value="' . esc_attr( $store_data['name'] ) . '">';
-		$html .= '<input type="hidden" name="payuni_selected_store_address" value="' . esc_attr( $store_data['address'] ) . '">';
-		$html .= '<input type="hidden" name="payuni_selected_store_data" value="' . esc_attr( wp_json_encode( $store_data ) ) . '">';
-		$html .= '</form>';
-		$html .= '<script>setTimeout(function(){document.getElementById("payuni-store-redirect").submit();},1500);</script>';
-		$html .= '</body></html>';
+		// 自動提交表單把門市資料 POST 回結帳頁（帶 restore nonce）
+		$forms_html = '<form method="post" id="moksafowo-payuni-store-redirect" action="' . esc_url( $checkout_url ) . '">'
+			. '<input type="hidden" name="moksafowo_payuni_selected_store_id" value="' . esc_attr( $store_data['id'] ) . '">'
+			. '<input type="hidden" name="moksafowo_payuni_selected_store_name" value="' . esc_attr( $store_data['name'] ) . '">'
+			. '<input type="hidden" name="moksafowo_payuni_selected_store_address" value="' . esc_attr( $store_data['address'] ) . '">'
+			. '<input type="hidden" name="moksafowo_payuni_selected_store_data" value="' . esc_attr( wp_json_encode( $store_data ) ) . '">'
+			. '<input type="hidden" name="moksafowo_payuni_store_nonce" value="' . esc_attr( wp_create_nonce( 'moksafowo_payuni_restore_store' ) ) . '">'
+			. '</form>';
 
-		echo wp_kses(
-			$html,
+		Interstitial::render(
+			__( '正在返回結帳頁面...', 'mo-ectools' ),
+			__( '門市選擇完成', 'mo-ectools' ),
 			[
-				'!doctype' => [], 'html' => [ 'lang' => true ], 'head' => [], 'meta' => [ 'charset' => true ], 'title' => [],
-				'style' => [], 'body' => [], 'div' => [ 'style' => true ], 'h3' => [ 'style' => true ], 'p' => [ 'style' => true ], 'strong' => [],
-				'form' => [ 'method' => true, 'id' => true, 'action' => true ],
-				'input' => [ 'type' => true, 'name' => true, 'value' => true ],
-				'script' => [],
-			]
+				/* translators: %s: store name */
+				sprintf( __( '選擇的門市：%s', 'mo-ectools' ), '<strong>' . esc_html( $store_data['name'] ) . '</strong>' ),
+				/* translators: %s: store address */
+				sprintf( __( '門市地址：%s', 'mo-ectools' ), esc_html( $store_data['address'] ) ),
+				__( '正在返回結帳頁面...', 'mo-ectools' ),
+			],
+			$forms_html,
+			'setTimeout(function(){document.getElementById("moksafowo-payuni-store-redirect").submit();},1500);'
 		);
 		exit;
 	}
@@ -429,7 +420,7 @@ JS
 		}
 		$nonce = isset( $_POST['_wpnonce'] ) ? sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ) : '';
 		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
-		if ( ! $order_id || ! wp_verify_nonce( $nonce, 'payuni_admin_store_' . $order_id ) ) {
+		if ( ! $order_id || ! wp_verify_nonce( $nonce, 'moksafowo_payuni_admin_store_' . $order_id ) ) {
 			wp_die( esc_html__( 'Invalid security token.', 'mo-ectools' ), 403 );
 		}
 
@@ -469,9 +460,9 @@ JS
 	public static function ajax_get_store_data() {
 		$cid = WC()->session ? WC()->session->get_customer_id() : '(no session)';
 		PayuniShipping::log( 'ajax_get_store_data called; customer_id=' . $cid . '; nonce=' . ( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : 'missing' ) );
-		check_ajax_referer( 'payuni_store_search', 'nonce' );
+		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 
-		$store_data = WC()->session ? WC()->session->get( 'payuni_selected_store_data', null ) : null;
+		$store_data = WC()->session ? WC()->session->get( 'moksafowo_payuni_selected_store_data', null ) : null;
 		PayuniShipping::log( 'ajax_get_store_data result: ' . wc_print_r( $store_data, true ) );
 
 		if ( $store_data ) {
@@ -482,7 +473,7 @@ JS
 	}
 
 	public static function ajax_resolve_store_token() {
-		check_ajax_referer( 'payuni_store_search', 'nonce' );
+		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 		$token = isset( $_POST['token'] ) ? sanitize_key( wp_unslash( $_POST['token'] ) ) : '';
 		if ( strlen( $token ) < 16 ) {
 			wp_send_json_error( array( 'message' => '無效的 token' ), 400 );
@@ -497,7 +488,7 @@ JS
 		// Mirror into the visitor's actual session so order-create flow picks
 		// it up, and delete the transient (one-shot semantics).
 		if ( WC()->session ) {
-			WC()->session->set( 'payuni_selected_store_data', $store_data );
+			WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
 		}
 		delete_transient( 'mowp_payuni_store_' . $token );
 
@@ -505,9 +496,9 @@ JS
 	}
 
 	public static function ajax_clear_store_data() {
-		check_ajax_referer( 'payuni_store_search', 'nonce' );
+		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 
-		WC()->session->set( 'payuni_selected_store_data', null );
+		WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
 
 		wp_send_json_success( array( 'message' => '門市資料已清除' ) );
 	}
@@ -528,7 +519,7 @@ JS
 		
 		PayuniShipping::log( 'Shipping method ID: ' . $shipping_method_id );
 		// 如果不是超商取貨，就不需要處理門市資料
-		if ( strpos( $shipping_method_id, 'mo_payuni_shipping_711' ) === false ) {
+		if ( strpos( $shipping_method_id, 'moksafowo_payuni_shipping_711' ) === false ) {
 			PayuniShipping::log( 'Not a CVS shipping method, skipping store data save' );
 			return;
 		}
@@ -578,13 +569,13 @@ JS
 		PayuniShipping::log( 'All POST data keys: ' . implode( ', ', array_keys( $_POST ) ) );
 		
 		// 首先從 POST 取得資料
-		$selected_store_id   = isset( $_POST['payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['payuni_selected_store_id'] ) ) : '';
-		$selected_store_data = isset( $_POST['payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['payuni_selected_store_data'] ) ) : '';
+		$selected_store_id   = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
+		$selected_store_data = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
 
 		// 如果沒有 POST 資料，嘗試從 session 取得並進行安全檢查
 		if ( ( empty( $selected_store_id ) || empty( $selected_store_data ) ) && WC()->session ) {
 			try {
-				$stored_data = WC()->session->get( 'payuni_selected_store_data', null );
+				$stored_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', null );
 				if ( $stored_data && is_array( $stored_data ) ) {
 					$selected_store_id = $stored_data['id'] ?? '';
 					$selected_store_data = wp_json_encode( $stored_data );
@@ -637,7 +628,7 @@ JS
 		$order->update_meta_data( OrderMeta::StoreName, $store_data['name'] );
 		$order->update_meta_data( OrderMeta::StoreAddr, $store_data['address'] );
 
-		// 寫入 canonical _mo_shipping_cvs_* meta（CLAUDE.md §3.5 要求 — 跨 provider 共用 key）
+		// 寫入 canonical _moksafowo_shipping_cvs_* meta（CLAUDE.md §3.5 要求 — 跨 provider 共用 key）
 		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_ID, (string) $store_data['id'] );
 		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_NAME, (string) $store_data['name'] );
 		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_ADDRESS, (string) $store_data['address'] );
@@ -649,21 +640,21 @@ JS
 		
 		// 清除 session 中的門市資料
 		if ( WC()->session ) {
-			WC()->session->set( 'payuni_selected_store_data', null );
+			WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		do_action( 'mo_payuni_shipping_save_cvs_order_meta', $order, $data );
+		do_action( 'moksafowo_payuni_shipping_save_cvs_order_meta', $order, $data );
 	}
 
 	public static function add_store_data_fragment( $fragments ) {
 		$stored_store_data = null;
 		if ( WC()->session ) {
-			$stored_store_data = WC()->session->get( 'payuni_selected_store_data', null );
+			$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', null );
 		}
 		
 		if ( $stored_store_data ) {
-			$fragments['payuni_stored_data'] = $stored_store_data;
+			$fragments['moksafowo_payuni_stored_data'] = $stored_store_data;
 			PayuniShipping::log( 'PAYUNi Store Selector: Adding store data to fragments: ' . wc_print_r( $stored_store_data, true ) );
 		}
 		
@@ -761,7 +752,7 @@ JS
 
 		$clean = array();
 		foreach ( $data['shipping_method'] as $package_idx => $method ) {
-			// shipping method ids are word chars + colon (e.g. "mo_payuni_shipping_711_b2c_normal:3").
+			// shipping method ids are word chars + colon (e.g. "moksafowo_payuni_shipping_711_b2c_normal:3").
 			$method = (string) $method;
 			if ( '' === $method || ! preg_match( '/^[A-Za-z0-9_:\\-]+$/', $method ) ) {
 				continue;
@@ -796,23 +787,23 @@ JS
 		$stored_store_data = self::restore_store_data_from_post();
 		
 		// 獲取已選擇的門市資料
-		$stored_store_data = WC()->session->get( 'payuni_selected_store_data', array() );
+		$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 
 		?>
-		<tr class="payuni-store-selector-row payuni-layout-<?php echo esc_attr( PayuniShipping::$cvs_selector_layout ); ?>">
+		<tr class="moksafowo-payuni-store-selector-row moksafowo-payuni-layout-<?php echo esc_attr( PayuniShipping::$cvs_selector_layout ); ?>">
 			<?php if ( PayuniShipping::$cvs_selector_layout === 'two_column' ) : ?>
-				<th class="payuni-store-selector-label">
+				<th class="moksafowo-payuni-store-selector-label">
 					<?php esc_html_e( '超商門市', 'mo-ectools' ); ?>
 				</th>
-				<td class="payuni-store-selector-content">
-					<div class="payuni-store-selector">
+				<td class="moksafowo-payuni-store-selector-content">
+					<div class="moksafowo-payuni-store-selector">
 						<?php self::render_store_selector_content( $stored_store_data ); ?>
 					</div>
 				</td>
 			<?php else : ?>
 				<td colspan="2">
-					<div class="payuni-select-store-heading"><?php esc_html_e( '超商門市', 'mo-ectools' ); ?></div>
-					<div class="payuni-store-selector">
+					<div class="moksafowo-payuni-select-store-heading"><?php esc_html_e( '超商門市', 'mo-ectools' ); ?></div>
+					<div class="moksafowo-payuni-store-selector">
 						<?php self::render_store_selector_content( $stored_store_data ); ?>
 					</div>
 				</td>
@@ -825,14 +816,14 @@ JS
 		// 如果 Session 沒有資料，嘗試從 POST 恢復
 		if ( empty( $stored_store_data ) ) {
 			self::restore_store_data_from_post();
-			$stored_store_data = WC()->session->get( 'payuni_selected_store_data', array() );
+			$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 		}
 		
 		// Log for debugging
 		PayuniShipping::log( 'render_store_selector_content - stored_store_data: ' . wc_print_r( $stored_store_data, true ) );
 		
 		if ( ! empty( $stored_store_data ) && is_array( $stored_store_data ) ) : ?>
-			<div class="payuni-selected-store">
+			<div class="moksafowo-payuni-selected-store">
 				<div class="store-info">
 					<div class="store-name"><?php echo esc_html( $stored_store_data['name'] ?? '' ); ?></div>
 					<div class="store-address"><?php echo esc_html( $stored_store_data['address'] ?? '' ); ?></div>
@@ -844,31 +835,51 @@ JS
 						<?php endif; ?>
 					</div>
 				</div>
-				<button type="button" class="payuni-store-map-btn button"><?php esc_html_e( '更換門市', 'mo-ectools' ); ?></button>
+				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( '更換門市', 'mo-ectools' ); ?></button>
 			</div>
 		<?php else : ?>
-			<div class="payuni-no-store">
+			<div class="moksafowo-payuni-no-store">
 				<p style="margin-bottom: 10px; color: #856404;"><?php esc_html_e( '尚未選擇取貨門市', 'mo-ectools' ); ?></p>
-				<button type="button" class="payuni-store-map-btn button"><?php esc_html_e( '選擇門市', 'mo-ectools' ); ?></button>
+				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( '選擇門市', 'mo-ectools' ); ?></button>
 			</div>
 		<?php endif;
 	}
 	
-	private static function restore_store_data_from_post() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- External store callback POST; hash verified inside this method.
+	private static function verify_restore_nonce(): bool {
+		$pairs = array(
+			'moksafowo_payuni_store_nonce'      => 'moksafowo_payuni_restore_store',
+			'woocommerce-process-checkout-nonce' => 'woocommerce-process_checkout',
+			'security'                           => 'update-order-review',
+		);
+		foreach ( $pairs as $field => $action ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- this IS the nonce verification.
+			$nonce = isset( $_POST[ $field ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) : '';
+			if ( '' !== $nonce && wp_verify_nonce( $nonce, $action ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-		if ( ! isset( $_POST['payuni_selected_store_id'] ) || ! isset( $_POST['payuni_selected_store_name'] ) || ! isset( $_POST['payuni_selected_store_address'] ) ) {
+	private static function restore_store_data_from_post() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- presence check only; nonce verified in verify_restore_nonce() below before any use.
+		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'] ) || ! isset( $_POST['moksafowo_payuni_selected_store_name'] ) || ! isset( $_POST['moksafowo_payuni_selected_store_address'] ) ) {
 			return false;
 		}
 
-		PayuniShipping::log( 'restore_store_data_from_post: ' . wc_print_r( $_POST, true ) );
+		// 來源驗證：自家 interstitial 表單的 nonce，或同行於 WC 結帳 / update_order_review
+		// 提交的 WC 原生 nonce。皆無效 → 不還原（token resolve 備援不受影響）。
+		if ( ! self::verify_restore_nonce() ) {
+			PayuniShipping::log( 'restore_store_data_from_post: nonce missing/invalid — ignored' );
+			return false;
+		}
 
 		// Check if we have store selection POST data
-		$store_id      = isset( $_POST['payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['payuni_selected_store_id'] ) ) : '';
-		$store_name    = isset( $_POST['payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['payuni_selected_store_name'] ) ) : '';
-		$store_address = isset( $_POST['payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['payuni_selected_store_address'] ) ) : '';
+		$store_id      = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
+		$store_name    = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : '';
+		$store_address = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : '';
 		// Use wp_unslash for JSON data to preserve structure
-		$store_data_json = isset( $_POST['payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['payuni_selected_store_data'] ) ) : '';
+		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
 
 		// Store the data in WooCommerce session
 		$store_data = array(
@@ -889,17 +900,17 @@ JS
 		}
 
 		// Store in session
-		WC()->session->set( 'payuni_selected_store_data', $store_data );
+		WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
 		
 		// Log for debugging
 		PayuniShipping::log( 'Store data restored from POST to WC Session: ' . wc_print_r( $store_data, true ) );
-		return WC()->session->get( 'payuni_selected_store_data', array() );
+		return WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 	
 	}
 
 	public static function modify_billing_fields_for_cvs( $fields ) {
 		// Check if the setting is enabled
-		if ( get_option( 'mo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
+		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
 			return $fields;
 		}
 
@@ -950,7 +961,7 @@ JS
 
 	public static function set_default_billing_address_for_cvs( $data ) {
 		// Check if the setting is enabled
-		if ( get_option( 'mo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
+		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
 			return $data;
 		}
 

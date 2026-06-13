@@ -35,6 +35,9 @@ final class IpnHandler {
 			exit;
 		}
 
+		// json_decode 不做消毒 — 簽章驗過後仍逐欄 sanitize 才記錄與使用。
+		$payload = map_deep( $payload, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+
 		Helper::log( 'notify received', [ 'payload' => $payload ] );
 
 		$order_number = (string) ( $payload['order_number'] ?? '' );

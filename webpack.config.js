@@ -12,6 +12,7 @@
 
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const path = require( 'path' );
+const WooCommerceDependencyExtractionWebpackPlugin = require( '@woocommerce/dependency-extraction-webpack-plugin' );
 
 module.exports = {
 	...defaultConfig,
@@ -28,4 +29,9 @@ module.exports = {
 		path: path.resolve( __dirname, 'assets/blocks/build' ),
 		filename: '[name].js',
 	},
+	plugins: [
+		// 換成 WC 版 DEWP：@woocommerce/* import 轉 wc.* 全域 + asset.php 自動列 wc-blocks-registry 等 dep
+		...defaultConfig.plugins.filter( ( p ) => p.constructor.name !== 'DependencyExtractionWebpackPlugin' ),
+		new WooCommerceDependencyExtractionWebpackPlugin(),
+	],
 };

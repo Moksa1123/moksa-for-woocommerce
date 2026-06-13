@@ -15,7 +15,6 @@ trait CVSTrait {
 			'package' => $package,
 		);
 		$this->add_rate( $rate );
-		do_action( 'woocommerce_' . $this->id . '_shipping_add_rate', $this, $rate );
 	}
 
     	public function is_available( $package ) {
@@ -34,6 +33,6 @@ trait CVSTrait {
 			$is_available = false;
 		}
 
-		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this );
+		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 }

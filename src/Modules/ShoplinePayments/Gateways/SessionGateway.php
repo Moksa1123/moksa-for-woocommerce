@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class SessionGateway extends \WC_Payment_Gateway {
 
-	public const GATEWAY_ID = 'mo_shopline_payments';
+	public const GATEWAY_ID = 'moksafowo_shopline_payments';
 
 	public function __construct() {
 		$this->id                 = self::GATEWAY_ID;
@@ -135,12 +135,12 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'mo_slp_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
 		}
 
 		$trade_order_id = (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID );
 		if ( '' === $trade_order_id ) {
-			return new \WP_Error( 'mo_slp_missing_trade_order_id', __( '訂單缺少 Shopline Payments 交易編號（tradeOrderId）。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_missing_trade_order_id', __( '訂單缺少 Shopline Payments 交易編號（tradeOrderId）。', 'mo-ectools' ) );
 		}
 
 		$reference_order_id = (string) $order->get_meta( Keys::SLP_REFERENCE_ID );
@@ -150,7 +150,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 
 		$value = (int) round( (float) $amount * 100 );
 		if ( $value <= 0 ) {
-			return new \WP_Error( 'mo_slp_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
 		}
 
 		// WC refund id（this request 的退款記錄）— 無法直接取得，用 time 後綴穩定識別。
@@ -181,7 +181,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 
 		if ( ! $resp['ok'] ) {
 			return new \WP_Error(
-				'mo_slp_refund_fail',
+				'moksafowo_slp_refund_fail',
 				sprintf(
 					/* translators: %s: error message */
 					__( 'Shopline Payments 退款失敗：%s', 'mo-ectools' ),

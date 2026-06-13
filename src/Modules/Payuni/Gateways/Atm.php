@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Atm extends GatewayBase {
 
-	const GATEWAY_ID = 'mo_payuni_atm';
+	const GATEWAY_ID = 'moksafowo_payuni_atm';
 
 	public $expire_days;
 
@@ -29,14 +29,14 @@ class Atm extends GatewayBase {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
-		add_filter( 'mo_payuni_transaction_args_' . $this->id, array( $this, 'payuni_payment_atm_transaction_arrgs' ), 10, 2 );
+		add_filter( 'moksafowo_payuni_transaction_args_' . $this->id, array( $this, 'moksafowo_payuni_payment_atm_transaction_arrgs' ), 10, 2 );
 	}
 
 	public function init_form_fields() {
-		$this->form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/Payuni/Settings/AtmSetting.php';
+		$this->form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Payuni/Settings/AtmSetting.php';
 	}
 
-	public function payuni_payment_atm_transaction_arrgs( $args, $order ) {
+	public function moksafowo_payuni_payment_atm_transaction_arrgs( $args, $order ) {
 
 		return array_merge(
 			$args,

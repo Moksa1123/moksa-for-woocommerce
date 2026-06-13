@@ -36,13 +36,13 @@ final class PayuniBlocksMethod extends AbstractPaymentMethodType {
 	}
 
 	public function get_payment_method_script_handles(): array {
-		$handle    = 'mo-payuni-blocks';
-		$build_dir = MOWC_PLUGIN_DIR . 'assets/blocks/build/methods/payuni/';
-		$build_url = MOWC_PLUGIN_URL . 'assets/blocks/build/methods/payuni/';
+		$handle    = 'moksafowo-payuni-blocks';
+		$build_dir = MOKSAFOWO_PLUGIN_DIR . 'assets/blocks/build/methods/payuni/';
+		$build_url = MOKSAFOWO_PLUGIN_URL . 'assets/blocks/build/methods/payuni/';
 		$asset     = $build_dir . 'index.asset.php';
 
 		$deps    = [ 'wc-blocks-registry', 'wp-element', 'wp-html-entities', 'wp-i18n' ];
-		$version = MOWC_VERSION;
+		$version = MOKSAFOWO_VERSION;
 		if ( file_exists( $asset ) ) {
 			$loaded  = require $asset;
 			$deps    = $loaded['dependencies'] ?? $deps;

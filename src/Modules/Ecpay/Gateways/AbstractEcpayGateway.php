@@ -40,12 +40,12 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'mo_ecpay_refund_invalid_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_refund_invalid_order', __( '找不到訂單。', 'mo-ectools' ) );
 		}
 
 		if ( ! $this->supports_credit_action() ) {
 			return new \WP_Error(
-				'mo_ecpay_refund_unsupported',
+				'moksafowo_ecpay_refund_unsupported',
 				__( '此付款方式不支援自動退款，請至綠界後台手動操作。', 'mo-ectools' )
 			);
 		}
@@ -55,7 +55,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		$payment_type = (string) $order->get_meta( Keys::ECPAY_PAYMENT_TYPE );
 		if ( '' !== $payment_type && ! self::payment_type_supports_refund( $payment_type ) ) {
 			return new \WP_Error(
-				'mo_ecpay_refund_offline_payment',
+				'moksafowo_ecpay_refund_offline_payment',
 				sprintf(
 					/* translators: %s: ECPay payment type */
 					__( '此訂單為線下付款（%s），綠界沒有自動退款 API，請至綠界後台手動退款。', 'mo-ectools' ),
@@ -66,7 +66,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 
 		$amount_int = (int) round( (float) $amount );
 		if ( $amount_int <= 0 ) {
-			return new \WP_Error( 'mo_ecpay_refund_amount', __( '退款金額需大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_refund_amount', __( '退款金額需大於 0。', 'mo-ectools' ) );
 		}
 
 		$result = Helper::credit_action( $order, 'R', $amount_int );
@@ -92,7 +92,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 				$rtn_code
 			);
 			$order->add_order_note( $msg );
-			return new \WP_Error( 'mo_ecpay_refund_failed', $msg );
+			return new \WP_Error( 'moksafowo_ecpay_refund_failed', $msg );
 		}
 
 		$order->add_order_note( sprintf(
@@ -134,7 +134,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		}
 
 		$total     = (int) round( (float) $order->get_total() );
-		$item_name = trim( (string) get_option( 'mo_ecpay_payment_item_name', '' ) );
+		$item_name = trim( (string) get_option( 'moksafowo_ecpay_payment_item_name', '' ) );
 		if ( '' === $item_name ) {
 			$first = null;
 			foreach ( $order->get_items() as $i ) {
@@ -161,7 +161,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			'TotalAmount'       => $total,
 			'TradeDesc'         => $item_name,
 			'ItemName'          => $item_name,
-			'ReturnURL'         => home_url( '/wc-api/mo_ecpay_payment' ),
+			'ReturnURL'         => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 			'ChoosePayment'     => $this->choose_payment(),
 			'EncryptType'       => 1,
 			'ClientBackURL'     => $order->get_checkout_order_received_url(),
@@ -176,12 +176,12 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			'choose_payment'    => $this->choose_payment(),
 		] );
 
-		echo '<form id="mo-ecpay-aio" method="post" action="' . esc_url( Helper::aio_endpoint() ) . '">';
+		echo '<form id="moksafowo-ecpay-aio" method="post" action="' . esc_url( Helper::aio_endpoint() ) . '">';
 		foreach ( $params as $k => $v ) {
 			echo '<input type="hidden" name="' . esc_attr( (string) $k ) . '" value="' . esc_attr( (string) $v ) . '" />';
 		}
 		echo '<noscript><button type="submit">' . esc_html__( '前往綠界付款', 'mo-ectools' ) . '</button></noscript>';
 		echo '</form>';
-		echo '<script>document.getElementById("mo-ecpay-aio").submit();</script>';
+		wp_print_inline_script_tag( 'document.getElementById("moksafowo-ecpay-aio").submit();' );
 	}
 }

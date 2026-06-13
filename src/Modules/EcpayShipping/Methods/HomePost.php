@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 final class HomePost extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
-		$this->id                 = 'mo_ecpay_shipping_home_post';
+		$this->id                 = 'moksafowo_ecpay_shipping_home_post';
 		$this->method_title       = __( '綠界 — 中華郵政', 'mo-ectools' );
 		$this->method_description = __( '綠界中華郵政（不接 COD）。', 'mo-ectools' );
 		parent::__construct( $instance_id );

@@ -58,7 +58,7 @@ final class Module extends AbstractModule {
 		}
 
 		// 自動開立
-		$when = (string) get_option( 'mo_ecpay_invoice_issue_when', 'paid' );
+		$when = (string) get_option( 'moksafowo_ecpay_invoice_issue_when', 'paid' );
 		if ( 'paid' === $when ) {
 			add_action( 'woocommerce_payment_complete', [ __CLASS__, 'maybe_issue' ], 30 );
 			add_action( 'woocommerce_order_status_processing', [ __CLASS__, 'maybe_issue' ], 30 );
@@ -67,10 +67,10 @@ final class Module extends AbstractModule {
 		}
 
 		// 延後開立 — 透過 Action Scheduler / WP-Cron 在 N 天後跑 deferred_issue
-		add_action( 'mo_ecpay_invoice_deferred_issue', [ __CLASS__, 'deferred_issue' ], 10, 1 );
+		add_action( 'moksafowo_ecpay_invoice_deferred_issue', [ __CLASS__, 'deferred_issue' ], 10, 1 );
 
 		// 訂單退款 / 取消時自動作廢發票。預設 manual — 商家進設定主動開啟（保守安全）。
-		if ( 'auto_cancel' === get_option( 'mo_ecpay_invoice_auto_cancel', 'manual' ) ) {
+		if ( 'auto_cancel' === get_option( 'moksafowo_ecpay_invoice_auto_cancel', 'manual' ) ) {
 			add_action( 'woocommerce_order_status_cancelled', [ Operations\AutoInvalid::class, 'schedule' ] );
 			add_action( 'woocommerce_order_status_refunded',  [ Operations\AutoInvalid::class, 'schedule' ] );
 			add_action( 'woocommerce_order_status_failed',    [ Operations\AutoInvalid::class, 'schedule' ] );
@@ -95,11 +95,11 @@ final class Module extends AbstractModule {
 			return;
 		}
 		// Dedupe：payment_complete + status_processing 都會觸發本 hook，AS 沒有 args-based 預設 dedupe。
-		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( 'mo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' ) ) {
+		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' ) ) {
 			return;
 		}
 
-		$delay_days = max( 0, min( 30, (int) get_option( 'mo_ecpay_invoice_delay_days', 0 ) ) );
+		$delay_days = max( 0, min( 30, (int) get_option( 'moksafowo_ecpay_invoice_delay_days', 0 ) ) );
 
 		if ( $delay_days > 0 && $order->get_meta( Keys::ECPAY_INVOICE_SCHEDULED_AT ) ) {
 			return;
@@ -107,9 +107,9 @@ final class Module extends AbstractModule {
 
 		$run_at = time() + ( $delay_days * DAY_IN_SECONDS );
 		if ( function_exists( 'as_schedule_single_action' ) ) {
-			as_schedule_single_action( $run_at, 'mo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' );
+			as_schedule_single_action( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' );
 		} else {
-			wp_schedule_single_event( $run_at, 'mo_ecpay_invoice_deferred_issue', [ $order_id ] );
+			wp_schedule_single_event( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ] );
 		}
 
 		if ( $delay_days > 0 ) {

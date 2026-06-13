@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class OrderMetaBox {
 
-	private const NONCE_ACTION = 'mo_ecpay_shipping_admin';
+	private const NONCE_ACTION = 'moksafowo_ecpay_shipping_admin';
 	private const CAPABILITY   = 'edit_shop_orders';
 
 	
@@ -56,10 +56,10 @@ final class OrderMetaBox {
 	public static function init(): void {
 		OrderInfoLayout::boot();
 		// 三欄 footer：priority 20 = 物流（中）— 順序「金流(10) 物流(20) 發票(30)」
-		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
-		add_action( 'wp_ajax_mo_ecpay_shipping_create_order', [ __CLASS__, 'ajax_create_order' ] );
-		add_action( 'wp_ajax_mo_ecpay_shipping_print_label', [ __CLASS__, 'ajax_print_label' ] );
-		add_action( 'wp_ajax_mo_ecpay_shipping_delete_record', [ __CLASS__, 'ajax_delete_record' ] );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_create_order', [ __CLASS__, 'ajax_create_order' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_print_label', [ __CLASS__, 'ajax_print_label' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_delete_record', [ __CLASS__, 'ajax_delete_record' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
@@ -154,7 +154,7 @@ final class OrderMetaBox {
 
 		ob_start();
 		?>
-		<div class="mo-ecpay-shipping-meta"
+		<div class="moksafowo-ecpay-shipping-meta"
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>">
 
 			<?php if ( ! empty( $records ) ) :
@@ -173,7 +173,7 @@ final class OrderMetaBox {
 						?>
 					</p>
 				<?php endif; ?>
-				<div class="mo-ecpay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
+				<div class="moksafowo-ecpay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
 					<?php foreach ( $records as $r ) :
 						$id         = (string) ( $r['id'] ?? '' );
 						$mtn        = (string) ( $r['mtn'] ?? '' );
@@ -206,11 +206,11 @@ final class OrderMetaBox {
 						/* translators: %d: cash-on-delivery amount in TWD */
 						$cod_label = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
 					?>
-					<details class="mo-ecpay-record"
+					<details class="moksafowo-ecpay-record"
 						data-logistics-id="<?php echo esc_attr( $id ); ?>"
 						<?php echo $is_split ? '' : 'open'; ?>>
 						<summary>
-							<span class="mo-ecpay-record__summary-id"><?php echo esc_html( $id ); ?></span>
+							<span class="moksafowo-ecpay-record__summary-id"><?php echo esc_html( $id ); ?></span>
 							<?php if ( '' !== $type_label ) : ?>
 								<span style="background:#dbeafe;color:#1e40af;padding:1px 8px;border-radius:3px;font-size:11px;white-space:nowrap;"><?php echo esc_html( $type_label ); ?></span>
 							<?php endif; ?>
@@ -218,10 +218,10 @@ final class OrderMetaBox {
 								<span style="background:<?php echo esc_attr( $temp_pill_color[0] ); ?>;color:<?php echo esc_attr( $temp_pill_color[1] ); ?>;padding:1px 8px;border-radius:3px;font-size:11px;white-space:nowrap;"><?php echo esc_html( $temp_label ); ?></span>
 							<?php endif; ?>
 							<?php if ( '' !== $rtn_msg ) : ?>
-								<span class="mo-ecpay-record__summary-status"><?php echo esc_html( $rtn_msg ); ?></span>
+								<span class="moksafowo-ecpay-record__summary-status"><?php echo esc_html( $rtn_msg ); ?></span>
 							<?php endif; ?>
 						</summary>
-						<div class="mo-ecpay-record__body">
+						<div class="moksafowo-ecpay-record__body">
 						<?php if ( $is_cvs && '' !== $pay ) : ?>
 							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay ); ?><?php if ( '' !== $val ) : ?> / <?php echo esc_html( $val ); ?><?php endif; ?></span></p>
 						<?php elseif ( ! $is_cvs && '' !== $bk ) : ?>
@@ -268,26 +268,26 @@ final class OrderMetaBox {
 						if ( null !== $tracking_info ) :
 							?>
 							<div style="margin-top:8px;">
-								<?php echo TrackingLink::render_button_html( $tracking_info ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?>
 							</div>
 							<?php
 						endif;
 						?>
 						<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:10px;">
 							<button type="button"
-	class="button button-small mo-ecpay-shipping-print"
+	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="1"
 								title="<?php esc_attr_e( '列印 A4', 'mo-ectools' ); ?>"><?php esc_html_e( 'A4', 'mo-ectools' ); ?></button>
 							<?php if ( $show_a6 ) : ?>
 							<button type="button"
-	class="button button-small mo-ecpay-shipping-print"
+	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="2"
 								title="<?php esc_attr_e( '列印 A6 標籤機', 'mo-ectools' ); ?>"><?php esc_html_e( 'A6', 'mo-ectools' ); ?></button>
 							<?php endif; ?>
 							<button type="button"
-	class="button button-small button-link-delete mo-ecpay-shipping-delete-record"
+	class="button button-small button-link-delete moksafowo-ecpay-shipping-delete-record"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								title="<?php esc_attr_e( '刪除此筆', 'mo-ectools' ); ?>"
 								style="color:#b32d2e;"><?php esc_html_e( '刪除', 'mo-ectools' ); ?></button>
@@ -299,12 +299,12 @@ final class OrderMetaBox {
 			<?php endif; ?>
 
 			<p style="margin:8px 0 0;">
-				<button type="button" class="button button-primary mo-ecpay-shipping-create"<?php echo empty( $records ) ? '' : ' data-has-records="1"'; ?>>
+				<button type="button" class="button button-primary moksafowo-ecpay-shipping-create"<?php echo empty( $records ) ? '' : ' data-has-records="1"'; ?>>
 					<?php echo empty( $records ) ? esc_html__( '建立物流單', 'mo-ectools' ) : esc_html__( '重新建立物流單', 'mo-ectools' ); ?>
 				</button>
 			</p>
 
-			<?php wp_nonce_field( self::NONCE_ACTION, 'mo_ecpay_shipping_nonce' ); ?>
+			<?php wp_nonce_field( self::NONCE_ACTION, 'moksafowo_ecpay_shipping_nonce' ); ?>
 		</div>
 		<?php
 		$cards[] = [
@@ -319,17 +319,17 @@ final class OrderMetaBox {
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		$handle = 'mo-ecpay-shipping-admin';
-		$js_path = MOWC_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/js/admin-meta-box.js';
-		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
+		$handle = 'moksafowo-ecpay-shipping-admin';
+		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/js/admin-meta-box.js';
+		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
 			$handle,
-			MOWC_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/js/admin-meta-box.js',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/js/admin-meta-box.js',
 			[ 'jquery' ],
 			$ver,
 			true
 		);
-		wp_localize_script( $handle, 'mo_ecpay_shipping_admin', [
+		wp_localize_script( $handle, 'moksafowo_ecpay_shipping_admin', [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'i18n'     => [
 				'creating'      => __( '建立中…', 'mo-ectools' ),
@@ -348,20 +348,20 @@ final class OrderMetaBox {
 		] );
 		wp_enqueue_script( $handle );
 		// 共用 clipboard JS — admin 頁的「複製貨號」按鈕用（由 Shipping\Module::register_admin_assets 註冊）
-		wp_enqueue_script( 'mo-tracking-copy' );
+		wp_enqueue_script( 'moksafowo-tracking-copy' );
 
-		$css = ".mo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}"
-			. ".mo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}"
-			. ".mo-ecpay-record summary::-webkit-details-marker{display:none;}"
-			. ".mo-ecpay-record summary::before{content:'\\25B6';margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}"
-			. ".mo-ecpay-record[open] summary::before{transform:rotate(90deg);}"
-			. ".mo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}"
-			. ".mo-ecpay-record summary > * + *{margin-left:0;}"
-			. ".mo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}"
-			. ".mo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}";
-		wp_register_style( 'mo-ecpay-shipping-admin', false, [], $ver );
-		wp_enqueue_style( 'mo-ecpay-shipping-admin' );
-		wp_add_inline_style( 'mo-ecpay-shipping-admin', $css );
+		$css = ".moksafowo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}"
+			. ".moksafowo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}"
+			. ".moksafowo-ecpay-record summary::-webkit-details-marker{display:none;}"
+			. ".moksafowo-ecpay-record summary::before{content:'\\25B6';margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}"
+			. ".moksafowo-ecpay-record[open] summary::before{transform:rotate(90deg);}"
+			. ".moksafowo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}"
+			. ".moksafowo-ecpay-record summary > * + *{margin-left:0;}"
+			. ".moksafowo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}"
+			. ".moksafowo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}";
+		wp_register_style( 'moksafowo-ecpay-shipping-admin', false, [], $ver );
+		wp_enqueue_style( 'moksafowo-ecpay-shipping-admin' );
+		wp_add_inline_style( 'moksafowo-ecpay-shipping-admin', $css );
 	}
 
 	private static function days_since( string $datetime ): ?int {

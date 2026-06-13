@@ -1,27 +1,27 @@
-.mo-batch-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99999;display:flex;align-items:center;justify-content:center;}
-.mo-batch-modal__panel{background:#fff;width:min(1080px,95vw);max-height:85vh;display:flex;flex-direction:column;border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,.2);}
-.mo-batch-modal__header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e0e0e0;}
-.mo-batch-modal__title{margin:0;font-size:16px;font-weight:600;}
-.mo-batch-modal__close{background:none;border:0;font-size:24px;line-height:1;cursor:pointer;color:#666;}
-.mo-batch-modal__body{padding:18px;overflow:auto;flex:1;}
-.mo-batch-modal__body table{width:100%;font-size:13px;}
-.mo-batch-disabled{opacity:.55;}
+.moksafowo-batch-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99999;display:flex;align-items:center;justify-content:center;}
+.moksafowo-batch-modal__panel{background:#fff;width:min(1080px,95vw);max-height:85vh;display:flex;flex-direction:column;border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,.2);}
+.moksafowo-batch-modal__header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e0e0e0;}
+.moksafowo-batch-modal__title{margin:0;font-size:16px;font-weight:600;}
+.moksafowo-batch-modal__close{background:none;border:0;font-size:24px;line-height:1;cursor:pointer;color:#666;}
+.moksafowo-batch-modal__body{padding:18px;overflow:auto;flex:1;}
+.moksafowo-batch-modal__body table{width:100%;font-size:13px;}
+.moksafowo-batch-disabled{opacity:.55;}
 /* checkbox + 可印 col 統一置中（th 跟 td 都要設） */
-.mo-batch-table .check-col{width:32px;text-align:center;padding-left:8px;padding-right:8px;}
-.mo-batch-table .printable-col{width:80px;text-align:center;white-space:nowrap;}
+.moksafowo-batch-table .check-col{width:32px;text-align:center;padding-left:8px;padding-right:8px;}
+.moksafowo-batch-table .printable-col{width:80px;text-align:center;white-space:nowrap;}
 /* 訂單號 / 收件人 / 狀態 不換行（method col 才允許換行讓 pill 與警告塞得下） */
-.mo-batch-table tbody td:nth-child(2),
-.mo-batch-table tbody td:nth-child(3),
-.mo-batch-table tbody td:nth-child(5){white-space:nowrap;}
-.mo-batch-table tbody td:nth-child(2){width:80px;}
-.mo-batch-table tbody td:nth-child(3){min-width:90px;max-width:140px;}
-.mo-batch-table tbody td:nth-child(5){width:80px;}
+.moksafowo-batch-table tbody td:nth-child(2),
+.moksafowo-batch-table tbody td:nth-child(3),
+.moksafowo-batch-table tbody td:nth-child(5){white-space:nowrap;}
+.moksafowo-batch-table tbody td:nth-child(2){width:80px;}
+.moksafowo-batch-table tbody td:nth-child(3){min-width:90px;max-width:140px;}
+.moksafowo-batch-table tbody td:nth-child(5){width:80px;}
 /* method col 自由 wrap，pill 個別 nowrap (inline span 已自帶) */
-.mo-batch-table tbody td:nth-child(4){line-height:1.7;}
-.mo-batch-table .check-col input[type="checkbox"]{margin:0;vertical-align:middle;}
-.mo-batch-modal__footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid #e0e0e0;}
+.moksafowo-batch-table tbody td:nth-child(4){line-height:1.7;}
+.moksafowo-batch-table .check-col input[type="checkbox"]{margin:0;vertical-align:middle;}
+.moksafowo-batch-modal__footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid #e0e0e0;}
 /* 讓按鈕沿用 .page-title-action style；只調整 dashicons 對齊 */
-.mo-batch-btn .dashicons{font-size:16px;width:16px;height:16px;line-height:1;vertical-align:-3px;}
+.moksafowo-batch-btn .dashicons{font-size:16px;width:16px;height:16px;line-height:1;vertical-align:-3px;}
 /* 紙張選單 — 反灰 disabled 選項。原生 <option>:disabled 在多數 theme 不會視覺反灰，明示給 user。 */
-.mo-batch-mode__select option{color:#1d2327;background:#fff;}
-.mo-batch-mode__select option:disabled{color:#a7aaad !important;background:#f0f0f1 !important;font-style:italic;}
+.moksafowo-batch-mode__select option{color:#1d2327;background:#fff;}
+.moksafowo-batch-mode__select option:disabled{color:#a7aaad !important;background:#f0f0f1 !important;font-style:italic;}

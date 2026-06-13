@@ -3,17 +3,17 @@
  *
  * Flow:
  *   1. 選 CVS 物流 → 顯示「選擇取貨門市」host
- *   2. 點按鈕 → POST mo_ecpay_shipping_open_map → 拿到 ECPay form_data + api_url → submit form 開 ECPay 地圖
- *   3. ECPay 跳回 ?wc-api=mo_ecpay_shipping_map_callback → 我們 redirect 結帳頁 + ?mo_ecpay_store=<token>
- *   4. JS 偵測 token → POST mo_ecpay_shipping_resolve_token 還原 store → 寫入 session → render
+ *   2. 點按鈕 → POST moksafowo_ecpay_shipping_open_map → 拿到 ECPay form_data + api_url → submit form 開 ECPay 地圖
+ *   3. ECPay 跳回 ?wc-api=moksafowo_ecpay_shipping_map_callback → 我們 redirect 結帳頁 + ?moksafowo_ecpay_store=<token>
+ *   4. JS 偵測 token → POST moksafowo_ecpay_shipping_resolve_token 還原 store → 寫入 session → render
  */
 ( function () {
 	'use strict';
-	if ( ! window.mo_ecpay_shipping ) {
+	if ( ! window.moksafowo_ecpay_shipping ) {
 		return;
 	}
-	const cfg = window.mo_ecpay_shipping;
-	const HOST_ID = 'mo-ecpay-shipping-store-host';
+	const cfg = window.moksafowo_ecpay_shipping;
+	const HOST_ID = 'moksafowo-ecpay-shipping-store-host';
 
 	function isCvsMethod( methodId ) {
 		if ( ! methodId ) {
@@ -58,13 +58,13 @@
 		}
 		const host = document.createElement( 'div' );
 		host.id = HOST_ID;
-		host.className = 'mo-ecpay-shipping-store';
+		host.className = 'moksafowo-ecpay-shipping-store';
 		anchor.parentNode.insertBefore( host, anchor.nextSibling );
 		return host;
 	}
 
 	function showRow( show ) {
-		const row = document.querySelector( '.mo-ecpay-shipping-store-row' );
+		const row = document.querySelector( '.moksafowo-ecpay-shipping-store-row' );
 		if ( row ) {
 			row.style.display = show ? '' : 'none';
 		}
@@ -81,18 +81,18 @@
 		let body;
 		if ( store && store.id ) {
 			body =
-				'<div class="mo-ecpay-shipping-store__info">' +
+				'<div class="moksafowo-ecpay-shipping-store__info">' +
 					'<strong>' + escapeHtml( store.name ) + '</strong> ' +
-					'<span class="mo-ecpay-shipping-store__id">(' + escapeHtml( cfg.i18n.store_id ) + ' ' + escapeHtml( store.id ) + ')</span>' +
-					'<div class="mo-ecpay-shipping-store__address">' + escapeHtml( store.address ) + '</div>' +
+					'<span class="moksafowo-ecpay-shipping-store__id">(' + escapeHtml( cfg.i18n.store_id ) + ' ' + escapeHtml( store.id ) + ')</span>' +
+					'<div class="moksafowo-ecpay-shipping-store__address">' + escapeHtml( store.address ) + '</div>' +
 				'</div>';
 		} else {
-			body = '<span class="mo-ecpay-shipping-store__placeholder">' + escapeHtml( cfg.i18n.none_selected ) + '</span>';
+			body = '<span class="moksafowo-ecpay-shipping-store__placeholder">' + escapeHtml( cfg.i18n.none_selected ) + '</span>';
 		}
 		host.innerHTML =
 			body +
-			'<button type="button" class="button mo-ecpay-shipping-store__btn">' + escapeHtml( btnLabel ) + '</button>';
-		const btn = host.querySelector( '.mo-ecpay-shipping-store__btn' );
+			'<button type="button" class="button moksafowo-ecpay-shipping-store__btn">' + escapeHtml( btnLabel ) + '</button>';
+		const btn = host.querySelector( '.moksafowo-ecpay-shipping-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', onSelect );
 		}
@@ -105,7 +105,7 @@
 			// Block-injected host 沒外層 <tr style="display:none"> 包住，innerHTML
 			// 清空後仍是個可見的 div。直接 remove，不留殘骸。Classic 的 host 在
 			// <tr> 內，<tr> 由 showRow 隱藏不需 remove。
-			const tr = host.closest( 'tr.mo-ecpay-shipping-store-row' );
+			const tr = host.closest( 'tr.moksafowo-ecpay-shipping-store-row' );
 			if ( ! tr ) {
 				host.remove();
 			}
@@ -120,7 +120,7 @@
 			return;
 		}
 		const fd = new FormData();
-		fd.append( 'action', 'mo_ecpay_shipping_open_map' );
+		fd.append( 'action', 'moksafowo_ecpay_shipping_open_map' );
 		fd.append( 'shipping_method', method );
 		fd.append( 'nonce', cfg.nonce );
 		// 帶當下頁面 URL，callback 後 redirect 回原頁（Block / Classic / 自訂頁皆可）
@@ -172,7 +172,7 @@
 		const token = readToken();
 		if ( token ) {
 			const fd = new FormData();
-			fd.append( 'action', 'mo_ecpay_shipping_resolve_token' );
+			fd.append( 'action', 'moksafowo_ecpay_shipping_resolve_token' );
 			fd.append( 'token', token );
 			fd.append( 'nonce', cfg.nonce );
 			fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
@@ -193,7 +193,7 @@
 
 	function sessionLookup( cb ) {
 		const fd = new FormData();
-		fd.append( 'action', 'mo_ecpay_shipping_get_store' );
+		fd.append( 'action', 'moksafowo_ecpay_shipping_get_store' );
 		fd.append( 'nonce', cfg.nonce );
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( function ( r ) { return r.json(); } )

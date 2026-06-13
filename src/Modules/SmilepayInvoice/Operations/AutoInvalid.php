@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class AutoInvalid extends AbstractAutoInvalid {
 
-	public const HOOK = 'mo_smilepay_invoice_auto_invalid';
+	public const HOOK = 'moksafowo_smilepay_invoice_auto_invalid';
 
 	protected static function hook_name(): string {
 		return self::HOOK;
@@ -29,7 +29,7 @@ final class AutoInvalid extends AbstractAutoInvalid {
 	}
 
 	protected static function deferred_issue_hook_name(): string {
-		return 'mo_smilepay_invoice_deferred_issue';
+		return 'moksafowo_smilepay_invoice_deferred_issue';
 	}
 
 	protected static function is_real_invoice_number( string $invoice_no ): bool {

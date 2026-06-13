@@ -10,7 +10,9 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		$payload = wp_unslash( $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- IPN verify_key 自驗
+		// 匿名 webhook 無法帶 WP nonce — 走 Verify_key（hash_equals）+ smseid 訂單對應雙重驗證。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; Verify_key checked below before any state change, fields sanitized at extraction.
+		$payload = wp_unslash( $_REQUEST );
 
 		// SmilePay 用 BIG5 編碼 → 強制轉 UTF-8
 		foreach ( $payload as $k => $v ) {
@@ -19,7 +21,7 @@ final class IpnHandler {
 			}
 		}
 
-		$verify  = isset( $payload['Verify_key'] ) ? (string) $payload['Verify_key'] : '';
+		$verify   = isset( $payload['Verify_key'] ) ? sanitize_text_field( (string) $payload['Verify_key'] ) : '';
 		$expected = Helper::verify_key();
 		if ( '' === $expected || ! hash_equals( $expected, $verify ) ) {
 			Helper::log( 'IPN verify_key mismatch', [ 'received' => substr( $verify, 0, 4 ) . '****' ] );
@@ -28,7 +30,7 @@ final class IpnHandler {
 		}
 
 		$order_id = isset( $payload['Data_id'] ) ? absint( $payload['Data_id'] ) : 0;
-		$smseid   = isset( $payload['Smseid'] ) ? (string) $payload['Smseid'] : '';
+		$smseid   = isset( $payload['Smseid'] ) ? sanitize_text_field( (string) $payload['Smseid'] ) : '';
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 
 		if ( ! $order instanceof \WC_Order ) {
@@ -46,7 +48,7 @@ final class IpnHandler {
 		}
 
 		$ship_status = isset( $payload['Shipstatus'] ) ? (int) $payload['Shipstatus'] : 0;
-		$paymentno   = isset( $payload['Payment_no'] ) ? (string) $payload['Payment_no'] : '';
+		$paymentno   = isset( $payload['Payment_no'] ) ? sanitize_text_field( (string) $payload['Payment_no'] ) : '';
 
 		[ $label, $wc_status ] = self::map_status( $ship_status );
 
@@ -82,9 +84,9 @@ final class IpnHandler {
 	private static function map_status( int $code ): array {
 		switch ( $code ) {
 			case 1:
-				return [ __( '已出貨', 'mo-ectools' ), 'mo-shipped' ];
+				return [ __( '已出貨', 'mo-ectools' ), 'moksa-shipped' ];
 			case 2:
-				return [ __( '已達門市', 'mo-ectools' ), 'mo-cvs-arrived' ];
+				return [ __( '已達門市', 'mo-ectools' ), 'moksa-cvs-arrived' ];
 			case 3:
 				return [ __( '消費者已取貨', 'mo-ectools' ), 'completed' ];
 			case 4:

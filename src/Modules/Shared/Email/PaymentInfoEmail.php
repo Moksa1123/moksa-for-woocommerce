@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class PaymentInfoEmail extends \WC_Email {
 
 	public function __construct() {
-		$this->id             = 'mo_payment_info';
+		$this->id             = 'moksafowo_payment_info';
 		$this->customer_email = true;
 		$this->title          = __( 'Moksa 取號繳費通知', 'mo-ectools' );
 		$this->description     = __( 'ATM 虛擬帳號 / 超商代碼 / 條碼等取號類付款，下單後寄送繳費資訊給顧客（獨立於 WC 原生訂單信）。', 'mo-ectools' );
@@ -23,7 +23,7 @@ final class PaymentInfoEmail extends \WC_Email {
 		$this->template_plain = '';
 
 		// 取號資訊擷取完成時觸發。
-		add_action( 'mo_payment_info_email', [ $this, 'trigger' ], 10, 1 );
+		add_action( 'moksafowo_payment_info_email', [ $this, 'trigger' ], 10, 1 );
 
 		parent::__construct();
 	}

@@ -12,9 +12,22 @@ final class Issue {
 
 	
 	public static function run( \WC_Order $order ): array {
-		// 已開過就不重開（依官方 spec — Issue 不冪等，重複會錯）
-		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) ) {
+		$existing = (string) $order->get_meta( Keys::ECPAY_INVOICE_NUMBER );
+		$voided   = (string) $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT );
+
+		// 已開立且未作廢 → 不重開（依官方 spec — Issue 不冪等，重複會錯）
+		if ( '' !== $existing && '' === $voided ) {
 			return [ 'ok' => false, 'message' => __( '此訂單已開立發票。', 'mo-ectools' ) ];
+		}
+
+		// 作廢後重開 → 清掉舊發票 meta，並換一組新的 RelateNumber（舊號不可重用）
+		if ( '' !== $existing && '' !== $voided ) {
+			$order->delete_meta_data( Keys::ECPAY_INVOICE_NUMBER );
+			$order->delete_meta_data( Keys::ECPAY_INVOICE_RANDOM );
+			$order->delete_meta_data( Keys::ECPAY_INVOICE_ISSUED_AT );
+			$order->delete_meta_data( Keys::ECPAY_INVOICE_INVALID_AT );
+			$order->delete_meta_data( Keys::ECPAY_INVOICE_RELATE_NUMBER );
+			$order->save();
 		}
 
 		$relate_no = (string) $order->get_meta( Keys::ECPAY_INVOICE_RELATE_NUMBER );

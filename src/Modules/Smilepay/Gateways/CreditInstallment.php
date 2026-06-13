@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class CreditInstallment extends AbstractSmilepayGateway {
 
-	public const GATEWAY_ID = 'mo_smilepay_credit_installment';
+	public const GATEWAY_ID = 'moksafowo_smilepay_credit_installment';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;
@@ -35,7 +35,7 @@ final class CreditInstallment extends AbstractSmilepayGateway {
 	}
 
 	protected function mtmk_extra_params( \WC_Order $order ): array {
-		$raw = (string) get_option( 'mo_smilepay_installment', '' );
+		$raw = (string) get_option( 'moksafowo_smilepay_installment', '' );
 		$raw = preg_replace( '/[^0-9,]/', '', $raw ) ?? '';
 		if ( '' === $raw ) {
 			return [];

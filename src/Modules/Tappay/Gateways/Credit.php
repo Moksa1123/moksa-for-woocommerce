@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Credit extends \WC_Payment_Gateway {
 
-	public const GATEWAY_ID = 'mo_tappay_credit';
+	public const GATEWAY_ID = 'moksafowo_tappay_credit';
 
 	public function __construct() {
 		$this->id                 = self::GATEWAY_ID;
@@ -66,24 +66,24 @@ final class Credit extends \WC_Payment_Gateway {
 			echo wp_kses_post( wpautop( wptexturize( $this->description ) ) );
 		}
 		?>
-		<div class="mo-tappay-fields" data-mo-tappay-gateway="<?php echo esc_attr( $this->id ); ?>">
+		<div class="moksafowo-tappay-fields" data-moksafowo-tappay-gateway="<?php echo esc_attr( $this->id ); ?>">
 			<p class="form-row form-row-wide">
-				<label for="mo-tappay-card-number"><?php esc_html_e( '卡號', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
-				<span id="mo-tappay-card-number" class="mo-tappay-field input-text"></span>
+				<label for="moksafowo-tappay-card-number"><?php esc_html_e( '卡號', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<span id="moksafowo-tappay-card-number" class="moksafowo-tappay-field input-text"></span>
 			</p>
 			<p class="form-row form-row-first">
-				<label for="mo-tappay-card-expiry"><?php esc_html_e( '有效期限（MM / YY）', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
-				<span id="mo-tappay-card-expiry" class="mo-tappay-field input-text"></span>
+				<label for="moksafowo-tappay-card-expiry"><?php esc_html_e( '有效期限（MM / YY）', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<span id="moksafowo-tappay-card-expiry" class="moksafowo-tappay-field input-text"></span>
 			</p>
 			<p class="form-row form-row-last">
-				<label for="mo-tappay-card-ccv"><?php esc_html_e( '安全碼 CVC', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
-				<span id="mo-tappay-card-ccv" class="mo-tappay-field input-text"></span>
+				<label for="moksafowo-tappay-card-ccv"><?php esc_html_e( '安全碼 CVC', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<span id="moksafowo-tappay-card-ccv" class="moksafowo-tappay-field input-text"></span>
 			</p>
-			<input type="hidden" name="mo_tappay_prime" class="mo-tappay-prime" value="" />
-			<input type="hidden" name="mo_tappay_bin" class="mo-tappay-bin" value="" />
-			<input type="hidden" name="mo_tappay_last_four" class="mo-tappay-last-four" value="" />
-			<input type="hidden" name="mo_tappay_issuer" class="mo-tappay-issuer" value="" />
-			<p class="mo-tappay-error" role="alert" style="display:none;color:#b32d2e;"></p>
+			<input type="hidden" name="moksafowo_tappay_prime" class="moksafowo-tappay-prime" value="" />
+			<input type="hidden" name="moksafowo_tappay_bin" class="moksafowo-tappay-bin" value="" />
+			<input type="hidden" name="moksafowo_tappay_last_four" class="moksafowo-tappay-last-four" value="" />
+			<input type="hidden" name="moksafowo_tappay_issuer" class="moksafowo-tappay-issuer" value="" />
+			<p class="moksafowo-tappay-error" role="alert" style="display:none;color:#b32d2e;"></p>
 		</div>
 		<?php
 	}
@@ -96,10 +96,10 @@ final class Credit extends \WC_Payment_Gateway {
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC checkout 在上游已驗 nonce；此處僅讀前端取得的一次性 prime
-		$prime = isset( $_POST['mo_tappay_prime'] ) ? sanitize_text_field( wp_unslash( $_POST['mo_tappay_prime'] ) ) : '';
-		$bin   = isset( $_POST['mo_tappay_bin'] ) ? sanitize_text_field( wp_unslash( $_POST['mo_tappay_bin'] ) ) : '';
-		$last4 = isset( $_POST['mo_tappay_last_four'] ) ? sanitize_text_field( wp_unslash( $_POST['mo_tappay_last_four'] ) ) : '';
-		$bank  = isset( $_POST['mo_tappay_issuer'] ) ? sanitize_text_field( wp_unslash( $_POST['mo_tappay_issuer'] ) ) : '';
+		$prime = isset( $_POST['moksafowo_tappay_prime'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_prime'] ) ) : '';
+		$bin   = isset( $_POST['moksafowo_tappay_bin'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_bin'] ) ) : '';
+		$last4 = isset( $_POST['moksafowo_tappay_last_four'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_last_four'] ) ) : '';
+		$bank  = isset( $_POST['moksafowo_tappay_issuer'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_issuer'] ) ) : '';
 		// phpcs:enable
 
 		if ( '' === $prime ) {
@@ -231,16 +231,16 @@ final class Credit extends \WC_Payment_Gateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'mo_tappay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
 		}
 		$rec_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
 		if ( '' === $rec_trade_id ) {
-			return new \WP_Error( 'mo_tappay_missing_rec_trade_id', __( '訂單缺少 TapPay 交易編號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_missing_rec_trade_id', __( '訂單缺少 TapPay 交易編號。', 'mo-ectools' ) );
 		}
 
 		$amt = (int) round( (float) $amount );
 		if ( $amt <= 0 ) {
-			return new \WP_Error( 'mo_tappay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
 		}
 
 		$result = Client::refund( $rec_trade_id, $amt );
@@ -257,7 +257,7 @@ final class Credit extends \WC_Payment_Gateway {
 
 		if ( ! $result['ok'] ) {
 			return new \WP_Error(
-				'mo_tappay_refund_fail',
+				'moksafowo_tappay_refund_fail',
 				sprintf(
 					/* translators: 1: status code, 2: message */
 					__( 'TapPay 退款失敗（狀態碼 %1$d）：%2$s', 'mo-ectools' ),

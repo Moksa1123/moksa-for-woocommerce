@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class GooglePay extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_googlepay';
+		$this->id = 'moksafowo_newebpay_googlepay';
 		parent::__construct();
 	}
 

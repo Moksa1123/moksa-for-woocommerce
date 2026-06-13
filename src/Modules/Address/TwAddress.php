@@ -13,13 +13,13 @@ final class TwAddress {
 	private static ?array $cities_cache = null;
 
 	public static function init(): void {
-		if ( 'yes' === get_option( 'mo_tw_address_dropdown_enabled', 'no' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_tw_address_dropdown_enabled', 'no' ) ) {
 			self::init_dropdown();
 		}
-		if ( 'yes' === get_option( 'mo_tw_address_name_swap', 'no' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_tw_address_name_swap', 'no' ) ) {
 			self::init_name_swap();
 		}
-		if ( 'yes' === get_option( 'mo_tw_address_hide_country', 'no' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
 			self::init_hide_country();
 		}
 
@@ -59,9 +59,9 @@ final class TwAddress {
 
 	private static function any_toggle_on(): bool {
 		foreach ( [
-			'mo_tw_address_dropdown_enabled',
-			'mo_tw_address_name_swap',
-			'mo_tw_address_hide_country',
+			'moksafowo_tw_address_dropdown_enabled',
+			'moksafowo_tw_address_name_swap',
+			'moksafowo_tw_address_hide_country',
 		] as $opt ) {
 			if ( 'yes' === get_option( $opt, 'no' ) ) {
 				return true;
@@ -191,13 +191,13 @@ final class TwAddress {
 		];
 
 		wp_enqueue_script(
-			'mo-tw-address',
-			MOWC_PLUGIN_URL . 'src/Modules/Address/assets/js/mo-tw-address.js',
+			'moksafowo-tw-address',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/js/moksafowo-tw-address.js',
 			[ 'jquery', 'woocommerce' ],
-			MOWC_VERSION,
+			MOKSAFOWO_VERSION,
 			true
 		);
-		wp_localize_script( 'mo-tw-address', 'mo_tw_address', $shared_data );
+		wp_localize_script( 'moksafowo-tw-address', 'moksafowo_tw_address', $shared_data );
 	}
 
 	private static function init_name_swap(): void {
@@ -236,22 +236,22 @@ final class TwAddress {
 	}
 
 	public static function add_body_classes( array $classes ): array {
-		if ( 'yes' === get_option( 'mo_tw_address_hide_country', 'no' ) ) {
-			$classes[] = 'mo-tw-hide-country';
+		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
+			$classes[] = 'moksafowo-tw-hide-country';
 		}
-		if ( 'yes' === get_option( 'mo_tw_address_name_swap', 'no' ) ) {
-			$classes[] = 'mo-tw-name-swap';
+		if ( 'yes' === get_option( 'moksafowo_tw_address_name_swap', 'no' ) ) {
+			$classes[] = 'moksafowo-tw-name-swap';
 		}
 
-		if ( 'yes' === get_option( 'mo_tw_address_reorder_fields', 'no' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_tw_address_reorder_fields', 'no' ) ) {
 			foreach ( FieldManager::get_layout() as $item ) {
 				$key = sanitize_html_class( (string) $item['key'] );
 				if ( empty( $item['enabled'] ) ) {
-					$classes[] = 'mo-tw-disable-' . $key;
+					$classes[] = 'moksafowo-tw-disable-' . $key;
 					continue;
 				}
 				$width = (int) ( $item['width'] ?? 100 );
-				$classes[] = 'mo-tw-w-' . $key . '-' . ( 50 === $width ? 50 : 100 );
+				$classes[] = 'moksafowo-tw-w-' . $key . '-' . ( 50 === $width ? 50 : 100 );
 			}
 		}
 
@@ -262,11 +262,11 @@ final class TwAddress {
 		if ( ! is_cart() && ! is_checkout() && ! is_wc_endpoint_url( 'edit-address' ) ) {
 			return;
 		}
-		$path    = MOWC_PLUGIN_DIR . 'src/Modules/Address/assets/css/mo-tw-address.css';
-		$version = file_exists( $path ) ? (string) filemtime( $path ) : MOWC_VERSION;
+		$path    = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Address/assets/css/moksafowo-tw-address.css';
+		$version = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
 		wp_enqueue_style(
-			'mo-tw-address',
-			MOWC_PLUGIN_URL . 'src/Modules/Address/assets/css/mo-tw-address.css',
+			'moksafowo-tw-address',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/css/moksafowo-tw-address.css',
 			[],
 			$version
 		);

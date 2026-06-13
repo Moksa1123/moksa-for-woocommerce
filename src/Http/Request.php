@@ -34,7 +34,7 @@ final class Request {
 	private static function common_args( array $headers, string $content_type, int $timeout ): array {
 		$default_headers = [
 			'Accept'     => 'application/json',
-			'User-Agent' => sprintf( 'Moksa/%s WordPress/%s', MOWC_VERSION, get_bloginfo( 'version' ) ),
+			'User-Agent' => sprintf( 'Moksa/%s WordPress/%s', MOKSAFOWO_VERSION, get_bloginfo( 'version' ) ),
 		];
 		if ( 'json' === $content_type ) {
 			$default_headers['Content-Type'] = 'application/json; charset=utf-8';

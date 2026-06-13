@@ -11,15 +11,15 @@
 (function ($) {
   'use strict';
 
-  if (typeof moEcpayCreditLifecycle === 'undefined' || !moEcpayCreditLifecycle.ajaxUrl) {
+  if (typeof moksafowoEcpayCreditLifecycle === 'undefined' || !moksafowoEcpayCreditLifecycle.ajaxUrl) {
     return;
   }
 
-  const i18n = moEcpayCreditLifecycle.i18n || {};
+  const i18n = moksafowoEcpayCreditLifecycle.i18n || {};
 
   function ajax(action, payload) {
     return $.ajax({
-      url: moEcpayCreditLifecycle.ajaxUrl,
+      url: moksafowoEcpayCreditLifecycle.ajaxUrl,
       method: 'POST',
       dataType: 'json',
       data: $.extend({ action: action }, payload),
@@ -27,7 +27,7 @@
   }
 
   function getRoot(el) {
-    return $(el).closest('.mo-ecpay-credit-lifecycle');
+    return $(el).closest('.moksafowo-ecpay-credit-lifecycle');
   }
 
   function setBusy($root, busy) {
@@ -35,10 +35,10 @@
   }
 
   function showError($root, msg) {
-    $root.find('.mo-ecpay-credit-lifecycle__error').remove();
+    $root.find('.moksafowo-ecpay-credit-lifecycle__error').remove();
     $root.append(
       $('<p>')
-        .addClass('mo-ecpay-credit-lifecycle__error')
+        .addClass('moksafowo-ecpay-credit-lifecycle__error')
         .css({ color: '#d63638', margin: '8px 0 0', fontSize: '12px' })
         .text((i18n.genericErr || 'Error: ') + msg)
     );
@@ -48,8 +48,8 @@
     const orderId = $root.data('order-id');
     const nonce = $root.data('nonce');
     setBusy($root, true);
-    $root.find('.mo-ecpay-credit-lifecycle__error').remove();
-    return ajax('mo_ecpay_credit_query', { order_id: orderId, nonce: nonce })
+    $root.find('.moksafowo-ecpay-credit-lifecycle__error').remove();
+    return ajax('moksafowo_ecpay_credit_query', { order_id: orderId, nonce: nonce })
       .done(function (resp) {
         if (resp && resp.success && resp.data && resp.data.html) {
           $root.html(resp.data.html);
@@ -66,13 +66,13 @@
   }
 
   // 點「查詢交易狀態」/「重新查詢」 → query
-  $(document).on('click', '.mo-ecpay-credit-lifecycle__refresh', function (e) {
+  $(document).on('click', '.moksafowo-ecpay-credit-lifecycle__refresh', function (e) {
     e.preventDefault();
     refresh(getRoot(this));
   });
 
   // 點 [取消授權 / 請款 / 退款] → confirm + AJAX action
-  $(document).on('click', '.mo-ecpay-credit-lifecycle__action', function (e) {
+  $(document).on('click', '.moksafowo-ecpay-credit-lifecycle__action', function (e) {
     e.preventDefault();
     const $btn = $(this);
     const $root = getRoot($btn);
@@ -83,7 +83,7 @@
     let amount = 0;
     let confirmMsg = '';
     if ('R' === action) {
-      amount = parseInt($root.find('.mo-ecpay-credit-lifecycle__amount').val(), 10) || 0;
+      amount = parseInt($root.find('.moksafowo-ecpay-credit-lifecycle__amount').val(), 10) || 0;
       if (amount <= 0) {
         window.alert(i18n.refundAmtErr || 'Amount must be > 0');
         return;
@@ -99,9 +99,9 @@
     }
 
     setBusy($root, true);
-    $root.find('.mo-ecpay-credit-lifecycle__error').remove();
+    $root.find('.moksafowo-ecpay-credit-lifecycle__error').remove();
 
-    ajax('mo_ecpay_credit_action', {
+    ajax('moksafowo_ecpay_credit_action', {
       order_id: orderId,
       nonce: nonce,
       credit_action: action,

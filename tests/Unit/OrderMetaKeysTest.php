@@ -7,7 +7,7 @@ use MoksaWeb\Mowc\Order\Meta\Keys;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Order\Meta\Keys 守則檢驗 — 所有常數必須遵守 `_mo_` 前綴（CLAUDE.md §2）。
+ * Order\Meta\Keys 守則檢驗 — 所有常數必須遵守 `_moksafowo_` 前綴（CLAUDE.md §2）。
  */
 final class OrderMetaKeysTest extends TestCase {
 
@@ -18,20 +18,20 @@ final class OrderMetaKeysTest extends TestCase {
 			if ( ! is_string( $value ) ) {
 				continue;
 			}
-			if ( 0 !== strpos( $value, '_mo_' ) ) {
+			if ( 0 !== strpos( $value, '_moksafowo_' ) ) {
 				$violations[] = "$name = '$value'";
 			}
 		}
-		self::assertSame( [], $violations, "違反 _mo_ 前綴的常數：\n" . implode( "\n", $violations ) );
+		self::assertSame( [], $violations, "違反 _moksafowo_ 前綴的常數：\n" . implode( "\n", $violations ) );
 	}
 
 	public function test_known_keys_format(): void {
 		// 抽幾條代表性常數驗格式
-		self::assertSame( '_mo_ecpay_merchant_trade_no', Keys::ECPAY_MERCHANT_TRADE_NO );
-		self::assertSame( '_mo_newebpay_payment_type', Keys::NEWEBPAY_PAYMENT_TYPE );
-		self::assertSame( '_mo_paynow_order_no', Keys::PAYNOW_ORDER_NO );
-		self::assertSame( '_mo_invoice_provider', Keys::INVOICE_PROVIDER );
-		self::assertSame( '_mo_tappay_rec_trade_id', Keys::TAPPAY_REC_TRADE_ID );
+		self::assertSame( '_moksafowo_ecpay_merchant_trade_no', Keys::ECPAY_MERCHANT_TRADE_NO );
+		self::assertSame( '_moksafowo_newebpay_payment_type', Keys::NEWEBPAY_PAYMENT_TYPE );
+		self::assertSame( '_moksafowo_paynow_order_no', Keys::PAYNOW_ORDER_NO );
+		self::assertSame( '_moksafowo_invoice_provider', Keys::INVOICE_PROVIDER );
+		self::assertSame( '_moksafowo_tappay_rec_trade_id', Keys::TAPPAY_REC_TRADE_ID );
 	}
 
 	public function test_no_duplicate_values(): void {

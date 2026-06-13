@@ -88,8 +88,16 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 			'amt'      => $args['total_price'],
 		] );
 
-		// PaymentRequest::render_form 內部 esc_attr / esc_url 已處理；此處輸出已轉義 HTML。
-		echo PaymentRequest::render_form( $params ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// render_form 內部已 esc_*，輸出端仍過 wp_kses 白名單；auto-submit 走官方 inline script API。
+		echo wp_kses(
+			PaymentRequest::render_form( $params ),
+			[
+				'form'   => [ 'method' => true, 'id' => true, 'action' => true, 'accept-charset' => true ],
+				'input'  => [ 'type' => true, 'name' => true, 'value' => true, 'id' => true ],
+				'button' => [ 'type' => true, 'id' => true, 'class' => true ],
+			]
+		);
+		wp_print_inline_script_tag( 'document.getElementById("moksafowo-paynow-form").submit();' );
 	}
 
 	private function resolve_receiver_id( \WC_Order $order ): string {
@@ -102,7 +110,7 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 	}
 
 	protected function build_order_info( \WC_Order $order ): string {
-		$admin = trim( (string) get_option( 'mo_paynow_order_info', '' ) );
+		$admin = trim( (string) get_option( 'moksafowo_paynow_order_info', '' ) );
 		if ( '' !== $admin ) {
 			return $admin;
 		}
@@ -130,7 +138,7 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 			$order->save();
 		}
 		return new \WP_Error(
-			'mo_paynow_manual_refund',
+			'moksafowo_paynow_manual_refund',
 			__( 'PayNow 退款請至 PayNow 商家後台手動操作（避免自動退款觸發停權）。', 'mo-ectools' )
 		);
 	}

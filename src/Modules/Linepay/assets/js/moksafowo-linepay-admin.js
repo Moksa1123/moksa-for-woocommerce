@@ -10,12 +10,12 @@ jQuery(function ($) {
 		 * Initialize.
 		 */
 		init: function () {
-			$(document.body).on('change', '#Mo_LinePay_sandboxmode_enabled', function () {
-				var sandbox_channel_id = $('#Mo_LinePay_sandbox_channel_id').parents('tr').eq(0),
-					sandbox_channel_secret = $('#Mo_LinePay_sandbox_channel_secret').parents('tr').eq(0),
+			$(document.body).on('change', '#Moksafowo_LinePay_sandboxmode_enabled', function () {
+				var sandbox_channel_id = $('#Moksafowo_LinePay_sandbox_channel_id').parents('tr').eq(0),
+					sandbox_channel_secret = $('#Moksafowo_LinePay_sandbox_channel_secret').parents('tr').eq(0),
 
-					channel_id = $('#Mo_LinePay_channel_id').parents('tr').eq(0),
-					channel_secret = $('#Mo_LinePay_channel_secret').parents('tr').eq(0);
+					channel_id = $('#Moksafowo_LinePay_channel_id').parents('tr').eq(0),
+					channel_secret = $('#Moksafowo_LinePay_channel_secret').parents('tr').eq(0);
 
 
 				if ($(this).is(':checked')) {
@@ -35,11 +35,11 @@ jQuery(function ($) {
 				}
 			});
 
-			$('#Mo_LinePay_sandboxmode_enabled').trigger('change');
+			$('#Moksafowo_LinePay_sandboxmode_enabled').trigger('change');
 
-			$( document ).on( 'click', '.linepay-confirm-btn', function( event ){
+			$( document ).on( 'click', '.moksafowo-linepay-confirm-btn', function( event ){
 				event.preventDefault();
-				if ( ! window.confirm( mo_linepay.confirm_msg ) ) {
+				if ( ! window.confirm( moksafowo_linepay.confirm_msg ) ) {
 					return;
 				}
 				var $btn = $(this);
@@ -52,11 +52,11 @@ jQuery(function ($) {
 					});
 				}
 			$.ajax({
-				url: mo_linepay.ajax_url,
+				url: moksafowo_linepay.ajax_url,
 				data: {
-					action: 'linepay_confirm',
+					action: 'moksafowo_linepay_confirm',
 					post_id: post_id,
-					security: mo_linepay.confirm_nonce,
+					security: moksafowo_linepay.confirm_nonce,
 				},
 				dataType: "json",
 				type: 'post',
@@ -70,7 +70,7 @@ jQuery(function ($) {
 					$btn.prop('disabled', false);
 				},
 				error: function () {
-					alert(mo_linepay.error_msg);
+					alert(moksafowo_linepay.error_msg);
 					$btn.prop('disabled', false);
 				},
 				complete: function () {

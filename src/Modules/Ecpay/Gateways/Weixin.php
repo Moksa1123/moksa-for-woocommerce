@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Weixin extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_weixin';
+		$this->id = 'moksafowo_ecpay_weixin';
 		parent::__construct();
 	}
 

@@ -13,32 +13,32 @@ final class Requirements {
 	public static function met(): bool {
 		self::$messages = [];
 
-		if ( version_compare( PHP_VERSION, MOWC_MIN_PHP, '<' ) ) {
+		if ( version_compare( PHP_VERSION, MOKSAFOWO_MIN_PHP, '<' ) ) {
 			self::$messages[] = sprintf(
 				/* translators: 1: required PHP, 2: current PHP. */
 				__( 'Moksa requires PHP %1$s or higher. You are running %2$s.', 'mo-ectools' ),
-				MOWC_MIN_PHP,
+				MOKSAFOWO_MIN_PHP,
 				PHP_VERSION
 			);
 		}
 
 		global $wp_version;
-		if ( version_compare( (string) $wp_version, MOWC_MIN_WP, '<' ) ) {
+		if ( version_compare( (string) $wp_version, MOKSAFOWO_MIN_WP, '<' ) ) {
 			self::$messages[] = sprintf(
 				/* translators: 1: required WP, 2: current WP. */
 				__( 'Moksa requires WordPress %1$s or higher. You are running %2$s.', 'mo-ectools' ),
-				MOWC_MIN_WP,
+				MOKSAFOWO_MIN_WP,
 				(string) $wp_version
 			);
 		}
 
 		if ( ! self::woocommerce_active() ) {
 			self::$messages[] = __( 'Moksa requires WooCommerce to be active.', 'mo-ectools' );
-		} elseif ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, MOWC_MIN_WC, '<' ) ) {
+		} elseif ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, MOKSAFOWO_MIN_WC, '<' ) ) {
 			self::$messages[] = sprintf(
 				/* translators: 1: required WC, 2: current WC. */
 				__( 'Moksa requires WooCommerce %1$s or higher. You are running %2$s.', 'mo-ectools' ),
-				MOWC_MIN_WC,
+				MOKSAFOWO_MIN_WC,
 				WC_VERSION
 			);
 		}

@@ -34,7 +34,7 @@ final class PrintLabel {
 		// → 改 form 打到我們 admin-post proxy，由 proxy 組 envelope 後 server-to-server 打 ECPay
 		// → 把 ECPay 回的 label HTML 直接 echo 給 browser 顯示
 		$payload = [
-			'action'        => 'mo_ecpay_shipping_print_v2',
+			'action'        => 'moksafowo_ecpay_shipping_print_v2',
 			'_wpnonce'      => wp_create_nonce( PrintProxy::nonce_action() ),
 			'logistics_ids' => implode( ',', $logistics_ids ),
 			'subtype'       => $subtype,

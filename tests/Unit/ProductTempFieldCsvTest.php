@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
 final class ProductTempFieldCsvTest extends TestCase {
 
 	private static function parse( string $raw ): string {
-		$data = ProductTempField::csv_import_parse_value( [ 'mo_product_temp' => $raw ], null );
-		return (string) ( $data['mo_product_temp'] ?? '' );
+		$data = ProductTempField::csv_import_parse_value( [ 'moksafowo_product_temp' => $raw ], null );
+		return (string) ( $data['moksafowo_product_temp'] ?? '' );
 	}
 
 	public function test_numeric_inputs_pass_through(): void {
@@ -67,7 +67,7 @@ final class ProductTempFieldCsvTest extends TestCase {
 
 	public function test_parse_value_passthrough_when_key_missing(): void {
 		$data = ProductTempField::csv_import_parse_value( [ 'other_key' => 'foo' ], null );
-		self::assertArrayNotHasKey( 'mo_product_temp', $data );
+		self::assertArrayNotHasKey( 'moksafowo_product_temp', $data );
 		self::assertSame( 'foo', $data['other_key'] );
 	}
 
@@ -75,12 +75,12 @@ final class ProductTempFieldCsvTest extends TestCase {
 		$cols = ProductTempField::csv_import_mapping_defaults( [] );
 
 		// 英文 base + 大小寫變體
-		self::assertArrayHasKey( 'mo_product_temp', $cols );
-		self::assertArrayHasKey( 'MO_PRODUCT_TEMP', $cols );
-		self::assertArrayHasKey( 'Mo_Product_Temp', $cols );
-		self::assertArrayHasKey( 'mo product temp', $cols );
-		self::assertArrayHasKey( 'MO PRODUCT TEMP', $cols );
-		self::assertArrayHasKey( 'Mo Product Temp', $cols );
+		self::assertArrayHasKey( 'moksafowo_product_temp', $cols );
+		self::assertArrayHasKey( 'MOKSAFOWO_PRODUCT_TEMP', $cols );
+		self::assertArrayHasKey( 'Moksafowo_Product_Temp', $cols );
+		self::assertArrayHasKey( 'moksafowo product temp', $cols );
+		self::assertArrayHasKey( 'MOKSAFOWO PRODUCT TEMP', $cols );
+		self::assertArrayHasKey( 'Moksafowo Product Temp', $cols );
 
 		// 中文 header
 		self::assertArrayHasKey( '物流溫層', $cols );
@@ -88,13 +88,13 @@ final class ProductTempFieldCsvTest extends TestCase {
 
 		// 全部應 map 到 mo_product_temp
 		foreach ( $cols as $val ) {
-			self::assertSame( 'mo_product_temp', $val );
+			self::assertSame( 'moksafowo_product_temp', $val );
 		}
 	}
 
 	public function test_mapping_defaults_preserves_other_columns(): void {
 		$cols = ProductTempField::csv_import_mapping_defaults( [ 'existing' => 'other_field' ] );
 		self::assertSame( 'other_field', $cols['existing'] );
-		self::assertArrayHasKey( 'mo_product_temp', $cols );
+		self::assertArrayHasKey( 'moksafowo_product_temp', $cols );
 	}
 }

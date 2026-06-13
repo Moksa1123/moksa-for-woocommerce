@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Unified extends AbstractEcpayGateway {
 
-	public const GATEWAY_ID = 'mo_ecpay_unified';
+	public const GATEWAY_ID = 'moksafowo_ecpay_unified';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

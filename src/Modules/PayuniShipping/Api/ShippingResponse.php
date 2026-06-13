@@ -18,16 +18,16 @@ class ShippingResponse {
 		self::get_instance();
 
 		// 7-11 物流貨態回傳.
-		add_action( 'woocommerce_api_mo_payuni_shipping_711_notify', array( self::get_instance(), 'payuni_711_receive_update' ) );
+		add_action( 'woocommerce_api_moksafowo_payuni_shipping_711_notify', array( self::get_instance(), 'moksafowo_payuni_711_receive_update' ) );
 
 		// TCAT 物流貨態回傳.
-		add_action( 'woocommerce_api_mo_payuni_shipping_tcat_notify', array( self::get_instance(), 'payuni_tcat_receive_update' ) );
+		add_action( 'woocommerce_api_moksafowo_payuni_shipping_tcat_notify', array( self::get_instance(), 'moksafowo_payuni_tcat_receive_update' ) );
 
 		// 根據貨態更新訂單狀態.
-		add_action( 'payuni_update_shipping_order_status', array( self::get_instance(), 'update_order_status_after_received_update' ), 10, 3 );
+		add_action( 'moksafowo_payuni_update_shipping_order_status', array( self::get_instance(), 'update_order_status_after_received_update' ), 10, 3 );
 	}
 
-	public static function payuni_711_receive_update() {
+	public static function moksafowo_payuni_711_receive_update() {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method.
 		$posted = wc_clean( wp_unslash( $_POST ) );
 
@@ -93,7 +93,7 @@ class ShippingResponse {
 						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
 
 						// change order status based on ShipStatus.
-						do_action( 'payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
 					}
 				}// end empty $orders
 
@@ -158,7 +158,7 @@ class ShippingResponse {
 		}
 	}
 
-	public static function payuni_tcat_receive_update() {
+	public static function moksafowo_payuni_tcat_receive_update() {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method.
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		$posted = wc_clean( wp_unslash( $_POST ) );
@@ -244,7 +244,7 @@ class ShippingResponse {
 						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
 
 						// change order status based on ShipStatus.
-						do_action( 'payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
 					}
 				} else {
 					PayuniShipping::log( 'PAYUNi NotifyURL response fail: can not find order by ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );

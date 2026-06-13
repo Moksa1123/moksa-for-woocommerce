@@ -42,7 +42,7 @@ final class OrderInfoLayout {
 
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$cards = (array) apply_filters( 'mo_order_info_cards', [], $order );
+		$cards = (array) apply_filters( 'moksafowo_order_info_cards', [], $order );
 
 		// 依 slot 分配（同 slot 多個 callback 後者覆蓋，allow override pattern）
 		$by_slot = [];
@@ -66,16 +66,59 @@ final class OrderInfoLayout {
 			if ( $card ) {
 				echo '<div class="mowp-order-info-card mowp-order-info-card--' . esc_attr( $slot ) . '">';
 				echo '<h4 class="mowp-order-info-card__title">' . esc_html( (string) ( $card['title'] ?? self::default_title( $slot ) ) ) . '</h4>';
-				echo $card['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- caller responsibility, html assembled by provider module with esc_*.
+				echo wp_kses( (string) $card['html'], self::card_allowlist() );
 				echo '</div>';
 			} else {
 				echo '<div class="mowp-order-info-card mowp-order-info-card--' . esc_attr( $slot ) . ' mowp-order-info-card--empty">';
 				echo '<h4 class="mowp-order-info-card__title">' . esc_html( self::default_title( $slot ) ) . '</h4>';
-				echo self::default_placeholder( $slot, $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo wp_kses( self::default_placeholder( $slot, $order ), self::card_allowlist() );
 				echo '</div>';
 			}
 		}
 		echo '</div>';
+	}
+
+	/**
+	 * 卡片 HTML 的 kses allowlist — provider module 組裝的 admin 卡片
+	 * （表單欄位 / 按鈕 / 表格 / 追蹤連結）允許的標籤與屬性。
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	private static function card_allowlist(): array {
+		$common = [ 'id' => true, 'class' => true, 'style' => true, 'title' => true ];
+		$data   = [ 'data-*' => true ];
+		return [
+			'div'      => array_merge( $common, $data ),
+			'span'     => array_merge( $common, $data ),
+			'p'        => $common,
+			'h4'       => $common,
+			'h5'       => $common,
+			'table'    => $common,
+			'thead'    => $common,
+			'tbody'    => $common,
+			'tr'       => $common,
+			'td'       => array_merge( $common, [ 'colspan' => true ] ),
+			'th'       => array_merge( $common, [ 'colspan' => true, 'scope' => true ] ),
+			'ul'       => $common,
+			'li'       => $common,
+			'code'     => $common,
+			'strong'   => [],
+			'em'       => [],
+			'small'    => $common,
+			'br'       => [],
+			'hr'       => $common,
+			'a'        => array_merge( $common, $data, [ 'href' => true, 'target' => true, 'rel' => true ] ),
+			'button'   => array_merge( $common, $data, [ 'type' => true, 'disabled' => true ] ),
+			'form'     => array_merge( $common, [ 'method' => true, 'action' => true ] ),
+			'label'    => array_merge( $common, [ 'for' => true ] ),
+			'input'    => array_merge( $common, $data, [ 'type' => true, 'name' => true, 'value' => true, 'placeholder' => true, 'readonly' => true, 'disabled' => true, 'checked' => true, 'maxlength' => true, 'size' => true ] ),
+			'select'   => array_merge( $common, $data, [ 'name' => true, 'disabled' => true ] ),
+			'option'   => [ 'value' => true, 'selected' => true, 'disabled' => true ],
+			'textarea' => array_merge( $common, [ 'name' => true, 'rows' => true, 'cols' => true, 'placeholder' => true, 'readonly' => true ] ),
+			'svg'      => [ 'xmlns' => true, 'viewbox' => true, 'width' => true, 'height' => true, 'fill' => true, 'aria-hidden' => true, 'style' => true ],
+			'path'     => [ 'd' => true, 'fill' => true, 'fill-rule' => true, 'clip-rule' => true ],
+			'img'      => array_merge( $common, [ 'src' => true, 'alt' => true, 'width' => true, 'height' => true ] ),
+		];
 	}
 
 	private static function default_title( string $slot ): string {
@@ -118,7 +161,7 @@ final class OrderInfoLayout {
 			}
 			// 其他 gateway — 區分「mowp 模組但 card 未實作」vs「完全外掛 gateway」
 			if ( '' !== $method_title ) {
-				$is_mowp = str_starts_with( $method, 'mo_' ) || 'linepay-tw' === $method;
+				$is_mowp = str_starts_with( $method, 'moksafowo_' ) || 'moksafowo-linepay' === $method;
 				$note = $is_mowp
 					? __( '此付款方式由 mowp 處理但詳情卡尚未實作。', 'mo-ectools' )
 					: __( '此付款方式未由 mowp 處理，無額外資訊可顯示。', 'mo-ectools' );
@@ -143,7 +186,7 @@ final class OrderInfoLayout {
 			$titles = [];
 			foreach ( $methods as $m ) {
 				$mid = (string) $m->get_method_id();
-				if ( str_starts_with( $mid, 'mo_' ) ) {
+				if ( str_starts_with( $mid, 'moksafowo_' ) ) {
 					$is_mowp = true;
 				}
 				$titles[] = $m->get_name();
@@ -180,9 +223,9 @@ final class OrderInfoLayout {
 			. '.mowp-order-info-card .button { margin-top: 6px; }'
 			. '@media (max-width: 1280px) { .mowp-order-info-grid { grid-template-columns: 1fr 1fr; } }'
 			. '@media (max-width: 782px) { .mowp-order-info-grid { grid-template-columns: 1fr; } }';
-		wp_register_style( 'mo-order-info-layout', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-order-info-layout' );
-		wp_add_inline_style( 'mo-order-info-layout', $css );
+		wp_register_style( 'moksafowo-order-info-layout', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-order-info-layout' );
+		wp_add_inline_style( 'moksafowo-order-info-layout', $css );
 	}
 
 	private static function resolve_order( $context ): ?\WC_Order {

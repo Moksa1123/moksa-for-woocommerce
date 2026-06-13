@@ -16,7 +16,7 @@ final class PaymentResponse {
 
 	public static function init(): void {
 		self::get_instance();
-		add_action( 'woocommerce_api_linepay_payment', array( self::get_instance(), 'receive_payment_response' ) );
+		add_action( 'woocommerce_api_moksafowo_linepay_payment', array( self::get_instance(), 'receive_payment_response' ) );
 	}
 
 	public function receive_payment_response(): void {
@@ -26,7 +26,7 @@ final class PaymentResponse {
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			$order_id     = isset( $_GET['order_id'] ) ? sanitize_text_field( wp_unslash( $_GET['order_id'] ) ) : '';
 			$request_type = isset( $_GET['request_type'] ) ? sanitize_text_field( wp_unslash( $_GET['request_type'] ) ) : '';
-			$posted_token = isset( $_GET['mo_token'] ) ? sanitize_text_field( wp_unslash( $_GET['mo_token'] ) ) : '';
+			$posted_token = isset( $_GET['moksafowo_token'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_token'] ) ) : '';
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 			$expected_token = PaymentRequest::callback_token( $order_id, $request_type );
@@ -40,7 +40,7 @@ final class PaymentResponse {
 				throw new Exception( sprintf( Constants::LOG_TEMPLATE_HANDLE_CALLBANK_NOT_FOUND_ORDER_ID, $order_id, __( 'Unable to process callback.', 'mo-ectools' ) ) );
 			}
 
-			$payment_status = $order->get_meta( '_linepay_payment_status' );
+			$payment_status = $order->get_meta( '_moksafowo_linepay_payment_status' );
 
 			$gateway = new Credit();
 			$request = new PaymentRequest( $gateway );

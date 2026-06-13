@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 6.7
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -14,8 +14,6 @@ WC tested up to: 10.7
 A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping and e-invoice integrations.
 
 == Description ==
-
-> 難用版台灣電商外掛，非常難用謹慎安裝。結合多家金流物流電子發票，但哪幾間請自行安裝才知道。😉 （以上純屬玩笑，其實很好用 👇）
 
 A Taiwan-focused WooCommerce extension. Toggleable modules cover ECPay (綠界), NewebPay (藍新), SmilePay (速買配), LINE Pay, PAYUNi (統一金流), PayNow (立即富), PChomePay (支付連), TapPay and Shopline Payments for payments; ECPay, NewebPay, SmilePay, PAYUNi and PayNow for convenience-store + home-delivery shipping; ezPay, ECPay, SmilePay, PayNow and AMEGO for Taiwan e-invoicing.
 
@@ -107,6 +105,13 @@ Yes. Payment, shipping and invoice modules are fully independent — any combina
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.1.0 - 2026-06-05 =
+* All global identifiers renamed to the unique `moksafowo` prefix (options, hooks, AJAX actions, gateway IDs, script handles, order meta, custom order statuses) per WordPress.org review.
+* Hardened all payment / logistics webhook handlers: signature verification before any use, full per-field input sanitization, no raw request logging.
+* Store-selection restore at checkout now requires a nonce.
+* All inline `<script>` / `<style>` output replaced with `wp_enqueue_*`, `wp_add_inline_*` and `wp_print_inline_script_tag()`.
+* All dynamic admin card / tracking-link HTML now escaped through explicit `wp_kses` allowlists at output time.
 
 = 1.0.0 - 2026-05-26 =
 * Initial public release on the WordPress.org Plugin Directory.

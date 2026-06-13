@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Atm extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_atm';
+		$this->id = 'moksafowo_ecpay_atm';
 		parent::__construct();
 	}
 
@@ -26,8 +26,8 @@ final class Atm extends AbstractEcpayGateway {
 
 	protected function extra_aio_params( \WC_Order $order ): array {
 		return [
-			'ExpireDate'     => max( 1, min( 60, (int) get_option( 'mo_ecpay_atm_expire_days', 3 ) ) ),
-			'PaymentInfoURL' => home_url( '/wc-api/mo_ecpay_payment' ),
+			'ExpireDate'     => max( 1, min( 60, (int) get_option( 'moksafowo_ecpay_atm_expire_days', 3 ) ) ),
+			'PaymentInfoURL' => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 		];
 	}
 }

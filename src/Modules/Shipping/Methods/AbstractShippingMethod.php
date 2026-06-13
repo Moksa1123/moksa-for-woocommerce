@@ -49,7 +49,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return apply_filters(
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			'mo_shipping_method_is_available',
+			'moksafowo_shipping_method_is_available',
 			empty( $missing ),
 			$package,
 			$this
@@ -95,7 +95,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'type'        => 'checkbox',
 				'label'       => __( '多溫層訂單，每個溫層的物流單帶該溫層自己的運費', 'mo-ectools' ),
 				'default'     => 'no',
-				'description' => __( '預設關閉：cost formula 依整車一次性算出單一運費，整單運費全數塞給第一張物流單（COD 第一張代收所有運費）。開啟後：cost formula 會對每個溫層的商品「分別」評估一次，顧客結帳顯示的運費 = 各溫層運費總和（多溫層 = 多份基本費），每張物流單的 GoodsAmount / COD 代收金額會帶該溫層自己評估出來的運費。需搭配 `[mo_addfee cool_2="X" cool_3="Y"]` 的 cost formula 才能讓不同溫層算出不同運費。', 'mo-ectools' ),
+				'description' => __( '預設關閉：cost formula 依整車一次性算出單一運費，整單運費全數塞給第一張物流單（COD 第一張代收所有運費）。開啟後：cost formula 會對每個溫層的商品「分別」評估一次，顧客結帳顯示的運費 = 各溫層運費總和（多溫層 = 多份基本費），每張物流單的 GoodsAmount / COD 代收金額會帶該溫層自己評估出來的運費。需搭配 `[moksafowo_addfee cool_2="X" cool_3="Y"]` 的 cost formula 才能讓不同溫層算出不同運費。', 'mo-ectools' ),
 				'desc_tip'    => false,
 			],
 			'breakdown_enabled' => [
@@ -209,7 +209,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			$args = apply_filters(
 				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-				'mo_shipping_evaluate_cost_args',
+				'moksafowo_shipping_evaluate_cost_args',
 				[
 					'temps'  => ProductTemp::temps_in_package( $package ),
 					'qty'    => self::package_qty( $package ),
@@ -316,10 +316,10 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 			__( '支援純數字或含 shortcode 的算式，計算結果為新台幣金額。', 'mo-ectools' ),
 			__( '範例：', 'mo-ectools' ),
 			__( '<code>100</code> — 固定 100 元', 'mo-ectools' ),
-			__( '<code>100 + [mo_addfee cool_2="50" cool_3="100"]</code> — 常溫 100、含冷藏訂單 +50、含冷凍訂單 +100', 'mo-ectools' ),
-			__( '<code>[mo_addfee temp_1="100" temp_2="150" temp_3="200"]</code> — 常溫 100 / 冷藏 150 / 冷凍 200（搭配下方「依溫層分別計算運費」勾起來，每張物流單就帶該溫層的價格）', 'mo-ectools' ),
-			__( '<code>50 + [mo_addfee qty="10"]</code> — 50 + 每件 10 元', 'mo-ectools' ),
-			__( '<code>[mo_addfee weight="20"]</code> — 每公斤 20 元', 'mo-ectools' ),
+			__( '<code>100 + [moksafowo_addfee cool_2="50" cool_3="100"]</code> — 常溫 100、含冷藏訂單 +50、含冷凍訂單 +100', 'mo-ectools' ),
+			__( '<code>[moksafowo_addfee temp_1="100" temp_2="150" temp_3="200"]</code> — 常溫 100 / 冷藏 150 / 冷凍 200（搭配下方「依溫層分別計算運費」勾起來，每張物流單就帶該溫層的價格）', 'mo-ectools' ),
+			__( '<code>50 + [moksafowo_addfee qty="10"]</code> — 50 + 每件 10 元', 'mo-ectools' ),
+			__( '<code>[moksafowo_addfee weight="20"]</code> — 每公斤 20 元', 'mo-ectools' ),
 			__( '屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 base、<code>temp_3</code>=冷凍 base、<code>cool</code>=任一冷的就加、<code>cool_2</code>=冷藏額外加、<code>cool_3</code>=冷凍額外加、<code>qty</code>=每件加、<code>weight</code>=每公斤加。', 'mo-ectools' ),
 		];
 		return wp_kses_post( implode( '<br>', $lines ) );

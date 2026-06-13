@@ -8,8 +8,8 @@ defined( 'ABSPATH' ) || exit;
 
 final class FieldManager {
 
-	private const OPTION_LAYOUT = 'mo_tw_address_field_layout';
-	private const OPTION_TOGGLE = 'mo_tw_address_reorder_fields';
+	private const OPTION_LAYOUT = 'moksafowo_tw_address_field_layout';
+	private const OPTION_TOGGLE = 'moksafowo_tw_address_reorder_fields';
 
 	private const DEFAULT_LAYOUT = [
 		[ 'key' => 'last_name',  'width' => 50,  'enabled' => true,  'required' => true  ],
@@ -154,8 +154,8 @@ final class FieldManager {
 				<label><?php echo esc_html( $value['title'] ?? '' ); ?> <?php echo $tooltip; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
 			</th>
 			<td class="forminp">
-				<input type="hidden" name="<?php echo esc_attr( self::OPTION_LAYOUT ); ?>" value="<?php echo esc_attr( (string) $json ); ?>" id="mo-tw-field-layout-input" />
-				<ul class="mo-tw-field-list" id="mo-tw-field-list">
+				<input type="hidden" name="<?php echo esc_attr( self::OPTION_LAYOUT ); ?>" value="<?php echo esc_attr( (string) $json ); ?>" id="moksafowo-tw-field-layout-input" />
+				<ul class="moksafowo-tw-field-list" id="moksafowo-tw-field-list">
 					<?php foreach ( $layout as $item ) :
 						$key      = $item['key'];
 						$width    = $item['width'];
@@ -164,22 +164,22 @@ final class FieldManager {
 						$label    = self::FIELD_LABELS[ $key ] ?? $key;
 					?>
 						<li data-key="<?php echo esc_attr( $key ); ?>" class="<?php echo $enabled ? '' : 'is-disabled'; ?>">
-							<span class="mo-tw-drag" aria-hidden="true">&#x2630;</span>
-							<label class="mo-tw-enable">
-								<input type="checkbox" class="mo-tw-enable-checkbox" <?php checked( $enabled ); ?> />
+							<span class="moksafowo-tw-drag" aria-hidden="true">&#x2630;</span>
+							<label class="moksafowo-tw-enable">
+								<input type="checkbox" class="moksafowo-tw-enable-checkbox" <?php checked( $enabled ); ?> />
 								<span>啟用</span>
 							</label>
-							<label class="mo-tw-required">
-								<input type="checkbox" class="mo-tw-required-checkbox" <?php checked( $required ); ?> />
+							<label class="moksafowo-tw-required">
+								<input type="checkbox" class="moksafowo-tw-required-checkbox" <?php checked( $required ); ?> />
 								<span>必填</span>
 							</label>
-							<span class="mo-tw-label"><?php echo esc_html( $label ); ?></span>
-							<span class="mo-tw-width-options">
+							<span class="moksafowo-tw-label"><?php echo esc_html( $label ); ?></span>
+							<span class="moksafowo-tw-width-options">
 								<label>
-									<input type="radio" name="mo-tw-w-<?php echo esc_attr( $key ); ?>" value="50" <?php checked( $width, 50 ); ?> /> 50%
+									<input type="radio" name="moksafowo-tw-w-<?php echo esc_attr( $key ); ?>" value="50" <?php checked( $width, 50 ); ?> /> 50%
 								</label>
 								<label>
-									<input type="radio" name="mo-tw-w-<?php echo esc_attr( $key ); ?>" value="100" <?php checked( $width, 100 ); ?> /> 100%
+									<input type="radio" name="moksafowo-tw-w-<?php echo esc_attr( $key ); ?>" value="100" <?php checked( $width, 100 ); ?> /> 100%
 								</label>
 							</span>
 						</li>
@@ -205,17 +205,17 @@ final class FieldManager {
 		}
 
 		wp_enqueue_script(
-			'mo-tw-field-manager',
-			MOWC_PLUGIN_URL . 'src/Modules/Address/assets/admin/js/mo-field-manager.js',
+			'moksafowo-tw-field-manager',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/admin/js/moksafowo-field-manager.js',
 			[ 'jquery', 'jquery-ui-sortable' ],
-			MOWC_VERSION,
+			MOKSAFOWO_VERSION,
 			true
 		);
 		wp_enqueue_style(
-			'mo-tw-field-manager',
-			MOWC_PLUGIN_URL . 'src/Modules/Address/assets/admin/css/mo-field-manager.css',
+			'moksafowo-tw-field-manager',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/admin/css/moksafowo-field-manager.css',
 			[],
-			MOWC_VERSION
+			MOKSAFOWO_VERSION
 		);
 	}
 

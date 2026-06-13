@@ -14,7 +14,7 @@ final class BatchPrintRegistry {
 			return self::$cache;
 		}
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$providers   = (array) apply_filters( 'mo_shipping_batch_print_providers', [] );
+		$providers   = (array) apply_filters( 'moksafowo_shipping_batch_print_providers', [] );
 		$normalized  = [];
 		foreach ( $providers as $key => $entry ) {
 			$key   = (string) $key;

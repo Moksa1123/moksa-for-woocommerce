@@ -20,9 +20,9 @@ final class Currency {
 			$currency_code = get_woocommerce_currency();
 		}
 		$currency_code = strtoupper( $currency_code );
-		// 用 array_key_exists 而非 in_array — 修 wpbr-linepay-tw 1.3.3 對非 TWD 幣別錯誤匹配的 bug
-		if ( array_key_exists( $currency_code, \Mo_LinePay::$currency_scales ) ) {
-			return (int) \Mo_LinePay::$currency_scales[ $currency_code ];
+		// 用 array_key_exists 而非 in_array — 修 wpbr-moksafowo-linepay 1.3.3 對非 TWD 幣別錯誤匹配的 bug
+		if ( array_key_exists( $currency_code, \MoksaWeb\Mowc\Modules\Linepay\LinePay::$currency_scales ) ) {
+			return (int) \MoksaWeb\Mowc\Modules\Linepay\LinePay::$currency_scales[ $currency_code ];
 		}
 		return 0;
 	}

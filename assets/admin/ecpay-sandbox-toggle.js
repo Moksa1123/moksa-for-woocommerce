@@ -15,28 +15,28 @@
 	// 每個 module 一筆：sandbox toggle id + 對應 sandbox / production 欄位 id
 	const MODULES = [
 		{
-			toggle:  'mo_ecpay_sandbox_enabled',
-			sandbox: [ 'mo_ecpay_sandbox_merchant_id', 'mo_ecpay_sandbox_hash_key', 'mo_ecpay_sandbox_hash_iv' ],
-			prod:    [ 'mo_ecpay_merchant_id', 'mo_ecpay_hash_key', 'mo_ecpay_hash_iv' ],
+			toggle:  'moksafowo_ecpay_sandbox_enabled',
+			sandbox: [ 'moksafowo_ecpay_sandbox_merchant_id', 'moksafowo_ecpay_sandbox_hash_key', 'moksafowo_ecpay_sandbox_hash_iv' ],
+			prod:    [ 'moksafowo_ecpay_merchant_id', 'moksafowo_ecpay_hash_key', 'moksafowo_ecpay_hash_iv' ],
 			label:   '綠界金流',
 		},
 		{
-			toggle:  'mo_ecpay_shipping_sandbox_enabled',
-			sandbox: [ 'mo_ecpay_shipping_sandbox_merchant_id', 'mo_ecpay_shipping_sandbox_hash_key', 'mo_ecpay_shipping_sandbox_hash_iv' ],
-			prod:    [ 'mo_ecpay_shipping_merchant_id', 'mo_ecpay_shipping_hash_key', 'mo_ecpay_shipping_hash_iv' ],
+			toggle:  'moksafowo_ecpay_shipping_sandbox_enabled',
+			sandbox: [ 'moksafowo_ecpay_shipping_sandbox_merchant_id', 'moksafowo_ecpay_shipping_sandbox_hash_key', 'moksafowo_ecpay_shipping_sandbox_hash_iv' ],
+			prod:    [ 'moksafowo_ecpay_shipping_merchant_id', 'moksafowo_ecpay_shipping_hash_key', 'moksafowo_ecpay_shipping_hash_iv' ],
 			label:   '綠界物流',
 		},
 		{
-			toggle:  'mo_ecpay_invoice_sandbox_enabled',
-			sandbox: [ 'mo_ecpay_invoice_sandbox_merchant_id', 'mo_ecpay_invoice_sandbox_hash_key', 'mo_ecpay_invoice_sandbox_hash_iv' ],
-			prod:    [ 'mo_ecpay_invoice_merchant_id', 'mo_ecpay_invoice_hash_key', 'mo_ecpay_invoice_hash_iv' ],
+			toggle:  'moksafowo_ecpay_invoice_sandbox_enabled',
+			sandbox: [ 'moksafowo_ecpay_invoice_sandbox_merchant_id', 'moksafowo_ecpay_invoice_sandbox_hash_key', 'moksafowo_ecpay_invoice_sandbox_hash_iv' ],
+			prod:    [ 'moksafowo_ecpay_invoice_merchant_id', 'moksafowo_ecpay_invoice_hash_key', 'moksafowo_ecpay_invoice_hash_iv' ],
 			label:   '綠界電子發票',
 		},
 		// PAYUNi 物流：同模式
 		{
-			toggle:  'mo_payuni_shipping_testmode_enabled',
-			sandbox: [ 'payuni_payment_merchant_id_test', 'payuni_payment_hashkey_test', 'payuni_payment_hashiv_test' ],
-			prod:    [ 'payuni_payment_merchant_id', 'payuni_payment_hashkey', 'payuni_payment_hashiv' ],
+			toggle:  'moksafowo_payuni_shipping_testmode_enabled',
+			sandbox: [ 'moksafowo_payuni_payment_merchant_id_test', 'moksafowo_payuni_payment_hashkey_test', 'moksafowo_payuni_payment_hashiv_test' ],
+			prod:    [ 'moksafowo_payuni_payment_merchant_id', 'moksafowo_payuni_payment_hashkey', 'moksafowo_payuni_payment_hashiv' ],
 			label:   'PAYUNi 物流',
 		},
 	];
@@ -50,7 +50,7 @@
 	}
 
 	function ensureBanner( toggleId, label, isSandbox ) {
-		const id = 'mo-sandbox-banner-' + toggleId;
+		const id = 'moksafowo-sandbox-banner-' + toggleId;
 		let banner = document.getElementById( id );
 		const text = isSandbox
 			? '<strong>' + label + '：目前使用「測試環境」資料</strong>　' +
@@ -75,7 +75,7 @@
 		}
 		banner = document.createElement( 'tr' );
 		banner.id = id;
-		banner.className = 'mo-sandbox-banner';
+		banner.className = 'moksafowo-sandbox-banner';
 		const td = document.createElement( 'td' );
 		td.colSpan = 2;
 		td.style.cssText = 'padding:8px 12px;background:' + bg + ';border-left:4px solid ' + accent + ';color:' + fg + ';font-size:13px;';

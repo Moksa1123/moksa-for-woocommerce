@@ -51,6 +51,9 @@ final class WebhookHandler {
 			self::reply( 400, 'bad request' );
 		}
 
+		// json_decode 不做消毒 — 簽章驗過後仍逐欄 sanitize 才記錄與使用。
+		$event = map_deep( $event, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+
 		$event_id = (string) ( $event['id'] ?? '' );
 		$type     = (string) ( $event['type'] ?? '' );
 		$data     = isset( $event['data'] ) && is_array( $event['data'] ) ? $event['data'] : [];

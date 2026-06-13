@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class ApplePay extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_applepay';
+		$this->id = 'moksafowo_ecpay_applepay';
 		parent::__construct();
 	}
 

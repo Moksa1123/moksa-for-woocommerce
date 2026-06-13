@@ -62,7 +62,7 @@ abstract class AbstractGatewayModule extends AbstractModule {
 		$unified = static::unified_gateway_id();
 
 		if ( static::uses_display_mode() ) {
-			$resolved_mode = $mode ?? (string) get_option( 'mo_' . $slug . '_display_mode', 'multi' );
+			$resolved_mode = $mode ?? (string) get_option( 'moksafowo_' . $slug . '_display_mode', 'multi' );
 			if ( 'single' === $resolved_mode ) {
 				return $id === $unified;
 			}
@@ -75,7 +75,7 @@ abstract class AbstractGatewayModule extends AbstractModule {
 			return true;
 		}
 
-		$resolved_allowlist = $allowlist ?? (array) get_option( 'mo_' . $slug . '_enabled_methods', [] );
+		$resolved_allowlist = $allowlist ?? (array) get_option( 'moksafowo_' . $slug . '_enabled_methods', [] );
 		return in_array( $id, $resolved_allowlist, true );
 	}
 
@@ -112,8 +112,8 @@ abstract class AbstractGatewayModule extends AbstractModule {
 	
 	protected static function fetch_gateway_options(): array {
 		$slug      = static::provider_slug();
-		$mode      = static::uses_display_mode() ? (string) get_option( 'mo_' . $slug . '_display_mode', 'multi' ) : null;
-		$allowlist = static::uses_allowlist()    ? (array)  get_option( 'mo_' . $slug . '_enabled_methods', [] ) : null;
+		$mode      = static::uses_display_mode() ? (string) get_option( 'moksafowo_' . $slug . '_display_mode', 'multi' ) : null;
+		$allowlist = static::uses_allowlist()    ? (array)  get_option( 'moksafowo_' . $slug . '_enabled_methods', [] ) : null;
 		return [ $mode, $allowlist ];
 	}
 

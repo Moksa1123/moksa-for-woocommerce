@@ -15,7 +15,7 @@ final class EmailShipped extends AbstractShippingEmail {
 	}
 
 	protected function get_status_slug(): string {
-		return 'mo-shipped';
+		return 'moksa-shipped';
 	}
 
 	public function get_default_subject(): string {

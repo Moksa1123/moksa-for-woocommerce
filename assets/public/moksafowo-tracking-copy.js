@@ -7,7 +7,7 @@
 ( function () {
 	'use strict';
 	document.addEventListener( 'click', function ( e ) {
-		var btn = e.target.closest( '.mo-tracking-copy' );
+		var btn = e.target.closest( '.moksafowo-tracking-copy' );
 		if ( ! btn ) {
 			return;
 		}

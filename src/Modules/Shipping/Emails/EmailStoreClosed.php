@@ -15,7 +15,7 @@ final class EmailStoreClosed extends AbstractShippingEmail {
 	}
 
 	protected function get_status_slug(): string {
-		return 'mo-store-closed';
+		return 'moksa-store-closed';
 	}
 
 	public function get_default_subject(): string {

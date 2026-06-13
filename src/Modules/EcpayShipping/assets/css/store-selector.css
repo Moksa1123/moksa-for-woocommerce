@@ -2,7 +2,7 @@
  * ECPay Shipping CVS 選店 — Classic + Block 共用樣式。
  */
 
-.mo-ecpay-shipping-store {
+.moksafowo-ecpay-shipping-store {
 	margin: 12px 0;
 	padding: 12px 16px;
 	border: 1px solid #ddd;
@@ -14,32 +14,32 @@
 	gap: 12px;
 }
 
-.mo-ecpay-shipping-store__info {
+.moksafowo-ecpay-shipping-store__info {
 	flex: 1 1 60%;
 	min-width: 0;
 }
 
-.mo-ecpay-shipping-store__id {
+.moksafowo-ecpay-shipping-store__id {
 	color: #666;
 	font-size: 0.9em;
 }
 
-.mo-ecpay-shipping-store__address {
+.moksafowo-ecpay-shipping-store__address {
 	font-size: 0.9em;
 	color: #444;
 	margin-top: 2px;
 }
 
-.mo-ecpay-shipping-store__placeholder {
+.moksafowo-ecpay-shipping-store__placeholder {
 	color: #888;
 	flex: 1 1 auto;
 }
 
-.mo-ecpay-shipping-store__btn {
+.moksafowo-ecpay-shipping-store__btn {
 	flex: 0 0 auto;
 }
 
 /* Block checkout 旁邊不要被 shipping-method-block 的 margin 擠 */
-.wp-block-woocommerce-checkout-shipping-method-block + .mo-ecpay-shipping-store {
+.wp-block-woocommerce-checkout-shipping-method-block + .moksafowo-ecpay-shipping-store {
 	margin-top: 8px;
 }

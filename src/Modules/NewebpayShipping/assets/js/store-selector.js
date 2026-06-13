@@ -1,19 +1,19 @@
 ( function () {
 	'use strict';
 
-	if ( ! window.mo_newebpay_shipping ) return;
-	const cfg = window.mo_newebpay_shipping;
-	const HOST_ID = 'mo-newebpay-shipping-store-host';
+	if ( ! window.moksafowo_newebpay_shipping ) return;
+	const cfg = window.moksafowo_newebpay_shipping;
+	const HOST_ID = 'moksafowo-newebpay-shipping-store-host';
 
 	function chosenShippingMethod() {
 		const block = document.querySelector( 'input[type="radio"][name^="radio-control-"]:checked' );
-		if ( block && /^mo_newebpay_shipping_/.test( block.value || '' ) ) {
+		if ( block && /^moksafowo_newebpay_shipping_/.test( block.value || '' ) ) {
 			return ( block.value.split( ':' )[0] || '' );
 		}
 		const classic = document.querySelector( 'input[name^="shipping_method"]:checked' );
 		if ( classic ) {
 			const v = String( classic.value || '' );
-			if ( /^mo_newebpay_shipping_/.test( v ) ) return v.split( ':' )[0];
+			if ( /^moksafowo_newebpay_shipping_/.test( v ) ) return v.split( ':' )[0];
 		}
 		return '';
 	}
@@ -27,7 +27,7 @@
 		if ( host ) return host;
 		host = document.createElement( 'div' );
 		host.id = HOST_ID;
-		host.className = 'mo-newebpay-shipping-store';
+		host.className = 'moksafowo-newebpay-shipping-store';
 		host.style.cssText = 'margin: 12px 0; padding: 12px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;';
 		// Find shipping options container to insert after
 		const shippingBlock = document.querySelector( '.wp-block-woocommerce-checkout-shipping-method-block, #shipping_method, .shipping_method' );
@@ -45,7 +45,7 @@
 		const info = store
 			? `<div><strong>${ escapeHtml( store.name || '' ) }</strong> (${ escapeHtml( cfg.i18n.store_id ) }: ${ escapeHtml( store.id || '' ) })<br><small>${ escapeHtml( store.address || '' ) }</small></div>`
 			: `<div style="color:#666;">${ escapeHtml( cfg.i18n.none_selected ) }</div>`;
-		host.innerHTML = info + `<button type="button" class="mo-newebpay-shipping-store__btn button" style="margin-top:8px;">${ escapeHtml( label ) }</button>`;
+		host.innerHTML = info + `<button type="button" class="moksafowo-newebpay-shipping-store__btn button" style="margin-top:8px;">${ escapeHtml( label ) }</button>`;
 	}
 
 	function clearHost() {
@@ -69,10 +69,10 @@
 
 	function onClick( e ) {
 		const t = e.target;
-		if ( t && t.classList && t.classList.contains( 'mo-newebpay-shipping-store__btn' ) ) {
+		if ( t && t.classList && t.classList.contains( 'moksafowo-newebpay-shipping-store__btn' ) ) {
 			e.preventDefault();
 			const fd = new FormData();
-			fd.append( 'action', 'mo_newebpay_shipping_open_map' );
+			fd.append( 'action', 'moksafowo_newebpay_shipping_open_map' );
 			fd.append( 'shipping_method', chosenShippingMethod() );
 			fd.append( 'ship_type', '1' ); // default 7-11；TODO: per-method ship_type
 			fd.append( 'referrer', window.location.href );
@@ -109,7 +109,7 @@
 		const t = new URL( window.location.href ).searchParams.get( cfg.token_query );
 		if ( ! t ) return;
 		const fd = new FormData();
-		fd.append( 'action', 'mo_newebpay_shipping_resolve_token' );
+		fd.append( 'action', 'moksafowo_newebpay_shipping_resolve_token' );
 		fd.append( 'token', t );
 		fd.append( 'nonce', cfg.nonce );
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )

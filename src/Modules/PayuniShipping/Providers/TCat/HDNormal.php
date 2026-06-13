@@ -14,7 +14,7 @@ class HDNormal extends ShippingBase {
 
 	use TCatHDTrait;
 
-	public const ID = 'mo_payuni_shipping_tcat_normal';
+	public const ID = 'moksafowo_payuni_shipping_tcat_normal';
 
 	public function __construct( $instance_id = 0 ) {
 
@@ -37,7 +37,7 @@ class HDNormal extends ShippingBase {
 	public function init() {
 
 		$this->init_settings();
-		$this->instance_form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php';
+		$this->instance_form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php';
 
 		$this->title                    = $this->get_option( 'title' );
 		$this->cost                     = $this->get_option( 'cost', 0 );

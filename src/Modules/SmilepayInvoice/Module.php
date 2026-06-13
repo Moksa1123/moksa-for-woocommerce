@@ -47,7 +47,7 @@ final class Module extends AbstractModule {
 		return 'smilepay-invoice';
 	}
 
-	public const ASYNC_ISSUE_HOOK = 'mo_smilepay_invoice_async_issue';
+	public const ASYNC_ISSUE_HOOK = 'moksafowo_smilepay_invoice_async_issue';
 
 	public function boot(): void {
 		Frontend\CheckoutFields::init();
@@ -55,7 +55,7 @@ final class Module extends AbstractModule {
 			Admin\OrderMetaBox::init();
 		}
 
-		$when = (string) get_option( 'mo_smilepay_invoice_issue_when', 'paid' );
+		$when = (string) get_option( 'moksafowo_smilepay_invoice_issue_when', 'paid' );
 		if ( 'paid' === $when ) {
 			add_action( 'woocommerce_payment_complete', [ __CLASS__, 'maybe_issue' ], 30 );
 			add_action( 'woocommerce_order_status_processing', [ __CLASS__, 'maybe_issue' ], 30 );
@@ -65,7 +65,7 @@ final class Module extends AbstractModule {
 
 		add_action( self::ASYNC_ISSUE_HOOK, [ __CLASS__, 'async_issue' ], 10, 1 );
 
-		if ( 'auto_cancel' === get_option( 'mo_smilepay_invoice_auto_cancel', 'manual' ) ) {
+		if ( 'auto_cancel' === get_option( 'moksafowo_smilepay_invoice_auto_cancel', 'manual' ) ) {
 			add_action( 'woocommerce_order_status_cancelled', [ Operations\AutoInvalid::class, 'schedule' ] );
 			add_action( 'woocommerce_order_status_refunded',  [ Operations\AutoInvalid::class, 'schedule' ] );
 			add_action( 'woocommerce_order_status_failed',    [ Operations\AutoInvalid::class, 'schedule' ] );
@@ -82,8 +82,8 @@ final class Module extends AbstractModule {
 			return;
 		}
 		$provider      = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
-		$ecpay_enabled = 'yes' === get_option( 'mo_ecpay_invoice_enabled', 'no' );
-		$ezpay_enabled = 'yes' === get_option( 'mo_ezpay_invoice_enabled', 'no' );
+		$ecpay_enabled = 'yes' === get_option( 'moksafowo_ecpay_invoice_enabled', 'no' );
+		$ezpay_enabled = 'yes' === get_option( 'moksafowo_ezpay_invoice_enabled', 'no' );
 
 		if ( '' !== $provider && 'smilepay' !== $provider ) {
 			return;

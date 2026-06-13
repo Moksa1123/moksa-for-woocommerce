@@ -7,14 +7,16 @@ use MoksaWeb\Mowc\Modules\SmilepayShipping\Api\Helper;
 use MoksaWeb\Mowc\Modules\SmilepayShipping\Module;
 use MoksaWeb\Mowc\Order\Meta\Keys;
 
+use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+
 defined( 'ABSPATH' ) || exit;
 
 final class PrintProxy {
 
-	private const ACTION             = 'mo_smilepay_shipping_print';
-	private const NONCE_ACTION       = 'mo_smilepay_shipping_print';
-	private const ACTION_QUICK       = 'mo_smilepay_shipping_print_quick';
-	private const NONCE_ACTION_QUICK = 'mo_smilepay_shipping_print_quick';
+	private const ACTION             = 'moksafowo_smilepay_shipping_print';
+	private const NONCE_ACTION       = 'moksafowo_smilepay_shipping_print';
+	private const ACTION_QUICK       = 'moksafowo_smilepay_shipping_print_quick';
+	private const NONCE_ACTION_QUICK = 'moksafowo_smilepay_shipping_print_quick';
 
 	private const ENDPOINTS = [
 		'tcat' => Helper::ENDPOINT_TCAT_PRINT,
@@ -29,8 +31,7 @@ final class PrintProxy {
 		add_action( 'admin_post_' . self::ACTION, [ __CLASS__, 'handle' ] );
 		add_action( 'admin_post_' . self::ACTION_QUICK, [ __CLASS__, 'handle_quick' ] );
 		add_filter( 'woocommerce_admin_order_actions', [ __CLASS__, 'add_print_action' ], 25, 2 );
-		add_action( 'admin_print_styles-woocommerce_page_wc-orders', [ __CLASS__, 'print_action_styles' ] );
-		add_action( 'admin_print_styles-edit-shop_order', [ __CLASS__, 'print_action_styles' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_action_assets' ] );
 	}
 
 	public static function relay_action(): string {
@@ -81,37 +82,44 @@ final class PrintProxy {
 			admin_url( 'admin-post.php?action=' . self::ACTION_QUICK . '&order_id=' . $order->get_id() ),
 			self::NONCE_ACTION_QUICK . '_' . $order->get_id()
 		);
-		$actions['mo_smilepay_print'] = [
+		$actions['moksafowo_smilepay_print'] = [
 			'url'    => $url,
 			'name'   => __( '列印速買配標籤', 'mo-ectools' ),
-			'action' => 'mo-smilepay-print',
+			'action' => 'moksafowo-smilepay-print',
 		];
 		return $actions;
 	}
 
-	public static function print_action_styles(): void {
-		echo '<style>
-			.wc-action-button.mo-smilepay-print{position:relative;}
-			.wc-action-button.mo-smilepay-print::before{
-				content:"\f193" !important;
-				font-family:dashicons !important;
-				font-size:16px !important;
-				line-height:1 !important;
-				text-indent:0 !important;
-				position:absolute !important;
-				top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;
-				display:flex !important;
-				align-items:center !important;
-				justify-content:center !important;
-				color:#16a34a !important;
-				background:none !important;
-				margin:0 !important;
-				padding:0 !important;
-				width:auto !important;height:auto !important;
-				mask:none !important;-webkit-mask:none !important;
-			}
-			.wc-action-button.mo-smilepay-print:hover{background:#f1f5f9;}
-		</style>';
+	public static function enqueue_action_assets(): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'woocommerce_page_wc-orders', 'edit-shop_order' ], true ) ) {
+			return;
+		}
+		$css = <<<'CSS'
+.wc-action-button.moksafowo-smilepay-print{position:relative;}
+.wc-action-button.moksafowo-smilepay-print::before{
+	content:"\f193" !important;
+	font-family:dashicons !important;
+	font-size:16px !important;
+	line-height:1 !important;
+	text-indent:0 !important;
+	position:absolute !important;
+	top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;
+	display:flex !important;
+	align-items:center !important;
+	justify-content:center !important;
+	color:#16a34a !important;
+	background:none !important;
+	margin:0 !important;
+	padding:0 !important;
+	width:auto !important;height:auto !important;
+	mask:none !important;-webkit-mask:none !important;
+}
+.wc-action-button.moksafowo-smilepay-print:hover{background:#f1f5f9;}
+CSS;
+		wp_register_style( 'moksafowo-smilepay-print-actions', false, [ 'dashicons' ], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-smilepay-print-actions' );
+		wp_add_inline_style( 'moksafowo-smilepay-print-actions', $css );
 	}
 
 	public static function handle_quick(): void {
@@ -145,41 +153,32 @@ final class PrintProxy {
 		}
 
 		$relay_url = self::relay_url();
-		?>
-		<!DOCTYPE html>
-		<html lang="zh-Hant">
-		<head>
-			<meta charset="utf-8">
-			<title>printing…</title>
-			<style>body{font-family:-apple-system,sans-serif;padding:32px;text-align:center;color:#374151;}h2{margin:0 0 8px;}p{margin:4px 0;color:#6b7280;font-size:13px;}</style>
-		</head>
-		<body>
-			<?php /* translators: %d: number of shipping labels being printed */ ?>
-			<h2><?php echo esc_html( sprintf( __( '正在列印 %d 張速買配物流標籤…', 'mo-ectools' ), count( $smseids ) ) ); ?></h2>
-			<?php if ( count( $smseids ) > 1 ) : ?>
-				<?php /* translators: %d: number of packages and print windows that will open */ ?>
-				<p><?php echo esc_html( sprintf( __( '此訂單拆 %d 包，會分別開啟列印視窗。', 'mo-ectools' ), count( $smseids ) ) ); ?></p>
-				<p><?php esc_html_e( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印速買配標籤」。', 'mo-ectools' ); ?></p>
-			<?php endif; ?>
-			<?php foreach ( $smseids as $idx => $smseid ) :
-				$form_data = self::relay_form_data( 'tcat', [ 'Smseid' => $smseid, 'print_format' => '1' ] );
-			?>
-				<form id="f<?php echo (int) $idx; ?>"
-					method="post"
-					action="<?php echo esc_url( $relay_url ); ?>"
-					<?php if ( $idx > 0 ) : ?>target="_blank"<?php endif; ?>>
-					<?php foreach ( $form_data as $k => $v ) : ?>
-						<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
-					<?php endforeach; ?>
-				</form>
-			<?php endforeach; ?>
-			<script>
-	const forms = document.querySelectorAll('form[id^="f"]');
-				forms.forEach( ( f, i ) => setTimeout( () => f.submit(), i * 800 ) );
-			</script>
-		</body>
-		</html>
-		<?php
+
+		$paragraphs = [];
+		if ( count( $smseids ) > 1 ) {
+			/* translators: %d: number of packages and print windows that will open */
+			$paragraphs[] = sprintf( __( '此訂單拆 %d 包，會分別開啟列印視窗。', 'mo-ectools' ), count( $smseids ) );
+			$paragraphs[] = __( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印速買配標籤」。', 'mo-ectools' );
+		}
+
+		$forms_html = '';
+		foreach ( $smseids as $idx => $smseid ) {
+			$form_data   = self::relay_form_data( 'tcat', [ 'Smseid' => $smseid, 'print_format' => '1' ] );
+			$forms_html .= '<form id="f' . (int) $idx . '" method="post" action="' . esc_url( $relay_url ) . '"' . ( $idx > 0 ? ' target="_blank"' : '' ) . '>';
+			foreach ( $form_data as $k => $v ) {
+				$forms_html .= '<input type="hidden" name="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '">';
+			}
+			$forms_html .= '</form>';
+		}
+
+		Interstitial::render(
+			__( '列印速買配標籤', 'mo-ectools' ),
+			/* translators: %d: number of shipping labels being printed */
+			sprintf( __( '正在列印 %d 張速買配物流標籤…', 'mo-ectools' ), count( $smseids ) ),
+			$paragraphs,
+			$forms_html,
+			'var forms=document.querySelectorAll("form[id^=f]");forms.forEach(function(f,i){setTimeout(function(){f.submit();},i*800);});'
+		);
 		exit;
 	}
 

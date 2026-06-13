@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class CreditInstallment3 extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_credit_3';
+		$this->id = 'moksafowo_ecpay_credit_3';
 		parent::__construct();
 	}
 

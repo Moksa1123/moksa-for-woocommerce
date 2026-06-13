@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class Module extends AbstractModule {
 
 	public function slug(): string {
-		return 'payuni_shipping';
+		return 'moksafowo_payuni_shipping';
 	}
 
 	public function label(): string {
@@ -43,7 +43,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function settings_section(): string {
-		return 'payuni-shipping';
+		return 'moksafowo-payuni-shipping';
 	}
 
 	public function boot(): void {
@@ -53,14 +53,14 @@ final class Module extends AbstractModule {
 		// PayUni Payment 未啟用時這邊補上，避免 get_option 拿到 MOWPv1: 密文當金鑰。
 		// Phase B（v0.5.63）：同時 wrap 新 mo_* 跟 legacy 兩組。
 		foreach ( [
-			'mo_payuni_payment_hashkey',
-			'mo_payuni_payment_hashkey_test',
-			'mo_payuni_payment_hashiv',
-			'mo_payuni_payment_hashiv_test',
-			'payuni_payment_hashkey',
-			'payuni_payment_hashkey_test',
-			'payuni_payment_hashiv',
-			'payuni_payment_hashiv_test',
+			'moksafowo_payuni_payment_hashkey',
+			'moksafowo_payuni_payment_hashkey_test',
+			'moksafowo_payuni_payment_hashiv',
+			'moksafowo_payuni_payment_hashiv_test',
+			'moksafowo_payuni_payment_hashkey',
+			'moksafowo_payuni_payment_hashkey_test',
+			'moksafowo_payuni_payment_hashiv',
+			'moksafowo_payuni_payment_hashiv_test',
 		] as $opt ) {
 			Vault::wrap_option( $opt );
 		}

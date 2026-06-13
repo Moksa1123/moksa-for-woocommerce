@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class PickupNotice {
 
-	private const ACTION = 'mo_newebpay_shipping_label';
+	private const ACTION = 'moksafowo_newebpay_shipping_label';
 
 	public static function init(): void {
 		add_action( 'admin_post_' . self::ACTION, [ __CLASS__, 'output' ] );

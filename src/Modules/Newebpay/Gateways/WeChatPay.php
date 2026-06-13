@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class WeChatPay extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_wechatpay';
+		$this->id = 'moksafowo_newebpay_wechatpay';
 		parent::__construct();
 	}
 

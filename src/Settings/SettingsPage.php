@@ -29,26 +29,26 @@ final class SettingsPage extends \WC_Settings_Page {
 		$section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
 
 		// 全 Moksa tab 共用視覺優化 — section 包成 card + 可收合（CSS/JS 走 enqueue）
-		$css_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-polish.css';
-		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOWC_VERSION;
-		wp_enqueue_style( 'mo-settings-polish', MOWC_PLUGIN_URL . 'assets/admin/settings-polish.css', [], $css_ver );
-		$shell_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-shell.css';
-		$shell_ver  = file_exists( $shell_path ) ? (string) filemtime( $shell_path ) : MOWC_VERSION;
-		wp_enqueue_style( 'mo-settings-shell', MOWC_PLUGIN_URL . 'assets/admin/settings-shell.css', [], $shell_ver );
-		$js_path = MOWC_PLUGIN_DIR . 'assets/admin/settings-polish.js';
-		$js_ver  = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
-		wp_enqueue_script( 'mo-settings-polish', MOWC_PLUGIN_URL . 'assets/admin/settings-polish.js', [], $js_ver, true );
+		$css_path = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/settings-polish.css';
+		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOKSAFOWO_VERSION;
+		wp_enqueue_style( 'moksafowo-settings-polish', MOKSAFOWO_PLUGIN_URL . 'assets/admin/settings-polish.css', [], $css_ver );
+		$shell_path = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/settings-shell.css';
+		$shell_ver  = file_exists( $shell_path ) ? (string) filemtime( $shell_path ) : MOKSAFOWO_VERSION;
+		wp_enqueue_style( 'moksafowo-settings-shell', MOKSAFOWO_PLUGIN_URL . 'assets/admin/settings-shell.css', [], $shell_ver );
+		$js_path = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/settings-polish.js';
+		$js_ver  = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
+		wp_enqueue_script( 'moksafowo-settings-polish', MOKSAFOWO_PLUGIN_URL . 'assets/admin/settings-polish.js', [], $js_ver, true );
 
 		// 只在 ECPay 三組子 section + PAYUNi shipping 載入
-		if ( ! in_array( $section, [ 'ecpay', 'ecpay-shipping', 'ecpay-invoice', 'payuni-shipping' ], true ) ) {
+		if ( ! in_array( $section, [ 'ecpay', 'ecpay-shipping', 'ecpay-invoice', 'moksafowo-payuni-shipping' ], true ) ) {
 			return;
 		}
 		// 用 filemtime 當版號，admin JS 改動每次自動 cache-bust，不靠 plugin VERSION bump。
-		$path    = MOWC_PLUGIN_DIR . 'assets/admin/ecpay-sandbox-toggle.js';
-		$version = file_exists( $path ) ? (string) filemtime( $path ) : MOWC_VERSION;
+		$path    = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/ecpay-sandbox-toggle.js';
+		$version = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
 		wp_enqueue_script(
-			'mo-ecpay-sandbox-toggle',
-			MOWC_PLUGIN_URL . 'assets/admin/ecpay-sandbox-toggle.js',
+			'moksafowo-ecpay-sandbox-toggle',
+			MOKSAFOWO_PLUGIN_URL . 'assets/admin/ecpay-sandbox-toggle.js',
 			[],
 			$version,
 			true
@@ -131,7 +131,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => '',
 			],
-			'payuni-payment' => [
+			'moksafowo-payuni-payment' => [
 				'enable_key' => 'payuni',
 				'label'      => __( 'PAYUNi 金流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 統一金流', 'mo-ectools' ),
@@ -139,8 +139,8 @@ final class SettingsPage extends \WC_Settings_Page {
 				'tab_method' => 'get_settings_for_payment_section',
 				'tab_arg'    => null,
 			],
-			'payuni-shipping' => [
-				'enable_key' => 'payuni_shipping',
+			'moksafowo-payuni-shipping' => [
+				'enable_key' => 'moksafowo_payuni_shipping',
 				'label'      => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Settings\\SettingsTab',
@@ -198,11 +198,11 @@ final class SettingsPage extends \WC_Settings_Page {
 			'advanced' => __( '進階設定', 'mo-ectools' ),
 		];
 		foreach ( self::module_descriptors() as $section => $desc ) {
-			if ( 'yes' === get_option( 'mo_' . $desc['enable_key'] . '_enabled', 'no' ) ) {
+			if ( 'yes' === get_option( 'moksafowo_' . $desc['enable_key'] . '_enabled', 'no' ) ) {
 				$sections[ $section ] = $desc['label'];
 			}
 		}
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	public function get_settings( $current_section = '' ): array {
@@ -262,7 +262,7 @@ final class SettingsPage extends \WC_Settings_Page {
 
 		// WC_Settings_Page::save() normally fires this so modules can persist
 		// custom field types; this class overrides save() so we fire it here.
-		do_action( 'woocommerce_update_options_' . $this->id );
+		do_action( 'woocommerce_update_options_' . $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	private function advanced_fields(): array {
@@ -272,28 +272,28 @@ final class SettingsPage extends \WC_Settings_Page {
 				'title' => __( '物流共用設定', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( '所有物流模組共用的行為設定。', 'mo-ectools' ),
-				'id'    => 'mo_shipping_common_section',
+				'id'    => 'moksafowo_shipping_common_section',
 			],
 			[
 				'title'         => __( '批次列印介面', 'mo-ectools' ),
-				'id'            => 'mo_shipping_bulk_print_mode_basic',
+				'id'            => 'moksafowo_shipping_bulk_print_mode_basic',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
 				'desc'          => __( '基本 — 走 WooCommerce 內建下拉選單，自己勾訂單再選批次操作。', 'mo-ectools' ),
 				'checkboxgroup' => 'start',
-				'class'         => 'mo-bulk-print-mode',
+				'class'         => 'moksafowo-bulk-print-mode',
 			],
 			[
-				'id'            => 'mo_shipping_bulk_print_mode_advanced',
+				'id'            => 'moksafowo_shipping_bulk_print_mode_advanced',
 				'type'          => 'checkbox',
 				'default'       => 'no',
 				'desc'          => __( '進階 — 點工具列「綠界 超商/宅配標籤」按鈕後跳出彈窗，自動過濾未印單，一次勾選一鍵列印（防漏印）。', 'mo-ectools' ),
 				'checkboxgroup' => 'end',
-				'class'         => 'mo-bulk-print-mode',
+				'class'         => 'moksafowo-bulk-print-mode',
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_shipping_common_section',
+				'id'   => 'moksafowo_shipping_common_section',
 			],
 
 			// 自訂訂單狀態（可選擇性停用避免 status dropdown 過長）
@@ -301,25 +301,25 @@ final class SettingsPage extends \WC_Settings_Page {
 				'title' => __( '自訂訂單狀態', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( '物流模組共用的自訂訂單狀態。停用某狀態 → 不出現在訂單編輯頁與批次操作下拉，但資料庫既有訂單仍保留該狀態。', 'mo-ectools' ),
-				'id'    => 'mo_shipping_status_section',
+				'id'    => 'moksafowo_shipping_status_section',
 			],
 			[
 				'title'         => __( '已出貨', 'mo-ectools' ),
-				'id'            => 'mo_shipping_status_mo_shipped_enabled',
+				'id'            => 'moksafowo_shipping_status_moksafowo_shipped_enabled',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
 				'desc'          => __( '物流商已收件並開始配送', 'mo-ectools' ),
 				'checkboxgroup' => 'start',
 			],
 			[
-				'id'            => 'mo_shipping_status_mo_cvs_arrived_enabled',
+				'id'            => 'moksafowo_shipping_status_moksafowo_cvs_arrived_enabled',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
 				'desc'          => __( '已到店待取（超商取貨流程專用）', 'mo-ectools' ),
 				'checkboxgroup' => '',
 			],
 			[
-				'id'            => 'mo_shipping_status_mo_store_closed_enabled',
+				'id'            => 'moksafowo_shipping_status_moksafowo_store_closed_enabled',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
 				'desc'          => __( '門市關轉（超商門市關閉，需重選門市）', 'mo-ectools' ),
@@ -327,7 +327,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_shipping_status_section',
+				'id'   => 'moksafowo_shipping_status_section',
 			],
 
 			// 訂單狀態 badge 顏色 — 緊湊 color grid（custom field type）
@@ -335,15 +335,15 @@ final class SettingsPage extends \WC_Settings_Page {
 				'title' => __( '訂單狀態顏色', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( 'WordPress 後台訂單列表狀態標籤的底色與文字顏色。點色塊用 WordPress 內建選色器選色，右邊即時預覽。', 'mo-ectools' ),
-				'id'    => 'mo_shipping_status_color_section',
+				'id'    => 'moksafowo_shipping_status_color_section',
 			],
 			[
 				'type' => 'mowp_status_color_grid',
-				'id'   => 'mo_status_color_grid',
+				'id'   => 'moksafowo_status_color_grid',
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_shipping_status_color_section',
+				'id'   => 'moksafowo_shipping_status_color_section',
 			],
 
 			// 台灣地址工具
@@ -351,39 +351,39 @@ final class SettingsPage extends \WC_Settings_Page {
 				'title' => __( '台灣地址工具', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( '結帳頁地址欄位的台灣本地化加強。傳統結帳與區塊結帳都相容。', 'mo-ectools' ),
-				'id'    => 'mo_tw_address_section',
+				'id'    => 'moksafowo_tw_address_section',
 			],
 			[
 				'title'         => __( '啟用台灣縣市/鄉鎮下拉選單', 'mo-ectools' ),
-				'id'            => 'mo_tw_address_dropdown_enabled',
+				'id'            => 'moksafowo_tw_address_dropdown_enabled',
 				'type'          => 'checkbox',
 				'default'       => 'no',
 				'desc'          => __( '把地址欄位的「縣 / 市」「鄉 / 鎮 / 區」改成下拉選單，避免顧客手動拼錯。', 'mo-ectools' ),
 				'checkboxgroup' => 'start',
 			],
 			[
-				'id'            => 'mo_tw_address_postcode_autofill',
+				'id'            => 'moksafowo_tw_address_postcode_autofill',
 				'type'          => 'checkbox',
 				'desc'          => __( '選完縣市鄉鎮後自動帶入郵遞區號（依政府最新郵遞區號表）', 'mo-ectools' ),
 				'default'       => 'no',
 				'checkboxgroup' => '',
 			],
 			[
-				'id'            => 'mo_tw_address_name_swap',
+				'id'            => 'moksafowo_tw_address_name_swap',
 				'type'          => 'checkbox',
 				'desc'          => __( '姓名對調 — 把 WooCommerce 預設「名字 / 姓氏」順序改成台灣慣例「姓氏 / 名字」。', 'mo-ectools' ),
 				'default'       => 'no',
 				'checkboxgroup' => '',
 			],
 			[
-				'id'            => 'mo_tw_address_hide_country',
+				'id'            => 'moksafowo_tw_address_hide_country',
 				'type'          => 'checkbox',
 				'desc'          => __( '隱藏「國家 / 地區」欄位（單一台灣站適用）', 'mo-ectools' ),
 				'default'       => 'no',
 				'checkboxgroup' => '',
 			],
 			[
-				'id'            => 'mo_tw_address_reorder_fields',
+				'id'            => 'moksafowo_tw_address_reorder_fields',
 				'type'          => 'checkbox',
 				'desc'          => __( '啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳完整生效，區塊結帳只同步順序（強制 2 欄）。', 'mo-ectools' ),
 				'default'       => 'no',
@@ -391,7 +391,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_tw_address_section',
+				'id'   => 'moksafowo_tw_address_section',
 			],
 
 			// 台灣欄位順序與寬度（field manager UI）
@@ -399,17 +399,17 @@ final class SettingsPage extends \WC_Settings_Page {
 				'title' => __( '台灣欄位順序與寬度', 'mo-ectools' ),
 				'type'  => 'title',
 				'desc'  => __( '拖曳重排欄位、選 50% 或 100% 寬度。需勾選上方「啟用台式欄位順序」才會套用到結帳頁。', 'mo-ectools' ),
-				'id'    => 'mo_tw_field_manager_section',
+				'id'    => 'moksafowo_tw_field_manager_section',
 			],
 			[
 				'title' => __( '欄位順序與寬度', 'mo-ectools' ),
 				'type'  => 'mowp_field_manager',
 				'desc'  => __( '半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。區塊結帳不吃寬度設定。', 'mo-ectools' ),
-				'id'    => 'mo_tw_address_field_layout',
+				'id'    => 'moksafowo_tw_address_field_layout',
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'mo_tw_field_manager_section',
+				'id'   => 'moksafowo_tw_field_manager_section',
 			],
 		];
 	}
@@ -457,7 +457,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			}
 			$cards = [];
 			foreach ( $entries as $key => $module ) {
-				$option        = sprintf( 'mo_%s_enabled', $key );
+				$option        = sprintf( 'moksafowo_%s_enabled', $key );
 				$enabled       = 'yes' === get_option( $option, 'no' );
 				$section_slug  = $module->settings_section();
 				$cards[]       = [
@@ -485,7 +485,7 @@ final class SettingsPage extends \WC_Settings_Page {
 		$desc = $descriptors[ $section ];
 
 		$tab_url = admin_url( 'admin.php?page=wc-settings&tab=' . SettingsTab::TAB_ID );
-		$enabled = 'yes' === get_option( 'mo_' . $desc['enable_key'] . '_enabled', 'no' );
+		$enabled = 'yes' === get_option( 'moksafowo_' . $desc['enable_key'] . '_enabled', 'no' );
 
 		Ui::subsection_banner( $desc['banner_name'], $enabled, $tab_url );
 
@@ -509,7 +509,7 @@ final class SettingsPage extends \WC_Settings_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC's settings page handles its own nonce upstream.
 		$posted = wp_unslash( $_POST );
 		foreach ( $registry->all() as $key => $class ) {
-			$option = sprintf( 'mo_%s_enabled', $key );
+			$option = sprintf( 'moksafowo_%s_enabled', $key );
 			$value  = isset( $posted[ $option ] ) && 'yes' === $posted[ $option ] ? 'yes' : 'no';
 			update_option( $option, $value );
 		}

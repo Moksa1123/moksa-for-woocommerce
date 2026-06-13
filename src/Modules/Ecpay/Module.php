@@ -50,22 +50,22 @@ final class Module extends AbstractGatewayModule {
 	public static function gateway_map(): array {
 		return [
 			Gateways\Unified::GATEWAY_ID => Gateways\Unified::class,
-			'mo_ecpay_credit'            => Gateways\Credit::class,
-			'mo_ecpay_credit_3'          => Gateways\CreditInstallment3::class,
-			'mo_ecpay_credit_6'          => Gateways\CreditInstallment6::class,
-			'mo_ecpay_credit_12'         => Gateways\CreditInstallment12::class,
-			'mo_ecpay_credit_18'         => Gateways\CreditInstallment18::class,
-			'mo_ecpay_credit_24'         => Gateways\CreditInstallment24::class,
-			'mo_ecpay_atm'               => Gateways\Atm::class,
-			'mo_ecpay_cvs'               => Gateways\Cvs::class,
-			'mo_ecpay_barcode'           => Gateways\Barcode::class,
-			'mo_ecpay_webatm'            => Gateways\Webatm::class,
-			'mo_ecpay_applepay'          => Gateways\ApplePay::class,
-			'mo_ecpay_twqr'              => Gateways\Twqr::class,
-			'mo_ecpay_bnpl'              => Gateways\Bnpl::class,
-			'mo_ecpay_weixin'            => Gateways\Weixin::class,
-			'mo_ecpay_jkopay'            => Gateways\Jkopay::class,
-			'mo_ecpay_ipass'             => Gateways\Ipass::class,
+			'moksafowo_ecpay_credit'            => Gateways\Credit::class,
+			'moksafowo_ecpay_credit_3'          => Gateways\CreditInstallment3::class,
+			'moksafowo_ecpay_credit_6'          => Gateways\CreditInstallment6::class,
+			'moksafowo_ecpay_credit_12'         => Gateways\CreditInstallment12::class,
+			'moksafowo_ecpay_credit_18'         => Gateways\CreditInstallment18::class,
+			'moksafowo_ecpay_credit_24'         => Gateways\CreditInstallment24::class,
+			'moksafowo_ecpay_atm'               => Gateways\Atm::class,
+			'moksafowo_ecpay_cvs'               => Gateways\Cvs::class,
+			'moksafowo_ecpay_barcode'           => Gateways\Barcode::class,
+			'moksafowo_ecpay_webatm'            => Gateways\Webatm::class,
+			'moksafowo_ecpay_applepay'          => Gateways\ApplePay::class,
+			'moksafowo_ecpay_twqr'              => Gateways\Twqr::class,
+			'moksafowo_ecpay_bnpl'              => Gateways\Bnpl::class,
+			'moksafowo_ecpay_weixin'            => Gateways\Weixin::class,
+			'moksafowo_ecpay_jkopay'            => Gateways\Jkopay::class,
+			'moksafowo_ecpay_ipass'             => Gateways\Ipass::class,
 		];
 	}
 
@@ -78,7 +78,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_mo_ecpay_payment', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_ecpay_payment', [ Api\IpnHandler::class, 'handle' ] );
 	}
 
 	protected function boot_extras(): void {

@@ -14,7 +14,7 @@ class HDFrozen extends ShippingBase {
 
 	use TCatHDTrait;
 
-	public const ID = 'mo_payuni_shipping_tcat_frozen';
+	public const ID = 'moksafowo_payuni_shipping_tcat_frozen';
 
 	public function __construct( $instance_id = 0 ) {
 
@@ -37,7 +37,7 @@ class HDFrozen extends ShippingBase {
 	public function init() {
 
 		$this->init_settings();
-		$this->instance_form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php';
+		$this->instance_form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php';
 
 		$this->title                    = $this->get_option( 'title' );
 		$this->cost                     = $this->get_option( 'cost', 0 );

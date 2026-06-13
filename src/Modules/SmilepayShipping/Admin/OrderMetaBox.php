@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class OrderMetaBox {
 
-	private const NONCE_ACTION = 'mo_smilepay_shipping_create';
+	private const NONCE_ACTION = 'moksafowo_smilepay_shipping_create';
 	private const CAPABILITY   = 'edit_shop_orders';
 
 	private static bool $booted = false;
@@ -22,8 +22,8 @@ final class OrderMetaBox {
 		}
 		self::$booted = true;
 		OrderInfoLayout::boot();
-		add_filter( 'mo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
-		add_action( 'wp_ajax_mo_smilepay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
+		add_action( 'wp_ajax_moksafowo_smilepay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'print_inline_js' ] );
 	}
 
@@ -80,12 +80,12 @@ final class OrderMetaBox {
 
 		ob_start();
 		?>
-		<div class="mo-smilepay-shipping-meta"
+		<div class="moksafowo-smilepay-shipping-meta"
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>"
 			data-nonce="<?php echo esc_attr( $nonce ); ?>">
 
 			<?php if ( ! empty( $records ) ) : ?>
-				<div class="mo-smilepay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
+				<div class="moksafowo-smilepay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
 					<?php foreach ( $records as $r ) :
 						$smseid     = (string) ( $r['smseid'] ?? '' );
 						$pay_no     = (string) ( $r['payment_no'] ?? '' );
@@ -127,9 +127,9 @@ final class OrderMetaBox {
 				</div>
 			<?php endif; ?>
 
-			<div class="mo-smilepay-shipping-actions">
+			<div class="moksafowo-smilepay-shipping-actions">
 				<button type="button"
-					class="button button-primary mo-smilepay-shipping-create">
+					class="button button-primary moksafowo-smilepay-shipping-create">
 					<?php echo esc_html( empty( $records ) ? __( '建立物流單', 'mo-ectools' ) : __( '重新建立物流單', 'mo-ectools' ) ); ?>
 				</button>
 			</div>
@@ -150,25 +150,25 @@ final class OrderMetaBox {
 		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		wp_register_script( 'mo-smilepay-shipping-admin', false, [ 'jquery' ], MOWC_VERSION, true );
-		wp_enqueue_script( 'mo-smilepay-shipping-admin' );
-		wp_add_inline_script( 'mo-smilepay-shipping-admin', self::inline_js() );
+		wp_register_script( 'moksafowo-smilepay-shipping-admin', false, [ 'jquery' ], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-smilepay-shipping-admin' );
+		wp_add_inline_script( 'moksafowo-smilepay-shipping-admin', self::inline_js() );
 	}
 
 	private static function inline_js(): string {
 		return <<<'JS'
 (function($){
-  $(document).on('click', '.mo-smilepay-shipping-create', function(e){
+  $(document).on('click', '.moksafowo-smilepay-shipping-create', function(e){
     e.preventDefault();
     var $btn = $(this);
-    var $wrap = $btn.closest('.mo-smilepay-shipping-meta');
+    var $wrap = $btn.closest('.moksafowo-smilepay-shipping-meta');
     var orderId = $wrap.data('order-id');
     var nonce   = $wrap.data('nonce');
     if (!orderId || !nonce) { window.alert('缺少訂單 ID 或 nonce'); return; }
     function send(force){
       $btn.prop('disabled', true);
       $.post(ajaxurl, {
-        action: 'mo_smilepay_shipping_create',
+        action: 'moksafowo_smilepay_shipping_create',
         order_id: orderId,
         _wpnonce: nonce,
         force: force ? '1' : '0'

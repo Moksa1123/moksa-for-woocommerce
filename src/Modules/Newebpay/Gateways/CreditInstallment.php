@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class CreditInstallment extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_credit_installment';
+		$this->id = 'moksafowo_newebpay_credit_installment';
 		parent::__construct();
 	}
 

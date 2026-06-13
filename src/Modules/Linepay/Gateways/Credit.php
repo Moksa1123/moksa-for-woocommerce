@@ -32,8 +32,8 @@ class Credit extends WC_Payment_Gateway {
 			'refunds',
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Mo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-		$this->supported_currencies = apply_filters( 'Mo_LinePay_support_currencies', array( 'TWD' ) );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+		$this->supported_currencies = apply_filters( 'Moksafowo_LinePay_support_currencies', array( 'TWD' ) );
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -46,19 +46,19 @@ class Credit extends WC_Payment_Gateway {
 	public function get_icon() {
 
 		$icon_html = '';
-		if ( 'yes' === get_option( 'Mo_LinePay_display_logo_enabled' ) ) {
+		if ( 'yes' === get_option( 'Moksafowo_LinePay_display_logo_enabled' ) ) {
 			$icon_html .= sprintf(
 				'<img src="%s" alt="%s" />',
-				esc_url( MOWC_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' ),
+				esc_url( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' ),
 				esc_attr__( 'LINE Pay Taiwan', 'mo-ectools' )
 			);
 		}
 
-		return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id );
+		return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	public function init_form_fields(): void {
-		$this->form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/Linepay/Settings/settings-fields.php';
+		$this->form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Linepay/Settings/settings-fields.php';
 	}
 
 	public function process_payment( $order_id ) {
@@ -120,11 +120,11 @@ class Credit extends WC_Payment_Gateway {
 		}
 
 		if ( 'on-hold' === $order->get_status() ) {
-			echo '<p class="mo-linepay-status-note">' . esc_html__( 'We have received your order, but the payment status need to be confirmed. Please contact the support.', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but the payment status need to be confirmed. Please contact the support.', 'mo-ectools' ) . '</p>';
 		}
 
 		if ( 'pending' === $order->get_status() ) {
-			echo '<p class="mo-linepay-status-note">' . esc_html__( 'We have received your order, but the order is awaiting payment. Please pay again.', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but the order is awaiting payment. Please pay again.', 'mo-ectools' ) . '</p>';
 		}
 	}
 }

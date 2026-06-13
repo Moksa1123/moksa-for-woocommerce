@@ -81,10 +81,10 @@ class PayuniPayment {
 
 		// Plugin row links 統一由 MoksaWeb\Mowc\Plugin::plugin_action_links() 處理。
 
-		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'payuni_checkout_enqueue_scripts' ), 9 );
-		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'payuni_admin_scripts' ), 9 );
+		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'moksafowo_payuni_checkout_enqueue_scripts' ), 9 );
+		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'moksafowo_payuni_admin_scripts' ), 9 );
 
-		add_action( 'wp_ajax_payuni_query', array( self::get_instance(), 'payuni_ajax_query_payment' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_query', array( self::get_instance(), 'moksafowo_payuni_ajax_query_payment' ) );
 	}
 
 	public function plugin_i18n() {
@@ -92,8 +92,8 @@ class PayuniPayment {
 	}
 
 	public function plugin_init() {
-		self::$log_enabled      = 'yes' === get_option( 'payuni_payment_debug_log_enabled', 'no' );
-		self::$einvoice_enabled = 'yes' === get_option( 'payuni_payment_einvoice_enabled', 'no' );
+		self::$log_enabled      = 'yes' === get_option( 'moksafowo_payuni_payment_debug_log_enabled', 'no' );
+		self::$einvoice_enabled = 'yes' === get_option( 'moksafowo_payuni_payment_einvoice_enabled', 'no' );
 
 		OrderList::init();
 		OrderMetaBoxes::init();
@@ -117,7 +117,7 @@ class PayuniPayment {
 			CreditRed::GATEWAY_ID      => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditRed',
 		);
 
-		$number_of_payments = get_option( 'payuni_payment_installment_number_of_payments', array() );
+		$number_of_payments = get_option( 'moksafowo_payuni_payment_installment_number_of_payments', array() );
 
 		self::$available_installments = array(
 			CreditInstallment3::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3',
@@ -167,7 +167,7 @@ class PayuniPayment {
 
 	
 	public static function should_register_gateway( string $id ): bool {
-		$mode    = get_option( 'mo_payuni_display_mode', 'multi' );
+		$mode    = get_option( 'moksafowo_payuni_display_mode', 'multi' );
 		$unified = Gateways\Unified::GATEWAY_ID;
 
 		if ( 'single' === $mode ) {
@@ -181,47 +181,47 @@ class PayuniPayment {
 
 		// Installments are governed by `payuni_payment_installment_number_of_payments`
 		// further down — let those through here unconditionally.
-		if ( strpos( $id, 'mo_payuni_installment_' ) === 0 ) {
+		if ( strpos( $id, 'moksafowo_payuni_installment_' ) === 0 ) {
 			return true;
 		}
 
-		$allowlist = (array) get_option( 'mo_payuni_enabled_methods', array() );
+		$allowlist = (array) get_option( 'moksafowo_payuni_enabled_methods', array() );
 		// 空 allowlist → 不註冊任何子方法。
 		return in_array( $id, $allowlist, true );
 	}
 
 	
-	public static function payuni_checkout_enqueue_scripts() {
+	public static function moksafowo_payuni_checkout_enqueue_scripts() {
 
 		if ( ! is_checkout() ) {
 			return;
 		}
 
-		wp_enqueue_style( 'mo-payuni-public', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-public.css', array(), MOWC_VERSION, 'all' );
+		wp_enqueue_style( 'moksafowo-payuni-public', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-public.css', array(), MOKSAFOWO_VERSION, 'all' );
 
-		wp_enqueue_script( 'mo-payuni-public', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts.js', array(), MOWC_VERSION, true );
+		wp_enqueue_script( 'moksafowo-payuni-public', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts.js', array(), MOKSAFOWO_VERSION, true );
 	}
 
 	
-	public function payuni_admin_scripts() {
+	public function moksafowo_payuni_admin_scripts() {
 
 		//enqueue admin css
-		wp_enqueue_style( 'mo-payuni-admin', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-admin.css', array(), MOWC_VERSION, 'all' );
+		wp_enqueue_style( 'moksafowo-payuni-admin', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/css/styles-admin.css', array(), MOKSAFOWO_VERSION, 'all' );
 
-		wp_enqueue_script( 'mo-payuni-admin', ( MOWC_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts-admin.js', array(), MOWC_VERSION, true );
+		wp_enqueue_script( 'moksafowo-payuni-admin', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/' ) . 'assets/js/scripts-admin.js', array(), MOKSAFOWO_VERSION, true );
 		wp_localize_script(
-			'mo-payuni-admin',
-			'mo_payuni',
+			'moksafowo-payuni-admin',
+			'moksafowo_payuni',
 			array(
 				'ajax_url'    => admin_url( 'admin-ajax.php' ),
-				'query_nonce' => wp_create_nonce( 'payuni-query' ),
+				'query_nonce' => wp_create_nonce( 'moksafowo-payuni-query' ),
 				'error_msg'   => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
 			)
 		);
 	}
 
 	
-	public function payuni_ajax_query_payment() {
+	public function moksafowo_payuni_ajax_query_payment() {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- AJAX handler; wp_verify_nonce() called at method entry; nonce token raw read is intentional.
 
 		// Cap before nonce: a valid nonce alone lets any logged-in user query
@@ -229,7 +229,7 @@ class PayuniPayment {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mo-ectools' ) ), 403 );
 		}
-		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'payuni-query' ) ) {
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'moksafowo-payuni-query' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unsecure AJAX call', 'mo-ectools' ) ), 403 );
 		}
 
@@ -359,9 +359,9 @@ class PayuniPayment {
 
 		$base_api_url = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api' : 'https://api.payuni.com.tw/api';
 
-		if ( 'payuni-credit' === $payment_method || 'payuni-applepay' === $payment_method ) {
+		if ( 'moksafowo-payuni-credit' === $payment_method || 'moksafowo-payuni-applepay' === $payment_method ) {
 			$base_api_url .= '/trade/cancel';
-		} elseif ( 'payuni-aftee' === $payment_method ) {
+		} elseif ( 'moksafowo-payuni-aftee' === $payment_method ) {
 			$base_api_url .= '/trade/common/refund/aftee';
 		}
 		return $base_api_url;
@@ -413,7 +413,7 @@ class PayuniPayment {
 			return $key;
 		} else {
 			// for backward-compatibility.
-			return str_replace( '_mo_payuni_', '_payuni_', $key );
+			return str_replace( '_moksafowo_payuni_', '_payuni_', $key );
 		}
 	}
 
@@ -422,11 +422,11 @@ class PayuniPayment {
 		if ( ! self::$log_enabled ) {
 			return;
 		}
-		// Forward 到 plugin-wide Logger facade (CLAUDE.md §4)，source tag 'payuni-payment'。
+		// Forward 到 plugin-wide Logger facade (CLAUDE.md §4)，source tag 'moksafowo-payuni-payment'。
 		// v0.5.69：Logger 內部對 message 已走 Redactor，不需 pre-redact。
 		$msg    = is_string( $message ) ? $message : (string) wp_json_encode( $message );
 		$method = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
-		\MoksaWeb\Mowc\Logging\Logger::{$method}( 'payuni-payment', $msg );
+		\MoksaWeb\Mowc\Logging\Logger::{$method}( 'moksafowo-payuni-payment', $msg );
 	}
 
 	

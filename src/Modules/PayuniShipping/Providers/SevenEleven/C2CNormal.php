@@ -15,7 +15,7 @@ class C2CNormal extends ShippingBase {
 
 	use CVSTrait;
 
-	public const ID = 'mo_payuni_shipping_711_c2c_normal';
+	public const ID = 'moksafowo_payuni_shipping_711_c2c_normal';
 
 	public function __construct( $instance_id = 0 ) {
 
@@ -38,7 +38,7 @@ class C2CNormal extends ShippingBase {
 	public function init() {
 		$this->init_settings();
 
-		$this->instance_form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/SevenEleven/C2CNormalFields.php';
+		$this->instance_form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/SevenEleven/C2CNormalFields.php';
 
 		$this->title                    = $this->get_option( 'title' );
 		$this->cost                     = $this->get_option( 'cost', 0 );

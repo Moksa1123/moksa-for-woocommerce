@@ -46,14 +46,14 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		$this->incomplete_payment_message = $this->get_option( 'incomplete_payment_message' );
 
 		$this->api_url    = ( $this->testmode ) ? 'https://sandbox-api.payuni.com.tw/api/upp' : 'https://api.payuni.com.tw/api/upp';
-		$this->notify_url = WC()->api_request_url( 'payuni_payment' );
-		$this->return_url = WC()->api_request_url( 'payuni_return' );
+		$this->notify_url = WC()->api_request_url( 'moksafowo_payuni_payment' );
+		$this->return_url = WC()->api_request_url( 'moksafowo_payuni_return' );
 
-		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'payuni_payment_detail_after_order_table' ), 10, 1 );
-		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'payuni_thankyou_order_unpaid_message' ), 10, 2 );
+		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'moksafowo_payuni_payment_detail_after_order_table' ), 10, 1 );
+		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'moksafowo_payuni_thankyou_order_unpaid_message' ), 10, 2 );
 	}
 
-	public function payuni_payment_detail_after_order_table( $order ) {
+	public function moksafowo_payuni_payment_detail_after_order_table( $order ) {
 
 		if ( $order->get_payment_method() === $this->id ) {
 
@@ -61,7 +61,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 
 			$trade_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::UNI_NO );
 			if ( empty( $order->get_meta( $trade_no_key ) ) ) {
-				echo '<div class="payuni_payment_notify_not_received">' . esc_html__( 'If the payment detail is not displayed. Please wait for a moment and reload the page.', 'mo-ectools' ) . '</div>';
+				echo '<div class="moksafowo_payuni_payment_notify_not_received">' . esc_html__( 'If the payment detail is not displayed. Please wait for a moment and reload the page.', 'mo-ectools' ) . '</div>';
 			}
 
 			echo '<table class="shop_table payuni_payment_details"><tbody>';
@@ -175,7 +175,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		$request->build_request_form( $order );
 	}
 
-	public function payuni_thankyou_order_unpaid_message( $text, $order ) {
+	public function moksafowo_payuni_thankyou_order_unpaid_message( $text, $order ) {
 		if ( $order ) {
 			if ( $order->get_payment_method() !== $this->id ) {
 				return $text;
@@ -188,9 +188,9 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 
 			if ( 'pending' === $order->get_status() || TradeStatus::PAID !== $trade_status ) {
 				if ( empty( $this->incomplete_payment_message ) ) {
-					$text = '<span class="payuni-incomplete-payment-message">' . esc_html__( 'We have received your order, but the payment is incompleted.', 'mo-ectools' ) . '</span>';
+					$text = '<span class="moksafowo-payuni-incomplete-payment-message">' . esc_html__( 'We have received your order, but the payment is incompleted.', 'mo-ectools' ) . '</span>';
 				} else {
-					$text = '<span class="payuni-incomplete-payment-message">' . $this->incomplete_payment_message . '</span>';
+					$text = '<span class="moksafowo-payuni-incomplete-payment-message">' . $this->incomplete_payment_message . '</span>';
 				}
 			}
 		}
@@ -213,7 +213,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		// hide Unified in `multi` mode. Unified::is_available() does its own
 		// flip; individual gateways defer to this base check.
 		if ( $is_available ) {
-			$mode = get_option( 'mo_payuni_display_mode', 'multi' );
+			$mode = get_option( 'moksafowo_payuni_display_mode', 'multi' );
 			if ( 'single' === $mode && Unified::GATEWAY_ID !== $this->id ) {
 				$is_available = false;
 			} elseif ( 'multi' === $mode && Unified::GATEWAY_ID === $this->id ) {

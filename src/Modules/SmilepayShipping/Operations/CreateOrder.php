@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class CreateOrder {
 
-	private const UNIFIED_TCAT_ID = 'mo_smilepay_shipping_tcat';
+	private const UNIFIED_TCAT_ID = 'moksafowo_smilepay_shipping_tcat';
 
 	
 	public static function run( \WC_Order $order ): array {
@@ -329,7 +329,7 @@ final class CreateOrder {
 			return $result;
 		}
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_LGS_TYPE, $cvs_service_type );
-		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TYPE, str_starts_with( $method_id, 'mo_smilepay_shipping_cvs_711' ) ? '711' . $cvs_service_type : 'FAMI' . $cvs_service_type );
+		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TYPE, str_starts_with( $method_id, 'moksafowo_smilepay_shipping_cvs_711' ) ? '711' . $cvs_service_type : 'FAMI' . $cvs_service_type );
 		if ( ! empty( $result['payment_no'] ) ) {
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_PAY_NO, $result['payment_no'] );
 		}
@@ -351,9 +351,9 @@ final class CreateOrder {
 	
 	private static function do_step2_tcat( \WC_Order $order, string $smseid, string $method_id ): array {
 		$temp_map = [
-			'mo_smilepay_shipping_tcat_normal'  => '0001',
-			'mo_smilepay_shipping_tcat_refrige' => '0002',
-			'mo_smilepay_shipping_tcat_freeze'  => '0003',
+			'moksafowo_smilepay_shipping_tcat_normal'  => '0001',
+			'moksafowo_smilepay_shipping_tcat_refrige' => '0002',
+			'moksafowo_smilepay_shipping_tcat_freeze'  => '0003',
 		];
 		$temperature = $temp_map[ $method_id ] ?? '0001';
 
@@ -404,15 +404,15 @@ final class CreateOrder {
 		// CVS 是 Pay_zg=91，Pay_subzg 區分超商：71=7-11 C2C, 72=全家 C2C, FM2=全家 B2C 大宗
 		// TCAT: 78=常溫 / 79=冷藏 / 80=冷凍, Pay_subzg 空
 		switch ( $method_id ) {
-			case 'mo_smilepay_shipping_cvs_711':
+			case 'moksafowo_smilepay_shipping_cvs_711':
 				return [ '91', 'B2C' === Helper::cvs_service_type() ? 'SE2' : '71' ];
-			case 'mo_smilepay_shipping_cvs_fami':
+			case 'moksafowo_smilepay_shipping_cvs_fami':
 				return [ '91', 'B2C' === Helper::cvs_service_type() ? 'FM2' : '72' ];
-			case 'mo_smilepay_shipping_tcat_normal':
+			case 'moksafowo_smilepay_shipping_tcat_normal':
 				return [ '78', '' ];
-			case 'mo_smilepay_shipping_tcat_refrige':
+			case 'moksafowo_smilepay_shipping_tcat_refrige':
 				return [ '79', '' ];
-			case 'mo_smilepay_shipping_tcat_freeze':
+			case 'moksafowo_smilepay_shipping_tcat_freeze':
 				return [ '80', '' ];
 		}
 		return [ '', '' ];

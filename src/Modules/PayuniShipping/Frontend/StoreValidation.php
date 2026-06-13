@@ -30,7 +30,7 @@ final class StoreValidation {
 
 		$store_id = '';
 		if ( WC()->session ) {
-			$session_store = WC()->session->get( 'payuni_selected_store_data' );
+			$session_store = WC()->session->get( 'moksafowo_payuni_selected_store_data' );
 			if ( is_array( $session_store ) && ! empty( $session_store['id'] ) ) {
 				$store_id = (string) $session_store['id'];
 			}
@@ -66,11 +66,11 @@ final class StoreValidation {
 		}
 
 		$store_id = '';
-		if ( ! empty( $_POST['payuni_selected_store_id'] ) ) {
-			$store_id = sanitize_text_field( wp_unslash( $_POST['payuni_selected_store_id'] ) );
+		if ( ! empty( $_POST['moksafowo_payuni_selected_store_id'] ) ) {
+			$store_id = sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) );
 		}
 		if ( empty( $store_id ) && WC()->session ) {
-			$session_store = WC()->session->get( 'payuni_selected_store_data' );
+			$session_store = WC()->session->get( 'moksafowo_payuni_selected_store_data' );
 			if ( is_array( $session_store ) && ! empty( $session_store['id'] ) ) {
 				$store_id = (string) $session_store['id'];
 			}
@@ -85,11 +85,11 @@ final class StoreValidation {
 			$shipping_phone = isset( $_POST['billing_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) : '';
 		}
 		if ( $need_cvs ) {
-			// TW 預設驗證，海外站可 `add_filter('mo_payuni_shipping_phone_valid', '__return_true')` 放寬
+			// TW 預設驗證，海外站可 `add_filter('moksafowo_payuni_shipping_phone_valid', '__return_true')` 放寬
 			$valid = (bool) preg_match( '/^[0][1-9]{1,3}[0-9]{6,8}$/', $shipping_phone )
 				&& strlen( $shipping_phone ) >= 10 && strlen( $shipping_phone ) <= 11;
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			$valid = (bool) apply_filters( 'mo_payuni_shipping_phone_valid', $valid, $shipping_phone );
+			$valid = (bool) apply_filters( 'moksafowo_payuni_shipping_phone_valid', $valid, $shipping_phone );
 			if ( ! $valid ) {
 				wc_add_notice( __( 'Shipping Phone format is invalid', 'mo-ectools' ), 'error' );
 			}

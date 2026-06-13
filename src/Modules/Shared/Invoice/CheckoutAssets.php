@@ -21,11 +21,11 @@ final class CheckoutAssets {
 				if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 					return;
 				}
-				$path    = MOWC_PLUGIN_DIR . 'src/Modules/Shared/Invoice/checkout-fields.js';
-				$version = file_exists( $path ) ? (string) filemtime( $path ) : MOWC_VERSION;
+				$path    = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Shared/Invoice/checkout-fields.js';
+				$version = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
 				wp_enqueue_script(
-					'mo-invoice-checkout-fields',
-					MOWC_PLUGIN_URL . 'src/Modules/Shared/Invoice/checkout-fields.js',
+					'moksafowo-invoice-checkout-fields',
+					MOKSAFOWO_PLUGIN_URL . 'src/Modules/Shared/Invoice/checkout-fields.js',
 					[],
 					$version,
 					true
@@ -39,8 +39,8 @@ final class CheckoutAssets {
 					$default_donate = substr( $default_donate, 0, 7 );
 				}
 				wp_localize_script(
-					'mo-invoice-checkout-fields',
-					'mo_ecpay_invoice_defaults',  // legacy var name — JS 內部沿用，不換
+					'moksafowo-invoice-checkout-fields',
+					'moksafowo_ecpay_invoice_defaults',  // legacy var name — JS 內部沿用，不換
 					[ 'love_code' => $default_donate ]
 				);
 			}

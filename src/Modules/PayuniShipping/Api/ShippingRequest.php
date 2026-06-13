@@ -11,26 +11,28 @@ use \DOMDocument;
 
 
 
+use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+
 defined( 'ABSPATH' ) || exit;
 
 class ShippingRequest {
 
 	use SingletonTrait;
 
-	public const ASYNC_CREATE_HOOK = 'mo_payuni_shipping_create_async';
+	public const ASYNC_CREATE_HOOK = 'moksafowo_payuni_shipping_create_async';
 
 	public static function init() {
 
 		self::get_instance();
 
 		add_action( 'woocommerce_order_status_processing', array( __CLASS__, 'schedule_create' ), 10, 1 );
-		add_action( self::ASYNC_CREATE_HOOK, array( self::get_instance(), 'payuni_create_shipping' ), 10, 1 );
+		add_action( self::ASYNC_CREATE_HOOK, array( self::get_instance(), 'moksafowo_payuni_create_shipping' ), 10, 1 );
 
-		add_action( 'wp_ajax_mo_payuni_shipping_delivery_status', array( self::get_instance(), 'payuni_ajax_query_delivery_status' ), 10, 1 );
-		add_action( 'wp_ajax_mo_payuni_shipping_update_package_spec', array( self::get_instance(), 'payuni_ajax_update_package_spec' ), 10, 1 );
+		add_action( 'wp_ajax_moksafowo_payuni_shipping_delivery_status', array( self::get_instance(), 'moksafowo_payuni_ajax_query_delivery_status' ), 10, 1 );
+		add_action( 'wp_ajax_moksafowo_payuni_shipping_update_package_spec', array( self::get_instance(), 'moksafowo_payuni_ajax_update_package_spec' ), 10, 1 );
 
-		add_action( 'wp_ajax_mo_payuni_shipping_print_label', array( self::get_instance(), 'payuni_print_label' ) );
-		add_action( 'wp_ajax_mo_payuni_shipping_download_label', array( self::get_instance(), 'payuni_download_label' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_shipping_print_label', array( self::get_instance(), 'moksafowo_payuni_print_label' ) );
+		add_action( 'wp_ajax_moksafowo_payuni_shipping_download_label', array( self::get_instance(), 'moksafowo_payuni_download_label' ) );
 
 	}
 
@@ -61,7 +63,7 @@ class ShippingRequest {
 		}
 	}
 
-	public static function payuni_create_shipping( $order = 0 ) {
+	public static function moksafowo_payuni_create_shipping( $order = 0 ) {
 		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		if ( is_numeric( $order ) ) {
@@ -165,7 +167,7 @@ class ShippingRequest {
 		}
 	}
 
-	public static function payuni_ajax_query_delivery_status() {
+	public static function moksafowo_payuni_ajax_query_delivery_status() {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce
@@ -174,7 +176,7 @@ class ShippingRequest {
 			wp_send_json_error( __( 'Permission denied.', 'mo-ectools' ), 403 );
 		}
 
-		if ( ! check_ajax_referer( 'payuni-shipping-order', 'security', false ) ) {
+		if ( ! check_ajax_referer( 'moksafowo-payuni-shipping-order', 'security', false ) ) {
 			$return = array(
 				'success' => false,
 				'result'  => __( 'Invalid security token sent.', 'mo-ectools' ),
@@ -234,7 +236,7 @@ class ShippingRequest {
 		wp_send_json( $return );
 	}
 
-	public static function payuni_ajax_update_package_spec() {
+	public static function moksafowo_payuni_ajax_update_package_spec() {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce only.
@@ -242,7 +244,7 @@ class ShippingRequest {
 			wp_send_json_error( __( 'Permission denied.', 'mo-ectools' ), 403 );
 		}
 
-		if ( ! check_ajax_referer( 'payuni-shipping-order', 'security', false ) ) {
+		if ( ! check_ajax_referer( 'moksafowo-payuni-shipping-order', 'security', false ) ) {
 			$return = array(
 				'success' => false,
 				'result'  => __( 'Invalid security token sent.', 'mo-ectools' ),
@@ -305,7 +307,7 @@ class ShippingRequest {
 		wp_send_json( $return );
 	}
 
-	public static function payuni_print_label() {
+	public static function moksafowo_payuni_print_label() {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 		// SECURITY: capability + nonce ALWAYS required. wpbr-payuni-shipping
 		// only checked the nonce when `security` was present in the URL, which
@@ -313,7 +315,7 @@ class ShippingRequest {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( esc_html__( 'Permission denied.', 'mo-ectools' ), 403 );
 		}
-		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'payuni-shipping-order' ) ) {
+		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'moksafowo-payuni-shipping-order' ) ) {
 			wp_die( esc_html__( 'Invalid security token.', 'mo-ectools' ), 403 );
 		}
 		if ( ! isset( $_GET['orderids'] ) || ! isset( $_GET['service'] ) ) {
@@ -365,7 +367,7 @@ class ShippingRequest {
 
 		if ( $service === ShipType::SEVEN ) {
 			// SEVEN
-			$label_mode = get_option( 'mo_payuni_shipping_cvs_label_mode', '1' ); // Default to A4 format
+			$label_mode = get_option( 'moksafowo_payuni_shipping_cvs_label_mode', '1' ); // Default to A4 format
 
 			$print_request_args = array(
 				'MerID'       => PayuniShipping::get_mer_id(),
@@ -404,7 +406,7 @@ class ShippingRequest {
 		<title><?php esc_html_e( '正在送出列印請求…', 'mo-ectools' ); ?></title>
 	</head>
 	<body>
-		<form id="payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
+		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
 			<?php foreach ( $request_arggs as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
@@ -412,7 +414,7 @@ class ShippingRequest {
 				<button type="submit"><?php esc_html_e( '送出', 'mo-ectools' ); ?></button>
 			</noscript>
 		</form>
-		<script>document.getElementById('payuni-print-label-form').submit();</script>
+		<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
 	</body>
 </html>
 <?php
@@ -421,7 +423,7 @@ class ShippingRequest {
 		} elseif ( $service === ShipType::TCAT ) {
 			// tcat、seven bulk、family bulk、family frozen and seven frozen.
 
-			$shipping_date = get_option( 'mo_payuni_shipping_tcat_estimate_shipping_date','1' );
+			$shipping_date = get_option( 'moksafowo_payuni_shipping_tcat_estimate_shipping_date','1' );
 			
 			// Calculate shipping date avoiding weekends
 			
@@ -464,7 +466,7 @@ class ShippingRequest {
 		<title><?php esc_html_e( '正在送出列印請求…', 'mo-ectools' ); ?></title>
 	</head>
 	<body>
-		<form id="payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
+		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
 			<?php foreach ( $request_arggs as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
@@ -472,7 +474,7 @@ class ShippingRequest {
 				<button type="submit"><?php esc_html_e( '送出', 'mo-ectools' ); ?></button>
 			</noscript>
 		</form>
-		<script>document.getElementById('payuni-print-label-form').submit();</script>
+		<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
 	</body>
 </html>
 <?php
@@ -482,14 +484,14 @@ class ShippingRequest {
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
-	public static function payuni_download_label() {
+	public static function moksafowo_payuni_download_label() {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( esc_html__( 'Permission denied.', 'mo-ectools' ), 403 );
 		}
-		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'payuni-shipping-order' ) ) {
+		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'moksafowo-payuni-shipping-order' ) ) {
 			wp_die( esc_html__( 'Invalid security token.', 'mo-ectools' ), 403 );
 		}
 
@@ -537,37 +539,19 @@ class ShippingRequest {
 			'HashInfo'    => PayuniShipping::hash_info( $encrypted_args ),
 		);
 
-		?>
-			<html>
-				<head><meta charset="utf-8"></head>
-				<body>
-					<script>
-						(function ($) {
-							'use strict';
+		$forms_html = '<form id="moksafowo-payuni-print-label-form" action="' . esc_url( $api_url ) . '" method="post">';
+		foreach ( $request_arggs as $k => $v ) {
+			$forms_html .= '<input type="hidden" name="' . esc_attr( (string) $k ) . '" value="' . esc_attr( (string) $v ) . '">';
+		}
+		$forms_html .= '</form>';
 
-							$( document ).ready(function() {
-
-								var label_request_args = <?php echo wp_json_encode( $request_arggs, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>;
-
-								var html = '<form id="payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">';
-
-								for (const [key, value] of Object.entries(label_request_args) ) {
-									html += '<input type="hidden" name="' + key + '" value="' + value + '">';
-								}
-								html += '</form>';
-
-								document.body.innerHTML += html;
-								document.getElementById('payuni-print-label-form').submit();
-
-							});
-
-						})(jQuery);
-					</script>
-		        </body>
-		    </html>
-
-<?php
-
+		Interstitial::render(
+			__( '下載物流標籤', 'mo-ectools' ),
+			__( '正在下載 PAYUNi 物流標籤…', 'mo-ectools' ),
+			[],
+			$forms_html,
+			'document.getElementById("moksafowo-payuni-print-label-form").submit();'
+		);
 			wp_die();
 	}
 
@@ -661,20 +645,20 @@ class ShippingRequest {
 
 			$args['Consignee']       = $order->get_shipping_last_name() . $order->get_shipping_first_name();
 			$args['ConsigneeMail']   = $order->get_billing_email();
-			$args['ConsigneeMobile'] = PayuniShipping::payuni_get_shipping_phone( $order );
+			$args['ConsigneeMobile'] = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
 
 			$args['RefundStoreID']    = '';
-			$args['SenderName']       = get_option( 'mo_payuni_shipping_sender_name' );
-			$args['SenderMobile']     = get_option( 'mo_payuni_shipping_sender_phone' );
+			$args['SenderName']       = get_option( 'moksafowo_payuni_shipping_sender_name' );
+			$args['SenderMobile']     = get_option( 'moksafowo_payuni_shipping_sender_phone' );
 
 			if ( $order->get_meta( OrderMeta::ShipType ) === ShipType::TCAT ) {
 				$args['StoreID']          = '';
 				$args['DeliveryTimeTag']  = PayuniShipping::get_tcat_delivery_time();
-				$args['ConsigneeAddress'] = self::payuni_get_api_order_address( $order );
+				$args['ConsigneeAddress'] = self::moksafowo_payuni_get_api_order_address( $order );
 				$args['ProdDesc']         = self::get_items_infos( $order );
-				$args['NotifyURL']        = wc()->api_request_url( 'mo_payuni_shipping_tcat_notify' );
+				$args['NotifyURL']        = wc()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' );
 			} else {
-				$args['NotifyURL'] = wc()->api_request_url( 'mo_payuni_shipping_711_notify' );
+				$args['NotifyURL'] = wc()->api_request_url( 'moksafowo_payuni_shipping_711_notify' );
 			}
 
 		} elseif ( $action === 'query' ) {
@@ -684,7 +668,7 @@ class ShippingRequest {
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		return apply_filters( 'mo_payuni_shipping_order_request_args', $args, $order );
+		return apply_filters( 'moksafowo_payuni_shipping_order_request_args', $args, $order );
 	}
 
 	public static function update_order_logistic_meta( $order, $resp_obj ) {
@@ -736,7 +720,7 @@ class ShippingRequest {
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 	}
 
-	public static function payuni_get_api_order_address( $order ) {
+	public static function moksafowo_payuni_get_api_order_address( $order ) {
 		// 縣市英文代碼 → 中文（黑貓 API 需中文地址）+ 鄉鎮市區（_shipping_mowp/district）。
 		$address  = '';
 		$address .= \MoksaWeb\Mowc\Modules\Address\TwAddress::state_label( (string) $order->get_shipping_state() );
@@ -749,7 +733,7 @@ class ShippingRequest {
 
 	private static function get_prefixed_order_no( $order ) {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$prefix = apply_filters( 'mo_payuni_shipping_order_prefix', '' );
+		$prefix = apply_filters( 'moksafowo_payuni_shipping_order_prefix', '' );
 		return $prefix . $order->get_order_number();
 	}
 

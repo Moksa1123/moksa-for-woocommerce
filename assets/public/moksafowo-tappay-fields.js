@@ -6,7 +6,7 @@
  *
  * 流程：
  *   1. SDK setupSDK + card.setup 把 iframe 卡號欄位 render 進
- *      payment_fields() 吐的 .mo-tappay-fields 容器（#mo-tappay-card-*）。
+ *      payment_fields() 吐的 .moksafowo-tappay-fields 容器（#moksafowo-tappay-card-*）。
  *   2. card.onUpdate → 記 canGetPrime + gate #place_order（不能取 prime 時 disable）。
  *   3. checkout submit（jQuery checkout_place_order_<id>）：
  *      尚未有 prime → preventDefault，getPrime() 成功後把 prime / bin /
@@ -20,7 +20,7 @@
 	'use strict';
 
 	var cfg = window.moTappaySettings || {};
-	var GATEWAY = cfg.gatewayId || 'mo_tappay_credit';
+	var GATEWAY = cfg.gatewayId || 'moksafowo_tappay_credit';
 	var I18N = cfg.i18n || {};
 
 	var sdkReady = false;
@@ -29,7 +29,7 @@
 	var submitting = false;
 
 	function $container() {
-		return $( '.mo-tappay-fields[data-mo-tappay-gateway="' + GATEWAY + '"]' );
+		return $( '.moksafowo-tappay-fields[data-moksafowo-tappay-gateway="' + GATEWAY + '"]' );
 	}
 
 	function selectedGateway() {
@@ -40,7 +40,7 @@
 	}
 
 	function setError( msg ) {
-		var $err = $container().find( '.mo-tappay-error' );
+		var $err = $container().find( '.moksafowo-tappay-error' );
 		if ( ! $err.length ) {
 			return;
 		}
@@ -78,7 +78,7 @@
 		var $c = $container();
 		if (
 			! $c.length ||
-			! $c.find( '#mo-tappay-card-number' ).length ||
+			! $c.find( '#moksafowo-tappay-card-number' ).length ||
 			! ensureSdk()
 		) {
 			return;
@@ -89,15 +89,15 @@
 			window.TPDirect.card.setup( {
 				fields: {
 					number: {
-						element: '#mo-tappay-card-number',
+						element: '#moksafowo-tappay-card-number',
 						placeholder: '**** **** **** ****',
 					},
 					expirationDate: {
-						element: '#mo-tappay-card-expiry',
+						element: '#moksafowo-tappay-card-expiry',
 						placeholder: 'MM / YY',
 					},
 					ccv: {
-						element: '#mo-tappay-card-ccv',
+						element: '#moksafowo-tappay-card-ccv',
 						placeholder: 'CCV',
 					},
 				},
@@ -151,12 +151,12 @@
 			}
 			var card = result.card || {};
 			var $c = $container();
-			$c.find( '.mo-tappay-prime' ).val( card.prime || '' );
-			$c.find( '.mo-tappay-bin' ).val( card.bin_code || '' );
-			$c.find( '.mo-tappay-last-four' ).val(
+			$c.find( '.moksafowo-tappay-prime' ).val( card.prime || '' );
+			$c.find( '.moksafowo-tappay-bin' ).val( card.bin_code || '' );
+			$c.find( '.moksafowo-tappay-last-four' ).val(
 				card.last_four || ''
 			);
-			$c.find( '.mo-tappay-issuer' ).val( card.issuer || '' );
+			$c.find( '.moksafowo-tappay-issuer' ).val( card.issuer || '' );
 			// prime 已寫入 → 放行原本的 checkout submit。
 			$form.trigger( 'submit' );
 		} );
@@ -170,7 +170,7 @@
 				return true;
 			}
 			var $c = $container();
-			var existing = $c.find( '.mo-tappay-prime' ).val();
+			var existing = $c.find( '.moksafowo-tappay-prime' ).val();
 			if ( existing ) {
 				return true; // 已有 prime（getPrime 後 re-submit）→ 放行。
 			}
@@ -205,7 +205,7 @@
 	} );
 	$( document.body ).on( 'change', 'input[name="payment_method"]', function () {
 		// 切回 TapPay 時把舊 prime 清掉（避免用過期 prime 送單）。
-		$container().find( '.mo-tappay-prime' ).val( '' );
+		$container().find( '.moksafowo-tappay-prime' ).val( '' );
 		mountFields();
 		togglePlaceOrder();
 	} );

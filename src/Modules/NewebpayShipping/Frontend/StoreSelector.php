@@ -12,23 +12,23 @@ defined( 'ABSPATH' ) || exit;
 
 final class StoreSelector {
 
-	private const NONCE_ACTION     = 'mo_newebpay_shipping_store';
-	private const TRANSIENT_PREFIX = 'mo_newebpay_store_';
-	private const STATE_PREFIX     = 'mo_newebpay_state_';
-	private const SESSION_KEY      = 'mo_newebpay_shipping_store';
-	private const TOKEN_QUERY      = 'mo_newebpay_store';
+	private const NONCE_ACTION     = 'moksafowo_newebpay_shipping_store';
+	private const TRANSIENT_PREFIX = 'moksafowo_newebpay_store_';
+	private const STATE_PREFIX     = 'moksafowo_newebpay_state_';
+	private const SESSION_KEY      = 'moksafowo_newebpay_shipping_store';
+	private const TOKEN_QUERY      = 'moksafowo_newebpay_store';
 
 	public static function init(): void {
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 
 		// AJAX：開地圖 / 解 token
-		add_action( 'wp_ajax_mo_newebpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
-		add_action( 'wp_ajax_nopriv_mo_newebpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
-		add_action( 'wp_ajax_mo_newebpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
-		add_action( 'wp_ajax_nopriv_mo_newebpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
+		add_action( 'wp_ajax_moksafowo_newebpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
+		add_action( 'wp_ajax_nopriv_moksafowo_newebpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
+		add_action( 'wp_ajax_moksafowo_newebpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
+		add_action( 'wp_ajax_nopriv_moksafowo_newebpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
 
 		// 藍新 storeMap callback
-		add_action( 'woocommerce_api_mo_newebpay_shipping_map_callback', [ __CLASS__, 'handle_callback' ] );
+		add_action( 'woocommerce_api_moksafowo_newebpay_shipping_map_callback', [ __CLASS__, 'handle_callback' ] );
 
 		// 下單 → 把 session store 寫進 order meta（Classic + Block）
 		add_action( 'woocommerce_checkout_create_order', [ __CLASS__, 'save_to_order' ], 20, 2 );
@@ -49,17 +49,17 @@ final class StoreSelector {
 		if ( ! self::is_checkout_page() ) {
 			return;
 		}
-		$handle  = 'mo-newebpay-shipping-store';
-		$js_path = MOWC_PLUGIN_DIR . 'src/Modules/NewebpayShipping/assets/js/store-selector.js';
-		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
+		$handle  = 'moksafowo-newebpay-shipping-store';
+		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/NewebpayShipping/assets/js/store-selector.js';
+		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
 			$handle,
-			MOWC_PLUGIN_URL . 'src/Modules/NewebpayShipping/assets/js/store-selector.js',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/NewebpayShipping/assets/js/store-selector.js',
 			[ 'jquery' ],
 			$ver,
 			true
 		);
-		wp_localize_script( $handle, 'mo_newebpay_shipping', [
+		wp_localize_script( $handle, 'moksafowo_newebpay_shipping', [
 			'ajax_url'    => admin_url( 'admin-ajax.php' ),
 			'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
 			'cvs_methods' => array_keys( Module::method_map() ),
@@ -102,11 +102,11 @@ final class StoreSelector {
 		$mtn = self::generate_mtn();
 		set_transient( self::STATE_PREFIX . $mtn, [ 'method_id' => $method_id, 'time' => time() ], 30 * MINUTE_IN_SECONDS );
 
-		$lgs_type  = (string) get_option( 'mo_newebpay_shipping_lgs_type', 'C2C' );
+		$lgs_type  = (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
 		$ship_type = isset( $_POST['ship_type'] ) ? sanitize_text_field( wp_unslash( $_POST['ship_type'] ) ) : '1';
 
 		// 過濾未啟用的超商品牌（per settings 的「啟用的超商」multiselect）
-		$enabled = (array) get_option( 'mo_newebpay_shipping_enabled_carriers', [ '1', '2', '3', '4' ] );
+		$enabled = (array) get_option( 'moksafowo_newebpay_shipping_enabled_carriers', [ '1', '2', '3', '4' ] );
 		if ( $enabled && ! in_array( (string) $ship_type, $enabled, true ) ) {
 			// 落到第一個有啟用的當 fallback
 			$ship_type = (string) reset( $enabled ) ?: '1';
@@ -119,7 +119,7 @@ final class StoreSelector {
 			'MerchantOrderNo' => $mtn,
 			'LgsType'         => $lgs_type,
 			'ShipType'        => $ship_type,
-			'ReturnURL'       => add_query_arg( 'wc-api', 'mo_newebpay_shipping_map_callback', home_url( '/' ) ),
+			'ReturnURL'       => add_query_arg( 'wc-api', 'moksafowo_newebpay_shipping_map_callback', home_url( '/' ) ),
 		] );
 		if ( ! $result['ok'] ) {
 			wp_send_json_error( [ 'message' => $result['message'] ] );
@@ -236,7 +236,7 @@ final class StoreSelector {
 		// 確認訂單真的是 NewebPay 物流
 		$is_match = false;
 		foreach ( $order->get_shipping_methods() as $m ) {
-			if ( str_starts_with( (string) $m->get_method_id(), 'mo_newebpay_shipping_' ) ) {
+			if ( str_starts_with( (string) $m->get_method_id(), 'moksafowo_newebpay_shipping_' ) ) {
 				$is_match = true;
 				break;
 			}

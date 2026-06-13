@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Unionpay extends AbstractSmilepayGateway {
 
-	public const GATEWAY_ID = 'mo_smilepay_unionpay';
+	public const GATEWAY_ID = 'moksafowo_smilepay_unionpay';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

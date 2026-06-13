@@ -17,28 +17,31 @@ class PaymentResponse {
 
 	public static function init() {
 		self::get_instance();
-		add_action( 'woocommerce_api_payuni_payment', array( self::get_instance(), 'payuni_receive_notify' ), 10 );
-		add_action( 'woocommerce_api_payuni_return', array( self::get_instance(), 'payuni_receive_response_frontend' ), 20 );
+		add_action( 'woocommerce_api_moksafowo_payuni_payment', array( self::get_instance(), 'moksafowo_payuni_receive_notify' ), 10 );
+		add_action( 'woocommerce_api_moksafowo_payuni_return', array( self::get_instance(), 'moksafowo_payuni_receive_response_frontend' ), 20 );
 	}
 
-	public static function payuni_receive_notify() {
-        // phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method; wc_clean is WC's sanitize alias.
-        // phpcs:disable WordPress.Security.NonceVerification.Missing
-
+	public static function moksafowo_payuni_receive_notify() {
+		// 匿名 gateway webhook 無法帶 WP nonce — 走 HashInfo（hash_equals）驗章，
+		// 解密前先驗、所有欄位 wc_clean / map_deep sanitize 後才使用。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
 		if ( empty( $_POST ) ) {
 			return;
 		}
 
-		$mer_id        = Credentials::merchant_id();
-		$posted_mer_id = ( isset( $_POST['MerID'] ) ) ? wc_clean( wp_unslash( $_POST['MerID'] ) ) : '';
+		$mer_id = Credentials::merchant_id();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$posted_mer_id = ( isset( $_POST['MerID'] ) ) ? sanitize_text_field( wp_unslash( $_POST['MerID'] ) ) : '';
 
 		if ( $mer_id !== $posted_mer_id ) {
 			PayuniPayment::log( 'PAYUNi received response MerID not found or not match. ' );
 			return;
 		}
 
-		$encrypt_info = ( isset( $_POST['EncryptInfo'] ) ) ? wc_clean( wp_unslash( $_POST['EncryptInfo'] ) ) : '';
-		$posted_hash  = ( isset( $_POST['HashInfo'] ) ) ? wc_clean( wp_unslash( $_POST['HashInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$encrypt_info = ( isset( $_POST['EncryptInfo'] ) ) ? sanitize_text_field( wp_unslash( $_POST['EncryptInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$posted_hash = ( isset( $_POST['HashInfo'] ) ) ? sanitize_text_field( wp_unslash( $_POST['HashInfo'] ) ) : '';
 
 		// 必須在 decrypt 前驗 HashInfo — 否則被偽造的 EncryptInfo 會 silent fail at parse_str
 		if ( '' === $posted_hash || ! hash_equals( PayuniPayment::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
@@ -48,6 +51,8 @@ class PaymentResponse {
 		}
 
 		$decrypted_info = PayuniPayment::decrypt( $encrypt_info );
+		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
+		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi NotifyURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
 		$status          = $decrypted_info['Status'];
@@ -89,26 +94,28 @@ class PaymentResponse {
 		status_header( 200 );
 		echo 'OK';
 		exit;
-     // phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 
-	public static function payuni_receive_response_frontend() {
-     // phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method; wc_clean is WC's sanitize alias.
-     // phpcs:disable WordPress.Security.NonceVerification.Missing
+	public static function moksafowo_payuni_receive_response_frontend() {
+		// 同 NotifyURL — HashInfo 驗章 + 逐欄 sanitize。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
 		if ( empty( $_POST ) ) {
 			return;
 		}
 
-		$mer_id        = Credentials::merchant_id();
-		$posted_mer_id = ( isset( $_POST['MerID'] ) ) ? wc_clean( wp_unslash( $_POST['MerID'] ) ) : '';
+		$mer_id = Credentials::merchant_id();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$posted_mer_id = ( isset( $_POST['MerID'] ) ) ? sanitize_text_field( wp_unslash( $_POST['MerID'] ) ) : '';
 
 		if ( $mer_id !== $posted_mer_id ) {
 			PayuniPayment::log( 'PAYUNi received response MerID not found or not match. ' );
 			return;
 		}
 
-		$encrypt_info = ( isset( $_POST['EncryptInfo'] ) ) ? wc_clean( wp_unslash( $_POST['EncryptInfo'] ) ) : '';
-		$posted_hash  = ( isset( $_POST['HashInfo'] ) ) ? wc_clean( wp_unslash( $_POST['HashInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$encrypt_info = ( isset( $_POST['EncryptInfo'] ) ) ? sanitize_text_field( wp_unslash( $_POST['EncryptInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
+		$posted_hash = ( isset( $_POST['HashInfo'] ) ) ? sanitize_text_field( wp_unslash( $_POST['HashInfo'] ) ) : '';
 
 		// 同 NotifyURL — 偽造 ReturnURL POST 會 driver payment_complete on unpaid order
 		if ( '' === $posted_hash || ! hash_equals( PayuniPayment::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
@@ -118,6 +125,8 @@ class PaymentResponse {
 		}
 
 		$decrypted_info = PayuniPayment::decrypt( $encrypt_info );
+		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
+		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi ReturnURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
 		$status   = $decrypted_info['Status'];
@@ -151,7 +160,6 @@ class PaymentResponse {
 		wp_safe_redirect( $order->get_checkout_order_received_url() );// 訂單感謝頁面.
 		exit;
 
-     // phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 
 	private static function save_payuni_order_data( $order, $decrypted_info ) {
@@ -215,7 +223,7 @@ class PaymentResponse {
 		self::update_order_meta( $order, $decrypted_info, OrderMeta::REFUND_AMT, 'RefundAmt' );
 		self::update_order_meta( $order, $decrypted_info, OrderMeta::REFUND_TIME, 'RefundTime' );
 
-		$order->update_meta_data( OrderMeta::PLUGIN_VERSION, MOWC_VERSION );
+		$order->update_meta_data( OrderMeta::PLUGIN_VERSION, MOKSAFOWO_VERSION );
 
 		$order->save();
 	}

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Webatm extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_webatm';
+		$this->id = 'moksafowo_newebpay_webatm';
 		parent::__construct();
 	}
 

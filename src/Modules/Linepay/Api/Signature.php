@@ -33,18 +33,18 @@ final class Signature {
 		// v3 spec: GET signs query, POST signs body
 		$payload = 'GET' === strtoupper( $method ) ? (string) wp_parse_url( $url, PHP_URL_QUERY ) : $request_body;
 		$data    = $channel_secret . $url_path . $payload . $nonce;
-		return base64_encode( hash_hmac( \Mo_LinePay_Const::AUTH_ALGRO, $data, $channel_secret, true ) );
+		return base64_encode( hash_hmac( \Moksafowo_LinePay_Const::AUTH_ALGRO, $data, $channel_secret, true ) );
 	}
 
 	public static function generate_request_time(): string {
 		// PHP 8.2 strict: microtime(true) is float — must cast before explode
 		$parts    = explode( '.', (string) microtime( true ) );
 		$fraction = $parts[1] ?? '0';
-		return gmdate( \Mo_LinePay_Const::REQUEST_TIME_FORMAT ) . $fraction;
+		return gmdate( \Moksafowo_LinePay_Const::REQUEST_TIME_FORMAT ) . $fraction;
 	}
 
 	public static function callback_token( $order_id, string $request_type ): string {
-		// Hard-fail rather than fall back to a public constant — key makes mo_token un-forgeable
+		// Hard-fail rather than fall back to a public constant — key makes moksafowo_token un-forgeable
 		$source = defined( 'AUTH_KEY' ) ? (string) AUTH_KEY
 			: ( defined( 'SECURE_AUTH_KEY' ) ? (string) SECURE_AUTH_KEY : '' );
 		if ( '' === $source ) {

@@ -22,17 +22,17 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'mo_newebpay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_newebpay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
 		}
 		$payment_type = (string) $order->get_meta( Keys::NEWEBPAY_PAYMENT_TYPE );
 		$mtn          = (string) $order->get_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
-			return new \WP_Error( 'mo_newebpay_missing_mtn', __( '訂單缺少藍新交易編號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_newebpay_missing_mtn', __( '訂單缺少藍新交易編號。', 'mo-ectools' ) );
 		}
 
 		$amt_int = (int) ceil( (float) $amount );
 		if ( $amt_int <= 0 ) {
-			return new \WP_Error( 'mo_newebpay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_newebpay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
 		}
 
 		// 路由：依 PaymentType 走對應 API
@@ -47,7 +47,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		// ATM/CVS/Barcode/WebATM 不走 API，提示登後台
 		$offline_types = [ 'VACC', 'CVS', 'BARCODE', 'WEBATM', 'CVSCOM' ];
 		if ( in_array( $payment_type, $offline_types, true ) ) {
-			return new \WP_Error( 'mo_newebpay_offline', sprintf(
+			return new \WP_Error( 'moksafowo_newebpay_offline', sprintf(
 				/* translators: %s: payment type */
 				__( '此付款方式（%s）為線下付款 / 超商，請至藍新後台處理退款。', 'mo-ectools' ),
 				$payment_type
@@ -69,7 +69,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			: \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::refund( [ 'Amt' => $amt, 'MerchantOrderNo' => $mtn, 'IndexType' => 1 ] );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'mo_newebpay_card_refund_fail', sprintf( __( '藍新退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( '藍新退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
 		$order->add_order_note( sprintf(
 			/* translators: 1: action, 2: amount, 3: reason */
@@ -90,7 +90,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		] );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'mo_newebpay_wallet_refund_fail', sprintf( __( '藍新錢包退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_wallet_refund_fail', sprintf( __( '藍新錢包退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
 		$order->add_order_note( sprintf(
 			/* translators: 1: payment type, 2: amount, 3: reason */
@@ -112,7 +112,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		] );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'mo_newebpay_bnpl_refund_fail', sprintf( __( 'AFTEE 退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_bnpl_refund_fail', sprintf( __( 'AFTEE 退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
 		$order->add_order_note( sprintf(
 			/* translators: 1: amount, 2: reason */
@@ -221,7 +221,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			'Amt'             => $amount,
 			'ItemDesc'        => $item_name,
 			'ReturnURL'       => $order->get_checkout_order_received_url(),
-			'NotifyURL'       => home_url( '/wc-api/mo_newebpay_payment' ),
+			'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_payment' ),
 			'CustomerURL'     => $order->get_checkout_order_received_url(),
 			'ClientBackURL'   => $order->get_cancel_order_url_raw(),
 			'Email'           => $order->get_billing_email(),
@@ -263,18 +263,18 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 
 		$url = Helper::mpg_url();
 		?>
-		<form method="post" id="mo-newebpay-form" action="<?php echo esc_url( $url ); ?>">
+		<form method="post" id="moksafowo-newebpay-form" action="<?php echo esc_url( $url ); ?>">
 			<?php foreach ( $form_data as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( (string) $v ); ?>">
 			<?php endforeach; ?>
-			<button type="submit" id="mo-newebpay-submit" class="button alt"><?php esc_html_e( '前往藍新付款頁', 'mo-ectools' ); ?></button>
+			<button type="submit" id="moksafowo-newebpay-submit" class="button alt"><?php esc_html_e( '前往藍新付款頁', 'mo-ectools' ); ?></button>
 		</form>
-		<script>document.getElementById('mo-newebpay-form').submit();</script>
+		<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-newebpay-form").submit();' ); ?>
 		<?php
 	}
 
 	protected function build_item_name( \WC_Order $order ): string {
-		$admin_name = trim( (string) get_option( 'mo_newebpay_payment_item_name', '' ) );
+		$admin_name = trim( (string) get_option( 'moksafowo_newebpay_payment_item_name', '' ) );
 		if ( '' !== $admin_name ) {
 			return $admin_name;
 		}

@@ -8,21 +8,21 @@ defined( 'ABSPATH' ) || exit;
 final class Registrar {
 
 	public const STATUSES = [
-		'mo-shipped' => [
+		'moksa-shipped' => [
 			'label'    => '已出貨',
 			'badge'    => '已出貨',
 			'wc_label' => '已出貨 <span class="count">(%s)</span>',
 			'color'    => '#2271b1',
 			'public'   => true,
 		],
-		'mo-cvs-arrived' => [
+		'moksa-cvs-arrived' => [
 			'label'    => '已到店待取',
 			'badge'    => '到店待取',
 			'wc_label' => '已到店待取 <span class="count">(%s)</span>',
 			'color'    => '#dba617',
 			'public'   => true,
 		],
-		'mo-store-closed' => [
+		'moksa-store-closed' => [
 			'label'    => '門市關轉',
 			'badge'    => '門市關轉',
 			'wc_label' => '門市關轉 <span class="count">(%s)</span>',
@@ -52,9 +52,9 @@ final class Registrar {
 	public static function color_status_labels(): array {
 		return [
 			'processing'      => __( '處理中', 'mo-ectools' ),
-			'mo-shipped'      => __( '已出貨', 'mo-ectools' ),
-			'mo-cvs-arrived'  => __( '已到店待取', 'mo-ectools' ),
-			'mo-store-closed' => __( '門市關轉', 'mo-ectools' ),
+			'moksa-shipped'      => __( '已出貨', 'mo-ectools' ),
+			'moksa-cvs-arrived'  => __( '已到店待取', 'mo-ectools' ),
+			'moksa-store-closed' => __( '門市關轉', 'mo-ectools' ),
 			'completed'       => __( '完成', 'mo-ectools' ),
 			'cancelled'       => __( '已取消 / 失敗', 'mo-ectools' ),
 			'refunded'        => __( '退款', 'mo-ectools' ),
@@ -65,9 +65,9 @@ final class Registrar {
 	public static function color_status_defaults(): array {
 		return [
 			'processing'      => [ '#dbeafe', '#1e40af' ],
-			'mo-shipped'      => [ '#1d4ed8', '#ffffff' ],
-			'mo-cvs-arrived'  => [ '#d97706', '#ffffff' ],
-			'mo-store-closed' => [ '#b45309', '#ffffff' ],
+			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
+			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
+			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
 			'completed'       => [ '#d1fae5', '#065f46' ],
 			'cancelled'       => [ '#fee2e2', '#991b1b' ],
 			'refunded'        => [ '#e2e8f0', '#475569' ],
@@ -86,20 +86,20 @@ final class Registrar {
 		}
 		wp_enqueue_style( 'wp-color-picker' );
 		$css = <<<'CSS'
-.mo-status-color-grid{border-collapse:collapse;width:auto;}
-.mo-status-color-grid th{text-align:left;padding:6px 24px 6px 0;font-weight:600;color:#1d2327;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #dcdcde;}
-.mo-status-color-grid td{padding:8px 24px 8px 0;border-bottom:1px solid #f0f0f1;vertical-align:middle;}
-.mo-status-color-grid th:last-child,
-.mo-status-color-grid td:last-child{padding-right:0;}
-.mo-status-color-grid tr:last-child td{border-bottom:0;}
-.mo-status-color-grid .mo-status-name{font-weight:500;color:#1d2327;white-space:nowrap;}
-.mo-status-color-grid .wp-picker-container{vertical-align:middle;}
-.mo-status-color-grid .wp-color-result{margin:0;}
-.mo-status-color-grid .mo-preview{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap;min-width:80px;text-align:center;border:1px solid rgba(0,0,0,.04);}
+.moksafowo-status-color-grid{border-collapse:collapse;width:auto;}
+.moksafowo-status-color-grid th{text-align:left;padding:6px 24px 6px 0;font-weight:600;color:#1d2327;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #dcdcde;}
+.moksafowo-status-color-grid td{padding:8px 24px 8px 0;border-bottom:1px solid #f0f0f1;vertical-align:middle;}
+.moksafowo-status-color-grid th:last-child,
+.moksafowo-status-color-grid td:last-child{padding-right:0;}
+.moksafowo-status-color-grid tr:last-child td{border-bottom:0;}
+.moksafowo-status-color-grid .moksafowo-status-name{font-weight:500;color:#1d2327;white-space:nowrap;}
+.moksafowo-status-color-grid .wp-picker-container{vertical-align:middle;}
+.moksafowo-status-color-grid .wp-color-result{margin:0;}
+.moksafowo-status-color-grid .moksafowo-preview{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;white-space:nowrap;min-width:80px;text-align:center;border:1px solid rgba(0,0,0,.04);}
 CSS;
-		wp_register_style( 'mo-status-color-grid', false, [ 'wp-color-picker' ], MOWC_VERSION );
-		wp_enqueue_style( 'mo-status-color-grid' );
-		wp_add_inline_style( 'mo-status-color-grid', $css );
+		wp_register_style( 'moksafowo-status-color-grid', false, [ 'wp-color-picker' ], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-status-color-grid' );
+		wp_add_inline_style( 'moksafowo-status-color-grid', $css );
 
 		$js = <<<'JS'
 jQuery(function($){
@@ -107,9 +107,9 @@ jQuery(function($){
 		var $row = $input.closest('tr');
 		var bg = $row.find('input[data-target="bg"]').val() || '#dbeafe';
 		var fg = $row.find('input[data-target="fg"]').val() || '#1e40af';
-		$row.find('.mo-preview').css({background: bg, color: fg});
+		$row.find('.moksafowo-preview').css({background: bg, color: fg});
 	}
-	$('.mo-status-color-input').each(function(){
+	$('.moksafowo-status-color-input').each(function(){
 		var $input = $(this);
 		$input.wpColorPicker({
 			change: function(e, ui){ setTimeout(function(){ updatePreview($(e.target)); }, 0); },
@@ -118,9 +118,9 @@ jQuery(function($){
 	});
 });
 JS;
-		wp_register_script( 'mo-status-color-grid', false, [ 'jquery', 'wp-color-picker' ], MOWC_VERSION, true );
-		wp_enqueue_script( 'mo-status-color-grid' );
-		wp_add_inline_script( 'mo-status-color-grid', $js );
+		wp_register_script( 'moksafowo-status-color-grid', false, [ 'jquery', 'wp-color-picker' ], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-status-color-grid' );
+		wp_add_inline_script( 'moksafowo-status-color-grid', $js );
 	}
 
 	public static function render_color_grid_field( array $field ): void {
@@ -133,7 +133,7 @@ JS;
 			echo '<p style="margin:0 0 12px;color:#646970;">' . esc_html( $desc ) . '</p>';
 		}
 		?>
-		<table class="mo-status-color-grid">
+		<table class="moksafowo-status-color-grid">
 			<thead><tr>
 				<th><?php esc_html_e( '訂單狀態', 'mo-ectools' ); ?></th>
 				<th><?php esc_html_e( '背景', 'mo-ectools' ); ?></th>
@@ -142,16 +142,16 @@ JS;
 			</tr></thead>
 			<tbody>
 				<?php foreach ( $labels as $slug => $label ) :
-					$key       = 'mo_status_color_' . str_replace( '-', '_', $slug );
+					$key       = 'moksafowo_status_color_' . str_replace( '-', '_', $slug );
 					[ $def_bg, $def_fg ] = $defaults[ $slug ];
 					$bg        = (string) get_option( $key . '_bg', $def_bg );
 					$fg        = (string) get_option( $key . '_fg', $def_fg );
 				?>
 					<tr data-status="<?php echo esc_attr( $slug ); ?>">
-						<td class="mo-status-name"><?php echo esc_html( $label ); ?></td>
-						<td><input type="text" class="mo-status-color-input" data-target="bg" name="<?php echo esc_attr( $key . '_bg' ); ?>" value="<?php echo esc_attr( $bg ); ?>" data-default-color="<?php echo esc_attr( $def_bg ); ?>"></td>
-						<td><input type="text" class="mo-status-color-input" data-target="fg" name="<?php echo esc_attr( $key . '_fg' ); ?>" value="<?php echo esc_attr( $fg ); ?>" data-default-color="<?php echo esc_attr( $def_fg ); ?>"></td>
-						<td><span class="mo-preview" style="background:<?php echo esc_attr( $bg ); ?>;color:<?php echo esc_attr( $fg ); ?>;"><?php echo esc_html( $label ); ?></span></td>
+						<td class="moksafowo-status-name"><?php echo esc_html( $label ); ?></td>
+						<td><input type="text" class="moksafowo-status-color-input" data-target="bg" name="<?php echo esc_attr( $key . '_bg' ); ?>" value="<?php echo esc_attr( $bg ); ?>" data-default-color="<?php echo esc_attr( $def_bg ); ?>"></td>
+						<td><input type="text" class="moksafowo-status-color-input" data-target="fg" name="<?php echo esc_attr( $key . '_fg' ); ?>" value="<?php echo esc_attr( $fg ); ?>" data-default-color="<?php echo esc_attr( $def_fg ); ?>"></td>
+						<td><span class="moksafowo-preview" style="background:<?php echo esc_attr( $bg ); ?>;color:<?php echo esc_attr( $fg ); ?>;"><?php echo esc_html( $label ); ?></span></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -163,7 +163,7 @@ JS;
 	public static function save_color_grid(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC settings nonce 已由 WC_Admin_Settings::save() 驗
 		foreach ( array_keys( self::color_status_labels() ) as $slug ) {
-			$key = 'mo_status_color_' . str_replace( '-', '_', $slug );
+			$key = 'moksafowo_status_color_' . str_replace( '-', '_', $slug );
 			foreach ( [ '_bg', '_fg' ] as $suffix ) {
 				$post_key = $key . $suffix;
 				if ( ! isset( $_POST[ $post_key ] ) ) {
@@ -179,7 +179,7 @@ JS;
 	}
 
 	public static function is_status_enabled( string $slug ): bool {
-		return 'yes' === get_option( 'mo_shipping_status_' . str_replace( '-', '_', $slug ) . '_enabled', 'yes' );
+		return 'yes' === get_option( 'moksafowo_shipping_status_' . str_replace( '-', '_', $slug ) . '_enabled', 'yes' );
 	}
 
 	/**
@@ -187,11 +187,11 @@ JS;
 	 */
 	private static function status_label( string $slug ): string {
 		switch ( $slug ) {
-			case 'mo-shipped':
+			case 'moksa-shipped':
 				return __( '已出貨', 'mo-ectools' );
-			case 'mo-cvs-arrived':
+			case 'moksa-cvs-arrived':
 				return __( '已到店待取', 'mo-ectools' );
-			case 'mo-store-closed':
+			case 'moksa-store-closed':
 				return __( '門市關轉', 'mo-ectools' );
 		}
 		return $slug;
@@ -204,13 +204,13 @@ JS;
 	 */
 	private static function status_label_count( string $slug ): array {
 		switch ( $slug ) {
-			case 'mo-cvs-arrived':
+			case 'moksa-cvs-arrived':
 				/* translators: %s: number of orders in this status */
 				return _n_noop( '已到店待取 <span class="count">(%s)</span>', '已到店待取 <span class="count">(%s)</span>', 'mo-ectools' );
-			case 'mo-store-closed':
+			case 'moksa-store-closed':
 				/* translators: %s: number of orders in this status */
 				return _n_noop( '門市關轉 <span class="count">(%s)</span>', '門市關轉 <span class="count">(%s)</span>', 'mo-ectools' );
-			case 'mo-shipped':
+			case 'moksa-shipped':
 			default:
 				/* translators: %s: number of orders in this status */
 				return _n_noop( '已出貨 <span class="count">(%s)</span>', '已出貨 <span class="count">(%s)</span>', 'mo-ectools' );
@@ -276,9 +276,9 @@ JS;
 	}
 
 	public static function mark_post_payment_statuses_as_paid( array $paid ): array {
-		$paid[] = 'mo-shipped';
-		$paid[] = 'mo-cvs-arrived';
-		$paid[] = 'mo-store-closed';
+		$paid[] = 'moksa-shipped';
+		$paid[] = 'moksa-cvs-arrived';
+		$paid[] = 'moksa-store-closed';
 		return $paid;
 	}
 
@@ -287,7 +287,7 @@ JS;
 			return $editable;
 		}
 		$status = method_exists( $order, 'get_status' ) ? $order->get_status() : '';
-		if ( in_array( $status, [ 'mo-shipped', 'mo-cvs-arrived', 'mo-store-closed' ], true ) ) {
+		if ( in_array( $status, [ 'moksa-shipped', 'moksa-cvs-arrived', 'moksa-store-closed' ], true ) ) {
 			return false;
 		}
 		return $editable;
@@ -334,9 +334,9 @@ JS;
 				esc_attr( $bg )
 			);
 		}
-		wp_register_style( 'mo-status-badges', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-status-badges' );
-		wp_add_inline_style( 'mo-status-badges', $css );
+		wp_register_style( 'moksafowo-status-badges', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-status-badges' );
+		wp_add_inline_style( 'moksafowo-status-badges', $css );
 	}
 
 	private static function sanitize_color( string $color ): string {
@@ -362,21 +362,21 @@ JS;
 			'failed'          => [ '#fee2e2', '#991b1b' ],
 			'on-hold'         => [ '#fef3c7', '#92400e' ],
 			'pending'         => [ '#fef3c7', '#92400e' ],
-			'mo-shipped'      => [ '#1d4ed8', '#ffffff' ],
-			'mo-cvs-arrived'  => [ '#d97706', '#ffffff' ],
-			'mo-store-closed' => [ '#b45309', '#ffffff' ],
+			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
+			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
+			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
 		];
 		$option_keys = [
-			'processing'      => 'mo_status_color_processing',
-			'completed'       => 'mo_status_color_completed',
-			'cancelled'       => 'mo_status_color_cancelled',
-			'failed'          => 'mo_status_color_cancelled',
-			'refunded'        => 'mo_status_color_refunded',
-			'on-hold'         => 'mo_status_color_on_hold',
-			'pending'         => 'mo_status_color_on_hold',
-			'mo-shipped'      => 'mo_status_color_mo_shipped',
-			'mo-cvs-arrived'  => 'mo_status_color_mo_cvs_arrived',
-			'mo-store-closed' => 'mo_status_color_mo_store_closed',
+			'processing'      => 'moksafowo_status_color_processing',
+			'completed'       => 'moksafowo_status_color_completed',
+			'cancelled'       => 'moksafowo_status_color_cancelled',
+			'failed'          => 'moksafowo_status_color_cancelled',
+			'refunded'        => 'moksafowo_status_color_refunded',
+			'on-hold'         => 'moksafowo_status_color_on_hold',
+			'pending'         => 'moksafowo_status_color_on_hold',
+			'moksa-shipped'      => 'moksafowo_status_color_moksafowo_shipped',
+			'moksa-cvs-arrived'  => 'moksafowo_status_color_moksafowo_cvs_arrived',
+			'moksa-store-closed' => 'moksafowo_status_color_moksafowo_store_closed',
 		];
 
 		$palette = [];

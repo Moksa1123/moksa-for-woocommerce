@@ -28,25 +28,25 @@ class LgsType {
 
 	public static function get_lgs_type_by_shipping_method( $shipping_method ) {
 		switch ( $shipping_method ) {
-			case 'mo_payuni_shipping_711_b2c_normal':
+			case 'moksafowo_payuni_shipping_711_b2c_normal':
 				return self::B2C;
 				break;
-			case 'mo_payuni_shipping_711_b2c_frozen':
+			case 'moksafowo_payuni_shipping_711_b2c_frozen':
 				return self::B2C;
 				break;
-			case 'mo_payuni_shipping_711_c2c_normal':
+			case 'moksafowo_payuni_shipping_711_c2c_normal':
 				return self::C2C;
 				break;
-			case 'mo_payuni_shipping_711_c2c_frozen':
+			case 'moksafowo_payuni_shipping_711_c2c_frozen':
 				return self::C2C;
 				break;
-			case 'mo_payuni_shipping_tcat_normal':
+			case 'moksafowo_payuni_shipping_tcat_normal':
 				return self::HOME;
 				break;
-			case 'mo_payuni_shipping_tcat_frozen':
+			case 'moksafowo_payuni_shipping_tcat_frozen':
 				return self::HOME;
 				break;
-			case 'mo_payuni_shipping_tcat_refrigerated':
+			case 'moksafowo_payuni_shipping_tcat_refrigerated':
 				return self::HOME;
 				break;
 			default:

@@ -30,20 +30,20 @@ final class LinePay {
 
 		self::get_instance();
 
-		self::$fail_order_status                  = get_option( 'Mo_LinePay_payment_fail_order_status', 'wc-failed' );
-		self::$detail_payment_status_note_enabled = wc_string_to_bool( get_option( 'Mo_LinePay_detail_status_note_enabled' ) );
-		self::$log_enabled                        = 'yes' === get_option( 'Mo_LinePay_debug_log_enabled', 'no' );
-		self::$enable_sandbox                     = wc_string_to_bool( get_option( 'Mo_LinePay_sandboxmode_enabled' ) );
+		self::$fail_order_status                  = get_option( 'Moksafowo_LinePay_payment_fail_order_status', 'wc-failed' );
+		self::$detail_payment_status_note_enabled = wc_string_to_bool( get_option( 'Moksafowo_LinePay_detail_status_note_enabled' ) );
+		self::$log_enabled                        = 'yes' === get_option( 'Moksafowo_LinePay_debug_log_enabled', 'no' );
+		self::$enable_sandbox                     = wc_string_to_bool( get_option( 'Moksafowo_LinePay_sandboxmode_enabled' ) );
 		self::$env_status                         = self::$enable_sandbox ? Constants::ENV_SANDBOX : Constants::ENV_REAL;
 
 		self::$channel_info = array(
 			Constants::ENV_REAL    => array(
-				'channel_id'     => get_option( 'Mo_LinePay_channel_id' ),
-				'channel_secret' => get_option( 'Mo_LinePay_channel_secret' ),
+				'channel_id'     => get_option( 'Moksafowo_LinePay_channel_id' ),
+				'channel_secret' => get_option( 'Moksafowo_LinePay_channel_secret' ),
 			),
 			Constants::ENV_SANDBOX => array(
-				'channel_id'     => get_option( 'Mo_LinePay_sandbox_channel_id' ),
-				'channel_secret' => get_option( 'Mo_LinePay_sandbox_channel_secret' ),
+				'channel_id'     => get_option( 'Moksafowo_LinePay_sandbox_channel_id' ),
+				'channel_secret' => get_option( 'Moksafowo_LinePay_sandbox_channel_secret' ),
 			),
 		);
 
@@ -52,17 +52,17 @@ final class LinePay {
 		);
 
 		self::$allowed_payments = array(
-			'linepay-tw' => Credit::class,
+			'moksafowo-linepay' => Credit::class,
 		);
 
 		PaymentResponse::init();
 		OrderMetaBox::init();
 
-		add_filter( 'woocommerce_payment_gateways', array( self::get_instance(), 'add_mo_linepay_payment_gateway' ) );
+		add_filter( 'woocommerce_payment_gateways', array( self::get_instance(), 'add_moksafowo_linepay_payment_gateway' ) );
 		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'enqueue_scripts' ), 9 );
 		add_action( 'admin_enqueue_scripts', array( self::get_instance(), 'admin_scripts' ), 9 );
 
-		add_action( 'wp_ajax_linepay_confirm', array( self::get_instance(), 'ajax_confirm_payment' ) );
+		add_action( 'wp_ajax_moksafowo_linepay_confirm', array( self::get_instance(), 'ajax_confirm_payment' ) );
 	}
 
 	public function ajax_confirm_payment(): void {
@@ -72,7 +72,7 @@ final class LinePay {
 		}
 
 		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
-		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'linepay-confirm' ) ) {
+		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'moksafowo-linepay-confirm' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Unsecure AJAX call', 'mo-ectools' ) ), 403 );
 		}
 
@@ -112,25 +112,25 @@ final class LinePay {
 		return self::$channel_info[ self::$env_status ];
 	}
 
-	public function add_mo_linepay_payment_gateway( $methods ) {
+	public function add_moksafowo_linepay_payment_gateway( $methods ) {
 		return array_merge( $methods, self::$allowed_payments );
 	}
 
 	public function enqueue_scripts(): void {
-		wp_enqueue_style( 'mo-linepay-public', MOWC_PLUGIN_URL . 'src/Modules/Linepay/assets/css/mo-linepay-public.css', array(), MOWC_VERSION );
+		wp_enqueue_style( 'moksafowo-linepay-public', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/css/moksafowo-linepay-public.css', array(), MOKSAFOWO_VERSION );
 	}
 
 	public function admin_scripts(): void {
 
-		wp_enqueue_script( 'mo-linepay-admin', MOWC_PLUGIN_URL . 'src/Modules/Linepay/assets/js/mo-linepay-admin.js', array(), MOWC_VERSION, true );
-		wp_enqueue_style( 'mo-linepay-admin', MOWC_PLUGIN_URL . 'src/Modules/Linepay/assets/css/mo-linepay-admin.css', array(), MOWC_VERSION );
+		wp_enqueue_script( 'moksafowo-linepay-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/js/moksafowo-linepay-admin.js', array(), MOKSAFOWO_VERSION, true );
+		wp_enqueue_style( 'moksafowo-linepay-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/css/moksafowo-linepay-admin.css', array(), MOKSAFOWO_VERSION );
 
 		wp_localize_script(
-			'mo-linepay-admin',
-			'mo_linepay',
+			'moksafowo-linepay-admin',
+			'moksafowo_linepay',
 			array(
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
-				'confirm_nonce' => wp_create_nonce( 'linepay-confirm' ),
+				'confirm_nonce' => wp_create_nonce( 'moksafowo-linepay-confirm' ),
 				'confirm_msg'   => __( '確定要對這筆 LINE Pay 訂單請款？此動作不可復原。', 'mo-ectools' ),
 				'error_msg'     => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
 			)

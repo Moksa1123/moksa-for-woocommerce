@@ -8,12 +8,12 @@ defined( 'ABSPATH' ) || exit;
 final class GatewayAllowlistMigrator {
 
 	public static function seed_if_unseeded( string $provider, array $gateway_ids ): void {
-		$flag_key = 'mo_' . $provider . '_methods_seeded';
+		$flag_key = 'moksafowo_' . $provider . '_methods_seeded';
 		if ( 'yes' === get_option( $flag_key ) ) {
 			return;
 		}
 
-		$opt_key   = 'mo_' . $provider . '_enabled_methods';
+		$opt_key   = 'moksafowo_' . $provider . '_enabled_methods';
 		$allowlist = get_option( $opt_key, null );
 
 		// 已明確設過非空 allowlist → 商家已自選，標記 seeded 不動。autoload=false：seeded flag 非熱路徑用。

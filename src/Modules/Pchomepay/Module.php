@@ -58,7 +58,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function register_webhooks(): void {
-		add_action( 'woocommerce_api_mo_pchomepay_payment', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_pchomepay_payment', [ Api\IpnHandler::class, 'handle' ] );
 	}
 
 	protected function boot_extras(): void {

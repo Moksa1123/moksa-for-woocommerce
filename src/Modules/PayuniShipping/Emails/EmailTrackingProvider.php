@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 final class EmailTrackingProvider {
 
 	public static function init(): void {
-		add_filter( 'mo_shipping_tracking_entries', [ __CLASS__, 'maybe_provide' ], 10, 3 );
+		add_filter( 'moksafowo_shipping_tracking_entries', [ __CLASS__, 'maybe_provide' ], 10, 3 );
 	}
 
 	public static function maybe_provide( array $entries, \WC_Order $order, string $method_id ): array {

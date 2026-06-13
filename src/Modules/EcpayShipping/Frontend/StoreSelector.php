@@ -11,12 +11,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class StoreSelector {
 
-	private const NONCE_ACTION       = 'mo_ecpay_shipping_store';
-	private const TRANSIENT_PREFIX   = 'mo_ecpay_store_';        // store data after callback (token).
-	private const STATE_PREFIX       = 'mo_ecpay_state_';         // session-bound state for anti-tamper.
-	private const SESSION_KEY        = 'mo_ecpay_shipping_store';
-	private const SESSION_PENDING_KEY = 'mo_ecpay_shipping_pending_mtn';
-	private const TOKEN_QUERY        = 'mo_ecpay_store';
+	private const NONCE_ACTION       = 'moksafowo_ecpay_shipping_store';
+	private const TRANSIENT_PREFIX   = 'moksafowo_ecpay_store_';        // store data after callback (token).
+	private const STATE_PREFIX       = 'moksafowo_ecpay_state_';         // session-bound state for anti-tamper.
+	private const SESSION_KEY        = 'moksafowo_ecpay_shipping_store';
+	private const SESSION_PENDING_KEY = 'moksafowo_ecpay_shipping_pending_mtn';
+	private const TOKEN_QUERY        = 'moksafowo_ecpay_store';
 
 	public static function init(): void {
 		// 結帳頁 enqueue + render
@@ -24,17 +24,17 @@ final class StoreSelector {
 		add_action( 'woocommerce_review_order_after_shipping', [ __CLASS__, 'render_classic' ] );
 
 		// 開啟地圖 / 取選店資料 / 解 token / 清空
-		add_action( 'wp_ajax_mo_ecpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
-		add_action( 'wp_ajax_nopriv_mo_ecpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
+		add_action( 'wp_ajax_nopriv_moksafowo_ecpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
 
-		add_action( 'wp_ajax_mo_ecpay_shipping_get_store', [ __CLASS__, 'ajax_get_store' ] );
-		add_action( 'wp_ajax_nopriv_mo_ecpay_shipping_get_store', [ __CLASS__, 'ajax_get_store' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_get_store', [ __CLASS__, 'ajax_get_store' ] );
+		add_action( 'wp_ajax_nopriv_moksafowo_ecpay_shipping_get_store', [ __CLASS__, 'ajax_get_store' ] );
 
-		add_action( 'wp_ajax_mo_ecpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
-		add_action( 'wp_ajax_nopriv_mo_ecpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
+		add_action( 'wp_ajax_nopriv_moksafowo_ecpay_shipping_resolve_token', [ __CLASS__, 'ajax_resolve_token' ] );
 
-		// ECPay map callback：?wc-api=mo_ecpay_shipping_map_callback
-		add_action( 'woocommerce_api_mo_ecpay_shipping_map_callback', [ __CLASS__, 'handle_callback' ] );
+		// ECPay map callback：?wc-api=moksafowo_ecpay_shipping_map_callback
+		add_action( 'woocommerce_api_moksafowo_ecpay_shipping_map_callback', [ __CLASS__, 'handle_callback' ] );
 
 		// 下單時把 session store 寫進 order meta（Classic 流程）
 		add_action( 'woocommerce_checkout_create_order', [ __CLASS__, 'save_to_order' ], 20, 2 );
@@ -59,20 +59,20 @@ final class StoreSelector {
 			return;
 		}
 
-		$handle = 'mo-ecpay-shipping-store';
+		$handle = 'moksafowo-ecpay-shipping-store';
 		// filemtime 當版號 — JS 改動每次自動 cache-bust
-		$js_path  = MOWC_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/js/store-selector.js';
-		$js_ver   = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
-		$css_path = MOWC_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/css/store-selector.css';
-		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOWC_VERSION;
+		$js_path  = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/js/store-selector.js';
+		$js_ver   = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
+		$css_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/css/store-selector.css';
+		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
 			$handle,
-			MOWC_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/js/store-selector.js',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/js/store-selector.js',
 			[ 'jquery', 'wp-i18n' ],
 			$js_ver,
 			true
 		);
-		wp_localize_script( $handle, 'mo_ecpay_shipping', [
+		wp_localize_script( $handle, 'moksafowo_ecpay_shipping', [
 			'ajax_url'    => admin_url( 'admin-ajax.php' ),
 			'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
 			'cvs_methods' => array_keys( array_filter(
@@ -92,7 +92,7 @@ final class StoreSelector {
 
 		wp_register_style(
 			$handle,
-			MOWC_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/css/store-selector.css',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/css/store-selector.css',
 			[],
 			$css_ver
 		);
@@ -101,14 +101,14 @@ final class StoreSelector {
 
 	public static function render_classic(): void {
 		// Classic checkout host — JS 會依 chosen shipping method 顯隱
-		echo '<tr class="mo-ecpay-shipping-store-row" style="display:none"><th></th><td><div id="mo-ecpay-shipping-store-host" class="mo-ecpay-shipping-store"></div></td></tr>';
+		echo '<tr class="moksafowo-ecpay-shipping-store-row" style="display:none"><th></th><td><div id="moksafowo-ecpay-shipping-store-host" class="moksafowo-ecpay-shipping-store"></div></td></tr>';
 	}
 
 	public static function ajax_open_map(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 
 		$method_id = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : '';
-		// chosen_method 可能帶 instance_id：mo_ecpay_shipping_cvs_711:5
+		// chosen_method 可能帶 instance_id：moksafowo_ecpay_shipping_cvs_711:5
 		if ( str_contains( $method_id, ':' ) ) {
 			$method_id = strstr( $method_id, ':', true );
 		}
@@ -152,7 +152,7 @@ final class StoreSelector {
 			'LogisticsType'    => 'CVS',
 			'LogisticsSubType' => $subtype,
 			'IsCollection'     => $is_collection ? 'Y' : 'N',
-			'ServerReplyURL'   => add_query_arg( 'wc-api', 'mo_ecpay_shipping_map_callback', home_url( '/' ) ),
+			'ServerReplyURL'   => add_query_arg( 'wc-api', 'moksafowo_ecpay_shipping_map_callback', home_url( '/' ) ),
 			'ExtraData'        => '',
 			'Device'           => wp_is_mobile() ? '1' : '0',
 		];

@@ -109,8 +109,8 @@ final class Vault {
 	}
 
 	private static function master_key(): string {
-		// MOWC_VAULT_KEY is the current name; MOWP_VAULT_KEY kept as fallback for sites that set the legacy const.
-		$source = defined( 'MOWC_VAULT_KEY' ) ? (string) MOWC_VAULT_KEY
+		// MOKSAFOWO_VAULT_KEY is the current name; MOWP_VAULT_KEY kept as fallback for sites that set the legacy const.
+		$source = defined( 'MOKSAFOWO_VAULT_KEY' ) ? (string) MOKSAFOWO_VAULT_KEY
 			: ( defined( 'MOWP_VAULT_KEY' ) ? (string) MOWP_VAULT_KEY
 			: ( defined( 'AUTH_KEY' )       ? (string) AUTH_KEY
 			: ( defined( 'SECURE_AUTH_KEY' ) ? (string) SECURE_AUTH_KEY

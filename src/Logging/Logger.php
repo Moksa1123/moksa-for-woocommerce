@@ -25,7 +25,8 @@ final class Logger {
 		if ( ! self::$wc_log_writable ) {
 			return false;
 		}
-		$dir = WP_CONTENT_DIR . '/uploads/wc-logs';
+		// WC 官方 log 目錄常數優先；fallback 用 wp_upload_dir()（自訂 uploads / multisite 也正確）。
+		$dir = defined( 'WC_LOG_DIR' ) ? WC_LOG_DIR : trailingslashit( wp_upload_dir()['basedir'] ) . 'wc-logs';
 		if ( ! is_dir( $dir ) || ! wp_is_writable( $dir ) ) {
 			self::$wc_log_writable = false;
 			return false;

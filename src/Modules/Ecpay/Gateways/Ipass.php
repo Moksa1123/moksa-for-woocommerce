@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Ipass extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_ipass';
+		$this->id = 'moksafowo_ecpay_ipass';
 		parent::__construct();
 	}
 

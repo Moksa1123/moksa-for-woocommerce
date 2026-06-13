@@ -10,9 +10,12 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- IPN webhook; signature verified inside; raw bytes required for hash check.
-		$trade_info = isset( $_POST['TradeInfo'] ) ? wp_unslash( (string) $_POST['TradeInfo'] ) : '';
-		$trade_sha  = isset( $_POST['TradeSha'] ) ? wp_unslash( (string) $_POST['TradeSha'] ) : '';
+		// IPN 無法帶 WP nonce — 走 TradeSha（SHA256 + hash_equals）驗簽。
+		// TradeInfo 為 AES 加密 hex 字串，sanitize_text_field 對其為恆等轉換。
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeSha'] ) ) : '';
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
 			Helper::log( 'missing TradeInfo / TradeSha' );
@@ -32,6 +35,9 @@ final class IpnHandler {
 			status_header( 400 );
 			exit( '0|DecryptFail' );
 		}
+
+		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
+		$decrypted = map_deep( $decrypted, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		$data = $decrypted['Result'] ?? [];
 		if ( ! is_array( $data ) ) {
@@ -117,7 +123,7 @@ final class IpnHandler {
 		$order->save();
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		do_action( 'mo_newebpay_shipping_status_received', $order, $data, $status );
+		do_action( 'moksafowo_newebpay_shipping_status_received', $order, $data, $status );
 
 		status_header( 200 );
 		exit( '1|OK' );

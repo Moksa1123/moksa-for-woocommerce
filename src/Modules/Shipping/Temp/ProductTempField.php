@@ -47,7 +47,7 @@ final class ProductTempField {
 	public static function init_csv_hooks(): void {
 		add_filter( 'woocommerce_product_export_column_names', [ __CLASS__, 'csv_add_column' ] );
 		add_filter( 'woocommerce_product_export_product_default_columns', [ __CLASS__, 'csv_add_column' ] );
-		add_filter( 'woocommerce_product_export_product_column_mo_product_temp', [ __CLASS__, 'csv_export_value' ], 10, 2 );
+		add_filter( 'woocommerce_product_export_product_column_moksafowo_product_temp', [ __CLASS__, 'csv_export_value' ], 10, 2 );
 		add_filter( 'woocommerce_csv_product_import_mapping_options', [ __CLASS__, 'csv_import_mapping_options' ] );
 		add_filter( 'woocommerce_csv_product_import_mapping_default_columns', [ __CLASS__, 'csv_import_mapping_defaults' ] );
 		add_filter( 'woocommerce_product_importer_parsed_data', [ __CLASS__, 'csv_import_parse_value' ], 10, 2 );
@@ -59,11 +59,11 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$css = '.wp-list-table .column-mo_product_temp{width:64px;text-align:center;white-space:nowrap;}'
-			. '.wp-list-table .column-mo_product_temp span{display:inline-block;}';
-		wp_register_style( 'mo-product-temp-col', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-product-temp-col' );
-		wp_add_inline_style( 'mo-product-temp-col', $css );
+		$css = '.wp-list-table .column-moksafowo_product_temp{width:64px;text-align:center;white-space:nowrap;}'
+			. '.wp-list-table .column-moksafowo_product_temp span{display:inline-block;}';
+		wp_register_style( 'moksafowo-product-temp-col', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-product-temp-col' );
+		wp_add_inline_style( 'moksafowo-product-temp-col', $css );
 	}
 
 	public static function add_list_column( array $cols ): array {
@@ -72,18 +72,18 @@ final class ProductTempField {
 		foreach ( $cols as $k => $v ) {
 			$new_cols[ $k ] = $v;
 			if ( $k === $insert_after ) {
-				$new_cols['mo_product_temp'] = __( '溫層', 'mo-ectools' );
+				$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
 			}
 		}
 		// 如果上面 insert_after 沒命中（rare edge case），fallback append
-		if ( ! isset( $new_cols['mo_product_temp'] ) ) {
-			$new_cols['mo_product_temp'] = __( '溫層', 'mo-ectools' );
+		if ( ! isset( $new_cols['moksafowo_product_temp'] ) ) {
+			$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
 		}
 		return $new_cols;
 	}
 
 	public static function render_list_column( string $column, int $product_id ): void {
-		if ( 'mo_product_temp' !== $column ) {
+		if ( 'moksafowo_product_temp' !== $column ) {
 			return;
 		}
 		$product = wc_get_product( $product_id );
@@ -111,7 +111,7 @@ final class ProductTempField {
 			$title = esc_attr__( '未明確設定 — cart 階段預設為常溫', 'mo-ectools' );
 		}
 		printf(
-			'<span class="mo-product-temp-pill%s" data-temp="%d" title="%s" style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;line-height:1.5;white-space:nowrap;%s">%s</span>',
+			'<span class="moksafowo-product-temp-pill%s" data-temp="%d" title="%s" style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;line-height:1.5;white-space:nowrap;%s">%s</span>',
 			$explicit ? '' : ' is-default',
 			(int) $temp,
 			esc_attr( $title ),
@@ -125,8 +125,8 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$current = isset( $_GET['mo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['mo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
-		echo '<select name="mo_product_temp_filter" id="mo_product_temp_filter">';
+		$current = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
+		echo '<select name="moksafowo_product_temp_filter" id="moksafowo_product_temp_filter">';
 		echo '<option value="">' . esc_html__( '所有溫層', 'mo-ectools' ) . '</option>';
 		foreach ( ProductTemp::options( false ) as $value => $label ) {
 			printf(
@@ -148,7 +148,7 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$raw = isset( $_GET['mo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['mo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
+		$raw = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
 		if ( '' === $raw ) {
 			return;
 		}
@@ -168,10 +168,10 @@ final class ProductTempField {
 
 	public static function render_wc_quick_edit_field(): void {
 		?>
-		<label class="alignleft mo-product-temp-field-quick">
+		<label class="alignleft moksafowo-product-temp-field-quick">
 			<span class="title"><?php esc_html_e( '物流溫層', 'mo-ectools' ); ?></span>
 			<span class="input-text-wrap">
-				<select name="mo_product_temp" class="mo-product-temp-select">
+				<select name="moksafowo_product_temp" class="moksafowo-product-temp-select">
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
 						<option value="<?php echo esc_attr( (string) (int) $val ); ?>"><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
@@ -184,10 +184,10 @@ final class ProductTempField {
 
 	public static function render_wc_bulk_edit_field(): void {
 		?>
-		<label class="alignleft mo-product-temp-field-bulk">
+		<label class="alignleft moksafowo-product-temp-field-bulk">
 			<span class="title"><?php esc_html_e( '物流溫層', 'mo-ectools' ); ?></span>
 			<span class="input-text-wrap">
-				<select name="mo_product_temp_bulk">
+				<select name="moksafowo_product_temp_bulk">
 					<option value=""><?php esc_html_e( '— 不變更 —', 'mo-ectools' ); ?></option>
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
 						<option value="<?php echo esc_attr( (string) (int) $val ); ?>"><?php echo esc_html( $label ); ?></option>
@@ -202,14 +202,14 @@ final class ProductTempField {
 	public static function save_wc_quick_edit( \WC_Product $product ): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC core 已驗 quick edit nonce
-		$raw = isset( $_REQUEST['mo_product_temp'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['mo_product_temp'] ) ) : null;
+		$raw = isset( $_REQUEST['moksafowo_product_temp'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
 
 	public static function save_wc_bulk_edit( \WC_Product $product ): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC core 已驗 bulk edit nonce
-		$raw = isset( $_REQUEST['mo_product_temp_bulk'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['mo_product_temp_bulk'] ) ) : null;
+		$raw = isset( $_REQUEST['moksafowo_product_temp_bulk'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp_bulk'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
 
@@ -232,11 +232,11 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$css = '#woocommerce-fields .mo-product-temp-field-quick { display:block; clear:both; }'
-			. '#woocommerce-fields .mo-product-temp-field-quick .title { width:5em; }';
-		wp_register_style( 'mo-product-temp-quick', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-product-temp-quick' );
-		wp_add_inline_style( 'mo-product-temp-quick', $css );
+		$css = '#woocommerce-fields .moksafowo-product-temp-field-quick { display:block; clear:both; }'
+			. '#woocommerce-fields .moksafowo-product-temp-field-quick .title { width:5em; }';
+		wp_register_style( 'moksafowo-product-temp-quick', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-product-temp-quick' );
+		wp_add_inline_style( 'moksafowo-product-temp-quick', $css );
 
 		$js = "(function(){"
 			. " if (typeof inlineEditPost === 'undefined') { return; }"
@@ -245,20 +245,20 @@ final class ProductTempField {
 			. " orig.apply(this, arguments);"
 			. " var post_id = (typeof id === 'object') ? this.getId(id) : id;"
 			. " if (!post_id) { return; }"
-			. " var pill = jQuery('#post-' + post_id).find('.mo-product-temp-pill').first();"
+			. " var pill = jQuery('#post-' + post_id).find('.moksafowo-product-temp-pill').first();"
 			. " var temp = pill.length ? pill.data('temp') : '';"
-			. " jQuery('#edit-' + post_id).find('select[name=\"mo_product_temp\"]').val(temp ? String(temp) : '');"
+			. " jQuery('#edit-' + post_id).find('select[name=\"moksafowo_product_temp\"]').val(temp ? String(temp) : '');"
 			. " };"
 			. " })();";
-		wp_register_script( 'mo-product-temp-quick', false, [ 'jquery', 'inline-edit-post' ], MOWC_VERSION, true );
-		wp_enqueue_script( 'mo-product-temp-quick' );
-		wp_add_inline_script( 'mo-product-temp-quick', $js );
+		wp_register_script( 'moksafowo-product-temp-quick', false, [ 'jquery', 'inline-edit-post' ], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-product-temp-quick' );
+		wp_add_inline_script( 'moksafowo-product-temp-quick', $js );
 	}
 
 	/* ============== CSV import / export ============== */
 
 	public static function csv_add_column( array $columns ): array {
-		$columns['mo_product_temp'] = __( '物流溫層', 'mo-ectools' );
+		$columns['moksafowo_product_temp'] = __( '物流溫層', 'mo-ectools' );
 		return $columns;
 	}
 
@@ -275,32 +275,32 @@ final class ProductTempField {
 	}
 
 	public static function csv_import_mapping_options( array $options ): array {
-		$options['mo_product_temp'] = __( '物流溫層', 'mo-ectools' );
+		$options['moksafowo_product_temp'] = __( '物流溫層', 'mo-ectools' );
 		return $options;
 	}
 
 	public static function csv_import_mapping_defaults( array $columns ): array {
 		// 給 WC importer 一些常見 header 自動對應到我們的 key — case-insensitive
 		// 枚舉常見大小寫變體（WC core auto-mapper 走 exact string match）
-		$bases = [ 'mo_product_temp', 'mo product temp' ];
+		$bases = [ 'moksafowo_product_temp', 'moksafowo product temp' ];
 		foreach ( $bases as $base ) {
 			$variants = [ $base, strtolower( $base ), strtoupper( $base ), ucwords( $base, ' _-' ) ];
 			foreach ( array_unique( $variants ) as $v ) {
-				$columns[ $v ] = 'mo_product_temp';
+				$columns[ $v ] = 'moksafowo_product_temp';
 			}
 		}
 		// 中文 header — 沒大小寫，直接加
-		$columns['物流溫層'] = 'mo_product_temp';
-		$columns['溫層']     = 'mo_product_temp';
+		$columns['物流溫層'] = 'moksafowo_product_temp';
+		$columns['溫層']     = 'moksafowo_product_temp';
 		return $columns;
 	}
 
 	public static function csv_import_parse_value( array $data, $importer ): array {
-		if ( ! array_key_exists( 'mo_product_temp', $data ) ) {
+		if ( ! array_key_exists( 'moksafowo_product_temp', $data ) ) {
 			return $data;
 		}
-		$raw = trim( (string) $data['mo_product_temp'] );
-		$data['mo_product_temp'] = self::normalize_csv_temp( $raw );
+		$raw = trim( (string) $data['moksafowo_product_temp'] );
+		$data['moksafowo_product_temp'] = self::normalize_csv_temp( $raw );
 		return $data;
 	}
 
@@ -308,10 +308,10 @@ final class ProductTempField {
 		if ( ! $product instanceof \WC_Product ) {
 			return;
 		}
-		if ( ! array_key_exists( 'mo_product_temp', $data ) ) {
+		if ( ! array_key_exists( 'moksafowo_product_temp', $data ) ) {
 			return;
 		}
-		$value = $data['mo_product_temp'];
+		$value = $data['moksafowo_product_temp'];
 		if ( '' === $value || null === $value ) {
 			// 空 = 不動（不刪也不寫，避免 import 一個沒這 column 的 CSV 就清掉所有設定）
 			return;
@@ -368,7 +368,7 @@ final class ProductTempField {
 				'label'         => __( '物流溫層', 'mo-ectools' ),
 				'description'   => __( '此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物流單時會獨立成單，供需要分艙運送的物流業者使用。', 'mo-ectools' ),
 				'desc_tip'      => true,
-				'wrapper_class' => 'mo-product-temp-field',
+				'wrapper_class' => 'moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( false ) ),
 			]
 		);
@@ -391,13 +391,13 @@ final class ProductTempField {
 
 		woocommerce_wp_select(
 			[
-				'id'            => 'mo_product_temp_' . $loop,
-				'name'          => 'mo_product_temp[' . $loop . ']',
+				'id'            => 'moksafowo_product_temp_' . $loop,
+				'name'          => 'moksafowo_product_temp[' . $loop . ']',
 				'value'         => $current,
 				'label'         => __( '物流溫層', 'mo-ectools' ),
 				'description'   => __( '空 / 繼承 = 跟父商品設定走。', 'mo-ectools' ),
 				'desc_tip'      => true,
-				'wrapper_class' => 'form-row form-row-full mo-product-temp-field',
+				'wrapper_class' => 'form-row form-row-full moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( true ) ),
 			]
 		);
@@ -405,8 +405,8 @@ final class ProductTempField {
 
 	public static function save_variation_field( int $variation_id, int $loop ): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
-		$raw = ( isset( $_POST['mo_product_temp'][ $loop ] ) && is_scalar( $_POST['mo_product_temp'][ $loop ] ) )
-			? sanitize_text_field( wp_unslash( (string) $_POST['mo_product_temp'][ $loop ] ) )
+		$raw = ( isset( $_POST['moksafowo_product_temp'][ $loop ] ) && is_scalar( $_POST['moksafowo_product_temp'][ $loop ] ) )
+			? sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_product_temp'][ $loop ] ) )
 			: '';
 
 		if ( '' === $raw ) {

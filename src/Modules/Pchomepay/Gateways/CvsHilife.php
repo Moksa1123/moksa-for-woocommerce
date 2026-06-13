@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class CvsHilife extends AbstractPchomepayGateway {
 
-	public const GATEWAY_ID = 'mo_pchomepay_cvshilife';
+	public const GATEWAY_ID = 'moksafowo_pchomepay_cvshilife';
 
 	public function __construct() {
 		$this->id = self::GATEWAY_ID;

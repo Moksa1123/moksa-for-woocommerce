@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Webatm extends AbstractEcpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_ecpay_webatm';
+		$this->id = 'moksafowo_ecpay_webatm';
 		parent::__construct();
 	}
 

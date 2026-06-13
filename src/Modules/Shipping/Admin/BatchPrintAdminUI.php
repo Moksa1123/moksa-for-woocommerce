@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 final class BatchPrintAdminUI {
 
-	private const NONCE_ACTION = 'mo_shipping_batch_print';
+	private const NONCE_ACTION = 'moksafowo_shipping_batch_print';
 	private const CAPABILITY   = 'edit_shop_orders';
-	private const BULK_ACTION  = 'mo_batchprint_labels';
+	private const BULK_ACTION  = 'moksafowo_batchprint_labels';
 
 	public static function init(): void {
 		// 訂單列表 column（HPOS + classic）— 兩種模式都顯示
@@ -23,14 +23,14 @@ final class BatchPrintAdminUI {
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_columns_css' ] );
 
 		// 列印輸出頁 — 基本模式 bulk action redirect 的目標（任何請求都註冊）
-		add_action( 'wp_ajax_mo_shipping_batch_print_output', [ __CLASS__, 'render_print_output' ] );
+		add_action( 'wp_ajax_moksafowo_shipping_batch_print_output', [ __CLASS__, 'render_print_output' ] );
 
 		if ( self::is_advanced() ) {
 			// 進階：工具列「<provider> 標籤」按鈕 + 彈窗（防漏印）
 			add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 			add_action( 'admin_footer', [ __CLASS__, 'render_modal' ] );
-			add_action( 'wp_ajax_mo_shipping_batch_print_list', [ __CLASS__, 'ajax_list' ] );
-			add_action( 'wp_ajax_mo_shipping_batch_print_run', [ __CLASS__, 'ajax_run' ] );
+			add_action( 'wp_ajax_moksafowo_shipping_batch_print_list', [ __CLASS__, 'ajax_list' ] );
+			add_action( 'wp_ajax_moksafowo_shipping_batch_print_run', [ __CLASS__, 'ajax_run' ] );
 		} else {
 			// 基本：WooCommerce 內建批次操作下拉（每個 provider 一個動作；選哪個動作就印哪家）
 			add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'register_bulk_actions' ] );
@@ -42,21 +42,21 @@ final class BatchPrintAdminUI {
 	}
 
 	public static function is_advanced(): bool {
-		return 'yes' === get_option( 'mo_shipping_bulk_print_mode_advanced', 'no' );
+		return 'yes' === get_option( 'moksafowo_shipping_bulk_print_mode_advanced', 'no' );
 	}
 
 	public static function admin_columns_css( string $hook = '' ): void {
 		if ( ! self::is_orders_screen( $hook ) ) {
 			return;
 		}
-		$css = '.wp-list-table .column-mo_shipping_method{width:8em;white-space:nowrap;}'
-			. '.wp-list-table .column-mo_shipping_method .mo-shipping-method{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;}'
-			. '.wp-list-table .column-mo_shipping_label_no{width:7em;white-space:nowrap;}'
+		$css = '.wp-list-table .column-moksafowo_shipping_method{width:8em;white-space:nowrap;}'
+			. '.wp-list-table .column-moksafowo_shipping_method .moksafowo-shipping-method{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;}'
+			. '.wp-list-table .column-moksafowo_shipping_label_no{width:7em;white-space:nowrap;}'
 			. '.wp-list-table .column-order_total{white-space:nowrap;}'
 			. '.wp-list-table .column-wc_actions{white-space:nowrap;}';
-		wp_register_style( 'mo-shipping-cols', false, [], MOWC_VERSION );
-		wp_enqueue_style( 'mo-shipping-cols' );
-		wp_add_inline_style( 'mo-shipping-cols', $css );
+		wp_register_style( 'moksafowo-shipping-cols', false, [], MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-shipping-cols' );
+		wp_add_inline_style( 'moksafowo-shipping-cols', $css );
 	}
 
 	public static function register_column( array $cols ): array {
@@ -65,20 +65,20 @@ final class BatchPrintAdminUI {
 		foreach ( $cols as $k => $v ) {
 			$new[ $k ] = $v;
 			if ( 'order_status' === $k ) {
-				$new['mo_shipping_method']   = __( '運送方式', 'mo-ectools' );
-				$new['mo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
+				$new['moksafowo_shipping_method']   = __( '運送方式', 'mo-ectools' );
+				$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
 			}
 		}
 		// fallback: 沒有 order_status 就 append
-		if ( ! isset( $new['mo_shipping_label_no'] ) ) {
-			$new['mo_shipping_method']   = __( '運送方式', 'mo-ectools' );
-			$new['mo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
+		if ( ! isset( $new['moksafowo_shipping_label_no'] ) ) {
+			$new['moksafowo_shipping_method']   = __( '運送方式', 'mo-ectools' );
+			$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
 		}
 		return $new;
 	}
 
 	public static function render_column( string $column, $order ): void {
-		if ( ! in_array( $column, [ 'mo_shipping_label_no', 'mo_shipping_method' ], true ) ) {
+		if ( ! in_array( $column, [ 'moksafowo_shipping_label_no', 'moksafowo_shipping_method' ], true ) ) {
 			return;
 		}
 		if ( ! $order instanceof \WC_Order ) {
@@ -88,16 +88,16 @@ final class BatchPrintAdminUI {
 			echo '—';
 			return;
 		}
-		if ( 'mo_shipping_method' === $column ) {
+		if ( 'moksafowo_shipping_method' === $column ) {
 			$label = self::find_method_label( $order ) ?: '—';
-			printf( '<span class="mo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
+			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
 		echo self::format_label_no( self::find_label_no( $order ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	public static function render_column_classic( string $column, int $post_id ): void {
-		if ( ! in_array( $column, [ 'mo_shipping_label_no', 'mo_shipping_method' ], true ) ) {
+		if ( ! in_array( $column, [ 'moksafowo_shipping_label_no', 'moksafowo_shipping_method' ], true ) ) {
 			return;
 		}
 		$order = wc_get_order( $post_id );
@@ -105,9 +105,9 @@ final class BatchPrintAdminUI {
 			echo '—';
 			return;
 		}
-		if ( 'mo_shipping_method' === $column ) {
+		if ( 'moksafowo_shipping_method' === $column ) {
 			$label = self::find_method_label( $order ) ?: '—';
-			printf( '<span class="mo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
+			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
 		echo self::format_label_no( self::find_label_no( $order ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -186,11 +186,11 @@ final class BatchPrintAdminUI {
 			return;
 		}
 
-		$handle  = 'mo-shipping-batch-print';
-		$js_path = MOWC_PLUGIN_DIR . 'src/Modules/Shipping/assets/js/batch-print.js';
-		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOWC_VERSION;
-		wp_register_script( $handle, MOWC_PLUGIN_URL . 'src/Modules/Shipping/assets/js/batch-print.js', [ 'jquery' ], $ver, true );
-		wp_localize_script( $handle, 'mo_shipping_batch_print', [
+		$handle  = 'moksafowo-shipping-batch-print';
+		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Shipping/assets/js/batch-print.js';
+		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
+		wp_register_script( $handle, MOKSAFOWO_PLUGIN_URL . 'src/Modules/Shipping/assets/js/batch-print.js', [ 'jquery' ], $ver, true );
+		wp_localize_script( $handle, 'moksafowo_shipping_batch_print', [
 			'ajax_url'  => admin_url( 'admin-ajax.php' ),
 			'nonce'     => wp_create_nonce( self::NONCE_ACTION ),
 			'providers' => array_map( static function ( array $p ): array {
@@ -225,9 +225,9 @@ final class BatchPrintAdminUI {
 		] );
 		wp_enqueue_script( $handle );
 
-		$css_path = MOWC_PLUGIN_DIR . 'src/Modules/Shipping/assets/css/batch-print.css';
-		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOWC_VERSION;
-		wp_register_style( $handle, MOWC_PLUGIN_URL . 'src/Modules/Shipping/assets/css/batch-print.css', [], $css_ver );
+		$css_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Shipping/assets/css/batch-print.css';
+		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOKSAFOWO_VERSION;
+		wp_register_style( $handle, MOKSAFOWO_PLUGIN_URL . 'src/Modules/Shipping/assets/css/batch-print.css', [], $css_ver );
 		wp_enqueue_style( $handle );
 	}
 
@@ -243,23 +243,23 @@ final class BatchPrintAdminUI {
 			return;
 		}
 		?>
-		<div id="mo-shipping-batch-print-modal" class="mo-batch-modal" style="display:none;">
-			<div class="mo-batch-modal__panel">
-				<div class="mo-batch-modal__header">
-					<h2 class="mo-batch-modal__title"></h2>
-					<button type="button" class="mo-batch-modal__close" aria-label="<?php esc_attr_e( '關閉', 'mo-ectools' ); ?>">×</button>
+		<div id="moksafowo-shipping-batch-print-modal" class="moksafowo-batch-modal" style="display:none;">
+			<div class="moksafowo-batch-modal__panel">
+				<div class="moksafowo-batch-modal__header">
+					<h2 class="moksafowo-batch-modal__title"></h2>
+					<button type="button" class="moksafowo-batch-modal__close" aria-label="<?php esc_attr_e( '關閉', 'mo-ectools' ); ?>">×</button>
 				</div>
-				<div class="mo-batch-modal__body"></div>
-				<div class="mo-batch-modal__footer">
-					<label class="mo-batch-mode" style="margin-right:auto;display:flex;align-items:center;gap:8px;font-size:13px;">
+				<div class="moksafowo-batch-modal__body"></div>
+				<div class="moksafowo-batch-modal__footer">
+					<label class="moksafowo-batch-mode" style="margin-right:auto;display:flex;align-items:center;gap:8px;font-size:13px;">
 						<span><?php esc_html_e( '紙張：', 'mo-ectools' ); ?></span>
-						<select class="mo-batch-mode__select">
+						<select class="moksafowo-batch-mode__select">
 							<option value="1"><?php esc_html_e( 'A4 標準', 'mo-ectools' ); ?></option>
 							<option value="2"><?php esc_html_e( 'A6 標籤機', 'mo-ectools' ); ?></option>
 						</select>
 					</label>
-					<button type="button" class="button button-primary mo-batch-modal__print" disabled></button>
-					<button type="button" class="button mo-batch-modal__cancel"></button>
+					<button type="button" class="button button-primary moksafowo-batch-modal__print" disabled></button>
+					<button type="button" class="button moksafowo-batch-modal__cancel"></button>
 				</div>
 			</div>
 		</div>
@@ -282,7 +282,7 @@ final class BatchPrintAdminUI {
 		// 在批次列印 modal 裡。要重印 已出貨 訂單請從訂單編輯頁的「列印物流單」按鈕走。
 		// （這個 filter 可被 hook 覆寫）
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$statuses = apply_filters( 'mo_shipping_batch_print_statuses', [
+		$statuses = apply_filters( 'moksafowo_shipping_batch_print_statuses', [
 			'processing',
 			'on-hold',
 		] );
@@ -435,36 +435,40 @@ final class BatchPrintAdminUI {
 		$skipped = count( $ids ) - count( array_unique( $matched ) );
 
 		if ( empty( $forms ) ) {
-			return add_query_arg( [ 'mo_bp_printed' => 0, 'mo_bp_skipped' => $skipped ], $redirect_to );
+			// 沒有可列印標籤 → 用一次性 transient 帶提示（不放網址參數，避免訂單列表重整時一直跳）。
+			set_transient( 'moksafowo_bp_skipped_' . get_current_user_id(), max( 1, $skipped ), MINUTE_IN_SECONDS );
+			return $redirect_to;
 		}
 
 		$token = wp_generate_password( 24, false );
-		set_transient( 'mo_bp_' . $token, $forms, 5 * MINUTE_IN_SECONDS );
+		set_transient( 'moksafowo_bp_' . $token, $forms, 5 * MINUTE_IN_SECONDS );
 
 		return add_query_arg(
 			[
-				'action'   => 'mo_shipping_batch_print_output',
+				'action'   => 'moksafowo_shipping_batch_print_output',
 				'token'    => rawurlencode( $token ),
 				'skipped'  => $skipped,
-				'_wpnonce' => wp_create_nonce( 'mo_bp_print_' . $token ),
+				'_wpnonce' => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
 			],
 			admin_url( 'admin-ajax.php' )
 		);
 	}
 
 	public static function bulk_notices(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only 提示旗標，無狀態變更；數值經 absint。
-		if ( ! isset( $_GET['mo_bp_printed'] ) ) {
+		// 只在訂單列表，且只顯示一次（讀完即刪 transient），避免重整訂單列表時一直跳。
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'woocommerce_page_wc-orders', 'edit-shop_order' ], true ) ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only 提示旗標，無狀態變更。
-		$printed = absint( wp_unslash( $_GET['mo_bp_printed'] ) );
-		if ( 0 === $printed ) {
-			printf(
-				'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
-				esc_html__( '所選訂單沒有符合此物流的可列印標籤（已全部跳過）。', 'mo-ectools' )
-			);
+		$key = 'moksafowo_bp_skipped_' . get_current_user_id();
+		if ( false === get_transient( $key ) ) {
+			return;
 		}
+		delete_transient( $key );
+		printf(
+			'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+			esc_html__( '所選訂單沒有符合此物流的可列印標籤（已全部跳過）。', 'mo-ectools' )
+		);
 	}
 
 	/**
@@ -474,14 +478,14 @@ final class BatchPrintAdminUI {
 	public static function render_print_output(): void {
 		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
-		if ( '' === $token || ! wp_verify_nonce( $nonce, 'mo_bp_print_' . $token ) ) {
+		if ( '' === $token || ! wp_verify_nonce( $nonce, 'moksafowo_bp_print_' . $token ) ) {
 			wp_die( esc_html__( '列印連結已失效，請重試。', 'mo-ectools' ), 403 );
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), 403 );
 		}
-		$forms = get_transient( 'mo_bp_' . $token );
-		delete_transient( 'mo_bp_' . $token );
+		$forms = get_transient( 'moksafowo_bp_' . $token );
+		delete_transient( 'moksafowo_bp_' . $token );
 		if ( ! is_array( $forms ) || empty( $forms ) ) {
 			wp_die( esc_html__( '沒有可列印的內容，或連結已過期。', 'mo-ectools' ) );
 		}
@@ -512,12 +516,12 @@ final class BatchPrintAdminUI {
 				<p><?php esc_html_e( '請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）：', 'mo-ectools' ); ?></p>
 				<?php foreach ( $forms as $i => $spec ) : ?>
 					<?php /* translators: %d: label sequence number */ ?>
-					<button type="button" onclick="document.getElementById('mo-bp-f<?php echo (int) $i; ?>').submit();"><?php printf( esc_html__( '列印第 %d 份', 'mo-ectools' ), (int) $i + 1 ); ?></button>
+					<button type="button" onclick="document.getElementById('moksafowo-bp-f<?php echo (int) $i; ?>').submit();"><?php printf( esc_html__( '列印第 %d 份', 'mo-ectools' ), (int) $i + 1 ); ?></button>
 				<?php endforeach; ?>
 			<?php endif; ?>
 
 			<?php foreach ( $forms as $i => $spec ) : ?>
-				<form id="mo-bp-f<?php echo (int) $i; ?>" method="post" action="<?php echo esc_url( (string) ( $spec['api_url'] ?? '' ) ); ?>" target="<?php echo $single ? '_self' : '_blank'; ?>">
+				<form id="moksafowo-bp-f<?php echo (int) $i; ?>" method="post" action="<?php echo esc_url( (string) ( $spec['api_url'] ?? '' ) ); ?>" target="<?php echo $single ? '_self' : '_blank'; ?>">
 					<?php foreach ( (array) ( $spec['form_data'] ?? [] ) as $k => $v ) : ?>
 						<input type="hidden" name="<?php echo esc_attr( (string) $k ); ?>" value="<?php echo esc_attr( (string) $v ); ?>">
 					<?php endforeach; ?>
@@ -525,7 +529,7 @@ final class BatchPrintAdminUI {
 			<?php endforeach; ?>
 
 			<?php if ( $single ) : ?>
-				<script>document.getElementById('mo-bp-f0').submit();</script>
+				<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-bp-f0").submit();' ); ?>
 			<?php endif; ?>
 		</body>
 		</html>

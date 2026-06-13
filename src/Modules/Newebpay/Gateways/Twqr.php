@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Twqr extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_twqr';
+		$this->id = 'moksafowo_newebpay_twqr';
 		parent::__construct();
 	}
 

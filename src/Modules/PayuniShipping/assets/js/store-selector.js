@@ -5,8 +5,8 @@
         // Configuration
         config: {
             debug: false, // Set to true for debugging
-            namespace: 'payuni_store',
-            cvsMethodPrefix: 'mo_payuni_shipping_711',
+            namespace: 'moksafowo_payuni_store',
+            cvsMethodPrefix: 'moksafowo_payuni_shipping_711',
             checkDelay: 200 // Single delay for initialization check
         },
 
@@ -30,8 +30,8 @@
             }
 
             // Setup default config if not provided
-            if (typeof payuni_store_selector === 'undefined') {
-                window.payuni_store_selector = {
+            if (typeof moksafowo_payuni_store_selector === 'undefined') {
+                window.moksafowo_payuni_store_selector = {
                     ajax_url: '/wp-admin/admin-ajax.php',
                     nonce: '',
                     stored_store_data: null,
@@ -103,7 +103,7 @@
             });
 
             // Store map button click
-            $(document).on(`click.${ns}`, '.payuni-store-map-btn', (e) => {
+            $(document).on(`click.${ns}`, '.moksafowo-payuni-store-map-btn', (e) => {
                 e.preventDefault();
                 this.openStoreMap();
             });
@@ -127,9 +127,9 @@
             window.payuniSelectingStore = false;
             
             // Priority 1: Check for WC Session data via PHP
-            if (mo_payuni_store_selector.stored_store_data) {
+            if (moksafowo_payuni_store_selector.stored_store_data) {
                 this.log('Found stored data from WC Session');
-                this.displayStore(mo_payuni_store_selector.stored_store_data);
+                this.displayStore(moksafowo_payuni_store_selector.stored_store_data);
                 return;
             }
 
@@ -154,9 +154,9 @@
          * Get POST data from store map return
          */
         getPostData: function() {
-            const $tempId = $('input[name="payuni_selected_store_id"]:not(#payuni_selected_store_id)');
-            const $tempName = $('input[name="payuni_selected_store_name"]');
-            const $tempAddress = $('input[name="payuni_selected_store_address"]');
+            const $tempId = $('input[name="moksafowo_payuni_selected_store_id"]:not(#moksafowo_payuni_selected_store_id)');
+            const $tempName = $('input[name="moksafowo_payuni_selected_store_name"]');
+            const $tempAddress = $('input[name="moksafowo_payuni_selected_store_address"]');
 
             if ($tempId.length && $tempName.length && $tempAddress.length) {
                 return {
@@ -173,7 +173,7 @@
          * Get data from hidden fields
          */
         getHiddenFieldData: function() {
-            const dataStr = $('#payuni_selected_store_data').val();
+            const dataStr = $('#moksafowo_payuni_selected_store_data').val();
             if (dataStr) {
                 try {
                     return JSON.parse(dataStr);
@@ -188,13 +188,13 @@
          * Clean up temporary POST data fields
          */
         cleanupPostData: function() {
-            $('input[name="payuni_selected_store_id"]:not(#payuni_selected_store_id)').remove();
-            $('input[name="payuni_selected_store_name"]').remove();
-            $('input[name="payuni_selected_store_address"]').remove();
-            $('input[name="payuni_selected_store_telephone"]').remove();
-            $('input[name="payuni_selected_store_outside"]').remove();
-            $('input[name="payuni_selected_store_ship"]').remove();
-            $('input[name="payuni_selected_store_data"]:not(#payuni_selected_store_data)').remove();
+            $('input[name="moksafowo_payuni_selected_store_id"]:not(#moksafowo_payuni_selected_store_id)').remove();
+            $('input[name="moksafowo_payuni_selected_store_name"]').remove();
+            $('input[name="moksafowo_payuni_selected_store_address"]').remove();
+            $('input[name="moksafowo_payuni_selected_store_telephone"]').remove();
+            $('input[name="moksafowo_payuni_selected_store_outside"]').remove();
+            $('input[name="moksafowo_payuni_selected_store_ship"]').remove();
+            $('input[name="moksafowo_payuni_selected_store_data"]:not(#moksafowo_payuni_selected_store_data)').remove();
         },
 
         /**
@@ -243,7 +243,7 @@
             const selected = this.getSelectedShippingMethod();
             
             // If no shipping method found, check if store selector row is visible (PHP already rendered it)
-            if (!selected && $('.payuni-store-selector-row').length > 0) {
+            if (!selected && $('.moksafowo-payuni-store-selector-row').length > 0) {
                 // PHP has already determined this is a CVS method, show the selector
                 this.showStoreSelector();
                 this.updateFieldVisibility();
@@ -299,11 +299,11 @@
             this.updateShipToDifferentLabel(selected);
 
             // Check for store data in fragments
-            if (data && data.fragments && data.fragments.payuni_stored_data) {
+            if (data && data.fragments && data.fragments.moksafowo_payuni_stored_data) {
                 const methodId = selected ? selected.split(':')[0] : '';
                 
                 if (methodId && methodId.indexOf(this.config.cvsMethodPrefix) !== -1) {
-                    this.displayStore(data.fragments.payuni_stored_data);
+                    this.displayStore(data.fragments.moksafowo_payuni_stored_data);
                 }
             }
 
@@ -322,8 +322,8 @@
             this.checkExistingStoreData();
             
             // The actual UI is rendered by PHP, we just ensure it's visible
-            $('.payuni-store-selector').show();
-            $('.payuni-store-selector-row').show();
+            $('.moksafowo-payuni-store-selector').show();
+            $('.moksafowo-payuni-store-selector-row').show();
             
             this.log('Store selector shown');
         },
@@ -332,8 +332,8 @@
          * Hide store selector UI
          */
         hideStoreSelector: function() {
-            $('.payuni-store-selector').hide();
-            $('.payuni-store-selector-row').hide();
+            $('.moksafowo-payuni-store-selector').hide();
+            $('.moksafowo-payuni-store-selector-row').hide();
         },
 
         /**
@@ -348,12 +348,12 @@
             }
 
             // Create hidden fields if they don't exist
-            if ($('#payuni_selected_store_id').length === 0) {
-                $form.append('<input type="hidden" name="payuni_selected_store_id" id="payuni_selected_store_id" value="">');
+            if ($('#moksafowo_payuni_selected_store_id').length === 0) {
+                $form.append('<input type="hidden" name="moksafowo_payuni_selected_store_id" id="moksafowo_payuni_selected_store_id" value="">');
             }
             
-            if ($('#payuni_selected_store_data').length === 0) {
-                $form.append('<input type="hidden" name="payuni_selected_store_data" id="payuni_selected_store_data" value="">');
+            if ($('#moksafowo_payuni_selected_store_data').length === 0) {
+                $form.append('<input type="hidden" name="moksafowo_payuni_selected_store_data" id="moksafowo_payuni_selected_store_data" value="">');
             }
         },
 
@@ -379,8 +379,8 @@
             }
 
             this.state.isProcessing = true;
-            const $btn = $('.payuni-store-map-btn');
-            $btn.prop('disabled', true).text(mo_payuni_store_selector.labels.loading);
+            const $btn = $('.moksafowo-payuni-store-map-btn');
+            $btn.prop('disabled', true).text(moksafowo_payuni_store_selector.labels.loading);
             
             // Save form data before redirecting to CVS selection
             // Set flag to prevent auto-save during CVS selection
@@ -396,11 +396,11 @@
             const shippingMethod = this.getSelectedShippingMethod();
 
             $.ajax({
-                url: mo_payuni_store_selector.ajax_url,
+                url: moksafowo_payuni_store_selector.ajax_url,
                 type: 'POST',
                 data: {
-                    action: 'payuni_open_store_map',
-                    nonce: mo_payuni_store_selector.nonce,
+                    action: 'moksafowo_payuni_open_store_map',
+                    nonce: moksafowo_payuni_store_selector.nonce,
                     shipping_method: shippingMethod
                 },
                 success: (response) => {
@@ -426,7 +426,7 @@
             const $form = $('<form>', {
                 method: 'POST',
                 action: data.api_url,
-                id: 'payuni-store-map-form'
+                id: 'moksafowo-payuni-store-map-form'
             });
 
             $.each(data.form_data, (key, value) => {
@@ -445,10 +445,10 @@
          * Handle map error
          */
         handleMapError: function(message) {
-            alert(message || mo_payuni_store_selector.labels.error);
-            $('.payuni-store-map-btn')
+            alert(message || moksafowo_payuni_store_selector.labels.error);
+            $('.moksafowo-payuni-store-map-btn')
                 .prop('disabled', false)
-                .text(mo_payuni_store_selector.labels.open_map);
+                .text(moksafowo_payuni_store_selector.labels.open_map);
         },
 
         /**
@@ -464,17 +464,17 @@
             this.ensureHiddenFields();
 
             // Save to hidden fields
-            $('#payuni_selected_store_id').val(storeData.id);
-            $('#payuni_selected_store_data').val(JSON.stringify(storeData));
+            $('#moksafowo_payuni_selected_store_id').val(storeData.id);
+            $('#moksafowo_payuni_selected_store_data').val(JSON.stringify(storeData));
 
             // Update UI
-            $('.payuni-selected-store .store-name').text(storeData.name);
-            $('.payuni-selected-store .store-address').text(storeData.address);
-            $('.payuni-selected-store .store-id').text('門市代號: ' + storeData.id);
+            $('.moksafowo-payuni-selected-store .store-name').text(storeData.name);
+            $('.moksafowo-payuni-selected-store .store-address').text(storeData.address);
+            $('.moksafowo-payuni-selected-store .store-id').text('門市代號: ' + storeData.id);
 
             // Show selected store, hide no-store message
-            $('.payuni-no-store').hide();
-            $('.payuni-selected-store').show();
+            $('.moksafowo-payuni-no-store').hide();
+            $('.moksafowo-payuni-selected-store').show();
         },
 
         /**
@@ -482,18 +482,18 @@
          */
         clearStoreData: function() {
             // Clear hidden fields
-            $('#payuni_selected_store_id').val('');
-            $('#payuni_selected_store_data').val('');
+            $('#moksafowo_payuni_selected_store_id').val('');
+            $('#moksafowo_payuni_selected_store_data').val('');
 
             // Reset UI
-            $('.payuni-selected-store').hide();
-            $('.payuni-no-store').show();
+            $('.moksafowo-payuni-selected-store').hide();
+            $('.moksafowo-payuni-no-store').show();
 
             // Clear from server session
-            if (mo_payuni_store_selector.ajax_url) {
-                $.post(mo_payuni_store_selector.ajax_url, {
-                    action: 'payuni_clear_store_data',
-                    nonce: mo_payuni_store_selector.nonce
+            if (moksafowo_payuni_store_selector.ajax_url) {
+                $.post(moksafowo_payuni_store_selector.ajax_url, {
+                    action: 'moksafowo_payuni_clear_store_data',
+                    nonce: moksafowo_payuni_store_selector.nonce
                 });
             }
         },
@@ -531,7 +531,7 @@
             }
 
             // Handle billing address fields based on setting
-            if (mo_payuni_store_selector.hide_billing_address_fields) {
+            if (moksafowo_payuni_store_selector.hide_billing_address_fields) {
                 if (isCVS) {
                     this.hideBillingAddressFields();
                 } else {
@@ -548,7 +548,7 @@
             this.cache.$shippingFields.show();
             
             // Method 1: Hide using the CSS class we added in PHP
-            $('.payuni-cvs-hide').hide();
+            $('.moksafowo-payuni-cvs-hide').hide();
             
             // Method 2: Also hide fields directly for immediate effect
             $('#shipping_country_field').hide();
@@ -560,9 +560,9 @@
             $('#shipping_company_field').hide();
             
             // Ensure name and phone fields are visible
-            $('#shipping_first_name_field').show().removeClass('payuni-cvs-hide');
-            $('#shipping_last_name_field').show().removeClass('payuni-cvs-hide');
-            $('#shipping_phone_field').show().removeClass('payuni-cvs-hide');
+            $('#shipping_first_name_field').show().removeClass('moksafowo-payuni-cvs-hide');
+            $('#shipping_last_name_field').show().removeClass('moksafowo-payuni-cvs-hide');
+            $('#shipping_phone_field').show().removeClass('moksafowo-payuni-cvs-hide');
         },
 
         /**
@@ -573,8 +573,8 @@
             if (this.cache.$shippingFields.length) {
                 this.cache.$shippingFields.show();
                 
-                // Remove the payuni-cvs-hide class and inline styles from all fields
-                // This is needed because .payuni-cvs-hide has !important in CSS
+                // Remove the moksafowo-payuni-cvs-hide class and inline styles from all fields
+                // This is needed because .moksafowo-payuni-cvs-hide has !important in CSS
                 const fieldsToShow = [
                     '#shipping_country_field',
                     '#shipping_postcode_field', 
@@ -589,12 +589,12 @@
                 ];
                 
                 fieldsToShow.forEach(field => {
-                    $(field).removeClass('payuni-cvs-hide').removeAttr('style').show();
+                    $(field).removeClass('moksafowo-payuni-cvs-hide').removeAttr('style').show();
                 });
                 
                 // Also ensure all shipping fields are visible and remove classes
                 this.cache.$shippingWrapper.find('p, .form-row').each(function() {
-                    $(this).removeClass('payuni-cvs-hide').removeAttr('style');
+                    $(this).removeClass('moksafowo-payuni-cvs-hide').removeAttr('style');
                 });
             }
         },
@@ -616,7 +616,7 @@
             this.restoreCheckboxLabel();
             
             // Also restore billing address fields if the setting was enabled
-            if (mo_payuni_store_selector.hide_billing_address_fields) {
+            if (moksafowo_payuni_store_selector.hide_billing_address_fields) {
                 this.showBillingAddressFields();
             }
         },
@@ -668,8 +668,8 @@
                 const $input = $field.find('input, select');
                 
                 // Store original required state
-                if (!$input.data('payuni-original-required')) {
-                    $input.data('payuni-original-required', $input.prop('required'));
+                if (!$input.data('moksafowo-payuni-original-required')) {
+                    $input.data('moksafowo-payuni-original-required', $input.prop('required'));
                 }
                 
                 // Remove required attribute and validation
@@ -681,7 +681,7 @@
                 // modify_billing_fields_for_cvs() already removes the required
                 // attribute so empty fields pass server-side validation. Filling
                 // 'N/A' just bleeds back when user later switches to home delivery.
-                $field.addClass('payuni-cvs-hide-billing').hide();
+                $field.addClass('moksafowo-payuni-cvs-hide-billing').hide();
             });
             
             this.log('Billing address fields hidden for CVS shipping');
@@ -705,7 +705,7 @@
                 const $field = $(field);
                 const $input = $field.find('input, select');
 
-                const originalRequired = $input.data('payuni-original-required');
+                const originalRequired = $input.data('moksafowo-payuni-original-required');
                 if (originalRequired !== undefined) {
                     $input.prop('required', originalRequired);
                     if (originalRequired) {
@@ -722,7 +722,7 @@
                     $input.val('');
                 }
 
-                $field.removeClass('payuni-cvs-hide-billing').removeAttr('style').show();
+                $field.removeClass('moksafowo-payuni-cvs-hide-billing').removeAttr('style').show();
             });
             
             this.log('Billing address fields shown');

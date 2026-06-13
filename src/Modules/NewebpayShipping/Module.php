@@ -46,17 +46,17 @@ final class Module extends AbstractModule {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
 		// 物流 IPN 接 NewebPay 物流貨態回傳（若商家有設定 NotifyURL）
-		add_action( 'woocommerce_api_mo_newebpay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_newebpay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
 
 		// CVS 取貨地址不需要收件電話 / first_name / last_name 必填
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
 
 		// 批次列印託運單 — 走 NPA-B54 API（PickupNotice 保留為無建單時 fallback）
-		add_filter( 'mo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 		Operations\PickupNotice::init();
-		add_action( 'wp_ajax_mo_newebpay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
-		add_action( 'wp_ajax_mo_newebpay_shipping_query', [ __CLASS__, 'ajax_query_shipment' ] );
-		add_action( 'wp_ajax_mo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
+		add_action( 'wp_ajax_moksafowo_newebpay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
+		add_action( 'wp_ajax_moksafowo_newebpay_shipping_query', [ __CLASS__, 'ajax_query_shipment' ] );
+		add_action( 'wp_ajax_moksafowo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
 
 		// NPA-B51 結帳選店流程
 		Frontend\StoreSelector::init();
@@ -68,7 +68,7 @@ final class Module extends AbstractModule {
 
 	public static function register_batch_print( array $providers ): array {
 		$titles = [
-			'mo_newebpay_shipping_cvs' => __( '藍新超商取貨', 'mo-ectools' ),
+			'moksafowo_newebpay_shipping_cvs' => __( '藍新超商取貨', 'mo-ectools' ),
 		];
 		// record_count = 1 if order has LgsNo（已建單），可送 NPA-B54 列印；無建單就不可印
 		$counter = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
@@ -85,7 +85,7 @@ final class Module extends AbstractModule {
 	}
 
 	public static function ajax_create_shipment(): void {
-		check_ajax_referer( 'mo_newebpay_shipping_create' );
+		check_ajax_referer( 'moksafowo_newebpay_shipping_create' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
 		}
@@ -108,7 +108,7 @@ final class Module extends AbstractModule {
 	}
 
 	public static function ajax_query_shipment(): void {
-		check_ajax_referer( 'mo_newebpay_shipping_query' );
+		check_ajax_referer( 'moksafowo_newebpay_shipping_query' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
 		}
@@ -149,7 +149,7 @@ final class Module extends AbstractModule {
 	}
 
 	public static function ajax_trace_shipment(): void {
-		check_ajax_referer( 'mo_newebpay_shipping_trace' );
+		check_ajax_referer( 'moksafowo_newebpay_shipping_trace' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
 		}
@@ -184,7 +184,7 @@ final class Module extends AbstractModule {
 
 	public static function method_map(): array {
 		return [
-			'mo_newebpay_shipping_cvs' => Methods\Cvs::class,
+			'moksafowo_newebpay_shipping_cvs' => Methods\Cvs::class,
 		];
 	}
 
@@ -201,7 +201,7 @@ final class Module extends AbstractModule {
 		}
 		$chosen = wc_get_chosen_shipping_method_ids();
 		foreach ( $chosen as $method ) {
-			if ( str_starts_with( (string) $method, 'mo_newebpay_shipping_' ) ) {
+			if ( str_starts_with( (string) $method, 'moksafowo_newebpay_shipping_' ) ) {
 				if ( isset( $fields['phone'] ) ) {
 					$fields['phone']['required'] = false;
 				}

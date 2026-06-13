@@ -64,7 +64,7 @@ final class BatchPrint {
 			// LabelMode 優先序：modal 傳的 mode > 設定頁 default > '1' (A4)。
 			// PAYUNi 規範：1=A4 / 2=直立式 (僅 B2C 適用)。modal row 級反灰已防止 C2C 訂單選 mode=2。
 			$modal_mode = isset( $options['mode'] ) && '2' === (string) $options['mode'] ? '2' : '';
-			$label_mode = '' !== $modal_mode ? $modal_mode : (string) get_option( 'mo_payuni_shipping_cvs_label_mode', '1' );
+			$label_mode = '' !== $modal_mode ? $modal_mode : (string) get_option( 'moksafowo_payuni_shipping_cvs_label_mode', '1' );
 			$args = [
 				'MerID'       => PayuniShipping::get_mer_id(),
 				'Timestamp'   => time(),
@@ -78,11 +78,11 @@ final class BatchPrint {
 		} else {
 			// TCAT — 多帶 PostType / PrintType / ShipDate / DeliveryDate / Spec
 			$api_url       = PayuniShipping::$api_url . '/home_delivery/get_obt_number_pdf';
-			$shipping_date = (int) get_option( 'mo_payuni_shipping_tcat_estimate_shipping_date', '1' );
+			$shipping_date = (int) get_option( 'moksafowo_payuni_shipping_tcat_estimate_shipping_date', '1' );
 			// Spec 必填（PAYUNi HOME01077 否則拒收）：訂單 meta > 設定預設 > 1 (60cm)
 			$package_spec  = (string) $reference->get_meta( OrderMeta::PackageSpec );
 			if ( '' === $package_spec ) {
-				$package_spec = (string) get_option( 'mo_payuni_shipping_tcat_default_spec', '1' );
+				$package_spec = (string) get_option( 'moksafowo_payuni_shipping_tcat_default_spec', '1' );
 			}
 			if ( ! in_array( $package_spec, [ '1', '2', '3', '4' ], true ) ) {
 				$package_spec = '1';

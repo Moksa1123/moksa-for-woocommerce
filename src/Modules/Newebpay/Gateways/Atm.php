@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 final class Atm extends AbstractNewebpayGateway {
 
 	public function __construct() {
-		$this->id = 'mo_newebpay_atm';
+		$this->id = 'moksafowo_newebpay_atm';
 		parent::__construct();
 	}
 
@@ -25,7 +25,7 @@ final class Atm extends AbstractNewebpayGateway {
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
-		$days = (int) get_option( 'mo_newebpay_atm_expire_days', 3 );
+		$days = (int) get_option( 'moksafowo_newebpay_atm_expire_days', 3 );
 		$days = max( 1, min( 180, $days ) );
 		return [ 'ExpireDate' => gmdate( 'Ymd', time() + $days * DAY_IN_SECONDS ) ];
 	}

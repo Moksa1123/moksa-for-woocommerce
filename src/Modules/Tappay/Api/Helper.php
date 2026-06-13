@@ -26,7 +26,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const SANDBOX_MERCHANT_ID = 'GlobalTesting_CTBC';
 
 	protected static function option_prefix(): string {
-		return 'mo_tappay';
+		return 'moksafowo_tappay';
 	}
 
 	protected static function log_source(): string {
@@ -34,11 +34,11 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function is_sandbox(): bool {
-		return 'yes' === get_option( 'mo_tappay_sandbox_enabled', 'yes' );
+		return 'yes' === get_option( 'moksafowo_tappay_sandbox_enabled', 'yes' );
 	}
 
 	private static function sandbox_value( string $option_suffix, string $const_define, string $fallback ): string {
-		$opt = trim( (string) get_option( 'mo_tappay_sandbox_' . $option_suffix, '' ) );
+		$opt = trim( (string) get_option( 'moksafowo_tappay_sandbox_' . $option_suffix, '' ) );
 		if ( '' !== $opt ) {
 			return $opt;
 		}
@@ -52,41 +52,41 @@ final class Helper extends AbstractCredentialHelper {
 		if ( self::is_sandbox() ) {
 			return self::sandbox_value( 'app_id', 'MO_TAPPAY_SANDBOX_APP_ID', self::SANDBOX_APP_ID );
 		}
-		return (string) get_option( 'mo_tappay_app_id', '' );
+		return (string) get_option( 'moksafowo_tappay_app_id', '' );
 	}
 
 	public static function app_key(): string {
 		if ( self::is_sandbox() ) {
 			return self::sandbox_value( 'app_key', 'MO_TAPPAY_SANDBOX_APP_KEY', self::SANDBOX_APP_KEY );
 		}
-		return (string) get_option( 'mo_tappay_app_key', '' );
+		return (string) get_option( 'moksafowo_tappay_app_key', '' );
 	}
 
 	public static function partner_key(): string {
 		if ( self::is_sandbox() ) {
 			return self::sandbox_value( 'partner_key', 'MO_TAPPAY_SANDBOX_PARTNER_KEY', self::SANDBOX_PARTNER_KEY );
 		}
-		return (string) get_option( 'mo_tappay_partner_key', '' );
+		return (string) get_option( 'moksafowo_tappay_partner_key', '' );
 	}
 
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
 			return self::sandbox_value( 'merchant_id', 'MO_TAPPAY_SANDBOX_MERCHANT_ID', self::SANDBOX_MERCHANT_ID );
 		}
-		return (string) get_option( 'mo_tappay_merchant_id', '' );
+		return (string) get_option( 'moksafowo_tappay_merchant_id', '' );
 	}
 
 	public static function notify_secret(): string {
 		if ( self::is_sandbox() ) {
-			$opt = trim( (string) get_option( 'mo_tappay_sandbox_notify_secret', '' ) );
+			$opt = trim( (string) get_option( 'moksafowo_tappay_sandbox_notify_secret', '' ) );
 		} else {
-			$opt = trim( (string) get_option( 'mo_tappay_notify_secret', '' ) );
+			$opt = trim( (string) get_option( 'moksafowo_tappay_notify_secret', '' ) );
 		}
 		return '' !== $opt ? $opt : self::partner_key();
 	}
 
 	public static function three_domain_secure_enabled(): bool {
-		return 'yes' === get_option( 'mo_tappay_3ds_enabled', 'yes' );
+		return 'yes' === get_option( 'moksafowo_tappay_3ds_enabled', 'yes' );
 	}
 
 	public static function sdk_env(): string {

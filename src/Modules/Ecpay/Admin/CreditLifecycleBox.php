@@ -11,68 +11,43 @@ defined( 'ABSPATH' ) || exit;
 
 final class CreditLifecycleBox {
 
-	private const NONCE_ACTION = 'mo_ecpay_credit_lifecycle';
-	private const META_BOX_ID  = 'mo_ecpay_credit_lifecycle';
+	private const NONCE_ACTION = 'moksafowo_ecpay_credit_lifecycle';
 
 	public static function init(): void {
-		add_action( 'add_meta_boxes', [ __CLASS__, 'register' ] );
-		add_action( 'wp_ajax_mo_ecpay_credit_query', [ __CLASS__, 'ajax_query' ] );
-		add_action( 'wp_ajax_mo_ecpay_credit_action', [ __CLASS__, 'ajax_action' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_credit_query', [ __CLASS__, 'ajax_query' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_credit_action', [ __CLASS__, 'ajax_action' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
-	public static function register( $post_type = '', $post = null ): void {
-		// 只在「綠界信用卡付款」的訂單註冊；其他付款方式的訂單根本不顯示這個區塊，
-		// 避免後台每張非綠界信用卡訂單都冒一個「無法使用此區塊」的空殼。
-		$order = ( $post instanceof \WC_Order )
-			? $post
-			: ( ( $post instanceof \WP_Post ) ? wc_get_order( $post->ID ) : null );
-		if ( ! $order instanceof \WC_Order || ! self::is_credit_order( $order ) ) {
-			return;
-		}
-		// HPOS-aware screen IDs — 同時 cover legacy CPT shop_order 跟 wc-orders
-		$screens = [ 'shop_order', 'woocommerce_page_wc-orders' ];
-		foreach ( $screens as $screen ) {
-			add_meta_box(
-				self::META_BOX_ID,
-				__( '綠界信用卡交易動作', 'mo-ectools' ),
-				[ __CLASS__, 'render' ],
-				$screen,
-				'side',
-				'default'
-			);
-		}
-	}
-
-	public static function render( $post_or_order ): void {
-		$order = self::resolve_order( $post_or_order );
-		if ( ! $order instanceof \WC_Order ) {
-			return;
-		}
-		// 只有 ECPay credit-card-style gateway 訂單才顯示
+	/**
+	 * 信用卡交易動作區 HTML — 由 ECPay 金流卡片（Ecpay\Admin\OrderMetaBox）附在金流資訊下方，
+	 * 不再是獨立 postbox。非綠界信用卡訂單回空字串（不顯示）。
+	 */
+	public static function lifecycle_html( \WC_Order $order ): string {
 		if ( ! self::is_credit_order( $order ) ) {
-			echo '<p style="color:#646970;font-size:12px;margin:0;">';
-			echo esc_html__( '此訂單非綠界信用卡付款，無法使用此區塊。', 'mo-ectools' );
-			echo '</p>';
-			return;
+			return '';
 		}
-
 		$nonce = wp_create_nonce( self::NONCE_ACTION );
+		ob_start();
 		?>
-		<div class="mo-ecpay-credit-lifecycle"
+		<div class="moksafowo-ecpay-credit-lifecycle" style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;"
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>"
 			data-nonce="<?php echo esc_attr( $nonce ); ?>"
 			data-total="<?php echo esc_attr( (string) (int) round( (float) $order->get_total() ) ); ?>">
-			<p class="mo-ecpay-credit-lifecycle__placeholder" style="margin:0;color:#646970;font-size:12px;">
+			<p style="margin:0 0 4px;color:#646970;font-size:11px;text-transform:uppercase;letter-spacing:.4px;">
+				<?php esc_html_e( '信用卡交易動作', 'mo-ectools' ); ?>
+			</p>
+			<p class="moksafowo-ecpay-credit-lifecycle__placeholder" style="margin:0;color:#646970;font-size:12px;">
 				<?php esc_html_e( '點下方按鈕向綠界查詢即時交易狀態…', 'mo-ectools' ); ?>
 			</p>
 			<p style="margin:8px 0 0;">
-				<button type="button" class="button button-secondary mo-ecpay-credit-lifecycle__refresh">
+				<button type="button" class="button button-secondary moksafowo-ecpay-credit-lifecycle__refresh">
 					<?php esc_html_e( '查詢交易狀態', 'mo-ectools' ); ?>
 				</button>
 			</p>
 		</div>
 		<?php
+		return (string) ob_get_clean();
 	}
 
 	public static function ajax_query(): void {
@@ -160,16 +135,16 @@ final class CreditLifecycleBox {
 		if ( ! in_array( $hook, $ok_screens, true ) ) {
 			return;
 		}
-		$path = MOWC_PLUGIN_DIR . 'assets/admin/ecpay-credit-lifecycle.js';
-		$ver  = file_exists( $path ) ? (string) filemtime( $path ) : MOWC_VERSION;
+		$path = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/ecpay-credit-lifecycle.js';
+		$ver  = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
 		wp_enqueue_script(
-			'mo-ecpay-credit-lifecycle',
-			MOWC_PLUGIN_URL . 'assets/admin/ecpay-credit-lifecycle.js',
+			'moksafowo-ecpay-credit-lifecycle',
+			MOKSAFOWO_PLUGIN_URL . 'assets/admin/ecpay-credit-lifecycle.js',
 			[ 'jquery' ],
 			$ver,
 			true
 		);
-		wp_localize_script( 'mo-ecpay-credit-lifecycle', 'moEcpayCreditLifecycle', [
+		wp_localize_script( 'moksafowo-ecpay-credit-lifecycle', 'moksafowoEcpayCreditLifecycle', [
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'i18n'    => [
 				'querying'      => __( '查詢中…', 'mo-ectools' ),
@@ -198,7 +173,7 @@ final class CreditLifecycleBox {
 
 		ob_start();
 		?>
-		<div class="mo-ecpay-credit-lifecycle__info">
+		<div class="moksafowo-ecpay-credit-lifecycle__info">
 			<p style="margin:0 0 6px;">
 				<strong><?php esc_html_e( '交易狀態', 'mo-ectools' ); ?>：</strong>
 				<span style="color:<?php echo esc_attr( $status_color ); ?>;font-weight:600;">
@@ -235,16 +210,16 @@ final class CreditLifecycleBox {
 			<?php endif; ?>
 		</div>
 
-		<div class="mo-ecpay-credit-lifecycle__actions" style="margin-top:12px;border-top:1px solid #e0e0e0;padding-top:10px;">
+		<div class="moksafowo-ecpay-credit-lifecycle__actions" style="margin-top:12px;border-top:1px solid #e0e0e0;padding-top:10px;">
 			<?php if ( 'Authorized' === $status ) : ?>
 				<p style="margin:0 0 6px;color:#646970;font-size:11px;">
 					<?php esc_html_e( '此筆已授權但未請款，可請款後扣顧客款項，或取消授權退回額度。', 'mo-ectools' ); ?>
 				</p>
-				<button type="button" class="button mo-ecpay-credit-lifecycle__action" data-action="N">
+				<button type="button" class="button moksafowo-ecpay-credit-lifecycle__action" data-action="N">
 					<?php esc_html_e( '取消授權', 'mo-ectools' ); ?>
 				</button>
 				&nbsp;
-				<button type="button" class="button button-primary mo-ecpay-credit-lifecycle__action" data-action="C">
+				<button type="button" class="button button-primary moksafowo-ecpay-credit-lifecycle__action" data-action="C">
 					<?php
 					/* translators: %d: 請款金額 */
 					echo esc_html( sprintf( __( '請款 NT$%d', 'mo-ectools' ), $total ) );
@@ -259,9 +234,9 @@ final class CreditLifecycleBox {
 				</p>
 				<input type="number" min="1" max="<?php echo esc_attr( (string) $cls_amt ); ?>"
 					value="<?php echo esc_attr( (string) $cls_amt ); ?>"
-	class="small-text mo-ecpay-credit-lifecycle__amount"
+	class="small-text moksafowo-ecpay-credit-lifecycle__amount"
 					style="width:80px;">
-				<button type="button" class="button button-primary mo-ecpay-credit-lifecycle__action" data-action="R">
+				<button type="button" class="button button-primary moksafowo-ecpay-credit-lifecycle__action" data-action="R">
 					<?php esc_html_e( '退款', 'mo-ectools' ); ?>
 				</button>
 			<?php else : ?>
@@ -272,7 +247,7 @@ final class CreditLifecycleBox {
 		</div>
 
 		<p style="margin:10px 0 0;text-align:right;">
-			<button type="button" class="button-link mo-ecpay-credit-lifecycle__refresh" style="font-size:11px;">
+			<button type="button" class="button-link moksafowo-ecpay-credit-lifecycle__refresh" style="font-size:11px;">
 				<?php esc_html_e( '重新查詢', 'mo-ectools' ); ?>
 			</button>
 		</p>
@@ -282,7 +257,7 @@ final class CreditLifecycleBox {
 
 	private static function is_credit_order( \WC_Order $order ): bool {
 		$method = (string) $order->get_payment_method();
-		if ( ! str_starts_with( $method, 'mo_ecpay_' ) ) {
+		if ( ! str_starts_with( $method, 'moksafowo_ecpay_' ) ) {
 			return false;
 		}
 		// 走 supports_credit_action() 判斷是否信用卡系列
@@ -299,21 +274,6 @@ final class CreditLifecycleBox {
 		// 還沒有 TradeNo（未付款）也不顯示
 		$trade_no = (string) $order->get_meta( Keys::ECPAY_TRADE_NO );
 		return '' !== $trade_no;
-	}
-
-	private static function resolve_order( $context ): ?\WC_Order {
-		if ( $context instanceof \WC_Order ) {
-			return $context;
-		}
-		if ( $context instanceof \WP_Post ) {
-			$order = wc_get_order( $context->ID );
-			return $order instanceof \WC_Order ? $order : null;
-		}
-		if ( is_numeric( $context ) ) {
-			$order = wc_get_order( (int) $context );
-			return $order instanceof \WC_Order ? $order : null;
-		}
-		return null;
 	}
 
 	private static function action_label( string $action ): string {

@@ -29,7 +29,7 @@ trait TraitCreditInstallment {
 	}
 
 	public function init_form_fields() {
-		$this->form_fields = include MOWC_PLUGIN_DIR . 'src/Modules/Payuni/Settings/CreditInstallmentSetting.php';
+		$this->form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Payuni/Settings/CreditInstallmentSetting.php';
 		/* translators: %s: number of installments */
 		$this->form_fields['title']['default'] = sprintf( __( 'PAYUNi Installment Payment (%s Installments)', 'mo-ectools' ), $this->installs );
 	}
@@ -48,7 +48,7 @@ trait TraitCreditInstallment {
 		return $is_available;
 	}
 
-	public function payuni_payment_installment_transaction_arrgs( $args, $order ) {
+	public function moksafowo_payuni_payment_installment_transaction_arrgs( $args, $order ) {
 		return array_merge(
 			$args,
 			array(

@@ -47,13 +47,13 @@ final class Module extends AbstractModule {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
 		// 物流 IPN 接 SmilePay 物流貨態回傳
-		add_action( 'woocommerce_api_mo_smilepay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
 
 		// CVS 取貨地址不需要收件電話 / first_name / last_name 必填
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
 
 		// 批次列印 — 走 SP_B2C_CVS_PRINT_API 或 SP_TCAT_PRINT_API
-		add_filter( 'mo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 
 		// 結帳選店流程
 		Frontend\StoreSelector::init();
@@ -71,12 +71,12 @@ final class Module extends AbstractModule {
 
 	public static function method_map(): array {
 		return [
-			'mo_smilepay_shipping_cvs_711'      => Methods\Cvs711::class,
-			'mo_smilepay_shipping_cvs_fami'     => Methods\CvsFami::class,
-			'mo_smilepay_shipping_tcat'         => Methods\Tcat::class,
-			'mo_smilepay_shipping_tcat_normal'  => Methods\TcatNormal::class,
-			'mo_smilepay_shipping_tcat_refrige' => Methods\TcatRefrige::class,
-			'mo_smilepay_shipping_tcat_freeze'  => Methods\TcatFreeze::class,
+			'moksafowo_smilepay_shipping_cvs_711'      => Methods\Cvs711::class,
+			'moksafowo_smilepay_shipping_cvs_fami'     => Methods\CvsFami::class,
+			'moksafowo_smilepay_shipping_tcat'         => Methods\Tcat::class,
+			'moksafowo_smilepay_shipping_tcat_normal'  => Methods\TcatNormal::class,
+			'moksafowo_smilepay_shipping_tcat_refrige' => Methods\TcatRefrige::class,
+			'moksafowo_smilepay_shipping_tcat_freeze'  => Methods\TcatFreeze::class,
 		];
 	}
 
@@ -97,8 +97,8 @@ final class Module extends AbstractModule {
 
 		// CVS bucket — 7-11 + 全家
 		$cvs_titles = [
-			'mo_smilepay_shipping_cvs_711'  => __( '速買配 7-11 取貨', 'mo-ectools' ),
-			'mo_smilepay_shipping_cvs_fami' => __( '速買配 全家取貨', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_cvs_711'  => __( '速買配 7-11 取貨', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_cvs_fami' => __( '速買配 全家取貨', 'mo-ectools' ),
 		];
 		$providers['smilepay-cvs'] = [
 			'label'          => __( '速買配 超商標籤', 'mo-ectools' ),
@@ -112,10 +112,10 @@ final class Module extends AbstractModule {
 
 		// HOME bucket — 黑貓 統一 method（多溫層拆單）+ 既有 3 個單溫層 method
 		$home_titles = [
-			'mo_smilepay_shipping_tcat'         => __( '速買配 黑貓宅配', 'mo-ectools' ),
-			'mo_smilepay_shipping_tcat_normal'  => __( '速買配 黑貓常溫', 'mo-ectools' ),
-			'mo_smilepay_shipping_tcat_refrige' => __( '速買配 黑貓冷藏', 'mo-ectools' ),
-			'mo_smilepay_shipping_tcat_freeze'  => __( '速買配 黑貓冷凍', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_tcat'         => __( '速買配 黑貓宅配', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_tcat_normal'  => __( '速買配 黑貓常溫', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_tcat_refrige' => __( '速買配 黑貓冷藏', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_tcat_freeze'  => __( '速買配 黑貓冷凍', 'mo-ectools' ),
 		];
 		// records 的溫層集合（給拆單訂單顯示溫層 pill 用），對應 ECPay register_batch_print 邏輯
 		$temps = static function ( \WC_Order $o ): array {

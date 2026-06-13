@@ -23,7 +23,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_PROD_MAP       = 'https://logistics.ecpay.com.tw/Express/map';
 
 	protected static function option_prefix(): string {
-		return 'mo_ecpay_shipping';
+		return 'moksafowo_ecpay_shipping';
 	}
 
 	protected static function log_source(): string {
@@ -49,13 +49,13 @@ final class Helper extends AbstractCredentialHelper {
 	private static function cred( string $subtype, string $field ): string {
 		$group     = self::group_for_subtype( $subtype );
 		$is_test   = self::is_sandbox();
-		$prefix    = 'mo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
+		$prefix    = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
 		$opt_key   = $prefix . $field;
 		$value     = (string) get_option( $opt_key, '' );
 
 		// Fallback 1：legacy 單組設定（沒有 _c2c_/_b2c_ 前綴）— migrate 用
 		if ( '' === $value ) {
-			$legacy_key = 'mo_ecpay_shipping_' . ( $is_test ? 'sandbox_' : '' ) . $field;
+			$legacy_key = 'moksafowo_ecpay_shipping_' . ( $is_test ? 'sandbox_' : '' ) . $field;
 			$value      = (string) get_option( $legacy_key, '' );
 		}
 
@@ -89,11 +89,11 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function has_credentials_for( string $group ): bool {
 		$is_test  = self::is_sandbox();
-		$prefix   = 'mo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
+		$prefix   = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
 		$mid      = (string) get_option( $prefix . 'merchant_id', '' );
 		// legacy fallback
 		if ( '' === $mid ) {
-			$legacy = 'mo_ecpay_shipping_' . ( $is_test ? 'sandbox_' : '' ) . 'merchant_id';
+			$legacy = 'moksafowo_ecpay_shipping_' . ( $is_test ? 'sandbox_' : '' ) . 'merchant_id';
 			$mid    = (string) get_option( $legacy, '' );
 		}
 		return '' !== $mid;
