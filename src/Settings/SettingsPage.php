@@ -140,7 +140,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'tab_arg'    => null,
 			],
 			'moksafowo-payuni-shipping' => [
-				'enable_key' => 'moksafowo_payuni_shipping',
+				'enable_key' => 'payuni_shipping',
 				'label'      => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Settings\\SettingsTab',

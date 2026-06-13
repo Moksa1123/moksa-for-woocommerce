@@ -20,7 +20,7 @@ final class ModuleRegistry {
 		'shopline_payments'  => Modules\ShoplinePayments\Module::class,
 		'ecpay_shipping'     => Modules\EcpayShipping\Module::class,
 		'newebpay_shipping'  => Modules\NewebpayShipping\Module::class,
-		'moksafowo_payuni_shipping'    => Modules\PayuniShipping\Module::class,
+		'payuni_shipping'              => Modules\PayuniShipping\Module::class,
 		'smilepay_shipping'  => Modules\SmilepayShipping\Module::class,
 		'ezpay_invoice'      => Modules\EzpayInvoice\Module::class,
 		'ecpay_invoice'      => Modules\EcpayInvoice\Module::class,

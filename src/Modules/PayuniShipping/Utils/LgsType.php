@@ -14,15 +14,17 @@ class LgsType {
 		switch ( $lgs_type ) {
 			case self::HOME:
 				return '宅配';
-				break;
 			case self::B2C:
 				return '大宗寄倉';
-				break;
-            case self::C2C:
-                return '店到店';
-                break;
+			case self::C2C:
+				return '店到店';
+			// 舊版資料把通路名稱（黑貓 / 宅配）誤存進 lgs_type；黑貓 = 宅配。
+			case '黑貓':
+			case '宅配':
+				return '宅配';
 			default:
-				return '未知的 LgsType:' . $lgs_type;
+				// 容忍 legacy / 非標準值：原樣顯示，不再露出 debug 字串。
+				return (string) $lgs_type;
 		}
 	}
 

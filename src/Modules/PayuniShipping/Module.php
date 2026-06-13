@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 final class Module extends AbstractModule {
 
 	public function slug(): string {
-		return 'moksafowo_payuni_shipping';
+		return 'payuni_shipping';
 	}
 
 	public function label(): string {
