@@ -139,7 +139,7 @@ final class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'shipping',
-			'title' => __( '物流資訊（速買配）', 'mo-ectools' ),
+			'title' => __( '物流資訊', 'mo-ectools' ),
 			'html'  => $html,
 		];
 		return $cards;

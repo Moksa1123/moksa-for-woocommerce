@@ -30,7 +30,7 @@ class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'shipping',
-			'title' => __( '物流資訊（PAYUNi）', 'mo-ectools' ),
+			'title' => __( '物流資訊', 'mo-ectools' ),
 			'html'  => self::card_html( $order ),
 		];
 		return $cards;
@@ -60,7 +60,7 @@ class OrderMetaBox {
 
 		ob_start();
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
-		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( 'ShipTradeNo', 'mo-ectools' ) . '</div></th><td>' . esc_html( $order->get_meta( OrderMeta::ShipTradeNo ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '物流交易序號', 'mo-ectools' ) . '</div></th><td>' . esc_html( $order->get_meta( OrderMeta::ShipTradeNo ) ) . '</td></tr>';
 
 		// 物流查詢編號(使用者查詢用的物流單號)
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $provider_query_html built locally with esc_url applied
@@ -85,7 +85,7 @@ class OrderMetaBox {
 			$package_spec_options = self::get_package_spec_options( $goods_type );
 
 			echo '<tr><th style="text-align:left;">' . esc_html__( 'Package Spec', 'mo-ectools' ) . '</th><td>';
-			echo '<select id="package-spec-select" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
+			echo '<select id="package-spec-select" style="font-size:12px;height:22px;line-height:20px;padding:0 4px;margin:0;vertical-align:middle;box-sizing:border-box;" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
 			foreach ( $package_spec_options as $value => $label ) {
 				$selected = selected( $package_spec, $value, false );
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- selected() returns escaped HTML attribute

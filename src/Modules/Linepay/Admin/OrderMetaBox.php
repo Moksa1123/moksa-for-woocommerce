@@ -24,7 +24,7 @@ final class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'payment',
-			'title' => __( '金流資訊（LINE Pay）', 'mo-ectools' ),
+			'title' => __( '金流資訊', 'mo-ectools' ),
 			'html'  => self::card_html( $order ),
 		];
 		return $cards;
