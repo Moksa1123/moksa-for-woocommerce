@@ -189,6 +189,13 @@ final class SettingsPage extends \WC_Settings_Page {
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
+			'order-lookup' => [
+				'enable_key' => 'order_lookup',
+				'label'      => __( '訂單查號搜尋', 'mo-ectools' ),
+				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\OrderLookup\\Settings\\SettingsTab',
+				'tab_method' => 'get_settings',
+				'tab_arg'    => null,
+			],
 		];
 	}
 
