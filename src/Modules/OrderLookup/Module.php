@@ -37,10 +37,6 @@ final class Module extends AbstractModule {
 		return __( '用發票號 / 物流單號 / 金流交易序號找訂單（訂單列表 + Ctrl+K）', 'mo-ectools' );
 	}
 
-	public function settings_section(): string {
-		return 'order-lookup';
-	}
-
 	public function boot(): void {
 		// P1/P2 — 訂單搜尋納入號碼 meta（HPOS + CPT）。
 		add_filter( 'woocommerce_order_table_search_query_meta_keys', [ SearchableKeys::class, 'add' ] );

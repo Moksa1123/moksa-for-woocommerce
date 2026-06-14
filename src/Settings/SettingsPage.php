@@ -11,7 +11,7 @@ final class SettingsPage extends \WC_Settings_Page {
 
 	public function __construct() {
 		$this->id    = SettingsTab::TAB_ID;
-		$this->label = __( 'Moksa', 'mo-ectools' );
+		$this->label = __( 'Moksa 電商工具', 'mo-ectools' );
 		parent::__construct();
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
@@ -186,13 +186,6 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key' => 'shopline_payments',
 				'label'      => __( 'Shopline Payments', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings',
-				'tab_arg'    => null,
-			],
-			'order-lookup' => [
-				'enable_key' => 'order_lookup',
-				'label'      => __( '訂單查號搜尋', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\OrderLookup\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
@@ -418,6 +411,83 @@ final class SettingsPage extends \WC_Settings_Page {
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_tw_field_manager_section',
 			],
+
+			// 訂單查號搜尋
+			[
+				'title' => __( '訂單查號搜尋', 'mo-ectools' ),
+				'type'  => 'title',
+				'desc'  => __( '讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。', 'mo-ectools' ),
+				'id'    => 'moksafowo_order_lookup_section',
+			],
+			[
+				'title'   => __( '啟用訂單查號搜尋', 'mo-ectools' ),
+				'id'      => 'moksafowo_order_lookup_enabled',
+				'type'    => 'checkbox',
+				'default' => 'no',
+				'desc'    => __( '開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。', 'mo-ectools' ),
+			],
+			[
+				'title'         => __( '搜尋號碼類型', 'mo-ectools' ),
+				'desc'          => __( '發票號碼', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_invoice',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => 'start',
+			],
+			[
+				'desc'          => __( '物流單號', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_shipping',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '金流交易序號', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_payment',
+				'type'          => 'checkbox',
+				'default'       => 'yes',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '統一編號', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_ubn',
+				'type'          => 'checkbox',
+				'default'       => 'no',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( 'ATM 虛擬帳號', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_atm',
+				'type'          => 'checkbox',
+				'default'       => 'no',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '超商繳費代碼', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_cvs',
+				'type'          => 'checkbox',
+				'default'       => 'no',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '卡末四碼', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_card',
+				'type'          => 'checkbox',
+				'default'       => 'no',
+				'checkboxgroup' => '',
+			],
+			[
+				'desc'          => __( '黑貓追蹤號', 'mo-ectools' ),
+				'id'            => 'moksafowo_order_lookup_field_tcat',
+				'type'          => 'checkbox',
+				'default'       => 'no',
+				'checkboxgroup' => 'end',
+				'desc_tip'      => __( '勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。', 'mo-ectools' ),
+			],
+			[
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_order_lookup_section',
+			],
 		];
 	}
 
@@ -437,6 +507,10 @@ final class SettingsPage extends \WC_Settings_Page {
 			}
 			$instance = new $class();
 			$category = $instance->category();
+			// 工具類（訂單查號搜尋）的設定全部移到「進階設定」分頁，總覽不放卡片。
+			if ( 'tools' === $category ) {
+				continue;
+			}
 			if ( ! isset( $by_category[ $category ] ) ) {
 				$by_category[ $category ] = [];
 			}
