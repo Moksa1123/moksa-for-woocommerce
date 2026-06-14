@@ -62,6 +62,7 @@ final class Ability {
 							'number'   => [ 'type' => 'string' ],
 							'name'     => [ 'type' => 'string' ],
 							'status'   => [ 'type' => 'string' ],
+							'total'    => [ 'type' => 'string' ],
 							'matched'  => [ 'type' => 'string' ],
 							'edit_url' => [ 'type' => 'string' ],
 						],

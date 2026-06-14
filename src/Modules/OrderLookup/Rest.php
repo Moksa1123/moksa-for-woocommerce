@@ -44,19 +44,16 @@ final class Rest {
 
 		$out = [];
 		foreach ( $results as $order ) {
-			$suffix = '' !== $order['matched']
-				/* translators: %s: matched field label, e.g. 發票號碼 */
-				? ' · ' . sprintf( __( '%s相符', 'mo-ectools' ), $order['matched'] )
-				: '';
 			$out[] = [
 				'id'       => $order['id'],
 				'label'    => sprintf(
-					/* translators: 1: order number, 2: buyer name, 3: order status */
-					__( '訂單 #%1$s · %2$s · %3$s', 'mo-ectools' ),
+					/* translators: 1: order number, 2: buyer name, 3: order status, 4: order total */
+					__( '訂單 #%1$s · %2$s · %3$s · %4$s', 'mo-ectools' ),
 					$order['number'],
 					$order['name'],
-					$order['status']
-				) . $suffix,
+					$order['status'],
+					$order['total']
+				),
 				'edit_url' => $order['edit_url'],
 			];
 		}

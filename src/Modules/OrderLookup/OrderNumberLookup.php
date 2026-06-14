@@ -17,7 +17,7 @@ final class OrderNumberLookup {
 	/**
 	 * @param string $term  搜尋字串（發票 / 物流 / 金流號碼）。
 	 * @param int    $limit 最多回傳幾筆。
-	 * @return array<int, array{id:int, number:string, name:string, status:string, matched:string, edit_url:string}>
+	 * @return array<int, array{id:int, number:string, name:string, status:string, total:string, matched:string, edit_url:string}>
 	 */
 	public static function resolve( string $term, int $limit = 10 ): array {
 		$term = trim( $term );
@@ -45,6 +45,7 @@ final class OrderNumberLookup {
 				'number'   => (string) $order->get_order_number(),
 				'name'     => '' !== $name ? $name : __( '（無姓名）', 'mo-ectools' ),
 				'status'   => wc_get_order_status_name( $order->get_status() ),
+				'total'    => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
 				'matched'  => SearchableKeys::matched_label( $order, $term ),
 				'edit_url' => $order->get_edit_order_url(),
 			];
