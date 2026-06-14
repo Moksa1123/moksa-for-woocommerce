@@ -28,6 +28,7 @@ final class ModuleRegistry {
 		'amego_invoice'      => Modules\AmegoInvoice\Module::class,
 		'smilepay_invoice'   => Modules\SmilepayInvoice\Module::class,
 		'sms'                => Modules\Sms\Module::class,
+		'order_lookup'       => Modules\OrderLookup\Module::class,
 	];
 
 	private array $booted = [];

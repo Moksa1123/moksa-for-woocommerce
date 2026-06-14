@@ -441,6 +441,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			'shipping' => __( '物流模組', 'mo-ectools' ),
 			'invoice'  => __( '電子發票模組', 'mo-ectools' ),
 			'checkout' => __( '結帳工具', 'mo-ectools' ),
+			'tools'    => __( '工具', 'mo-ectools' ),
 		];
 
 		$tab = SettingsTab::TAB_ID;
