@@ -12,6 +12,13 @@
 	var useState = wp.element.useState;
 	var useEffect = wp.element.useEffect;
 	var apiFetch = wp.apiFetch;
+	var createElement = wp.element.createElement;
+
+	// 命令面板指令前的圖示 —— 用 dashicon SVG 自繪,不依賴 wp-icons（該 handle 在此環境未暴露 wp.icons,會害 loader 不註冊）。
+	var ORDER_ICON = createElement(
+		'span',
+		{ className: 'dashicons dashicons-cart', style: { fontSize: '20px', width: '20px', height: '20px' } }
+	);
 
 	function useOrderLookupCommands( props ) {
 		var search = ( props && props.search ) || '';
@@ -49,6 +56,7 @@
 									return {
 										name: 'mo-ectools/order-' + order.id,
 										label: order.label,
+										icon: ORDER_ICON,
 										// 命令面板(cmdk)會用搜尋字串再過濾一次,
 										// label 不含號碼會被濾掉 → searchLabel 帶上號碼確保命中.
 										searchLabel: term + ' ' + order.label,
