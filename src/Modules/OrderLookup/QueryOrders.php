@@ -21,6 +21,10 @@ final class QueryOrders {
 		$status = is_array( $input ) && ! empty( $input['status'] )
 			? str_replace( 'wc-', '', sanitize_key( (string) $input['status'] ) )
 			: '';
+		// all / any = 不指定狀態,只回各狀態分布。
+		if ( in_array( $status, array( 'all', 'any', 'breakdown' ), true ) ) {
+			$status = '';
+		}
 
 		$breakdown = array();
 		$total     = 0;

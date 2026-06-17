@@ -42,7 +42,6 @@ final class Module extends AbstractModule {
 		if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
 			return;
 		}
-		add_action( 'admin_menu', [ AdminPage::class, 'register' ] );
 		add_action( 'rest_api_init', [ Rest::class, 'register' ] );
 		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_chat' ] );
 	}

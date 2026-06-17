@@ -58,11 +58,23 @@ final class Agent {
 
 			// 模型沒有要呼叫工具了 → 這就是最終文字答覆。
 			if ( ! $resolver->has_ability_calls( $assistant ) ) {
+				$text = '';
 				try {
-					return (string) $result->toText();
+					$text = (string) $result->toText();
 				} catch ( \Throwable $e ) {
-					return new \WP_Error( 'mo_ai_no_text', __( 'AI 沒有回覆文字內容,請換個問法。', 'mo-ectools' ) );
+					$text = '';
 				}
+				if ( '' !== trim( $text ) ) {
+					return $text;
+				}
+				// 模型這回合沒給文字(工具回應後常見的空回合)→ 明確請它用文字總結,再跑一回合,而非直接報錯。
+				$history[] = is_string( $current )
+					? new \WordPress\AiClient\Messages\DTO\UserMessage( array( new \WordPress\AiClient\Messages\DTO\MessagePart( $current ) ) )
+					: $current;
+				$current = new \WordPress\AiClient\Messages\DTO\UserMessage(
+					array( new \WordPress\AiClient\Messages\DTO\MessagePart( '請根據前面工具查到的資料,用繁體中文文字簡短回答我的問題。' ) )
+				);
+				continue;
 			}
 
 			// 執行模型要呼叫的 ability(permission_callback 由核心強制),把回應餵回下一回合。

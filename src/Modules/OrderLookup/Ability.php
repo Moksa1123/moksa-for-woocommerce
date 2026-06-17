@@ -94,13 +94,16 @@ final class Ability {
 				'description'         => __( '查詢訂單數量與各狀態筆數分布,或列出某狀態的訂單。常見狀態 slug:processing(處理中 / 待出貨)、pending(待付款)、on-hold(保留中)、completed(已完成)、cancelled(已取消)、refunded(已退款)。不給 status 會回各狀態的筆數分布。唯讀。', 'mo-ectools' ),
 				'category'            => 'mo-ectools',
 				'input_schema'        => [
+					// status 設必填 + 用 all 當哨值:確保 AI 一定帶物件(不會傳 null 被驗證擋),
+					// 且 type 維持單一 object(Gemini 不接受 type 為陣列 union)。
 					'type'                 => 'object',
 					'properties'           => [
 						'status' => [
 							'type'        => 'string',
-							'description' => __( 'WooCommerce 訂單狀態 slug(如 processing),可省略以取得各狀態筆數分布', 'mo-ectools' ),
+							'description' => __( 'WooCommerce 訂單狀態 slug;用 all 取得各狀態筆數分布,或指定如 processing(處理中 / 待出貨)、pending(待付款)、completed(已完成)、cancelled(已取消)、refunded(已退款)', 'mo-ectools' ),
 						],
 					],
+					'required'             => [ 'status' ],
 					'additionalProperties' => false,
 				],
 				'output_schema'       => [
