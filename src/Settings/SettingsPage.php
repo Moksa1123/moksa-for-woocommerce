@@ -489,19 +489,19 @@ final class SettingsPage extends \WC_Settings_Page {
 				'id'   => 'moksafowo_order_lookup_section',
 			],
 
-			// AI 助手（Beta，需 WP 7.0 AI Client）
+			// Moksa AI（Beta，需 WP 7.0 AI Client）
 			[
-				'title' => __( 'AI 助手（Beta）', 'mo-ectools' ),
+				'title' => __( 'Moksa AI 助手（Beta）', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '需 WordPress 7.0(內建 AI Client）+ 在「設定 → Connectors」設好 AI 金鑰。啟用後，WooCommerce 選單下會多一個「AI 助手」頁,可用自然語言查訂單。', 'mo-ectools' ),
+				'desc'  => __( '在後台用自然語言查訂單的 AI 助手。啟用後右下角會出現浮動對話窗(WooCommerce 選單下也有「Moksa AI」頁)。<br><strong>目前會做</strong>:① 用發票號 / 物流單號 / 金流交易序號查單筆訂單;② 查訂單數量與各狀態分布(例:待出貨幾筆)。<br><strong>前置需求</strong>:WordPress 7.0(內建 AI Client)+ 在「設定 → Connectors」設好 OpenAI / Anthropic / Google 任一把 AI 金鑰(費用走商家自己的金鑰)。WordPress 低於 7.0 時此功能不會出現。', 'mo-ectools' ),
 				'id'    => 'moksafowo_ai_assistant_section',
 			],
 			[
-				'title'   => __( '啟用 AI 助手', 'mo-ectools' ),
+				'title'   => __( '啟用 Moksa AI', 'mo-ectools' ),
 				'id'      => 'moksafowo_ai_assistant_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '在後台用一句話查訂單(底層用我們的查號 ability 當 AI 工具)。', 'mo-ectools' ),
+				'desc'    => __( '開啟後台浮動 AI 對話窗 + 選單頁。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

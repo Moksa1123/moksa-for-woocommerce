@@ -86,6 +86,49 @@ final class Ability {
 				],
 			]
 		);
+
+		wp_register_ability(
+			'mo-ectools/query-orders',
+			[
+				'label'               => __( '查訂單數量 / 狀態', 'mo-ectools' ),
+				'description'         => __( '查詢訂單數量與各狀態筆數分布,或列出某狀態的訂單。常見狀態 slug:processing(處理中 / 待出貨)、pending(待付款)、on-hold(保留中)、completed(已完成)、cancelled(已取消)、refunded(已退款)。不給 status 會回各狀態的筆數分布。唯讀。', 'mo-ectools' ),
+				'category'            => 'mo-ectools',
+				'input_schema'        => [
+					'type'                 => 'object',
+					'properties'           => [
+						'status' => [
+							'type'        => 'string',
+							'description' => __( 'WooCommerce 訂單狀態 slug(如 processing),可省略以取得各狀態筆數分布', 'mo-ectools' ),
+						],
+					],
+					'additionalProperties' => false,
+				],
+				'output_schema'       => [
+					'type'       => 'object',
+					'properties' => [
+						'total'     => [ 'type' => 'integer' ],
+						'breakdown' => [ 'type' => 'array' ],
+						'orders'    => [ 'type' => 'array' ],
+					],
+				],
+				'execute_callback'    => [ QueryOrders::class, 'run' ],
+				'permission_callback' => static function (): bool {
+					return current_user_can( 'edit_shop_orders' );
+				},
+				'meta'                => [
+					'show_in_rest' => true,
+					'annotations'  => [
+						'readonly'    => true,
+						'destructive' => false,
+						'idempotent'  => true,
+					],
+					'mcp'          => [
+						'public' => true,
+						'type'   => 'tool',
+					],
+				],
+			]
+		);
 	}
 
 	/**

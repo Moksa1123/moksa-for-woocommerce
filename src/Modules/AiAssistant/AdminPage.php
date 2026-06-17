@@ -19,8 +19,8 @@ final class AdminPage {
 	public static function register(): void {
 		add_submenu_page(
 			'woocommerce',
-			__( 'AI 助手', 'mo-ectools' ),
-			__( 'AI 助手', 'mo-ectools' ),
+			Config::NAME,
+			Config::NAME,
 			Config::CAP,
 			self::SLUG,
 			[ self::class, 'render' ]
@@ -49,8 +49,8 @@ final class AdminPage {
 		}
 
 		echo '<div class="wrap">';
-		echo '<h1>' . esc_html__( 'AI 助手', 'mo-ectools' ) . ' <span style="font-size:12px;color:#888;">Beta</span></h1>';
-		echo '<p style="color:#555;">' . esc_html__( '用一句話查訂單。例如:「幫我查發票號 JT12202411 是哪張訂單」。AI 會用我們提供的查號工具查詢後回答。', 'mo-ectools' ) . '</p>';
+		echo '<h1>' . esc_html( Config::NAME ) . ' <span style="font-size:12px;color:#888;">Beta</span></h1>';
+		echo '<p style="color:#555;">' . esc_html__( '用一句話查訂單。例如:「待出貨有幾筆?」或「查發票號 JT12202411 是哪張訂單」。會用真實資料查詢後回答。', 'mo-ectools' ) . '</p>';
 
 		echo '<form method="post">';
 		wp_nonce_field( 'mo_ai_assistant' );
