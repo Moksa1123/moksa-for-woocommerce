@@ -488,6 +488,25 @@ final class SettingsPage extends \WC_Settings_Page {
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_order_lookup_section',
 			],
+
+			// AI 助手（Beta，需 WP 7.0 AI Client）
+			[
+				'title' => __( 'AI 助手（Beta）', 'mo-ectools' ),
+				'type'  => 'title',
+				'desc'  => __( '需 WordPress 7.0(內建 AI Client）+ 在「設定 → Connectors」設好 AI 金鑰。啟用後，WooCommerce 選單下會多一個「AI 助手」頁,可用自然語言查訂單。', 'mo-ectools' ),
+				'id'    => 'moksafowo_ai_assistant_section',
+			],
+			[
+				'title'   => __( '啟用 AI 助手', 'mo-ectools' ),
+				'id'      => 'moksafowo_ai_assistant_enabled',
+				'type'    => 'checkbox',
+				'default' => 'no',
+				'desc'    => __( '在後台用一句話查訂單(底層用我們的查號 ability 當 AI 工具)。', 'mo-ectools' ),
+			],
+			[
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_ai_assistant_section',
+			],
 		];
 	}
 
