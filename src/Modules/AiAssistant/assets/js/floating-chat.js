@@ -1,7 +1,8 @@
 /**
  * Moksa AI 浮動對話窗 — 後台右下角 AI 助手。訊息經 REST(mo-ectools/v1/ai-chat)走
  * agentic 迴圈(AI 用我們的 ability 查訂單後回答)。名稱/文案由 wp_localize 的 moksafowoAi 帶入。
- * 配色走金色系(對齊設定頁的橘金 accent)。
+ * 配色:白底 + 細金線(對齊設定頁低調感),金色只當點綴。
+ * 樣式全用 #mo-ai-panel / #mo-ai-fab 前綴拉高特異性,壓過 WP admin 對 input/button 的預設樣式。
  */
 ( function ( wp ) {
 	if ( ! wp || ! wp.apiFetch || ! document.body ) {
@@ -16,41 +17,41 @@
 	var style = document.createElement( 'style' );
 	style.textContent =
 		'#mo-ai-fab{position:fixed;right:22px;bottom:22px;z-index:99998;display:flex;align-items:center;gap:8px;' +
-		'background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:0;border-radius:24px;padding:11px 18px;' +
-		'cursor:pointer;box-shadow:0 4px 14px rgba(217,119,6,.38);font-size:14px;font-weight:600;transition:transform .15s,box-shadow .15s;}' +
-		'#mo-ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(217,119,6,.5);}' +
+		'background:#1d2327;color:#fff;border:0;border-radius:24px;padding:11px 18px;' +
+		'cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.28);font-size:14px;font-weight:600;transition:transform .15s,box-shadow .15s;}' +
+		'#mo-ai-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.36);}' +
 		'#mo-ai-panel{position:fixed;right:22px;bottom:80px;z-index:99999;width:360px;max-width:92vw;height:520px;max-height:78vh;' +
-		'display:none;flex-direction:column;background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.22);overflow:hidden;' +
+		'display:none;flex-direction:column;background:#fff;border:1px solid #e8e8ea;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);overflow:hidden;' +
 		'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;animation:mo-ai-in .18s ease;}' +
 		'@keyframes mo-ai-in{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}' +
-		'.mo-ai-head{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:13px 16px;display:flex;align-items:center;gap:9px;' +
-		'border-bottom:2px solid;border-image:linear-gradient(90deg,#fde68a,rgba(253,230,138,0)) 1;}' +
-		'.mo-ai-head .mo-ai-dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.3);}' +
-		'.mo-ai-head b{font-size:15px;font-weight:700;}' +
-		'.mo-ai-head .mo-ai-beta{font-size:11px;opacity:.85;font-weight:400;}' +
-		'.mo-ai-head .mo-ai-clear{margin-left:auto;background:rgba(255,255,255,.22);border:0;color:#fff;border-radius:8px;padding:4px 9px;font-size:12px;cursor:pointer;}' +
-		'.mo-ai-head .mo-ai-clear:hover{background:rgba(255,255,255,.34);}' +
-		'.mo-ai-msgs{flex:1;overflow-y:auto;padding:14px;background:#fbf8f3;font-size:13.5px;line-height:1.6;}' +
-		'.mo-ai-row{margin:10px 0;display:flex;gap:8px;align-items:flex-end;}' +
-		'.mo-ai-row.user{justify-content:flex-end;}' +
-		'.mo-ai-av{width:26px;height:26px;border-radius:50%;flex:0 0 26px;display:flex;align-items:center;justify-content:center;' +
-		'background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:14px;}' +
-		'.mo-ai-bub{max-width:75%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;word-break:break-word;}' +
-		'.mo-ai-bub a{color:inherit;text-decoration:underline;}' +
-		'.mo-ai-row.bot .mo-ai-bub{background:#fff;border:1px solid #ece2d2;color:#1d2327;border-bottom-left-radius:4px;}' +
-		'.mo-ai-row.user .mo-ai-bub{background:#d97706;color:#fff;border-bottom-right-radius:4px;}' +
-		'.mo-ai-row.user .mo-ai-bub a{color:#fff;}' +
-		'.mo-ai-typing span{display:inline-block;width:6px;height:6px;margin:0 1px;border-radius:50%;background:#c8a25f;animation:mo-ai-blink 1.2s infinite both;}' +
-		'.mo-ai-typing span:nth-child(2){animation-delay:.2s;}.mo-ai-typing span:nth-child(3){animation-delay:.4s;}' +
+		'#mo-ai-panel .mo-ai-head{background:#fff;color:#1d2327;padding:13px 16px;display:flex;align-items:center;gap:9px;' +
+		'border-bottom:2px solid;border-image:linear-gradient(90deg,#f97316,rgba(249,115,22,0)) 1;}' +
+		'#mo-ai-panel .mo-ai-dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.25);}' +
+		'#mo-ai-panel .mo-ai-head b{font-size:15px;font-weight:700;}' +
+		'#mo-ai-panel .mo-ai-beta{font-size:11px;color:#8a8f94;font-weight:400;}' +
+		'#mo-ai-panel .mo-ai-clear{margin-left:auto;background:#f0f0f1;border:0;color:#50575e;border-radius:8px;padding:4px 9px;font-size:12px;cursor:pointer;box-shadow:none;}' +
+		'#mo-ai-panel .mo-ai-clear:hover{background:#e2e4e7;}' +
+		'#mo-ai-panel .mo-ai-msgs{flex:1;overflow-y:auto;padding:14px;background:#f6f7f7;font-size:13.5px;line-height:1.6;}' +
+		'#mo-ai-panel .mo-ai-row{margin:10px 0;display:flex;gap:8px;align-items:flex-end;}' +
+		'#mo-ai-panel .mo-ai-row.user{justify-content:flex-end;}' +
+		'#mo-ai-panel .mo-ai-av{width:26px;height:26px;border-radius:50%;flex:0 0 26px;display:flex;align-items:center;justify-content:center;' +
+		'background:#f97316;color:#fff;font-size:13px;}' +
+		'#mo-ai-panel .mo-ai-bub{max-width:75%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;word-break:break-word;}' +
+		'#mo-ai-panel .mo-ai-bub a{color:#c2410c;text-decoration:underline;}' +
+		'#mo-ai-panel .mo-ai-row.bot .mo-ai-bub{background:#fff;border:1px solid #e2e4e7;color:#1d2327;border-bottom-left-radius:4px;}' +
+		'#mo-ai-panel .mo-ai-row.user .mo-ai-bub{background:#1d2327;color:#fff;border-bottom-right-radius:4px;}' +
+		'#mo-ai-panel .mo-ai-row.user .mo-ai-bub a{color:#fde68a;}' +
+		'#mo-ai-panel .mo-ai-typing span{display:inline-block;width:6px;height:6px;margin:0 1px;border-radius:50%;background:#b9bcc0;animation:mo-ai-blink 1.2s infinite both;}' +
+		'#mo-ai-panel .mo-ai-typing span:nth-child(2){animation-delay:.2s;}#mo-ai-panel .mo-ai-typing span:nth-child(3){animation-delay:.4s;}' +
 		'@keyframes mo-ai-blink{0%,80%,100%{opacity:.25;}40%{opacity:1;}}' +
-		'.mo-ai-chips{padding:0 14px 8px;display:flex;flex-wrap:wrap;gap:6px;background:#fbf8f3;}' +
-		'.mo-ai-chip{background:#fff;border:1px solid #e7c48a;color:#b45309;border-radius:14px;padding:5px 11px;font-size:12.5px;cursor:pointer;}' +
-		'.mo-ai-chip:hover{background:#fef6e7;}' +
-		'.mo-ai-foot{display:flex;gap:8px;padding:10px;border-top:1px solid #ece2d2;background:#fff;}' +
-		'.mo-ai-input{flex:1;border:1px solid #d8c39a;border-radius:20px;padding:9px 14px;font-size:13.5px;outline:none;}' +
-		'.mo-ai-input:focus{border-color:#d97706;box-shadow:0 0 0 2px rgba(245,158,11,.2);}' +
-		'.mo-ai-send{background:#d97706;color:#fff;border:0;border-radius:50%;width:38px;height:38px;flex:0 0 38px;cursor:pointer;font-size:16px;}' +
-		'.mo-ai-send:hover{background:#b45309;}.mo-ai-send:disabled{opacity:.5;cursor:default;}';
+		'#mo-ai-panel .mo-ai-chips{padding:0 14px 8px;display:flex;flex-wrap:wrap;gap:6px;background:#f6f7f7;}' +
+		'#mo-ai-panel .mo-ai-chip{background:#fff;border:1px solid #f0c79a;color:#c2410c;border-radius:14px;padding:5px 11px;font-size:12.5px;cursor:pointer;box-shadow:none;}' +
+		'#mo-ai-panel .mo-ai-chip:hover{background:#fff7ed;}' +
+		'#mo-ai-panel .mo-ai-foot{display:flex;gap:8px;padding:10px;border-top:1px solid #e2e4e7;background:#fff;}' +
+		'#mo-ai-panel .mo-ai-input{flex:1;border:1px solid #c3c4c7;border-radius:20px;padding:9px 14px;font-size:13.5px;outline:none;box-shadow:none;background:#fff;-webkit-appearance:none;appearance:none;min-height:0;}' +
+		'#mo-ai-panel .mo-ai-input:focus{border-color:#f97316;box-shadow:0 0 0 2px rgba(249,115,22,.15);outline:none;}' +
+		'#mo-ai-panel .mo-ai-send{background:#1d2327;color:#fff;border:0;border-radius:50%;width:38px;height:38px;flex:0 0 38px;cursor:pointer;font-size:16px;box-shadow:none;}' +
+		'#mo-ai-panel .mo-ai-send:hover{background:#2c3338;}#mo-ai-panel .mo-ai-send:disabled{opacity:.5;cursor:default;}';
 	document.head.appendChild( style );
 
 	function esc( s ) {
@@ -84,7 +85,7 @@
 	var busy = false;
 	var started = false;
 
-	// 行內處理:**粗體** 與 http(s) 連結(XSS-safe:純文字用 textNode、href 僅限 https?://)。
+	// 行內處理:**粗體** 與 http(s) 連結(XSS-safe:純文字用 textNode、href 僅限 https?://;同頁跳轉)。
 	function inline_into( parent, text ) {
 		var re = /(\*\*([^*]+)\*\*)|(https?:\/\/[^\s]+)/g;
 		var last = 0, m;
@@ -100,8 +101,6 @@
 				var a = document.createElement( 'a' );
 				a.href = m[ 3 ];
 				a.textContent = m[ 3 ];
-				a.target = '_blank';
-				a.rel = 'noopener noreferrer';
 				parent.appendChild( a );
 			}
 			last = m.index + m[ 0 ].length;
