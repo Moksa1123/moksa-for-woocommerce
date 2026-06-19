@@ -34,14 +34,13 @@ final class PrintProxy {
 		if ( '' === $method_id ) {
 			return $actions;
 		}
-		// unified records list 或 legacy single ShipTradeNo 任一存在即可
 		$has_records = ! empty( CreateOrderUnified::get_records( $order ) )
 			|| '' !== (string) $order->get_meta( OrderMeta::ShipTradeNo );
 		if ( ! $has_records ) {
 			return $actions;
 		}
 
-		$url = wp_nonce_url(
+		$url                               = wp_nonce_url(
 			admin_url( 'admin-post.php?action=' . self::ACTION_QUICK . '&order_id=' . $order->get_id() ),
 			self::NONCE_ACTION_QUICK . '_' . $order->get_id()
 		);
@@ -97,7 +96,6 @@ CSS;
 			wp_die( esc_html__( '找不到訂單。', 'mo-ectools' ), '', 404 );
 		}
 
-		// 偵測 ShipType（從 records 第一筆或 legacy meta 推）
 		$ship_type = '';
 		$records   = CreateOrderUnified::get_records( $order );
 		if ( ! empty( $records ) ) {
@@ -106,7 +104,6 @@ CSS;
 			$ship_type = (string) $order->get_meta( OrderMeta::ShipType );
 		}
 
-		// 直接 reuse BatchPrint::cvs/home — 已支援 records list 多筆
 		$forms = ( ShipType::SEVEN === $ship_type )
 			? BatchPrint::cvs( [ $order_id ] )
 			: BatchPrint::home( [ $order_id ] );

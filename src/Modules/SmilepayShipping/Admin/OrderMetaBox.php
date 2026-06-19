@@ -42,23 +42,27 @@ final class OrderMetaBox {
 		if ( ! empty( $existing ) ) {
 			$force = isset( $_POST['force'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['force'] ) );
 			if ( ! $force ) {
-				wp_send_json_error( [
-					'code'    => 'existing',
-					'message' => __( '此訂單已有物流單記錄。系統只會為「尚未建立的溫層」補建，已建立的不會重複下單。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
-				] );
+				wp_send_json_error(
+					[
+						'code'    => 'existing',
+						'message' => __( '此訂單已有物流單記錄。系統只會為「尚未建立的溫層」補建，已建立的不會重複下單。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
+					]
+				);
 			}
 		}
 
 		$result = CreateOrder::run( $order );
 		if ( $result['ok'] ) {
-			wp_send_json_success( [
-				'message' => sprintf(
-					/* translators: 1: smseid 2: paymentno or tracknum */
-					__( '速買配物流單建立成功（smseid=%1$s 編號=%2$s）', 'mo-ectools' ),
-					$result['smseid'] ?? '-',
-					$result['payment_no'] ?? $result['track_num'] ?? '-'
-				),
-			] );
+			wp_send_json_success(
+				[
+					'message' => sprintf(
+						/* translators: 1: smseid 2: paymentno or tracknum */
+						__( '速買配物流單建立成功（smseid=%1$s 編號=%2$s）', 'mo-ectools' ),
+						$result['smseid'] ?? '-',
+						$result['payment_no'] ?? $result['track_num'] ?? '-'
+					),
+				]
+			);
 		}
 		wp_send_json_error( [ 'message' => $result['message'] ?? __( '未知錯誤', 'mo-ectools' ) ] );
 	}
@@ -86,21 +90,22 @@ final class OrderMetaBox {
 
 			<?php if ( ! empty( $records ) ) : ?>
 				<div class="moksafowo-smilepay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
-					<?php foreach ( $records as $r ) :
-						$smseid     = (string) ( $r['smseid'] ?? '' );
-						$pay_no     = (string) ( $r['payment_no'] ?? '' );
-						$track_num  = (string) ( $r['track_num'] ?? '' );
-						$method_id  = (string) ( $r['method_id'] ?? '' );
-						$temp       = isset( $r['temp'] ) ? (int) $r['temp'] : 0;
-						$created_at = (string) ( $r['created_at'] ?? '' );
-						$status_msg = (string) ( $r['status_msg'] ?? '' );
-						$temp_label = $temp ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp ) : '';
+					<?php
+					foreach ( $records as $r ) :
+						$smseid          = (string) ( $r['smseid'] ?? '' );
+						$pay_no          = (string) ( $r['payment_no'] ?? '' );
+						$track_num       = (string) ( $r['track_num'] ?? '' );
+						$method_id       = (string) ( $r['method_id'] ?? '' );
+						$temp            = isset( $r['temp'] ) ? (int) $r['temp'] : 0;
+						$created_at      = (string) ( $r['created_at'] ?? '' );
+						$status_msg      = (string) ( $r['status_msg'] ?? '' );
+						$temp_label      = $temp ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp ) : '';
 						$temp_pill_color = match ( $temp ) {
 							2       => [ '#dbeafe', '#1e40af' ],
 							3       => [ '#ede9fe', '#6d28d9' ],
 							default => [ '#e5e7eb', '#374151' ],
 						};
-					?>
+						?>
 					<div style="background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;padding:10px 12px;font-size:12px;">
 						<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
 							<?php if ( '' !== $smseid ) : ?>

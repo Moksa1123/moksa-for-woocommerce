@@ -10,17 +10,23 @@ defined( 'ABSPATH' ) || exit;
 
 final class Issue {
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		// idempotent
 		$existing = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_NUMBER );
 		if ( '' !== $existing ) {
-			return [ 'ok' => false, 'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ),
+			];
 		}
 
 		$type = (string) $order->get_meta( Keys::INVOICE_TYPE );
 		if ( '' === $type ) {
-			return [ 'ok' => false, 'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ),
+			];
 		}
 
 		$args = self::build_args( $order );
@@ -29,13 +35,21 @@ final class Issue {
 			$order->update_meta_data( Keys::SMILEPAY_INVOICE_NUMBER, 'zero' );
 			$order->add_order_note( __( '訂單金額為 0，不開立 SmilePay 發票。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => true, 'message' => __( '訂單金額為 0，未開立。', 'mo-ectools' ), 'invoice_number' => 'zero' ];
+			return [
+				'ok'             => true,
+				'message'        => __( '訂單金額為 0，未開立。', 'mo-ectools' ),
+				'invoice_number' => 'zero',
+			];
 		}
 		if ( (int) $args['AllAmount'] < 0 ) {
 			$order->update_meta_data( Keys::SMILEPAY_INVOICE_NUMBER, 'negative' );
 			$order->add_order_note( __( '訂單金額為負，無法開立 SmilePay 發票。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => false, 'message' => __( '訂單金額為負，無法開立。', 'mo-ectools' ), 'invoice_number' => 'negative' ];
+			return [
+				'ok'             => false,
+				'message'        => __( '訂單金額為負，無法開立。', 'mo-ectools' ),
+				'invoice_number' => 'negative',
+			];
 		}
 
 		// implode array fields
@@ -45,7 +59,13 @@ final class Issue {
 			}
 		}
 
-		Helper::log( 'issue request', [ 'order_id' => $order->get_id(), 'order_id_str' => $args['orderid'] ] );
+		Helper::log(
+			'issue request',
+			[
+				'order_id'     => $order->get_id(),
+				'order_id_str' => $args['orderid'],
+			]
+		);
 
 		$result = Helper::post( Helper::PATH_ISSUE, $args );
 
@@ -58,10 +78,13 @@ final class Issue {
 			);
 			$order->add_order_note( $msg );
 			$order->save();
-			return [ 'ok' => false, 'message' => $msg ];
+			return [
+				'ok'      => false,
+				'message' => $msg,
+			];
 		}
 
-		$data = $result['data'] ?? [];
+		$data       = $result['data'] ?? [];
 		$invoice_no = (string) ( $data['InvoiceNumber'] ?? '' );
 		$random     = (string) ( $data['RandomNumber'] ?? '' );
 		$inv_date   = (string) ( $data['InvoiceDate'] ?? '' );
@@ -70,7 +93,10 @@ final class Issue {
 		if ( '' === $invoice_no ) {
 			$order->add_order_note( __( 'SmilePay 回應 Status=0 但沒帶 InvoiceNumber，請檢查 SmilePay 後台。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => false, 'message' => 'no invoice number returned' ];
+			return [
+				'ok'      => false,
+				'message' => 'no invoice number returned',
+			];
 		}
 
 		// 組 issue_at = InvoiceDate + InvoiceTime
@@ -98,16 +124,22 @@ final class Issue {
 		$order->update_meta_data( Keys::SMILEPAY_INVOICE_ORDER_ID, (string) $args['orderid'] );
 		$order->delete_meta_data( Keys::SMILEPAY_INVOICE_SCHEDULED_AT );
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: invoice number, 2: random number, 3: create time */
-			__( 'SmilePay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'mo-ectools' ),
-			$invoice_no,
-			$random,
-			$issue_at
-		) );
+				__( 'SmilePay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'mo-ectools' ),
+				$invoice_no,
+				$random,
+				$issue_at
+			)
+		);
 		$order->save();
 
-		return [ 'ok' => true, 'message' => $invoice_no, 'invoice_number' => $invoice_no ];
+		return [
+			'ok'             => true,
+			'message'        => $invoice_no,
+			'invoice_number' => $invoice_no,
+		];
 	}
 
 	private static function build_args( \WC_Order $order ): array {
@@ -138,14 +170,14 @@ final class Issue {
 			'Description'        => [],
 			'Quantity'           => [],
 			'UnitPrice'          => [],
-			'Unit'                => [],
-			'Amount'              => [],
-			'AllAmount'           => $total,
+			'Unit'               => [],
+			'Amount'             => [],
+			'AllAmount'          => $total,
 
-			'Name'                => $buyer_name,
-			'Address'             => $buyer_address,
-			'Phone'               => $order->get_billing_phone(),
-			'Email'               => $order->get_billing_email(),
+			'Name'               => $buyer_name,
+			'Address'            => $buyer_address,
+			'Phone'              => $order->get_billing_phone(),
+			'Email'              => $order->get_billing_email(),
 		];
 
 		$type    = (string) $order->get_meta( Keys::INVOICE_TYPE );
@@ -188,11 +220,11 @@ final class Issue {
 		// 商品逐項
 		$total_refunded = (float) $order->get_total_refunded();
 		foreach ( $order->get_items( [ 'line_item' ] ) as $item ) {
-			$item_total    = (float) $item->get_total();
-			$item_refunded = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
+			$item_total      = (float) $item->get_total();
+			$item_refunded   = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
 			$total_refunded -= $item_refunded;
-			$line_total     = $item_total - $item_refunded;
-			$qty            = $item->get_quantity() + $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
+			$line_total      = $item_total - $item_refunded;
+			$qty             = $item->get_quantity() + $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
 			if ( 0.0 === $line_total && 0 === $qty ) {
 				continue;
 			}
@@ -202,7 +234,7 @@ final class Issue {
 		}
 
 		// 運費
-		$shipping_fee = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
+		$shipping_fee    = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
 		$total_refunded -= (float) $order->get_total_shipping_refunded();
 		if ( 0.0 !== $shipping_fee ) {
 			$args['Description'][] = __( '運費', 'mo-ectools' );
@@ -218,9 +250,9 @@ final class Issue {
 
 		// 重算 UnitPrice / Amount
 		foreach ( $args['Description'] as $i => $name ) {
-			$amt   = (float) $args['Amount'][ $i ];
-			$count = (float) $args['Quantity'][ $i ];
-			$price = $count > 0 ? round( $amt / $count, 6 ) : 0;
+			$amt                     = (float) $args['Amount'][ $i ];
+			$count                   = (float) $args['Quantity'][ $i ];
+			$price                   = $count > 0 ? round( $amt / $count, 6 ) : 0;
 			$args['UnitPrice'][ $i ] = (string) $price;
 			$args['Amount'][ $i ]    = (string) (int) round( $count * $price, 0 );
 			$args['Quantity'][ $i ]  = (string) $count;

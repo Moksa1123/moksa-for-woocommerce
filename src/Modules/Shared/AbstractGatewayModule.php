@@ -11,10 +11,10 @@ defined( 'ABSPATH' ) || exit;
 
 abstract class AbstractGatewayModule extends AbstractModule {
 
-	
+
 	abstract public static function gateway_map(): array;
 
-	
+
 	abstract protected static function blocks_method_class(): string;
 
 	public function category(): string {
@@ -56,7 +56,7 @@ abstract class AbstractGatewayModule extends AbstractModule {
 
 	protected function boot_extras(): void {}
 
-	
+
 	public static function should_register_gateway( string $id, ?string $mode = null, ?array $allowlist = null ): bool {
 		$slug    = static::provider_slug();
 		$unified = static::unified_gateway_id();
@@ -109,15 +109,15 @@ abstract class AbstractGatewayModule extends AbstractModule {
 		}
 	}
 
-	
+
 	protected static function fetch_gateway_options(): array {
 		$slug      = static::provider_slug();
 		$mode      = static::uses_display_mode() ? (string) get_option( 'moksafowo_' . $slug . '_display_mode', 'multi' ) : null;
-		$allowlist = static::uses_allowlist()    ? (array)  get_option( 'moksafowo_' . $slug . '_enabled_methods', [] ) : null;
+		$allowlist = static::uses_allowlist() ? (array) get_option( 'moksafowo_' . $slug . '_enabled_methods', [] ) : null;
 		return [ $mode, $allowlist ];
 	}
 
-	
+
 	protected static function provider_slug(): string {
 		return ( new static() )->slug();
 	}

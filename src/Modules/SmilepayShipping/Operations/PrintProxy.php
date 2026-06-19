@@ -78,7 +78,7 @@ final class PrintProxy {
 			return $actions;
 		}
 
-		$url = wp_nonce_url(
+		$url                                 = wp_nonce_url(
 			admin_url( 'admin-post.php?action=' . self::ACTION_QUICK . '&order_id=' . $order->get_id() ),
 			self::NONCE_ACTION_QUICK . '_' . $order->get_id()
 		);
@@ -163,7 +163,13 @@ CSS;
 
 		$forms_html = '';
 		foreach ( $smseids as $idx => $smseid ) {
-			$form_data   = self::relay_form_data( 'tcat', [ 'Smseid' => $smseid, 'print_format' => '1' ] );
+			$form_data   = self::relay_form_data(
+				'tcat',
+				[
+					'Smseid'       => $smseid,
+					'print_format' => '1',
+				]
+			);
 			$forms_html .= '<form id="f' . (int) $idx . '" method="post" action="' . esc_url( $relay_url ) . '"' . ( $idx > 0 ? ' target="_blank"' : '' ) . '>';
 			foreach ( $form_data as $k => $v ) {
 				$forms_html .= '<input type="hidden" name="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '">';
@@ -223,10 +229,13 @@ CSS;
 			wp_die( esc_html__( '缺少物流單號。', 'mo-ectools' ), '', 400 );
 		}
 
-		$response = wp_remote_post( $endpoint, [
-			'timeout' => 40,
-			'body'    => $body,
-		] );
+		$response = wp_remote_post(
+			$endpoint,
+			[
+				'timeout' => 40,
+				'body'    => $body,
+			]
+		);
 
 		if ( is_wp_error( $response ) ) {
 			Helper::log( 'print relay wp_error', [ 'msg' => $response->get_error_message() ] );
@@ -241,10 +250,35 @@ CSS;
 		}
 
 		header( 'Content-Type: text/html; charset=utf-8' );
-		// 速買配 print server 回傳標籤 HTML — 過 wp_kses 白名單剔除 active content，
-		// 列印觸發改走官方 inline script API（與 EcpayShipping PrintProxy 一致）。
-		echo wp_kses( $html, Interstitial::label_allowlist() );
-		wp_print_inline_script_tag( 'window.addEventListener("load",function(){window.print();});' );
+		// 速買配 print server 回應有兩種:① 直接標籤 HTML ② 自動轉址中繼頁(隱藏表單 + submit
+		// script)。wp_kses 會剔除 active content,故額外保留 form/input 讓轉址表單存活,被剔除的
+		// 自動 submit 由我們補回:有轉址表單就送出(→ 真標籤頁自行列印),沒有就直接列印。
+		// (與 EcpayShipping PrintProxy 一致 — 避免卡在中繼頁印不出標籤。)
+		$allow          = Interstitial::label_allowlist();
+		$allow['form']  = [
+			'method'         => true,
+			'id'             => true,
+			'name'           => true,
+			'action'         => true,
+			'target'         => true,
+			'enctype'        => true,
+			'accept-charset' => true,
+		];
+		$allow['input'] = [
+			'type'  => true,
+			'name'  => true,
+			'value' => true,
+			'id'    => true,
+		];
+		echo wp_kses( $html, $allow );
+		wp_print_inline_script_tag(
+			'window.addEventListener("load",function(){'
+			. 'var f=document.forms["PostForm"]||document.getElementById("PostForm");'
+			. 'if(!f){var fs=document.querySelectorAll("form");f=fs.length?fs[fs.length-1]:null;}'
+			. 'if(f&&f.querySelector("input")){try{f.submit();return;}catch(e){}}'
+			. 'window.print();'
+			. '});'
+		);
 		exit;
 	}
 }

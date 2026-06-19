@@ -40,7 +40,6 @@ final class IpnHandler {
 			exit;
 		}
 
-		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
 		$decoded = map_deep( $decoded, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		Helper::log( 'IPN decoded', [ 'data' => $decoded ] );
@@ -68,7 +67,6 @@ final class IpnHandler {
 			exit;
 		}
 
-		// 寫共用 meta — TradeNo / PaymentType / PaidAt
 		$trade_no     = (string) ( $result['TradeNo'] ?? '' );
 		$payment_type = (string) ( $result['PaymentType'] ?? '' );
 		$pay_time     = (string) ( $result['PayTime'] ?? '' );
@@ -78,14 +76,22 @@ final class IpnHandler {
 
 		// CheckCode 雙重驗證 (per NDNF 1.2.2 4.1.5) — 只有 SUCCESS + Result 帶 CheckCode 才驗
 		if ( 'SUCCESS' === $status && '' !== $check_code && '' !== $trade_no ) {
-			$expected_cc = Helper::generate_notify_check_code( [
-				'Amt'             => $amt,
-				'MerchantID'      => Helper::merchant_id(),
-				'MerchantOrderNo' => $mtn,
-				'TradeNo'         => $trade_no,
-			] );
+			$expected_cc = Helper::generate_notify_check_code(
+				[
+					'Amt'             => $amt,
+					'MerchantID'      => Helper::merchant_id(),
+					'MerchantOrderNo' => $mtn,
+					'TradeNo'         => $trade_no,
+				]
+			);
 			if ( ! hash_equals( $expected_cc, strtoupper( $check_code ) ) ) {
-				Helper::log( 'IPN CheckCode mismatch — possible forgery', [ 'mtn' => $mtn, 'trade_no' => $trade_no ] );
+				Helper::log(
+					'IPN CheckCode mismatch — possible forgery',
+					[
+						'mtn'      => $mtn,
+						'trade_no' => $trade_no,
+					]
+				);
 				status_header( 400 );
 				echo 'CheckCode mismatch';
 				exit;
@@ -106,36 +112,38 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::NEWEBPAY_CARD_LAST4, $card4no );
 		}
 
-		// 各 PaymentType 額外 meta（CVS / VACC / BARCODE）
 		self::write_extra_meta( $order, $payment_type, $result );
-
-		// 若顧客選 NewebPay CVS 物流，IPN 可能附帶取貨門市資訊（藍新整合付款 + 物流時）
 		self::maybe_write_shipping_store_meta( $order, $result );
 
-		// SUCCESS / CUSTOM 兩種正常結果，其他算失敗
 		if ( 'SUCCESS' === $status ) {
 			$order->payment_complete( $trade_no );
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: payment type, 2: trade no */
-				__( '藍新付款完成 — %1$s（交易編號 %2$s）', 'mo-ectools' ),
-				self::payment_type_label( $payment_type ),
-				$trade_no
-			) );
+					__( '藍新付款完成 — %1$s（交易編號 %2$s）', 'mo-ectools' ),
+					self::payment_type_label( $payment_type ),
+					$trade_no
+				)
+			);
 		} elseif ( in_array( $status, [ 'CUSTOM', 'GETTING' ], true ) ) {
-			// CVS / VACC / BARCODE 取得繳費資訊但尚未付款 — 訂單留 on-hold 等顧客付款
-			$order->update_status( 'on-hold', sprintf(
+			$order->update_status(
+				'on-hold',
+				sprintf(
 				/* translators: 1: payment type, 2: status */
-				__( '藍新已產生 %1$s 付款資訊，等待顧客付款（狀態 %2$s）', 'mo-ectools' ),
-				self::payment_type_label( $payment_type ),
-				$status
-			) );
+					__( '藍新已產生 %1$s 付款資訊，等待顧客付款（狀態 %2$s）', 'mo-ectools' ),
+					self::payment_type_label( $payment_type ),
+					$status
+				)
+			);
 		} else {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: status, 2: message */
-				__( '藍新付款失敗：%1$s（%2$s）', 'mo-ectools' ),
-				$status,
-				$message
-			) );
+					__( '藍新付款失敗：%1$s（%2$s）', 'mo-ectools' ),
+					$status,
+					$message
+				)
+			);
 			$order->update_status( 'failed' );
 		}
 
@@ -179,7 +187,6 @@ final class IpnHandler {
 	}
 
 	private static function maybe_write_shipping_store_meta( \WC_Order $order, array $result ): void {
-		// 只有訂單有 NewebPay 物流方式才處理 — 避免污染 ECPay 物流訂單
 		$has_newebpay_shipping = false;
 		foreach ( $order->get_shipping_methods() as $m ) {
 			if ( str_starts_with( (string) $m->get_method_id(), 'moksafowo_newebpay_shipping_' ) ) {
@@ -217,5 +224,4 @@ final class IpnHandler {
 	private static function payment_type_label( string $type ): string {
 		return \MoksaWeb\Mowc\Modules\Newebpay\PaymentTypeCatalog::label( $type, $type );
 	}
-
 }

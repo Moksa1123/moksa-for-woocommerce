@@ -103,19 +103,25 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function check_value( string $post_data ): string {
-		return strtoupper( hash(
-			'sha256',
-			'HashKey=' . self::hash_key() . '&' . $post_data . '&HashIV=' . self::hash_iv()
-		) );
+		return strtoupper(
+			hash(
+				'sha256',
+				'HashKey=' . self::hash_key() . '&' . $post_data . '&HashIV=' . self::hash_iv()
+			)
+		);
 	}
 
-	
+
 	public static function post( string $path, array $args ) {
 		try {
 			$post_data = self::encrypt_post_data( $args );
 		} catch ( \Throwable $e ) {
 			self::log( 'encrypt failed', [ 'msg' => $e->getMessage() ] );
-			return [ 'ok' => false, 'status' => 'ENCRYPT_FAIL', 'message' => $e->getMessage() ];
+			return [
+				'ok'      => false,
+				'status'  => 'ENCRYPT_FAIL',
+				'message' => $e->getMessage(),
+			];
 		}
 
 		$body = [
@@ -125,23 +131,39 @@ final class Helper extends AbstractCredentialHelper {
 
 		$response = wp_safe_remote_post(
 			self::base_url() . $path,
-			[ 'timeout' => 30, 'body' => $body ]
+			[
+				'timeout' => 30,
+				'body'    => $body,
+			]
 		);
 		if ( is_wp_error( $response ) ) {
 			self::log( 'http error: ' . $response->get_error_message(), [ 'path' => $path ] );
-			return [ 'ok' => false, 'status' => 'HTTP_ERROR', 'message' => $response->get_error_message() ];
+			return [
+				'ok'      => false,
+				'status'  => 'HTTP_ERROR',
+				'message' => $response->get_error_message(),
+			];
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
-			/* translators: %d: HTTP response code */
-			return [ 'ok' => false, 'status' => 'HTTP_' . $code, 'message' => sprintf( __( 'ezPay 回傳 HTTP %d', 'mo-ectools' ), $code ) ];
+			return [
+				'ok'      => false,
+				'status'  => 'HTTP_' . $code,
+				/* translators: %d: HTTP response code */
+				'message' => sprintf( __( 'ezPay 回傳 HTTP %d', 'mo-ectools' ), $code ),
+			];
 		}
 
 		$raw    = (string) wp_remote_retrieve_body( $response );
 		$result = json_decode( $raw, true );
 		if ( ! is_array( $result ) ) {
-			return [ 'ok' => false, 'status' => 'PARSE_FAIL', 'message' => __( 'ezPay 回傳格式無法解析', 'mo-ectools' ), 'raw' => $raw ];
+			return [
+				'ok'      => false,
+				'status'  => 'PARSE_FAIL',
+				'message' => __( 'ezPay 回傳格式無法解析', 'mo-ectools' ),
+				'raw'     => $raw,
+			];
 		}
 
 		$status  = (string) ( $result['Status'] ?? '' );
@@ -150,11 +172,14 @@ final class Helper extends AbstractCredentialHelper {
 		// ezPay Result 是 JSON string（不是加密），直接 decode
 		$inner_decoded = '' !== $inner ? json_decode( $inner, true ) : null;
 
-		self::log( 'response', [
-			'path'    => $path,
-			'status'  => $status,
-			'message' => $message,
-		] );
+		self::log(
+			'response',
+			[
+				'path'    => $path,
+				'status'  => $status,
+				'message' => $message,
+			]
+		);
 
 		return [
 			'ok'      => 'SUCCESS' === $status,

@@ -34,11 +34,13 @@ final class Module extends AbstractModule {
 	}
 
 	public function tagline(): string {
-		return __( '需 WordPress 7.0 AI Client + 在「設定 → Connectors」設好 AI 金鑰', 'mo-ectools' );
+		return __( '需 WordPress 7.0 並設定 AI 金鑰', 'mo-ectools' );
 	}
 
 	public function boot(): void {
-		// WP 7.0 才有 AI Client;不在就整個不掛,不 fatal。
+		if ( 'yes' !== get_option( 'moksafowo_ai_enabled', 'no' ) ) {
+			return;
+		}
 		if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
 			return;
 		}
@@ -54,6 +56,7 @@ final class Module extends AbstractModule {
 		if ( ! current_user_can( Config::CAP ) ) {
 			return;
 		}
+		wp_enqueue_style( 'dashicons' );
 		$rel  = 'src/Modules/AiAssistant/assets/js/floating-chat.js';
 		$path = MOKSAFOWO_PLUGIN_DIR . $rel;
 		$ver  = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
@@ -64,22 +67,24 @@ final class Module extends AbstractModule {
 			$ver,
 			true
 		);
+		$greeting = (string) get_option( 'moksafowo_ai_greeting', __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'mo-ectools' ) );
+		$ex_raw   = (string) get_option( 'moksafowo_ai_examples', __( '待出貨有幾筆?,各狀態訂單數量', 'mo-ectools' ) );
+		$examples = array_values( array_filter( array_map( 'trim', explode( ',', $ex_raw ) ) ) );
+
 		wp_localize_script(
 			'moksafowo-ai-chat',
 			'moksafowoAi',
 			[
-				'name'         => Config::NAME,
-				'greeting'     => __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'mo-ectools' ),
-				'placeholder'  => __( '例如:待出貨有幾筆?', 'mo-ectools' ),
-				'examples'     => [
-					__( '待出貨有幾筆?', 'mo-ectools' ),
-					__( '各狀態訂單數量', 'mo-ectools' ),
-				],
-				'sendLabel'    => __( '送出', 'mo-ectools' ),
-				'thinking'     => __( '查詢中', 'mo-ectools' ),
-				'clearLabel'   => __( '清除', 'mo-ectools' ),
-				'errorPrefix'  => __( '發生錯誤', 'mo-ectools' ),
-				'emptyReply'   => __( '（無回覆）', 'mo-ectools' ),
+				'name'        => Config::NAME,
+				'userId'      => get_current_user_id(),
+				'greeting'    => $greeting,
+				'placeholder' => __( '例如:待出貨有幾筆?', 'mo-ectools' ),
+				'examples'    => $examples,
+				'sendLabel'   => __( '送出', 'mo-ectools' ),
+				'thinking'    => __( '查詢中', 'mo-ectools' ),
+				'clearLabel'  => __( '清除', 'mo-ectools' ),
+				'errorPrefix' => __( '發生錯誤', 'mo-ectools' ),
+				'emptyReply'  => __( '（無回覆）', 'mo-ectools' ),
 			]
 		);
 	}

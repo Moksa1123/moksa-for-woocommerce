@@ -68,19 +68,19 @@ final class LinePay {
 	public function ajax_confirm_payment(): void {
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'mo-ectools' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( '權限不足。', 'mo-ectools' ) ), 403 );
 		}
 
 		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'moksafowo-linepay-confirm' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Unsecure AJAX call', 'mo-ectools' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( '安全驗證失敗，請重新整理後再試。', 'mo-ectools' ) ), 403 );
 		}
 
 		$order_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( 'No such order id', 'mo-ectools' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( '找不到此訂單。', 'mo-ectools' ) ), 404 );
 		}
 
 		$gateway = new Credit();
@@ -92,7 +92,7 @@ final class LinePay {
 				wp_send_json(
 					array(
 						'success' => true,
-						'message' => __( 'Confirm succeed', 'mo-ectools' ),
+						'message' => __( '確認付款成功。', 'mo-ectools' ),
 					)
 				);
 			}
@@ -117,6 +117,9 @@ final class LinePay {
 	}
 
 	public function enqueue_scripts(): void {
+		if ( ! is_checkout() && ! is_cart() && ! is_wc_endpoint_url( 'view-order' ) && ! is_wc_endpoint_url( 'order-received' ) ) {
+			return;
+		}
 		wp_enqueue_style( 'moksafowo-linepay-public', MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/css/moksafowo-linepay-public.css', array(), MOKSAFOWO_VERSION );
 	}
 
@@ -150,9 +153,8 @@ final class LinePay {
 		Logger::{$method}( 'linepay', $msg );
 	}
 
-	public function __construct() {
-		// do nothing.
-	}
+	public function __construct() {}
+
 
 	public static function get_instance(): self {
 		if ( null === self::$instance ) {

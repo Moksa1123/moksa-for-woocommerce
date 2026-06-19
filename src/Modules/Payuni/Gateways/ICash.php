@@ -12,7 +12,7 @@ class ICash extends GatewayBase {
 
 		$this->id                 = self::GATEWAY_ID;
 		$this->method_title       = __( 'PAYUNi ICash Pay 愛金卡', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi UPP — ICash Pay 愛金卡', 'mo-ectools' );
+		$this->method_description = __( '使用 ICash Pay 愛金卡付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array( 'products' );
 
 		$this->init_form_fields();

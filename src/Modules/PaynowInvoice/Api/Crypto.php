@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Crypto {
 
-	
+
 	public static function encode( string $plain, string $password ): string {
 		$key = '1234567890' . $password . '123456';
 		// 24-byte key 為 3DES 需要長度；不足或超過會被 openssl 拒
@@ -19,9 +19,9 @@ final class Crypto {
 		}
 
 		// Zero-pad 至 8-byte 邊界
-		$pad_len  = 8 - ( strlen( $plain ) % 8 );
-		$pad_len  = 8 === $pad_len ? 0 : $pad_len;
-		$padded   = $plain . str_repeat( "\0", $pad_len );
+		$pad_len = 8 - ( strlen( $plain ) % 8 );
+		$pad_len = 8 === $pad_len ? 0 : $pad_len;
+		$padded  = $plain . str_repeat( "\0", $pad_len );
 
 		$cipher = openssl_encrypt(
 			$padded,

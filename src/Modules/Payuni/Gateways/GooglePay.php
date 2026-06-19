@@ -17,8 +17,8 @@ class GooglePay extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi Google Pay Payment', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi Google Pay Payment', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi Google Pay', 'mo-ectools' );
+		$this->method_description = __( '使用 Google Pay 快速付款，需 Android 或 Chrome 瀏覽器，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array(
 			'products',
 			'refunds',
@@ -56,18 +56,18 @@ class GooglePay extends GatewayBase {
 
 	public static function get_payment_order_metas() {
 		return array(
-			OrderMeta::CREDIT_AUTH_TYPE   => __( 'Auth Type', 'mo-ectools' ),
-			OrderMeta::CREDIT_AUTH_DAY    => __( 'Auth Date', 'mo-ectools' ),
-			OrderMeta::CREDIT_AUTH_TIME   => __( 'Auth Time', 'mo-ectools' ),
-			OrderMeta::CREDIT_AUTH_CODE   => __( 'Bank Auth Code', 'mo-ectools' ),
-			OrderMeta::CREDIT_CARD_4NO    => __( 'Card Last 4', 'mo-ectools' ),
-			OrderMeta::CREDIT_BANK        => __( 'Issuer Bank', 'mo-ectools' ),
-			OrderMeta::CREDIT_LOCATION    => __( 'Foreign Card', 'mo-ectools' ),
-			OrderMeta::CREDIT_ECI         => __( '3D Secure ECI', 'mo-ectools' ),
-			OrderMeta::CREDIT_RED_AMT     => __( 'Bonus Redeem', 'mo-ectools' ),
-			OrderMeta::CREDIT_RED_NO      => __( 'Bonus No', 'mo-ectools' ),
-			OrderMeta::CREDIT_TOKEN_ID    => __( 'Token ID', 'mo-ectools' ),
-			OrderMeta::CREDIT_TOKEN_LIFE  => __( 'Token Life', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_TYPE  => __( '授權方式', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_DAY   => __( '授權日期', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_TIME  => __( '授權時間', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_CODE  => __( '銀行授權碼', 'mo-ectools' ),
+			OrderMeta::CREDIT_CARD_4NO   => __( '卡號末四碼', 'mo-ectools' ),
+			OrderMeta::CREDIT_BANK       => __( '發卡銀行', 'mo-ectools' ),
+			OrderMeta::CREDIT_LOCATION   => __( '境外卡', 'mo-ectools' ),
+			OrderMeta::CREDIT_ECI        => __( '3D 驗證 ECI', 'mo-ectools' ),
+			OrderMeta::CREDIT_RED_AMT    => __( '紅利折抵金額', 'mo-ectools' ),
+			OrderMeta::CREDIT_RED_NO     => __( '紅利折抵序號', 'mo-ectools' ),
+			OrderMeta::CREDIT_TOKEN_ID   => __( 'Token 編號', 'mo-ectools' ),
+			OrderMeta::CREDIT_TOKEN_LIFE => __( 'Token 有效期', 'mo-ectools' ),
 		);
 	}
 }

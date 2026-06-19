@@ -16,8 +16,8 @@ class Aftee extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi AFTEE Payment', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi AFTEE Payment', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi AFTEE 無卡分期', 'mo-ectools' );
+		$this->method_description = __( 'AFTEE 先享後付無卡分期，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array(
 			'products',
 		);
@@ -51,8 +51,8 @@ class Aftee extends GatewayBase {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::AFTEE_PAY_NO   => _x( 'Pay No', 'AFTEE', 'mo-ectools' ),
-			OrderMeta::AFTEE_PAY_TIME => __( 'Pay Time', 'mo-ectools' ),
+			OrderMeta::AFTEE_PAY_NO   => _x( '付款序號', 'AFTEE', 'mo-ectools' ),
+			OrderMeta::AFTEE_PAY_TIME => __( '付款時間', 'mo-ectools' ),
 		);
 
 		return $order_metas;

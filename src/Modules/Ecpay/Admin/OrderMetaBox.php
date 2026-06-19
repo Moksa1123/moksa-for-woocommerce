@@ -12,7 +12,6 @@ final class OrderMetaBox {
 
 	public static function init(): void {
 		OrderInfoLayout::boot();
-		// 三欄 footer：priority 10 = 金流（左）
 		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 10, 2 );
 	}
 
@@ -22,8 +21,8 @@ final class OrderMetaBox {
 			return $cards;
 		}
 
-		$trade_no   = (string) $order->get_meta( Keys::ECPAY_TRADE_NO );
-		$mtn        = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
+		$trade_no = (string) $order->get_meta( Keys::ECPAY_TRADE_NO );
+		$mtn      = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
 		if ( '' === $trade_no && '' === $mtn ) {
 			return $cards;
 		}
@@ -48,7 +47,6 @@ final class OrderMetaBox {
 			echo '<p><strong>' . esc_html__( '付款時間：', 'mo-ectools' ) . '</strong>' . esc_html( $pay_date ) . '</p>';
 		}
 
-		// 取號類付款資訊：ATM 虛擬帳號 / CVS 繳費代碼 / 條碼。
 		$atm_acct = (string) $order->get_meta( Keys::ECPAY_ATM_V_ACCOUNT );
 		$cvs_no   = (string) $order->get_meta( Keys::ECPAY_CVS_PAYMENT_NO );
 		$barcode1 = (string) $order->get_meta( Keys::ECPAY_BARCODE_1 );
@@ -71,7 +69,11 @@ final class OrderMetaBox {
 			}
 		} elseif ( '' !== $barcode1 ) {
 			$expire       = (string) $order->get_meta( Keys::ECPAY_BARCODE_EXPIRE_DATE );
-			$barcode_keys = [ 1 => Keys::ECPAY_BARCODE_1, 2 => Keys::ECPAY_BARCODE_2, 3 => Keys::ECPAY_BARCODE_3 ];
+			$barcode_keys = [
+				1 => Keys::ECPAY_BARCODE_1,
+				2 => Keys::ECPAY_BARCODE_2,
+				3 => Keys::ECPAY_BARCODE_3,
+			];
 			for ( $i = 1; $i <= 3; $i++ ) {
 				$bc = (string) $order->get_meta( $barcode_keys[ $i ] );
 				if ( '' !== $bc ) {
@@ -88,14 +90,13 @@ final class OrderMetaBox {
 			echo '<p style="color:#646970;font-size:11px;"><strong>狀態代碼：</strong>' . esc_html( $rtn_code ) . '</p>';
 		}
 
-		// 退款記錄 — WC 把退款存成子 order，iterate 顯示。給商家對帳用，避免要捲到上方訂單明細才看得到。
 		$refunds = $order->get_refunds();
 		if ( ! empty( $refunds ) ) {
-			$total      = (float) $order->get_total( 'edit' );  // 不含已退費，原始金額
-			$refunded   = (float) $order->get_total_refunded();
-			$net        = $total - $refunded;
-			$is_full    = abs( $net ) < 0.01;
-			$net_color  = $is_full ? '#d63638' : '#dba617';
+			$total     = (float) $order->get_total( 'edit' );  // 不含已退費，原始金額
+			$refunded  = (float) $order->get_total_refunded();
+			$net       = $total - $refunded;
+			$is_full   = abs( $net ) < 0.01;
+			$net_color = $is_full ? '#d63638' : '#dba617';
 			echo '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
 			echo '<p style="margin:0 0 4px;color:#646970;font-size:11px;text-transform:uppercase;letter-spacing:.4px;">' . esc_html__( '退款紀錄', 'mo-ectools' ) . '</p>';
 			foreach ( $refunds as $refund ) {
@@ -130,7 +131,6 @@ final class OrderMetaBox {
 			echo '</div>';
 		}
 
-		// 信用卡交易動作（查詢 / 請款 / 退刷 / 取消授權）— 附在金流資訊下方，僅綠界信用卡訂單顯示。
 		echo CreditLifecycleBox::lifecycle_html( $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML assembled in CreditLifecycleBox with esc_*.
 
 		$cards[] = [

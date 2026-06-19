@@ -66,8 +66,8 @@ final class Module extends AbstractModule {
 
 		if ( 'auto_cancel' === get_option( 'moksafowo_paynow_invoice_auto_cancel', 'manual' ) ) {
 			add_action( 'woocommerce_order_status_cancelled', [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_refunded',  [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_failed',    [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_refunded', [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_failed', [ Operations\AutoInvalid::class, 'schedule' ] );
 		}
 		add_action( Operations\AutoInvalid::HOOK, [ Operations\AutoInvalid::class, 'run' ], 10, 1 );
 	}
@@ -80,8 +80,8 @@ final class Module extends AbstractModule {
 		if ( $order->get_meta( Keys::PAYNOW_INVOICE_NUMBER ) ) {
 			return;
 		}
-		$provider           = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
-		$other_provider_on  = 'yes' === get_option( 'moksafowo_ezpay_invoice_enabled', 'no' )
+		$provider          = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
+		$other_provider_on = 'yes' === get_option( 'moksafowo_ezpay_invoice_enabled', 'no' )
 			|| 'yes' === get_option( 'moksafowo_ecpay_invoice_enabled', 'no' )
 			|| 'yes' === get_option( 'moksafowo_smilepay_invoice_enabled', 'no' );
 

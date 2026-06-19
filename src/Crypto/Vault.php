@@ -8,14 +8,13 @@ defined( 'ABSPATH' ) || exit;
 
 final class Vault {
 
-	private const PREFIX     = 'MOWPv1:';
-	private const IV_LEN     = 12;
-	private const TAG_LEN    = 16;
+	private const PREFIX  = 'MOWPv1:';
+	private const IV_LEN  = 12;
+	private const TAG_LEN = 16;
 
 	private static array $wrapped = [];
 
-	// ciphertext → plaintext memoize — 同 request 內同 option 多次 get_option 不重 decrypt
-	// （Payuni hashkey/hashiv 在 cart→thankyou 流程被讀數十次）
+	// memoize decrypt per-request — PAYUNi hashkey/hashiv read dozens of times in cart→thankyou flow
 	private static array $decrypted_cache = [];
 
 	public static function wrap_option( string $option_name ): void {
@@ -53,7 +52,7 @@ final class Vault {
 			return self::$decrypted_cache[ $value ];
 		}
 		try {
-			$pt = self::decrypt( $value );
+			$pt                              = self::decrypt( $value );
 			self::$decrypted_cache[ $value ] = $pt;
 			return $pt;
 		} catch ( \RuntimeException $e ) {
@@ -109,10 +108,10 @@ final class Vault {
 	}
 
 	private static function master_key(): string {
-		// MOKSAFOWO_VAULT_KEY is the current name; MOWP_VAULT_KEY kept as fallback for sites that set the legacy const.
+		// MOWP_VAULT_KEY kept as fallback for sites that defined the legacy constant before the rename.
 		$source = defined( 'MOKSAFOWO_VAULT_KEY' ) ? (string) MOKSAFOWO_VAULT_KEY
 			: ( defined( 'MOWP_VAULT_KEY' ) ? (string) MOWP_VAULT_KEY
-			: ( defined( 'AUTH_KEY' )       ? (string) AUTH_KEY
+			: ( defined( 'AUTH_KEY' ) ? (string) AUTH_KEY
 			: ( defined( 'SECURE_AUTH_KEY' ) ? (string) SECURE_AUTH_KEY
 			: '' ) ) );
 		if ( '' === $source ) {

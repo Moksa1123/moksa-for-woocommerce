@@ -18,20 +18,15 @@ final class Module {
 		Registrar::init();
 		BatchPrintAdminUI::init();
 		ShippingCardSection::init();
-		// [moksafowo_addfee] / [ry_addfee] shortcode — 給 cost formula 用
 		AddFee::init();
-		// Cart / 結帳頁顯示溫層拆解（透明顧客運費怎來的）
 		CartTempLabel::init();
-		// 商品溫層欄位（Simple / Variation）— admin UI 才需註冊
 		if ( is_admin() ) {
 			ProductTempField::init();
 		}
-		// CSV import / export hooks — 需在 WPCLI / cron / REST 也能 fire，所以脫離 admin guard
+		// CSV hooks 需在 WPCLI / cron / REST 也能 fire，脫離 admin guard
 		ProductTempField::init_csv_hooks();
 		add_filter( 'woocommerce_email_classes', [ __CLASS__, 'register_email_classes' ] );
-		// Email 模板裡 fire 的「貨態查詢」section（moksafowo_shipping_email_tracking_info action）
 		Emails\EmailTrackingSection::init();
-		// 共用 frontend assets — 各 Provider CustomerOrderView 用 wp_enqueue_*('moksafowo-shipping-card' / 'moksafowo-tracking-copy')
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'register_frontend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'register_admin_assets' ] );
 	}

@@ -1,10 +1,10 @@
 === Moksa for WooCommerce ===
 Contributors: moksa0923
 Tags: woocommerce, taiwan, payment, shipping, invoice
-Requires at least: 6.7
+Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.1.0
+Stable tag: 1.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -20,6 +20,10 @@ A Taiwan-focused WooCommerce extension. Toggleable modules cover ECPay (綠界),
 Enable only the providers you need from a single settings page — payment, shipping and invoice modules are fully independent and can be mixed in any combination.
 
 HPOS-native, Block Checkout-native, PHP 8.2+ strict-typed, GPLv3, no premium gating.
+
+= Moksa AI assistant (new in 1.3.0) =
+
+Built on the WordPress 7.0 AI Client, Moksa AI is an optional in-admin chat assistant that lets you run common store tasks in natural language: find orders by invoice / shipping / payment number, look up order details and counts, change order status (single or batch), add order notes, issue / void / allowance e-invoices, create and print shipping labels, and enable or disable modules, individual payment methods and invoice issuing methods. Every action that changes data first shows a summary and waits for your explicit confirmation before it runs. The assistant uses whichever AI provider you connect under Settings → Connectors — the plugin never handles your AI keys, refunds, or credentials.
 
 = Source =
 
@@ -68,12 +72,20 @@ These run when an invoice is issued for an order (immediately on payment, on com
 
 When a shipment has a tracking number, the order page shows a link to the carrier's own public tracking page (no data is sent by the plugin; the customer clicks the link): T-Cat 黑貓宅配 (t-cat.com.tw), 7-11 (eservice.7-11.com.tw), 7-11 via PAYUNi logistics (tracking.shopmore.com.tw), FamilyMart 全家 (fmec.famiport.com.tw), Hi-Life 萊爾富 (hilife.com.tw), OK Mart (ecservice.okmart.com.tw), Chunghwa Post 中華郵政 (postserv.post.gov.tw).
 
+= Moksa AI assistant (optional, admin-only) =
+
+When an administrator actively uses the in-admin Moksa AI assistant, the typed question and the store/order data needed to answer it (for example an order number, status, totals or invoice/shipping numbers) are sent to the AI provider you have connected in WordPress under **Settings → Connectors** — Anthropic, Google or OpenAI — through the WordPress 7.0 AI Client. This never happens automatically and only for the administrator using the assistant. The plugin does not store these conversations on any Moksa server, sends nothing to Moksa, and never transmits your AI provider keys (WordPress manages the connector credentials). The transmitted data is governed by the terms and privacy policy of the provider you choose: Anthropic — Terms: https://www.anthropic.com/legal/commercial-terms — Privacy: https://www.anthropic.com/legal/privacy ; Google — Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy ; OpenAI — Terms: https://openai.com/policies/terms-of-use — Privacy: https://openai.com/policies/privacy-policy
+
+= MCP server (optional, off by default) =
+
+This plugin can optionally expose a standards-compliant, stateless MCP (Model Context Protocol) endpoint on **your own site** at `/wp-json/mo-ectools/v1/mcp`, so a standard MCP client you control (for example mcp-remote or Claude) can look up orders and reports through the WordPress REST API. This is **not a Moksa service and is not a phone-home**: nothing is sent to Moksa, the endpoint only runs on your server and only exposes the plugin's own WordPress Abilities. It is **off by default** and must be turned on under WooCommerce → Moksa AI → Settings. Access requires authentication with a WordPress Application Password for a user that has the "edit orders" capability (use a dedicated, limited account). By default only read-only tools are exposed; order-changing tools stay hidden unless you also enable the separate "allow external AI to make changes" option, and every request is permission-checked on your server.
+
 == Installation ==
 
 = Minimum Requirements =
 
 * PHP 8.2+
-* WordPress 6.7+
+* WordPress 7.0+
 * WooCommerce 8.0+
 
 = Setup =
@@ -96,6 +108,16 @@ Yes. All order meta uses `$order->update_meta_data()` / `$order->save()`, never 
 
 Yes. Payment, shipping and invoice modules are fully independent — any combination works.
 
+= What is the Moksa AI assistant and what does it need? =
+
+It is an optional in-admin chat assistant for managing orders, e-invoices, shipping labels and module settings in natural language. It requires WordPress 7.0 (for the built-in AI Client) and an AI provider connected under **Settings → Connectors**; enable it under the plugin's Advanced settings. Every action that changes data first asks for your confirmation, and the assistant can never read or change your provider credentials, switch sandbox/live mode, or issue refunds.
+
+= Can external AI tools connect to my store over MCP? =
+
+Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI → Settings → "Enable external MCP server"**. The plugin then serves a standards-compliant, stateless MCP (Model Context Protocol) endpoint at `/wp-json/mo-ectools/v1/mcp` that any standard MCP client (for example mcp-remote or Claude) can connect to directly — no bridge required.
+
+Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed; order-changing tools stay hidden unless you also enable the "allow external AI to make changes" option, and destructive actions still require in-store confirmation. Every request is permission-checked on the server.
+
 == Screenshots ==
 
 1. Modules overview — toggle payment / shipping / invoice integrations from a single settings page.
@@ -105,6 +127,15 @@ Yes. Payment, shipping and invoice modules are fully independent — any combina
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.3.0 - 2026-06-18 =
+* New Moksa AI in-admin assistant (requires WordPress 7.0 AI Client and a configured AI connector): query and manage orders, e-invoices, shipping labels and module settings in natural language, with a human confirmation step before any change is applied.
+* Order tools via the WordPress Abilities API: find order by number, order details, order counts, status changes (single and batch), order notes, and an advanced order list.
+* Taiwan e-invoice actions: issue, void and allowance, plus per-channel issuing-method toggles.
+* Shipping: create a logistics booking and print labels (single and batch).
+* Manage settings by natural language: enable or disable provider modules, individual payment methods and invoice issuing methods — each behind a confirmation step. Credentials and sandbox/live switches are never exposed.
+* Raised the minimum WordPress version to 7.0, required by the AI assistant and the Abilities API. Core payment, shipping and invoice features are unchanged.
+* Removed the unused SMS module.
 
 = 1.1.0 - 2026-06-05 =
 * All global identifiers renamed to the unique `moksafowo` prefix (options, hooks, AJAX actions, gateway IDs, script handles, order meta, custom order statuses) per WordPress.org review.

@@ -12,7 +12,7 @@ final class Cvs711 extends AbstractCvsShippingMethod {
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_smilepay_shipping_cvs_711';
 		$this->method_title       = __( '速買配 — 7-11 取貨', 'mo-ectools' );
-		$this->method_description = __( 'SmilePay 7-ELEVEN 超商取貨（C2C / B2C 由模組設定切換）。', 'mo-ectools' );
+		$this->method_description = __( '速買配 7-ELEVEN 超商取貨。', 'mo-ectools' );
 		parent::__construct( $instance_id );
 	}
 

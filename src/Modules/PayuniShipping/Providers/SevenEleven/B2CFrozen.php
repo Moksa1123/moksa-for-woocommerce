@@ -22,8 +22,8 @@ class B2CFrozen extends ShippingBase {
 
 		$this->instance_id        = absint( (int) $instance_id );
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi Shipping 7-11 B2C Frozen', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi Shipping 7-11 B2C Frozen', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'mo-ectools' );
+		$this->method_description = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'mo-ectools' );
 
 		$this->goods_type = GoodsType::FROZEN;
 		$this->lgs_type   = LgsType::B2C;
@@ -37,7 +37,7 @@ class B2CFrozen extends ShippingBase {
 	public function init(): void {
 		$this->init_settings();
 
-		$this->instance_form_fields = include ( MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/SevenEleven/B2CFrozenFields.php' );
+		$this->instance_form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/Settings/SevenEleven/B2CFrozenFields.php';
 
 		$this->title                    = $this->get_option( 'title' );
 		$this->cost                     = $this->get_option( 'cost', 0 );

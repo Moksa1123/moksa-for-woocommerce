@@ -12,7 +12,7 @@ final class SplitByTemp {
 
 	public static function for_order( \WC_Order $order, array $supported_temps, ?AbstractShippingMethod $method = null ): array {
 		$split_shipping_fee = $method instanceof AbstractShippingMethod && $method->split_shipping_fee_enabled();
-		$groups = ProductTemp::group_order_items( $order, $supported_temps );
+		$groups             = ProductTemp::group_order_items( $order, $supported_temps );
 		if ( empty( $groups ) ) {
 			return [];
 		}
@@ -54,20 +54,18 @@ final class SplitByTemp {
 			return $packages;
 		}
 
-		// 開啟「依溫層分別計算運費」：每包用該溫層的 qty / weight 對 cost formula 重評
-		// 一次，作為該物流單的運費。顧客結帳看到的運費 = sum（calculate_shipping 那邊
-		// 也是同一個 per-temp eval 邏輯），所以 sum 自然 = $order->get_shipping_total()。
+		// split_shipping_fee：per-temp eval 與 calculate_shipping 邏輯一致，sum = get_shipping_total()
 		if ( $split_shipping_fee && $method instanceof AbstractShippingMethod ) {
 			foreach ( $packages as $i => &$p ) {
-				$fee                 = (int) round( $method->evaluate_cost_for_temp( (int) $p['temp'], (int) $p['qty'], (float) $p['weight'] ) );
-				$p['shipping_fee']   = $fee;
-				$p['amount']        += $fee;
+				$fee               = (int) round( $method->evaluate_cost_for_temp( (int) $p['temp'], (int) $p['qty'], (float) $p['weight'] ) );
+				$p['shipping_fee'] = $fee;
+				$p['amount']      += $fee;
 			}
 			unset( $p );
 			return $packages;
 		}
 
-		// 預設（RY 行為）— 整單運費全部塞給第一包，COD 第一張代收所有運費。
+		// 整單運費塞給第一包（COD 第一張代收）
 		$shipping_fee = (int) round( (float) $order->get_shipping_total() + (float) $order->get_shipping_tax() );
 		if ( $shipping_fee > 0 ) {
 			$packages[0]['amount']      += $shipping_fee;

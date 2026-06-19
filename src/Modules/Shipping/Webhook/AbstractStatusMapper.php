@@ -46,7 +46,7 @@ abstract class AbstractStatusMapper {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( "moksafowo_shipping_status_changed_{$slug}", $order, $provider, $code );
 
-		// mo-* 自訂狀態走自家 email action；WC 既有狀態走 WC 內建 email pipeline。
+		// mo-* 自訂狀態走自家 email；WC 既有狀態走 WC 內建 email pipeline
 		if ( str_starts_with( $slug, 'mo-' ) ) {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			do_action( 'moksafowo_shipping_status_' . $slug . '_notification', $order->get_id(), $order );

@@ -1,7 +1,7 @@
 <?php
 
 
- defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit;
 
 
 return array(
@@ -26,9 +26,9 @@ return array(
 		'desc_tip'    => true,
 	),
 	'min_amount'                 => array(
-		'title'       => __( 'Minimum Amount', 'mo-ectools' ),
+		'title'       => __( '最低訂單金額', 'mo-ectools' ),
 		'type'        => 'number',
-		'description' => __( 'Minimum amount to use this payment gateway.', 'mo-ectools' ),
+		'description' => __( '低於此金額不顯示此付款方式。', 'mo-ectools' ),
 	),
 	'incomplete_payment_message' => array(
 		'title'       => __( '未完成付款說明', 'mo-ectools' ),

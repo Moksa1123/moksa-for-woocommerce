@@ -7,18 +7,16 @@ trait SingletonTrait {
 
 	protected static $instance;
 
-	protected function  __construct() { }
+	protected function __construct() { }
 
-	final protected function  __clone() { }
+	final protected function __clone() { }
 
 	final public static function get_instance() {
 
 		if ( null === static::$instance ) {
-	static::$instance = new static();
+			static::$instance = new static();
 		}
 
 		return static::$instance;
-
 	}
-
 }

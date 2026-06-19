@@ -17,15 +17,17 @@ abstract class AbstractApi {
 
 	public function encrypt( array $data ): string {
 		$payload = http_build_query( $data );
-		return strtoupper( bin2hex(
-			openssl_encrypt(
-				$this->pkcs7_pad( $payload ),
-				$this->aes_method(),
-				$this->hash_key(),
-				OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
-				$this->hash_iv()
+		return strtoupper(
+			bin2hex(
+				openssl_encrypt(
+					$this->pkcs7_pad( $payload ),
+					$this->aes_method(),
+					$this->hash_key(),
+					OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
+					$this->hash_iv()
+				)
 			)
-		) );
+		);
 	}
 
 	public function decrypt( string $encrypt_info ): array {
@@ -50,7 +52,7 @@ abstract class AbstractApi {
 	}
 
 	public function trade_no_to_order_id( string $trade_no, string $prefix = '' ): int {
-		$body = substr( $trade_no, strlen( $prefix ) );
+		$body   = substr( $trade_no, strlen( $prefix ) );
 		$ts_pos = strrpos( $body, 'TS' );
 		if ( false === $ts_pos ) {
 			return 0;

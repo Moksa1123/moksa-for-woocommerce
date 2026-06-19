@@ -43,12 +43,12 @@ abstract class AbstractMowcBlocksMethod extends AbstractPaymentMethodType {
 		return 'assets/blocks/build/methods/' . $this->provider_slug() . '/';
 	}
 
-	
+
 	protected function default_deps(): array {
 		return [ 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-html-entities', 'wp-i18n' ];
 	}
 
-	
+
 	protected function extra_script_handles(): array {
 		return [];
 	}
@@ -101,15 +101,17 @@ abstract class AbstractMowcBlocksMethod extends AbstractPaymentMethodType {
 			? array_values( $gateway->supports )
 			: [ 'products' ];
 
-		return $this->payment_method_data_extra( [
-			'name'        => $this->name,
-			'title'       => $title,
-			'description' => $description,
-			'supports'    => $supports,
-		] );
+		return $this->payment_method_data_extra(
+			[
+				'name'        => $this->name,
+				'title'       => $title,
+				'description' => $description,
+				'supports'    => $supports,
+			]
+		);
 	}
 
-	
+
 	protected function payment_method_data_extra( array $base ): array {
 		return $base;
 	}

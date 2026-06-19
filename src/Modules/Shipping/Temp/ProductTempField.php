@@ -10,40 +10,26 @@ defined( 'ABSPATH' ) || exit;
 final class ProductTempField {
 
 	public static function init(): void {
-		// Simple / Variable parent — 顯示在 Shipping tab 既有欄位下方
 		add_action( 'woocommerce_product_options_shipping', [ __CLASS__, 'render_simple_field' ] );
 		add_action( 'woocommerce_admin_process_product_object', [ __CLASS__, 'save_simple_field' ] );
-
-		// Variation — variation 欄位區塊
 		add_action( 'woocommerce_variation_options', [ __CLASS__, 'render_variation_field' ], 10, 3 );
 		add_action( 'woocommerce_save_product_variation', [ __CLASS__, 'save_variation_field' ], 10, 2 );
-
-		// 商品列表多一格「溫層」column
 		add_filter( 'manage_edit-product_columns', [ __CLASS__, 'add_list_column' ], 20 );
 		add_action( 'manage_product_posts_custom_column', [ __CLASS__, 'render_list_column' ], 10, 2 );
-		// column 寬度 / nowrap CSS（避免 column header 直立 wrap 跟相鄰 column 重疊）
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'list_column_styles' ] );
-
-		// 商品列表上方 filter 下拉（依溫層篩選）
 		add_action( 'restrict_manage_posts', [ __CLASS__, 'render_list_filter' ] );
 		add_filter( 'parse_query', [ __CLASS__, 'apply_list_filter' ] );
-
-		// Quick Edit / Bulk Edit 行內溫層下拉 — 走 WC 自己的 hook（位置會在 WC「商品資料」
-		// section 末尾，跟 SKU / 價格 / 重量 等 WC field 並排），比 WP core 的
-		// quick_edit_custom_box 對齊（WP core hook 在 WC product 會跑到 column-right 末尾，
-		// 跟 layout 衝突）。
+		// Quick/Bulk Edit 走 WC hook（WP core quick_edit_custom_box 在 WC product 會落在 column-right 末尾跑版）
 		add_action( 'woocommerce_product_quick_edit_end', [ __CLASS__, 'render_wc_quick_edit_field' ] );
 		add_action( 'woocommerce_product_bulk_edit_end', [ __CLASS__, 'render_wc_bulk_edit_field' ] );
 		add_action( 'woocommerce_product_quick_edit_save', [ __CLASS__, 'save_wc_quick_edit' ] );
 		add_action( 'woocommerce_product_bulk_edit_save', [ __CLASS__, 'save_wc_bulk_edit' ] );
-		// 把 row 上的當前 temp 灌進 quick edit form 的 JS（WC core 不自動 prefill custom field）
+		// WC core 不自動 prefill custom field；JS 把 row 上的 temp data-attr 灌進 quick edit
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inline_quick_edit_js' ] );
-
-		// 注意：CSV import / export hooks 由 init_csv_hooks() 在 Module::boot() 直接呼叫
-		// （在 is_admin() guard 外）— WPCLI / cron / REST 不會走進 ProductTempField::init()
+		// CSV hooks 由 init_csv_hooks() 在 is_admin() guard 外呼叫
 	}
 
-	
+
 	public static function init_csv_hooks(): void {
 		add_filter( 'woocommerce_product_export_column_names', [ __CLASS__, 'csv_add_column' ] );
 		add_filter( 'woocommerce_product_export_product_default_columns', [ __CLASS__, 'csv_add_column' ] );
@@ -75,7 +61,6 @@ final class ProductTempField {
 				$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
 			}
 		}
-		// 如果上面 insert_after 沒命中（rare edge case），fallback append
 		if ( ! isset( $new_cols['moksafowo_product_temp'] ) ) {
 			$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
 		}
@@ -91,9 +76,7 @@ final class ProductTempField {
 			echo '—';
 			return;
 		}
-		// 視覺差表達 explicit vs 預設（fallback 常溫）：
-		//   explicit  = 實心 pill（常溫灰 / 冷藏藍 / 冷凍紫）
-		//   unset     = dashed outline pill 灰字，hover 提示「未明確設定 — 預設為常溫」
+		// explicit: 實心 pill；unset: dashed outline（hover 提示預設常溫）
 		$raw      = (int) $product->get_meta( Keys::PRODUCT_TEMP, true );
 		$explicit = in_array( $raw, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true );
 		$temp     = $explicit ? $raw : ProductTemp::NORMAL;
@@ -156,12 +139,27 @@ final class ProductTempField {
 		if ( 'unset' === $raw ) {
 			$meta_query[] = [
 				'relation' => 'OR',
-				[ 'key' => Keys::PRODUCT_TEMP, 'compare' => 'NOT EXISTS' ],
-				[ 'key' => Keys::PRODUCT_TEMP, 'value' => '', 'compare' => '=' ],
-				[ 'key' => Keys::PRODUCT_TEMP, 'value' => '0', 'compare' => '=' ],
+				[
+					'key'     => Keys::PRODUCT_TEMP,
+					'compare' => 'NOT EXISTS',
+				],
+				[
+					'key'     => Keys::PRODUCT_TEMP,
+					'value'   => '',
+					'compare' => '=',
+				],
+				[
+					'key'     => Keys::PRODUCT_TEMP,
+					'value'   => '0',
+					'compare' => '=',
+				],
 			];
 		} elseif ( in_array( (int) $raw, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true ) ) {
-			$meta_query[] = [ 'key' => Keys::PRODUCT_TEMP, 'value' => (string) (int) $raw, 'compare' => '=' ];
+			$meta_query[] = [
+				'key'     => Keys::PRODUCT_TEMP,
+				'value'   => (string) (int) $raw,
+				'compare' => '=',
+			];
 		}
 		$query->set( 'meta_query', $meta_query );
 	}
@@ -222,8 +220,7 @@ final class ProductTempField {
 			return;
 		}
 		$product->update_meta_data( Keys::PRODUCT_TEMP, (string) $value );
-		// WC core 流程在「呼叫此 action 之前」就先 $product->save() 了，必須這裡再 save 一次
-		// 才會把 meta 寫入 DB（之前以為外層會再 save 是錯的）。
+		// WC core 在此 action 前已 save；此處再 save 才能把 meta 寫入 DB
 		$product->save();
 	}
 
@@ -238,18 +235,18 @@ final class ProductTempField {
 		wp_enqueue_style( 'moksafowo-product-temp-quick' );
 		wp_add_inline_style( 'moksafowo-product-temp-quick', $css );
 
-		$js = "(function(){"
+		$js = '(function(){'
 			. " if (typeof inlineEditPost === 'undefined') { return; }"
-			. " var orig = inlineEditPost.edit;"
-			. " inlineEditPost.edit = function(id){"
-			. " orig.apply(this, arguments);"
+			. ' var orig = inlineEditPost.edit;'
+			. ' inlineEditPost.edit = function(id){'
+			. ' orig.apply(this, arguments);'
 			. " var post_id = (typeof id === 'object') ? this.getId(id) : id;"
-			. " if (!post_id) { return; }"
+			. ' if (!post_id) { return; }'
 			. " var pill = jQuery('#post-' + post_id).find('.moksafowo-product-temp-pill').first();"
 			. " var temp = pill.length ? pill.data('temp') : '';"
 			. " jQuery('#edit-' + post_id).find('select[name=\"moksafowo_product_temp\"]').val(temp ? String(temp) : '');"
-			. " };"
-			. " })();";
+			. ' };'
+			. ' })();';
 		wp_register_script( 'moksafowo-product-temp-quick', false, [ 'jquery', 'inline-edit-post' ], MOKSAFOWO_VERSION, true );
 		wp_enqueue_script( 'moksafowo-product-temp-quick' );
 		wp_add_inline_script( 'moksafowo-product-temp-quick', $js );
@@ -262,7 +259,7 @@ final class ProductTempField {
 		return $columns;
 	}
 
-	
+
 	public static function csv_export_value( $value, $product ): string {
 		if ( ! $product instanceof \WC_Product ) {
 			return '';
@@ -280,8 +277,7 @@ final class ProductTempField {
 	}
 
 	public static function csv_import_mapping_defaults( array $columns ): array {
-		// 給 WC importer 一些常見 header 自動對應到我們的 key — case-insensitive
-		// 枚舉常見大小寫變體（WC core auto-mapper 走 exact string match）
+		// WC auto-mapper 走 exact string match，枚舉常見大小寫變體
 		$bases = [ 'moksafowo_product_temp', 'moksafowo product temp' ];
 		foreach ( $bases as $base ) {
 			$variants = [ $base, strtolower( $base ), strtoupper( $base ), ucwords( $base, ' _-' ) ];
@@ -289,9 +285,8 @@ final class ProductTempField {
 				$columns[ $v ] = 'moksafowo_product_temp';
 			}
 		}
-		// 中文 header — 沒大小寫，直接加
 		$columns['物流溫層'] = 'moksafowo_product_temp';
-		$columns['溫層']     = 'moksafowo_product_temp';
+		$columns['溫層']   = 'moksafowo_product_temp';
 		return $columns;
 	}
 
@@ -299,7 +294,7 @@ final class ProductTempField {
 		if ( ! array_key_exists( 'moksafowo_product_temp', $data ) ) {
 			return $data;
 		}
-		$raw = trim( (string) $data['moksafowo_product_temp'] );
+		$raw                            = trim( (string) $data['moksafowo_product_temp'] );
 		$data['moksafowo_product_temp'] = self::normalize_csv_temp( $raw );
 		return $data;
 	}
@@ -313,11 +308,9 @@ final class ProductTempField {
 		}
 		$value = $data['moksafowo_product_temp'];
 		if ( '' === $value || null === $value ) {
-			// 空 = 不動（不刪也不寫，避免 import 一個沒這 column 的 CSV 就清掉所有設定）
-			return;
+			return; // 空 = 不動（無此 column 的 CSV 不會清設定）
 		}
-		// explicit clear marker — `-` / `unset` / `(none)` / `預設` 等 → 刪 meta
-		if ( '__clear__' === $value ) {
+		if ( '__clear__' === $value ) { // `-` / `unset` / `預設` 等 → 刪 meta
 			$product->delete_meta_data( Keys::PRODUCT_TEMP );
 			$product->save();
 			return;
@@ -332,25 +325,22 @@ final class ProductTempField {
 		if ( '' === $raw ) {
 			return '';
 		}
-		// 數字直接接（'1' / '2' / '3'）
 		if ( ctype_digit( $raw ) ) {
 			$v = (int) $raw;
 			return in_array( $v, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true ) ? (string) $v : '';
 		}
-		// 顯式 clear marker — 商家想用 CSV 清掉某商品的設定，用這些字串
 		$clear_markers = [ '-', '–', 'unset', 'clear', '(none)', 'none', '預設', 'default' ];
 		$key           = mb_strtolower( trim( $raw ) );
 		if ( in_array( $key, $clear_markers, true ) || in_array( $raw, $clear_markers, true ) ) {
 			return '__clear__';
 		}
-		// 中文標籤對應
 		$lookup = [
-			'常溫'        => (string) ProductTemp::NORMAL,
-			'冷藏'        => (string) ProductTemp::REFRIGERATED,
-			'冷凍'        => (string) ProductTemp::FROZEN,
-			'normal'      => (string) ProductTemp::NORMAL,
+			'常溫'           => (string) ProductTemp::NORMAL,
+			'冷藏'           => (string) ProductTemp::REFRIGERATED,
+			'冷凍'           => (string) ProductTemp::FROZEN,
+			'normal'       => (string) ProductTemp::NORMAL,
 			'refrigerated' => (string) ProductTemp::REFRIGERATED,
-			'frozen'      => (string) ProductTemp::FROZEN,
+			'frozen'       => (string) ProductTemp::FROZEN,
 		];
 		if ( isset( $lookup[ $raw ] ) ) {
 			return $lookup[ $raw ];
@@ -381,8 +371,7 @@ final class ProductTempField {
 		if ( in_array( $value, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true ) ) {
 			$product->update_meta_data( Keys::PRODUCT_TEMP, (string) $value );
 		} else {
-			// 0 / 空 / 異常 → 等同常溫，刪除 meta 讓 cart 階段走預設
-			$product->delete_meta_data( Keys::PRODUCT_TEMP );
+			$product->delete_meta_data( Keys::PRODUCT_TEMP ); // 0/空/異常 → 刪 meta 走預設常溫
 		}
 	}
 

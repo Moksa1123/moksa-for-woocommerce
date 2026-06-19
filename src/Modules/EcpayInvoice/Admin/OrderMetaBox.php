@@ -20,13 +20,10 @@ final class OrderMetaBox {
 
 	public static function init(): void {
 		OrderInfoLayout::boot();
-		// 三欄 footer：priority 30 = 發票（右）— 順序「金流(10) 物流(20) 發票(30)」
 		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 30, 2 );
 
-		// WC Blocks (CheckoutFieldsAdmin::admin_order_fields) 會把 location='order'
-		// 的 additional checkout fields 自動 merge 進 woocommerce_admin_shipping_fields，
-		// 結果「發票類型 / 載具類型」在運送地址下方又印一次（跟我們的 inline 區重複）。
-		// 我們有專屬 ECPay 發票區，不需要 WC 預設那條 list — 拿掉。
+		// WC Blocks merges location='order' fields into woocommerce_admin_shipping_fields,
+		// which would duplicate our invoice section; remove them.
 		add_filter( 'woocommerce_admin_shipping_fields', [ __CLASS__, 'hide_invoice_in_admin_shipping' ], 11 );
 
 		add_action( 'wp_ajax_moksafowo_ecpay_invoice_save', [ __CLASS__, 'ajax_save' ] );
@@ -46,21 +43,20 @@ final class OrderMetaBox {
 	}
 
 	public static function add_card( array $cards, \WC_Order $order ): array {
-		// 若訂單明確標示由其他 provider 處理（ezpay / smilepay），不搶 slot
 		$provider = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
 		if ( '' !== $provider && 'ecpay' !== $provider ) {
 			return $cards;
 		}
-		$inv         = (string) $order->get_meta( Keys::ECPAY_INVOICE_NUMBER );
-		$rand        = (string) $order->get_meta( Keys::ECPAY_INVOICE_RANDOM );
-		$issued_at   = (string) $order->get_meta( Keys::ECPAY_INVOICE_ISSUED_AT );
-		$invalid_at  = (string) $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT );
-		$allowance   = (string) $order->get_meta( Keys::ECPAY_INVOICE_ALLOWANCE_NO );
-		$type        = (string) $order->get_meta( Keys::INVOICE_TYPE );
-		$ubn         = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-		$buyer_name  = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-		$carrier_t   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
-		$carrier_n   = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
+		$inv        = (string) $order->get_meta( Keys::ECPAY_INVOICE_NUMBER );
+		$rand       = (string) $order->get_meta( Keys::ECPAY_INVOICE_RANDOM );
+		$issued_at  = (string) $order->get_meta( Keys::ECPAY_INVOICE_ISSUED_AT );
+		$invalid_at = (string) $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT );
+		$allowance  = (string) $order->get_meta( Keys::ECPAY_INVOICE_ALLOWANCE_NO );
+		$type       = (string) $order->get_meta( Keys::INVOICE_TYPE );
+		$ubn        = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+		$buyer_name = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+		$carrier_t  = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
+		$carrier_n  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
 
 		ob_start();
 		echo '<div class="moksafowo-ecpay-invoice-meta" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">';
@@ -71,11 +67,11 @@ final class OrderMetaBox {
 				echo '<p><strong>' . esc_html__( '開立時間：', 'mo-ectools' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
 			}
 			echo '<p><strong>' . esc_html__( '隨機碼：', 'mo-ectools' ) . '</strong>' . esc_html( $rand ) . '</p>';
-			echo '<p><strong>' . esc_html__( '開立方式：', 'mo-ectools' ) . '</strong>' . esc_html__( '一般開立發票', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '開立方式：', 'mo-ectools' ) . '</strong>' . esc_html__( '立即開立', 'mo-ectools' ) . '</p>';
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
 				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::carrier_label( $carrier_t ) ) . '</p>';
 			} elseif ( 'b2b' === $type ) {
-				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html__( '三聯式發票', 'mo-ectools' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html__( '公司統編', 'mo-ectools' ) . '</p>';
 			} elseif ( 'b2c_donate' === $type ) {
 				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html__( '捐贈', 'mo-ectools' ) . '</p>';
 				$love_code = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
@@ -88,7 +84,7 @@ final class OrderMetaBox {
 					echo '</p>';
 				}
 			}
-			echo '<p><strong>' . esc_html__( '發票開立：', 'mo-ectools' ) . '</strong>' . esc_html( self::issue_label( $type ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票對象：', 'mo-ectools' ) . '</strong>' . esc_html( self::issue_label( $type ) ) . '</p>';
 			if ( '' !== $ubn ) {
 				echo '<p><strong>' . esc_html__( '統一編號：', 'mo-ectools' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
 			}
@@ -105,7 +101,6 @@ final class OrderMetaBox {
 				echo '<button type="button" class="button moksafowo-ecpay-invoice-invalid">' . esc_html__( '作廢發票', 'mo-ectools' ) . '</button> ';
 				echo '<button type="button" class="button moksafowo-ecpay-invoice-allowance">' . esc_html__( '開立折讓單', 'mo-ectools' ) . '</button>';
 				echo '</p>';
-				// 作廢原因 — 內聯輸入（取代 JS prompt），按「作廢發票」展開
 				echo '<div class="moksafowo-inv-invalid-form" style="display:none;margin-top:.5em;">';
 				echo '<input type="text" class="moksafowo-inv-invalid-reason" maxlength="20" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( '作廢原因（最多 20 字）', 'mo-ectools' ) . '">';
 				echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-invalid-confirm">' . esc_html__( '確認作廢', 'mo-ectools' ) . '</button> ';
@@ -177,31 +172,35 @@ final class OrderMetaBox {
 			$ver,
 			true
 		);
-		wp_localize_script( $handle, 'moksafowo_ecpay_invoice_admin', [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'i18n'     => [
-				'updating'       => __( '更新中…', 'mo-ectools' ),
-				'updated'        => __( '已更新，可開立發票。', 'mo-ectools' ),
-				'update_fail'    => __( '更新失敗：', 'mo-ectools' ),
-				'issuing'        => __( '開立中…', 'mo-ectools' ),
-				'issue_ok'       => __( '發票已開立。', 'mo-ectools' ),
-				'issue_fail'     => __( '開立失敗：', 'mo-ectools' ),
-				'need_donate'    => __( '請選擇捐贈單位（或輸入愛心碼）。', 'mo-ectools' ),
-				'need_ubn'       => __( '請輸入統一編號。', 'mo-ectools' ),
-				'need_cnum'      => __( '請輸入載具編號。', 'mo-ectools' ),
-				'cnum_mobile'    => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' ),
-				'cnum_cert'      => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
-				'invalidating'      => __( '作廢中…', 'mo-ectools' ),
-				'invalid_need_reason' => __( '請輸入作廢原因。', 'mo-ectools' ),
-				'invalid_ok'     => __( '發票已作廢。', 'mo-ectools' ),
-				'invalid_fail'   => __( '作廢失敗：', 'mo-ectools' ),
-				'allowancing'    => __( '折讓中…', 'mo-ectools' ),
-				'allowance_need_amount' => __( '請輸入折讓金額。', 'mo-ectools' ),
-				'allowance_ok'   => __( '折讓單已開立。', 'mo-ectools' ),
-				'allowance_fail' => __( '折讓失敗：', 'mo-ectools' ),
-				'unknown_error'     => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			$handle,
+			'moksafowo_ecpay_invoice_admin',
+			[
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'i18n'     => [
+					'updating'              => __( '更新中…', 'mo-ectools' ),
+					'updated'               => __( '已更新，可開立發票。', 'mo-ectools' ),
+					'update_fail'           => __( '更新失敗：', 'mo-ectools' ),
+					'issuing'               => __( '開立中…', 'mo-ectools' ),
+					'issue_ok'              => __( '發票已開立。', 'mo-ectools' ),
+					'issue_fail'            => __( '開立失敗：', 'mo-ectools' ),
+					'need_donate'           => __( '請選擇捐贈單位（或輸入愛心碼）。', 'mo-ectools' ),
+					'need_ubn'              => __( '請輸入統一編號。', 'mo-ectools' ),
+					'need_cnum'             => __( '請輸入載具編號。', 'mo-ectools' ),
+					'cnum_mobile'           => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' ),
+					'cnum_cert'             => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
+					'invalidating'          => __( '作廢中…', 'mo-ectools' ),
+					'invalid_need_reason'   => __( '請輸入作廢原因。', 'mo-ectools' ),
+					'invalid_ok'            => __( '發票已作廢。', 'mo-ectools' ),
+					'invalid_fail'          => __( '作廢失敗：', 'mo-ectools' ),
+					'allowancing'           => __( '折讓中…', 'mo-ectools' ),
+					'allowance_need_amount' => __( '請輸入折讓金額。', 'mo-ectools' ),
+					'allowance_ok'          => __( '折讓單已開立。', 'mo-ectools' ),
+					'allowance_fail'        => __( '折讓失敗：', 'mo-ectools' ),
+					'unknown_error'         => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
+				],
+			]
+		);
 		wp_enqueue_script( $handle );
 	}
 
@@ -280,7 +279,7 @@ final class OrderMetaBox {
 
 	private static function type_label( string $type ): string {
 		return match ( $type ) {
-			'b2b'         => __( '公司（三聯式）', 'mo-ectools' ),
+			'b2b'         => __( '公司（統一編號）', 'mo-ectools' ),
 			'b2c_donate'  => __( '捐贈', 'mo-ectools' ),
 			'b2c_carrier' => __( '個人（載具）', 'mo-ectools' ),
 			default       => $type,
@@ -291,7 +290,7 @@ final class OrderMetaBox {
 		return match ( $c ) {
 			'mobile' => __( '手機條碼', 'mo-ectools' ),
 			'cert'   => __( '自然人憑證', 'mo-ectools' ),
-			'paper'  => __( '紙本', 'mo-ectools' ),
+			'paper'  => __( '紙本發票', 'mo-ectools' ),
 			'member' => __( '會員載具', 'mo-ectools' ),
 			default  => $c,
 		};

@@ -80,7 +80,7 @@ final class Helper extends AbstractCredentialHelper {
 		return is_array( $json ) ? $json : null;
 	}
 
-	
+
 	public static function parse_order_id( string $merchant_order_no ): int {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$external = apply_filters( 'moksafowo_newebpay_shipping_parse_order_id', null, $merchant_order_no );

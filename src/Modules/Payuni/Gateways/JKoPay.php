@@ -11,8 +11,8 @@ class JKoPay extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi JKoPay 街口支付', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi UPP — JKoPay 街口支付', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 街口支付', 'mo-ectools' );
+		$this->method_description = __( '使用街口支付付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array( 'products' );
 
 		$this->init_form_fields();

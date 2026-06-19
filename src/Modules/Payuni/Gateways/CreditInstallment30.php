@@ -14,11 +14,11 @@ class CreditInstallment30 extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi Installment Payment (30 Installments)', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi Installment Payment (30 Installments)', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 信用卡分期 30 期', 'mo-ectools' );
+		$this->method_description = __( '信用卡分 30 期付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 
 		$this->init_installment( 30, $this->min_amount );
-		
+
 		// Load the settings.
 		$this->init_form_fields();
 		$this->init_settings();

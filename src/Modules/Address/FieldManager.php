@@ -12,16 +12,66 @@ final class FieldManager {
 	private const OPTION_TOGGLE = 'moksafowo_tw_address_reorder_fields';
 
 	private const DEFAULT_LAYOUT = [
-		[ 'key' => 'last_name',  'width' => 50,  'enabled' => true,  'required' => true  ],
-		[ 'key' => 'first_name', 'width' => 50,  'enabled' => true,  'required' => true  ],
-		[ 'key' => 'company',    'width' => 100, 'enabled' => false, 'required' => false ],
-		[ 'key' => 'country',    'width' => 100, 'enabled' => true,  'required' => true  ],
-		[ 'key' => 'address_1',  'width' => 100, 'enabled' => true,  'required' => true  ],
-		[ 'key' => 'address_2',  'width' => 100, 'enabled' => true,  'required' => false ],
-		[ 'key' => 'state',      'width' => 50,  'enabled' => true,  'required' => true  ],
-		[ 'key' => 'city',       'width' => 50,  'enabled' => true,  'required' => true  ],
-		[ 'key' => 'postcode',   'width' => 100, 'enabled' => true,  'required' => true  ],
-		[ 'key' => 'phone',      'width' => 100, 'enabled' => true,  'required' => true  ],
+		[
+			'key'      => 'last_name',
+			'width'    => 50,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'first_name',
+			'width'    => 50,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'company',
+			'width'    => 100,
+			'enabled'  => false,
+			'required' => false,
+		],
+		[
+			'key'      => 'country',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'address_1',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'address_2',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => false,
+		],
+		[
+			'key'      => 'state',
+			'width'    => 50,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'city',
+			'width'    => 50,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'postcode',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => true,
+		],
+		[
+			'key'      => 'phone',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => true,
+		],
 	];
 
 	private const FIELD_LABELS = [
@@ -70,9 +120,9 @@ final class FieldManager {
 			add_filter( 'woocommerce_shipping_fields', [ __CLASS__, 'apply_to_shipping_fields' ], 20 );
 
 			// Block 不讀 fields filter，要 override WC core 的 visibility option 才同步。
-			add_filter( 'option_woocommerce_checkout_company_field',   [ __CLASS__, 'override_wc_company_visibility'   ] );
+			add_filter( 'option_woocommerce_checkout_company_field', [ __CLASS__, 'override_wc_company_visibility' ] );
 			add_filter( 'option_woocommerce_checkout_address_2_field', [ __CLASS__, 'override_wc_address_2_visibility' ] );
-			add_filter( 'option_woocommerce_checkout_phone_field',     [ __CLASS__, 'override_wc_phone_visibility'     ] );
+			add_filter( 'option_woocommerce_checkout_phone_field', [ __CLASS__, 'override_wc_phone_visibility' ] );
 		}
 	}
 
@@ -122,10 +172,10 @@ final class FieldManager {
 				continue;
 			}
 			$seen[ $key ] = true;
-			$width    = isset( $item['width'] ) ? (int) $item['width'] : 100;
-			$enabled  = ! isset( $item['enabled'] ) || (bool) $item['enabled'];
-			$required = isset( $item['required'] ) ? (bool) $item['required'] : ( $default_required[ $key ] ?? true );
-			$clean[]  = [
+			$width        = isset( $item['width'] ) ? (int) $item['width'] : 100;
+			$enabled      = ! isset( $item['enabled'] ) || (bool) $item['enabled'];
+			$required     = isset( $item['required'] ) ? (bool) $item['required'] : ( $default_required[ $key ] ?? true );
+			$clean[]      = [
 				'key'      => $key,
 				'width'    => 50 === $width ? 50 : 100,
 				'enabled'  => $enabled,
@@ -156,13 +206,14 @@ final class FieldManager {
 			<td class="forminp">
 				<input type="hidden" name="<?php echo esc_attr( self::OPTION_LAYOUT ); ?>" value="<?php echo esc_attr( (string) $json ); ?>" id="moksafowo-tw-field-layout-input" />
 				<ul class="moksafowo-tw-field-list" id="moksafowo-tw-field-list">
-					<?php foreach ( $layout as $item ) :
+					<?php
+					foreach ( $layout as $item ) :
 						$key      = $item['key'];
 						$width    = $item['width'];
 						$enabled  = ! empty( $item['enabled'] );
 						$required = ! empty( $item['required'] );
 						$label    = self::FIELD_LABELS[ $key ] ?? $key;
-					?>
+						?>
 						<li data-key="<?php echo esc_attr( $key ); ?>" class="<?php echo $enabled ? '' : 'is-disabled'; ?>">
 							<span class="moksafowo-tw-drag" aria-hidden="true">&#x2630;</span>
 							<label class="moksafowo-tw-enable">
@@ -252,19 +303,19 @@ final class FieldManager {
 
 		// 半寬配對只在「相鄰兩個 enabled + 50%」成立；落單 50% fallback wide。
 		$classes_by_idx = [];
-		$total = count( $enabled );
-		$i = 0;
+		$total          = count( $enabled );
+		$i              = 0;
 		while ( $i < $total ) {
 			$cur_w  = $enabled[ $i ]['width'];
 			$next_w = $enabled[ $i + 1 ]['width'] ?? null;
 			if ( 50 === $cur_w && 50 === $next_w ) {
 				$classes_by_idx[ $i ]     = 'form-row-first';
 				$classes_by_idx[ $i + 1 ] = 'form-row-last';
-				$i += 2;
+				$i                       += 2;
 				continue;
 			}
 			$classes_by_idx[ $i ] = 'form-row-wide';
-			$i += 1;
+			++$i;
 		}
 
 		foreach ( $enabled as $idx => $item ) {

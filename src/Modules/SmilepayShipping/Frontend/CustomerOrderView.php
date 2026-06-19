@@ -57,14 +57,16 @@ final class CustomerOrderView {
 
 		// Legacy 單筆：合成 1 個 record 用同一個 render path
 		if ( empty( $records ) ) {
-			$records = [ [
-				'smseid'    => $smseid,
-				'pay_no'    => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_PAY_NO ),
-				'track_num' => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TRACK_NO ),
-				'lgs_type'  => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_LGS_TYPE ),
-				'subtype'   => self::method_to_subtype( $method_id ),
-				'temp'      => '0',
-			] ];
+			$records = [
+				[
+					'smseid'    => $smseid,
+					'pay_no'    => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_PAY_NO ),
+					'track_num' => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TRACK_NO ),
+					'lgs_type'  => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_LGS_TYPE ),
+					'subtype'   => self::method_to_subtype( $method_id ),
+					'temp'      => '0',
+				],
+			];
 		}
 		$is_split = count( $records ) > 1;
 
@@ -87,7 +89,8 @@ final class CustomerOrderView {
 					$store_name = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_NAME );
 					$store_id   = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_ID );
 					$store_addr = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_ADDR );
-					if ( '' !== $store_name || '' !== $store_id ) : ?>
+					if ( '' !== $store_name || '' !== $store_id ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value">
@@ -100,28 +103,34 @@ final class CustomerOrderView {
 								<?php endif; ?>
 							</span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				} else {
 					$address   = TwAddress::format_shipping_address( $order );
 					$recipient = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
 					if ( '' === $recipient ) {
 						$recipient = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
 					}
-					if ( '' !== $recipient ) : ?>
+					if ( '' !== $recipient ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $recipient ); ?></span>
 						</div>
-					<?php endif;
-					if ( '' !== $address ) : ?>
+						<?php
+					endif;
+					if ( '' !== $address ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件地址', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $address ); ?></span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				}
 
-				if ( $is_split ) : ?>
+				if ( $is_split ) :
+					?>
 					<div class="moksafowo-shipping-card__row" style="grid-template-columns:1fr;border-bottom:1px dashed #f1f5f9;">
 						<span class="moksafowo-shipping-card__label" style="font-size:12px;">
 							<?php
@@ -130,15 +139,16 @@ final class CustomerOrderView {
 							?>
 						</span>
 					</div>
-				<?php endif;
+					<?php
+				endif;
 
 				foreach ( $records as $r ) :
-					$track_num  = (string) ( $r['track_num'] ?? '' );
-					$pay_no     = (string) ( $r['pay_no'] ?? '' );
-					$rec_temp   = (int) ( $r['temp'] ?? 0 );
-					$temp_label = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
+					$track_num     = (string) ( $r['track_num'] ?? '' );
+					$pay_no        = (string) ( $r['pay_no'] ?? '' );
+					$rec_temp      = (int) ( $r['temp'] ?? 0 );
+					$temp_label    = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_smilepay_record( $r );
-					$primary    = '' !== $track_num ? $track_num : $pay_no;
+					$primary       = '' !== $track_num ? $track_num : $pay_no;
 					?>
 					<div class="moksafowo-shipping-card__row">
 						<span class="moksafowo-shipping-card__label">

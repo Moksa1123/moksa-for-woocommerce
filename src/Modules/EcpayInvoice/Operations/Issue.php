@@ -10,17 +10,19 @@ defined( 'ABSPATH' ) || exit;
 
 final class Issue {
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		$existing = (string) $order->get_meta( Keys::ECPAY_INVOICE_NUMBER );
 		$voided   = (string) $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT );
 
-		// 已開立且未作廢 → 不重開（依官方 spec — Issue 不冪等，重複會錯）
 		if ( '' !== $existing && '' === $voided ) {
-			return [ 'ok' => false, 'message' => __( '此訂單已開立發票。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '此訂單已開立發票。', 'mo-ectools' ),
+			];
 		}
 
-		// 作廢後重開 → 清掉舊發票 meta，並換一組新的 RelateNumber（舊號不可重用）
+		// Re-issue after void: clear old meta and generate a new RelateNumber (old number cannot be reused per ECPay spec).
 		if ( '' !== $existing && '' !== $voided ) {
 			$order->delete_meta_data( Keys::ECPAY_INVOICE_NUMBER );
 			$order->delete_meta_data( Keys::ECPAY_INVOICE_RANDOM );
@@ -36,26 +38,31 @@ final class Issue {
 			$order->update_meta_data( Keys::ECPAY_INVOICE_RELATE_NUMBER, $relate_no );
 		}
 
-		$invoice_type   = (string) $order->get_meta( Keys::INVOICE_TYPE );
-		$buyer_ubn      = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-		$buyer_name     = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-		$carrier_type   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
-		$carrier_num    = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
-		$love_code      = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
-		$is_b2b         = 'b2b' === $invoice_type && '' !== $buyer_ubn;
-		$is_donate      = 'b2c_donate' === $invoice_type && '' !== $love_code;
+		$invoice_type = (string) $order->get_meta( Keys::INVOICE_TYPE );
+		$buyer_ubn    = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+		$buyer_name   = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+		$carrier_type = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
+		$carrier_num  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
+		$love_code    = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
+		$is_b2b       = 'b2b' === $invoice_type && '' !== $buyer_ubn;
+		$is_donate    = 'b2c_donate' === $invoice_type && '' !== $love_code;
 
 		$customer_name = $is_b2b ? $buyer_name : trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
 		if ( '' === $customer_name ) {
 			$customer_name = '消費者';
 		}
 
-		$customer_addr = trim( implode( '', [
-			$order->get_billing_state(),
-			$order->get_billing_city(),
-			$order->get_billing_address_1(),
-			$order->get_billing_address_2(),
-		] ) );
+		$customer_addr = trim(
+			implode(
+				'',
+				[
+					$order->get_billing_state(),
+					$order->get_billing_city(),
+					$order->get_billing_address_1(),
+					$order->get_billing_address_2(),
+				]
+			)
+		);
 
 		$amount = (int) round( (float) $order->get_total() );
 		$items  = self::build_items( $order, $amount );
@@ -84,12 +91,17 @@ final class Issue {
 
 		$result = Helper::post( '/B2CInvoice/Issue', $data );
 		if ( ! $result['ok'] ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: error message */
-				__( '綠界發票開立失敗：%s', 'mo-ectools' ),
-				$result['message']
-			) );
-			return [ 'ok' => false, 'message' => $result['message'] ];
+					__( '綠界發票開立失敗：%s', 'mo-ectools' ),
+					$result['message']
+				)
+			);
+			return [
+				'ok'      => false,
+				'message' => $result['message'],
+			];
 		}
 
 		$resp = $result['data'] ?? [];
@@ -101,19 +113,24 @@ final class Issue {
 		$order->update_meta_data( Keys::ECPAY_INVOICE_ISSUED_AT, current_time( 'mysql' ) );
 		$order->update_meta_data( Keys::ECPAY_INVOICE_TAX_TYPE, '1' );
 		$order->update_meta_data( Keys::INVOICE_PROVIDER, 'ecpay' );
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: invoice number, 2: random */
-			__( '綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'mo-ectools' ),
-			$inv,
-			$rand
-		) );
+				__( '綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'mo-ectools' ),
+				$inv,
+				$rand
+			)
+		);
 		$order->save();
 
-		return [ 'ok' => true, 'message' => $result['message'], 'invoice_no' => $inv ];
+		return [
+			'ok'         => true,
+			'message'    => $result['message'],
+			'invoice_no' => $inv,
+		];
 	}
 
 	private static function carrier_type_code( string $internal ): string {
-		// internal 我們用 'member' / 'cert' / 'mobile' 或數字
 		return match ( $internal ) {
 			'mobile', '3'     => '3',
 			'cert', '2'       => '2',
@@ -123,15 +140,15 @@ final class Issue {
 	}
 
 	private static function build_items( \WC_Order $order, int $total ): array {
-		$items = [];
-		$index = 1;
+		$items    = [];
+		$index    = 1;
 		$line_sum = 0;
 		foreach ( $order->get_items() as $item ) {
-			$qty   = (float) $item->get_quantity();
+			$qty       = (float) $item->get_quantity();
 			$total_amt = (int) round( (float) $item->get_total() + (float) $item->get_total_tax() );
-			$unit  = $qty > 0 ? (int) round( $total_amt / $qty ) : 0;
+			$unit      = $qty > 0 ? (int) round( $total_amt / $qty ) : 0;
 			$line_sum += $total_amt;
-			$items[] = [
+			$items[]   = [
 				'ItemSeq'     => $index++,
 				'ItemName'    => mb_substr( $item->get_name(), 0, 100 ),
 				'ItemCount'   => (int) $qty,
@@ -142,7 +159,6 @@ final class Issue {
 			];
 		}
 
-		// 運費 + 手續費 等 fee items
 		foreach ( $order->get_shipping_methods() as $shipping ) {
 			$amt = (int) round( (float) $shipping->get_total() + (float) $shipping->get_total_tax() );
 			if ( 0 === $amt ) {
@@ -160,10 +176,9 @@ final class Issue {
 			];
 		}
 
-		// 補差額 — line_sum vs $total（捨入差等問題）
 		if ( $line_sum !== $total ) {
-			$diff      = $total - $line_sum;
-			$items[]   = [
+			$diff    = $total - $line_sum;
+			$items[] = [
 				'ItemSeq'     => $index++,
 				'ItemName'    => __( '其他', 'mo-ectools' ),
 				'ItemCount'   => 1,

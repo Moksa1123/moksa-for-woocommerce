@@ -94,7 +94,9 @@ final class Plugin {
 		Modules\Address\TwAddress::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
+			Modules\AiAssistant\Admin\Hub::boot();
 		}
+		add_action( 'rest_api_init', [ Mcp\Server::class, 'register' ] );
 		$this->modules->boot();
 	}
 }

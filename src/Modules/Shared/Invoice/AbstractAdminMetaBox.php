@@ -27,17 +27,17 @@ abstract class AbstractAdminMetaBox {
 
 	abstract protected static function invalid_at_meta_key(): string;
 
-	
+
 	abstract protected static function issue_callable(): callable;
 
-	
+
 	abstract protected static function invalid_callable(): callable;
 
 	protected static function supports_allowance(): bool {
 		return false;
 	}
 
-	
+
 	protected static function allowance_callable(): ?callable {
 		return null;
 	}
@@ -50,7 +50,7 @@ abstract class AbstractAdminMetaBox {
 		return '';
 	}
 
-	
+
 	protected static function extra_card_meta( \WC_Order $order ): array {
 		return [];
 	}
@@ -96,15 +96,15 @@ abstract class AbstractAdminMetaBox {
 			}
 		}
 
-		$inv         = (string) $order->get_meta( static::invoice_number_meta_key() );
-		$issued_at   = (string) $order->get_meta( static::issued_at_meta_key() );
-		$invalid_at  = (string) $order->get_meta( static::invalid_at_meta_key() );
-		$type        = (string) $order->get_meta( Keys::INVOICE_TYPE );
-		$ubn         = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-		$buyer_name  = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-		$carrier_t   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
-		$carrier_n   = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
-		$love_code   = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
+		$inv        = (string) $order->get_meta( static::invoice_number_meta_key() );
+		$issued_at  = (string) $order->get_meta( static::issued_at_meta_key() );
+		$invalid_at = (string) $order->get_meta( static::invalid_at_meta_key() );
+		$type       = (string) $order->get_meta( Keys::INVOICE_TYPE );
+		$ubn        = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+		$buyer_name = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+		$carrier_t  = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
+		$carrier_n  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
+		$love_code  = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
 
 		$key        = static::provider_key();
 		$prefix     = static::ajax_action_prefix();
@@ -245,29 +245,33 @@ abstract class AbstractAdminMetaBox {
 				$ver,
 				true
 			);
-			wp_localize_script( $handle, 'moksafowo_invoice_admin_i18n', [
-				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-				'issuing'         => __( '開立中…', 'mo-ectools' ),
-				'issue_ok'        => __( '發票已開立。', 'mo-ectools' ),
-				'issue_fail'      => __( '開立失敗：', 'mo-ectools' ),
-				'need_donate'     => __( '請選擇捐贈單位（或輸入愛心碼）。', 'mo-ectools' ),
-				'need_ubn'        => __( '請輸入統一編號。', 'mo-ectools' ),
-				'need_cnum'       => __( '請輸入載具編號。', 'mo-ectools' ),
-				'updating'        => __( '更新中…', 'mo-ectools' ),
-				'updated'         => __( '已更新，可開立發票。', 'mo-ectools' ),
-				'update_fail'     => __( '更新失敗：', 'mo-ectools' ),
-				'cnum_mobile'     => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' ),
-				'cnum_cert'       => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
-				'invalidating'    => __( '作廢中…', 'mo-ectools' ),
-				'invalid_need_reason' => __( '請輸入作廢原因。', 'mo-ectools' ),
-				'invalid_ok'      => __( '發票已作廢。', 'mo-ectools' ),
-				'invalid_fail'    => __( '作廢失敗：', 'mo-ectools' ),
-				'allowancing'     => __( '折讓中…', 'mo-ectools' ),
-				'allowance_need_amount' => __( '請輸入折讓金額。', 'mo-ectools' ),
-				'allowance_ok'    => __( '折讓單已開立。', 'mo-ectools' ),
-				'allowance_fail'  => __( '折讓失敗：', 'mo-ectools' ),
-				'unknown_error'     => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
-			] );
+			wp_localize_script(
+				$handle,
+				'moksafowo_invoice_admin_i18n',
+				[
+					'ajax_url'              => admin_url( 'admin-ajax.php' ),
+					'issuing'               => __( '開立中…', 'mo-ectools' ),
+					'issue_ok'              => __( '發票已開立。', 'mo-ectools' ),
+					'issue_fail'            => __( '開立失敗：', 'mo-ectools' ),
+					'need_donate'           => __( '請選擇捐贈單位（或輸入愛心碼）。', 'mo-ectools' ),
+					'need_ubn'              => __( '請輸入統一編號。', 'mo-ectools' ),
+					'need_cnum'             => __( '請輸入載具編號。', 'mo-ectools' ),
+					'updating'              => __( '更新中…', 'mo-ectools' ),
+					'updated'               => __( '已更新，可開立發票。', 'mo-ectools' ),
+					'update_fail'           => __( '更新失敗：', 'mo-ectools' ),
+					'cnum_mobile'           => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' ),
+					'cnum_cert'             => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
+					'invalidating'          => __( '作廢中…', 'mo-ectools' ),
+					'invalid_need_reason'   => __( '請輸入作廢原因。', 'mo-ectools' ),
+					'invalid_ok'            => __( '發票已作廢。', 'mo-ectools' ),
+					'invalid_fail'          => __( '作廢失敗：', 'mo-ectools' ),
+					'allowancing'           => __( '折讓中…', 'mo-ectools' ),
+					'allowance_need_amount' => __( '請輸入折讓金額。', 'mo-ectools' ),
+					'allowance_ok'          => __( '折讓單已開立。', 'mo-ectools' ),
+					'allowance_fail'        => __( '折讓失敗：', 'mo-ectools' ),
+					'unknown_error'         => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
+				]
+			);
 		}
 		wp_enqueue_script( $handle );
 	}
@@ -275,7 +279,7 @@ abstract class AbstractAdminMetaBox {
 	/** 「更新」按鈕 — 只把後台手動挑的欄位存回 meta（不開立），前端隨後重整確認。 */
 	public static function ajax_save(): void {
 		[ $order ] = self::ajax_authenticate();
-		$err = AdminIssueForm::validate();
+		$err       = AdminIssueForm::validate();
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
@@ -285,7 +289,7 @@ abstract class AbstractAdminMetaBox {
 
 	public static function ajax_issue(): void {
 		[ $order ] = self::ajax_authenticate();
-		$err = AdminIssueForm::validate();
+		$err       = AdminIssueForm::validate();
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
@@ -305,16 +309,16 @@ abstract class AbstractAdminMetaBox {
 	public static function ajax_invalid(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
 		[ $order ] = self::ajax_authenticate();
-		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
-		$result = call_user_func( static::invalid_callable(), $order, $reason );
+		$reason    = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$result    = call_user_func( static::invalid_callable(), $order, $reason );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 
 	public static function ajax_allowance(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
 		[ $order ] = self::ajax_authenticate();
-		$amount   = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
-		$callable = static::allowance_callable();
+		$amount    = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
+		$callable  = static::allowance_callable();
 		if ( null === $callable ) {
 			wp_send_json_error( [ 'message' => __( '此 provider 不支援折讓。', 'mo-ectools' ) ] );
 		}
@@ -322,7 +326,7 @@ abstract class AbstractAdminMetaBox {
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 
-	
+
 	private static function ajax_authenticate(): array {
 		check_ajax_referer( static::nonce_action(), 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {

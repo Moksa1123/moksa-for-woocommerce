@@ -2,7 +2,6 @@
 
 namespace MoksaWeb\Mowc\Modules\PayuniShipping\Providers;
 
-
 defined( 'ABSPATH' ) || exit;
 
 abstract class ShippingBase extends \WC_Shipping_Method {
@@ -47,7 +46,6 @@ abstract class ShippingBase extends \WC_Shipping_Method {
 		}
 
 		return $this->cost;
-
 	}
 
 	private function has_met_min_amount() {
@@ -87,5 +85,4 @@ abstract class ShippingBase extends \WC_Shipping_Method {
 
 		return $has_coupon;
 	}
-
 }

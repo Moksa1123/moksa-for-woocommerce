@@ -73,7 +73,10 @@ final class SettingsTab {
 				'type'              => 'text',
 				'default'           => '',
 				'desc_tip'          => __( '最多 5 字元（限英數字）。同一個綠界發票帳號跨多店時，用前綴避免發票號撞號。', 'mo-ectools' ),
-				'custom_attributes' => [ 'pattern' => '[a-zA-Z0-9]{0,5}', 'maxlength' => 5 ],
+				'custom_attributes' => [
+					'pattern'   => '[a-zA-Z0-9]{0,5}',
+					'maxlength' => 5,
+				],
 			],
 			[
 				'title'   => __( '何時開立', 'mo-ectools' ),
@@ -92,7 +95,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 0,
 				'desc_tip'          => __( '達到「何時開立」條件後再延幾天才實際開立。預設 0 = 立即。常見：訂單完成後 N 天才開（避免取消退款）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 0, 'max' => 30, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 0,
+					'max'  => 30,
+					'step' => 1,
+				],
 			],
 			[
 				'title'   => __( '訂單退款 / 取消時自動作廢發票', 'mo-ectools' ),
@@ -103,14 +110,14 @@ final class SettingsTab {
 					'manual'      => __( '手動 — 商家自己進訂單編輯頁按「作廢發票」', 'mo-ectools' ),
 					'auto_cancel' => __( '自動 — 訂單變取消 / 退款 / 失敗時 2 分鐘後自動作廢', 'mo-ectools' ),
 				],
-				'desc'    => __( '預設「手動」最保守。改成「自動」後，訂單變取消 / 退款 / 失敗時會在 2 分鐘後自動觸發作廢（buffer 期間切回正常狀態可救回）。已開立的發票會打綠界 Invalid API；還在排程未開的會直接取消排程。避免商家手動忘記作廢造成稅務問題。', 'mo-ectools' ),
+				'desc'    => __( '改成「自動」後，訂單取消 / 退款 / 失敗時會自動作廢該訂單已開立的發票，避免忘記作廢造成稅務問題。', 'mo-ectools' ),
 			],
 			[
 				'title'   => __( '載具 / 愛心碼真驗', 'mo-ectools' ),
 				'id'      => 'moksafowo_ecpay_invoice_carrier_api_check',
 				'type'    => 'checkbox',
 				'default' => 'yes',
-				'desc'    => __( '結帳時呼叫綠界 API 真的查財政部資料庫，確認顧客輸入的手機條碼 / 愛心碼存在。預設開啟避免顧客輸入合法格式但偽造的載具導致發票開立失敗。財政部 API 維護中時自動跳過放行。', 'mo-ectools' ),
+				'desc'    => __( '結帳時即時驗證顧客輸入的手機條碼 / 愛心碼是否真實存在，避免偽造載具導致發票開立失敗。', 'mo-ectools' ),
 			],
 			[
 				'title'   => __( '結帳允許捐贈', 'mo-ectools' ),
@@ -166,16 +173,16 @@ final class SettingsTab {
 				'desc_tip'      => __( '勾選要在結帳頁與後台手動開立提供的個人載具。至少留一項；全不勾會自動保留紙本。', 'mo-ectools' ),
 			],
 			[
-				'title'   => __( '個人預設載具', 'mo-ectools' ),
-				'id'      => 'moksafowo_ecpay_invoice_default_carrier',
-				'type'    => 'select',
-				'options' => [
+				'title'    => __( '個人預設載具', 'mo-ectools' ),
+				'id'       => 'moksafowo_ecpay_invoice_default_carrier',
+				'type'     => 'select',
+				'options'  => [
 					'member' => __( '會員載具（雲端，免輸入）', 'mo-ectools' ),
 					'mobile' => __( '手機條碼（消費者輸入 8 碼）', 'mo-ectools' ),
 					'cert'   => __( '自然人憑證（消費者輸入 16 碼）', 'mo-ectools' ),
 					'paper'  => __( '紙本（不發載具）', 'mo-ectools' ),
 				],
-				'default' => 'member',
+				'default'  => 'member',
 				'desc_tip' => __( '結帳頁與後台手動開立的預設選取載具（須是上方有開放的）。', 'mo-ectools' ),
 			],
 			[

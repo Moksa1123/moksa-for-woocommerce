@@ -22,39 +22,39 @@
 		return cfg.cvs_methods.indexOf( methodId ) !== -1;
 	}
 
-	function ensureHost() {
-		let host = document.getElementById( HOST_ID );
-		if ( host ) return host;
-		host = document.createElement( 'div' );
-		host.id = HOST_ID;
-		host.className = 'moksafowo-newebpay-shipping-store';
-		host.style.cssText = 'margin: 12px 0; padding: 12px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;';
-		// Find shipping options container to insert after
-		const shippingBlock = document.querySelector( '.wp-block-woocommerce-checkout-shipping-method-block, #shipping_method, .shipping_method' );
-		if ( shippingBlock && shippingBlock.parentNode ) {
-			shippingBlock.parentNode.insertBefore( host, shippingBlock.nextSibling );
-		} else {
-			document.body.appendChild( host );
+	const M = window.MowpCvsStore;
+
+	function carriers() {
+		return ( cfg.carriers && cfg.carriers.length ) ? cfg.carriers : [ { ship_type: '1', name: '7-ELEVEN' } ];
+	}
+
+	// 藍新一個 CVS 方式涵蓋四大超商,靠 storeMap 的 ShipType 決定開哪家的電子地圖
+	// (每家各自的圖、地圖內不能切換),所以開圖前讓顧客先選超商。
+	function carrierButtonsHtml( btnPrefix ) {
+		const esc = M.escapeHtml;
+		const list = carriers();
+		if ( list.length === 1 ) {
+			const c = list[ 0 ];
+			return `<div class="mowp-cvs-store__carriers"><button type="button" class="mowp-cvs-store__btn button" data-ship-type="${ esc( c.ship_type ) }">${ esc( btnPrefix ) }（${ esc( c.name ) }）</button></div>`;
 		}
-		return host;
+		const tip = `<div class="mowp-cvs-store__carriers-tip">${ esc( cfg.i18n.pick_carrier ) }</div>`;
+		const btns = list.map( ( c ) => `<button type="button" class="mowp-cvs-store__carrier button" data-ship-type="${ esc( c.ship_type ) }">${ esc( c.name ) }</button>` ).join( '' );
+		return `<div class="mowp-cvs-store__carriers">${ tip }<div>${ btns }</div></div>`;
 	}
 
 	function renderHost( store ) {
-		const host = ensureHost();
-		const label = store ? cfg.i18n.change : cfg.i18n.select;
-		const info = store
-			? `<div><strong>${ escapeHtml( store.name || '' ) }</strong> (${ escapeHtml( cfg.i18n.store_id ) }: ${ escapeHtml( store.id || '' ) })<br><small>${ escapeHtml( store.address || '' ) }</small></div>`
-			: `<div style="color:#666;">${ escapeHtml( cfg.i18n.none_selected ) }</div>`;
-		host.innerHTML = info + `<button type="button" class="moksafowo-newebpay-shipping-store__btn button" style="margin-top:8px;">${ escapeHtml( label ) }</button>`;
+		const host = M.ensureHost( HOST_ID );
+		host.innerHTML = M.cardHtml( {
+			store: store,
+			storeIdLabel: cfg.i18n.store_id,
+			noneText: cfg.i18n.none_selected,
+			belowHtml: carrierButtonsHtml( store ? cfg.i18n.change : cfg.i18n.select ),
+		} );
 	}
 
 	function clearHost() {
 		const host = document.getElementById( HOST_ID );
 		if ( host && host.parentNode ) host.parentNode.removeChild( host );
-	}
-
-	function escapeHtml( s ) {
-		return String( s ).replace( /[&<>"']/g, ( c ) => ( { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ c ] ) );
 	}
 
 	function refresh() {
@@ -67,42 +67,31 @@
 		renderHost( window.__moNewebpayStore || null );
 	}
 
-	function onClick( e ) {
-		const t = e.target;
-		if ( t && t.classList && t.classList.contains( 'moksafowo-newebpay-shipping-store__btn' ) ) {
-			e.preventDefault();
-			const fd = new FormData();
-			fd.append( 'action', 'moksafowo_newebpay_shipping_open_map' );
-			fd.append( 'shipping_method', chosenShippingMethod() );
-			fd.append( 'ship_type', '1' ); // default 7-11；TODO: per-method ship_type
-			fd.append( 'referrer', window.location.href );
-			fd.append( 'nonce', cfg.nonce );
-			fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
-				.then( ( r ) => r.json() )
-				.then( ( res ) => {
-					if ( res.success && res.data && res.data.api_url ) {
-						submitForm( res.data.api_url, res.data.form_data );
-					} else {
-						alert( res.data?.message || cfg.i18n.error );
-					}
-				} )
-				.catch( () => alert( cfg.i18n.error ) );
-		}
+	function openMap( shipType ) {
+		const fd = new FormData();
+		fd.append( 'action', 'moksafowo_newebpay_shipping_open_map' );
+		fd.append( 'shipping_method', chosenShippingMethod() );
+		fd.append( 'ship_type', shipType || '1' );
+		fd.append( 'referrer', window.location.href );
+		fd.append( 'nonce', cfg.nonce );
+		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
+			.then( ( r ) => r.json() )
+			.then( ( res ) => {
+				if ( res.success && res.data && res.data.api_url ) {
+					M.submitForm( res.data.api_url, res.data.form_data );
+				} else {
+					alert( res.data?.message || cfg.i18n.error );
+				}
+			} )
+			.catch( () => alert( cfg.i18n.error ) );
 	}
 
-	function submitForm( url, fields ) {
-		const f = document.createElement( 'form' );
-		f.method = 'POST';
-		f.action = url;
-		Object.keys( fields ).forEach( ( k ) => {
-			const i = document.createElement( 'input' );
-			i.type = 'hidden';
-			i.name = k;
-			i.value = fields[ k ];
-			f.appendChild( i );
-		} );
-		document.body.appendChild( f );
-		f.submit();
+	function onClick( e ) {
+		const t = e.target;
+		if ( t && t.tagName === 'BUTTON' && t.hasAttribute( 'data-ship-type' ) && t.closest( '#' + HOST_ID ) ) {
+			e.preventDefault();
+			openMap( t.getAttribute( 'data-ship-type' ) || '1' );
+		}
 	}
 
 	function resolveToken() {

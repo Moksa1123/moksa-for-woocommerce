@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle_notify(): void {
-		// RAW body — 簽章必須對原始 bytes 算，不可用 parsed $_POST（CLAUDE.md §4）。
+		// Signature must be computed over raw bytes before any parsing.
 		$raw_body = file_get_contents( 'php://input' );
 		if ( ! is_string( $raw_body ) || '' === $raw_body ) {
 			Helper::log( 'notify empty body' );
@@ -35,7 +35,6 @@ final class IpnHandler {
 			exit;
 		}
 
-		// json_decode 不做消毒 — 簽章驗過後仍逐欄 sanitize 才記錄與使用。
 		$payload = map_deep( $payload, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		Helper::log( 'notify received', [ 'payload' => $payload ] );
@@ -77,7 +76,7 @@ final class IpnHandler {
 			$rec_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
 		}
 
-		// 不信任 query 參數推斷結果 — 一律 server query 確認真實狀態。
+		// Always server-query to confirm status; do not trust query-string params.
 		$query = '' !== $rec_trade_id
 			? Client::query_by_rec_trade_id( $rec_trade_id )
 			: Client::query_by_order_number( Helper::build_order_number( $order ) );
@@ -152,7 +151,6 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::TAPPAY_TRANSACTION_STATUS, (string) $payload['status'] );
 		}
 
-		// 卡片預覽資訊（不是完整卡號）— card_info.{last_four,bin_code,issuer}。
 		$card = isset( $payload['card_info'] ) && is_array( $payload['card_info'] ) ? $payload['card_info'] : $payload;
 		if ( isset( $card['last_four'] ) && '' !== (string) $card['last_four'] ) {
 			$order->update_meta_data( Keys::TAPPAY_CARD_LAST4, (string) $card['last_four'] );
@@ -170,21 +168,17 @@ final class IpnHandler {
 	}
 
 	private static function apply_status( \WC_Order $order, array $payload ): void {
-		// pay-by-prime 回應帶 `status`（0=成功）；query trade_record 沒有 `status`，
-		// 只有 `record_status`（0=已授權待請款＝成功）。兩種 payload 走不同判定。
+		// pay-by-prime has `status` (0=success); query trade_record has only `record_status` (0=authorized).
 		$has_status    = array_key_exists( 'status', $payload );
 		$status        = $has_status ? (int) $payload['status'] : -1;
 		$record_status = isset( $payload['record_status'] ) ? (int) $payload['record_status'] : null;
 		$rec_trade_id  = (string) ( $payload['rec_trade_id'] ?? $order->get_meta( Keys::TAPPAY_REC_TRADE_ID ) );
 
-		// record_status 2=已退款（外部對帳同步），不視為新付款。
 		if ( 2 === $record_status ) {
 			$order->add_order_note( __( 'TapPay 交易已於 TapPay 後台退款。', 'mo-ectools' ) );
 			return;
 		}
 
-		// 成功：pay-by-prime → status 0（record_status 可能無或 0/4）；
-		//       query record → 無 status，以 record_status 0（已授權）為準。
 		$paid = $has_status
 			? ( 0 === $status && ( null === $record_status || in_array( $record_status, [ 0, 4 ], true ) ) )
 			: ( 0 === $record_status );
@@ -203,13 +197,12 @@ final class IpnHandler {
 			return;
 		}
 
-		// record_status 1（待付款）— 3DS 尚未完成 / 顧客未付，維持 pending。
 		if ( 1 === $record_status ) {
 			$order->update_status( 'pending', __( 'TapPay 等待顧客完成 3D 驗證。', 'mo-ectools' ) );
 			return;
 		}
 
-		$msg = (string) ( $payload['msg'] ?? ( $payload['bank_result_msg'] ?? '' ) );
+		$msg  = (string) ( $payload['msg'] ?? ( $payload['bank_result_msg'] ?? '' ) );
 		$code = $has_status ? $status : (int) ( $record_status ?? -1 );
 		$order->update_status(
 			'failed',
@@ -226,7 +219,6 @@ final class IpnHandler {
 		if ( isset( $data['trade_records'][0] ) && is_array( $data['trade_records'][0] ) ) {
 			return $data['trade_records'][0];
 		}
-		// 部分情境直接回單筆（無 trade_records 包裹）。
 		if ( isset( $data['rec_trade_id'] ) ) {
 			return $data;
 		}
@@ -237,5 +229,4 @@ final class IpnHandler {
 		$key = 'HTTP_' . strtoupper( str_replace( '-', '_', $name ) );
 		return isset( $_SERVER[ $key ] ) ? sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) ) : '';
 	}
-
 }

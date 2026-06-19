@@ -7,12 +7,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class PaymentRequest {
 
-	
+
 	public static function build_params( array $args ): array {
 		$web_no   = Helper::web_no();
 		$order_no = (string) $args['order_no'];
 		// TotalPrice 必須與 PassCode 計算用的字串完全一致。
-		$total    = (string) (int) $args['total_price'];
+		$total = (string) (int) $args['total_price'];
 
 		$pass_code = Signature::make(
 			$web_no,

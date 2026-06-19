@@ -9,13 +9,13 @@ use MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs;
 
 class TradeStatus {
 
-	const CREDIT_VALID_OR_GET_NUMBER_SUCCESS      = '0'; // 信用審查正常或取號成功. (AFTEE, ATM, CVS)
-	const PAID    = '1'; // 已付款.
-	const FAIL    = '2'; // 付款失敗.
-	const CANCEL  = '3'; // 付款取消.
-	const EXPIRED = '4'; // 交易逾期. (AFTEE, ATM, CVS)
-	const TBC     = '8'; // 待確認
-	const UNPAID  = '9'; // 未付款.
+	const CREDIT_VALID_OR_GET_NUMBER_SUCCESS = '0'; // 信用審查正常或取號成功. (AFTEE, ATM, CVS)
+	const PAID                               = '1'; // 已付款.
+	const FAIL                               = '2'; // 付款失敗.
+	const CANCEL                             = '3'; // 付款取消.
+	const EXPIRED                            = '4'; // 交易逾期. (AFTEE, ATM, CVS)
+	const TBC                                = '8'; // 待確認
+	const UNPAID                             = '9'; // 未付款.
 
 	public static function get_name( $status_code, $payment_method ) {
 		switch ( $status_code ) {

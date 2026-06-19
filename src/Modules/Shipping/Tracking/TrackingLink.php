@@ -7,12 +7,11 @@ defined( 'ABSPATH' ) || exit;
 
 final class TrackingLink {
 
-	
+
 	public static function for_ecpay_record( array $record ): ?array {
-		$subtype = (string) ( $record['subtype'] ?? '' );
-		$booking = (string) ( $record['booking_note'] ?? '' );
-		$pay     = (string) ( $record['cvs_payment_no'] ?? '' );
-		// CVS 訂單：booking_note 為主，否則 fallback 取貨碼（CVS C2C 才填）
+		$subtype     = (string) ( $record['subtype'] ?? '' );
+		$booking     = (string) ( $record['booking_note'] ?? '' );
+		$pay         = (string) ( $record['cvs_payment_no'] ?? '' );
 		$tracking_no = '' !== $booking ? $booking : $pay;
 
 		return self::resolve_carrier_link( $subtype, $tracking_no );
@@ -34,7 +33,6 @@ final class TrackingLink {
 		$subtype  = (string) ( $record['subtype'] ?? '' );
 		$lgs_type = (string) ( $record['lgs_type'] ?? '' );
 
-		// 先看 subtype，再 fallback lgs_type 中文名（兩種寫入路徑都涵蓋）
 		if ( 'TCAT' === $subtype || '黑貓' === $lgs_type ) {
 			$tracking_no = (string) ( $record['track_num'] ?? $record['track_no'] ?? '' );
 			return self::resolve_carrier_link( 'TCAT', $tracking_no );
@@ -50,7 +48,7 @@ final class TrackingLink {
 		return null;
 	}
 
-	
+
 	private static function resolve_carrier_link( string $subtype, string $tracking_no ): ?array {
 		switch ( $subtype ) {
 			case 'TCAT':
@@ -107,20 +105,46 @@ final class TrackingLink {
 		return null;
 	}
 
-	
-	/**
-	 * render_button_html 輸出的 kses allowlist — 各 echo 端統一使用。
-	 *
-	 * @return array<string, array<string, bool>>
-	 */
+
 	public static function kses_allowlist(): array {
 		return [
-			'span'   => [ 'class' => true, 'style' => true ],
-			'code'   => [ 'class' => true, 'style' => true ],
-			'button' => [ 'type' => true, 'class' => true, 'style' => true, 'title' => true, 'data-tracking' => true ],
-			'a'      => [ 'href' => true, 'target' => true, 'rel' => true, 'class' => true, 'style' => true ],
-			'svg'    => [ 'xmlns' => true, 'viewbox' => true, 'width' => true, 'height' => true, 'fill' => true, 'aria-hidden' => true, 'style' => true ],
-			'path'   => [ 'd' => true, 'fill' => true, 'fill-rule' => true, 'clip-rule' => true ],
+			'span'   => [
+				'class' => true,
+				'style' => true,
+			],
+			'code'   => [
+				'class' => true,
+				'style' => true,
+			],
+			'button' => [
+				'type'          => true,
+				'class'         => true,
+				'style'         => true,
+				'title'         => true,
+				'data-tracking' => true,
+			],
+			'a'      => [
+				'href'   => true,
+				'target' => true,
+				'rel'    => true,
+				'class'  => true,
+				'style'  => true,
+			],
+			'svg'    => [
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'fill'        => true,
+				'aria-hidden' => true,
+				'style'       => true,
+			],
+			'path'   => [
+				'd'         => true,
+				'fill'      => true,
+				'fill-rule' => true,
+				'clip-rule' => true,
+			],
 			'strong' => [],
 			'br'     => [],
 		];

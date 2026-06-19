@@ -8,14 +8,14 @@ defined( 'ABSPATH' ) || exit;
 final class Registrar {
 
 	public const STATUSES = [
-		'moksa-shipped' => [
+		'moksa-shipped'      => [
 			'label'    => '已出貨',
 			'badge'    => '已出貨',
 			'wc_label' => '已出貨 <span class="count">(%s)</span>',
 			'color'    => '#2271b1',
 			'public'   => true,
 		],
-		'moksa-cvs-arrived' => [
+		'moksa-cvs-arrived'  => [
 			'label'    => '已到店待取',
 			'badge'    => '到店待取',
 			'wc_label' => '已到店待取 <span class="count">(%s)</span>',
@@ -39,11 +39,10 @@ final class Registrar {
 		add_filter( 'wc_order_is_editable', [ __CLASS__, 'lock_order_editing_after_shipping' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inject_admin_badge_css' ] );
 
-		// WC 不自動將自訂狀態加入 dropdown，需兩個 filter 同時掛（legacy + HPOS DataViews）。
+		// 自訂狀態需兩個 filter（legacy + HPOS DataViews）
 		add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'add_bulk_actions' ] );
 		add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'add_bulk_actions' ] );
 
-		// Custom field type for compact color picker grid + manual save
 		add_action( 'woocommerce_admin_field_mowp_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_color_grid_assets' ] );
 		add_action( 'woocommerce_update_options_' . \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
@@ -51,27 +50,27 @@ final class Registrar {
 
 	public static function color_status_labels(): array {
 		return [
-			'processing'      => __( '處理中', 'mo-ectools' ),
+			'processing'         => __( '處理中', 'mo-ectools' ),
 			'moksa-shipped'      => __( '已出貨', 'mo-ectools' ),
 			'moksa-cvs-arrived'  => __( '已到店待取', 'mo-ectools' ),
 			'moksa-store-closed' => __( '門市關轉', 'mo-ectools' ),
-			'completed'       => __( '完成', 'mo-ectools' ),
-			'cancelled'       => __( '已取消 / 失敗', 'mo-ectools' ),
-			'refunded'        => __( '退款', 'mo-ectools' ),
-			'on-hold'         => __( '保留 / 待付款', 'mo-ectools' ),
+			'completed'          => __( '完成', 'mo-ectools' ),
+			'cancelled'          => __( '已取消 / 失敗', 'mo-ectools' ),
+			'refunded'           => __( '退款', 'mo-ectools' ),
+			'on-hold'            => __( '保留 / 待付款', 'mo-ectools' ),
 		];
 	}
 
 	public static function color_status_defaults(): array {
 		return [
-			'processing'      => [ '#dbeafe', '#1e40af' ],
+			'processing'         => [ '#dbeafe', '#1e40af' ],
 			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
 			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
 			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
-			'completed'       => [ '#d1fae5', '#065f46' ],
-			'cancelled'       => [ '#fee2e2', '#991b1b' ],
-			'refunded'        => [ '#e2e8f0', '#475569' ],
-			'on-hold'         => [ '#fef3c7', '#92400e' ],
+			'completed'          => [ '#d1fae5', '#065f46' ],
+			'cancelled'          => [ '#fee2e2', '#991b1b' ],
+			'refunded'           => [ '#e2e8f0', '#475569' ],
+			'on-hold'            => [ '#fef3c7', '#92400e' ],
 		];
 	}
 
@@ -141,12 +140,13 @@ JS;
 				<th><?php esc_html_e( '預覽', 'mo-ectools' ); ?></th>
 			</tr></thead>
 			<tbody>
-				<?php foreach ( $labels as $slug => $label ) :
-					$key       = 'moksafowo_status_color_' . str_replace( '-', '_', $slug );
+				<?php
+				foreach ( $labels as $slug => $label ) :
+					$key                 = 'moksafowo_status_color_' . str_replace( '-', '_', $slug );
 					[ $def_bg, $def_fg ] = $defaults[ $slug ];
-					$bg        = (string) get_option( $key . '_bg', $def_bg );
-					$fg        = (string) get_option( $key . '_fg', $def_fg );
-				?>
+					$bg                  = (string) get_option( $key . '_bg', $def_bg );
+					$fg                  = (string) get_option( $key . '_fg', $def_fg );
+					?>
 					<tr data-status="<?php echo esc_attr( $slug ); ?>">
 						<td class="moksafowo-status-name"><?php echo esc_html( $label ); ?></td>
 						<td><input type="text" class="moksafowo-status-color-input" data-target="bg" name="<?php echo esc_attr( $key . '_bg' ); ?>" value="<?php echo esc_attr( $bg ); ?>" data-default-color="<?php echo esc_attr( $def_bg ); ?>"></td>
@@ -237,7 +237,7 @@ JS;
 		$out = [];
 		foreach ( $statuses as $key => $label ) {
 			$out[ $key ] = $label;
-				if ( 'wc-completed' === $key ) {
+			if ( 'wc-completed' === $key ) {
 				foreach ( array_keys( self::STATUSES ) as $slug ) {
 					if ( ! self::is_status_enabled( $slug ) ) {
 						continue;
@@ -324,8 +324,7 @@ JS;
 		$css = '';
 		foreach ( $palette as $slug => $colors ) {
 			[ $bg, $fg ] = $colors;
-			// 只 target 真的 badge（有 .order-status class），不波及只帶 .status-X 的 <tr>。
-			$css .= sprintf(
+			$css        .= sprintf(
 				'.order-status.status-%s, mark.order-status.status-%s { background:%s !important; color:%s !important; border-color:%s !important; }',
 				esc_attr( $slug ),
 				esc_attr( $slug ),
@@ -347,33 +346,33 @@ JS;
 		return '';
 	}
 
-	
+
 	private static function status_palette(): array {
 		if ( null !== self::$palette_cache ) {
 			return self::$palette_cache;
 		}
 
-		// failed 共用 cancelled、pending 共用 on-hold 的 option key。
-		$defaults = [
-			'processing'      => [ '#dbeafe', '#1e40af' ],
-			'completed'       => [ '#d1fae5', '#065f46' ],
-			'cancelled'       => [ '#fee2e2', '#991b1b' ],
-			'refunded'        => [ '#e2e8f0', '#475569' ],
-			'failed'          => [ '#fee2e2', '#991b1b' ],
-			'on-hold'         => [ '#fef3c7', '#92400e' ],
-			'pending'         => [ '#fef3c7', '#92400e' ],
+		// failed 共用 cancelled；pending 共用 on-hold 的 option key
+		$defaults    = [
+			'processing'         => [ '#dbeafe', '#1e40af' ],
+			'completed'          => [ '#d1fae5', '#065f46' ],
+			'cancelled'          => [ '#fee2e2', '#991b1b' ],
+			'refunded'           => [ '#e2e8f0', '#475569' ],
+			'failed'             => [ '#fee2e2', '#991b1b' ],
+			'on-hold'            => [ '#fef3c7', '#92400e' ],
+			'pending'            => [ '#fef3c7', '#92400e' ],
 			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
 			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
 			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
 		];
 		$option_keys = [
-			'processing'      => 'moksafowo_status_color_processing',
-			'completed'       => 'moksafowo_status_color_completed',
-			'cancelled'       => 'moksafowo_status_color_cancelled',
-			'failed'          => 'moksafowo_status_color_cancelled',
-			'refunded'        => 'moksafowo_status_color_refunded',
-			'on-hold'         => 'moksafowo_status_color_on_hold',
-			'pending'         => 'moksafowo_status_color_on_hold',
+			'processing'         => 'moksafowo_status_color_processing',
+			'completed'          => 'moksafowo_status_color_completed',
+			'cancelled'          => 'moksafowo_status_color_cancelled',
+			'failed'             => 'moksafowo_status_color_cancelled',
+			'refunded'           => 'moksafowo_status_color_refunded',
+			'on-hold'            => 'moksafowo_status_color_on_hold',
+			'pending'            => 'moksafowo_status_color_on_hold',
 			'moksa-shipped'      => 'moksafowo_status_color_moksafowo_shipped',
 			'moksa-cvs-arrived'  => 'moksafowo_status_color_moksafowo_cvs_arrived',
 			'moksa-store-closed' => 'moksafowo_status_color_moksafowo_store_closed',

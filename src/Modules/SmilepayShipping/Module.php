@@ -46,26 +46,15 @@ final class Module extends AbstractModule {
 	public function boot(): void {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
-		// 物流 IPN 接 SmilePay 物流貨態回傳
 		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
-
-		// CVS 取貨地址不需要收件電話 / first_name / last_name 必填
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
-
-		// 批次列印 — 走 SP_B2C_CVS_PRINT_API 或 SP_TCAT_PRINT_API
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
-
-		// 結帳選店流程
 		Frontend\StoreSelector::init();
-		// 顧客 my-account/view-order 物流卡片 + tracking buttons
 		Frontend\CustomerOrderView::init();
-
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 			Operations\PrintProxy::init();
 		}
-
-		// Email 貨態追蹤 — 自己 register filter callback 提供 entries（Shipping core 解耦）
 		Emails\EmailTrackingProvider::init();
 	}
 
@@ -95,8 +84,7 @@ final class Module extends AbstractModule {
 	public static function register_batch_print( array $providers ): array {
 		$counter = static fn( \WC_Order $o ): int => Operations\BatchPrint::record_count( $o );
 
-		// CVS bucket — 7-11 + 全家
-		$cvs_titles = [
+		$cvs_titles                = [
 			'moksafowo_smilepay_shipping_cvs_711'  => __( '速買配 7-11 取貨', 'mo-ectools' ),
 			'moksafowo_smilepay_shipping_cvs_fami' => __( '速買配 全家取貨', 'mo-ectools' ),
 		];
@@ -106,19 +94,17 @@ final class Module extends AbstractModule {
 			'method_ids'     => $cvs_titles,
 			'handler'        => [ Operations\BatchPrint::class, 'cvs' ],
 			'record_counter' => $counter,
-			// SmilePay B2C CVS print API 不分紙張，固定一格式
+			// SmilePay CVS print API 固定格式，不分紙張
 			'paper_modes'    => [ '1' ],
 		];
 
-		// HOME bucket — 黑貓 統一 method（多溫層拆單）+ 既有 3 個單溫層 method
-		$home_titles = [
+		$home_titles                = [
 			'moksafowo_smilepay_shipping_tcat'         => __( '速買配 黑貓宅配', 'mo-ectools' ),
 			'moksafowo_smilepay_shipping_tcat_normal'  => __( '速買配 黑貓常溫', 'mo-ectools' ),
 			'moksafowo_smilepay_shipping_tcat_refrige' => __( '速買配 黑貓冷藏', 'mo-ectools' ),
 			'moksafowo_smilepay_shipping_tcat_freeze'  => __( '速買配 黑貓冷凍', 'mo-ectools' ),
 		];
-		// records 的溫層集合（給拆單訂單顯示溫層 pill 用），對應 ECPay register_batch_print 邏輯
-		$temps = static function ( \WC_Order $o ): array {
+		$temps                      = static function ( \WC_Order $o ): array {
 			$out = [];
 			foreach ( Operations\CreateOrder::get_records( $o ) as $r ) {
 				$t = (int) ( $r['temp'] ?? 0 );

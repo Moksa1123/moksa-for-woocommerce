@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class PaymentTypeCatalog {
 
-	
+
 	public static function label( string $type, ?string $fallback = null ): string {
 		$map = [
 			'CREDIT'     => __( '信用卡', 'mo-ectools' ),

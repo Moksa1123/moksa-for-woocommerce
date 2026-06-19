@@ -18,7 +18,7 @@ final class HDUnified extends AbstractHomeShippingMethod {
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
 		$this->method_title       = __( 'PAYUNi — 黑貓宅配（多溫層）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi 統一金流物流 — 黑貓宅急便。商品溫層混合（常溫 / 冷藏 / 冷凍）時，後台建單自動拆 N 包送 PAYUNi /home_delivery/trade API（GoodsType 1/3/2 各對應），各取獨立 ShipTradeNo。', 'mo-ectools' );
+		$this->method_description = __( 'PAYUNi 黑貓宅急便，支援常溫 / 冷藏 / 冷凍多溫層配送。', 'mo-ectools' );
 		parent::__construct( $instance_id );
 	}
 

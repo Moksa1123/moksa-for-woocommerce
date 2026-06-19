@@ -22,7 +22,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function tagline(): string {
-		return __( '17 種付款方式 — 信用卡 / ATM / 超商 / 行動支付 / BNPL', 'mo-ectools' );
+		return __( '信用卡 / ATM / 超商 / 行動支付 / 分期後付', 'mo-ectools' );
 	}
 
 	public function methods(): array {
@@ -53,7 +53,7 @@ final class Module extends AbstractGatewayModule {
 
 	public static function gateway_map(): array {
 		return [
-			Gateways\Unified::GATEWAY_ID     => Gateways\Unified::class,
+			Gateways\Unified::GATEWAY_ID            => Gateways\Unified::class,
 			'moksafowo_newebpay_credit'             => Gateways\Credit::class,
 			'moksafowo_newebpay_credit_installment' => Gateways\CreditInstallment::class,
 			'moksafowo_newebpay_atm'                => Gateways\Atm::class,
@@ -89,11 +89,9 @@ final class Module extends AbstractGatewayModule {
 	protected function boot_extras(): void {
 		add_filter( 'woocommerce_order_get_payment_method_title', [ __CLASS__, 'rebrand_legacy_payment_title' ], 10, 2 );
 
-		// 顧客端取號繳費資訊（ATM/超商代碼/條碼）。
 		Frontend\CustomerPaymentInfo::init();
 
-		// NewebpayShipping 共用商家憑證 fallback — 物流模組沒設 shipping-specific 憑證時走這條。
-		// 細節見 NewebpayShipping\Api\Helper class docblock。
+		// NewebpayShipping fallback: shipping module uses payment credentials when no shipping-specific credentials set.
 		add_filter( 'moksafowo_newebpay_shipping_sandbox_fallback', static fn() => Api\Helper::is_sandbox() );
 		add_filter( 'moksafowo_newebpay_shipping_merchant_id_fallback', static fn() => Api\Helper::merchant_id() );
 		add_filter( 'moksafowo_newebpay_shipping_hash_key_fallback', static fn() => Api\Helper::hash_key() );

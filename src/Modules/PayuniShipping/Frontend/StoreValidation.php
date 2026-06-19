@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class StoreValidation {
 
-	
+
 	public static function block_validate_cvs_store( \WC_Order $order, $request ): void {
 		// 跳過試算 call（換金流 / 換物流時 Block 會打 __experimental_calc_totals=true，不是真下單）
 		if ( $request && method_exists( $request, 'get_param' ) && $request->get_param( '__experimental_calc_totals' ) ) {
@@ -91,7 +91,7 @@ final class StoreValidation {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			$valid = (bool) apply_filters( 'moksafowo_payuni_shipping_phone_valid', $valid, $shipping_phone );
 			if ( ! $valid ) {
-				wc_add_notice( __( 'Shipping Phone format is invalid', 'mo-ectools' ), 'error' );
+				wc_add_notice( __( '收件人電話格式不正確，請填入有效的手機或市話號碼。', 'mo-ectools' ), 'error' );
 			}
 		}
 

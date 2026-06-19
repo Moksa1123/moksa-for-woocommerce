@@ -17,14 +17,11 @@ final class CustomerOrderView {
 		add_action( 'woocommerce_order_details_before_order_table', [ __CLASS__, 'render' ], 5, 1 );
 		add_filter( 'woocommerce_get_order_item_totals', [ __CLASS__, 'filter_order_item_totals' ], 10, 3 );
 		add_filter( 'woocommerce_order_item_name', [ __CLASS__, 'filter_item_name' ], 10, 2 );
-		// HPOS 訂單列表「運送至」column 走 $order->get_shipping_method()，沒過 wc_get_order_item_name
-		add_filter( 'woocommerce_order_shipping_method', [ __CLASS__, 'filter_shipping_method_string' ], 10, 2 );
-		// my-account/view-order 頁載入共用 card CSS + clipboard JS（priority 20 確保 register 先跑）
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_copy_script' ], 20 );
+		add_filter( 'woocommerce_order_shipping_method', [ __CLASS__, 'filter_shipping_method_string' ], 10, 2 ); // HPOS 訂單列表「運送至」column
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_copy_script' ], 20 ); // priority 20 確保 register 先跑
 	}
 
 	public static function enqueue_copy_script(): void {
-		// 只在 my-account/view-order 載入共用 card CSS + clipboard JS
 		if ( ! function_exists( 'is_account_page' ) || ! is_account_page() ) {
 			return;
 		}
@@ -59,10 +56,6 @@ final class CustomerOrderView {
 		foreach ( $order->get_shipping_methods() as $m ) {
 			$mid  = (string) $m->get_method_id();
 			$name = (string) $m->get_name();
-			// 我們提供的物流 method 一律以最新的 carrier_title 顯示
-			// （cover raw method_id / 舊「ECPay — XXX」/ 中間 rename 過的多種 legacy 字串）
-			// 例外：stored name 含 multi-temp breakdown（CartTempLabel 注入的 ` · `
-			//      per-temp 分隔符）就保留 stored name，讓 my-account 看到完整 breakdown
 			if ( isset( $map[ $mid ] ) ) {
 				$names[] = self::label_with_breakdown( $name, $mid );
 			} else {
@@ -75,12 +68,11 @@ final class CustomerOrderView {
 		return $total_rows;
 	}
 
-	
+
 	private static function label_with_breakdown( string $stored_name, string $method_id ): string {
 		if ( '' === $stored_name ) {
 			return self::carrier_title( $method_id );
 		}
-		// 偵測 CartTempLabel 注入的視覺標記（任一出現即視為有 breakdown）
 		$markers = [ '　｜　', '🟫', '🟦', '🟪' ];
 		foreach ( $markers as $m ) {
 			if ( str_contains( $stored_name, $m ) ) {
@@ -146,12 +138,12 @@ final class CustomerOrderView {
 
 			<div class="moksafowo-shipping-card__body">
 				<?php
-				// 取貨資訊 (CVS) 或 收件人/地址 (HOME) — 全 records 共用，顯示一次就好
 				if ( $is_cvs ) :
 					$store_name = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
 					$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 					$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
-					if ( '' !== $store_name || '' !== $store_id ) : ?>
+					if ( '' !== $store_name || '' !== $store_id ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value">
@@ -164,29 +156,34 @@ final class CustomerOrderView {
 								<?php endif; ?>
 							</span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				else :
 					$address   = TwAddress::format_shipping_address( $order );
 					$recipient = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
 					if ( '' === $recipient ) {
 						$recipient = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
 					}
-					if ( '' !== $recipient ) : ?>
+					if ( '' !== $recipient ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $recipient ); ?></span>
 						</div>
-					<?php endif;
-					if ( '' !== $address ) : ?>
+						<?php
+					endif;
+					if ( '' !== $address ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件地址', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $address ); ?></span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				endif;
 
-				// records loop — 多溫層拆單訂單會有多筆，每筆顯示物流編號 + 貨態查詢按鈕
-				if ( $is_split ) : ?>
+				if ( $is_split ) :
+					?>
 					<div class="moksafowo-shipping-card__row" style="grid-template-columns:1fr;border-bottom:1px dashed #f1f5f9;">
 						<span class="moksafowo-shipping-card__label" style="font-size:12px;">
 							<?php
@@ -195,15 +192,16 @@ final class CustomerOrderView {
 							?>
 						</span>
 					</div>
-				<?php endif;
+					<?php
+				endif;
 
 				foreach ( $records as $r ) :
-					$rec_id  = (string) ( $r['id'] ?? '' );
-					$rec_pay = (string) ( $r['cvs_payment_no'] ?? '' );
-					$rec_val = (string) ( $r['cvs_validation_no'] ?? '' );
-					$rec_book = (string) ( $r['booking_note'] ?? '' );
-					$rec_temp = (int) ( $r['temp'] ?? 0 );
-					$temp_label = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
+					$rec_id        = (string) ( $r['id'] ?? '' );
+					$rec_pay       = (string) ( $r['cvs_payment_no'] ?? '' );
+					$rec_val       = (string) ( $r['cvs_validation_no'] ?? '' );
+					$rec_book      = (string) ( $r['booking_note'] ?? '' );
+					$rec_temp      = (int) ( $r['temp'] ?? 0 );
+					$temp_label    = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_ecpay_record( $r );
 					?>
 					<div class="moksafowo-shipping-card__row">
@@ -222,7 +220,11 @@ final class CustomerOrderView {
 							<?php if ( $is_cvs && '' !== $rec_pay ) : ?>
 								<span style="font-size:12px;color:#475569;">
 									<?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?>
-									<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_pay ); ?><?php if ( '' !== $rec_val ) : ?> / <?php echo esc_html( $rec_val ); ?><?php endif; ?></span>
+									<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_pay ); ?>
+									<?php
+									if ( '' !== $rec_val ) :
+										?>
+										/ <?php echo esc_html( $rec_val ); ?><?php endif; ?></span>
 								</span>
 							<?php endif; ?>
 							<?php if ( null !== $tracking_info ) : ?>

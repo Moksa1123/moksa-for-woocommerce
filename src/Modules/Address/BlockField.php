@@ -73,8 +73,8 @@ final class BlockField {
 
 	public static function fill_city_from_district( \WC_Order $order, $request ): void {
 		$additional = $request->get_param( 'extensions' ) ?? [];
-		$billing  = (array) ( $request->get_param( 'billing_address' ) ?? [] );
-		$shipping = (array) ( $request->get_param( 'shipping_address' ) ?? [] );
+		$billing    = (array) ( $request->get_param( 'billing_address' ) ?? [] );
+		$shipping   = (array) ( $request->get_param( 'shipping_address' ) ?? [] );
 
 		$pick = static function ( $arr ): string {
 			if ( ! is_array( $arr ) ) {
@@ -98,7 +98,7 @@ final class BlockField {
 		}
 	}
 
-	
+
 	public static function strip_district_additional_meta( \WC_Order $order ): void {
 		$changed = false;
 		foreach ( [ '_wc_billing/mowp/district', '_wc_shipping/mowp/district' ] as $key ) {
@@ -112,7 +112,7 @@ final class BlockField {
 		}
 	}
 
-	
+
 	public static function validate_district_for_home( $data, $errors ): void {
 		if ( ! $errors instanceof \WP_Error ) {
 			return;
@@ -127,7 +127,7 @@ final class BlockField {
 		}
 	}
 
-	
+
 	public static function enforce_district_block( \WC_Order $order, $request ): void {
 		$methods = ( function_exists( 'WC' ) && WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
 		foreach ( $order->get_shipping_methods() as $sm ) {
@@ -215,18 +215,20 @@ final class BlockField {
 			}
 		}
 
-		woocommerce_register_additional_checkout_field( [
-			'id'          => self::FIELD_ID,
-			'label'       => __( '鄉鎮市區', 'mo-ectools' ),
-			'location'    => 'address',
-			'type'        => 'select',
-			// 不全域 required — CVS 取貨送門市不需鄉鎮市區；只有宅配（HOME）才要，
-			// 由 validate_district_for_home() 條件式驗證。
-			'required'    => false,
-			'placeholder' => __( '請選擇…', 'mo-ectools' ),
-			'options'     => $options,
+		woocommerce_register_additional_checkout_field(
+			[
+				'id'          => self::FIELD_ID,
+				'label'       => __( '鄉鎮市區', 'mo-ectools' ),
+				'location'    => 'address',
+				'type'        => 'select',
+				// 不全域 required — CVS 取貨送門市不需鄉鎮市區；只有宅配（HOME）才要，
+				// 由 validate_district_for_home() 條件式驗證。
+				'required'    => false,
+				'placeholder' => __( '請選擇…', 'mo-ectools' ),
+				'options'     => $options,
 			// additional checkout fields 沒有 priority option，順序與寬度走 CSS order property。
-		] );
+			]
+		);
 	}
 
 	public static function sync_to_core_city( string $key, $value, string $group, $object ): void {
@@ -267,7 +269,7 @@ final class BlockField {
 			true
 		);
 
-		$cities         = TwAddress::get_cities( 'TW' );
+		$cities          = TwAddress::get_cities( 'TW' );
 		$state_to_cities = [];
 		$postcode_map    = [];
 		$seen            = [];
@@ -279,7 +281,7 @@ final class BlockField {
 					if ( isset( $seen[ $name ] ) && $seen[ $name ] !== $state_key ) {
 						$value = $name . '|' . $state_key;
 					} else {
-						$value = $name;
+						$value         = $name;
 						$seen[ $name ] = $state_key;
 					}
 					$values[] = $value;
@@ -291,12 +293,16 @@ final class BlockField {
 			}
 		}
 
-		wp_localize_script( 'moksafowo-tw-district-block', 'moksafowo_tw_district', [
-			'field_id'   => self::FIELD_ID,
-			'by_state'   => $state_to_cities,
-			'postcodes'  => $postcode_map,
-			'placeholder' => __( '請選擇…', 'mo-ectools' ),
-		] );
+		wp_localize_script(
+			'moksafowo-tw-district-block',
+			'moksafowo_tw_district',
+			[
+				'field_id'    => self::FIELD_ID,
+				'by_state'    => $state_to_cities,
+				'postcodes'   => $postcode_map,
+				'placeholder' => __( '請選擇…', 'mo-ectools' ),
+			]
+		);
 	}
 
 	public static function add_body_class( array $classes ): array {

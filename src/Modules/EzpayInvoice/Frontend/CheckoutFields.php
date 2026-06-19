@@ -51,7 +51,7 @@ final class CheckoutFields {
 		}
 
 		$carrier_labels  = [
-			'member' => __( 'ezPay 平台會員載具', 'mo-ectools' ),
+			'member' => __( 'ezPay 會員載具', 'mo-ectools' ),
 			'mobile' => __( '手機條碼', 'mo-ectools' ),
 			'cert'   => __( '自然人憑證', 'mo-ectools' ),
 			'paper'  => __( '紙本發票', 'mo-ectools' ),
@@ -63,63 +63,95 @@ final class CheckoutFields {
 
 		echo '<div class="moksafowo-ezpay-invoice-fields"><h3>' . esc_html__( '電子發票', 'mo-ectools' ) . '</h3>';
 
-		woocommerce_form_field( 'moksafowo_invoice_type', [
-			'type'     => 'select',
-			'label'    => __( '發票類型', 'mo-ectools' ),
-			'options'  => $type_options,
-			'default'  => 'b2c_carrier',
-			'required' => true,
-			'class'    => [ 'form-row-wide' ],
-		], (string) WC()->checkout->get_value( 'moksafowo_invoice_type' ) );
+		woocommerce_form_field(
+			'moksafowo_invoice_type',
+			[
+				'type'     => 'select',
+				'label'    => __( '發票類型', 'mo-ectools' ),
+				'options'  => $type_options,
+				'default'  => 'b2c_carrier',
+				'required' => true,
+				'class'    => [ 'form-row-wide' ],
+			],
+			(string) WC()->checkout->get_value( 'moksafowo_invoice_type' )
+		);
 
-		woocommerce_form_field( 'moksafowo_invoice_carrier_type', [
-			'type'    => 'select',
-			'label'   => __( '載具類型', 'mo-ectools' ),
-			'options' => $carrier_options,
-			'default' => InvoiceChannels::default_carrier( $prefix ),
-			'class'   => [ 'form-row-wide', 'moksafowo-invoice-b2c-only' ],
-		], (string) WC()->checkout->get_value( 'moksafowo_invoice_carrier_type' ) );
+		woocommerce_form_field(
+			'moksafowo_invoice_carrier_type',
+			[
+				'type'    => 'select',
+				'label'   => __( '載具類型', 'mo-ectools' ),
+				'options' => $carrier_options,
+				'default' => InvoiceChannels::default_carrier( $prefix ),
+				'class'   => [ 'form-row-wide', 'moksafowo-invoice-b2c-only' ],
+			],
+			(string) WC()->checkout->get_value( 'moksafowo_invoice_carrier_type' )
+		);
 
-		woocommerce_form_field( 'moksafowo_invoice_carrier_num', [
-			'type'  => 'text',
-			'label' => __( '載具編號', 'mo-ectools' ),
-			'class' => [ 'form-row-wide' ],
-		], (string) WC()->checkout->get_value( 'moksafowo_invoice_carrier_num' ) );
+		woocommerce_form_field(
+			'moksafowo_invoice_carrier_num',
+			[
+				'type'  => 'text',
+				'label' => __( '載具編號', 'mo-ectools' ),
+				'class' => [ 'form-row-wide' ],
+			],
+			(string) WC()->checkout->get_value( 'moksafowo_invoice_carrier_num' )
+		);
 
 		if ( $allow_b2b ) {
-			woocommerce_form_field( 'moksafowo_invoice_buyer_ubn', [
-				'type'  => 'text',
-				'label' => __( '統一編號', 'mo-ectools' ),
-				'class' => [ 'form-row-wide' ],
-			], (string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_ubn' ) );
-			woocommerce_form_field( 'moksafowo_invoice_buyer_name', [
-				'type'  => 'text',
-				'label' => __( '公司名稱', 'mo-ectools' ),
-				'class' => [ 'form-row-wide' ],
-			], (string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_name' ) );
+			woocommerce_form_field(
+				'moksafowo_invoice_buyer_ubn',
+				[
+					'type'  => 'text',
+					'label' => __( '統一編號', 'mo-ectools' ),
+					'class' => [ 'form-row-wide' ],
+				],
+				(string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_ubn' )
+			);
+			woocommerce_form_field(
+				'moksafowo_invoice_buyer_name',
+				[
+					'type'  => 'text',
+					'label' => __( '公司名稱', 'mo-ectools' ),
+					'class' => [ 'form-row-wide' ],
+				],
+				(string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_name' )
+			);
 		}
 
 		if ( $allow_donate ) {
 			if ( InvoiceChannels::has_donate_orgs( $prefix ) ) {
 				// 捐贈單位（名稱下拉）+ 捐贈碼（唯讀，JS 依選到的單位帶入）
-				woocommerce_form_field( 'moksafowo_invoice_donate_org', [
-					'type'    => 'select',
-					'label'   => __( '捐贈單位', 'mo-ectools' ),
-					'class'   => [ 'form-row-wide' ],
-					'options' => InvoiceChannels::donate_select_options( $prefix ),
-				], (string) WC()->checkout->get_value( 'moksafowo_invoice_donate_org' ) );
-				woocommerce_form_field( 'moksafowo_invoice_love_code', [
-					'type'              => 'text',
-					'label'             => __( '捐贈碼', 'mo-ectools' ),
-					'class'             => [ 'form-row-wide' ],
-					'custom_attributes' => [ 'readonly' => 'readonly' ],
-				], (string) WC()->checkout->get_value( 'moksafowo_invoice_love_code' ) );
+				woocommerce_form_field(
+					'moksafowo_invoice_donate_org',
+					[
+						'type'    => 'select',
+						'label'   => __( '捐贈單位', 'mo-ectools' ),
+						'class'   => [ 'form-row-wide' ],
+						'options' => InvoiceChannels::donate_select_options( $prefix ),
+					],
+					(string) WC()->checkout->get_value( 'moksafowo_invoice_donate_org' )
+				);
+				woocommerce_form_field(
+					'moksafowo_invoice_love_code',
+					[
+						'type'              => 'text',
+						'label'             => __( '捐贈碼', 'mo-ectools' ),
+						'class'             => [ 'form-row-wide' ],
+						'custom_attributes' => [ 'readonly' => 'readonly' ],
+					],
+					(string) WC()->checkout->get_value( 'moksafowo_invoice_love_code' )
+				);
 			} else {
-				woocommerce_form_field( 'moksafowo_invoice_love_code', [
-					'type'  => 'text',
-					'label' => __( '捐贈碼', 'mo-ectools' ),
-					'class' => [ 'form-row-wide' ],
-				], (string) WC()->checkout->get_value( 'moksafowo_invoice_love_code' ) );
+				woocommerce_form_field(
+					'moksafowo_invoice_love_code',
+					[
+						'type'  => 'text',
+						'label' => __( '捐贈碼', 'mo-ectools' ),
+						'class' => [ 'form-row-wide' ],
+					],
+					(string) WC()->checkout->get_value( 'moksafowo_invoice_love_code' )
+				);
 			}
 		}
 
@@ -224,88 +256,110 @@ final class CheckoutFields {
 		];
 		$type_options = [];
 		foreach ( $enabled_types as $t ) {
-			$type_options[] = [ 'value' => $t, 'label' => $type_labels[ $t ] ];
+			$type_options[] = [
+				'value' => $t,
+				'label' => $type_labels[ $t ],
+			];
 		}
 
 		$carrier_labels  = [
-			'member' => __( 'ezPay 平台會員載具', 'mo-ectools' ),
+			'member' => __( 'ezPay 會員載具', 'mo-ectools' ),
 			'mobile' => __( '手機條碼', 'mo-ectools' ),
 			'cert'   => __( '自然人憑證', 'mo-ectools' ),
 			'paper'  => __( '紙本發票', 'mo-ectools' ),
 		];
 		$carrier_options = [];
 		foreach ( InvoiceChannels::enabled_carriers( $prefix ) as $c ) {
-			$carrier_options[] = [ 'value' => $c, 'label' => $carrier_labels[ $c ] ];
+			$carrier_options[] = [
+				'value' => $c,
+				'label' => $carrier_labels[ $c ],
+			];
 		}
 
-		woocommerce_register_additional_checkout_field( [
-			'id'       => 'mowp/invoice-type',
-			'label'    => __( '發票類型', 'mo-ectools' ),
-			'location' => 'order',
-			'type'     => 'select',
-			'options'  => $type_options,
-			'required' => true,
-		] );
-		woocommerce_register_additional_checkout_field( [
-			'id'       => 'mowp/invoice-carrier-type',
-			'label'    => __( '載具類型', 'mo-ectools' ),
-			'location' => 'order',
-			'type'     => 'select',
-			'options'  => $carrier_options,
-			'required' => false,
-		] );
-		woocommerce_register_additional_checkout_field( [
-			'id'       => 'mowp/invoice-carrier-num',
-			'label'    => __( '載具編號', 'mo-ectools' ),
-			'location' => 'order',
-			'type'     => 'text',
-			'required' => false,
-		] );
-		if ( $allow_b2b ) {
-			woocommerce_register_additional_checkout_field( [
-				'id'                => 'mowp/invoice-buyer-ubn',
-				'label'             => __( '統一編號', 'mo-ectools' ),
-				'location'          => 'order',
-				'type'              => 'text',
-				'required'          => false,
-				'validate_callback' => [ __CLASS__, 'validate_ubn_block' ],
-			] );
-			woocommerce_register_additional_checkout_field( [
-				'id'       => 'mowp/invoice-buyer-name',
-				'label'    => __( '公司名稱', 'mo-ectools' ),
+		woocommerce_register_additional_checkout_field(
+			[
+				'id'       => 'mowp/invoice-type',
+				'label'    => __( '發票類型', 'mo-ectools' ),
+				'location' => 'order',
+				'type'     => 'select',
+				'options'  => $type_options,
+				'required' => true,
+			]
+		);
+		woocommerce_register_additional_checkout_field(
+			[
+				'id'       => 'mowp/invoice-carrier-type',
+				'label'    => __( '載具類型', 'mo-ectools' ),
+				'location' => 'order',
+				'type'     => 'select',
+				'options'  => $carrier_options,
+				'required' => false,
+			]
+		);
+		woocommerce_register_additional_checkout_field(
+			[
+				'id'       => 'mowp/invoice-carrier-num',
+				'label'    => __( '載具編號', 'mo-ectools' ),
 				'location' => 'order',
 				'type'     => 'text',
 				'required' => false,
-			] );
+			]
+		);
+		if ( $allow_b2b ) {
+			woocommerce_register_additional_checkout_field(
+				[
+					'id'                => 'mowp/invoice-buyer-ubn',
+					'label'             => __( '統一編號', 'mo-ectools' ),
+					'location'          => 'order',
+					'type'              => 'text',
+					'required'          => false,
+					'validate_callback' => [ __CLASS__, 'validate_ubn_block' ],
+				]
+			);
+			woocommerce_register_additional_checkout_field(
+				[
+					'id'       => 'mowp/invoice-buyer-name',
+					'label'    => __( '公司名稱', 'mo-ectools' ),
+					'location' => 'order',
+					'type'     => 'text',
+					'required' => false,
+				]
+			);
 		}
 		if ( $allow_donate ) {
 			if ( InvoiceChannels::has_donate_orgs( $prefix ) ) {
 				// 捐贈單位（名稱下拉）+ 捐贈碼（唯讀文字，JS 依選到的單位帶入）
-				woocommerce_register_additional_checkout_field( [
-					'id'       => 'mowp/invoice-donate-org',
-					'label'    => __( '捐贈單位', 'mo-ectools' ),
-					'location' => 'order',
-					'type'     => 'select',
-					'options'  => InvoiceChannels::donate_block_options( $prefix ),
-					'required' => false,
-				] );
-				woocommerce_register_additional_checkout_field( [
-					'id'                => 'mowp/invoice-love-code',
-					'label'             => __( '捐贈碼', 'mo-ectools' ),
-					'location'          => 'order',
-					'type'              => 'text',
-					'required'          => false,
-					'validate_callback' => [ __CLASS__, 'validate_love_code_block' ],
-				] );
+				woocommerce_register_additional_checkout_field(
+					[
+						'id'       => 'mowp/invoice-donate-org',
+						'label'    => __( '捐贈單位', 'mo-ectools' ),
+						'location' => 'order',
+						'type'     => 'select',
+						'options'  => InvoiceChannels::donate_block_options( $prefix ),
+						'required' => false,
+					]
+				);
+				woocommerce_register_additional_checkout_field(
+					[
+						'id'                => 'mowp/invoice-love-code',
+						'label'             => __( '捐贈碼', 'mo-ectools' ),
+						'location'          => 'order',
+						'type'              => 'text',
+						'required'          => false,
+						'validate_callback' => [ __CLASS__, 'validate_love_code_block' ],
+					]
+				);
 			} else {
-				woocommerce_register_additional_checkout_field( [
-					'id'                => 'mowp/invoice-love-code',
-					'label'             => __( '捐贈碼', 'mo-ectools' ),
-					'location'          => 'order',
-					'type'              => 'text',
-					'required'          => false,
-					'validate_callback' => [ __CLASS__, 'validate_love_code_block' ],
-				] );
+				woocommerce_register_additional_checkout_field(
+					[
+						'id'                => 'mowp/invoice-love-code',
+						'label'             => __( '捐贈碼', 'mo-ectools' ),
+						'location'          => 'order',
+						'type'              => 'text',
+						'required'          => false,
+						'validate_callback' => [ __CLASS__, 'validate_love_code_block' ],
+					]
+				);
 			}
 		}
 	}

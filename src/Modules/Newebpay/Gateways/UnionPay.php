@@ -21,6 +21,6 @@ final class UnionPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '銀聯卡（UnionPay 國際）跨境付款。跳轉至藍新支付頁完成；接受 PRC / 港澳 / 海外發行的銀聯卡。', 'mo-ectools' );
+		return __( '銀聯卡跨境付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

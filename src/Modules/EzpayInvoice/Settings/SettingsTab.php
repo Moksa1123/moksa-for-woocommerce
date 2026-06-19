@@ -12,7 +12,7 @@ final class SettingsTab {
 			[
 				'title' => __( '基本設定', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( 'ezPay 電子發票串接。商家須自行至 cinv.ezpay.com.tw（沙箱）／ inv.ezpay.com.tw（正式）申請會員、開立商店、取得 MerchantID + HashKey + HashIV。', 'mo-ectools' ),
+				'desc'  => __( 'ezPay 電子發票串接。請先至 ezPay 後台申請會員、開立商店，取得商店憑證後填入下方。', 'mo-ectools' ),
 				'id'    => 'moksafowo_ezpay_invoice_section',
 			],
 			[
@@ -20,16 +20,19 @@ final class SettingsTab {
 				'id'      => 'moksafowo_ezpay_invoice_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後走 cinv.ezpay.com.tw 測試環境。預設關閉（對齊 RY / ezPay 官方建議）— 開發階段才開啟。', 'mo-ectools' ),
+				'desc'    => __( '勾選後走測試環境，不會真正開立發票。上線後請取消勾選。', 'mo-ectools' ),
 			],
 			[
-				'title'   => __( '訂單編號前綴', 'mo-ectools' ),
-				'id'      => 'moksafowo_ezpay_invoice_order_prefix',
-				'type'    => 'text',
-				'default' => '',
-				'desc'    => __( '商家自定的訂單前綴（限英數，最多 5 字元）。送進 ezPay 的 MerchantOrderNo 會以此開頭。留空即無前綴。', 'mo-ectools' ),
-				'desc_tip' => true,
-				'custom_attributes' => [ 'pattern' => '[A-Za-z0-9]{0,5}', 'maxlength' => 5 ],
+				'title'             => __( '訂單編號前綴', 'mo-ectools' ),
+				'id'                => 'moksafowo_ezpay_invoice_order_prefix',
+				'type'              => 'text',
+				'default'           => '',
+				'desc'              => __( '送至 ezPay 的訂單編號前綴（限英數，最多 5 字元）。留空即無前綴。', 'mo-ectools' ),
+				'desc_tip'          => true,
+				'custom_attributes' => [
+					'pattern'   => '[A-Za-z0-9]{0,5}',
+					'maxlength' => 5,
+				],
 			],
 			[
 				'title'   => __( '開立時機', 'mo-ectools' ),
@@ -37,8 +40,8 @@ final class SettingsTab {
 				'type'    => 'select',
 				'default' => 'paid',
 				'options' => [
-					'paid'      => __( '付款完成 — 訂單一變 processing / on-hold 已付狀態就立即開立', 'mo-ectools' ),
-					'completed' => __( '訂單完成 — 訂單變 completed 才開立（出貨後）', 'mo-ectools' ),
+					'paid'      => __( '付款完成立即開立', 'mo-ectools' ),
+					'completed' => __( '訂單完成（出貨後）才開立', 'mo-ectools' ),
 					'manual'    => __( '手動 — 商家自己在訂單頁按「開立發票」按鈕', 'mo-ectools' ),
 				],
 			],
@@ -51,7 +54,7 @@ final class SettingsTab {
 					'manual'      => __( '手動 — 商家自己進訂單編輯頁按「作廢發票」', 'mo-ectools' ),
 					'auto_cancel' => __( '自動 — 訂單變取消 / 退款 / 失敗時 2 分鐘後自動作廢', 'mo-ectools' ),
 				],
-				'desc'    => __( '預設「手動」最保守。改成「自動」後，訂單變取消 / 退款 / 失敗時會在 2 分鐘後自動觸發作廢（buffer 期間切回正常狀態可救回）。', 'mo-ectools' ),
+				'desc'    => __( '改成「自動」後，訂單取消 / 退款 / 失敗時會自動作廢該訂單已開立的發票，避免忘記作廢造成稅務問題。', 'mo-ectools' ),
 			],
 			[
 				'title'   => __( '結帳允許捐贈', 'mo-ectools' ),
@@ -122,7 +125,7 @@ final class SettingsTab {
 				'id'      => 'moksafowo_ezpay_invoice_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查 API 異常時開啟。', 'mo-ectools' ),
+				'desc'    => __( '排查發票異常時開啟。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -148,13 +151,13 @@ final class SettingsTab {
 				'title' => __( '測試 HashKey', 'mo-ectools' ),
 				'id'    => 'moksafowo_ezpay_invoice_sandbox_hash_key',
 				'type'  => 'text',
-				'desc'  => __( 'AES-256-CBC 加密金鑰，32 字元。', 'mo-ectools' ),
+				'desc'  => __( '32 字元。', 'mo-ectools' ),
 			],
 			[
 				'title' => __( '測試 HashIV', 'mo-ectools' ),
 				'id'    => 'moksafowo_ezpay_invoice_sandbox_hash_iv',
 				'type'  => 'text',
-				'desc'  => __( 'AES-256-CBC IV，16 字元。', 'mo-ectools' ),
+				'desc'  => __( '16 字元。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

@@ -68,13 +68,16 @@ final class SettingsTab {
 				'id'    => 'moksafowo_ecpay_misc_section',
 			],
 			[
-				'title'   => __( '訂單編號前綴', 'mo-ectools' ),
-				'id'      => 'moksafowo_ecpay_order_prefix',
-				'type'    => 'text',
-				'default' => '',
-				'desc'    => __( '最多 5 字元，限英數（對齊 ECPay 官方限制）。留空即無前綴，MerchantTradeNo 直接從訂單 ID 開始。', 'mo-ectools' ),
-				'desc_tip' => true,
-				'custom_attributes' => [ 'pattern' => '[A-Za-z0-9]{0,5}', 'maxlength' => 5 ],
+				'title'             => __( '訂單編號前綴', 'mo-ectools' ),
+				'id'                => 'moksafowo_ecpay_order_prefix',
+				'type'              => 'text',
+				'default'           => '',
+				'desc'              => __( '最多 5 字元，限英數。留空則訂單編號直接從訂單號開始。', 'mo-ectools' ),
+				'desc_tip'          => true,
+				'custom_attributes' => [
+					'pattern'   => '[A-Za-z0-9]{0,5}',
+					'maxlength' => 5,
+				],
 			],
 			[
 				'title'    => __( '付款頁顯示的商品名稱', 'mo-ectools' ),
@@ -89,7 +92,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 3,
 				'desc_tip'          => __( '顧客選 ATM 後，幾天內沒付款訂單就過期（綠界限制 1-60 天）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 60, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 60,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( '超商代碼付款期限（天）', 'mo-ectools' ),
@@ -97,7 +104,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 7,
 				'desc_tip'          => __( '顧客拿代碼到超商繳費的期限（綠界限制 1-7 天）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 7, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 7,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( '超商條碼付款期限（天）', 'mo-ectools' ),
@@ -105,10 +116,14 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 7,
 				'desc_tip'          => __( '顧客拿條碼到超商繳費的期限（綠界限制 1-7 天）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 7, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 7,
+					'step' => 1,
+				],
 			],
 			[
-				'title'   => __( 'Debug 日誌', 'mo-ectools' ),
+				'title'   => __( '偵錯日誌', 'mo-ectools' ),
 				'id'      => 'moksafowo_ecpay_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
@@ -160,7 +175,7 @@ final class SettingsTab {
 					'moksafowo_ecpay_jkopay'    => __( '街口支付', 'mo-ectools' ),
 					'moksafowo_ecpay_ipass'     => __( '一卡通 iPASS', 'mo-ectools' ),
 				],
-				'desc'    => __( '勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（共 16 種，預設全部未勾選）。「合併顯示」模式下此欄位無效。', 'mo-ectools' ),
+				'desc'    => __( '勾選的付款方式才會出現在結帳頁，未勾選不會出現。「合併顯示」模式下此欄位無效。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

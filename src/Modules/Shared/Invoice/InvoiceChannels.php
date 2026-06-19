@@ -90,11 +90,14 @@ final class InvoiceChannels {
 				continue;
 			}
 			[ $name, $code ] = array_map( 'trim', explode( '|', $line, 2 ) );
-			$code = (string) preg_replace( '/[^0-9]/', '', $code );
+			$code            = (string) preg_replace( '/[^0-9]/', '', $code );
 			if ( '' === $code || '' === $name ) {
 				continue;
 			}
-			$orgs[] = [ 'code' => $code, 'name' => $name ];
+			$orgs[] = [
+				'code' => $code,
+				'name' => $name,
+			];
 		}
 		return $orgs;
 	}
@@ -119,7 +122,10 @@ final class InvoiceChannels {
 	public static function donate_block_options( string $option_prefix ): array {
 		$opts = [];
 		foreach ( self::donate_orgs( $option_prefix ) as $o ) {
-			$opts[] = [ 'value' => $o['code'], 'label' => $o['name'] ];
+			$opts[] = [
+				'value' => $o['code'],
+				'label' => $o['name'],
+			];
 		}
 		return $opts;
 	}

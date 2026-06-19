@@ -30,7 +30,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 	}
 
 	protected function build_form_fields(): array {
-		$fields = parent::build_form_fields();
+		$fields                         = parent::build_form_fields();
 		$fields['order_successed_text'] = [
 			'title'       => __( '下單成功顯示訊息', 'mo-ectools' ),
 			'type'        => 'textarea',
@@ -41,7 +41,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 		return $fields;
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
@@ -60,22 +60,22 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 			: $this->process_charge_flow( $order );
 	}
 
-	
+
 	private function process_redirect_flow( \WC_Order $order ): array {
 		$args = array_merge(
 			[
-				'Pay_zg'       => $this->pay_zg(),
-				'Pur_name'     => $order->get_billing_last_name() . $order->get_billing_first_name(),
-				'Tel_number'   => (string) $order->get_billing_phone(),
+				'Pay_zg'        => $this->pay_zg(),
+				'Pur_name'      => $order->get_billing_last_name() . $order->get_billing_first_name(),
+				'Tel_number'    => (string) $order->get_billing_phone(),
 				'Mobile_number' => (string) $order->get_billing_phone(),
-				'Address'      => $order->get_billing_address_1() . $order->get_billing_address_2(),
-				'Email'        => (string) $order->get_billing_email(),
-				'Data_id'      => (string) $order->get_id(),
-				'od_sob'       => Helper::build_products_summary( $order, 49 ),
-				'Amount'       => (string) (int) ceil( (float) $order->get_total() ),
-				'Roturl'       => home_url( '/wc-api/moksafowo_smilepay_credit_roturl?Payment_title=' . rawurlencode( $this->title ) ),
+				'Address'       => $order->get_billing_address_1() . $order->get_billing_address_2(),
+				'Email'         => (string) $order->get_billing_email(),
+				'Data_id'       => (string) $order->get_id(),
+				'od_sob'        => Helper::build_products_summary( $order, 49 ),
+				'Amount'        => (string) (int) ceil( (float) $order->get_total() ),
+				'Roturl'        => home_url( '/wc-api/moksafowo_smilepay_credit_roturl?Payment_title=' . rawurlencode( $this->title ) ),
 				'Roturl_status' => IpnHandler::ROTURL_OK,
-				'Remark'       => (string) $order->get_customer_note(),
+				'Remark'        => (string) $order->get_customer_note(),
 			],
 			$this->mtmk_extra_params( $order )
 		);
@@ -93,35 +93,38 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 		];
 	}
 
-	
+
 	private function process_charge_flow( \WC_Order $order ): array {
 		$args = array_merge(
 			[
-				'Pay_zg'       => $this->pay_zg(),
-				'Pur_name'     => $order->get_billing_last_name() . $order->get_billing_first_name(),
-				'Tel_number'   => (string) $order->get_billing_phone(),
+				'Pay_zg'        => $this->pay_zg(),
+				'Pur_name'      => $order->get_billing_last_name() . $order->get_billing_first_name(),
+				'Tel_number'    => (string) $order->get_billing_phone(),
 				'Mobile_number' => (string) $order->get_billing_phone(),
-				'Address'      => (string) $order->get_billing_address_1(),
-				'Email'        => (string) $order->get_billing_email(),
-				'Data_id'      => (string) $order->get_id(),
-				'od_sob'       => Helper::build_products_summary( $order, 45 ),
-				'Amount'       => (string) (int) ceil( (float) $order->get_total() ),
-				'Roturl'       => home_url( '/wc-api/moksafowo_smilepay_roturl' ),
+				'Address'       => (string) $order->get_billing_address_1(),
+				'Email'         => (string) $order->get_billing_email(),
+				'Data_id'       => (string) $order->get_id(),
+				'od_sob'        => Helper::build_products_summary( $order, 45 ),
+				'Amount'        => (string) (int) ceil( (float) $order->get_total() ),
+				'Roturl'        => home_url( '/wc-api/moksafowo_smilepay_roturl' ),
 				'Roturl_status' => IpnHandler::ROTURL_OK,
-				'Remark'       => (string) $order->get_customer_note(),
+				'Remark'        => (string) $order->get_customer_note(),
 			],
 			$this->extra_params( $order )
 		);
 
 		$resp = Request::create_order( $args );
 
-		Helper::log( 'charge flow result', [
-			'order_id' => $order->get_id(),
-			'gateway'  => $this->id,
-			'pay_zg'   => $this->pay_zg(),
-			'ok'       => $resp['ok'],
-			'status'   => $resp['status'],
-		] );
+		Helper::log(
+			'charge flow result',
+			[
+				'order_id' => $order->get_id(),
+				'gateway'  => $this->id,
+				'pay_zg'   => $this->pay_zg(),
+				'ok'       => $resp['ok'],
+				'status'   => $resp['status'],
+			]
+		);
 
 		if ( ! $resp['ok'] ) {
 			wc_add_notice(
@@ -132,14 +135,19 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 				),
 				'error'
 			);
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: error message */
-				__( 'SmilePay 取號失敗：%s', 'mo-ectools' ),
-				$resp['message']
-			) );
+					__( 'SmilePay 取號失敗：%s', 'mo-ectools' ),
+					$resp['message']
+				)
+			);
 			$order->update_status( 'failed' );
 			$order->save();
-			return [ 'result' => 'failure', 'redirect' => '' ];
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
 		}
 
 		$this->store_charge_meta( $order, $resp['data'] );
@@ -218,23 +226,27 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 		$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $html );
 		$order->add_order_note( wp_kses_post( $html ), 1 );
 		if ( '' !== $smilepay_no ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: tracking code */
-				__( 'SmilePay 金流追蹤碼：%s', 'mo-ectools' ),
-				$smilepay_no
-			) );
+					__( 'SmilePay 金流追蹤碼：%s', 'mo-ectools' ),
+					$smilepay_no
+				)
+			);
 		}
 	}
 
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( $order instanceof \WC_Order ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: amount, 2: reason */
-				__( 'SmilePay 退款請至 SmilePay 商家後台手動操作（金額 NT$%1$s）— %2$s', 'mo-ectools' ),
-				(int) ceil( (float) $amount ),
-				'' !== (string) $reason ? $reason : __( '無原因', 'mo-ectools' )
-			) );
+					__( 'SmilePay 退款請至 SmilePay 商家後台手動操作（金額 NT$%1$s）— %2$s', 'mo-ectools' ),
+					(int) ceil( (float) $amount ),
+					'' !== (string) $reason ? $reason : __( '無原因', 'mo-ectools' )
+				)
+			);
 			$order->save();
 		}
 		return new \WP_Error(

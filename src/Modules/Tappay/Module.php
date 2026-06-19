@@ -23,12 +23,12 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function tagline(): string {
-		return __( '信用卡直連 — 卡資走 iframe 隔離，PCI SAQ-A', 'mo-ectools' );
+		return __( '信用卡直接在本站安全付款', 'mo-ectools' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡（TapPay Fields）', 'mo-ectools' ),
+			__( '信用卡', 'mo-ectools' ),
 		];
 	}
 

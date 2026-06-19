@@ -18,7 +18,7 @@ class LinePay extends GatewayBase {
 
 		$this->id                 = self::GATEWAY_ID;
 		$this->method_title       = __( 'PAYUNi LINE Pay', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi LINE Pay', 'mo-ectools' );
+		$this->method_description = __( '使用 LINE Pay 付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array(
 			'products',
 		);
@@ -56,7 +56,7 @@ class LinePay extends GatewayBase {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::LINE_PAY_NO => _x( 'Pay No', 'LINE Pay', 'mo-ectools' ),
+			OrderMeta::LINE_PAY_NO => _x( '付款序號', 'LINE Pay', 'mo-ectools' ),
 		);
 
 		return $order_metas;

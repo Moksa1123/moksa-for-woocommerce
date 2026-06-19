@@ -30,14 +30,12 @@ final class Signature {
 
 	public static function generate_signature( string $channel_secret, string $url, string $request_body, string $nonce, string $method = 'POST' ): string {
 		$url_path = wp_parse_url( $url, PHP_URL_PATH );
-		// v3 spec: GET signs query, POST signs body
-		$payload = 'GET' === strtoupper( $method ) ? (string) wp_parse_url( $url, PHP_URL_QUERY ) : $request_body;
-		$data    = $channel_secret . $url_path . $payload . $nonce;
+		$payload  = 'GET' === strtoupper( $method ) ? (string) wp_parse_url( $url, PHP_URL_QUERY ) : $request_body;
+		$data     = $channel_secret . $url_path . $payload . $nonce;
 		return base64_encode( hash_hmac( \Moksafowo_LinePay_Const::AUTH_ALGRO, $data, $channel_secret, true ) );
 	}
 
 	public static function generate_request_time(): string {
-		// PHP 8.2 strict: microtime(true) is float — must cast before explode
 		$parts    = explode( '.', (string) microtime( true ) );
 		$fraction = $parts[1] ?? '0';
 		return gmdate( \Moksafowo_LinePay_Const::REQUEST_TIME_FORMAT ) . $fraction;

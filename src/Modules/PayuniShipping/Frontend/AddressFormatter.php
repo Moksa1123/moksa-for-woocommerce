@@ -38,8 +38,8 @@ final class AddressFormatter {
 			$raw_address['moksafowo_payuni_storeid']      = $order->get_meta( OrderMeta::StoreId );
 			$raw_address['moksafowo_payuni_storename']    = $order->get_meta( OrderMeta::StoreName );
 			$raw_address['moksafowo_payuni_storeaddress'] = $order->get_meta( OrderMeta::StoreAddr );
-			$raw_address['phone']               = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
-			$raw_address['country']             = 'PNCVS';
+			$raw_address['phone']                         = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
+			$raw_address['country']                       = 'PNCVS';
 		} else {
 			$phone = PayuniShipping::moksafowo_payuni_get_shipping_phone( $order );
 			if ( $phone ) {

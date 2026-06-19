@@ -33,9 +33,12 @@ final class BatchPrint {
 			return [
 				[
 					'api_url'   => PrintProxy::relay_url(),
-					'form_data' => PrintProxy::relay_form_data( 'b2c', [
-						'smseid' => implode( ',', $smseids ),
-					] ),
+					'form_data' => PrintProxy::relay_form_data(
+						'b2c',
+						[
+							'smseid' => implode( ',', $smseids ),
+						]
+					),
 				],
 			];
 		}
@@ -53,13 +56,16 @@ final class BatchPrint {
 			}
 			$is_cod    = 'cod' === $o->get_payment_method();
 			$pay_subzg = self::resolve_cvs_pay_subzg( $o );
-			$forms[] = [
+			$forms[]   = [
 				'api_url'   => PrintProxy::relay_url(),
-				'form_data' => PrintProxy::relay_form_data( $is_cod ? 'c2c' : 'c2cu', [
-					'smseid'    => $smseid,
-					'Pay_subzg' => $pay_subzg,
-					'types'     => 'Web',
-				] ),
+				'form_data' => PrintProxy::relay_form_data(
+					$is_cod ? 'c2c' : 'c2cu',
+					[
+						'smseid'    => $smseid,
+						'Pay_subzg' => $pay_subzg,
+						'types'     => 'Web',
+					]
+				),
 			];
 		}
 		return $forms;
@@ -93,10 +99,13 @@ final class BatchPrint {
 		foreach ( array_unique( $smseids ) as $smseid ) {
 			$forms[] = [
 				'api_url'   => PrintProxy::relay_url(),
-				'form_data' => PrintProxy::relay_form_data( 'tcat', [
-					'Smseid'       => $smseid,
-					'print_format' => '1',
-				] ),
+				'form_data' => PrintProxy::relay_form_data(
+					'tcat',
+					[
+						'Smseid'       => $smseid,
+						'print_format' => '1',
+					]
+				),
 			];
 		}
 		return $forms;

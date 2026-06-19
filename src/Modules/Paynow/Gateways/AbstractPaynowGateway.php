@@ -34,7 +34,7 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 		add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'render_paynow_form' ] );
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
@@ -80,21 +80,38 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 
 		$params = PaymentRequest::build_params( $args );
 
-		Helper::log( 'form redirect', [
-			'order_id' => $order_id,
-			'order_no' => $order_no,
-			'gateway'  => $this->id,
-			'pay_type' => $this->pay_type(),
-			'amt'      => $args['total_price'],
-		] );
+		Helper::log(
+			'form redirect',
+			[
+				'order_id' => $order_id,
+				'order_no' => $order_no,
+				'gateway'  => $this->id,
+				'pay_type' => $this->pay_type(),
+				'amt'      => $args['total_price'],
+			]
+		);
 
 		// render_form 內部已 esc_*，輸出端仍過 wp_kses 白名單；auto-submit 走官方 inline script API。
 		echo wp_kses(
 			PaymentRequest::render_form( $params ),
 			[
-				'form'   => [ 'method' => true, 'id' => true, 'action' => true, 'accept-charset' => true ],
-				'input'  => [ 'type' => true, 'name' => true, 'value' => true, 'id' => true ],
-				'button' => [ 'type' => true, 'id' => true, 'class' => true ],
+				'form'   => [
+					'method'         => true,
+					'id'             => true,
+					'action'         => true,
+					'accept-charset' => true,
+				],
+				'input'  => [
+					'type'  => true,
+					'name'  => true,
+					'value' => true,
+					'id'    => true,
+				],
+				'button' => [
+					'type'  => true,
+					'id'    => true,
+					'class' => true,
+				],
 			]
 		);
 		wp_print_inline_script_tag( 'document.getElementById("moksafowo-paynow-form").submit();' );
@@ -129,12 +146,14 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( $order instanceof \WC_Order ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: amount, 2: reason */
-				__( 'PayNow 退款請至 PayNow 商家後台手動操作（金額 NT$%1$s）— %2$s', 'mo-ectools' ),
-				(int) ceil( (float) $amount ),
-				'' !== (string) $reason ? $reason : __( '無原因', 'mo-ectools' )
-			) );
+					__( 'PayNow 退款請至 PayNow 商家後台手動操作（金額 NT$%1$s）— %2$s', 'mo-ectools' ),
+					(int) ceil( (float) $amount ),
+					'' !== (string) $reason ? $reason : __( '無原因', 'mo-ectools' )
+				)
+			);
 			$order->save();
 		}
 		return new \WP_Error(

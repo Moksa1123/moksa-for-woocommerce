@@ -21,7 +21,6 @@ final class PrintProxy {
 		add_action( 'admin_post_' . self::ACTION_QUICK, [ __CLASS__, 'handle_quick' ] );
 		add_filter( 'woocommerce_admin_order_actions', [ __CLASS__, 'add_print_actions' ], 20, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_action_assets' ] );
-		// 純 admin 用，不開 nopriv（browser 已經登入）
 	}
 
 	public static function add_print_actions( array $actions, \WC_Order $order ): array {
@@ -41,9 +40,7 @@ final class PrintProxy {
 			return $actions;
 		}
 
-		// A4 一律支援；A6 只有 7-11（UNIMART/UNIMARTC2C/UNIMARTFREEZE）+ 中華郵政（POST）。
-		// 訂單只要有「任一筆」record 是 A6-capable subtype 就顯示 A6 按鈕；handle_quick
-		// 會依 subtype 分桶處理，A4-only subtype 自動 fallback A4 不會印錯。
+		// 任一 record 是 A6-capable subtype 就顯示 A6 按鈕；其他 subtype 自動 fallback A4
 		$a6_subtypes      = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
 		$any_a6_supported = false;
 		foreach ( $records as $r ) {
@@ -62,8 +59,6 @@ final class PrintProxy {
 				admin_url( 'admin-post.php?action=' . self::ACTION_QUICK . '&order_id=' . $order->get_id() . '&mode=' . $mode ),
 				self::NONCE_ACTION_QUICK . '_' . $order->get_id()
 			);
-			// name = 完整無障礙描述（會渲染進 aria-label / title）
-			// 可見圖示由 CSS ::before 用 dashicons-printer，文字本體由 text-indent 隱藏
 			$actions[ 'moksafowo_ecpay_print_' . $tone ] = [
 				'url'    => $url,
 				'name'   => 'a4' === $tone ? __( '列印物流標籤 A4', 'mo-ectools' ) : __( '列印物流標籤 A6', 'mo-ectools' ),
@@ -157,9 +152,8 @@ JS;
 			wp_die( esc_html__( '此訂單尚未建立物流單。', 'mo-ectools' ), '', 400 );
 		}
 
-		// 多溫層拆單訂單可能有多個 subtype（如 UNIMART + UNIMARTFREEZE）→ 各 subtype 一筆 print API call
-		// 同 subtype 的多筆 LogisticsID 走同一筆 API 列印（comma-separated），1 張 PDF 含所有標籤
-		$buckets = [];  // subtype => list<logistics_id>
+		// 多溫層：各 subtype 各一筆 API；同 subtype 多筆 ID comma-separated（一張 PDF）
+		$buckets = [];
 		foreach ( $records as $r ) {
 			$id      = (string) ( $r['id'] ?? '' );
 			$subtype = (string) ( $r['subtype'] ?? '' );
@@ -171,8 +165,7 @@ JS;
 			wp_die( esc_html__( '物流單資料不完整。', 'mo-ectools' ), '', 400 );
 		}
 
-		// A6 只有 7-11（UNIMART/UNIMARTC2C/UNIMARTFREEZE）+ 郵政（POST）支援；
-		// 不支援 A6 的 subtype（TCAT / FAMI / HILIFE / OK）自動降 A4 不報錯。
+		// TCAT / FAMI / HILIFE / OK 不支援 A6；自動降 A4
 		$a6_subtypes = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
 
 		$nonce      = wp_create_nonce( self::NONCE_ACTION );
@@ -188,8 +181,7 @@ JS;
 
 		$forms = '';
 		foreach ( $buckets as $subtype => $ids ) {
-			// 此 subtype 不支援 A6 → 自動降 A4
-			$bucket_mode = ( '2' === $mode && ! in_array( $subtype, $a6_subtypes, true ) ) ? '1' : $mode;
+			$bucket_mode = ( '2' === $mode && ! in_array( $subtype, $a6_subtypes, true ) ) ? '1' : $mode; // A4-only subtype 降 A4
 			$forms      .= '<form id="f' . (int) $bucket_idx . '" method="post" action="' . esc_url( $action_url ) . '"' . ( $bucket_idx > 0 ? ' target="_blank"' : '' ) . '>'
 				. '<input type="hidden" name="_wpnonce" value="' . esc_attr( $nonce ) . '">'
 				. '<input type="hidden" name="logistics_ids" value="' . esc_attr( implode( ',', $ids ) ) . '">'
@@ -235,15 +227,12 @@ JS;
 
 		$mer = Helper::merchant_id( $subtype );
 
-		// 1) 內部資料
 		$data = [
 			'MerchantID'       => $mer,
 			'LogisticsID'      => $ids,
 			'LogisticsSubType' => $subtype,
-			'PrintMode'        => '2' === $mode ? 2 : 1,  // 1=A4，2=A6
+			'PrintMode'        => '2' === $mode ? 2 : 1, // 1=A4, 2=A6
 		];
-
-		// 2) 包 envelope
 		$args = [
 			'MerchantID' => $mer,
 			'RqHeader'   => [
@@ -252,8 +241,7 @@ JS;
 			],
 			'Data'       => wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
 		];
-
-		// 3) urlencode + AES-128-CBC encrypt Data（ECPay V2 規則）— 用對應 subtype 的 hash key/iv
+		// ECPay V2: urlencode → AES-128-CBC encrypt，用對應 subtype 的 hash key/iv
 		$args['Data'] = self::ecpay_urlencode( (string) $args['Data'] );
 		$args['Data'] = openssl_encrypt(
 			$args['Data'],
@@ -265,16 +253,18 @@ JS;
 
 		Helper::log( 'V2 PrintTradeDocument request', [ 'args' => $args ] );
 
-		// 4) POST JSON
 		$endpoint = Helper::is_sandbox()
 			? 'https://logistics-stage.ecpay.com.tw/Express/v2/PrintTradeDocument'
 			: 'https://logistics.ecpay.com.tw/Express/v2/PrintTradeDocument';
 
-		$response = wp_remote_post( $endpoint, [
-			'timeout' => 40,
-			'headers' => [ 'Content-Type' => 'application/json' ],
-			'body'    => wp_json_encode( $args ),
-		] );
+		$response = wp_remote_post(
+			$endpoint,
+			[
+				'timeout' => 40,
+				'headers' => [ 'Content-Type' => 'application/json' ],
+				'body'    => wp_json_encode( $args ),
+			]
+		);
 
 		if ( is_wp_error( $response ) ) {
 			Helper::log( 'V2 print wp_error', [ 'msg' => $response->get_error_message() ] );
@@ -284,29 +274,66 @@ JS;
 		$code = wp_remote_retrieve_response_code( $response );
 		$body = (string) wp_remote_retrieve_body( $response );
 		if ( 200 !== (int) $code ) {
-			Helper::log( 'V2 print http error', [ 'code' => $code, 'body' => substr( $body, 0, 500 ) ] );
+			Helper::log(
+				'V2 print http error',
+				[
+					'code' => $code,
+					'body' => substr( $body, 0, 500 ),
+				]
+			);
 			wp_die( esc_html( sprintf( 'ECPay HTTP %d: %s', $code, substr( $body, 0, 200 ) ) ) );
 		}
 
-		// 5) ECPay V2 Print 直接回標籤 HTML（不像其他 V2 API 回加密 JSON）。
-		// 輸出前過 wp_kses：標籤本體（table/img/style/css）保留、active content（script 等）剔除，
-		// 自動列印改由我們的 wp_print_inline_script_tag 觸發。
-		echo wp_kses( $body, self::label_allowlist() );
-		wp_print_inline_script_tag( 'window.addEventListener("load",function(){window.print();});' );
+		// ECPay V2 可能回標籤 HTML 或轉址中繼頁；form/input 入 allowlist，submit 補回（CSP safe）
+		$allow          = self::label_allowlist();
+		$allow['form']  = [
+			'method'         => true,
+			'id'             => true,
+			'name'           => true,
+			'action'         => true,
+			'target'         => true,
+			'enctype'        => true,
+			'accept-charset' => true,
+		];
+		$allow['input'] = [
+			'type'  => true,
+			'name'  => true,
+			'value' => true,
+			'id'    => true,
+		];
+
+		// 宣告 UTF-8，避免 ECPay 中繼頁中文被瀏覽器猜錯編碼
+		if ( ! headers_sent() ) {
+			header( 'Content-Type: text/html; charset=utf-8' );
+		}
+
+		$is_forward = (bool) preg_match( '/<form[^>]*name=["\']?PostForm/i', $body )
+			|| ( preg_match( '/<form/i', $body ) && preg_match( '/<input/i', $body ) && ! preg_match( '/<table|<img/i', $body ) );
+
+		if ( $is_forward ) {
+			// 隱藏 ECPay 中繼頁（避免閃亂碼），由下方 script 程式化 submit
+			echo '<!DOCTYPE html><meta charset="utf-8"><div style="font-family:-apple-system,\'Microsoft JhengHei\',sans-serif;text-align:center;margin-top:18vh;color:#1d2327;font-size:16px">' . esc_html__( '物流標籤產生中，請稍候…', 'mo-ectools' ) . '</div>';
+			echo '<div style="display:none">' . wp_kses( $body, $allow ) . '</div>';
+		} else {
+			echo wp_kses( $body, $allow );
+		}
+		wp_print_inline_script_tag(
+			'window.addEventListener("load",function(){'
+			. 'var f=document.forms["PostForm"]||document.getElementById("PostForm");'
+			. 'if(!f){var fs=document.querySelectorAll("form");f=fs.length?fs[fs.length-1]:null;}'
+			. 'if(f&&f.querySelector("input")){try{f.submit();return;}catch(e){}}'
+			. 'window.print();'
+			. '});'
+		);
 		exit;
 	}
 
-	/**
-	 * ECPay 標籤頁 HTML 的 kses allowlist — 結構 / 表格 / 圖片 / 樣式保留，active content 剔除。
-	 *
-	 * @return array<string, array<string, bool>>
-	 */
 	public static function label_allowlist(): array {
 		return Interstitial::label_allowlist();
 	}
 
 	private static function ecpay_urlencode( string $s ): string {
-		// 對齊 ECPay SDK 的 urlencode 邏輯：保留 - _ . * ! ( )
+		// 對齊 ECPay SDK：保留 - _ . * ! ( )
 		return str_replace(
 			[ '%2D', '%2d', '%5F', '%5f', '%2E', '%2e', '%2A', '%2a', '%21', '%28', '%29' ],
 			[ '-', '-', '_', '_', '.', '.', '*', '*', '!', '(', ')' ],

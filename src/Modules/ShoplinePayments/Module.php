@@ -22,7 +22,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function tagline(): string {
-		return __( '託管結帳跳轉 — 信用卡 / 行動支付', 'mo-ectools' );
+		return __( '信用卡 / 行動支付（轉跳付款頁）', 'mo-ectools' );
 	}
 
 	public function methods(): array {

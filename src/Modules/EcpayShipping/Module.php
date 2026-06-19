@@ -47,34 +47,18 @@ final class Module extends AbstractModule {
 	public function boot(): void {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
-		// IPN 接 ECPay 物流貨態回傳
 		add_action( 'woocommerce_api_moksafowo_ecpay_shipping_status', [ Webhook\IpnHandler::class, 'handle' ] );
-
-		// StatusMapper — listen moksafowo_ecpay_shipping_status_received action
 		Webhook\StatusMapper::init();
-
-		// 結帳 CVS 選店流程
 		Frontend\StoreSelector::init();
-
-		// 顧客「我的帳戶 → 訂單詳情」物流資訊區塊
 		Frontend\CustomerOrderView::init();
-
-		// 運送地址注入「carrier + 門市」— admin / frontend / email 都要，所以在 is_admin() 之外註冊
+		// WC 用 woocommerce_get_order_address（不是 woocommerce_order_get_address）
 		add_filter( 'woocommerce_order_get_formatted_shipping_address', [ Admin\OrderMetaBox::class, 'inject_cvs_shipping_address' ], 10, 3 );
-		// HPOS 訂單列表的 Google Maps URL 走 raw `get_address('shipping')`，CVS 訂單注入 store_address 修連結
-		// 注意 filter 名稱：WC 用 `woocommerce_get_order_address` 不是 `woocommerce_order_get_address`
 		add_filter( 'woocommerce_get_order_address', [ Admin\OrderMetaBox::class, 'inject_cvs_address_fields' ], 10, 3 );
-
-		// 訂單編輯頁 meta box（建單 / 列印按鈕）
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 			Operations\PrintProxy::init();
 		}
-
-		// 註冊批次列印能力（CVS + HOME 各一條）
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
-
-		// Email 貨態追蹤 — 自己 register filter callback 提供 entries（Shipping core 解耦）
 		Emails\EmailTrackingProvider::init();
 	}
 
@@ -88,8 +72,8 @@ final class Module extends AbstractModule {
 			'moksafowo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'mo-ectools' ),
 			'moksafowo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'mo-ectools' ),
 		];
-		$cvs  = [];
-		$home = [];
+		$cvs    = [];
+		$home   = [];
 		foreach ( self::method_map() as $id => $class ) {
 			$title = $titles[ $id ] ?? $id;
 			if ( str_contains( $id, '_cvs_' ) ) {
@@ -99,7 +83,7 @@ final class Module extends AbstractModule {
 			}
 		}
 		$counter = static fn( \WC_Order $o ): int => count( Operations\CreateOrder::get_records( $o ) );
-		// 依最新 logistic record 的 subtype 判斷此訂單支援哪些紙張：A6 限 UNIMARTC2C / UNIMART / UNIMARTFREEZE / POST。
+		// A6 僅 UNIMARTC2C / UNIMART / UNIMARTFREEZE / POST 支援
 		$row_modes = static function ( \WC_Order $o ): array {
 			$records = Operations\CreateOrder::get_records( $o );
 			if ( empty( $records ) ) {
@@ -109,10 +93,7 @@ final class Module extends AbstractModule {
 			$subtype = (string) ( $latest['subtype'] ?? '' );
 			return in_array( $subtype, [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ], true ) ? [ '1', '2' ] : [ '1' ];
 		};
-		// records 的溫層集合（給拆單訂單顯示溫層 pill 用）。
-		// 新 records 直接讀 temp 欄位；舊 records 沒記 temp 時用 subtype fallback：
-		//   UNIMARTFREEZE      → 冷凍 (3)
-		//   其他 CVS / TCAT / POST → 常溫 (1)（TCAT 多溫 legacy 拿不回來，預設常溫）
+		// 舊 records 未記 temp 時 subtype fallback：UNIMARTFREEZE=3，其餘=1
 		$temps = static function ( \WC_Order $o ): array {
 			$out = [];
 			foreach ( Operations\CreateOrder::get_records( $o ) as $r ) {
@@ -132,7 +113,6 @@ final class Module extends AbstractModule {
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
 				'record_counter'  => $counter,
 				'record_temps'    => $temps,
-				// provider 級允許 A4+A6；row 級會依 subtype 過濾（FAMI/HILIFE/OK 只 A4，UNIMART 才 A4+A6）
 				'paper_modes'     => [ '1', '2' ],
 				'row_paper_modes' => $row_modes,
 			];
@@ -145,8 +125,7 @@ final class Module extends AbstractModule {
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
 				'record_counter'  => $counter,
 				'record_temps'    => $temps,
-				// 中華郵政 (POST) A4+A6；黑貓 (TCAT) 只 A4
-				'paper_modes'     => [ '1', '2' ],
+				'paper_modes'     => [ '1', '2' ], // POST 支援 A6；TCAT 只 A4（row_paper_modes 細控）
 				'row_paper_modes' => $row_modes,
 			];
 		}
@@ -154,7 +133,7 @@ final class Module extends AbstractModule {
 	}
 
 	public static function method_map(): array {
-		// 注意：嘉里大榮 (ECAN) 已被 ECPay 於 2022/06/30 終止合作，永不註冊。
+		// ECAN（嘉里大榮）2022/06/30 被 ECPay 終止合作，永不註冊
 		return [
 			'moksafowo_ecpay_shipping_cvs_711'            => Methods\Cvs711::class,
 			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => Methods\Cvs711B2CFreeze::class,

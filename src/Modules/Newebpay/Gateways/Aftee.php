@@ -21,7 +21,7 @@ final class Aftee extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '日商 AFTEE 提供的「先享後付」無卡分期服務，最多 3 期；風控由 AFTEE 承擔。跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( 'AFTEE 先享後付無卡分期，最多 3 期，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 
 	protected function min_amount(): int {

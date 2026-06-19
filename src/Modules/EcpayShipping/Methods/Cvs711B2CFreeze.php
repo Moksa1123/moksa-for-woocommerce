@@ -13,7 +13,7 @@ final class Cvs711B2CFreeze extends AbstractCvsShippingMethod {
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_ecpay_shipping_cvs_711_b2c_freeze';
 		$this->method_title       = __( '綠界 — 7-11 B2C 冷凍店取', 'mo-ectools' );
-		$this->method_description = __( '綠界 7-ELEVEN 冷凍店取（B2C 大宗）— 適合冷凍食品電商。需簽 ECPay B2C 月租合約。', 'mo-ectools' );
+		$this->method_description = __( '綠界 7-ELEVEN 冷凍超商取貨 — 適合冷凍食品電商，需向綠界申請大宗寄件服務。', 'mo-ectools' );
 		parent::__construct( $instance_id );
 	}
 

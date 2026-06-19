@@ -71,11 +71,13 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 
 		$result = Helper::credit_action( $order, 'R', $amount_int );
 		if ( is_wp_error( $result ) ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: error message */
-				__( '綠界退款失敗：%s', 'mo-ectools' ),
-				$result->get_error_message()
-			) );
+					__( '綠界退款失敗：%s', 'mo-ectools' ),
+					$result->get_error_message()
+				)
+			);
 			return $result;
 		}
 
@@ -95,12 +97,14 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			return new \WP_Error( 'moksafowo_ecpay_refund_failed', $msg );
 		}
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: amount, 2: reason */
-			__( '綠界退款成功（金額 NT$%1$d）。原因：%2$s', 'mo-ectools' ),
-			$amount_int,
-			'' === $reason ? __( '（未填寫）', 'mo-ectools' ) : $reason
-		) );
+				__( '綠界退款成功（金額 NT$%1$d）。原因：%2$s', 'mo-ectools' ),
+				$amount_int,
+				'' === $reason ? __( '（未填寫）', 'mo-ectools' ) : $reason
+			)
+		);
 		return true;
 	}
 
@@ -167,14 +171,17 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			'ClientBackURL'     => $order->get_checkout_order_received_url(),
 		];
 
-		$params = array_merge( $params, $this->extra_aio_params( $order ) );
+		$params                  = array_merge( $params, $this->extra_aio_params( $order ) );
 		$params['CheckMacValue'] = Helper::generate_check_mac_value( $params );
 
-		Helper::log( 'AIO redirect', [
-			'order_id'          => $order_id,
-			'merchant_trade_no' => $merchant_trade_no,
-			'choose_payment'    => $this->choose_payment(),
-		] );
+		Helper::log(
+			'AIO redirect',
+			[
+				'order_id'          => $order_id,
+				'merchant_trade_no' => $merchant_trade_no,
+				'choose_payment'    => $this->choose_payment(),
+			]
+		);
 
 		echo '<form id="moksafowo-ecpay-aio" method="post" action="' . esc_url( Helper::aio_endpoint() ) . '">';
 		foreach ( $params as $k => $v ) {

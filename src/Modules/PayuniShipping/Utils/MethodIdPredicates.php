@@ -24,7 +24,7 @@ final class MethodIdPredicates {
 			|| 0 === strpos( (string) $payment_method, 'moksafowo-payuni-upp' );
 	}
 
-	
+
 	public static function is_moksafowo_payuni_shipping_cvs( $shipping_method_id ) {
 		foreach ( PayuniShipping::$cvs_methods as $method => $method_class ) {
 			if ( 0 === strpos( (string) $shipping_method_id, $method ) ) {

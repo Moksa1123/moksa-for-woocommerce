@@ -21,6 +21,6 @@ final class WeChatPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '透過藍新中介整合的微信支付通道（接陸客與跨境訂單），跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '微信支付跨境付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

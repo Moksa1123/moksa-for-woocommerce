@@ -71,12 +71,13 @@ final class Helper extends AbstractCredentialHelper {
 			return new \WP_Error( 'moksafowo_ecpay_query_no_mtn', __( '找不到綠界 MerchantTradeNo。', 'mo-ectools' ) );
 		}
 
-		$inner = wp_json_encode( [
-			'MerchantID'      => self::merchant_id(),
-			'MerchantTradeNo' => $mtn,
-		] );
+		$inner = wp_json_encode(
+			[
+				'MerchantID'      => self::merchant_id(),
+				'MerchantTradeNo' => $mtn,
+			]
+		);
 
-		// V2 API 的特殊 urlencode：urlencode 後把 - _ . * ! ( ) 還原成原字
 		$enc_url  = self::v2_urlencode( (string) $inner );
 		$enc_data = openssl_encrypt( $enc_url, 'aes-128-cbc', self::hash_key(), 0, self::hash_iv() );
 		if ( false === $enc_data ) {
@@ -89,7 +90,13 @@ final class Helper extends AbstractCredentialHelper {
 			'Data'       => $enc_data,
 		];
 
-		self::log( 'query_credit_trade request', [ 'order_id' => $order->get_id(), 'mtn' => $mtn ] );
+		self::log(
+			'query_credit_trade request',
+			[
+				'order_id' => $order->get_id(),
+				'mtn'      => $mtn,
+			]
+		);
 
 		$response = wp_remote_post(
 			self::query_endpoint(),
@@ -137,12 +144,15 @@ final class Helper extends AbstractCredentialHelper {
 			return new \WP_Error( 'moksafowo_ecpay_query_inner_parse', __( '綠界 Data 解碼失敗。', 'mo-ectools' ) );
 		}
 
-		self::log( 'query_credit_trade response', [
-			'order_id' => $order->get_id(),
-			'status'   => $result['RtnValue']['Status'] ?? '',
-			'amount'   => $result['RtnValue']['Amount'] ?? '',
-			'cls_amt'  => $result['RtnValue']['ClsAmt'] ?? '',
-		] );
+		self::log(
+			'query_credit_trade response',
+			[
+				'order_id' => $order->get_id(),
+				'status'   => $result['RtnValue']['Status'] ?? '',
+				'amount'   => $result['RtnValue']['Amount'] ?? '',
+				'cls_amt'  => $result['RtnValue']['ClsAmt'] ?? '',
+			]
+		);
 
 		return $result;
 	}
@@ -169,7 +179,7 @@ final class Helper extends AbstractCredentialHelper {
 			);
 		}
 
-		$args = [
+		$args                  = [
 			'MerchantID'      => self::merchant_id(),
 			'MerchantTradeNo' => $merchant_trade_no,
 			'TradeNo'         => $trade_no,
@@ -178,7 +188,14 @@ final class Helper extends AbstractCredentialHelper {
 		];
 		$args['CheckMacValue'] = self::generate_check_mac_value( $args );
 
-		self::log( 'credit_action request', [ 'order_id' => $order->get_id(), 'action' => $action, 'amount' => $amount ] );
+		self::log(
+			'credit_action request',
+			[
+				'order_id' => $order->get_id(),
+				'action'   => $action,
+				'amount'   => $amount,
+			]
+		);
 
 		$response = wp_remote_post(
 			self::action_endpoint(),
@@ -210,7 +227,14 @@ final class Helper extends AbstractCredentialHelper {
 			return new \WP_Error( 'moksafowo_ecpay_credit_action_parse', __( '綠界回傳格式無法解析。', 'mo-ectools' ) );
 		}
 
-		self::log( 'credit_action response', [ 'order_id' => $order->get_id(), 'rtn_code' => $result['RtnCode'] ?? '', 'rtn_msg' => $result['RtnMsg'] ?? '' ] );
+		self::log(
+			'credit_action response',
+			[
+				'order_id' => $order->get_id(),
+				'rtn_code' => $result['RtnCode'] ?? '',
+				'rtn_msg'  => $result['RtnMsg'] ?? '',
+			]
+		);
 
 		return array_map( 'strval', $result );
 	}
@@ -240,14 +264,15 @@ final class Helper extends AbstractCredentialHelper {
 			}
 		}
 
-		// Fallback — 直接用 meta key 查
-		$found = wc_get_orders( [
-			'limit'      => 1,
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_value' => $merchant_trade_no,
-		] );
+		$found = wc_get_orders(
+			[
+				'limit'      => 1,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_value' => $merchant_trade_no,
+			]
+		);
 		if ( ! empty( $found ) ) {
 			$order = $found[0];
 			return $order instanceof \WC_Order ? $order->get_id() : null;
@@ -273,6 +298,4 @@ final class Helper extends AbstractCredentialHelper {
 		$expected = self::generate_check_mac_value( $signed );
 		return hash_equals( $expected, (string) $posted['CheckMacValue'] );
 	}
-
-	// is_sandbox / log_enabled / log inherited from AbstractCredentialHelper
 }

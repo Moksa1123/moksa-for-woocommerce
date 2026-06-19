@@ -48,9 +48,9 @@ final class PaymentRequest {
 					'confirmUrl'     => esc_url_raw(
 						add_query_arg(
 							array(
-								'request_type' => Constants::REQUEST_TYPE_CONFIRM,
-								'order_id'     => $order_id,
-								'moksafowo_token'     => $confirm_token,
+								'request_type'    => Constants::REQUEST_TYPE_CONFIRM,
+								'order_id'        => $order_id,
+								'moksafowo_token' => $confirm_token,
 							),
 							WC()->api_request_url( 'moksafowo_linepay_payment' )
 						)
@@ -59,9 +59,9 @@ final class PaymentRequest {
 					'cancelUrl'      => esc_url_raw(
 						add_query_arg(
 							array(
-								'request_type' => Constants::REQUEST_TYPE_CANCEL,
-								'order_id'     => $order_id,
-								'moksafowo_token'     => $cancel_token,
+								'request_type'    => Constants::REQUEST_TYPE_CANCEL,
+								'order_id'        => $order_id,
+								'moksafowo_token' => $cancel_token,
 							),
 							WC()->api_request_url( 'moksafowo_linepay_payment' )
 						)
@@ -113,7 +113,7 @@ final class PaymentRequest {
 
 			LinePay::log( 'process payment request error:' . $e->getMessage(), 'error' );
 
-			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] Order Received but unable to process payment request. Please try to pay again.', 'mo-ectools' ) ) );
+			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。', 'mo-ectools' ) ) );
 
 			return array(
 				'result'   => 'success',

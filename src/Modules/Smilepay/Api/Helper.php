@@ -68,8 +68,8 @@ final class Helper extends AbstractCredentialHelper {
 		$r_all = str_pad( $r_all, 4, '9', STR_PAD_LEFT );
 		$r     = '';
 		for ( $i = 0; $i < 4; $i++ ) {
-			$ch  = substr( $r_all, $i, 1 );
-			$r  .= is_numeric( $ch ) ? $ch : '9';
+			$ch = substr( $r_all, $i, 1 );
+			$r .= is_numeric( $ch ) ? $ch : '9';
 		}
 
 		$str1 = str_pad( $amount, 8, '0', STR_PAD_LEFT );

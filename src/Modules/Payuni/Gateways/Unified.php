@@ -45,38 +45,44 @@ final class Unified extends GatewayBase {
 
 	public function init_form_fields() {
 		$this->form_fields = array(
-			'enabled'     => array(
-				'title'   => __( '啟用', 'mo-ectools' ),
-				'type'    => 'checkbox',
-				'label'   => __( '啟用 PAYUNi 統一金流（單一入口）', 'mo-ectools' ),
-				'description' => __( '注意：此 gateway 僅在「結帳呈現模式 = 單一入口」時於結帳頁出現。', 'mo-ectools' ),
-				'default' => 'yes',
+			'enabled'             => array(
+				'title'       => __( '啟用', 'mo-ectools' ),
+				'type'        => 'checkbox',
+				'label'       => __( '啟用 PAYUNi 統一金流（單一入口）', 'mo-ectools' ),
+				'description' => __( '注意：啟用「單一入口」顯示模式時才會出現在結帳頁。', 'mo-ectools' ),
+				'default'     => 'yes',
 			),
-			'title'       => array(
+			'title'               => array(
 				'title'   => __( '結帳顯示名稱', 'mo-ectools' ),
 				'type'    => 'text',
 				'default' => __( '統一金流 PAYUNi', 'mo-ectools' ),
 			),
-			'description' => array(
+			'description'         => array(
 				'title'   => __( '結帳顯示說明', 'mo-ectools' ),
 				'type'    => 'textarea',
 				'default' => __( '整合各式付款工具，按下「下單」後將跳轉至 PAYUNi 收銀台。', 'mo-ectools' ),
 			),
-			'allow_installment' => array(
+			'allow_installment'   => array(
 				'title'   => __( '允許分期付款', 'mo-ectools' ),
 				'type'    => 'checkbox',
 				'label'   => __( '在 PAYUNi 收銀台顯示信用卡分期選項', 'mo-ectools' ),
 				'default' => 'no',
 			),
 			'installment_periods' => array(
-				'title'   => __( '可用分期數', 'mo-ectools' ),
-				'type'    => 'multiselect',
-				'class'   => 'wc-enhanced-select',
-				'css'     => 'width: 400px;',
-				'options' => array(
-					3 => '3', 6 => '6', 9 => '9', 12 => '12', 18 => '18', 24 => '24', 30 => '30',
+				'title'    => __( '可用分期數', 'mo-ectools' ),
+				'type'     => 'multiselect',
+				'class'    => 'wc-enhanced-select',
+				'css'      => 'width: 400px;',
+				'options'  => array(
+					3  => '3',
+					6  => '6',
+					9  => '9',
+					12 => '12',
+					18 => '18',
+					24 => '24',
+					30 => '30',
 				),
-				'desc'    => __( '僅在「允許分期付款」勾選時生效。會以逗號連接送至 PAYUNi 的 CreditInst 參數。', 'mo-ectools' ),
+				'desc'     => __( '勾選「允許分期付款」時生效，勾選的期數將在 PAYUNi 付款頁供顧客選擇。', 'mo-ectools' ),
 				'desc_tip' => true,
 			),
 		);

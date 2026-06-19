@@ -47,10 +47,14 @@ final class StoreSelector {
 		$handle  = 'moksafowo-smilepay-shipping-store';
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/SmilepayShipping/assets/js/store-selector.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
+
+		// 共用超商選店卡片樣式 + MowpCvsStore helper(對齊 PAYUNi / 藍新)。
+		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
+
 		wp_register_script(
 			$handle,
 			MOKSAFOWO_PLUGIN_URL . 'src/Modules/SmilepayShipping/assets/js/store-selector.js',
-			[ 'jquery' ],
+			[ 'jquery', \MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
 			$ver,
 			true
 		);
@@ -80,16 +84,21 @@ final class StoreSelector {
 			'address' => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_address', '' ),
 		] : [];
 
-		wp_localize_script( $handle, 'moksafowo_smilepay_shipping', [
-			'emap_urls'      => $emap_urls,
-			'cvs_methods'    => array_keys( $emap_urls ),
-			'selected_store' => $selected_store,
-			'i18n'           => [
-				'select'        => __( '選擇取貨門市', 'mo-ectools' ),
-				'change'        => __( '更換門市', 'mo-ectools' ),
-				'none_selected' => __( '尚未選擇取貨門市', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			$handle,
+			'moksafowo_smilepay_shipping',
+			[
+				'emap_urls'      => $emap_urls,
+				'cvs_methods'    => array_keys( $emap_urls ),
+				'selected_store' => $selected_store,
+				'i18n'           => [
+					'select'        => __( '選擇取貨門市', 'mo-ectools' ),
+					'change'        => __( '更換門市', 'mo-ectools' ),
+					'none_selected' => __( '尚未選擇取貨門市', 'mo-ectools' ),
+					'store_id'      => __( '門市代號', 'mo-ectools' ),
+				],
+			]
+		);
 		wp_enqueue_script( $handle );
 	}
 
@@ -121,7 +130,13 @@ final class StoreSelector {
 		WC()->session->set( 'moksafowo_smilepay_shipping_store_name', $store_name );
 		WC()->session->set( 'moksafowo_smilepay_shipping_store_address', $store_address );
 
-		Helper::log( 'EMAP callback ok', [ 'store_id' => $store_id, 'store_name' => $store_name ] );
+		Helper::log(
+			'EMAP callback ok',
+			[
+				'store_id'   => $store_id,
+				'store_name' => $store_name,
+			]
+		);
 
 		wp_safe_redirect( wc_get_checkout_url() );
 		exit;

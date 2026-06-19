@@ -22,14 +22,21 @@ final class BatchPrint {
 	}
 
 	private static function build( array $order_ids, string $service, array $options = [] ): array {
-		$orders = wc_get_orders( [ 'include' => $order_ids, 'limit' => -1 ] );
+		$orders = wc_get_orders(
+			[
+				'include' => $order_ids,
+				'limit'   => -1,
+			]
+		);
 		if ( empty( $orders ) ) {
 			return [];
 		}
 
 		$ship_trade_nos = [];
 		foreach ( $orders as $order ) {
-			// Unified records list 優先（多溫層拆單訂單會有多筆）
+			if ( ! $order instanceof \WC_Order ) { // wc_get_orders 在有退款時可能回傳 OrderRefund
+				continue;
+			}
 			$records = CreateOrderUnified::get_records( $order );
 			if ( ! empty( $records ) ) {
 				foreach ( $records as $r ) {
@@ -40,7 +47,6 @@ final class BatchPrint {
 				}
 				continue;
 			}
-			// Legacy 單溫層 method 走 single key meta
 			$no = (string) $order->get_meta( OrderMeta::ShipTradeNo );
 			if ( '' !== $no ) {
 				$ship_trade_nos[] = $no;
@@ -53,19 +59,16 @@ final class BatchPrint {
 
 		$reference = $orders[0];
 
-		// PAYUNi API expects Asia/Taipei wallclock dates; use wp_date() instead of mutating PHP's default tz.
-
 		if ( ShipType::SEVEN === $service ) {
-			$api_url    = PayuniShipping::$api_url . '/logistics/print_label';
-			$lgs_type   = (string) $reference->get_meta( OrderMeta::LgsType );
-			$ship_date  = ( $lgs_type === LgsType::B2C )
+			$api_url   = PayuniShipping::$api_url . '/logistics/print_label';
+			$lgs_type  = (string) $reference->get_meta( OrderMeta::LgsType );
+			$ship_date = ( $lgs_type === LgsType::B2C )
 				? gmdate( 'Ymd', strtotime( '+1 day' ) )
 				: gmdate( 'Ymd' );
-			// LabelMode 優先序：modal 傳的 mode > 設定頁 default > '1' (A4)。
-			// PAYUNi 規範：1=A4 / 2=直立式 (僅 B2C 適用)。modal row 級反灰已防止 C2C 訂單選 mode=2。
+			// LabelMode: 1=A4 / 2=直立式（僅 B2C）；C2C 禁 mode=2
 			$modal_mode = isset( $options['mode'] ) && '2' === (string) $options['mode'] ? '2' : '';
 			$label_mode = '' !== $modal_mode ? $modal_mode : (string) get_option( 'moksafowo_payuni_shipping_cvs_label_mode', '1' );
-			$args = [
+			$args       = [
 				'MerID'       => PayuniShipping::get_mer_id(),
 				'Timestamp'   => time(),
 				'ShipTradeNo' => implode( ',', $ship_trade_nos ),
@@ -76,11 +79,10 @@ final class BatchPrint {
 				'LabelMode'   => $label_mode,
 			];
 		} else {
-			// TCAT — 多帶 PostType / PrintType / ShipDate / DeliveryDate / Spec
 			$api_url       = PayuniShipping::$api_url . '/home_delivery/get_obt_number_pdf';
 			$shipping_date = (int) get_option( 'moksafowo_payuni_shipping_tcat_estimate_shipping_date', '1' );
-			// Spec 必填（PAYUNi HOME01077 否則拒收）：訂單 meta > 設定預設 > 1 (60cm)
-			$package_spec  = (string) $reference->get_meta( OrderMeta::PackageSpec );
+			// Spec 未設時 PAYUNi HOME01077 拒收；訂單 meta > 設定預設 > '1'
+			$package_spec = (string) $reference->get_meta( OrderMeta::PackageSpec );
 			if ( '' === $package_spec ) {
 				$package_spec = (string) get_option( 'moksafowo_payuni_shipping_tcat_default_spec', '1' );
 			}
@@ -88,7 +90,7 @@ final class BatchPrint {
 				$package_spec = '1';
 			}
 
-			$est_ship   = self::next_business_day( new \DateTime(), $shipping_date );
+			$est_ship    = self::next_business_day( new \DateTime(), $shipping_date );
 			$est_deliver = self::next_business_day( $est_ship, 1 );
 
 			$args = [
@@ -127,7 +129,7 @@ final class BatchPrint {
 		while ( $days > 0 ) {
 			$d->modify( '+1 day' );
 			if ( '0' !== $d->format( 'w' ) ) {  // 跳過週日
-				$days--;
+				--$days;
 			}
 		}
 		return $d;

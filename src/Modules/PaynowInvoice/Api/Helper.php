@@ -38,7 +38,7 @@ final class Helper extends AbstractCredentialHelper {
 		return '' !== self::mem_cid() && '' !== self::mem_password();
 	}
 
-	
+
 	public static function generate_orderno( int $order_id ): string {
 		$prefix = (string) get_option( 'moksafowo_paynow_invoice_orderno_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';

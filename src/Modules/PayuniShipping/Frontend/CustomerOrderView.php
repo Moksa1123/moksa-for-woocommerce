@@ -45,7 +45,7 @@ final class CustomerOrderView {
 			return;
 		}
 
-		$records = CreateOrderUnified::get_records( $order );
+		$records           = CreateOrderUnified::get_records( $order );
 		$has_legacy_single = '' !== (string) $order->get_meta( OrderMeta::ShipTradeNo );
 		if ( empty( $records ) && ! $has_legacy_single ) {
 			return;
@@ -60,12 +60,14 @@ final class CustomerOrderView {
 
 		// Legacy 單筆無 records：把 single keys 合成成一個 record 走相同 render
 		if ( empty( $records ) ) {
-			$records = [ [
-				'ship_trade_no' => (string) $order->get_meta( OrderMeta::ShipTradeNo ),
-				'odno'          => (string) $order->get_meta( OrderMeta::Odno ),
-				'ship_type'     => (string) $order->get_meta( OrderMeta::ShipType ),
-				'temp'          => '0',
-			] ];
+			$records = [
+				[
+					'ship_trade_no' => (string) $order->get_meta( OrderMeta::ShipTradeNo ),
+					'odno'          => (string) $order->get_meta( OrderMeta::Odno ),
+					'ship_type'     => (string) $order->get_meta( OrderMeta::ShipType ),
+					'temp'          => '0',
+				],
+			];
 		}
 
 		?>
@@ -101,7 +103,8 @@ final class CustomerOrderView {
 						$store_name = (string) $order->get_meta( OrderMeta::StoreName );
 						$store_addr = (string) $order->get_meta( OrderMeta::StoreAddr );
 					}
-					if ( '' !== $store_id || '' !== $store_name ) : ?>
+					if ( '' !== $store_id || '' !== $store_name ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value">
@@ -114,28 +117,34 @@ final class CustomerOrderView {
 								<?php endif; ?>
 							</span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				} else {
 					$address   = TwAddress::format_shipping_address( $order );
 					$recipient = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
 					if ( '' === $recipient ) {
 						$recipient = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
 					}
-					if ( '' !== $recipient ) : ?>
+					if ( '' !== $recipient ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $recipient ); ?></span>
 						</div>
-					<?php endif;
-					if ( '' !== $address ) : ?>
+						<?php
+					endif;
+					if ( '' !== $address ) :
+						?>
 						<div class="moksafowo-shipping-card__row">
 							<span class="moksafowo-shipping-card__label"><?php esc_html_e( '收件地址', 'mo-ectools' ); ?></span>
 							<span class="moksafowo-shipping-card__value"><?php echo esc_html( $address ); ?></span>
 						</div>
-					<?php endif;
+						<?php
+					endif;
 				}
 
-				if ( $is_split ) : ?>
+				if ( $is_split ) :
+					?>
 					<div class="moksafowo-shipping-card__row" style="grid-template-columns:1fr;border-bottom:1px dashed #f1f5f9;">
 						<span class="moksafowo-shipping-card__label" style="font-size:12px;">
 							<?php
@@ -144,7 +153,8 @@ final class CustomerOrderView {
 							?>
 						</span>
 					</div>
-				<?php endif;
+					<?php
+				endif;
 
 				foreach ( $records as $r ) :
 					$ship_trade_no = (string) ( $r['ship_trade_no'] ?? '' );
@@ -187,16 +197,16 @@ final class CustomerOrderView {
 
 	private static function carrier_title( string $method_id ): string {
 		$map = [
-			'moksafowo_payuni_shipping_tcat'         => __( 'PAYUNi — 黑貓宅配', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_tcat_normal'  => __( 'PAYUNi — 黑貓宅配 (常溫)', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_tcat'              => __( 'PAYUNi — 黑貓宅配', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_tcat_normal'       => __( 'PAYUNi — 黑貓宅配 (常溫)', 'mo-ectools' ),
 			'moksafowo_payuni_shipping_tcat_refrigerated' => __( 'PAYUNi — 黑貓宅配 (冷藏)', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_tcat_frozen'  => __( 'PAYUNi — 黑貓宅配 (冷凍)', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_c2c'      => __( 'PAYUNi — 7-11 C2C 取貨', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c'      => __( 'PAYUNi — 7-11 B2C 取貨', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_c2c_normal' => __( 'PAYUNi — 7-11 C2C 常溫', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_c2c_frozen' => __( 'PAYUNi — 7-11 C2C 冷凍', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c_normal' => __( 'PAYUNi — 7-11 B2C 常溫', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c_frozen' => __( 'PAYUNi — 7-11 B2C 冷凍', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_tcat_frozen'       => __( 'PAYUNi — 黑貓宅配 (冷凍)', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_c2c'           => __( 'PAYUNi — 7-11 C2C 取貨', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_b2c'           => __( 'PAYUNi — 7-11 B2C 取貨', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_c2c_normal'    => __( 'PAYUNi — 7-11 C2C 常溫', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_c2c_frozen'    => __( 'PAYUNi — 7-11 C2C 冷凍', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_b2c_normal'    => __( 'PAYUNi — 7-11 B2C 常溫', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_b2c_frozen'    => __( 'PAYUNi — 7-11 B2C 冷凍', 'mo-ectools' ),
 		];
 		return $map[ $method_id ] ?? __( 'PAYUNi 物流', 'mo-ectools' );
 	}

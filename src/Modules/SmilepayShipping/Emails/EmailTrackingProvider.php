@@ -42,7 +42,7 @@ final class EmailTrackingProvider {
 			if ( null === $info ) {
 				continue;
 			}
-			$temp = (int) ( $r['temp'] ?? 0 );
+			$temp  = (int) ( $r['temp'] ?? 0 );
 			$out[] = [
 				'carrier'     => (string) $info['carrier'],
 				'tracking_no' => (string) $info['tracking_no'],

@@ -2,7 +2,6 @@
 
 namespace MoksaWeb\Mowc\Modules\PayuniShipping\Settings;
 
-
 defined( 'ABSPATH' ) || exit;
 
 class SettingsTab extends \WC_Settings_Page {
@@ -26,7 +25,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 		unset( $sections[''] );
 		if ( is_array( $sections ) && ! array_key_exists( 'shipping', $sections ) ) {
-			$sections['shipping'] = __( 'Shipping Settings', 'mo-ectools' );
+			$sections['shipping'] = __( '物流設定', 'mo-ectools' );
 		}
 		return $sections;
 	}
@@ -35,7 +34,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 		if ( 'yes' !== get_option( 'moksafowo_payuni_enabled', 'no' ) ) {
 			$sections = array(
-				'shipping' => __( 'Shipping Settings', 'mo-ectools' ),
+				'shipping' => __( '物流設定', 'mo-ectools' ),
 			);
 			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 		}
@@ -59,7 +58,7 @@ class SettingsTab extends \WC_Settings_Page {
 					'default' => 'no',
 					'desc'    => sprintf(
 						/* translators: %s = view logs link */
-						__( '排查物流單異常時開啟。位置：WooCommerce → 狀態 → 日誌（來源 <code>mowp</code>）。 %s', 'mo-ectools' ),
+						__( '排查物流單異常時開啟。位置：WooCommerce → 狀態 → 日誌。 %s', 'mo-ectools' ),
 						$this->get_log_link()
 					),
 					'id'      => 'moksafowo_payuni_shipping_debug_log_enabled',
@@ -90,7 +89,7 @@ class SettingsTab extends \WC_Settings_Page {
 				array(
 					'title' => __( '寄件人資料', 'mo-ectools' ),
 					'type'  => 'title',
-					'desc'  => __( '建立物流單時送進 PAYUNi。退貨時也會用。', 'mo-ectools' ),
+					'desc'  => __( '建立物流單時的寄件人資訊。', 'mo-ectools' ),
 					'id'    => 'moksafowo_payuni_shipping_store_settings',
 				),
 				array(
@@ -109,37 +108,37 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
-					'title' => __( '物流貨態 → 訂單狀態對應', 'mo-ectools' ),
+					'title' => __( '物流貨態自動更新訂單狀態', 'mo-ectools' ),
 					'type'  => 'title',
-					'desc'  => __( 'PAYUNi 回傳每個物流貨態時，自動把訂單轉到指定狀態。空白 = 不變。', 'mo-ectools' ),
+					'desc'  => __( '物流進度更新時，自動把訂單轉到指定狀態。留空則不變更。', 'mo-ectools' ),
 					'id'    => 'moksafowo_payuni_shipping_shipping_settings',
 				),
 				array(
-					'title'   => __( '7-11 B2C：物流中心驗收（22）', 'mo-ectools' ),
+					'title'   => __( '7-11 商家出貨：物流中心驗收', 'mo-ectools' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_logistic_center',
 				),
 				array(
-					'title'   => __( '7-11 C2C：賣家門市寄件（92）', 'mo-ectools' ),
+					'title'   => __( '7-11 個人寄件：賣家門市寄件', 'mo-ectools' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_sender_cvs',
 				),
 				array(
-					'title'   => __( '配送中（31）', 'mo-ectools' ),
+					'title'   => __( '配送中', 'mo-ectools' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_delivering',
 				),
 				array(
-					'title'   => __( '到收件門市待取（32）', 'mo-ectools' ),
+					'title'   => __( '到收件門市待取', 'mo-ectools' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_receiver_cvs',
 				),
 				array(
-					'title'   => __( '已取貨（11）', 'mo-ectools' ),
+					'title'   => __( '已取貨', 'mo-ectools' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_pickuped',
@@ -241,11 +240,11 @@ class SettingsTab extends \WC_Settings_Page {
 
 	private static function moksafowo_payuni_get_order_status() {
 		$order_statuses = array(
-			'' => __( 'No action', 'mo-ectools' ),
+			'' => __( '不變更', 'mo-ectools' ),
 		);
 
 		foreach ( wc_get_order_statuses() as $slug => $name ) {
-			if ( $slug == 'wc-cancelled' || $slug == 'wc-refunded' || $slug == 'wc-failed' ) {
+			if ( $slug === 'wc-cancelled' || $slug === 'wc-refunded' || $slug === 'wc-failed' ) {
 				continue;
 			}
 			$order_statuses[ str_replace( 'wc-', '', $slug ) ] = $name;
@@ -262,7 +261,6 @@ class SettingsTab extends \WC_Settings_Page {
 			return;
 		}
 
-		// See get_sections() — same self-vs-payment ownership rule.
 		if ( 'yes' === get_option( 'moksafowo_payuni_enabled', 'no' ) ) {
 			return;
 		}
@@ -270,7 +268,7 @@ class SettingsTab extends \WC_Settings_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
 		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-		$tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
 
 		if ( 'wc-settings' === $page && 'payuni' === $tab ) {
 
@@ -280,7 +278,6 @@ class SettingsTab extends \WC_Settings_Page {
 				exit;
 			}
 		}
-
 	}
 
 	public function output() {
@@ -308,6 +305,6 @@ class SettingsTab extends \WC_Settings_Page {
 	}
 
 	protected function get_log_link() {
-		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( 'View logs', 'mo-ectools' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( '查看日誌', 'mo-ectools' ) . '</a>';
 	}
 }

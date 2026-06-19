@@ -20,7 +20,7 @@ final class SettingsTab {
 				'id'      => 'moksafowo_smilepay_shipping_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後 SmilePay 視為測試環境（API URL 共用，由 Dcvc 區分）。上線前測試用。', 'mo-ectools' ),
+				'desc'    => __( '勾選後走測試環境，不會真出貨。上線前測試用，上線後請取消勾選。', 'mo-ectools' ),
 			],
 			[
 				'title'    => __( '超商服務類型', 'mo-ectools' ),
@@ -28,10 +28,10 @@ final class SettingsTab {
 				'type'     => 'select',
 				'default'  => 'C2C',
 				'options'  => [
-					'C2C' => __( 'C2C — 個人帳戶（店到店，免月租，最常見）', 'mo-ectools' ),
-					'B2C' => __( 'B2C — 大宗合約（需另跟 SmilePay 簽月租）', 'mo-ectools' ),
+					'C2C' => __( '個人帳戶（超商店到店，免月租，最常見）', 'mo-ectools' ),
+					'B2C' => __( '大宗合約（需另跟 SmilePay 簽月租）', 'mo-ectools' ),
 				],
-				'desc'     => __( '影響 7-11 / 全家 取貨走 SmilePay 哪條 API（C2C: C2CPayment.asp / B2C: B2CPayment.asp）。', 'mo-ectools' ),
+				'desc'     => __( '需依 SmilePay 後台開通的帳號類型選擇。', 'mo-ectools' ),
 				'desc_tip' => true,
 			],
 			[
@@ -59,13 +59,13 @@ final class SettingsTab {
 				'title' => __( 'Verify_key — 驗證金鑰', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_shipping_verify_key',
 				'type'  => 'text',
-				'desc'  => __( 'IPN webhook 驗證用（防偽造）。', 'mo-ectools' ),
+				'desc'  => __( '收到物流通知時驗章用，防止偽造。', 'mo-ectools' ),
 			],
 			[
 				'title' => __( 'SmseID — 商家編號', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_shipping_smseid',
 				'type'  => 'text',
-				'desc'  => __( '部分 API（C2B 退貨等）需要。', 'mo-ectools' ),
+				'desc'  => __( '部分物流服務需要。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -75,7 +75,7 @@ final class SettingsTab {
 			[
 				'title' => __( '寄件人資料', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '建立物流單時送進 SmilePay。CVS B2C / 黑貓 必填。', 'mo-ectools' ),
+				'desc'  => __( '超商大宗寄件與黑貓宅配必填。', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_shipping_sender_section',
 			],
 			[
@@ -116,7 +116,7 @@ final class SettingsTab {
 				'id'      => 'moksafowo_smilepay_shipping_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查物流單異常時開啟。位置：WooCommerce → 狀態 → 日誌。敏感欄位會自動 redact。', 'mo-ectools' ),
+				'desc'    => __( '排查物流單異常時開啟。位置：WooCommerce → 狀態 → 日誌。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

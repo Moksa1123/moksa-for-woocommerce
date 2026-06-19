@@ -9,13 +9,13 @@ defined( 'ABSPATH' ) || exit;
 
 class OrderMeta {
 
-	const PAYUNI_ORDER_NO      = Keys::PAYUNI_ORDER_NO;
-	const UNI_NO               = Keys::PAYUNI_TRADE_NO;
-	const TRADE_STATUS         = Keys::PAYUNI_TRADE_STATUS;
-	const TRADE_AMOUNT         = Keys::PAYUNI_TRADE_AMOUNT;
-	const STATUS               = Keys::PAYUNI_STATUS;
-	const MESSAGE              = Keys::PAYUNI_MESSAGE;
-	const PAY_TYPE             = Keys::PAYUNI_PAYMENT_TYPE;
+	const PAYUNI_ORDER_NO = Keys::PAYUNI_ORDER_NO;
+	const UNI_NO          = Keys::PAYUNI_TRADE_NO;
+	const TRADE_STATUS    = Keys::PAYUNI_TRADE_STATUS;
+	const TRADE_AMOUNT    = Keys::PAYUNI_TRADE_AMOUNT;
+	const STATUS          = Keys::PAYUNI_STATUS;
+	const MESSAGE         = Keys::PAYUNI_MESSAGE;
+	const PAY_TYPE        = Keys::PAYUNI_PAYMENT_TYPE;
 
 	const CREDIT_REST_CODE     = Keys::PAYUNI_CREDIT_RESCODE;
 	const CREDIT_REST_CODE_MSG = Keys::PAYUNI_CREDIT_RESCODE_MSG;
@@ -35,39 +35,39 @@ class OrderMeta {
 	const CREDIT_TOKEN_ID      = Keys::PAYUNI_CREDIT_TOKEN_ID;
 	const CREDIT_TOKEN_LIFE    = Keys::PAYUNI_CREDIT_TOKEN_LIFE;
 
-	const AMT_PAY_NO           = Keys::PAYUNI_ATM_PAYNO;
-	const AMT_BANK_TYPE        = Keys::PAYUNI_ATM_BANKTYPE;
-	const AMT_PAY_TIME         = Keys::PAYUNI_ATM_PAYTIME;
-	const AMT_ACCOUNT_5NO      = Keys::PAYUNI_ATM_ACCOUNT5NO;
-	const AMT_PAY_SET          = Keys::PAYUNI_ATM_PAYSET;
-	const AMT_EXPIRE_DATE      = Keys::PAYUNI_ATM_EXPIREDATE;
+	const AMT_PAY_NO      = Keys::PAYUNI_ATM_PAYNO;
+	const AMT_BANK_TYPE   = Keys::PAYUNI_ATM_BANKTYPE;
+	const AMT_PAY_TIME    = Keys::PAYUNI_ATM_PAYTIME;
+	const AMT_ACCOUNT_5NO = Keys::PAYUNI_ATM_ACCOUNT5NO;
+	const AMT_PAY_SET     = Keys::PAYUNI_ATM_PAYSET;
+	const AMT_EXPIRE_DATE = Keys::PAYUNI_ATM_EXPIREDATE;
 
-	const CVS_PAY_NO           = Keys::PAYUNI_CVS_PAYNO;
-	const CVS_STORE            = Keys::PAYUNI_CVS_STORE;
-	const CVS_EXPIRE_DATE      = Keys::PAYUNI_CVS_EXPIREDATE;
+	const CVS_PAY_NO      = Keys::PAYUNI_CVS_PAYNO;
+	const CVS_STORE       = Keys::PAYUNI_CVS_STORE;
+	const CVS_EXPIRE_DATE = Keys::PAYUNI_CVS_EXPIREDATE;
 
-	const AFTEE_PAY_NO         = Keys::PAYUNI_AFTEE_PAYNO;
-	const AFTEE_PAY_TIME       = Keys::PAYUNI_AFTEE_PAYTIME;
+	const AFTEE_PAY_NO   = Keys::PAYUNI_AFTEE_PAYNO;
+	const AFTEE_PAY_TIME = Keys::PAYUNI_AFTEE_PAYTIME;
 
-	const LINE_PAY_NO          = Keys::PAYUNI_LINEPAY_PAYNO;
+	const LINE_PAY_NO = Keys::PAYUNI_LINEPAY_PAYNO;
 
-	const REFUND_NO            = Keys::PAYUNI_REFUND_NO;
-	const REFUND_AMT           = Keys::PAYUNI_REFUND_AMT;
-	const REFUND_TIME          = Keys::PAYUNI_REFUND_TIME;
+	const REFUND_NO   = Keys::PAYUNI_REFUND_NO;
+	const REFUND_AMT  = Keys::PAYUNI_REFUND_AMT;
+	const REFUND_TIME = Keys::PAYUNI_REFUND_TIME;
 
-	const CLOSE_STATUS         = Keys::PAYUNI_CLOSE_STATUS;
-	const CLOSE_TIME           = Keys::PAYUNI_CLOSE_TIME;
-	const CLOSE_AUTH           = Keys::PAYUNI_CLOSE_AUTH;
+	const CLOSE_STATUS = Keys::PAYUNI_CLOSE_STATUS;
+	const CLOSE_TIME   = Keys::PAYUNI_CLOSE_TIME;
+	const CLOSE_AUTH   = Keys::PAYUNI_CLOSE_AUTH;
 
-	const PAID_AT              = Keys::PAYUNI_PAID_AT;
+	const PAID_AT = Keys::PAYUNI_PAID_AT;
 
-	const EINVOICE_NO          = Keys::PAYUNI_EINVOICE_NO;
-	const EINVOICE_AMT         = Keys::PAYUNI_EINVOICE_AMT;
-	const EINVOICE_TIME        = Keys::PAYUNI_EINVOICE_TIME;
-	const EINVOICE_TYPE        = Keys::PAYUNI_EINVOICE_TYPE;
-	const EINVOICE_INFO        = Keys::PAYUNI_EINVOICE_INFO;
-	const EINVOICE_STATUS      = Keys::PAYUNI_EINVOICE_STATUS;
+	const EINVOICE_NO     = Keys::PAYUNI_EINVOICE_NO;
+	const EINVOICE_AMT    = Keys::PAYUNI_EINVOICE_AMT;
+	const EINVOICE_TIME   = Keys::PAYUNI_EINVOICE_TIME;
+	const EINVOICE_TYPE   = Keys::PAYUNI_EINVOICE_TYPE;
+	const EINVOICE_INFO   = Keys::PAYUNI_EINVOICE_INFO;
+	const EINVOICE_STATUS = Keys::PAYUNI_EINVOICE_STATUS;
 
-	const PLUGIN_VERSION       = Keys::PAYUNI_PLUGIN_VERSION;
-	const ORDER_SERIAL_NO      = Keys::PAYUNI_ORDER_SERIAL_NO;
+	const PLUGIN_VERSION  = Keys::PAYUNI_PLUGIN_VERSION;
+	const ORDER_SERIAL_NO = Keys::PAYUNI_ORDER_SERIAL_NO;
 }

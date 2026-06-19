@@ -11,7 +11,6 @@ defined( 'ABSPATH' ) || exit;
 
 final class IpnHandler {
 
-	// 即時交易 PayType — 回傳 PassCode 一律含 TranStatus。
 	private const IMMEDIATE_TYPES = [ '01', '02', '09', '11' ];
 
 	public static function handle(): void {
@@ -25,7 +24,6 @@ final class IpnHandler {
 			self::reply( 400, 'EMPTY' );
 		}
 
-		// 全欄位 sanitize 後才允許記錄與使用。
 		$posted = array_map(
 			static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v,
 			$source
@@ -33,7 +31,6 @@ final class IpnHandler {
 
 		Helper::log( 'callback received', [ 'data' => $posted ] );
 
-		// OrderNo 大小寫 PayNow 不保證統一（BuysafeNo vs BuySafeNo），統一取值。
 		$order_no   = self::pick( $posted, [ 'OrderNo' ] );
 		$total      = self::pick( $posted, [ 'TotalPrice' ] );
 		$pay_type   = self::pick( $posted, [ 'PayType' ] );
@@ -63,11 +60,16 @@ final class IpnHandler {
 		$is_success = 'S' === strtoupper( $tran );
 
 		if ( ! self::verify_pass_code( $pay_type, $order_no, $total, $tran, $is_success, $pass_code ) ) {
-			Helper::log( 'callback PassCode mismatch — possible forgery', [ 'order_no' => $order_no, 'pay_type' => $pay_type ] );
+			Helper::log(
+				'callback PassCode mismatch — possible forgery',
+				[
+					'order_no' => $order_no,
+					'pay_type' => $pay_type,
+				]
+			);
 			self::reply( 400, 'PASSCODE_MISMATCH' );
 		}
 
-		// 代碼繳費（05）成功時額外驗 PassCode2 = SHA1( PassCode + ReceiverEmail )。
 		if ( '05' === $pay_type && $is_success ) {
 			$pass_code2 = self::pick( $posted, [ 'PassCode2' ] );
 			$email      = (string) $order->get_billing_email();
@@ -102,18 +104,15 @@ final class IpnHandler {
 			return false;
 		}
 
-		// TotalPrice 整數化比對（PayNow 回傳偶帶小數 / 前導零）。
 		$total = (string) (int) $total;
 
 		$base = [ $web_no, $order_no, $total, $pass ];
 
 		if ( in_array( $pay_type, self::IMMEDIATE_TYPES, true ) ) {
-			// 即時：S / F 皆含 TranStatus。
 			$expected = Signature::make( ...array_merge( $base, [ strtoupper( $tran ) ] ) );
 			return Signature::verify( $expected, $actual );
 		}
 
-		// 虛擬帳號 / 超商條碼 / 代碼繳費：四參數；僅成功時加 TranStatus。
 		if ( $is_success ) {
 			$with_status = Signature::make( ...array_merge( $base, [ strtoupper( $tran ) ] ) );
 			if ( Signature::verify( $with_status, $actual ) ) {
@@ -158,8 +157,8 @@ final class IpnHandler {
 
 	private static function write_paytype_meta( \WC_Order $order, string $pay_type, array $posted ): void {
 		switch ( $pay_type ) {
-			case '01': // 信用卡.
-			case '11': // 分期.
+			case '01':
+			case '11':
 				$last4 = self::pick( $posted, [ 'pan_no4' ] );
 				if ( '' !== $last4 ) {
 					$order->update_meta_data( Keys::PAYNOW_CARD_LAST4, $last4 );
@@ -174,7 +173,7 @@ final class IpnHandler {
 				}
 				break;
 
-			case '03': // 虛擬帳號.
+			case '03':
 				$atm = self::pick( $posted, [ 'ATMNo' ] );
 				if ( '' !== $atm ) {
 					$order->update_meta_data( Keys::PAYNOW_ATM_NO, $atm );
@@ -193,8 +192,12 @@ final class IpnHandler {
 				}
 				break;
 
-			case '10': // 超商條碼.
-				foreach ( [ 'BarCode1' => Keys::PAYNOW_BARCODE_1, 'BarCode2' => Keys::PAYNOW_BARCODE_2, 'BarCode3' => Keys::PAYNOW_BARCODE_3 ] as $f => $k ) {
+			case '10':
+				foreach ( [
+					'BarCode1' => Keys::PAYNOW_BARCODE_1,
+					'BarCode2' => Keys::PAYNOW_BARCODE_2,
+					'BarCode3' => Keys::PAYNOW_BARCODE_3,
+				] as $f => $k ) {
 					$v = self::pick( $posted, [ $f ] );
 					if ( '' !== $v ) {
 						$order->update_meta_data( $k, $v );
@@ -206,7 +209,7 @@ final class IpnHandler {
 				}
 				break;
 
-			case '05': // 代碼繳費 ibon / FamiPort / iCash.
+			case '05':
 				$ibon = self::pick( $posted, [ 'IBONNO' ] );
 				if ( '' !== $ibon ) {
 					$order->update_meta_data( Keys::PAYNOW_IBON_NO, $ibon );
@@ -242,32 +245,39 @@ final class IpnHandler {
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( (string) $order->get_meta( Keys::PAYNOW_BUYSAFE_NO ) );
 			}
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: payment type */
-				__( 'PayNow 付款完成 — %s', 'mo-ectools' ),
-				$label
-			) );
+					__( 'PayNow 付款完成 — %s', 'mo-ectools' ),
+					$label
+				)
+			);
 			return;
 		}
 
 		$err = self::pick( $posted, [ 'ErrDesc' ] );
 
-		// 非即時且尚未明確失敗 → 取號 / 取碼成功，等顧客付款。
 		if ( ! in_array( $pay_type, self::IMMEDIATE_TYPES, true ) && '' === $err ) {
-			$order->update_status( 'on-hold', sprintf(
+			$order->update_status(
+				'on-hold',
+				sprintf(
 				/* translators: %s: payment type */
-				__( 'PayNow 已產生 %s 付款資訊，等待顧客付款。', 'mo-ectools' ),
-				$label
-			) );
+					__( 'PayNow 已產生 %s 付款資訊，等待顧客付款。', 'mo-ectools' ),
+					$label
+				)
+			);
 			return;
 		}
 
-		$order->update_status( 'failed', sprintf(
+		$order->update_status(
+			'failed',
+			sprintf(
 			/* translators: 1: payment type, 2: error */
-			__( 'PayNow %1$s 付款失敗：%2$s', 'mo-ectools' ),
-			$label,
-			'' !== $err ? $err : __( '未提供原因', 'mo-ectools' )
-		) );
+				__( 'PayNow %1$s 付款失敗：%2$s', 'mo-ectools' ),
+				$label,
+				'' !== $err ? $err : __( '未提供原因', 'mo-ectools' )
+			)
+		);
 	}
 
 	private static function pick( array $src, array $keys ): string {
@@ -286,5 +296,4 @@ final class IpnHandler {
 	private static function reply( int $status, string $body ): void {
 		Response::send_plain( $status, $body );
 	}
-
 }

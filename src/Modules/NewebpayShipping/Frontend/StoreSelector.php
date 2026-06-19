@@ -52,27 +52,77 @@ final class StoreSelector {
 		$handle  = 'moksafowo-newebpay-shipping-store';
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/NewebpayShipping/assets/js/store-selector.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
+
+		// 共用超商選店卡片樣式 + MowpCvsStore helper(對齊 PAYUNi 視覺)。
+		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 		wp_register_script(
 			$handle,
 			MOKSAFOWO_PLUGIN_URL . 'src/Modules/NewebpayShipping/assets/js/store-selector.js',
-			[ 'jquery' ],
+			[ 'jquery', \MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
 			$ver,
 			true
 		);
-		wp_localize_script( $handle, 'moksafowo_newebpay_shipping', [
-			'ajax_url'    => admin_url( 'admin-ajax.php' ),
-			'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
-			'cvs_methods' => array_keys( Module::method_map() ),
-			'token_query' => self::TOKEN_QUERY,
-			'i18n'        => [
-				'select'        => __( '選擇取貨門市', 'mo-ectools' ),
-				'change'        => __( '更換門市', 'mo-ectools' ),
-				'none_selected' => __( '尚未選擇取貨門市', 'mo-ectools' ),
-				'store_id'      => __( '門市代號', 'mo-ectools' ),
-				'error'         => __( '無法開啟藍新選店畫面，請稍後再試。', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			$handle,
+			'moksafowo_newebpay_shipping',
+			[
+				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
+				'cvs_methods' => array_keys( Module::method_map() ),
+				'token_query' => self::TOKEN_QUERY,
+				'carriers'    => self::enabled_carriers(),
+				'i18n'        => [
+					'select'        => __( '選擇取貨門市', 'mo-ectools' ),
+					'change'        => __( '更換門市', 'mo-ectools' ),
+					'pick_carrier'  => __( '請選擇取貨超商：', 'mo-ectools' ),
+					'none_selected' => __( '尚未選擇取貨門市', 'mo-ectools' ),
+					'store_id'      => __( '門市代號', 'mo-ectools' ),
+					'error'         => __( '無法開啟藍新選店畫面，請稍後再試。', 'mo-ectools' ),
+				],
+			]
+		);
 		wp_enqueue_script( $handle );
+	}
+
+	/**
+	 * 結帳頁讓顧客選的取貨超商清單(依設定「啟用的超商」過濾)。
+	 * NDNS ShipType:1=7-ELEVEN、2=全家、3=萊爾富、4=OK mart。B2C 物流只支援 7-ELEVEN。
+	 *
+	 * @return array<int, array{ship_type:string, name:string}>
+	 */
+	private static function enabled_carriers(): array {
+		$labels = [
+			'1' => __( '7-ELEVEN', 'mo-ectools' ),
+			'2' => __( '全家', 'mo-ectools' ),
+			'3' => __( '萊爾富', 'mo-ectools' ),
+			'4' => __( 'OK mart', 'mo-ectools' ),
+		];
+		// B2C 只支援 7-ELEVEN。
+		if ( 'B2C' === (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' ) ) {
+			return [
+				[
+					'ship_type' => '1',
+					'name'      => $labels['1'],
+				],
+			];
+		}
+		$enabled = array_map( 'strval', (array) get_option( 'moksafowo_newebpay_shipping_enabled_carriers', [ '1', '2', '3', '4' ] ) );
+		$out     = [];
+		foreach ( $labels as $type => $name ) {
+			// 注意:PHP 會把 '1' 等字串數字鍵轉成 int,故比對前一律 (string)。
+			if ( in_array( (string) $type, $enabled, true ) ) {
+				$out[] = [
+					'ship_type' => (string) $type,
+					'name'      => $name,
+				];
+			}
+		}
+		return ! empty( $out ) ? $out : [
+			[
+				'ship_type' => '1',
+				'name'      => $labels['1'],
+			],
+		];
 	}
 
 	private static function is_checkout_page(): bool {
@@ -100,7 +150,14 @@ final class StoreSelector {
 
 		// state token 存 transient anti-tamper
 		$mtn = self::generate_mtn();
-		set_transient( self::STATE_PREFIX . $mtn, [ 'method_id' => $method_id, 'time' => time() ], 30 * MINUTE_IN_SECONDS );
+		set_transient(
+			self::STATE_PREFIX . $mtn,
+			[
+				'method_id' => $method_id,
+				'time'      => time(),
+			],
+			30 * MINUTE_IN_SECONDS
+		);
 
 		$lgs_type  = (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
 		$ship_type = isset( $_POST['ship_type'] ) ? sanitize_text_field( wp_unslash( $_POST['ship_type'] ) ) : '1';
@@ -115,19 +172,23 @@ final class StoreSelector {
 		$referrer = isset( $_POST['referrer'] ) ? esc_url_raw( wp_unslash( $_POST['referrer'] ) ) : '';
 		set_transient( self::STATE_PREFIX . $mtn . '_ref', $referrer, 30 * MINUTE_IN_SECONDS );
 
-		$result = ShippingRequest::open_store_map( [
-			'MerchantOrderNo' => $mtn,
-			'LgsType'         => $lgs_type,
-			'ShipType'        => $ship_type,
-			'ReturnURL'       => add_query_arg( 'wc-api', 'moksafowo_newebpay_shipping_map_callback', home_url( '/' ) ),
-		] );
+		$result = ShippingRequest::open_store_map(
+			[
+				'MerchantOrderNo' => $mtn,
+				'LgsType'         => $lgs_type,
+				'ShipType'        => $ship_type,
+				'ReturnURL'       => add_query_arg( 'wc-api', 'moksafowo_newebpay_shipping_map_callback', home_url( '/' ) ),
+			]
+		);
 		if ( ! $result['ok'] ) {
 			wp_send_json_error( [ 'message' => $result['message'] ] );
 		}
-		wp_send_json_success( [
-			'api_url'   => $result['api_url'],
-			'form_data' => $result['form_data'],
-		] );
+		wp_send_json_success(
+			[
+				'api_url'   => $result['api_url'],
+				'form_data' => $result['form_data'],
+			]
+		);
 	}
 
 	public static function handle_callback(): void {
@@ -196,7 +257,7 @@ final class StoreSelector {
 		delete_transient( self::STATE_PREFIX . $mtn . '_ref' );
 
 		// 重導回原結帳頁 + token
-		$base = $referrer !== '' ? $referrer : wc_get_checkout_url();
+		$base      = $referrer !== '' ? $referrer : wc_get_checkout_url();
 		$home_host = wp_parse_url( home_url( '/' ), PHP_URL_HOST );
 		$base_host = wp_parse_url( $base, PHP_URL_HOST );
 		if ( $base_host !== $home_host ) {

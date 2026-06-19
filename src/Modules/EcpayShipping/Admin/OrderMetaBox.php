@@ -17,10 +17,10 @@ final class OrderMetaBox {
 	private const NONCE_ACTION = 'moksafowo_ecpay_shipping_admin';
 	private const CAPABILITY   = 'edit_shop_orders';
 
-	
+
 	private static array $method_id_cache = [];
 
-	
+
 	private static ?array $registry_titles_cache = null;
 
 	private static function find_mowp_method_id( \WC_Order $order ): string {
@@ -55,8 +55,7 @@ final class OrderMetaBox {
 
 	public static function init(): void {
 		OrderInfoLayout::boot();
-		// 三欄 footer：priority 20 = 物流（中）— 順序「金流(10) 物流(20) 發票(30)」
-		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_card' ], 20, 2 ); // priority 20 = 物流（金流10 物流20 發票30）
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_create_order', [ __CLASS__, 'ajax_create_order' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_print_label', [ __CLASS__, 'ajax_print_label' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_delete_record', [ __CLASS__, 'ajax_delete_record' ] );
@@ -75,7 +74,6 @@ final class OrderMetaBox {
 		if ( '' === $store_addr ) {
 			return $address;
 		}
-		// 只在 address_1 為空時注入（不覆蓋管理員手動輸入的值）
 		if ( empty( $address['address_1'] ) ) {
 			$address['address_1'] = $store_addr;
 		}
@@ -83,14 +81,12 @@ final class OrderMetaBox {
 	}
 
 	public static function inject_cvs_shipping_address( string $address, $raw_address, \WC_Order $order ): string {
-		// 只處理 ECPay 物流訂單（CVS 或 HOME）
 		$method_id = self::find_mowp_method_id( $order );
 		if ( '' === $method_id ) {
 			return $address;
 		}
 		$is_cvs = str_contains( $method_id, '_cvs_' );
 
-		// 拿運送方式中文標題 — registry titles 優先
 		$registry_titles = self::registry_titles();
 		$method_title    = '';
 		foreach ( $order->get_shipping_methods() as $m ) {
@@ -105,23 +101,14 @@ final class OrderMetaBox {
 			}
 			break;
 		}
-		// 收件人
 		$name = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
 		if ( '' === $name ) {
 			$name = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
 		}
 
 		$lines = [];
-		if ( '' !== $name ) {
-			$lines[] = esc_html( $name );
-		}
-		if ( '' !== $method_title ) {
-			$lines[] = esc_html( $method_title );
-		}
 
-		// 注意：HPOS list table 的「運送至」column 會把這個 filter 回傳值跑 esc_html()，
-		// 所以 inner 不能放任何 HTML tag（包含 <small>），否則會被 escape 顯示成原始字串。
-		// 用純文字 + <br/> 分隔 — WC 會 preg_replace 把 <br/> 換成 ', ' 給 list 顯示。
+		// HPOS list table 對此 filter 跑 esc_html()，禁 HTML tag；WC 把 <br/> 換成 ', ' 供列表顯示
 		if ( $is_cvs ) {
 			$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 			$store_name = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
@@ -134,18 +121,20 @@ final class OrderMetaBox {
 				$lines[] = esc_html( $store_addr );
 			}
 		} else {
-			// HOME — 用實體運送地址。走 TwAddress::format_shipping_address 統一處理
-			// 縣市英文代碼 → 中文（state_label）+ 鄉鎮市區（_shipping_mowp/district）。
-			$formatted = \MoksaWeb\Mowc\Modules\Address\TwAddress::format_shipping_address( $order );
-			if ( '' !== $formatted ) {
-				$lines[] = esc_html( $formatted );
+			foreach ( \MoksaWeb\Mowc\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
+				$lines[] = esc_html( $line );
 			}
+		}
+		if ( '' !== $name ) {
+			$lines[] = esc_html( $name );
+		}
+		if ( '' !== $method_title ) {
+			$lines[] = esc_html( $method_title );
 		}
 		return implode( '<br/>', $lines );
 	}
 
 	public static function add_card( array $cards, \WC_Order $order ): array {
-		// 不是 ECPay 物流訂單就不顯示（避免在所有訂單下方都印出 section）
 		if ( '' === self::find_mowp_method_id( $order ) ) {
 			return $cards;
 		}
@@ -157,14 +146,13 @@ final class OrderMetaBox {
 		<div class="moksafowo-ecpay-shipping-meta"
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>">
 
-			<?php if ( ! empty( $records ) ) :
+			<?php
+			if ( ! empty( $records ) ) :
 				$order_total = (int) round( (float) $order->get_total() );
 				$is_cod      = 'cod' === (string) $order->get_payment_method();
-				// A6 只有 7-11 + POST 支援，其他物流隱藏 A6 按鈕。
-				$a6_subtypes = [ 'UNIMARTC2C', 'POST' ];
-				// 多筆 records = 「同訂單拆 N 包」。
-				$is_split = count( $records ) > 1;
-			?>
+				$a6_subtypes = [ 'UNIMARTC2C', 'POST' ]; // 其他物流隱藏 A6 按鈕
+				$is_split    = count( $records ) > 1;
+				?>
 				<?php if ( $is_split ) : ?>
 					<p style="margin:0 0 8px;font-size:11px;color:#646970;">
 						<?php
@@ -174,7 +162,8 @@ final class OrderMetaBox {
 					</p>
 				<?php endif; ?>
 				<div class="moksafowo-ecpay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
-					<?php foreach ( $records as $r ) :
+					<?php
+					foreach ( $records as $r ) :
 						$id         = (string) ( $r['id'] ?? '' );
 						$mtn        = (string) ( $r['mtn'] ?? '' );
 						$pay        = (string) ( $r['cvs_payment_no'] ?? '' );
@@ -188,24 +177,21 @@ final class OrderMetaBox {
 						$type_label = self::subtype_label( $subtype );
 						$is_cvs     = 'CVS' === $type;
 						$show_a6    = in_array( $subtype, $a6_subtypes, true );
-						// Phase C 後新增：每筆 record 各自的溫層 + 申報金額。
-						// 舊 records 沒 temp 欄位時 fallback subtype 推（UNIMARTFREEZE → 冷凍、其他 → 常溫），
-						// 確保所有 records 都顯示溫層 pill。
+						// 舊 records 沒 temp 欄位：UNIMARTFREEZE → 冷凍，其他 → 常溫
 						$temp = isset( $r['temp'] ) ? (int) $r['temp'] : 0;
 						if ( 0 === $temp ) {
 							$temp = 'UNIMARTFREEZE' === $subtype ? 3 : 1;
 						}
-						$amount     = isset( $r['amount'] ) ? (int) $r['amount'] : $order_total;
-						$temp_label = \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp );
-						// 溫層 pill 顏色（常溫灰、冷藏藍、冷凍紫）
-						$temp_pill_color = match ( $temp ) {
+						$amount          = isset( $r['amount'] ) ? (int) $r['amount'] : $order_total;
+						$temp_label      = \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp );
+						$temp_pill_color = match ( $temp ) { // 常溫灰、冷藏藍、冷凍紫
 							2       => [ '#dbeafe', '#1e40af' ],
 							3       => [ '#ede9fe', '#6d28d9' ],
 							default => [ '#e5e7eb', '#374151' ],
 						};
 						/* translators: %d: cash-on-delivery amount in TWD */
 						$cod_label = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
-					?>
+						?>
 					<details class="moksafowo-ecpay-record"
 						data-logistics-id="<?php echo esc_attr( $id ); ?>"
 						<?php echo $is_split ? '' : 'open'; ?>>
@@ -223,21 +209,27 @@ final class OrderMetaBox {
 						</summary>
 						<div class="moksafowo-ecpay-record__body">
 						<?php if ( $is_cvs && '' !== $pay ) : ?>
-							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay ); ?><?php if ( '' !== $val ) : ?> / <?php echo esc_html( $val ); ?><?php endif; ?></span></p>
+							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay ); ?>
+							<?php
+							if ( '' !== $val ) :
+								?>
+								/ <?php echo esc_html( $val ); ?><?php endif; ?></span></p>
 						<?php elseif ( ! $is_cvs && '' !== $bk ) : ?>
 							<p style="margin:.2em 0;"><strong><?php esc_html_e( '託運單號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $bk ); ?></span></p>
 						<?php endif; ?>
 						<?php /* translators: %d: declared value amount in TWD */ ?>
 						<p style="margin:.2em 0;"><strong><?php esc_html_e( '申報價值：', 'mo-ectools' ); ?></strong><?php echo esc_html( sprintf( __( 'NT$%d', 'mo-ectools' ), $amount ) ); ?></p>
 						<p style="margin:.2em 0;"><strong><?php esc_html_e( '代收貨款：', 'mo-ectools' ); ?></strong><?php echo esc_html( $cod_label ); ?></p>
-						<?php if ( '' !== $at ) :
+						<?php
+						if ( '' !== $at ) :
 							$days_ago = self::days_since( $at );
-						?>
+							?>
 							<p style="margin:.2em 0;">
 								<strong><?php esc_html_e( '建立時間：', 'mo-ectools' ); ?></strong><?php echo esc_html( $at ); ?>
-								<?php if ( null !== $days_ago ) :
+								<?php
+								if ( null !== $days_ago ) :
 									$pill_color = $days_ago >= 14 ? '#d63638' : ( $days_ago >= 7 ? '#dba617' : '#646970' );
-								?>
+									?>
 									<span style="color:<?php echo esc_attr( $pill_color ); ?>;font-size:11px;margin-left:4px;">
 										<?php
 										if ( 0 === $days_ago ) {
@@ -263,7 +255,6 @@ final class OrderMetaBox {
 							<p style="margin:.2em 0;color:#646970;"><strong><?php esc_html_e( '狀態：', 'mo-ectools' ); ?></strong><?php echo esc_html( $rtn_msg ); ?></p>
 						<?php endif; ?>
 						<?php
-						// 貨態查詢按鈕 — 跟前台顧客頁同一套 helper，黑貓直連 / 其他開新分頁
 						$tracking_info = TrackingLink::for_ecpay_record( $r );
 						if ( null !== $tracking_info ) :
 							?>
@@ -319,7 +310,7 @@ final class OrderMetaBox {
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		$handle = 'moksafowo-ecpay-shipping-admin';
+		$handle  = 'moksafowo-ecpay-shipping-admin';
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/js/admin-meta-box.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 		wp_register_script(
@@ -329,36 +320,39 @@ final class OrderMetaBox {
 			$ver,
 			true
 		);
-		wp_localize_script( $handle, 'moksafowo_ecpay_shipping_admin', [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'i18n'     => [
-				'creating'      => __( '建立中…', 'mo-ectools' ),
-				'create_ok'     => __( '物流單已建立，重新整理頁面取得完整資訊。', 'mo-ectools' ),
-				'create_fail'   => __( '建立失敗：', 'mo-ectools' ),
-				'recreate_confirm' => __( '此訂單已有物流單記錄。系統只會為「尚未建立的溫層」補建，已建立的不會重複下單。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
-				'no_order'      => __( '找不到訂單。', 'mo-ectools' ),
-				'delete_confirm' => __( '確定刪除此筆物流單記錄？\n（綠界端不會收到通知，僅刪除網站本地紀錄）', 'mo-ectools' ),
-				'delete_ok'     => __( '已刪除，重新整理頁面。', 'mo-ectools' ),
-				'delete_fail'   => __( '刪除失敗：', 'mo-ectools' ),
-				'print_fail'    => __( '列印失敗：', 'mo-ectools' ),
-				'printing'      => __( '列印中…', 'mo-ectools' ),
-				'unknown_error' => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
-				'ajax_error'    => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			$handle,
+			'moksafowo_ecpay_shipping_admin',
+			[
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'i18n'     => [
+					'creating'         => __( '建立中…', 'mo-ectools' ),
+					'create_ok'        => __( '物流單已建立，重新整理頁面取得完整資訊。', 'mo-ectools' ),
+					'create_fail'      => __( '建立失敗：', 'mo-ectools' ),
+					'recreate_confirm' => __( '此訂單已有物流單記錄，僅補建缺少的部分。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
+					'no_order'         => __( '找不到訂單。', 'mo-ectools' ),
+					'delete_confirm'   => __( '確定刪除此筆物流單記錄？', 'mo-ectools' ),
+					'delete_ok'        => __( '已刪除，重新整理頁面。', 'mo-ectools' ),
+					'delete_fail'      => __( '刪除失敗：', 'mo-ectools' ),
+					'print_fail'       => __( '列印失敗：', 'mo-ectools' ),
+					'printing'         => __( '列印中…', 'mo-ectools' ),
+					'unknown_error'    => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
+					'ajax_error'       => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
+				],
+			]
+		);
 		wp_enqueue_script( $handle );
-		// 共用 clipboard JS — admin 頁的「複製貨號」按鈕用（由 Shipping\Module::register_admin_assets 註冊）
 		wp_enqueue_script( 'moksafowo-tracking-copy' );
 
-		$css = ".moksafowo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}"
-			. ".moksafowo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}"
-			. ".moksafowo-ecpay-record summary::-webkit-details-marker{display:none;}"
+		$css = '.moksafowo-ecpay-record summary{cursor:pointer;list-style:none;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;font-size:12px;}'
+			. '.moksafowo-ecpay-record[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0;}'
+			. '.moksafowo-ecpay-record summary::-webkit-details-marker{display:none;}'
 			. ".moksafowo-ecpay-record summary::before{content:'\\25B6';margin-right:2px;font-size:9px;color:#646970;display:inline-block;transition:transform .15s;flex-shrink:0;}"
-			. ".moksafowo-ecpay-record[open] summary::before{transform:rotate(90deg);}"
-			. ".moksafowo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}"
-			. ".moksafowo-ecpay-record summary > * + *{margin-left:0;}"
-			. ".moksafowo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}"
-			. ".moksafowo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}";
+			. '.moksafowo-ecpay-record[open] summary::before{transform:rotate(90deg);}'
+			. '.moksafowo-ecpay-record__body{background:#f6f7f7;border:1px solid #dcdcde;border-top:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;padding:0 12px 10px;font-size:12px;line-height:1.5;}'
+			. '.moksafowo-ecpay-record summary > * + *{margin-left:0;}'
+			. '.moksafowo-ecpay-record__summary-id{font-family:monospace;font-weight:600;color:#0f172a;}'
+			. '.moksafowo-ecpay-record__summary-status{margin-left:auto;color:#64748b;font-size:11px;}';
 		wp_register_style( 'moksafowo-ecpay-shipping-admin', false, [], $ver );
 		wp_enqueue_style( 'moksafowo-ecpay-shipping-admin' );
 		wp_add_inline_style( 'moksafowo-ecpay-shipping-admin', $css );
@@ -381,10 +375,10 @@ final class OrderMetaBox {
 
 	private static function subtype_label( string $subtype ): string {
 		$map = [
-			'UNIMARTC2C' => __( '7-11 取貨', 'mo-ectools' ),
-			'FAMIC2C'    => __( '全家取貨', 'mo-ectools' ),
-			'HILIFEC2C'  => __( '萊爾富取貨', 'mo-ectools' ),
-			'OKMARTC2C'  => __( 'OK 取貨', 'mo-ectools' ),
+			'UNIMARTC2C'    => __( '7-11 取貨', 'mo-ectools' ),
+			'FAMIC2C'       => __( '全家取貨', 'mo-ectools' ),
+			'HILIFEC2C'     => __( '萊爾富取貨', 'mo-ectools' ),
+			'OKMARTC2C'     => __( 'OK 取貨', 'mo-ectools' ),
 			'UNIMART'       => __( '7-11 大宗', 'mo-ectools' ),
 			'UNIMARTFREEZE' => __( '7-11 冷凍', 'mo-ectools' ),
 			'FAMI'          => __( '全家大宗', 'mo-ectools' ),
@@ -425,7 +419,6 @@ final class OrderMetaBox {
 			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
 		}
 
-		// Optional: 限定特定物流單 ID 列印（每筆 row 的 print 按鈕）
 		$specific_id = isset( $_POST['logistics_id'] ) ? sanitize_text_field( wp_unslash( $_POST['logistics_id'] ) ) : '';
 		$mode        = isset( $_POST['mode'] ) && '2' === sanitize_text_field( wp_unslash( $_POST['mode'] ) ) ? '2' : '1';
 		if ( '' !== $specific_id ) {

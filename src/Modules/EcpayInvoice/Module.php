@@ -49,15 +49,12 @@ final class Module extends AbstractModule {
 	}
 
 	public function boot(): void {
-		// 結帳頁載具欄位（Classic + Block）
 		Frontend\CheckoutFields::init();
 
-		// 訂單編輯頁 meta box
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 		}
 
-		// 自動開立
 		$when = (string) get_option( 'moksafowo_ecpay_invoice_issue_when', 'paid' );
 		if ( 'paid' === $when ) {
 			add_action( 'woocommerce_payment_complete', [ __CLASS__, 'maybe_issue' ], 30 );
@@ -66,16 +63,13 @@ final class Module extends AbstractModule {
 			add_action( 'woocommerce_order_status_completed', [ __CLASS__, 'maybe_issue' ], 30 );
 		}
 
-		// 延後開立 — 透過 Action Scheduler / WP-Cron 在 N 天後跑 deferred_issue
 		add_action( 'moksafowo_ecpay_invoice_deferred_issue', [ __CLASS__, 'deferred_issue' ], 10, 1 );
 
-		// 訂單退款 / 取消時自動作廢發票。預設 manual — 商家進設定主動開啟（保守安全）。
 		if ( 'auto_cancel' === get_option( 'moksafowo_ecpay_invoice_auto_cancel', 'manual' ) ) {
 			add_action( 'woocommerce_order_status_cancelled', [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_refunded',  [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_failed',    [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_refunded', [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_failed', [ Operations\AutoInvalid::class, 'schedule' ] );
 		}
-		// 不論 toggle 開關，都掛 Action Scheduler callback — 既有排程要能跑完
 		add_action( Operations\AutoInvalid::HOOK, [ Operations\AutoInvalid::class, 'run' ], 10, 1 );
 	}
 
@@ -87,14 +81,11 @@ final class Module extends AbstractModule {
 		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) ) {
 			return;
 		}
-		// 單一路由（無雙開）：ECPay 為預設 provider，但若此單已由別家發票模組接管
-		// （結帳時 INVOICE_PROVIDER 設成 ezpay/smilepay/paynow/amego），ECPay 不得也開立，
-		// 否則兩家同時開 → 重複發票。其餘 4 模組已有對應 gate，這裡補上 ECPay 的。
+		// Prevent double-issue: if another provider was selected at checkout, skip.
 		$provider = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
 		if ( '' !== $provider && 'ecpay' !== $provider ) {
 			return;
 		}
-		// Dedupe：payment_complete + status_processing 都會觸發本 hook，AS 沒有 args-based 預設 dedupe。
 		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' ) ) {
 			return;
 		}
@@ -114,11 +105,13 @@ final class Module extends AbstractModule {
 
 		if ( $delay_days > 0 ) {
 			$order->update_meta_data( Keys::ECPAY_INVOICE_SCHEDULED_AT, current_time( 'mysql' ) );
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %d: delay days */
-				__( '綠界發票排程於 %d 天後開立。', 'mo-ectools' ),
-				$delay_days
-			) );
+					__( '綠界發票排程於 %d 天後開立。', 'mo-ectools' ),
+					$delay_days
+				)
+			);
 			$order->save();
 		}
 	}
@@ -129,7 +122,7 @@ final class Module extends AbstractModule {
 			return;
 		}
 		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) ) {
-			return; // 已開過
+			return;
 		}
 		if ( in_array( $order->get_status(), [ 'cancelled', 'refunded', 'failed' ], true ) ) {
 			$order->add_order_note( __( '綠界發票排程取消（訂單已取消 / 退款 / 失敗）。', 'mo-ectools' ) );

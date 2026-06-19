@@ -22,13 +22,11 @@ final class OrderListHelper {
 			$method_id = (string) $m->get_method_id();
 			break;
 		}
-		// 只處理 PAYUNi unified methods（HD / 7-11 C2C / 7-11 B2C）
 		if ( ! in_array( $method_id, [ HDUnified::ID, C2CUnified::ID, B2CUnified::ID ], true ) ) {
 			return $address;
 		}
 		$is_cvs = in_array( $method_id, [ C2CUnified::ID, B2CUnified::ID ], true );
 
-		// 拿運送方式中文標題
 		$method_title = '';
 		foreach ( $order->get_shipping_methods() as $m ) {
 			$mid          = (string) $m->get_method_id();
@@ -43,12 +41,6 @@ final class OrderListHelper {
 		}
 
 		$lines = [];
-		if ( '' !== $name ) {
-			$lines[] = esc_html( $name );
-		}
-		if ( '' !== $method_title ) {
-			$lines[] = esc_html( $method_title );
-		}
 
 		if ( $is_cvs ) {
 			$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
@@ -62,11 +54,15 @@ final class OrderListHelper {
 				$lines[] = esc_html( $store_addr );
 			}
 		} else {
-			// HOME 黑貓 — 用實體運送地址。縣市英文代碼 → 中文 + 鄉鎮市區。
-			$formatted = \MoksaWeb\Mowc\Modules\Address\TwAddress::format_shipping_address( $order );
-			if ( '' !== $formatted ) {
-				$lines[] = esc_html( $formatted );
+			foreach ( \MoksaWeb\Mowc\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
+				$lines[] = esc_html( $line );
 			}
+		}
+		if ( '' !== $name ) {
+			$lines[] = esc_html( $name );
+		}
+		if ( '' !== $method_title ) {
+			$lines[] = esc_html( $method_title );
 		}
 		return implode( '<br/>', $lines );
 	}

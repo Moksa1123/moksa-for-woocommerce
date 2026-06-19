@@ -104,7 +104,13 @@ final class Helper extends AbstractCredentialHelper {
 		$body  = $resp->json();
 		$token = (string) ( $body['token'] ?? '' );
 		if ( '' === $token ) {
-			self::log( 'token request failed', [ 'status' => $resp->status, 'code' => (string) ( $body['code'] ?? '' ) ] );
+			self::log(
+				'token request failed',
+				[
+					'status' => $resp->status,
+					'code'   => (string) ( $body['code'] ?? '' ),
+				]
+			);
 			return '';
 		}
 
@@ -119,18 +125,34 @@ final class Helper extends AbstractCredentialHelper {
 		delete_transient( self::token_transient_key() );
 	}
 
-	
+
 	public static function api_post( string $url, array $body, bool $retried = false ): array {
 		$token = self::get_token( $retried );
 		if ( '' === $token ) {
-			return [ 'ok' => false, 'message' => __( '無法取得支付連 token，請確認 APP ID / Secret。', 'mo-ectools' ), 'code' => 'NO_TOKEN', 'data' => [] ];
+			return [
+				'ok'      => false,
+				'message' => __( '無法取得支付連 token，請確認 APP ID / Secret。', 'mo-ectools' ),
+				'code'    => 'NO_TOKEN',
+				'data'    => [],
+			];
 		}
 
 		try {
 			$resp = Request::post( $url, $body, [ 'pcpay-token' => $token ], 'json' );
 		} catch ( \RuntimeException $e ) {
-			self::log( 'api transport error', [ 'url' => $url, 'error' => $e->getMessage() ] );
-			return [ 'ok' => false, 'message' => $e->getMessage(), 'code' => 'TRANSPORT', 'data' => [] ];
+			self::log(
+				'api transport error',
+				[
+					'url'   => $url,
+					'error' => $e->getMessage(),
+				]
+			);
+			return [
+				'ok'      => false,
+				'message' => $e->getMessage(),
+				'code'    => 'TRANSPORT',
+				'data'    => [],
+			];
 		}
 
 		$decoded = $resp->json();
@@ -145,7 +167,14 @@ final class Helper extends AbstractCredentialHelper {
 		// 成功回應沒有 code 欄位（直接回 payload）；失敗時帶 code + message。
 		$is_error = isset( $decoded['code'] ) && '' !== (string) $decoded['code'];
 		if ( $is_error ) {
-			self::log( 'api error', [ 'url' => $url, 'code' => $code, 'message' => (string) ( $decoded['message'] ?? '' ) ] );
+			self::log(
+				'api error',
+				[
+					'url'     => $url,
+					'code'    => $code,
+					'message' => (string) ( $decoded['message'] ?? '' ),
+				]
+			);
 			return [
 				'ok'      => false,
 				'message' => (string) ( $decoded['message'] ?? __( '支付連 API 失敗', 'mo-ectools' ) ),
@@ -155,10 +184,20 @@ final class Helper extends AbstractCredentialHelper {
 		}
 
 		if ( ! $resp->ok() ) {
-			return [ 'ok' => false, 'message' => sprintf( 'HTTP %d', $resp->status ), 'code' => (string) $resp->status, 'data' => $decoded ];
+			return [
+				'ok'      => false,
+				'message' => sprintf( 'HTTP %d', $resp->status ),
+				'code'    => (string) $resp->status,
+				'data'    => $decoded,
+			];
 		}
 
-		return [ 'ok' => true, 'message' => 'OK', 'code' => '', 'data' => $decoded ];
+		return [
+			'ok'      => true,
+			'message' => 'OK',
+			'code'    => '',
+			'data'    => $decoded,
+		];
 	}
 
 	public static function generate_order_id( int $order_id, bool $retry = false ): string {

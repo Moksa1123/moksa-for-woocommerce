@@ -12,7 +12,7 @@ class CreditRed extends GatewayBase {
 
 		$this->id                 = self::GATEWAY_ID;
 		$this->method_title       = __( 'PAYUNi 信用卡紅利折抵', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi UPP — 信用卡紅利點數折抵', 'mo-ectools' );
+		$this->method_description = __( '信用卡紅利點數折抵付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
 		$this->supports           = array( 'products', 'refunds' );
 
 		$this->init_form_fields();

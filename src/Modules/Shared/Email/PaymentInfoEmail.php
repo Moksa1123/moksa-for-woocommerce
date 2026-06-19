@@ -14,10 +14,10 @@ final class PaymentInfoEmail extends \WC_Email {
 		$this->id             = 'moksafowo_payment_info';
 		$this->customer_email = true;
 		$this->title          = __( 'Moksa 取號繳費通知', 'mo-ectools' );
-		$this->description     = __( 'ATM 虛擬帳號 / 超商代碼 / 條碼等取號類付款，下單後寄送繳費資訊給顧客（獨立於 WC 原生訂單信）。', 'mo-ectools' );
+		$this->description    = __( 'ATM 虛擬帳號 / 超商代碼 / 條碼等取號類付款，下單後寄送繳費資訊給顧客（獨立於 WC 原生訂單信）。', 'mo-ectools' );
 		$this->heading        = __( '請完成付款', 'mo-ectools' );
 		/* translators: %s: site title */
-		$this->subject        = __( '【{site_title}】訂單 {order_number} 繳費資訊', 'mo-ectools' );
+		$this->subject = __( '【{site_title}】訂單 {order_number} 繳費資訊', 'mo-ectools' );
 
 		$this->template_html  = '';
 		$this->template_plain = '';
@@ -36,7 +36,7 @@ final class PaymentInfoEmail extends \WC_Email {
 		return $this->heading;
 	}
 
-	
+
 	public function trigger( $order_id ): void {
 		$this->setup_locale();
 
@@ -65,15 +65,23 @@ final class PaymentInfoEmail extends \WC_Email {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
 		echo wc_get_template_html(
 			'emails/email-header.php',
-			[ 'email_heading' => $this->get_heading(), 'email' => $this ]
+			[
+				'email_heading' => $this->get_heading(),
+				'email'         => $this,
+			]
 		);
 		echo '<p>' . esc_html__( '您好，您的訂單已成立，請於期限內以下列資訊完成付款：', 'mo-ectools' ) . '</p>';
 		echo PaymentInfoBox::render_html( $rows ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( $this->object instanceof \WC_Order ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
-		echo wc_get_template_html(
+			echo wc_get_template_html(
 				'emails/email-order-details.php',
-				[ 'order' => $this->object, 'sent_to_admin' => false, 'plain_text' => false, 'email' => $this ]
+				[
+					'order'         => $this->object,
+					'sent_to_admin' => false,
+					'plain_text'    => false,
+					'email'         => $this,
+				]
 			);
 		}
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.

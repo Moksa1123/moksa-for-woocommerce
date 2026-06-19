@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class PaymentRequest {
 
-	
+
 	public static function create( array $args ): array {
 		$result = Helper::api_post( Helper::payment_url(), $args );
 		$data   = $result['data'];
@@ -21,13 +21,16 @@ final class PaymentRequest {
 		];
 	}
 
-	
+
 	public static function refund( string $order_id, string $refund_id, int $amount ): array {
-		$result = Helper::api_post( Helper::refund_url(), [
-			'order_id'     => $order_id,
-			'refund_id'    => $refund_id,
-			'trade_amount' => $amount,
-		] );
+		$result = Helper::api_post(
+			Helper::refund_url(),
+			[
+				'order_id'     => $order_id,
+				'refund_id'    => $refund_id,
+				'trade_amount' => $amount,
+			]
+		);
 		return [
 			'ok'      => $result['ok'],
 			'message' => $result['message'],

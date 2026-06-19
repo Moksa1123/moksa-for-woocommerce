@@ -43,9 +43,11 @@ final class Ui {
 		<section class="mowp-category">
 			<h3 class="mowp-category__title"><?php echo esc_html( $title ); ?></h3>
 			<div class="mowp-list">
-				<?php foreach ( $cards as $card ) {
+				<?php
+				foreach ( $cards as $card ) {
 					self::card( $card );
-				} ?>
+				}
+				?>
 			</div>
 		</section>
 		<?php

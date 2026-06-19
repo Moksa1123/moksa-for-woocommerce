@@ -15,7 +15,7 @@ final class CustomerPaymentInfo {
 		PaymentInfoBox::register( [ __CLASS__, 'resolve' ] );
 	}
 
-	
+
 	public static function resolve( \WC_Order $order ): array {
 		if ( $order->is_paid() ) {
 			return [];
@@ -29,21 +29,38 @@ final class CustomerPaymentInfo {
 			$rows = [];
 			$bank = (string) $order->get_meta( Keys::NEWEBPAY_ATM_BANK_CODE );
 			if ( '' !== $bank ) {
-				$rows[] = [ 'label' => __( '銀行代碼', 'mo-ectools' ), 'value' => $bank ];
+				$rows[] = [
+					'label' => __( '銀行代碼', 'mo-ectools' ),
+					'value' => $bank,
+				];
 			}
-			$rows[] = [ 'label' => __( '虛擬帳號', 'mo-ectools' ), 'value' => $atm_acct ];
+			$rows[] = [
+				'label' => __( '虛擬帳號', 'mo-ectools' ),
+				'value' => $atm_acct,
+			];
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_ATM_EXPIRE_DATE );
 			if ( '' !== $expire ) {
-				$rows[] = [ 'label' => __( '繳費期限', 'mo-ectools' ), 'value' => $expire ];
+				$rows[] = [
+					'label' => __( '繳費期限', 'mo-ectools' ),
+					'value' => $expire,
+				];
 			}
 			return $rows;
 		}
 
 		if ( '' !== $cvs_no ) {
-			$rows   = [ [ 'label' => __( '繳費代碼', 'mo-ectools' ), 'value' => $cvs_no ] ];
+			$rows   = [
+				[
+					'label' => __( '繳費代碼', 'mo-ectools' ),
+					'value' => $cvs_no,
+				],
+			];
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_CVS_EXPIRE_DATE );
 			if ( '' !== $expire ) {
-				$rows[] = [ 'label' => __( '繳費期限', 'mo-ectools' ), 'value' => $expire ];
+				$rows[] = [
+					'label' => __( '繳費期限', 'mo-ectools' ),
+					'value' => $expire,
+				];
 			}
 			return $rows;
 		}
@@ -53,13 +70,19 @@ final class CustomerPaymentInfo {
 			foreach ( [ Keys::NEWEBPAY_BARCODE_1, Keys::NEWEBPAY_BARCODE_2, Keys::NEWEBPAY_BARCODE_3 ] as $i => $key ) {
 				$bc = (string) $order->get_meta( $key );
 				if ( '' !== $bc ) {
-					/* translators: %d: barcode segment index */
-					$rows[] = [ 'label' => sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 ), 'value' => $bc ];
+					$rows[] = [
+						/* translators: %d: barcode segment index */
+						'label' => sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 ),
+						'value' => $bc,
+					];
 				}
 			}
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_BARCODE_EXPIRE_DATE );
 			if ( '' !== $expire ) {
-				$rows[] = [ 'label' => __( '繳費期限', 'mo-ectools' ), 'value' => $expire ];
+				$rows[] = [
+					'label' => __( '繳費期限', 'mo-ectools' ),
+					'value' => $expire,
+				];
 			}
 			return $rows;
 		}

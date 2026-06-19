@@ -49,7 +49,7 @@ final class Helper extends AbstractCredentialHelper {
 		return 'B2C' === get_option( 'moksafowo_smilepay_shipping_cvs_service_type', 'C2C' ) ? 'B2C' : 'C2C';
 	}
 
-	
+
 	public static function sender_info(): array {
 		return [
 			'name'    => trim( (string) get_option( 'moksafowo_smilepay_shipping_sender_name', '' ) ),

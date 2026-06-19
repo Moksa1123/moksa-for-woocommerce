@@ -37,30 +37,15 @@
 		return '';
 	}
 
-	function escapeHtml( s ) {
-		return String( s == null ? '' : s )
-			.replace( /&/g, '&amp;' )
-			.replace( /</g, '&lt;' )
-			.replace( />/g, '&gt;' )
-			.replace( /"/g, '&quot;' );
-	}
-
 	function findHost() {
-		// Classic 已經在 review_order 渲染好 row
+		// Classic 已在 review_order 渲染好 <tr> host — 不搬動(共用 ensureHost 會 append
+		// 進 step content,會把 Classic host 拔離它的 <tr>)。
 		const existing = document.getElementById( HOST_ID );
-		if ( existing ) {
+		if ( existing && existing.closest( 'tr.moksafowo-ecpay-shipping-store-row' ) ) {
 			return existing;
 		}
-		// Block — 動態插到 shipping-method-block 之後
-		const anchor = document.querySelector( '.wp-block-woocommerce-checkout-shipping-method-block' );
-		if ( ! anchor || ! anchor.parentNode ) {
-			return null;
-		}
-		const host = document.createElement( 'div' );
-		host.id = HOST_ID;
-		host.className = 'moksafowo-ecpay-shipping-store';
-		anchor.parentNode.insertBefore( host, anchor.nextSibling );
-		return host;
+		// Block — 共用 helper 塞進 step content(對齊 PAYUni / 藍新 / 速買配)。
+		return window.MowpCvsStore ? window.MowpCvsStore.ensureHost( HOST_ID ) : null;
 	}
 
 	function showRow( show ) {
@@ -77,22 +62,16 @@
 		}
 		showRow( true );
 
+		const M = window.MowpCvsStore;
 		const btnLabel = store && store.id ? cfg.i18n.change : cfg.i18n.select;
-		let body;
-		if ( store && store.id ) {
-			body =
-				'<div class="moksafowo-ecpay-shipping-store__info">' +
-					'<strong>' + escapeHtml( store.name ) + '</strong> ' +
-					'<span class="moksafowo-ecpay-shipping-store__id">(' + escapeHtml( cfg.i18n.store_id ) + ' ' + escapeHtml( store.id ) + ')</span>' +
-					'<div class="moksafowo-ecpay-shipping-store__address">' + escapeHtml( store.address ) + '</div>' +
-				'</div>';
-		} else {
-			body = '<span class="moksafowo-ecpay-shipping-store__placeholder">' + escapeHtml( cfg.i18n.none_selected ) + '</span>';
-		}
-		host.innerHTML =
-			body +
-			'<button type="button" class="button moksafowo-ecpay-shipping-store__btn">' + escapeHtml( btnLabel ) + '</button>';
-		const btn = host.querySelector( '.moksafowo-ecpay-shipping-store__btn' );
+		const rightHtml = '<button type="button" class="button mowp-cvs-store__btn">' + M.escapeHtml( btnLabel ) + '</button>';
+		host.innerHTML = M.cardHtml( {
+			store: store,
+			storeIdLabel: cfg.i18n.store_id,
+			noneText: cfg.i18n.none_selected,
+			rightHtml: rightHtml,
+		} );
+		const btn = host.querySelector( '.mowp-cvs-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', onSelect );
 		}
@@ -132,24 +111,9 @@
 					alert( ( resp && resp.data && resp.data.message ) || cfg.i18n.error );
 					return;
 				}
-				submitForm( resp.data.api_url, resp.data.form_data );
+				window.MowpCvsStore.submitForm( resp.data.api_url, resp.data.form_data );
 			} )
 			.catch( function () { alert( cfg.i18n.error ); } );
-	}
-
-	function submitForm( apiUrl, formData ) {
-		const f = document.createElement( 'form' );
-		f.method = 'POST';
-		f.action = apiUrl;
-		Object.keys( formData ).forEach( function ( k ) {
-			const i = document.createElement( 'input' );
-			i.type = 'hidden';
-			i.name = k;
-			i.value = formData[ k ];
-			f.appendChild( i );
-		} );
-		document.body.appendChild( f );
-		f.submit();
 	}
 
 	function readToken() {

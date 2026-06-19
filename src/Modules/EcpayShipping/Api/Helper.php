@@ -47,11 +47,11 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	private static function cred( string $subtype, string $field ): string {
-		$group     = self::group_for_subtype( $subtype );
-		$is_test   = self::is_sandbox();
-		$prefix    = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
-		$opt_key   = $prefix . $field;
-		$value     = (string) get_option( $opt_key, '' );
+		$group   = self::group_for_subtype( $subtype );
+		$is_test = self::is_sandbox();
+		$prefix  = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
+		$opt_key = $prefix . $field;
+		$value   = (string) get_option( $opt_key, '' );
 
 		// Fallback 1：legacy 單組設定（沒有 _c2c_/_b2c_ 前綴）— migrate 用
 		if ( '' === $value ) {
@@ -73,7 +73,7 @@ final class Helper extends AbstractCredentialHelper {
 					'hash_iv'     => self::SANDBOX_B2C_HASH_IV,
 				],
 			];
-			$value = $consts[ $group ][ $field ] ?? '';
+			$value  = $consts[ $group ][ $field ] ?? '';
 		}
 
 		return $value;
@@ -88,10 +88,9 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function has_credentials_for( string $group ): bool {
-		$is_test  = self::is_sandbox();
-		$prefix   = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
-		$mid      = (string) get_option( $prefix . 'merchant_id', '' );
-		// legacy fallback
+		$is_test = self::is_sandbox();
+		$prefix  = 'moksafowo_ecpay_shipping_' . $group . '_' . ( $is_test ? 'sandbox_' : '' );
+		$mid     = (string) get_option( $prefix . 'merchant_id', '' );
 		if ( '' === $mid ) {
 			$legacy = 'moksafowo_ecpay_shipping_' . ( $is_test ? 'sandbox_' : '' ) . 'merchant_id';
 			$mid    = (string) get_option( $legacy, '' );
@@ -125,6 +124,4 @@ final class Helper extends AbstractCredentialHelper {
 		$expected = self::generate_check_mac_value( $signed, $subtype );
 		return hash_equals( $expected, (string) $posted['CheckMacValue'] );
 	}
-
-	// is_sandbox / log_enabled / log inherited from AbstractCredentialHelper
 }

@@ -27,7 +27,7 @@ final class EmailTrackingSection {
 		}
 	}
 
-	
+
 	private static function collect_entries( \WC_Order $order ): array {
 		$method_id = '';
 		foreach ( $order->get_shipping_methods() as $m ) {
@@ -37,7 +37,6 @@ final class EmailTrackingSection {
 		if ( '' === $method_id ) {
 			return [];
 		}
-
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$entries = apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, $method_id );
@@ -74,9 +73,9 @@ final class EmailTrackingSection {
 			$carrier = '' !== $e['temp_label'] ? $e['carrier'] . '（' . $e['temp_label'] . '）' : $e['carrier'];
 			echo esc_html( $carrier ) . " — \n";
 			if ( '' !== $e['tracking_no'] ) {
-				echo "  " . esc_html__( '貨號：', 'mo-ectools' ) . esc_html( $e['tracking_no'] ) . "\n";
+				echo '  ' . esc_html__( '貨號：', 'mo-ectools' ) . esc_html( $e['tracking_no'] ) . "\n";
 			}
-			echo "  " . esc_html__( '查詢：', 'mo-ectools' ) . esc_url( $e['url'] ) . "\n\n";
+			echo '  ' . esc_html__( '查詢：', 'mo-ectools' ) . esc_url( $e['url'] ) . "\n\n";
 		}
 	}
 }

@@ -10,18 +10,24 @@ defined( 'ABSPATH' ) || exit;
 
 final class Issue {
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		// idempotent — 已開過就不重開
 		$existing = (string) $order->get_meta( Keys::EZPAY_INVOICE_NUMBER );
 		if ( '' !== $existing ) {
-			return [ 'ok' => false, 'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ),
+			];
 		}
 
 		// 沒選發票類型就不開（顧客結帳沒填）
 		$type = (string) $order->get_meta( Keys::INVOICE_TYPE );
 		if ( '' === $type ) {
-			return [ 'ok' => false, 'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ),
+			];
 		}
 
 		$args = self::build_args( $order );
@@ -31,13 +37,21 @@ final class Issue {
 			$order->update_meta_data( Keys::EZPAY_INVOICE_NUMBER, 'zero' );
 			$order->add_order_note( __( '訂單金額為 0，不開立 ezPay 發票。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => true, 'message' => __( '訂單金額為 0，未開立。', 'mo-ectools' ), 'invoice_number' => 'zero' ];
+			return [
+				'ok'             => true,
+				'message'        => __( '訂單金額為 0，未開立。', 'mo-ectools' ),
+				'invoice_number' => 'zero',
+			];
 		}
 		if ( (int) $args['TotalAmt'] < 0 ) {
 			$order->update_meta_data( Keys::EZPAY_INVOICE_NUMBER, 'negative' );
 			$order->add_order_note( __( '訂單金額為負，無法開立 ezPay 發票（需走折讓單）。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => false, 'message' => __( '訂單金額為負，無法開立。', 'mo-ectools' ), 'invoice_number' => 'negative' ];
+			return [
+				'ok'             => false,
+				'message'        => __( '訂單金額為負，無法開立。', 'mo-ectools' ),
+				'invoice_number' => 'negative',
+			];
 		}
 
 		// ItemName/Count/Amt 是 array — 送出時要 implode '|'
@@ -47,7 +61,13 @@ final class Issue {
 			}
 		}
 
-		Helper::log( 'issue request', [ 'order_id' => $order->get_id(), 'merchant_order_no' => $args['MerchantOrderNo'] ] );
+		Helper::log(
+			'issue request',
+			[
+				'order_id'          => $order->get_id(),
+				'merchant_order_no' => $args['MerchantOrderNo'],
+			]
+		);
 
 		$result = Helper::post( '/Api/invoice_issue', $args );
 
@@ -60,10 +80,13 @@ final class Issue {
 			);
 			$order->add_order_note( $msg );
 			$order->save();
-			return [ 'ok' => false, 'message' => $msg ];
+			return [
+				'ok'      => false,
+				'message' => $msg,
+			];
 		}
 
-		$data = $result['data'] ?? [];
+		$data       = $result['data'] ?? [];
 		$invoice_no = (string) ( $data['InvoiceNumber'] ?? '' );
 		$random     = (string) ( $data['RandomNum'] ?? '' );
 		$created    = (string) ( $data['CreateTime'] ?? '' );
@@ -72,7 +95,10 @@ final class Issue {
 		if ( '' === $invoice_no ) {
 			$order->add_order_note( __( 'ezPay 回應 SUCCESS 但沒帶 InvoiceNumber，請檢查 ezPay 後台。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => false, 'message' => 'no invoice number returned' ];
+			return [
+				'ok'      => false,
+				'message' => 'no invoice number returned',
+			];
 		}
 
 		$order->update_meta_data( Keys::EZPAY_INVOICE_NUMBER, $invoice_no );
@@ -83,16 +109,22 @@ final class Issue {
 		// 開立後清掉 scheduled_at（如果是延後開立路徑進來的）
 		$order->delete_meta_data( Keys::EZPAY_SCHEDULED_AT );
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: invoice number, 2: random number, 3: create time */
-			__( 'ezPay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'mo-ectools' ),
-			$invoice_no,
-			$random,
-			$created
-		) );
+				__( 'ezPay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'mo-ectools' ),
+				$invoice_no,
+				$random,
+				$created
+			)
+		);
 		$order->save();
 
-		return [ 'ok' => true, 'message' => $invoice_no, 'invoice_number' => $invoice_no ];
+		return [
+			'ok'             => true,
+			'message'        => $invoice_no,
+			'invoice_number' => $invoice_no,
+		];
 	}
 
 	private static function build_args( \WC_Order $order ): array {
@@ -100,11 +132,11 @@ final class Issue {
 
 		$total = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded(), 0 );
 
-		$buyer_country  = WC()->countries->countries[ $order->get_billing_country() ] ?? $order->get_billing_country();
-		$buyer_states   = WC()->countries->get_states( $order->get_billing_country() );
-		$buyer_state    = $buyer_states[ $order->get_billing_state() ] ?? $order->get_billing_state();
-		$buyer_address  = $buyer_country . $buyer_state . $order->get_billing_city() . $order->get_billing_address_1() . $order->get_billing_address_2();
-		$buyer_name     = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
+		$buyer_country = WC()->countries->countries[ $order->get_billing_country() ] ?? $order->get_billing_country();
+		$buyer_states  = WC()->countries->get_states( $order->get_billing_country() );
+		$buyer_state   = $buyer_states[ $order->get_billing_state() ] ?? $order->get_billing_state();
+		$buyer_address = $buyer_country . $buyer_state . $order->get_billing_city() . $order->get_billing_address_1() . $order->get_billing_address_2();
+		$buyer_name    = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
 
 		$args = [
 			'RespondType'     => 'JSON',
@@ -177,11 +209,11 @@ final class Issue {
 		// 商品逐項
 		$total_refunded = (float) $order->get_total_refunded();
 		foreach ( $order->get_items( [ 'line_item' ] ) as $item ) {
-			$item_total    = (float) $item->get_total();
-			$item_refunded = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
+			$item_total      = (float) $item->get_total();
+			$item_refunded   = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
 			$total_refunded -= $item_refunded;
-			$line_total     = $item_total - $item_refunded;
-			$qty            = $item->get_quantity() + $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
+			$line_total      = $item_total - $item_refunded;
+			$qty             = $item->get_quantity() + $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
 			if ( 0.0 === $line_total && 0 === $qty ) {
 				continue;
 			}
@@ -191,7 +223,7 @@ final class Issue {
 		}
 
 		// 運費
-		$shipping_fee = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
+		$shipping_fee    = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
 		$total_refunded -= (float) $order->get_total_shipping_refunded();
 		if ( 0.0 !== $shipping_fee ) {
 			$args['ItemName'][]  = __( '運費', 'mo-ectools' );
@@ -213,7 +245,7 @@ final class Issue {
 			if ( 'B2B' === $args['Category'] ) {
 				$amt = $amt / 1.05;  // B2B 含稅金額拆分
 			}
-			$price = $count > 0 ? round( $amt / $count, 6 ) : 0;
+			$price                   = $count > 0 ? round( $amt / $count, 6 ) : 0;
 			$args['ItemPrice'][ $i ] = (string) $price;
 			$args['ItemAmt'][ $i ]   = (string) (int) round( $count * $price, 0 );
 			$args['ItemCount'][ $i ] = (string) $count;

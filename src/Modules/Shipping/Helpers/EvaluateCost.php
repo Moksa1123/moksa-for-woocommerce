@@ -7,13 +7,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class EvaluateCost {
 
-	
+
 	public static function evaluate( string $formula, array $args = [] ): float {
 		$formula = trim( $formula );
 		if ( '' === $formula ) {
 			return 0.0;
 		}
-		// 純數字 fast path（含小數）
 		if ( is_numeric( $formula ) ) {
 			return (float) $formula;
 		}
@@ -32,14 +31,11 @@ final class EvaluateCost {
 			esc_attr( (string) $weight )
 		);
 
-		// 把屬性注入到 [moksafowo_addfee ...] / [ry_addfee ...] 標籤的開頭
-		// 用 lookahead 確保只 match shortcode 開頭，避免動到屬性中含 moksafowo_addfee 字樣的字串
-		$sum = (string) preg_replace( '/\[(moksafowo_addfee|ry_addfee)(?=[\s\]])/', '[$1' . $injection, $formula );
-
-		// do_shortcode 解 [moksafowo_addfee ...] → 數字字串
+		// lookahead 確保只 match shortcode 開頭；mo_addfee 為 2026-06 前舊 token BC 別名
+		$sum = (string) preg_replace( '/\[(moksafowo_addfee|ry_addfee|mo_addfee)(?=[\s\]])/', '[$1' . $injection, $formula );
 		$sum = do_shortcode( $sum );
 
-		// WC 內建表達式引擎，安全 — 不會吃到 PHP eval
+		// WC_Eval_Math 安全 — 不 eval PHP
 		if ( ! class_exists( '\WC_Eval_Math' ) ) {
 			$wc_path = function_exists( 'WC' ) ? WC()->plugin_path() : '';
 			$lib     = $wc_path . '/includes/libraries/class-wc-eval-math.php';
@@ -49,7 +45,6 @@ final class EvaluateCost {
 		}
 
 		if ( ! class_exists( '\WC_Eval_Math' ) ) {
-			// WC_Eval_Math 缺席 fallback：只接受純數字
 			return is_numeric( $sum ) ? (float) $sum : 0.0;
 		}
 

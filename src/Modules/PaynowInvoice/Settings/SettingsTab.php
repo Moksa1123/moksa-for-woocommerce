@@ -12,7 +12,7 @@ final class SettingsTab {
 			[
 				'title' => __( '基本設定', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( 'PayNow 立即富電子發票串接（PayNow_EInvoice v1.5）。商家須自行至 invoice.paynow.com.tw 申請會員、取得 mem_cid 與 mem_password。', 'mo-ectools' ),
+				'desc'  => __( 'PayNow 電子發票串接。請先至 PayNow 申請會員，取得商店憑證後填入下方。', 'mo-ectools' ),
 				'id'    => 'moksafowo_paynow_invoice_section',
 			],
 			[
@@ -20,16 +20,19 @@ final class SettingsTab {
 				'id'      => 'moksafowo_paynow_invoice_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後走 testinvoice.paynow.com.tw 測試環境。', 'mo-ectools' ),
+				'desc'    => __( '勾選後走測試環境，不會真正開立發票。上線後請取消勾選。', 'mo-ectools' ),
 			],
 			[
-				'title'   => __( 'orderno 前綴', 'mo-ectools' ),
-				'id'      => 'moksafowo_paynow_invoice_orderno_prefix',
-				'type'    => 'text',
-				'default' => '',
-				'desc'    => __( '送至 PayNow 的 orderno 前綴（限英數，最多 5 字元）。留空即無前綴。', 'mo-ectools' ),
-				'desc_tip' => true,
-				'custom_attributes' => [ 'pattern' => '[A-Za-z0-9]{0,5}', 'maxlength' => 5 ],
+				'title'             => __( '訂單編號前綴', 'mo-ectools' ),
+				'id'                => 'moksafowo_paynow_invoice_orderno_prefix',
+				'type'              => 'text',
+				'default'           => '',
+				'desc'              => __( '送至 PayNow 的訂單編號前綴（限英數，最多 5 字元）。留空即無前綴。', 'mo-ectools' ),
+				'desc_tip'          => true,
+				'custom_attributes' => [
+					'pattern'   => '[A-Za-z0-9]{0,5}',
+					'maxlength' => 5,
+				],
 			],
 			[
 				'title'   => __( '開立時機', 'mo-ectools' ),
@@ -37,8 +40,8 @@ final class SettingsTab {
 				'type'    => 'select',
 				'default' => 'paid',
 				'options' => [
-					'paid'      => __( '付款完成 — 訂單變 processing 就立即開立', 'mo-ectools' ),
-					'completed' => __( '訂單完成 — 訂單變 completed 才開立', 'mo-ectools' ),
+					'paid'      => __( '付款完成立即開立', 'mo-ectools' ),
+					'completed' => __( '訂單完成後才開立', 'mo-ectools' ),
 					'manual'    => __( '手動 — 商家在訂單頁按按鈕開立', 'mo-ectools' ),
 				],
 			],
@@ -130,15 +133,15 @@ final class SettingsTab {
 				'id'    => 'moksafowo_paynow_invoice_sandbox_section',
 			],
 			[
-				'title' => __( '測試 mem_cid', 'mo-ectools' ),
+				'title' => __( '測試會員帳號（mem_cid）', 'mo-ectools' ),
 				'id'    => 'moksafowo_paynow_invoice_sandbox_mem_cid',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( '測試 mem_password', 'mo-ectools' ),
+				'title' => __( '測試會員密碼（mem_password）', 'mo-ectools' ),
 				'id'    => 'moksafowo_paynow_invoice_sandbox_mem_password',
 				'type'  => 'text',
-				'desc'  => __( '8 字元（用於 3DES key 推導，spec §2.2）。', 'mo-ectools' ),
+				'desc'  => __( '8 字元。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -152,12 +155,12 @@ final class SettingsTab {
 				'id'    => 'moksafowo_paynow_invoice_prod_section',
 			],
 			[
-				'title' => __( '正式 mem_cid', 'mo-ectools' ),
+				'title' => __( '正式會員帳號（mem_cid）', 'mo-ectools' ),
 				'id'    => 'moksafowo_paynow_invoice_mem_cid',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( '正式 mem_password', 'mo-ectools' ),
+				'title' => __( '正式會員密碼（mem_password）', 'mo-ectools' ),
 				'id'    => 'moksafowo_paynow_invoice_mem_password',
 				'type'  => 'text',
 			],

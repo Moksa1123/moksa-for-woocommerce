@@ -43,7 +43,7 @@ final class CreditInstallment extends AbstractNewebpayGateway {
 				'24' => __( '24 期', 'mo-ectools' ),
 				'30' => __( '30 期', 'mo-ectools' ),
 			],
-			'description' => __( '勾選的期數會在結帳頁讓顧客選擇。需先向發卡銀行申請開通。預設不勾選（商家依實際申請開通的期數啟用）。', 'mo-ectools' ),
+			'description' => __( '勾選要開放的分期期數。需先向發卡銀行申請開通。', 'mo-ectools' ),
 			'desc_tip'    => true,
 		];
 	}

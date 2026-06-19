@@ -20,9 +20,9 @@ abstract class AbstractAdminActions {
 	abstract public function handle_bulk_action( string $action, array $order_ids ): string;
 
 	public function init(): void {
-		add_filter( 'bulk_actions-edit-shop_order',                [ $this, 'register_bulk_actions' ] );
-		add_filter( 'bulk_actions-woocommerce_page_wc-orders',     [ $this, 'register_bulk_actions' ] );
-		add_filter( 'handle_bulk_actions-edit-shop_order',         [ $this, 'dispatch_bulk_action' ], 10, 3 );
+		add_filter( 'bulk_actions-edit-shop_order', [ $this, 'register_bulk_actions' ] );
+		add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ $this, 'register_bulk_actions' ] );
+		add_filter( 'handle_bulk_actions-edit-shop_order', [ $this, 'dispatch_bulk_action' ], 10, 3 );
 		add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', [ $this, 'dispatch_bulk_action' ], 10, 3 );
 
 		if ( 'advanced' === self::get_ui_mode() ) {
@@ -53,34 +53,48 @@ abstract class AbstractAdminActions {
 	}
 
 	public function find_unprinted_orders( ?string $kind = null, ?string $carrier = null ): array {
-		$orders = wc_get_orders( [
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			'limit'      => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-			'status'     => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_query' => [
-				[ 'key' => $this->provider->meta_key_trade_no(), 'value' => '', 'compare' => '!=' ],
-				[ 'key' => $this->provider->meta_key_ship_no(),  'compare' => 'NOT EXISTS' ],
-			],
-		] );
+		$orders = wc_get_orders(
+			[
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
+				'limit'      => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
+				'status'     => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_query' => [
+					[
+						'key'     => $this->provider->meta_key_trade_no(),
+						'value'   => '',
+						'compare' => '!=',
+					],
+					[
+						'key'     => $this->provider->meta_key_ship_no(),
+						'compare' => 'NOT EXISTS',
+					],
+				],
+			]
+		);
 
-		return array_values( array_filter( $orders, function ( $order ) use ( $kind, $carrier ) {
-			foreach ( $order->get_shipping_methods() as $method ) {
-				$mid = $method->get_method_id();
-				if ( ! $this->provider->is_supported_method( $mid ) ) {
-					continue;
+		return array_values(
+			array_filter(
+				$orders,
+				function ( $order ) use ( $kind, $carrier ) {
+					foreach ( $order->get_shipping_methods() as $method ) {
+						$mid = $method->get_method_id();
+						if ( ! $this->provider->is_supported_method( $mid ) ) {
+							continue;
+						}
+						if ( $kind && $this->provider->get_method_kind( $mid ) !== $kind ) {
+							continue;
+						}
+						if ( $carrier && $this->provider->get_method_carrier( $mid ) !== $carrier ) {
+							continue;
+						}
+						return true;
+					}
+					return false;
 				}
-				if ( $kind && $this->provider->get_method_kind( $mid ) !== $kind ) {
-					continue;
-				}
-				if ( $carrier && $this->provider->get_method_carrier( $mid ) !== $carrier ) {
-					continue;
-				}
-				return true;
-			}
-			return false;
-		} ) );
+			)
+		);
 	}
 
 	public function inject_advanced_modal_button(): void {
@@ -96,14 +110,17 @@ abstract class AbstractAdminActions {
 		$carrier = isset( $_POST['carrier'] ) ? sanitize_text_field( wp_unslash( $_POST['carrier'] ) ) : null;
 
 		$orders = $this->find_unprinted_orders( $kind, $carrier );
-		$data   = array_map( function ( $o ) {
-			return [
-				'id'       => $o->get_id(),
-				'number'   => $o->get_order_number(),
-				'customer' => $o->get_formatted_billing_full_name(),
-				'method'   => $o->get_shipping_method(),
-			];
-		}, $orders );
+		$data   = array_map(
+			function ( $o ) {
+				return [
+					'id'       => $o->get_id(),
+					'number'   => $o->get_order_number(),
+					'customer' => $o->get_formatted_billing_full_name(),
+					'method'   => $o->get_shipping_method(),
+				];
+			},
+			$orders
+		);
 
 		wp_send_json_success( $data );
 	}
@@ -112,7 +129,6 @@ abstract class AbstractAdminActions {
 		if ( 'yes' === get_option( 'moksafowo_shipping_bulk_print_mode_advanced', 'no' ) ) {
 			return 'advanced';
 		}
-		// 舊 option fallback
 		$legacy = (string) get_option( 'moksafowo_shipping_bulk_print_ui_mode', 'simple' );
 		return 'advanced' === $legacy ? 'advanced' : 'simple';
 	}

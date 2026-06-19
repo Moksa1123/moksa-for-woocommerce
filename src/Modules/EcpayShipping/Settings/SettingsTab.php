@@ -120,7 +120,7 @@ final class SettingsTab {
 			[
 				'title' => __( '寄件人資料', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '建立物流單時送進綠界。超商寄件會印在標籤上，宅配用來聯絡寄件。', 'mo-ectools' ),
+				'desc'  => __( '超商取貨標籤上的寄件人資訊，宅配時供物流商聯絡。', 'mo-ectools' ),
 				'id'    => 'moksafowo_ecpay_shipping_sender_section',
 			],
 			[

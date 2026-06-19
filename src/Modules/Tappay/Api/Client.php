@@ -11,7 +11,7 @@ final class Client {
 
 	private const TIMEOUT = 30;
 
-	
+
 	public static function pay_by_prime( array $payload ): array {
 		$result = self::request( Helper::pay_by_prime_url(), $payload );
 		$data   = $result['data'];
@@ -21,7 +21,6 @@ final class Client {
 			$payment_url = (string) $data['payment_url'];
 		}
 
-		// status 0 + payment_url → 3DS 驗證跳轉（frictionless 時 payment_url 為空字串）。
 		$needs_3ds = $result['ok'] && '' !== $payment_url;
 
 		return [
@@ -34,7 +33,7 @@ final class Client {
 		];
 	}
 
-	
+
 	public static function refund( string $rec_trade_id, int $amount ): array {
 		return self::request(
 			Helper::refund_url(),
@@ -46,7 +45,7 @@ final class Client {
 		);
 	}
 
-	
+
 	public static function query_by_rec_trade_id( string $rec_trade_id ): array {
 		return self::request(
 			Helper::query_url(),
@@ -67,7 +66,7 @@ final class Client {
 		);
 	}
 
-	
+
 	private static function request( string $url, array $body ): array {
 		$partner_key = Helper::partner_key();
 		if ( '' === $partner_key ) {
@@ -88,7 +87,13 @@ final class Client {
 				self::TIMEOUT
 			);
 		} catch ( \RuntimeException $e ) {
-			Helper::log( 'api transport error', [ 'url' => $url, 'error' => $e->getMessage() ] );
+			Helper::log(
+				'api transport error',
+				[
+					'url'   => $url,
+					'error' => $e->getMessage(),
+				]
+			);
 			return [
 				'ok'     => false,
 				'status' => -1,

@@ -12,14 +12,16 @@ final class Lookup {
 		if ( '' === $meta_value || '' === $meta_key ) {
 			return null;
 		}
-		$found = wc_get_orders( [
-			'limit'      => 1,
-			'return'     => 'ids',
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_key'   => $meta_key,
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_value' => $meta_value,
-		] );
+		$found = wc_get_orders(
+			[
+				'limit'      => 1,
+				'return'     => 'ids',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_key'   => $meta_key,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_value' => $meta_value,
+			]
+		);
 		if ( empty( $found ) ) {
 			return null;
 		}

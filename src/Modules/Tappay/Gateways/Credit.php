@@ -17,7 +17,7 @@ final class Credit extends \WC_Payment_Gateway {
 		$this->id                 = self::GATEWAY_ID;
 		$this->has_fields         = true; // 結帳頁要渲染 TapPay Fields。
 		$this->method_title       = __( 'TapPay 信用卡', 'mo-ectools' );
-		$this->method_description = __( '透過 TapPay Fields（iframe 隔離）收集卡號，卡資不經本站，PCI 範圍維持 SAQ-A。支援 3D 驗證。', 'mo-ectools' );
+		$this->method_description = __( '安全信用卡付款，支援 3D 驗證。卡號資訊不流經本站。', 'mo-ectools' );
 		$this->supports           = [ 'products', 'refunds' ];
 
 		$this->init_form_fields();
@@ -88,7 +88,7 @@ final class Credit extends \WC_Payment_Gateway {
 		<?php
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
@@ -104,20 +104,23 @@ final class Credit extends \WC_Payment_Gateway {
 
 		if ( '' === $prime ) {
 			wc_add_notice( __( '無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。', 'mo-ectools' ), 'error' );
-			return [ 'result' => 'failure', 'redirect' => '' ];
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
 		}
 
 		// 重試（曾送過 order_number）時加 T{time} 後綴避免 TapPay 拒重複。
 		$retry        = '' !== (string) $order->get_meta( Keys::TAPPAY_ORDER_NUMBER );
 		$order_number = Helper::build_order_number( $order, $retry );
 
-		$use_3ds     = Helper::three_domain_secure_enabled();
-		$result_url  = add_query_arg(
+		$use_3ds    = Helper::three_domain_secure_enabled();
+		$result_url = add_query_arg(
 			'order_number',
 			rawurlencode( $order_number ),
 			home_url( '/wc-api/moksafowo_tappay_result' )
 		);
-		$notify_url  = home_url( '/wc-api/moksafowo_tappay_notify' );
+		$notify_url = home_url( '/wc-api/moksafowo_tappay_notify' );
 
 		$payload = [
 			'prime'               => $prime,
@@ -183,7 +186,10 @@ final class Credit extends \WC_Payment_Gateway {
 				),
 				'error'
 			);
-			return [ 'result' => 'failure', 'redirect' => '' ];
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
 		}
 
 		// 3DS challenge — 導去 TapPay payment_url，完成後回 result_url。

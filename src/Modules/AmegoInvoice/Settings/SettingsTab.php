@@ -12,11 +12,7 @@ final class SettingsTab {
 			[
 				'title' => __( '基本設定', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => sprintf(
-					/* translators: %s: Amego docs link */
-					__( 'AMEGO 光貿電子發票串接（API 文件 %s）。Amego 測試與正式同一個 API 網址，靠統編 + App Key 區分。Amego 提供「公開測試帳號」（統編 12345678 / App Key sHeq7t8G1wiQvhAuIM27），勾選測試模式後即可直接試開立。', 'mo-ectools' ),
-					'<a href="https://invoice.amego.tw/api_doc/" target="_blank">invoice.amego.tw/api_doc/</a>'
-				),
+				'desc'  => __( 'AMEGO 光貿電子發票串接。已內建公開測試帳號，勾選測試模式即可直接試開立；上線請填入下方正式環境憑證。', 'mo-ectools' ),
 				'id'    => 'moksafowo_amego_invoice_section',
 			],
 			[
@@ -24,16 +20,19 @@ final class SettingsTab {
 				'id'      => 'moksafowo_amego_invoice_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後使用 Amego 公開測試憑證（除非自設下方測試環境憑證）。', 'mo-ectools' ),
+				'desc'    => __( '勾選後使用內建公開測試憑證（若下方有自填測試憑證則以自填為準）。', 'mo-ectools' ),
 			],
 			[
-				'title'   => __( 'OrderId 前綴', 'mo-ectools' ),
-				'id'      => 'moksafowo_amego_invoice_order_prefix',
-				'type'    => 'text',
-				'default' => '',
-				'desc'    => __( '送 API 的 OrderId 前綴（限英數，最多 5 字元）。留空無前綴。', 'mo-ectools' ),
-				'desc_tip' => true,
-				'custom_attributes' => [ 'pattern' => '[A-Za-z0-9]{0,5}', 'maxlength' => 5 ],
+				'title'             => __( '訂單編號前綴', 'mo-ectools' ),
+				'id'                => 'moksafowo_amego_invoice_order_prefix',
+				'type'              => 'text',
+				'default'           => '',
+				'desc'              => __( '送至 AMEGO 的訂單編號前綴（限英數，最多 5 字元）。留空即無前綴。', 'mo-ectools' ),
+				'desc_tip'          => true,
+				'custom_attributes' => [
+					'pattern'   => '[A-Za-z0-9]{0,5}',
+					'maxlength' => 5,
+				],
 			],
 			[
 				'title'   => __( '開立時機', 'mo-ectools' ),
@@ -41,8 +40,8 @@ final class SettingsTab {
 				'type'    => 'select',
 				'default' => 'paid',
 				'options' => [
-					'paid'      => __( '付款完成 — 訂單變 processing 立即開立', 'mo-ectools' ),
-					'completed' => __( '訂單完成 — 訂單變 completed 才開立', 'mo-ectools' ),
+					'paid'      => __( '付款完成立即開立', 'mo-ectools' ),
+					'completed' => __( '訂單完成後才開立', 'mo-ectools' ),
 					'manual'    => __( '手動 — 商家在訂單頁按按鈕開立', 'mo-ectools' ),
 				],
 			],
@@ -77,14 +76,14 @@ final class SettingsTab {
 				'checkboxgroup' => 'start',
 			],
 			[
-				'desc'          => __( '手機條碼 (3J0002)', 'mo-ectools' ),
+				'desc'          => __( '手機條碼', 'mo-ectools' ),
 				'id'            => 'moksafowo_amego_invoice_channel_mobile',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
 				'checkboxgroup' => '',
 			],
 			[
-				'desc'          => __( '自然人憑證 (CQ0001)', 'mo-ectools' ),
+				'desc'          => __( '自然人憑證', 'mo-ectools' ),
 				'id'            => 'moksafowo_amego_invoice_channel_cert',
 				'type'          => 'checkbox',
 				'default'       => 'yes',
@@ -104,8 +103,8 @@ final class SettingsTab {
 				'type'     => 'select',
 				'options'  => [
 					'member' => __( 'AMEGO 會員載具', 'mo-ectools' ),
-					'mobile' => __( '手機條碼 (3J0002)', 'mo-ectools' ),
-					'cert'   => __( '自然人憑證 (CQ0001)', 'mo-ectools' ),
+					'mobile' => __( '手機條碼', 'mo-ectools' ),
+					'cert'   => __( '自然人憑證', 'mo-ectools' ),
 					'paper'  => __( '紙本發票', 'mo-ectools' ),
 				],
 				'default'  => 'member',
@@ -134,7 +133,7 @@ final class SettingsTab {
 			[
 				'title' => __( '測試環境憑證（選填）', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '留空時使用 Amego 公開測試帳號（統編 12345678 / App Key sHeq7t8G1wiQvhAuIM27）。自家測試環境可在此覆蓋。', 'mo-ectools' ),
+				'desc'  => __( '留空時使用內建公開測試帳號。要用自家測試環境可在此覆蓋。', 'mo-ectools' ),
 				'id'    => 'moksafowo_amego_invoice_sandbox_section',
 			],
 			[

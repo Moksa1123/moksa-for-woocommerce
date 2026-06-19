@@ -12,7 +12,7 @@ final class CvsFami extends AbstractCvsShippingMethod {
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_smilepay_shipping_cvs_fami';
 		$this->method_title       = __( '速買配 — 全家取貨', 'mo-ectools' );
-		$this->method_description = __( 'SmilePay 全家超商取貨（C2C / B2C 由模組設定切換）。', 'mo-ectools' );
+		$this->method_description = __( '速買配全家超商取貨。', 'mo-ectools' );
 		parent::__construct( $instance_id );
 	}
 

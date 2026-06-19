@@ -47,11 +47,14 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		// ATM/CVS/Barcode/WebATM 不走 API，提示登後台
 		$offline_types = [ 'VACC', 'CVS', 'BARCODE', 'WEBATM', 'CVSCOM' ];
 		if ( in_array( $payment_type, $offline_types, true ) ) {
-			return new \WP_Error( 'moksafowo_newebpay_offline', sprintf(
+			return new \WP_Error(
+				'moksafowo_newebpay_offline',
+				sprintf(
 				/* translators: %s: payment type */
-				__( '此付款方式（%s）為線下付款 / 超商，請至藍新後台處理退款。', 'mo-ectools' ),
-				$payment_type
-			) );
+					__( '此付款方式（%s）為線下付款 / 超商，請至藍新後台處理退款。', 'mo-ectools' ),
+					$payment_type
+				)
+			);
 		}
 
 		// 預設走信用卡類 (CREDIT / 分期 / ApplePay / GooglePay / SamsungPay / 紅利 / 銀聯 / Amex)
@@ -60,66 +63,88 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 
 	private static function do_card_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
 		// 用 B02 query 看 CloseStatus
-		$query = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
-		$close_status = $query['ok'] ? (string) ( $query['data']['CloseStatus'] ?? '0' ) : '0';
+		$query              = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
+		$close_status       = $query['ok'] ? (string) ( $query['data']['CloseStatus'] ?? '0' ) : '0';
 		$is_authorized_only = '0' === $close_status;
 
 		$result = $is_authorized_only
-			? \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::cancel( [ 'Amt' => $amt, 'MerchantOrderNo' => $mtn, 'IndexType' => 1 ] )
-			: \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::refund( [ 'Amt' => $amt, 'MerchantOrderNo' => $mtn, 'IndexType' => 1 ] );
+			? \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::cancel(
+				[
+					'Amt'             => $amt,
+					'MerchantOrderNo' => $mtn,
+					'IndexType'       => 1,
+				]
+			)
+			: \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::refund(
+				[
+					'Amt'             => $amt,
+					'MerchantOrderNo' => $mtn,
+					'IndexType'       => 1,
+				]
+			);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
 			return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( '藍新退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: action, 2: amount, 3: reason */
-			__( '藍新%1$s成功（NT$%2$s）— %3$s', 'mo-ectools' ),
-			$is_authorized_only ? __( '取消授權', 'mo-ectools' ) : __( '退款', 'mo-ectools' ),
-			$amt,
-			$reason ?: __( '無原因', 'mo-ectools' )
-		) );
+				__( '藍新%1$s成功（NT$%2$s）— %3$s', 'mo-ectools' ),
+				$is_authorized_only ? __( '取消授權', 'mo-ectools' ) : __( '退款', 'mo-ectools' ),
+				$amt,
+				$reason ?: __( '無原因', 'mo-ectools' )
+			)
+		);
 		$order->save();
 		return true;
 	}
 
 	private static function do_wallet_refund( \WC_Order $order, string $payment_type, string $mtn, int $amt, string $reason ) {
-		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::wallet_refund( [
-			'MerchantOrderNo' => $mtn,
-			'Amount'          => $amt,
-			'PaymentType'     => $payment_type,
-		] );
+		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::wallet_refund(
+			[
+				'MerchantOrderNo' => $mtn,
+				'Amount'          => $amt,
+				'PaymentType'     => $payment_type,
+			]
+		);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
 			return new \WP_Error( 'moksafowo_newebpay_wallet_refund_fail', sprintf( __( '藍新錢包退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: payment type, 2: amount, 3: reason */
-			__( '藍新%1$s 退款成功（NT$%2$s）— %3$s', 'mo-ectools' ),
-			self::wallet_label( $payment_type ),
-			$amt,
-			$reason ?: __( '無原因', 'mo-ectools' )
-		) );
+				__( '藍新%1$s 退款成功（NT$%2$s）— %3$s', 'mo-ectools' ),
+				self::wallet_label( $payment_type ),
+				$amt,
+				$reason ?: __( '無原因', 'mo-ectools' )
+			)
+		);
 		$order->save();
 		return true;
 	}
 
 	private static function do_bnpl_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
-		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::bnpl_refund( [
-			'MerchantOrderNo' => $mtn,
-			'Amt'             => $amt,
-			'PaymentType'     => 'AFTEE',
-			'Reason'          => $reason ?: __( '一般退貨', 'mo-ectools' ),
-		] );
+		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::bnpl_refund(
+			[
+				'MerchantOrderNo' => $mtn,
+				'Amt'             => $amt,
+				'PaymentType'     => 'AFTEE',
+				'Reason'          => $reason ?: __( '一般退貨', 'mo-ectools' ),
+			]
+		);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
 			return new \WP_Error( 'moksafowo_newebpay_bnpl_refund_fail', sprintf( __( 'AFTEE 退款失敗：%s', 'mo-ectools' ), $result['message'] ) );
 		}
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: amount, 2: reason */
-			__( 'AFTEE 退款成功（NT$%1$s）— %2$s', 'mo-ectools' ),
-			$amt,
-			$reason ?: __( '無原因', 'mo-ectools' )
-		) );
+				__( 'AFTEE 退款成功（NT$%1$s）— %2$s', 'mo-ectools' ),
+				$amt,
+				$reason ?: __( '無原因', 'mo-ectools' )
+			)
+		);
 		$order->save();
 		return true;
 	}
@@ -142,13 +167,13 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	}
 
 	private static function build_order_detail( \WC_Order $order ): string {
-		$items = [];
+		$items         = [];
 		$running_total = 0;
 		foreach ( $order->get_items() as $item ) {
-			$qty = (int) $item->get_quantity();
-			$amt = (int) round( (float) $item->get_total() );  // line total (含折扣)
+			$qty            = (int) $item->get_quantity();
+			$amt            = (int) round( (float) $item->get_total() );  // line total (含折扣)
 			$running_total += $amt;
-			$items[] = [
+			$items[]        = [
 				'ItemName'    => mb_substr( (string) $item->get_name(), 0, 20 ),
 				'ItemAmt'     => $amt,
 				'ItemType'    => 1, // 1=實體商品 / 2=虛擬 / 3=月租 / 4=出貨型
@@ -158,7 +183,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		// 運費
 		$shipping_total = (int) round( (float) $order->get_shipping_total() );
 		if ( $shipping_total > 0 ) {
-			$items[] = [
+			$items[]        = [
 				'ItemName'    => __( '運費', 'mo-ectools' ),
 				'ItemAmt'     => $shipping_total,
 				'ItemType'    => 1,
@@ -179,7 +204,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		return wp_json_encode( $items, JSON_UNESCAPED_UNICODE ) ?: '';
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
@@ -212,36 +237,40 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		$amount    = (int) ceil( (float) $order->get_total() );
 		$item_name = mb_substr( $this->build_item_name( $order ), 0, 40 );
 
-		$args = array_merge( [
-			'MerchantID'      => Helper::merchant_id(),
-			'RespondType'     => 'JSON',
-			'TimeStamp'       => (string) time(),
-			'Version'         => '2.3',
-			'MerchantOrderNo' => $mtn,
-			'Amt'             => $amount,
-			'ItemDesc'        => $item_name,
-			'ReturnURL'       => $order->get_checkout_order_received_url(),
-			'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_payment' ),
-			'CustomerURL'     => $order->get_checkout_order_received_url(),
-			'ClientBackURL'   => $order->get_cancel_order_url_raw(),
-			'Email'           => $order->get_billing_email(),
-			'EmailModify'     => 0,
-			'LoginType'       => 0,
-			// OrderDetail（per NDNF 1.2.2 — AFTEE 必填，其他選填提升結帳頁體驗）
-			'OrderDetail'     => self::build_order_detail( $order ),
-			// 預設全部 payment type flag 關閉，子類 payment_type_flags() 開對應的
-			'CREDIT'          => 0,
-			'WEBATM'          => 0,
-			'VACC'            => 0,
-			'CVS'             => 0,
-			'BARCODE'         => 0,
-			'APPLEPAY'        => 0,
-			'ANDROIDPAY'      => 0,
-			'SAMSUNGPAY'      => 0,
-			'LINEPAY'         => 0,
-			'AFTEE'           => 0,
-			'InstFlag'        => 0,
-		], $this->payment_type_flags(), $this->extra_params( $order ) );
+		$args = array_merge(
+			[
+				'MerchantID'      => Helper::merchant_id(),
+				'RespondType'     => 'JSON',
+				'TimeStamp'       => (string) time(),
+				'Version'         => '2.3',
+				'MerchantOrderNo' => $mtn,
+				'Amt'             => $amount,
+				'ItemDesc'        => $item_name,
+				'ReturnURL'       => $order->get_checkout_order_received_url(),
+				'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_payment' ),
+				'CustomerURL'     => $order->get_checkout_order_received_url(),
+				'ClientBackURL'   => $order->get_cancel_order_url_raw(),
+				'Email'           => $order->get_billing_email(),
+				'EmailModify'     => 0,
+				'LoginType'       => 0,
+				// OrderDetail（per NDNF 1.2.2 — AFTEE 必填，其他選填提升結帳頁體驗）
+				'OrderDetail'     => self::build_order_detail( $order ),
+				// 預設全部 payment type flag 關閉，子類 payment_type_flags() 開對應的
+				'CREDIT'          => 0,
+				'WEBATM'          => 0,
+				'VACC'            => 0,
+				'CVS'             => 0,
+				'BARCODE'         => 0,
+				'APPLEPAY'        => 0,
+				'ANDROIDPAY'      => 0,
+				'SAMSUNGPAY'      => 0,
+				'LINEPAY'         => 0,
+				'AFTEE'           => 0,
+				'InstFlag'        => 0,
+			],
+			$this->payment_type_flags(),
+			$this->extra_params( $order )
+		);
 
 		$trade_info = Helper::encrypt_trade_info( $args );
 		$trade_sha  = Helper::generate_trade_sha( $trade_info );
@@ -254,12 +283,15 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			'EncryptType' => 0,
 		];
 
-		Helper::log( 'MPG redirect', [
-			'order_id'          => $order_id,
-			'merchant_order_no' => $mtn,
-			'gateway'           => $this->id,
-			'amt'               => $amount,
-		] );
+		Helper::log(
+			'MPG redirect',
+			[
+				'order_id'          => $order_id,
+				'merchant_order_no' => $mtn,
+				'gateway'           => $this->id,
+				'amt'               => $amount,
+			]
+		);
 
 		$url = Helper::mpg_url();
 		?>

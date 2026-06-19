@@ -76,28 +76,44 @@ final class Helper extends AbstractCredentialHelper {
 		return $order_id > 0 ? $order_id : null;
 	}
 
-	
+
 	public static function post( string $path, array $args ): array {
 		$response = wp_safe_remote_post(
 			self::base_url() . $path,
-			[ 'timeout' => 30, 'body' => $args ]
+			[
+				'timeout' => 30,
+				'body'    => $args,
+			]
 		);
 		if ( is_wp_error( $response ) ) {
 			self::log( 'http error: ' . $response->get_error_message(), [ 'path' => $path ] );
-			return [ 'ok' => false, 'status' => 'HTTP_ERROR', 'message' => $response->get_error_message() ];
+			return [
+				'ok'      => false,
+				'status'  => 'HTTP_ERROR',
+				'message' => $response->get_error_message(),
+			];
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
-			/* translators: %d: HTTP response code */
-			return [ 'ok' => false, 'status' => 'HTTP_' . $code, 'message' => sprintf( __( 'SmilePay 回傳 HTTP %d', 'mo-ectools' ), $code ) ];
+			return [
+				'ok'      => false,
+				'status'  => 'HTTP_' . $code,
+				/* translators: %d: HTTP response code */
+				'message' => sprintf( __( 'SmilePay 回傳 HTTP %d', 'mo-ectools' ), $code ),
+			];
 		}
 
 		$raw = (string) wp_remote_retrieve_body( $response );
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
 		$xml = @simplexml_load_string( $raw );
 		if ( ! is_object( $xml ) ) {
-			return [ 'ok' => false, 'status' => 'PARSE_FAIL', 'message' => __( 'SmilePay 回傳格式無法解析', 'mo-ectools' ), 'data' => [ 'raw' => $raw ] ];
+			return [
+				'ok'      => false,
+				'status'  => 'PARSE_FAIL',
+				'message' => __( 'SmilePay 回傳格式無法解析', 'mo-ectools' ),
+				'data'    => [ 'raw' => $raw ],
+			];
 		}
 
 		// SmilePay XML 回應：<Status>0</Status> 為成功，<Desc> 為訊息
@@ -110,7 +126,14 @@ final class Helper extends AbstractCredentialHelper {
 			$data[ (string) $key ] = (string) $val;
 		}
 
-		self::log( 'response', [ 'path' => $path, 'status' => $status, 'desc' => $desc ] );
+		self::log(
+			'response',
+			[
+				'path'   => $path,
+				'status' => $status,
+				'desc'   => $desc,
+			]
+		);
 
 		return [
 			'ok'      => '0' === $status,

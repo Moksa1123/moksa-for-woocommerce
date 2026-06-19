@@ -135,9 +135,9 @@ final class ShippingCardSection {
 					default => [ '#e5e7eb', '#374151' ],
 				};
 				/* translators: %d: cash-on-delivery amount in TWD */
-				$cod_label  = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
-				$ship_t     = (string) ( $r['ship_type'] ?? '' );
-				$type_label = '1' === $ship_t ? __( '7-11', 'mo-ectools' ) : ( '2' === $ship_t ? __( '黑貓宅配', 'mo-ectools' ) : '' );
+				$cod_label     = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
+				$ship_t        = (string) ( $r['ship_type'] ?? '' );
+				$type_label    = '1' === $ship_t ? __( '7-11', 'mo-ectools' ) : ( '2' === $ship_t ? __( '黑貓宅配', 'mo-ectools' ) : '' );
 				$ship_trade_no = (string) ( $r['ship_trade_no'] ?? '' );
 				$rtn_msg_p     = (string) ( $r['rtn_msg'] ?? '' );
 				$open_attr     = $is_split ? '' : 'open';
@@ -215,10 +215,12 @@ final class ShippingCardSection {
 		if ( '' !== $status_t ) {
 			echo '<p><strong>' . esc_html__( '狀態更新時間：', 'mo-ectools' ) . '</strong>' . esc_html( $status_t ) . '</p>';
 		}
-		$tracking_info = TrackingLink::for_payuni_record( [
-			'ship_type' => (string) $order->get_meta( $mod_meta::ShipType ),
-			'odno'      => $odno,
-		] );
+		$tracking_info = TrackingLink::for_payuni_record(
+			[
+				'ship_type' => (string) $order->get_meta( $mod_meta::ShipType ),
+				'odno'      => $odno,
+			]
+		);
 		if ( null !== $tracking_info ) {
 			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 		}
@@ -341,11 +343,13 @@ final class ShippingCardSection {
 		if ( '' !== $status ) {
 			echo '<p><strong>' . esc_html__( '物流狀態：', 'mo-ectools' ) . '</strong>' . esc_html( $status ) . '</p>';
 		}
-		$tracking_info = TrackingLink::for_smilepay_record( [
-			'lgs_type'  => $lgs_type,
-			'pay_no'    => $pay_no,
-			'track_num' => $track_no,
-		] );
+		$tracking_info = TrackingLink::for_smilepay_record(
+			[
+				'lgs_type'  => $lgs_type,
+				'pay_no'    => $pay_no,
+				'track_num' => $track_no,
+			]
+		);
 		if ( null !== $tracking_info ) {
 			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 		}

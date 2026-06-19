@@ -44,12 +44,12 @@ abstract class AbstractShippingEmail extends \WC_Email {
 			return;
 		}
 
-		$this->object                          = $order;
-		$this->recipient                       = $order->get_billing_email();
-		$this->placeholders['{order_date}']    = wc_format_datetime( $order->get_date_created() );
-		$this->placeholders['{order_number}']  = $order->get_order_number();
-		$this->placeholders['{store_name}']    = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
-		$this->placeholders['{store_id}']      = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
+		$this->object                         = $order;
+		$this->recipient                      = $order->get_billing_email();
+		$this->placeholders['{order_date}']   = wc_format_datetime( $order->get_date_created() );
+		$this->placeholders['{order_number}'] = $order->get_order_number();
+		$this->placeholders['{store_name}']   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
+		$this->placeholders['{store_id}']     = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 
 		if ( $this->is_enabled() && $this->get_recipient() ) {
 			$this->send(

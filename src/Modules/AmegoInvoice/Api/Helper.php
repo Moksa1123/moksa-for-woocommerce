@@ -44,12 +44,12 @@ final class Helper extends AbstractCredentialHelper {
 		return '' !== self::invoice_id() && '' !== self::app_key();
 	}
 
-	
+
 	public static function sign( string $data_json, int $time ): string {
 		return md5( $data_json . $time . self::app_key() );
 	}
 
-	
+
 	public static function generate_order_id( int $order_id ): string {
 		$prefix = (string) get_option( 'moksafowo_amego_invoice_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';

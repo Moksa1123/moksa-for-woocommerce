@@ -15,7 +15,7 @@
  *
  * Body classes:
  *   moksafowo-tw-hide-country         隱藏「國家 / 地區」欄位
- *   moksafowo-tw-name-swap            姓氏 / 名字 順序對調 (priority 走 PHP)
+ *   欄位順序                          Classic 走 PHP priority；Block 走 TwAddress::block_field_order_css() 注入的 CSS order
  *   moksafowo-tw-disable-<field>      停用某欄位（Block React 元件用 CSS 蓋）
  *   moksafowo-tw-w-<field>-<50|100>   設定某欄位寬度（蓋 Block 預設 flex）
  */

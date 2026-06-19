@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 trait TCatHDTrait {
 
 	private $package_spec;
-    
+
 	public function calculate_shipping( $package = array() ) {
 		$rate = array(
 			'id'      => $this->get_rate_id(),
@@ -20,10 +20,10 @@ trait TCatHDTrait {
 
 	public function is_available( $package ) {
 		$is_available = $this->is_enabled();
-		
+
 		// Check if payment method is COD
-		$chosen_payment_method = WC()->session->get('chosen_payment_method');
-		
+		$chosen_payment_method = WC()->session->get( 'chosen_payment_method' );
+
 		$total = WC()->cart->get_cart_contents_total();
 
 		if ( $chosen_payment_method === 'cod' && ( $total < 30 || $total > 20000 ) ) {
@@ -43,5 +43,4 @@ trait TCatHDTrait {
 		$this->free_shipping_requires   = $this->get_option( 'free_shipping_requires' );
 		$this->free_shipping_min_amount = $this->get_option( 'free_shipping_min_amount', 0 );
 	}
-
 }

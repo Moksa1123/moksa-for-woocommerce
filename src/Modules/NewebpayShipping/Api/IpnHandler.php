@@ -10,8 +10,7 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// IPN 無法帶 WP nonce — 走 TradeSha（SHA256 + hash_equals）驗簽。
-		// TradeInfo 為 AES 加密 hex 字串，sanitize_text_field 對其為恆等轉換。
+		// IPN 無 nonce — TradeSha（SHA256）驗簽後才使用；AES hex 對 sanitize_text_field 為恆等
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
 		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeInfo'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
@@ -36,7 +35,6 @@ final class IpnHandler {
 			exit( '0|DecryptFail' );
 		}
 
-		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
 		$decrypted = map_deep( $decrypted, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		$data = $decrypted['Result'] ?? [];
@@ -59,16 +57,16 @@ final class IpnHandler {
 			exit( '0|OrderNotFound' );
 		}
 
-		$status = (string) ( $decrypted['Status'] ?? '' );
-		$lgs_no = (string) ( $data['LgsNo'] ?? '' );
-		$lgs_type = (string) ( $data['LgsType'] ?? '' );
-		$store_id = (string) ( $data['StoreCode'] ?? $data['StoreID'] ?? '' );
+		$status     = (string) ( $decrypted['Status'] ?? '' );
+		$lgs_no     = (string) ( $data['LgsNo'] ?? '' );
+		$lgs_type   = (string) ( $data['LgsType'] ?? '' );
+		$store_id   = (string) ( $data['StoreCode'] ?? $data['StoreID'] ?? '' );
 		$store_name = (string) ( $data['StoreName'] ?? '' );
 		$store_addr = (string) ( $data['StoreAddr'] ?? $data['StoreAddress'] ?? '' );
-		// NPA-B58 notify 也帶 Retld + RetString — 用 StatusMapper 轉中文 + 推 WC status
-		$retld = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
+		// NPA-B58 Retld → StatusMapper 轉 WC status
+		$retld      = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
 		$ret_string = (string) ( $data['RetString'] ?? '' );
-		$mapped = '' !== $retld ? \MoksaWeb\Mowc\Modules\NewebpayShipping\Operations\StatusMapper::map( $retld ) : null;
+		$mapped     = '' !== $retld ? \MoksaWeb\Mowc\Modules\NewebpayShipping\Operations\StatusMapper::map( $retld ) : null;
 
 		if ( '' !== $lgs_no ) {
 			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_LGS_NO, $lgs_no );
@@ -107,17 +105,19 @@ final class IpnHandler {
 		}
 		$order->add_order_note( implode( '，', $parts ) );
 
-		// 自動推 WC 狀態（per Retld 對照）
 		if ( null !== $mapped && '' !== $mapped['wc_status'] ) {
 			$current = $order->get_status();
 			if ( $current !== $mapped['wc_status'] ) {
-				$order->update_status( $mapped['wc_status'], sprintf(
-					/* translators: 1: from, 2: to, 3: retld */
-					__( '藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）', 'mo-ectools' ),
-					$current,
+				$order->update_status(
 					$mapped['wc_status'],
-					$retld
-				) );
+					sprintf(
+					/* translators: 1: from, 2: to, 3: retld */
+						__( '藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）', 'mo-ectools' ),
+						$current,
+						$mapped['wc_status'],
+						$retld
+					)
+				);
 			}
 		}
 		$order->save();

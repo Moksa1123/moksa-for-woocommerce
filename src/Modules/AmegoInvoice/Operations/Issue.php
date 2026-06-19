@@ -11,20 +11,29 @@ defined( 'ABSPATH' ) || exit;
 
 final class Issue {
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		$existing = (string) $order->get_meta( Keys::AMEGO_INVOICE_NUMBER );
 		if ( '' !== $existing ) {
-			return [ 'ok' => false, 'message' => __( '此訂單已開立發票。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '此訂單已開立發票。', 'mo-ectools' ),
+			];
 		}
 
 		$type = (string) $order->get_meta( Keys::INVOICE_TYPE );
 		if ( '' === $type ) {
-			return [ 'ok' => false, 'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ),
+			];
 		}
 
 		if ( ! Helper::has_credentials() ) {
-			return [ 'ok' => false, 'message' => __( 'Amego 發票憑證未設定。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( 'Amego 發票憑證未設定。', 'mo-ectools' ),
+			];
 		}
 
 		$total = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded(), 0 );
@@ -32,18 +41,24 @@ final class Issue {
 			$order->update_meta_data( Keys::AMEGO_INVOICE_NUMBER, 'zero' );
 			$order->add_order_note( __( '訂單金額為 0 或負，不開立 Amego 發票。', 'mo-ectools' ) );
 			$order->save();
-			return [ 'ok' => false, 'message' => __( '訂單金額為 0 或負。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單金額為 0 或負。', 'mo-ectools' ),
+			];
 		}
 
 		$order_id_str = Helper::generate_order_id( $order->get_id() );
 		$args         = self::build_args( $order, $order_id_str, $total );
 
-		Helper::log( 'issue request', [
-			'order_id'   => $order->get_id(),
-			'amego_oid'  => $order_id_str,
-			'total'      => $total,
-			'item_count' => count( $args['ProductItem'] ),
-		] );
+		Helper::log(
+			'issue request',
+			[
+				'order_id'   => $order->get_id(),
+				'amego_oid'  => $order_id_str,
+				'total'      => $total,
+				'item_count' => count( $args['ProductItem'] ),
+			]
+		);
 
 		$resp = Request::post( '/json/f0401', $args );
 
@@ -57,7 +72,10 @@ final class Issue {
 			$order->update_meta_data( Keys::AMEGO_INVOICE_STATUS, 'F' );
 			$order->add_order_note( $msg );
 			$order->save();
-			return [ 'ok' => false, 'message' => $msg ];
+			return [
+				'ok'      => false,
+				'message' => $msg,
+			];
 		}
 
 		$data       = $resp['data'];
@@ -77,7 +95,10 @@ final class Issue {
 				)
 			);
 			$order->save();
-			return [ 'ok' => false, 'message' => 'no invoice number returned' ];
+			return [
+				'ok'      => false,
+				'message' => 'no invoice number returned',
+			];
 		}
 
 		$order->update_meta_data( Keys::AMEGO_INVOICE_NUMBER, $invoice_no );
@@ -91,18 +112,24 @@ final class Issue {
 		$order->update_meta_data( Keys::INVOICE_PROVIDER, 'amego' );
 		$order->delete_meta_data( Keys::AMEGO_INVOICE_SCHEDULED_AT );
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: invoice number, 2: random num */
-			__( 'Amego 發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'mo-ectools' ),
-			$invoice_no,
-			$random
-		) );
+				__( 'Amego 發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'mo-ectools' ),
+				$invoice_no,
+				$random
+			)
+		);
 		$order->save();
 
-		return [ 'ok' => true, 'message' => $invoice_no, 'invoice_number' => $invoice_no ];
+		return [
+			'ok'             => true,
+			'message'        => $invoice_no,
+			'invoice_number' => $invoice_no,
+		];
 	}
 
-	
+
 	private static function build_args( \WC_Order $order, string $order_id_str, int $total ): array {
 		$type      = (string) $order->get_meta( Keys::INVOICE_TYPE );
 		$carrier   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
@@ -158,11 +185,11 @@ final class Issue {
 		$total_taxable  = 0;
 		$total_refunded = (float) $order->get_total_refunded();
 		foreach ( $order->get_items( [ 'line_item' ] ) as $item ) {
-			$item_total    = (float) $item->get_total();
-			$item_refunded = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
+			$item_total      = (float) $item->get_total();
+			$item_refunded   = (float) $order->get_total_refunded_for_item( $item->get_id(), $item->get_type() );
 			$total_refunded -= $item_refunded;
-			$line_total     = $item_total - $item_refunded;
-			$qty            = (int) $item->get_quantity() + (int) $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
+			$line_total      = $item_total - $item_refunded;
+			$qty             = (int) $item->get_quantity() + (int) $order->get_qty_refunded_for_item( $item->get_id(), $item->get_type() );
 			if ( $qty <= 0 || 0.0 === $line_total ) {
 				continue;
 			}
@@ -195,8 +222,8 @@ final class Issue {
 
 		// 對帳修正（總額與小計不符時補一行）
 		if ( $total_taxable !== $total ) {
-			$diff           = $total - $total_taxable;
-			$items[]        = [
+			$diff    = $total - $total_taxable;
+			$items[] = [
 				'Description' => $diff >= 0 ? __( '稅費 / 折扣調整', 'mo-ectools' ) : __( '折扣調整', 'mo-ectools' ),
 				'Quantity'    => '1',
 				'UnitPrice'   => (string) $diff,
@@ -207,8 +234,8 @@ final class Issue {
 		}
 
 		// 稅額計算（spec §基本說明 含稅商品金額計算邏輯）
-		$is_b2b      = 'b2b' === $type;
-		$tax_amount  = $is_b2b ? ( $total - (int) round( $total / 1.05, 0 ) ) : 0;
+		$is_b2b       = 'b2b' === $type;
+		$tax_amount   = $is_b2b ? ( $total - (int) round( $total / 1.05, 0 ) ) : 0;
 		$sales_amount = $is_b2b ? ( $total - $tax_amount ) : $total;
 
 		return [

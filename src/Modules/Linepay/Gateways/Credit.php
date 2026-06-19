@@ -102,11 +102,11 @@ class Credit extends WC_Payment_Gateway {
 			}
 
 			if ( 'on-hold' === $order->get_status() ) {
-				$text = esc_html__( 'We have received your order, but the payment status need to be confirmed. Please contact the support.', 'mo-ectools' );
+				$text = esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'mo-ectools' );
 			}
 
 			if ( 'pending' === $order->get_status() ) {
-				$text = esc_html__( 'We have received your order, but the order is awaiting payment. Please pay again.', 'mo-ectools' );
+				$text = esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'mo-ectools' );
 			}
 		}
 
@@ -120,11 +120,11 @@ class Credit extends WC_Payment_Gateway {
 		}
 
 		if ( 'on-hold' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but the payment status need to be confirmed. Please contact the support.', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'mo-ectools' ) . '</p>';
 		}
 
 		if ( 'pending' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but the order is awaiting payment. Please pay again.', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'mo-ectools' ) . '</p>';
 		}
 	}
 }

@@ -39,7 +39,7 @@ abstract class AbstractMowcGateway extends \WC_Payment_Gateway {
 		$this->form_fields = $this->build_form_fields();
 	}
 
-	
+
 	protected function build_form_fields(): array {
 		return [
 			'enabled'     => [

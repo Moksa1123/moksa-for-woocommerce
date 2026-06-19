@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Request {
 
-	
+
 	public static function create_order( array $args ): array {
 		$post = array_merge(
 			[
@@ -20,17 +20,25 @@ final class Request {
 			$args
 		);
 
-		Helper::log( 'SPPayment request', [
-			'data_id' => (string) ( $args['Data_id'] ?? '' ),
-			'pay_zg'  => (string) ( $args['Pay_zg'] ?? '' ),
-			'amount'  => (string) ( $args['Amount'] ?? '' ),
-		] );
+		Helper::log(
+			'SPPayment request',
+			[
+				'data_id' => (string) ( $args['Data_id'] ?? '' ),
+				'pay_zg'  => (string) ( $args['Pay_zg'] ?? '' ),
+				'amount'  => (string) ( $args['Amount'] ?? '' ),
+			]
+		);
 
 		try {
 			$resp = HttpRequest::post( Helper::ENDPOINT_SP_API, $post, [], 'form' );
 		} catch ( \RuntimeException $e ) {
 			Helper::log( 'SPPayment transport error', [ 'error' => $e->getMessage() ] );
-			return [ 'ok' => false, 'status' => 'TRANSPORT', 'message' => $e->getMessage(), 'data' => [] ];
+			return [
+				'ok'      => false,
+				'status'  => 'TRANSPORT',
+				'message' => $e->getMessage(),
+				'data'    => [],
+			];
 		}
 
 		$raw = $resp->body;
@@ -54,7 +62,13 @@ final class Request {
 			$data[ (string) $key ] = (string) $val;
 		}
 
-		Helper::log( 'SPPayment response', [ 'status' => $status, 'desc' => $desc ] );
+		Helper::log(
+			'SPPayment response',
+			[
+				'status' => $status,
+				'desc'   => $desc,
+			]
+		);
 
 		return [
 			'ok'      => '1' === $status,
@@ -74,12 +88,15 @@ final class Request {
 			$args
 		);
 
-		Helper::log( 'mtmk redirect', [
-			'data_id' => (string) ( $args['Data_id'] ?? '' ),
-			'pay_zg'  => (string) ( $args['Pay_zg'] ?? '' ),
-			'amount'  => (string) ( $args['Amount'] ?? '' ),
-			'stage'   => (string) ( $args['Stage'] ?? '' ),
-		] );
+		Helper::log(
+			'mtmk redirect',
+			[
+				'data_id' => (string) ( $args['Data_id'] ?? '' ),
+				'pay_zg'  => (string) ( $args['Pay_zg'] ?? '' ),
+				'amount'  => (string) ( $args['Amount'] ?? '' ),
+				'stage'   => (string) ( $args['Stage'] ?? '' ),
+			]
+		);
 
 		return Helper::ENDPOINT_MTMK . '?' . http_build_query( $query );
 	}

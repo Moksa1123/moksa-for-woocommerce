@@ -45,8 +45,8 @@ class OrderMetaBox {
 		$validation_no = $order->get_meta( OrderMeta::ValidationNo );
 		$shipping_no   = ( $ship_type === ShipType::SEVEN ) ? PayuniShipping::format_cvs_shipno( $order ) : $order->get_meta( OrderMeta::ShipNo );
 
-		$service_type  = $order->get_meta( OrderMeta::ServiceType );
-		$trade_amt     = $order->get_meta( OrderMeta::TradeAmt );
+		$service_type = $order->get_meta( OrderMeta::ServiceType );
+		$trade_amt    = $order->get_meta( OrderMeta::TradeAmt );
 
 		$ship_status      = $order->get_meta( OrderMeta::ShipStatus );
 		$ship_status_desc = $order->get_meta( OrderMeta::ShipStatusDesc );
@@ -62,29 +62,26 @@ class OrderMetaBox {
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
 		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '物流交易序號', 'mo-ectools' ) . '</div></th><td>' . esc_html( $order->get_meta( OrderMeta::ShipTradeNo ) ) . '</td></tr>';
 
-		// 物流查詢編號(使用者查詢用的物流單號)
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $provider_query_html built locally with esc_url applied
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'ShipNo', 'mo-ectools' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流單號', 'mo-ectools' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
 
 		if ( $ship_type === ShipType::SEVEN ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'PartnerID', 'mo-ectools' ) . '</th><td>' . esc_html( $partner_id ) . '</td></tr>';
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Odon', 'mo-ectools' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '門市代碼', 'mo-ectools' ) . '</th><td>' . esc_html( $partner_id ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '訂單號碼', 'mo-ectools' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
 
 			if ( $lgs_type === LgsType::C2C ) {
-				// validationNo is only for 7-11 C2C.
-				echo '<tr><th style="text-align:left;">' . esc_html__( 'ValidationNo', 'mo-ectools' ) . '</th><td>' . esc_html( $validation_no ) . '</td></tr>';
+				echo '<tr><th style="text-align:left;">' . esc_html__( '驗證碼', 'mo-ectools' ) . '</th><td>' . esc_html( $validation_no ) . '</td></tr>';
 			}
 		}
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Ship Type', 'mo-ectools' ) . '</th><td>' . esc_html( ShipType::get_name( $ship_type ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Logistic Type', 'mo-ectools' ) . '</th><td>' . esc_html( LgsType::get_name( $lgs_type ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Goods Type', 'mo-ectools' ) . '</th><td>' . esc_html( GoodsType::get_name( $goods_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流類型', 'mo-ectools' ) . '</th><td>' . esc_html( ShipType::get_name( $ship_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '配送方式', 'mo-ectools' ) . '</th><td>' . esc_html( LgsType::get_name( $lgs_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '商品類型', 'mo-ectools' ) . '</th><td>' . esc_html( GoodsType::get_name( $goods_type ) ) . '</td></tr>';
 
-		// Package spec field for TCAT shipping only
 		if ( $ship_type === ShipType::TCAT ) {
 			$package_spec         = $order->get_meta( OrderMeta::PackageSpec );
 			$package_spec_options = self::get_package_spec_options( $goods_type );
 
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Package Spec', 'mo-ectools' ) . '</th><td>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '包裹規格', 'mo-ectools' ) . '</th><td>';
 			echo '<select id="package-spec-select" style="font-size:12px;height:24px;line-height:22px;padding:0 4px;margin:0;vertical-align:middle;box-sizing:border-box;max-width:140px;" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
 			foreach ( $package_spec_options as $value => $label ) {
 				$selected = selected( $package_spec, $value, false );
@@ -95,18 +92,18 @@ class OrderMetaBox {
 			echo '</td></tr>';
 		}
 
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Service Type', 'mo-ectools' ) . '</th><td>' . esc_html( ServiceType::get_name( $service_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '服務類型', 'mo-ectools' ) . '</th><td>' . esc_html( ServiceType::get_name( $service_type ) ) . '</td></tr>';
 
 		if ( $order->get_payment_method() === 'cod' || $service_type === ServiceType::COD ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'COD Amount', 'mo-ectools' ) . '</th><td>' . esc_html( $trade_amt ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '代收金額', 'mo-ectools' ) . '</th><td>' . esc_html( $trade_amt ) . '</td></tr>';
 		}
 
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Status', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Status Desc', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_desc ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( 'Status Time', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_time ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流狀態', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態說明', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_desc ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態時間', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_time ) . '</td></tr>';
 
 		if ( $ship_type === ShipType::TCAT ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Print Date', 'mo-ectools' ) . '</th><td>' . esc_html( $print_date ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '列印時間', 'mo-ectools' ) . '</th><td>' . esc_html( $print_date ) . '</td></tr>';
 		}
 
 		if ( ! empty( $shipping_no ) && $ship_type === ShipType::TCAT ) {
@@ -129,7 +126,6 @@ class OrderMetaBox {
 			'3' => '120cm',
 		);
 
-		// Only normal temperature supports 150cm
 		if ( $goods_type === GoodsType::NORMAL ) {
 			$base_options['4'] = '150cm';
 		}

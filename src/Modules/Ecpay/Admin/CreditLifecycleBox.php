@@ -19,10 +19,6 @@ final class CreditLifecycleBox {
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
-	/**
-	 * 信用卡交易動作區 HTML — 由 ECPay 金流卡片（Ecpay\Admin\OrderMetaBox）附在金流資訊下方，
-	 * 不再是獨立 postbox。非綠界信用卡訂單回空字串（不顯示）。
-	 */
 	public static function lifecycle_html( \WC_Order $order ): string {
 		if ( ! self::is_credit_order( $order ) ) {
 			return '';
@@ -38,7 +34,7 @@ final class CreditLifecycleBox {
 				<?php esc_html_e( '信用卡交易動作', 'mo-ectools' ); ?>
 			</p>
 			<p class="moksafowo-ecpay-credit-lifecycle__placeholder" style="margin:0;color:#646970;font-size:12px;">
-				<?php esc_html_e( '點下方按鈕向綠界查詢即時交易狀態…', 'mo-ectools' ); ?>
+				<?php esc_html_e( '點下方按鈕查詢最新交易狀態…', 'mo-ectools' ); ?>
 			</p>
 			<p style="margin:8px 0 0;">
 				<button type="button" class="button button-secondary moksafowo-ecpay-credit-lifecycle__refresh">
@@ -86,17 +82,18 @@ final class CreditLifecycleBox {
 			wp_send_json_error( [ 'message' => __( '找不到訂單或非信用卡付款。', 'mo-ectools' ) ] );
 		}
 
-		// N / C 一律用訂單總額；R 用前端傳的金額（部分退款）
 		$run_amount = ( 'R' === $action ) ? max( 1, $amount ) : (int) round( (float) $order->get_total() );
 		$result     = Helper::credit_action( $order, $action, $run_amount );
 
 		if ( is_wp_error( $result ) ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: action label, 2: error msg */
-				__( '綠界 %1$s 失敗：%2$s', 'mo-ectools' ),
-				self::action_label( $action ),
-				$result->get_error_message()
-			) );
+					__( '綠界 %1$s 失敗：%2$s', 'mo-ectools' ),
+					self::action_label( $action ),
+					$result->get_error_message()
+				)
+			);
 			wp_send_json_error( [ 'message' => $result->get_error_message() ] );
 		}
 
@@ -114,14 +111,15 @@ final class CreditLifecycleBox {
 			wp_send_json_error( [ 'message' => $msg ] );
 		}
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: action label, 2: amount */
-			__( '綠界 %1$s 成功（金額 NT$%2$d）。', 'mo-ectools' ),
-			self::action_label( $action ),
-			$run_amount
-		) );
+				__( '綠界 %1$s 成功（金額 NT$%2$d）。', 'mo-ectools' ),
+				self::action_label( $action ),
+				$run_amount
+			)
+		);
 
-		// 動作完再 query 一次取最新狀態
 		$query = Helper::query_credit_trade( $order );
 		if ( is_wp_error( $query ) ) {
 			wp_send_json_success( [ 'html' => '<p style="color:#00a32a;">' . esc_html( __( '動作成功，但查詢最新狀態失敗。請手動重新整理。', 'mo-ectools' ) ) . '</p>' ] );
@@ -130,7 +128,6 @@ final class CreditLifecycleBox {
 	}
 
 	public static function enqueue( string $hook ): void {
-		// 只在訂單編輯頁載入
 		$ok_screens = [ 'post.php', 'post-new.php', 'woocommerce_page_wc-orders' ];
 		if ( ! in_array( $hook, $ok_screens, true ) ) {
 			return;
@@ -144,17 +141,21 @@ final class CreditLifecycleBox {
 			$ver,
 			true
 		);
-		wp_localize_script( 'moksafowo-ecpay-credit-lifecycle', 'moksafowoEcpayCreditLifecycle', [
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'i18n'    => [
-				'querying'      => __( '查詢中…', 'mo-ectools' ),
-				'cancelConfirm' => __( '確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。', 'mo-ectools' ),
-				'closureConfirm' => __( '確定要請款？銀行會實際扣顧客款項。', 'mo-ectools' ),
-				'refundConfirm' => __( '確定要退款？金額：', 'mo-ectools' ),
-				'refundAmtErr'  => __( '退款金額需大於 0。', 'mo-ectools' ),
-				'genericErr'    => __( '操作失敗：', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			'moksafowo-ecpay-credit-lifecycle',
+			'moksafowoEcpayCreditLifecycle',
+			[
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'i18n'    => [
+					'querying'       => __( '查詢中…', 'mo-ectools' ),
+					'cancelConfirm'  => __( '確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。', 'mo-ectools' ),
+					'closureConfirm' => __( '確定要請款？銀行會實際扣顧客款項。', 'mo-ectools' ),
+					'refundConfirm'  => __( '確定要退款？金額：', 'mo-ectools' ),
+					'refundAmtErr'   => __( '退款金額需大於 0。', 'mo-ectools' ),
+					'genericErr'     => __( '操作失敗：', 'mo-ectools' ),
+				],
+			]
+		);
 	}
 
 	private static function build_panel_html( \WC_Order $order, array $info ): string {
@@ -166,7 +167,7 @@ final class CreditLifecycleBox {
 		$history   = is_array( $info['CloseData'] ?? null ) ? $info['CloseData'] : [];
 
 		$total      = (int) round( (float) $order->get_total() );
-		$can_refund = max( 0, $cls_amt - 0 ); // 已請款金額才是可退上限（API 會擋超額）
+		$can_refund = max( 0, $cls_amt - 0 );
 
 		$status_label = self::status_label( $status );
 		$status_color = self::status_color( $status );
@@ -260,18 +261,15 @@ final class CreditLifecycleBox {
 		if ( ! str_starts_with( $method, 'moksafowo_ecpay_' ) ) {
 			return false;
 		}
-		// 走 supports_credit_action() 判斷是否信用卡系列
 		$gateways = WC()->payment_gateways()->payment_gateways();
 		$gateway  = $gateways[ $method ] ?? null;
 		if ( ! $gateway instanceof AbstractEcpayGateway ) {
 			return false;
 		}
-		// PaymentType 也要是 Credit_* 才行（Unified 訂單可能選 ATM/CVS）
 		$pay_type = (string) $order->get_meta( Keys::ECPAY_PAYMENT_TYPE );
 		if ( '' !== $pay_type && ! str_starts_with( $pay_type, 'Credit' ) ) {
 			return false;
 		}
-		// 還沒有 TradeNo（未付款）也不顯示
 		$trade_no = (string) $order->get_meta( Keys::ECPAY_TRADE_NO );
 		return '' !== $trade_no;
 	}
@@ -286,12 +284,12 @@ final class CreditLifecycleBox {
 
 	private static function status_label( string $raw ): string {
 		$map = [
-			'Authorized'      => __( '已授權（未請款）', 'mo-ectools' ),
-			'Captured'        => __( '已請款', 'mo-ectools' ),
-			'To be captured'  => __( '請款處理中', 'mo-ectools' ),
-			'Refunded'        => __( '已退刷', 'mo-ectools' ),
-			'Cancelled'       => __( '已取消授權', 'mo-ectools' ),
-			'Failed'          => __( '失敗', 'mo-ectools' ),
+			'Authorized'     => __( '已授權（未請款）', 'mo-ectools' ),
+			'Captured'       => __( '已請款', 'mo-ectools' ),
+			'To be captured' => __( '請款處理中', 'mo-ectools' ),
+			'Refunded'       => __( '已退刷', 'mo-ectools' ),
+			'Cancelled'      => __( '已取消授權', 'mo-ectools' ),
+			'Failed'         => __( '失敗', 'mo-ectools' ),
 		];
 		return $map[ $raw ] ?? ( '' === $raw ? __( '未知', 'mo-ectools' ) : $raw );
 	}

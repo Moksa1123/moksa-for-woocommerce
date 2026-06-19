@@ -30,15 +30,15 @@ final class Module extends AbstractModule {
 	}
 
 	public function tagline(): string {
-		return __( 'B2C / B2B / 載具 / 捐贈 — 光貿（MIG 4.0）', 'mo-ectools' );
+		return __( 'B2C / B2B / 載具 / 捐贈 — 光貿', 'mo-ectools' );
 	}
 
 	public function methods(): array {
 		return [
 			__( 'B2C 一般發票', 'mo-ectools' ),
 			__( 'B2B 三聯式', 'mo-ectools' ),
-			__( '手機條碼 3J0002', 'mo-ectools' ),
-			__( '自然人憑證 CQ0001', 'mo-ectools' ),
+			__( '手機條碼', 'mo-ectools' ),
+			__( '自然人憑證', 'mo-ectools' ),
 			__( 'AMEGO 會員載具', 'mo-ectools' ),
 			__( '愛心碼捐贈', 'mo-ectools' ),
 			__( '作廢發票', 'mo-ectools' ),
@@ -67,8 +67,8 @@ final class Module extends AbstractModule {
 
 		if ( 'auto_cancel' === get_option( 'moksafowo_amego_invoice_auto_cancel', 'manual' ) ) {
 			add_action( 'woocommerce_order_status_cancelled', [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_refunded',  [ Operations\AutoInvalid::class, 'schedule' ] );
-			add_action( 'woocommerce_order_status_failed',    [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_refunded', [ Operations\AutoInvalid::class, 'schedule' ] );
+			add_action( 'woocommerce_order_status_failed', [ Operations\AutoInvalid::class, 'schedule' ] );
 		}
 		add_action( Operations\AutoInvalid::HOOK, [ Operations\AutoInvalid::class, 'run' ], 10, 1 );
 	}

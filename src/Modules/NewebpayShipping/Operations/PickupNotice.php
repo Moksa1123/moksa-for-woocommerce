@@ -26,14 +26,16 @@ final class PickupNotice {
 		if ( empty( $valid_ids ) ) {
 			return [];
 		}
-		return [ [
-			'api_url'   => admin_url( 'admin-post.php' ),
-			'form_data' => [
-				'action'    => self::ACTION,
-				'order_ids' => implode( ',', $valid_ids ),
-				'_wpnonce'  => wp_create_nonce( self::ACTION ),
+		return [
+			[
+				'api_url'   => admin_url( 'admin-post.php' ),
+				'form_data' => [
+					'action'    => self::ACTION,
+					'order_ids' => implode( ',', $valid_ids ),
+					'_wpnonce'  => wp_create_nonce( self::ACTION ),
+				],
 			],
-		] ];
+		];
 	}
 
 	public static function output(): void {
@@ -76,9 +78,9 @@ final class PickupNotice {
 	}
 
 	private static function build_html( array $orders ): string {
-		$shop_name    = (string) get_bloginfo( 'name' );
-		$shop_address = (string) ( get_option( 'woocommerce_store_address', '' ) );
-		$shop_city    = (string) ( get_option( 'woocommerce_store_city', '' ) );
+		$shop_name     = (string) get_bloginfo( 'name' );
+		$shop_address  = (string) ( get_option( 'woocommerce_store_address', '' ) );
+		$shop_city     = (string) ( get_option( 'woocommerce_store_city', '' ) );
 		$shop_postcode = (string) ( get_option( 'woocommerce_store_postcode', '' ) );
 
 		ob_start();
@@ -121,21 +123,21 @@ final class PickupNotice {
 	<button onclick="window.print()"><?php esc_html_e( '列印', 'mo-ectools' ); ?></button>
 	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單由 mowp 自產，貼於包裹上即可。', 'mo-ectools' ); ?></div>
 </div>
-<?php foreach ( $orders as $order ) : ?>
-	<?php
-	$store_id   = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ID );
-	$store_name = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_NAME );
-	$store_addr = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ADDR );
-	if ( '' === $store_id ) {
-		$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
-		$store_name = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
-		$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
-	}
-	$customer = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
-	if ( '' === $customer ) {
-		$customer = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
-	}
-	?>
+		<?php foreach ( $orders as $order ) : ?>
+			<?php
+			$store_id   = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ID );
+			$store_name = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_NAME );
+			$store_addr = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ADDR );
+			if ( '' === $store_id ) {
+				$store_id   = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
+				$store_name = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
+				$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
+			}
+			$customer = trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() );
+			if ( '' === $customer ) {
+				$customer = trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() );
+			}
+			?>
 	<div class="label">
 		<div class="label__head">
 			<h1><?php esc_html_e( '藍新物流託運單', 'mo-ectools' ); ?></h1>
@@ -143,7 +145,7 @@ final class PickupNotice {
 		</div>
 		<div class="row"><div class="label-key"><?php esc_html_e( '訂單編號', 'mo-ectools' ); ?></div><div class="label-val big">#<?php echo esc_html( (string) $order->get_id() ); ?></div></div>
 		<div class="row"><div class="label-key"><?php esc_html_e( '寄件人', 'mo-ectools' ); ?></div><div class="label-val"><?php echo esc_html( $shop_name ); ?></div></div>
-		<?php if ( '' !== $shop_address ) : ?>
+			<?php if ( '' !== $shop_address ) : ?>
 		<div class="row"><div class="label-key"><?php esc_html_e( '寄件地址', 'mo-ectools' ); ?></div><div class="label-val"><?php echo esc_html( trim( $shop_postcode . ' ' . $shop_city . ' ' . $shop_address ) ); ?></div></div>
 		<?php endif; ?>
 		<div class="row"><div class="label-key"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></div><div class="label-val big"><?php echo esc_html( $customer ); ?></div></div>
@@ -169,7 +171,7 @@ final class PickupNotice {
 		</div>
 		<div class="row" style="margin-top:8px;border-top:1px solid #000;padding-top:6px;"><div class="label-key"><?php esc_html_e( '訂單總額', 'mo-ectools' ); ?></div><div class="label-val big">NT$<?php echo esc_html( (string) (int) $order->get_total() ); ?></div></div>
 	</div>
-<?php endforeach; ?>
+		<?php endforeach; ?>
 </body>
 </html>
 		<?php

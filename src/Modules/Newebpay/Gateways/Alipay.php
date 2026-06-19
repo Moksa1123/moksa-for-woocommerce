@@ -21,6 +21,6 @@ final class Alipay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '透過藍新中介整合的支付寶通道（接陸客與跨境訂單），跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '支付寶跨境付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

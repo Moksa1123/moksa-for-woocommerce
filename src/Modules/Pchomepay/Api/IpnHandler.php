@@ -45,10 +45,13 @@ final class IpnHandler {
 		// json_decode 不做消毒 — 解碼後逐欄 sanitize 才記錄與使用。
 		$message = map_deep( $message, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
-		Helper::log( 'webhook received', [
-			'notify_type' => $notify_type,
-			'message'     => $message,
-		] );
+		Helper::log(
+			'webhook received',
+			[
+				'notify_type' => $notify_type,
+				'message'     => $message,
+			]
+		);
 
 		$pchome_order_id = (string) ( $message['order_id'] ?? '' );
 		$order_id        = Helper::parse_order_id( $pchome_order_id );
@@ -88,21 +91,26 @@ final class IpnHandler {
 				if ( ! $order->is_paid() ) {
 					$order->payment_complete( (string) ( $message['order_id'] ?? '' ) );
 				}
-				$order->add_order_note( sprintf(
+				$order->add_order_note(
+					sprintf(
 					/* translators: 1: pay type, 2: amount */
-					__( '支付連付款完成 — %1$s（金額 NT$%2$s）', 'mo-ectools' ),
-					self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
-					(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
-				) );
+						__( '支付連付款完成 — %1$s（金額 NT$%2$s）', 'mo-ectools' ),
+						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
+						(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
+					)
+				);
 				break;
 
 			case 'order_audit':
 				// ATM 取號 / 超商代碼取條碼 / 超商取貨選好門市 — 尚未付款，留 on-hold。
-				$order->update_status( 'on-hold', sprintf(
+				$order->update_status(
+					'on-hold',
+					sprintf(
 					/* translators: %s: pay type */
-					__( '支付連已產生 %s 付款資訊，等待顧客付款。', 'mo-ectools' ),
-					self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) )
-				) );
+						__( '支付連已產生 %s 付款資訊，等待顧客付款。', 'mo-ectools' ),
+						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) )
+					)
+				);
 				break;
 
 			case 'order_expired':
@@ -110,39 +118,48 @@ final class IpnHandler {
 				break;
 
 			case 'order_failed':
-				$order->update_status( 'failed', sprintf(
+				$order->update_status(
+					'failed',
+					sprintf(
 					/* translators: %s: status code */
-					__( '支付連付款失敗（狀態碼 %s）。', 'mo-ectools' ),
-					(string) ( $message['status_code'] ?? '' )
-				) );
+						__( '支付連付款失敗（狀態碼 %s）。', 'mo-ectools' ),
+						(string) ( $message['status_code'] ?? '' )
+					)
+				);
 				break;
 
 			case 'refund_success':
-				$order->add_order_note( sprintf(
+				$order->add_order_note(
+					sprintf(
 					/* translators: 1: refund id, 2: amount */
-					__( '支付連退款成功 — 退款編號 %1$s（NT$%2$s）', 'mo-ectools' ),
-					(string) ( $message['refund_id'] ?? '' ),
-					(string) ( $message['trade_amount'] ?? $message['refund_amount'] ?? '' )
-				) );
+						__( '支付連退款成功 — 退款編號 %1$s（NT$%2$s）', 'mo-ectools' ),
+						(string) ( $message['refund_id'] ?? '' ),
+						(string) ( $message['trade_amount'] ?? $message['refund_amount'] ?? '' )
+					)
+				);
 				break;
 
 			case 'seller_dispatched':
 			case 'pickup_shipped':
 			case 'return_shipped':
 				$order->update_meta_data( Keys::PCHOMEPAY_LOGISTIC_STATUS, $notify_type );
-				$order->add_order_note( sprintf(
+				$order->add_order_note(
+					sprintf(
 					/* translators: %s: logistic stage */
-					__( '支付連物流狀態更新：%s', 'mo-ectools' ),
-					self::logistic_label( $notify_type )
-				) );
+						__( '支付連物流狀態更新：%s', 'mo-ectools' ),
+						self::logistic_label( $notify_type )
+					)
+				);
 				break;
 
 			default:
-				$order->add_order_note( sprintf(
+				$order->add_order_note(
+					sprintf(
 					/* translators: %s: notify type */
-					__( '支付連通知：%s', 'mo-ectools' ),
-					$notify_type
-				) );
+						__( '支付連通知：%s', 'mo-ectools' ),
+						$notify_type
+					)
+				);
 		}
 	}
 
@@ -182,7 +199,11 @@ final class IpnHandler {
 		if ( isset( $info['pincode'] ) ) {
 			$order->update_meta_data( Keys::PCHOMEPAY_PINCODE, (string) $info['pincode'] );
 		}
-		foreach ( [ 'barcode1' => Keys::PCHOMEPAY_BARCODE_1, 'barcode2' => Keys::PCHOMEPAY_BARCODE_2, 'barcode3' => Keys::PCHOMEPAY_BARCODE_3 ] as $f => $k ) {
+		foreach ( [
+			'barcode1' => Keys::PCHOMEPAY_BARCODE_1,
+			'barcode2' => Keys::PCHOMEPAY_BARCODE_2,
+			'barcode3' => Keys::PCHOMEPAY_BARCODE_3,
+		] as $f => $k ) {
 			if ( isset( $info[ $f ] ) ) {
 				$order->update_meta_data( $k, (string) $info[ $f ] );
 			}
@@ -204,5 +225,4 @@ final class IpnHandler {
 	private static function logistic_label( string $notify_type ): string {
 		return \MoksaWeb\Mowc\Modules\Pchomepay\PaymentTypeCatalog::logistic_label( $notify_type, $notify_type );
 	}
-
 }

@@ -4,6 +4,8 @@ declare( strict_types=1 );
 namespace MoksaWeb\Mowc\Settings;
 
 use MoksaWeb\Mowc\Plugin;
+use MoksaWeb\Mowc\Modules\OrderLookup\Index\Backfill;
+use MoksaWeb\Mowc\Modules\OrderLookup\Index\Table;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,6 +17,54 @@ final class SettingsPage extends \WC_Settings_Page {
 		parent::__construct();
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		// 自訂 settings field：訂單查號索引狀態 + 重建鈕（乾淨的 <tr>，不破版）。
+		add_action( 'woocommerce_admin_field_moksafowo_order_index_status', [ $this, 'render_index_status' ] );
+	}
+
+	/**
+	 * 自訂 field 渲染：索引啟用時輸出一列「狀態 + 重建索引」。
+	 */
+	public function render_index_status(): void {
+		$html = self::order_index_status_html();
+		if ( '' === $html ) {
+			return;
+		}
+		echo '<tr valign="top"><th scope="row" class="titledesc">'
+			. esc_html__( '索引狀態', 'mo-ectools' )
+			. '</th><td class="forminp">'
+			. wp_kses_post( $html )
+			. '</td></tr>';
+	}
+
+	/**
+	 * 訂單查號索引的狀態 + 重建連結（HTML，含已逸出的 button 連結）。
+	 */
+	private static function order_index_status_html(): string {
+		if ( 'yes' !== get_option( Table::ENABLED_OPTION, 'no' ) ) {
+			return '';
+		}
+		$status = Backfill::status();
+		if ( $status['running'] ) {
+			$msg = sprintf(
+				/* translators: 1: processed count, 2: total count */
+				__( '索引建立中…已處理 %1$d / %2$d 筆訂單（重新整理看進度）。', 'mo-ectools' ),
+				$status['done'],
+				max( $status['total'], $status['done'] )
+			);
+		} else {
+			$rows = Table::exists() ? Table::count_orders() : 0;
+			/* translators: %d: indexed order count */
+			$msg = sprintf( __( '已索引 %d 筆訂單。', 'mo-ectools' ), $rows );
+		}
+		$url = wp_nonce_url(
+			add_query_arg( 'moksafowo_rebuild_order_index', '1' ),
+			'moksafowo_rebuild_order_index'
+		);
+		return esc_html( $msg ) . sprintf(
+			' <a href="%s" class="button button-secondary">%s</a>',
+			esc_url( $url ),
+			esc_html__( '重建索引', 'mo-ectools' )
+		);
 	}
 
 	public function enqueue_assets( string $hook ): void {
@@ -57,73 +107,73 @@ final class SettingsPage extends \WC_Settings_Page {
 
 	private static function module_descriptors(): array {
 		return [
-			'ecpay' => [
-				'enable_key' => 'ecpay',
-				'label'      => __( '綠界金流', 'mo-ectools' ),
+			'ecpay'                     => [
+				'enable_key'  => 'ecpay',
+				'label'       => __( '綠界金流', 'mo-ectools' ),
 				'banner_name' => __( '綠界金流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Ecpay\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings',
-				'tab_arg'    => null,
+				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\Ecpay\\Settings\\SettingsTab',
+				'tab_method'  => 'get_settings',
+				'tab_arg'     => null,
 			],
-			'ecpay-shipping' => [
-				'enable_key' => 'ecpay_shipping',
-				'label'      => __( '綠界物流', 'mo-ectools' ),
+			'ecpay-shipping'            => [
+				'enable_key'  => 'ecpay_shipping',
+				'label'       => __( '綠界物流', 'mo-ectools' ),
 				'banner_name' => __( '綠界物流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\EcpayShipping\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings',
-				'tab_arg'    => null,
+				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\EcpayShipping\\Settings\\SettingsTab',
+				'tab_method'  => 'get_settings',
+				'tab_arg'     => null,
 			],
-			'ecpay-invoice' => [
-				'enable_key' => 'ecpay_invoice',
-				'label'      => __( '綠界電子發票', 'mo-ectools' ),
+			'ecpay-invoice'             => [
+				'enable_key'  => 'ecpay_invoice',
+				'label'       => __( '綠界電子發票', 'mo-ectools' ),
 				'banner_name' => __( '綠界電子發票', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\EcpayInvoice\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings',
-				'tab_arg'    => null,
+				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\EcpayInvoice\\Settings\\SettingsTab',
+				'tab_method'  => 'get_settings',
+				'tab_arg'     => null,
 			],
-			'newebpay' => [
+			'newebpay'                  => [
 				'enable_key' => 'newebpay',
 				'label'      => __( '藍新金流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Newebpay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'newebpay-shipping' => [
+			'newebpay-shipping'         => [
 				'enable_key' => 'newebpay_shipping',
 				'label'      => __( '藍新物流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\NewebpayShipping\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'ezpay-invoice' => [
+			'ezpay-invoice'             => [
 				'enable_key' => 'ezpay_invoice',
 				'label'      => __( 'ezPay 電子發票', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\EzpayInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'smilepay-invoice' => [
+			'smilepay-invoice'          => [
 				'enable_key' => 'smilepay_invoice',
 				'label'      => __( 'SmilePay 電子發票', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\SmilepayInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'paynow-invoice' => [
+			'paynow-invoice'            => [
 				'enable_key' => 'paynow_invoice',
 				'label'      => __( 'PayNow 電子發票', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\PaynowInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'amego-invoice' => [
+			'amego-invoice'             => [
 				'enable_key' => 'amego_invoice',
 				'label'      => __( 'AMEGO 電子發票', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\AmegoInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'linepay' => [
+			'linepay'                   => [
 				'enable_key'  => 'linepay',
 				'label'       => __( 'LINE Pay', 'mo-ectools' ),
 				'banner_name' => __( 'LINE Pay 台灣', 'mo-ectools' ),
@@ -131,58 +181,58 @@ final class SettingsPage extends \WC_Settings_Page {
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => '',
 			],
-			'moksafowo-payuni-payment' => [
-				'enable_key' => 'payuni',
-				'label'      => __( 'PAYUNi 金流', 'mo-ectools' ),
+			'moksafowo-payuni-payment'  => [
+				'enable_key'  => 'payuni',
+				'label'       => __( 'PAYUNi 金流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 統一金流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Payuni\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings_for_payment_section',
-				'tab_arg'    => null,
+				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\Payuni\\Settings\\SettingsTab',
+				'tab_method'  => 'get_settings_for_payment_section',
+				'tab_arg'     => null,
 			],
 			'moksafowo-payuni-shipping' => [
-				'enable_key' => 'payuni_shipping',
-				'label'      => __( 'PAYUNi 物流', 'mo-ectools' ),
+				'enable_key'  => 'payuni_shipping',
+				'label'       => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 物流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Settings\\SettingsTab',
-				'tab_method' => 'get_settings_for_shipping_section',
-				'tab_arg'    => null,
+				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Settings\\SettingsTab',
+				'tab_method'  => 'get_settings_for_shipping_section',
+				'tab_arg'     => null,
 			],
-			'smilepay-shipping' => [
+			'smilepay-shipping'         => [
 				'enable_key' => 'smilepay_shipping',
 				'label'      => __( '速買配 物流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\SmilepayShipping\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'smilepay-payment' => [
+			'smilepay-payment'          => [
 				'enable_key' => 'smilepay',
 				'label'      => __( 'SmilePay 速買配 金流', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Smilepay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'pchomepay' => [
+			'pchomepay'                 => [
 				'enable_key' => 'pchomepay',
 				'label'      => __( 'PChomePay 支付連', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Pchomepay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'tappay' => [
+			'tappay'                    => [
 				'enable_key' => 'tappay',
 				'label'      => __( 'TapPay 拍付', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Tappay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'paynow' => [
+			'paynow'                    => [
 				'enable_key' => 'paynow',
 				'label'      => __( 'PayNow 立即富', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Paynow\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
-			'shopline-payments' => [
+			'shopline-payments'         => [
 				'enable_key' => 'shopline_payments',
 				'label'      => __( 'Shopline Payments', 'mo-ectools' ),
 				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
@@ -225,8 +275,8 @@ final class SettingsPage extends \WC_Settings_Page {
 			return [];
 		}
 		try {
-			$ref = new \ReflectionClass( $class );
-			$obj = $ref->newInstanceWithoutConstructor();
+			$ref    = new \ReflectionClass( $class );
+			$obj    = $ref->newInstanceWithoutConstructor();
 			$result = $arg === null ? $obj->{$method}() : $obj->{$method}( $arg );
 			return is_array( $result ) ? $result : [];
 		} catch ( \Throwable $e ) {
@@ -300,7 +350,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			[
 				'title' => __( '自訂訂單狀態', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '物流模組共用的自訂訂單狀態。停用某狀態 → 不出現在訂單編輯頁與批次操作下拉，但資料庫既有訂單仍保留該狀態。', 'mo-ectools' ),
+				'desc'  => __( '物流模組共用的自訂訂單狀態。停用後不再出現在訂單編輯頁與批次操作選單，但既有訂單仍保留原狀態。', 'mo-ectools' ),
 				'id'    => 'moksafowo_shipping_status_section',
 			],
 			[
@@ -385,7 +435,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			[
 				'id'            => 'moksafowo_tw_address_reorder_fields',
 				'type'          => 'checkbox',
-				'desc'          => __( '啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳完整生效，區塊結帳只同步順序（強制 2 欄）。', 'mo-ectools' ),
+				'desc'          => __( '啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳與區塊結帳都會套用順序與 50% / 100% 寬度。', 'mo-ectools' ),
 				'default'       => 'no',
 				'checkboxgroup' => 'end',
 			],
@@ -404,7 +454,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			[
 				'title' => __( '欄位順序與寬度', 'mo-ectools' ),
 				'type'  => 'mowp_field_manager',
-				'desc'  => __( '半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。區塊結帳不吃寬度設定。', 'mo-ectools' ),
+				'desc'  => __( '半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。', 'mo-ectools' ),
 				'id'    => 'moksafowo_tw_address_field_layout',
 			],
 			[
@@ -485,35 +535,27 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc_tip'      => __( '勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。', 'mo-ectools' ),
 			],
 			[
+				'title'   => __( '加速索引（大量訂單建議開啟）', 'mo-ectools' ),
+				'id'      => Table::ENABLED_OPTION,
+				'type'    => 'checkbox',
+				'default' => 'no',
+				'desc'    => __( '把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。', 'mo-ectools' ),
+			],
+			[
+				'type' => 'moksafowo_order_index_status',
+				'id'   => 'moksafowo_order_lookup_index_status',
+			],
+			[
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_order_lookup_section',
 			],
 
-			// Moksa AI（Beta，需 WP 7.0 AI Client）
-			[
-				'title' => __( 'Moksa AI 助手（Beta）', 'mo-ectools' ),
-				'type'  => 'title',
-				'desc'  => __( '在後台用自然語言查訂單的 AI 助手。啟用後,後台右下角會出現浮動對話窗。<br><strong>目前會做</strong>:① 用發票號 / 物流單號 / 金流交易序號查單筆訂單;② 查訂單數量與各狀態分布(例:待出貨幾筆)。<br><strong>前置需求</strong>:WordPress 7.0(內建 AI Client)+ 在「設定 → Connectors」設好 OpenAI / Anthropic / Google 任一把 AI 金鑰(費用走商家自己的金鑰)。WordPress 低於 7.0 時此功能不會出現。', 'mo-ectools' ),
-				'id'    => 'moksafowo_ai_assistant_section',
-			],
-			[
-				'title'   => __( '啟用 Moksa AI', 'mo-ectools' ),
-				'id'      => 'moksafowo_ai_assistant_enabled',
-				'type'    => 'checkbox',
-				'default' => 'no',
-				'desc'    => __( '開啟後台右下角的浮動 AI 對話窗。', 'mo-ectools' ),
-			],
-			[
-				'type' => 'sectionend',
-				'id'   => 'moksafowo_ai_assistant_section',
-			],
 		];
 	}
 
 	private function render_general_section(): void {
 		$registry = Plugin::instance()->modules();
 
-		
 		$by_category = [
 			'payment'  => [],
 			'shipping' => [],
@@ -549,7 +591,7 @@ final class SettingsPage extends \WC_Settings_Page {
 		Ui::open_shell();
 		Ui::intro(
 			__( 'Moksa — 台灣工具包', 'mo-ectools' ),
-			__( '啟用您需要的模組。各家可任意組合搭配；金流、物流、發票完全解耦。', 'mo-ectools' )
+			__( '啟用您需要的模組。金流、物流、發票可自由搭配組合。', 'mo-ectools' )
 		);
 
 		foreach ( $by_category as $category => $entries ) {
@@ -558,10 +600,10 @@ final class SettingsPage extends \WC_Settings_Page {
 			}
 			$cards = [];
 			foreach ( $entries as $key => $module ) {
-				$option        = sprintf( 'moksafowo_%s_enabled', $key );
-				$enabled       = 'yes' === get_option( $option, 'no' );
-				$section_slug  = $module->settings_section();
-				$cards[]       = [
+				$option       = sprintf( 'moksafowo_%s_enabled', $key );
+				$enabled      = 'yes' === get_option( $option, 'no' );
+				$section_slug = $module->settings_section();
+				$cards[]      = [
 					'name'         => $module->name(),
 					'tagline'      => $module->tagline(),
 					'methods'      => $module->methods(),
@@ -593,13 +635,15 @@ final class SettingsPage extends \WC_Settings_Page {
 		if ( ! $enabled ) {
 			?>
 			<div class="notice notice-warning inline" style="margin: 0 0 16px;">
-				<p><?php
+				<p>
+				<?php
 					printf(
 						/* translators: %s is the link to module overview */
 						esc_html__( '此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。', 'mo-ectools' ),
 						'<a href="' . esc_url( $tab_url ) . '">' . esc_html__( '模組總覽', 'mo-ectools' ) . '</a>'
 					);
-				?></p>
+				?>
+				</p>
 			</div>
 			<?php
 		}

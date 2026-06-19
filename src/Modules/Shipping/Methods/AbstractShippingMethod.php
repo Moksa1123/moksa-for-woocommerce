@@ -23,10 +23,10 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 	protected function init(): void {
 		$this->init_form_fields();
 		$this->init_settings();
-		$this->title       = $this->get_option( 'title', $this->method_title );
-		$this->tax_status  = $this->get_option( 'tax_status', 'taxable' );
-		$this->cost        = $this->get_option( 'cost', '0' );
-		$this->free_min    = $this->get_option( 'free_min', '' );
+		$this->title      = $this->get_option( 'title', $this->method_title );
+		$this->tax_status = $this->get_option( 'tax_status', 'taxable' );
+		$this->cost       = $this->get_option( 'cost', '0' );
+		$this->free_min   = $this->get_option( 'free_min', '' );
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, [ $this, 'process_admin_options' ] );
 	}
@@ -58,14 +58,14 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 
 	public function init_form_fields(): void {
 		$this->instance_form_fields = [
-			'title' => [
+			'title'                         => [
 				'title'       => __( '物流名稱', 'mo-ectools' ),
 				'type'        => 'text',
 				'description' => __( '結帳頁顯示的物流名稱', 'mo-ectools' ),
 				'default'     => $this->method_title,
 				'desc_tip'    => true,
 			],
-			'tax_status' => [
+			'tax_status'                    => [
 				'title'   => __( '稅率', 'mo-ectools' ),
 				'type'    => 'select',
 				'class'   => 'wc-enhanced-select',
@@ -75,7 +75,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 					'none'    => _x( '不收稅', 'Tax status', 'mo-ectools' ),
 				],
 			],
-			'cost' => [
+			'cost'                          => [
 				'title'       => __( '運費', 'mo-ectools' ),
 				'type'        => 'text',
 				'placeholder' => '0',
@@ -83,14 +83,14 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'description' => self::cost_field_description(),
 				'desc_tip'    => false,
 			],
-			'free_min' => [
+			'free_min'                      => [
 				'title'       => __( '免運門檻', 'mo-ectools' ),
 				'type'        => 'text',
 				'placeholder' => __( '訂單金額 ≥ 此值免運。空白 = 不啟用免運', 'mo-ectools' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			],
-			'split_shipping_fee' => [
+			'split_shipping_fee'            => [
 				'title'       => __( '依溫層分別計算運費（進階）', 'mo-ectools' ),
 				'type'        => 'checkbox',
 				'label'       => __( '多溫層訂單，每個溫層的物流單帶該溫層自己的運費', 'mo-ectools' ),
@@ -98,7 +98,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'description' => __( '預設關閉：cost formula 依整車一次性算出單一運費，整單運費全數塞給第一張物流單（COD 第一張代收所有運費）。開啟後：cost formula 會對每個溫層的商品「分別」評估一次，顧客結帳顯示的運費 = 各溫層運費總和（多溫層 = 多份基本費），每張物流單的 GoodsAmount / COD 代收金額會帶該溫層自己評估出來的運費。需搭配 `[moksafowo_addfee cool_2="X" cool_3="Y"]` 的 cost formula 才能讓不同溫層算出不同運費。', 'mo-ectools' ),
 				'desc_tip'    => false,
 			],
-			'breakdown_enabled' => [
+			'breakdown_enabled'             => [
 				'title'       => __( '結帳顯示溫層拆解（進階）', 'mo-ectools' ),
 				'type'        => 'checkbox',
 				'label'       => __( '多溫層訂單，物流名稱後面顯示各溫層件數與運費', 'mo-ectools' ),
@@ -106,7 +106,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'description' => __( '預設開啟：結帳頁的物流選項會在物流名稱後面附上「🟫 常溫 ×1　🟦 冷藏 ×2」之類的拆解。純常溫訂單、或單溫層 method 不會顯示。', 'mo-ectools' ),
 				'desc_tip'    => false,
 			],
-			'breakdown_marker_normal' => [
+			'breakdown_marker_normal'       => [
 				'title'       => __( '常溫 marker', 'mo-ectools' ),
 				'type'        => 'text',
 				'default'     => '🟫',
@@ -120,14 +120,14 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'mo-ectools' ),
 				'desc_tip'    => true,
 			],
-			'breakdown_marker_frozen' => [
+			'breakdown_marker_frozen'       => [
 				'title'       => __( '冷凍 marker', 'mo-ectools' ),
 				'type'        => 'text',
 				'default'     => '🟪',
 				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'mo-ectools' ),
 				'desc_tip'    => true,
 			],
-			'breakdown_separator' => [
+			'breakdown_separator'           => [
 				'title'       => __( '拆解分隔符', 'mo-ectools' ),
 				'type'        => 'select',
 				'class'       => 'wc-enhanced-select',
@@ -141,7 +141,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'description' => __( '多溫層之間如何分隔。Block 結帳會把 \n 換行 normalize 成 space，所以走全形字元最穩。', 'mo-ectools' ),
 				'desc_tip'    => false,
 			],
-			'breakdown_format' => [
+			'breakdown_format'              => [
 				'title'       => __( '拆解顯示密度', 'mo-ectools' ),
 				'type'        => 'select',
 				'class'       => 'wc-enhanced-select',
@@ -167,12 +167,12 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 			ProductTemp::REFRIGERATED => '🟦',
 			ProductTemp::FROZEN       => '🟪',
 		];
-		$keys = [
+		$keys     = [
 			ProductTemp::NORMAL       => 'breakdown_marker_normal',
 			ProductTemp::REFRIGERATED => 'breakdown_marker_refrigerated',
 			ProductTemp::FROZEN       => 'breakdown_marker_frozen',
 		];
-		$key   = $keys[ $temp ] ?? null;
+		$key      = $keys[ $temp ] ?? null;
 		if ( null === $key ) {
 			return '·';
 		}
@@ -239,7 +239,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 		);
 	}
 
-	
+
 	protected function evaluate_cost_per_temp_from_package( string $formula, array $package ): float {
 		$contents = $package['contents'] ?? [];
 		if ( ! is_array( $contents ) || empty( $contents ) ) {
@@ -269,16 +269,24 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 					}
 				}
 			}
-			$args  = [ 'temps' => [ (int) $temp ], 'qty' => $qty, 'weight' => $weight ];
+			$args   = [
+				'temps'  => [ (int) $temp ],
+				'qty'    => $qty,
+				'weight' => $weight,
+			];
 			$total += EvaluateCost::evaluate( $formula, $args );
 		}
 		return $total;
 	}
 
-	
+
 	public function evaluate_cost_for_temp( int $temp, int $qty, float $weight ): float {
 		$formula = (string) $this->get_option( 'cost', '0' );
-		$args    = [ 'temps' => [ $temp ], 'qty' => $qty, 'weight' => $weight ];
+		$args    = [
+			'temps'  => [ $temp ],
+			'qty'    => $qty,
+			'weight' => $weight,
+		];
 		return EvaluateCost::evaluate( $formula, $args );
 	}
 

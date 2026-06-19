@@ -20,7 +20,7 @@ final class SettingsTab {
 				'id'      => 'moksafowo_paynow_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後所有交易走 test.paynow.com.tw 測試平台。注意：測試平台除「虛擬帳號」外所有交易都會回失敗。上線後請取消勾選。', 'mo-ectools' ),
+				'desc'    => __( '勾選後所有交易走 PayNow 測試平台。注意：測試平台除「虛擬帳號」外所有交易都會回失敗。上線後請取消勾選。', 'mo-ectools' ),
 			],
 			[
 				'title'    => __( '測試 WebNo', 'mo-ectools' ),
@@ -55,14 +55,14 @@ final class SettingsTab {
 				'id'    => 'moksafowo_paynow_misc_section',
 			],
 			[
-				'title'    => __( 'EC 平台名稱（ECPlatform）', 'mo-ectools' ),
+				'title'    => __( 'EC 平台名稱', 'mo-ectools' ),
 				'id'       => 'moksafowo_paynow_ec_platform',
 				'type'     => 'text',
 				'default'  => '',
 				'desc_tip' => __( '送出至 PayNow 的 EC 平台名稱。留空 = 使用網站名稱。', 'mo-ectools' ),
 			],
 			[
-				'title'    => __( '交易內容（OrderInfo）', 'mo-ectools' ),
+				'title'    => __( '交易內容', 'mo-ectools' ),
 				'id'       => 'moksafowo_paynow_order_info',
 				'type'     => 'text',
 				'default'  => '',
@@ -74,7 +74,10 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 0,
 				'desc_tip'          => __( '虛擬帳號繳款期限。0 = 依 PayNow 預設。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 0, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 0,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( '超商條碼繳款期限（天）', 'mo-ectools' ),
@@ -82,7 +85,10 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 0,
 				'desc_tip'          => __( '超商條碼繳款期限。0 = 依 PayNow 預設。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 0, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 0,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( '代碼繳費期限（天）', 'mo-ectools' ),
@@ -90,14 +96,17 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 0,
 				'desc_tip'          => __( 'ibon / FamiPort / iCash 繳費期限。0 = 依 PayNow 預設。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 0, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 0,
+					'step' => 1,
+				],
 			],
 			[
-				'title'   => __( 'Debug 日誌', 'mo-ectools' ),
+				'title'   => __( '偵錯日誌', 'mo-ectools' ),
 				'id'      => 'moksafowo_paynow_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌（來源 paynow-payment）。商家交易密碼 / PassCode 不會寫入日誌。', 'mo-ectools' ),
+				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。交易密碼等敏感資料不會寫入日誌。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -127,7 +136,7 @@ final class SettingsTab {
 					'moksafowo_paynow_icash'              => __( 'iCash 錢包', 'mo-ectools' ),
 					'moksafowo_paynow_unionpay'           => __( '銀聯卡', 'mo-ectools' ),
 				],
-				'desc'    => __( '勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（共 9 種，預設全部未勾選）。', 'mo-ectools' ),
+				'desc'    => __( '勾選的付款方式才會出現在結帳頁，未勾選不會出現。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

@@ -43,7 +43,7 @@ class SettingsTab extends WC_Settings_Page {
 					'id'    => 'Moksafowo_LinePay_general_setting',
 				),
 				array(
-					'title'   => __( 'Debug 日誌', 'mo-ectools' ),
+					'title'   => __( '偵錯日誌', 'mo-ectools' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
 					'desc'    => sprintf(

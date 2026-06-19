@@ -51,7 +51,6 @@ class PaymentResponse {
 		}
 
 		$decrypted_info = PayuniPayment::decrypt( $encrypt_info );
-		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
 		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi NotifyURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
@@ -75,7 +74,6 @@ class PaymentResponse {
 			return;
 		}
 
-		// 電子發票的通知
 		if ( array_key_exists( 'InvoiceNo', $decrypted_info ) ) {
 			self::save_einvoice_data( $order, $decrypted_info );
 			$order->add_order_note( 'PAYUNi E-Invoice Notify. InvoiceStatus:' . $decrypted_info['InvoiceStatus'] . ', InvoiceNo:' . $decrypted_info['InvoiceNo'] );
@@ -83,21 +81,18 @@ class PaymentResponse {
 		}
 
 		if ( $order->is_paid() || $order->get_meta( OrderMeta::TRADE_STATUS ) === TradeStatus::PAID ) {
-			// PAYUNi 失敗會 retry / 成功後可能重送 — 已付款就不再灌重複 note，只記 log。
 			PayuniPayment::log( sprintf( 'PAYUNi Notify: Order %s already paid or transaction status has already set as success. Skip duplicate note.', $woo_order_id ) );
 		} else {
 			$order->add_order_note( "<strong>{$text_log}</strong><br>{$text_code} {$status}<br>{$text_message} {$message}<br>{$text_mertradeno} {$payuni_order_no}<br>{$text_number} {$trade_no}<br>{$text_paytype} " . PayType::get_name( $pay_type ) );
 			self::update_order_meta_and_order_status( $order, $decrypted_info );
 		}
 
-		// PAYUNi 失敗時會 retry，先 200 回避免重複 note
 		status_header( 200 );
 		echo 'OK';
 		exit;
 	}
 
 	public static function moksafowo_payuni_receive_response_frontend() {
-		// 同 NotifyURL — HashInfo 驗章 + 逐欄 sanitize。
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
 		if ( empty( $_POST ) ) {
 			return;
@@ -117,7 +112,6 @@ class PaymentResponse {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed gateway webhook; HashInfo (hash_equals) verified before any use.
 		$posted_hash = ( isset( $_POST['HashInfo'] ) ) ? sanitize_text_field( wp_unslash( $_POST['HashInfo'] ) ) : '';
 
-		// 同 NotifyURL — 偽造 ReturnURL POST 會 driver payment_complete on unpaid order
 		if ( '' === $posted_hash || ! hash_equals( PayuniPayment::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
 			PayuniPayment::log( 'PAYUNi return HashInfo mismatch — request rejected.' );
 			status_header( 403 );
@@ -125,7 +119,6 @@ class PaymentResponse {
 		}
 
 		$decrypted_info = PayuniPayment::decrypt( $encrypt_info );
-		// 解密內容源自遠端輸入 — 逐欄 sanitize 後才記錄與使用。
 		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi ReturnURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
@@ -134,7 +127,7 @@ class PaymentResponse {
 		$message  = $decrypted_info['Message'];
 		$pay_type = $decrypted_info['PaymentType'];
 		$trade_no = $decrypted_info['TradeNo'];
-		
+
 		$text_log        = __( 'PAYUNi Return', 'mo-ectools' );
 		$text_code       = __( 'Status code:', 'mo-ectools' );
 		$text_message    = __( 'Transaction message:', 'mo-ectools' );
@@ -150,16 +143,14 @@ class PaymentResponse {
 		}
 
 		if ( $order->is_paid() || $order->get_meta( OrderMeta::TRADE_STATUS ) === TradeStatus::PAID ) {
-			// 已付款就不再灌重複 note，只記 log。
 			PayuniPayment::log( sprintf( 'PAYUNi Return: Order %s already paid or transaction status has already set as success. Skip duplicate note.', $woo_order_id ) );
 		} else {
 			$order->add_order_note( "<strong>{$text_log}</strong><br>{$text_code} {$status}<br>{$text_message} {$message}<br>{$text_mertradeno} {$order_id}<br>{$text_number} {$trade_no}<br>{$text_paytype} " . PayType::get_name( $pay_type ) );
 			self::update_order_meta_and_order_status( $order, $decrypted_info );
 		}
 
-		wp_safe_redirect( $order->get_checkout_order_received_url() );// 訂單感謝頁面.
+		wp_safe_redirect( $order->get_checkout_order_received_url() );
 		exit;
-
 	}
 
 	private static function save_payuni_order_data( $order, $decrypted_info ) {

@@ -9,13 +9,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class Helper extends AbstractCredentialHelper {
 
-	// NewebPay 沒公開測試帳號 — 商家須自行至 https://www.newebpay.com 申請會員開立商店
 	public const BASE_SANDBOX = 'https://ccore.newebpay.com';
 	public const BASE_PROD    = 'https://core.newebpay.com';
 
-	public const PATH_MPG    = '/MPG/mpg_gateway';
-	public const PATH_QUERY  = '/API/QueryTradeInfo';
-	public const PATH_CLOSE  = '/API/CreditCard/Close';
+	public const PATH_MPG   = '/MPG/mpg_gateway';
+	public const PATH_QUERY = '/API/QueryTradeInfo';
+	public const PATH_CLOSE = '/API/CreditCard/Close';
 
 	protected static function option_prefix(): string {
 		return 'moksafowo_newebpay';
@@ -79,7 +78,6 @@ final class Helper extends AbstractCredentialHelper {
 		$without = ( '' !== $prefix && str_starts_with( $merchant_order_no, $prefix ) )
 			? substr( $merchant_order_no, strlen( $prefix ) )
 			: $merchant_order_no;
-		// pre-R numeric portion = order_id
 		if ( ! preg_match( '/^(\d+)R/', $without, $m ) ) {
 			return null;
 		}
@@ -119,27 +117,26 @@ final class Helper extends AbstractCredentialHelper {
 		if ( false === $plain ) {
 			return null;
 		}
-		// PKCS#7 manual unpad
 		$slast  = ord( substr( $plain, -1 ) );
 		$slastc = chr( $slast );
 		if ( preg_match( '/' . preg_quote( $slastc, '/' ) . '{' . $slast . '}$/', $plain ) ) {
 			$plain = substr( $plain, 0, -$slast );
 		}
-		// NewebPay 回 JSON string 包 TradeInfo decrypted 內容
 		$json = json_decode( $plain, true );
 		if ( is_array( $json ) ) {
 			return $json;
 		}
-		// fallback: parse_str（form-encoded）
 		parse_str( $plain, $out );
 		return is_array( $out ) ? $out : null;
 	}
 
 	public static function generate_trade_sha( string $hex_trade_info ): string {
-		return strtoupper( hash(
-			'sha256',
-			'HashKey=' . self::hash_key() . '&' . $hex_trade_info . '&HashIV=' . self::hash_iv()
-		) );
+		return strtoupper(
+			hash(
+				'sha256',
+				'HashKey=' . self::hash_key() . '&' . $hex_trade_info . '&HashIV=' . self::hash_iv()
+			)
+		);
 	}
 
 	public static function verify_trade_sha( string $trade_info_hex, string $trade_sha ): bool {
@@ -147,20 +144,24 @@ final class Helper extends AbstractCredentialHelper {
 		return hash_equals( $expected, strtoupper( $trade_sha ) );
 	}
 
-	
+
 	public static function generate_query_check_value( array $args ): string {
-		$str = http_build_query( [
-			'Amt'             => $args['Amt'],
-			'MerchantID'      => $args['MerchantID'],
-			'MerchantOrderNo' => $args['MerchantOrderNo'],
-		] );
-		return strtoupper( hash(
-			'sha256',
-			'IV=' . self::hash_iv() . '&' . $str . '&Key=' . self::hash_key()
-		) );
+		$str = http_build_query(
+			[
+				'Amt'             => $args['Amt'],
+				'MerchantID'      => $args['MerchantID'],
+				'MerchantOrderNo' => $args['MerchantOrderNo'],
+			]
+		);
+		return strtoupper(
+			hash(
+				'sha256',
+				'IV=' . self::hash_iv() . '&' . $str . '&Key=' . self::hash_key()
+			)
+		);
 	}
 
-	
+
 	public static function generate_notify_check_code( array $args ): string {
 		$pick = [
 			'Amt'             => $args['Amt'],
@@ -170,15 +171,15 @@ final class Helper extends AbstractCredentialHelper {
 		];
 		ksort( $pick );
 		$str = http_build_query( $pick );
-		return strtoupper( hash(
-			'sha256',
-			'HashIV=' . self::hash_iv() . '&' . $str . '&HashKey=' . self::hash_key()
-		) );
+		return strtoupper(
+			hash(
+				'sha256',
+				'HashIV=' . self::hash_iv() . '&' . $str . '&HashKey=' . self::hash_key()
+			)
+		);
 	}
 
 	public static function is_sandbox(): bool {
 		return 'yes' === get_option( 'moksafowo_newebpay_sandbox_enabled', 'no' );
 	}
-
-	// log_enabled / log inherited from AbstractCredentialHelper
 }

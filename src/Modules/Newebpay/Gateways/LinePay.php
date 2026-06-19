@@ -21,6 +21,6 @@ final class LinePay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '透過藍新中介整合的 LINE Pay — 不需另申請 LINE Pay 商店帳號。跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '使用 LINE Pay 付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

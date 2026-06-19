@@ -40,7 +40,6 @@ final class OrderInfoLayout {
 			return;
 		}
 
-
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$cards = (array) apply_filters( 'moksafowo_order_info_cards', [], $order );
 
@@ -85,7 +84,12 @@ final class OrderInfoLayout {
 	 * @return array<string, array<string, bool>>
 	 */
 	private static function card_allowlist(): array {
-		$common = [ 'id' => true, 'class' => true, 'style' => true, 'title' => true ];
+		$common = [
+			'id'    => true,
+			'class' => true,
+			'style' => true,
+			'title' => true,
+		];
 		$data   = [ 'data-*' => true ];
 		return [
 			'div'      => array_merge( $common, $data ),
@@ -98,7 +102,13 @@ final class OrderInfoLayout {
 			'tbody'    => $common,
 			'tr'       => $common,
 			'td'       => array_merge( $common, [ 'colspan' => true ] ),
-			'th'       => array_merge( $common, [ 'colspan' => true, 'scope' => true ] ),
+			'th'       => array_merge(
+				$common,
+				[
+					'colspan' => true,
+					'scope'   => true,
+				]
+			),
 			'ul'       => $common,
 			'li'       => $common,
 			'code'     => $common,
@@ -107,17 +117,93 @@ final class OrderInfoLayout {
 			'small'    => $common,
 			'br'       => [],
 			'hr'       => $common,
-			'a'        => array_merge( $common, $data, [ 'href' => true, 'target' => true, 'rel' => true ] ),
-			'button'   => array_merge( $common, $data, [ 'type' => true, 'disabled' => true ] ),
-			'form'     => array_merge( $common, [ 'method' => true, 'action' => true ] ),
+			'a'        => array_merge(
+				$common,
+				$data,
+				[
+					'href'   => true,
+					'target' => true,
+					'rel'    => true,
+				]
+			),
+			'button'   => array_merge(
+				$common,
+				$data,
+				[
+					'type'     => true,
+					'disabled' => true,
+				]
+			),
+			'form'     => array_merge(
+				$common,
+				[
+					'method' => true,
+					'action' => true,
+				]
+			),
 			'label'    => array_merge( $common, [ 'for' => true ] ),
-			'input'    => array_merge( $common, $data, [ 'type' => true, 'name' => true, 'value' => true, 'placeholder' => true, 'readonly' => true, 'disabled' => true, 'checked' => true, 'maxlength' => true, 'size' => true ] ),
-			'select'   => array_merge( $common, $data, [ 'name' => true, 'disabled' => true ] ),
-			'option'   => [ 'value' => true, 'selected' => true, 'disabled' => true ],
-			'textarea' => array_merge( $common, [ 'name' => true, 'rows' => true, 'cols' => true, 'placeholder' => true, 'readonly' => true ] ),
-			'svg'      => [ 'xmlns' => true, 'viewbox' => true, 'width' => true, 'height' => true, 'fill' => true, 'aria-hidden' => true, 'style' => true ],
-			'path'     => [ 'd' => true, 'fill' => true, 'fill-rule' => true, 'clip-rule' => true ],
-			'img'      => array_merge( $common, [ 'src' => true, 'alt' => true, 'width' => true, 'height' => true ] ),
+			'input'    => array_merge(
+				$common,
+				$data,
+				[
+					'type'        => true,
+					'name'        => true,
+					'value'       => true,
+					'placeholder' => true,
+					'readonly'    => true,
+					'disabled'    => true,
+					'checked'     => true,
+					'maxlength'   => true,
+					'size'        => true,
+				]
+			),
+			'select'   => array_merge(
+				$common,
+				$data,
+				[
+					'name'     => true,
+					'disabled' => true,
+				]
+			),
+			'option'   => [
+				'value'    => true,
+				'selected' => true,
+				'disabled' => true,
+			],
+			'textarea' => array_merge(
+				$common,
+				[
+					'name'        => true,
+					'rows'        => true,
+					'cols'        => true,
+					'placeholder' => true,
+					'readonly'    => true,
+				]
+			),
+			'svg'      => [
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'fill'        => true,
+				'aria-hidden' => true,
+				'style'       => true,
+			],
+			'path'     => [
+				'd'         => true,
+				'fill'      => true,
+				'fill-rule' => true,
+				'clip-rule' => true,
+			],
+			'img'      => array_merge(
+				$common,
+				[
+					'src'    => true,
+					'alt'    => true,
+					'width'  => true,
+					'height' => true,
+				]
+			),
 		];
 	}
 
@@ -130,15 +216,15 @@ final class OrderInfoLayout {
 	}
 
 	private static function default_placeholder( string $slot, \WC_Order $order ): string {
-		$method = (string) $order->get_payment_method();
+		$method       = (string) $order->get_payment_method();
 		$method_title = (string) $order->get_payment_method_title();
 
 		if ( 'payment' === $slot ) {
 			// 貨到付款 — 走通用 COD 卡片
 			if ( 'cod' === $method ) {
-				$amount = (int) round( (float) $order->get_total() );
+				$amount   = (int) round( (float) $order->get_total() );
 				$shipping = $order->get_shipping_methods();
-				$is_cvs = false;
+				$is_cvs   = false;
 				foreach ( $shipping as $sm ) {
 					if ( str_contains( (string) $sm->get_method_id(), '_cvs_' ) ) {
 						$is_cvs = true;
@@ -162,7 +248,7 @@ final class OrderInfoLayout {
 			// 其他 gateway — 區分「mowp 模組但 card 未實作」vs「完全外掛 gateway」
 			if ( '' !== $method_title ) {
 				$is_mowp = str_starts_with( $method, 'moksafowo_' ) || 'moksafowo-linepay' === $method;
-				$note = $is_mowp
+				$note    = $is_mowp
 					? __( '此付款方式由 mowp 處理但詳情卡尚未實作。', 'mo-ectools' )
 					: __( '此付款方式未由 mowp 處理，無額外資訊可顯示。', 'mo-ectools' );
 				return sprintf(
@@ -183,7 +269,7 @@ final class OrderInfoLayout {
 			}
 			// 區分「mowp 物流模組但 card 未實作」vs「完全外掛 method」
 			$is_mowp = false;
-			$titles = [];
+			$titles  = [];
 			foreach ( $methods as $m ) {
 				$mid = (string) $m->get_method_id();
 				if ( str_starts_with( $mid, 'moksafowo_' ) ) {

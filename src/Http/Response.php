@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 final class Response {
 
 	public function __construct(
-	public readonly int $status,
-	public readonly string $body,
-	public readonly mixed $headers
+		public readonly int $status,
+		public readonly string $body,
+		public readonly mixed $headers
 	) {}
 
 	public function ok(): bool {
@@ -26,7 +26,7 @@ final class Response {
 	public function form(): array {
 		$out = [];
 		parse_str( $this->body, $out );
-		
+
 		return $out;
 	}
 

@@ -45,20 +45,14 @@ final class Module extends AbstractModule {
 	public function boot(): void {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
 
-		// 物流 IPN 接 NewebPay 物流貨態回傳（若商家有設定 NotifyURL）
 		add_action( 'woocommerce_api_moksafowo_newebpay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
-
-		// CVS 取貨地址不需要收件電話 / first_name / last_name 必填
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
-
-		// 批次列印託運單 — 走 NPA-B54 API（PickupNotice 保留為無建單時 fallback）
+		// 批次列印走 NPA-B54（PickupNotice 保留為無建單 fallback）
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 		Operations\PickupNotice::init();
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_create', [ __CLASS__, 'ajax_create_shipment' ] );
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_query', [ __CLASS__, 'ajax_query_shipment' ] );
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
-
-		// NPA-B51 結帳選店流程
 		Frontend\StoreSelector::init();
 
 		if ( is_admin() ) {
@@ -67,18 +61,17 @@ final class Module extends AbstractModule {
 	}
 
 	public static function register_batch_print( array $providers ): array {
-		$titles = [
+		$titles                    = [
 			'moksafowo_newebpay_shipping_cvs' => __( '藍新超商取貨', 'mo-ectools' ),
 		];
-		// record_count = 1 if order has LgsNo（已建單），可送 NPA-B54 列印；無建單就不可印
-		$counter = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
+		$counter                   = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
 		$providers['newebpay-cvs'] = [
 			'label'          => __( '藍新 物流託運單', 'mo-ectools' ),
 			'category'       => 'cvs',
 			'method_ids'     => $titles,
 			'handler'        => [ Operations\PrintLabel::class, 'render' ],
 			'record_counter' => $counter,
-			// 藍新 NPA-B54 printLabel 不分紙張，回傳統一格式 PDF — A6 規格實質無效。
+			// NPA-B54 回傳統一 PDF，A6 規格無效
 			'paper_modes'    => [ '1' ],
 		];
 		return $providers;
@@ -96,13 +89,15 @@ final class Module extends AbstractModule {
 		}
 		$result = Operations\CreateShipment::run( $order );
 		if ( $result['ok'] ) {
-			wp_send_json_success( [
-				'message' => sprintf(
-					/* translators: %s: lgs_no */
-					__( '藍新物流單建立成功（單號 %s）', 'mo-ectools' ),
-					$result['lgs_no']
-				),
-			] );
+			wp_send_json_success(
+				[
+					'message' => sprintf(
+						/* translators: %s: lgs_no */
+						__( '藍新物流單建立成功（單號 %s）', 'mo-ectools' ),
+						$result['lgs_no']
+					),
+				]
+			);
 		}
 		wp_send_json_error( [ 'message' => $result['message'] ] );
 	}
@@ -126,26 +121,29 @@ final class Module extends AbstractModule {
 			/* translators: %s: error message */
 			wp_send_json_error( [ 'message' => sprintf( __( '查詢失敗：%s', 'mo-ectools' ), $result['message'] ) ] );
 		}
-		$data = $result['data'] ?? [];
-		// 寫回最新 retld 對應的 status
+		$data   = $result['data'] ?? [];
 		$retld  = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
 		$mapped = '' !== $retld ? Operations\StatusMapper::map( $retld ) : null;
 		if ( null !== $mapped ) {
 			$order->update_meta_data( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_SHIPPING_STATUS, $mapped['label'] );
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: status label */
-				__( '查詢藍新物流：%s', 'mo-ectools' ),
-				$mapped['label']
-			) );
+					__( '查詢藍新物流：%s', 'mo-ectools' ),
+					$mapped['label']
+				)
+			);
 			$order->save();
 		}
-		wp_send_json_success( [
-			'message' => sprintf(
-				/* translators: %s: status */
-				__( '查詢成功 — %s', 'mo-ectools' ),
-				null !== $mapped ? $mapped['label'] : ( $data['RetString'] ?? 'OK' )
-			),
-		] );
+		wp_send_json_success(
+			[
+				'message' => sprintf(
+					/* translators: %s: status */
+					__( '查詢成功 — %s', 'mo-ectools' ),
+					null !== $mapped ? $mapped['label'] : ( $data['RetString'] ?? 'OK' )
+				),
+			]
+		);
 	}
 
 	public static function ajax_trace_shipment(): void {
@@ -173,7 +171,7 @@ final class Module extends AbstractModule {
 		foreach ( $history as $h ) {
 			$retld  = (string) ( $h['Retld'] ?? $h['RetId'] ?? '' );
 			$mapped = '' !== $retld ? Operations\StatusMapper::map( $retld ) : null;
-			$out[] = [
+			$out[]  = [
 				'event_time' => (string) ( $h['EventTime'] ?? '' ),
 				'label'      => null !== $mapped ? $mapped['label'] : (string) ( $h['RetString'] ?? '' ),
 				'retld'      => $retld,

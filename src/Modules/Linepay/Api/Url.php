@@ -24,11 +24,21 @@ final class Url {
 	public static function request_uri( string $type, array $args = [] ): string {
 		$uri = '';
 		switch ( $type ) {
-			case \Moksafowo_LinePay_Const::REQUEST_TYPE_REQUEST: $uri = \Moksafowo_LinePay_Const::URI_REQUEST; break;
-			case \Moksafowo_LinePay_Const::REQUEST_TYPE_CONFIRM: $uri = \Moksafowo_LinePay_Const::URI_CONFIRM; break;
-			case \Moksafowo_LinePay_Const::REQUEST_TYPE_DETAILS: $uri = \Moksafowo_LinePay_Const::URI_DETAILS; break;
-			case \Moksafowo_LinePay_Const::REQUEST_TYPE_CHECK:   $uri = \Moksafowo_LinePay_Const::URI_CHECK;   break;
-			case \Moksafowo_LinePay_Const::REQUEST_TYPE_REFUND:  $uri = \Moksafowo_LinePay_Const::URI_REFUND;  break;
+			case \Moksafowo_LinePay_Const::REQUEST_TYPE_REQUEST:
+				$uri = \Moksafowo_LinePay_Const::URI_REQUEST;
+				break;
+			case \Moksafowo_LinePay_Const::REQUEST_TYPE_CONFIRM:
+				$uri = \Moksafowo_LinePay_Const::URI_CONFIRM;
+				break;
+			case \Moksafowo_LinePay_Const::REQUEST_TYPE_DETAILS:
+				$uri = \Moksafowo_LinePay_Const::URI_DETAILS;
+				break;
+			case \Moksafowo_LinePay_Const::REQUEST_TYPE_CHECK:
+				$uri = \Moksafowo_LinePay_Const::URI_CHECK;
+				break;
+			case \Moksafowo_LinePay_Const::REQUEST_TYPE_REFUND:
+				$uri = \Moksafowo_LinePay_Const::URI_REFUND;
+				break;
 		}
 		foreach ( $args as $key => $value ) {
 			$uri = str_replace( '{' . $key . '}', (string) $value, $uri );

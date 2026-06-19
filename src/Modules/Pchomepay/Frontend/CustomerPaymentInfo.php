@@ -15,7 +15,7 @@ final class CustomerPaymentInfo {
 		PaymentInfoBox::register( [ __CLASS__, 'resolve' ] );
 	}
 
-	
+
 	public static function resolve( \WC_Order $order ): array {
 		if ( $order->is_paid() ) {
 			return [];
@@ -29,14 +29,28 @@ final class CustomerPaymentInfo {
 			$rows = [];
 			$bank = (string) $order->get_meta( Keys::PCHOMEPAY_BANK_CODE );
 			if ( '' !== $bank ) {
-				$rows[] = [ 'label' => __( '銀行代碼', 'mo-ectools' ), 'value' => $bank ];
+				$rows[] = [
+					'label' => __( '銀行代碼', 'mo-ectools' ),
+					'value' => $bank,
+				];
 			}
-			$rows[] = [ 'label' => __( '虛擬帳號', 'mo-ectools' ), 'value' => $virtual_account ];
+			$rows[] = [
+				'label' => __( '虛擬帳號', 'mo-ectools' ),
+				'value' => $virtual_account,
+			];
 			return self::append_expire( $order, $rows );
 		}
 
 		if ( '' !== $pincode ) {
-			return self::append_expire( $order, [ [ 'label' => __( '超商繳費代碼', 'mo-ectools' ), 'value' => $pincode ] ] );
+			return self::append_expire(
+				$order,
+				[
+					[
+						'label' => __( '超商繳費代碼', 'mo-ectools' ),
+						'value' => $pincode,
+					],
+				]
+			);
 		}
 
 		if ( '' !== $barcode1 ) {
@@ -44,8 +58,11 @@ final class CustomerPaymentInfo {
 			foreach ( [ Keys::PCHOMEPAY_BARCODE_1, Keys::PCHOMEPAY_BARCODE_2, Keys::PCHOMEPAY_BARCODE_3 ] as $i => $key ) {
 				$bc = (string) $order->get_meta( $key );
 				if ( '' !== $bc ) {
-					/* translators: %d: barcode segment index */
-					$rows[] = [ 'label' => sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 ), 'value' => $bc ];
+					$rows[] = [
+						/* translators: %d: barcode segment index */
+						'label' => sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 ),
+						'value' => $bc,
+					];
 				}
 			}
 			return self::append_expire( $order, $rows );
@@ -54,7 +71,7 @@ final class CustomerPaymentInfo {
 		return [];
 	}
 
-	
+
 	private static function append_expire( \WC_Order $order, array $rows ): array {
 		$exp = (string) $order->get_meta( Keys::PCHOMEPAY_EXPIRE_DATE );
 		if ( '' === $exp || empty( $rows ) ) {
@@ -64,7 +81,10 @@ final class CustomerPaymentInfo {
 		if ( 1 === preg_match( '/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/', $exp, $m ) ) {
 			$exp = "{$m[1]}/{$m[2]}/{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}";
 		}
-		$rows[] = [ 'label' => __( '繳費期限', 'mo-ectools' ), 'value' => $exp ];
+		$rows[] = [
+			'label' => __( '繳費期限', 'mo-ectools' ),
+			'value' => $exp,
+		];
 		return $rows;
 	}
 }

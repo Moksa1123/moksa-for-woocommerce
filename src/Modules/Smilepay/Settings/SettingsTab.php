@@ -12,7 +12,7 @@ final class SettingsTab {
 			[
 				'title' => __( '商家憑證', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '從 SmilePay 後台「會員專區 → 系統識別資料」取得 Dcvc / Rvg2c / Verify_key / 商家驗證參數 (Mid)。SmilePay 沒有公開測試 host，沙箱與正式同網域，由 Dcvc 區分。', 'mo-ectools' ),
+				'desc'  => __( '從 SmilePay 後台「會員專區 → 系統識別資料」取得 Dcvc / Rvg2c / Verify_key / 商家驗證參數 (Mid)。', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_section',
 			],
 			[
@@ -41,7 +41,7 @@ final class SettingsTab {
 				'title' => __( 'Mid — 商家驗證參數', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_mid',
 				'type'  => 'text',
-				'desc'  => __( '回傳驗證用（計算 Mid_smilepay 防偽造）。留空則略過回傳簽章驗證（不建議）。', 'mo-ectools' ),
+				'desc'  => __( '用於驗證付款回傳結果。留空則略過驗證（不建議）。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -58,7 +58,7 @@ final class SettingsTab {
 				'id'       => 'moksafowo_smilepay_installment',
 				'type'     => 'text',
 				'default'  => '3',
-				'desc_tip' => __( '逗號分隔（例 3,6,12）。信用卡分期 gateway 會使用第一個有效期數。', 'mo-ectools' ),
+				'desc_tip' => __( '逗號分隔（例 3,6,12）。信用卡分期會使用第一個有效期數。', 'mo-ectools' ),
 			],
 			[
 				'title'             => __( 'ATM 繳款期限（天）', 'mo-ectools' ),
@@ -66,7 +66,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 7,
 				'desc_tip'          => __( '顧客取得虛擬帳號後幾天內須完成付款（1-720）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 720, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 720,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( '超商條碼繳款期限（天）', 'mo-ectools' ),
@@ -74,7 +78,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 7,
 				'desc_tip'          => __( '顧客取得繳費條碼後幾天內須完成付款（1-50）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 50, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 50,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( 'ibon 繳款期限（天）', 'mo-ectools' ),
@@ -82,7 +90,11 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 6,
 				'desc_tip'          => __( '顧客取得繳費代碼後幾天內須完成付款（1-6）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 6, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 6,
+					'step' => 1,
+				],
 			],
 			[
 				'title'             => __( 'FamiPort 繳款期限（天）', 'mo-ectools' ),
@@ -90,14 +102,18 @@ final class SettingsTab {
 				'type'              => 'number',
 				'default'           => 6,
 				'desc_tip'          => __( '顧客取得繳費代碼後幾天內須完成付款（1-6）。', 'mo-ectools' ),
-				'custom_attributes' => [ 'min' => 1, 'max' => 6, 'step' => 1 ],
+				'custom_attributes' => [
+					'min'  => 1,
+					'max'  => 6,
+					'step' => 1,
+				],
 			],
 			[
-				'title'   => __( 'Debug 日誌', 'mo-ectools' ),
+				'title'   => __( '偵錯日誌', 'mo-ectools' ),
 				'id'      => 'moksafowo_smilepay_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌（來源 smilepay-payment）。憑證不會寫入日誌。', 'mo-ectools' ),
+				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -107,7 +123,7 @@ final class SettingsTab {
 			[
 				'title' => __( '啟用的付款方式', 'mo-ectools' ),
 				'type'  => 'title',
-				'desc'  => __( '勾選要在結帳頁顯示的 SmilePay 付款方式。各付款方式的標題 / 描述 / 啟用另在「WooCommerce → 付款方式」分頁設定。', 'mo-ectools' ),
+				'desc'  => __( '勾選要在結帳頁顯示的 SmilePay 付款方式。各付款方式的名稱 / 描述另在「WooCommerce → 付款方式」分頁設定。', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_methods_section',
 			],
 			[
@@ -117,15 +133,15 @@ final class SettingsTab {
 				'class'   => 'wc-enhanced-select',
 				'css'     => 'width: 400px;',
 				'options' => [
-					'moksafowo_smilepay_credit'             => __( '信用卡', 'mo-ectools' ),
+					'moksafowo_smilepay_credit'   => __( '信用卡', 'mo-ectools' ),
 					'moksafowo_smilepay_credit_installment' => __( '信用卡分期', 'mo-ectools' ),
-					'moksafowo_smilepay_atm'                => __( 'ATM 虛擬帳號', 'mo-ectools' ),
-					'moksafowo_smilepay_barcode'            => __( '四大超商條碼', 'mo-ectools' ),
-					'moksafowo_smilepay_ibon'               => __( 'ibon 代碼繳費', 'mo-ectools' ),
-					'moksafowo_smilepay_famiport'           => __( 'FamiPort 代碼繳費', 'mo-ectools' ),
-					'moksafowo_smilepay_unionpay'           => __( '銀聯線上刷卡', 'mo-ectools' ),
+					'moksafowo_smilepay_atm'      => __( 'ATM 虛擬帳號', 'mo-ectools' ),
+					'moksafowo_smilepay_barcode'  => __( '四大超商條碼', 'mo-ectools' ),
+					'moksafowo_smilepay_ibon'     => __( 'ibon 代碼繳費', 'mo-ectools' ),
+					'moksafowo_smilepay_famiport' => __( 'FamiPort 代碼繳費', 'mo-ectools' ),
+					'moksafowo_smilepay_unionpay' => __( '銀聯線上刷卡', 'mo-ectools' ),
 				],
-				'desc'    => __( '勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（共 7 種，預設全部未勾選）。', 'mo-ectools' ),
+				'desc'    => __( '勾選的付款方式才會出現在結帳頁，未勾選不會出現。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

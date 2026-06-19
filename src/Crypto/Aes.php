@@ -9,7 +9,11 @@ defined( 'ABSPATH' ) || exit;
 final class Aes {
 
 	public static function encrypt_cbc_hex( string $plain, string $key, string $iv ): string {
-		$padded = self::pkcs7_pad( $plain, 32 );
+		// AES 的 block size 一律 16 bytes(AES-256 指金鑰 256-bit,block 仍 128-bit)。
+		// 原本 pad 到 32 會產生 >16 的 PKCS7 padding 量,NewebPay / ezPay 伺服器用標準
+		// 16-byte PKCS7 解 padding 時(視 query 長度)會判定無效 → 回「加密資料有誤」。
+		// 官方範例即 openssl_encrypt(..., OPENSSL_RAW_DATA, ...)(= OpenSSL 內建 16-byte PKCS7)。
+		$padded = self::pkcs7_pad( $plain, 16 );
 		$bin    = openssl_encrypt(
 			$padded,
 			'AES-256-CBC',
@@ -41,7 +45,7 @@ final class Aes {
 		return self::pkcs7_unpad( $plain );
 	}
 
-	
+
 	public static function encrypt_gcm( string $plain, string $key, string $iv, string $aad = '' ): array {
 		$tag = '';
 		$bin = openssl_encrypt(

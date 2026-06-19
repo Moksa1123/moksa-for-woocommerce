@@ -21,6 +21,6 @@ final class SamsungPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( 'Samsung 手機上使用 Samsung Pay 信用卡 token 化付款，跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( 'Samsung 手機上使用 Samsung Pay 付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

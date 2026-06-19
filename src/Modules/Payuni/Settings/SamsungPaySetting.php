@@ -1,7 +1,7 @@
 <?php
 
 
- defined( 'ABSPATH' ) || exit;
+defined( 'ABSPATH' ) || exit;
 
 
 return array(
@@ -16,7 +16,7 @@ return array(
 		'title'       => __( '結帳頁顯示名稱', 'mo-ectools' ),
 		'type'        => 'text',
 		'description' => __( '顧客在結帳頁看到的名稱。', 'mo-ectools' ),
-		'default'     => __( 'PAYUNi  Samsung Pay Payment', 'mo-ectools' ),
+		'default'     => __( 'PAYUNi Samsung Pay Payment', 'mo-ectools' ),
 		'desc_tip'    => true,
 	),
 	'description'                => array(

@@ -2,8 +2,6 @@
 
 namespace MoksaWeb\Mowc\Modules\PayuniShipping\Settings;
 
-
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -11,51 +9,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 return array(
 	'title'                    => array(
-		'title'       => __( 'Title', 'mo-ectools' ),
+		'title'       => __( '配送方式名稱', 'mo-ectools' ),
 		'type'        => 'text',
-		'description' => __( 'This controls the title which the user sees during checkout.', 'mo-ectools' ),
-		'default'     => __( 'PAYUNi Shipping 7-11 C2C Freeze', 'mo-ectools' ),
+		'description' => __( '結帳頁顯示給顧客看的名稱。', 'mo-ectools' ),
+		'default'     => __( 'PAYUNi 7-11 超商取貨冷凍（個人寄件）', 'mo-ectools' ),
 		'desc_tip'    => true,
 	),
 	'description'              => array(
-		'title'       => __( 'Description', 'mo-ectools' ),
+		'title'       => __( '配送方式說明', 'mo-ectools' ),
 		'type'        => 'textarea',
-		'description' => __( 'This controls the description which the user sees during checkout.', 'mo-ectools' ),
+		'description' => __( '結帳頁顯示給顧客看的補充說明。', 'mo-ectools' ),
 		'desc_tip'    => true,
 	),
 	'cost'                     => array(
-		'title'   => __( 'Shipping Cost', 'mo-ectools' ),
+		'title'   => __( '運費', 'mo-ectools' ),
 		'type'    => 'number',
 		'default' => 0,
 		'min'     => 0,
 		'step'    => 1,
 	),
 	'free_shipping_requires'   => array(
-		'title'   => __( 'Free shipping requires', 'mo-ectools' ),
+		'title'   => __( '免運條件', 'mo-ectools' ),
 		'type'    => 'select',
 		'class'   => 'wc-enhanced-select',
 		'default' => '',
 		'options' => array(
 			''           => __( '不啟用免運', 'mo-ectools' ),
-			'coupon'     => __( 'A valid free shipping coupon', 'mo-ectools' ),
-			'min_amount' => __( 'A minimum order amount', 'mo-ectools' ),
-			'either'     => __( 'A minimum order amount OR a coupon', 'mo-ectools' ),
-			'both'       => __( 'A minimum order amount AND a coupon', 'mo-ectools' ),	
+			'coupon'     => __( '使用免運優惠券', 'mo-ectools' ),
+			'min_amount' => __( '訂單滿額', 'mo-ectools' ),
+			'either'     => __( '訂單滿額或使用優惠券', 'mo-ectools' ),
+			'both'       => __( '訂單滿額且使用優惠券', 'mo-ectools' ),
 		),
 	),
 	'free_shipping_min_amount' => array(
-		'title'       => __( 'Minimum order amount for free shipping', 'mo-ectools' ),
+		'title'       => __( '免運最低訂單金額', 'mo-ectools' ),
 		'type'        => 'price',
 		'default'     => 0,
 		'placeholder' => wc_format_localized_price( '0' ),
-		'description' => __( 'Users will need to spend this amount to get free shipping.', 'mo-ectools' ),
+		'description' => __( '訂單滿這個金額才免運。', 'mo-ectools' ),
 		'desc_tip'    => true,
 	),
 	'ignore_discounts'         => array(
-		'title'       => __( 'Coupons discounts', 'mo-ectools' ),
-		'label'       => __( 'Apply minimum order rule before coupon discount', 'mo-ectools' ),
+		'title'       => __( '優惠券折扣', 'mo-ectools' ),
+		'label'       => __( '以折扣前金額判斷是否滿額免運', 'mo-ectools' ),
 		'type'        => 'checkbox',
-		'description' => __( 'If checked, free shipping would be available based on pre-discount order amount.', 'mo-ectools' ),
+		'description' => __( '勾選後，免運門檻以套用優惠券折扣前的訂單金額計算。', 'mo-ectools' ),
 		'default'     => 'yes',
 		'desc_tip'    => true,
 	),

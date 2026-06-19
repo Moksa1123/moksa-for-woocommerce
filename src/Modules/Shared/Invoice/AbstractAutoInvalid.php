@@ -27,7 +27,7 @@ abstract class AbstractAutoInvalid {
 
 	public static function schedule( int $order_id ): void {
 		if ( ! function_exists( 'as_schedule_single_action' ) ) {
-	static::run( $order_id );
+			static::run( $order_id );
 			return;
 		}
 		$hook = static::hook_name();
@@ -49,7 +49,7 @@ abstract class AbstractAutoInvalid {
 				sprintf(
 					/* translators: 1: provider label */
 					__( '%1$s 發票自動作廢已取消（訂單已切回非取消 / 退款狀態）。', 'mo-ectools' ),
-	static::provider_label()
+					static::provider_label()
 				)
 			);
 			$order->save();
@@ -60,7 +60,7 @@ abstract class AbstractAutoInvalid {
 		$scheduled_at = '' !== static::scheduled_meta_key() ? (string) $order->get_meta( static::scheduled_meta_key() ) : '';
 
 		if ( static::is_real_invoice_number( $invoice_no ) ) {
-	static::invoke_invalid( $order, static::reason_for_status( $status ) );
+			static::invoke_invalid( $order, static::reason_for_status( $status ) );
 			return;
 		}
 
@@ -77,12 +77,12 @@ abstract class AbstractAutoInvalid {
 					? sprintf(
 						/* translators: 1: provider label */
 						__( '%1$s 發票延後開立排程已取消（訂單退款 / 取消）。', 'mo-ectools' ),
-	static::provider_label()
+						static::provider_label()
 					)
 					: sprintf(
 						/* translators: 1: provider label */
 						__( '%1$s 發票延後開立排程取消失敗或排程已過期 — 請手動確認 %1$s 後台。', 'mo-ectools' ),
-	static::provider_label()
+						static::provider_label()
 					)
 			);
 			$order->save();

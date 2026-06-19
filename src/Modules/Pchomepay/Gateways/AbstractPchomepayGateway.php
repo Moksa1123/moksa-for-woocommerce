@@ -26,7 +26,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		return Helper::has_credentials();
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
@@ -37,28 +37,34 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		$retry           = '' !== (string) $order->get_meta( Keys::PCHOMEPAY_ORDER_ID );
 		$pchome_order_id = Helper::generate_order_id( (int) $order_id, $retry );
 
-		$args = array_merge( [
-			'order_id'        => $pchome_order_id,
-			'pay_type'        => $this->pay_types(),
-			'amount'          => (int) ceil( (float) $order->get_total() ),
-			'items'           => $this->build_items( $order ),
-			'return_url'      => $order->get_checkout_order_received_url(),
-			'fail_return_url' => $order->get_checkout_payment_url( false ),
-			'notify_url'      => home_url( '/wc-api/moksafowo_pchomepay_payment' ),
-			'buyer_name'      => $order->get_formatted_billing_full_name(),
-			'buyer_email'     => $order->get_billing_email(),
-			'buyer_mobile'    => $order->get_billing_phone(),
-		], $this->extra_params( $order ) );
+		$args = array_merge(
+			[
+				'order_id'        => $pchome_order_id,
+				'pay_type'        => $this->pay_types(),
+				'amount'          => (int) ceil( (float) $order->get_total() ),
+				'items'           => $this->build_items( $order ),
+				'return_url'      => $order->get_checkout_order_received_url(),
+				'fail_return_url' => $order->get_checkout_payment_url( false ),
+				'notify_url'      => home_url( '/wc-api/moksafowo_pchomepay_payment' ),
+				'buyer_name'      => $order->get_formatted_billing_full_name(),
+				'buyer_email'     => $order->get_billing_email(),
+				'buyer_mobile'    => $order->get_billing_phone(),
+			],
+			$this->extra_params( $order )
+		);
 
 		$resp = PaymentRequest::create( $args );
 
-		Helper::log( 'payment created', [
-			'order_id'        => $order_id,
-			'pchome_order_id' => $pchome_order_id,
-			'gateway'         => $this->id,
-			'ok'              => $resp['ok'],
-			'code'            => $resp['code'],
-		] );
+		Helper::log(
+			'payment created',
+			[
+				'order_id'        => $order_id,
+				'pchome_order_id' => $pchome_order_id,
+				'gateway'         => $this->id,
+				'ok'              => $resp['ok'],
+				'code'            => $resp['code'],
+			]
+		);
 
 		if ( ! $resp['ok'] || '' === $resp['payment_url'] ) {
 			wc_add_notice(
@@ -69,7 +75,10 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 				),
 				'error'
 			);
-			return [ 'result' => 'failure', 'redirect' => '' ];
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
 		}
 
 		$order->update_meta_data( Keys::PCHOMEPAY_ORDER_ID, $pchome_order_id );
@@ -129,13 +138,15 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 			);
 		}
 
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: amount, 2: refund id, 3: reason */
-			__( '支付連退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'mo-ectools' ),
-			$amt,
-			$refund_id,
-			$reason ?: __( '無原因', 'mo-ectools' )
-		) );
+				__( '支付連退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'mo-ectools' ),
+				$amt,
+				$refund_id,
+				$reason ?: __( '無原因', 'mo-ectools' )
+			)
+		);
 		$order->save();
 		return true;
 	}

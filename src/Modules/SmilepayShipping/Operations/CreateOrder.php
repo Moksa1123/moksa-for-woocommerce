@@ -16,7 +16,7 @@ final class CreateOrder {
 
 	private const UNIFIED_TCAT_ID = 'moksafowo_smilepay_shipping_tcat';
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		// 從訂單裡識別運送方式 → 決定走 CVS / TCAT / unified-TCat 路徑
 		$method_id = '';
@@ -25,7 +25,10 @@ final class CreateOrder {
 			break;
 		}
 		if ( '' === $method_id ) {
-			return [ 'ok' => false, 'message' => __( '訂單無速買配運送方式。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單無速買配運送方式。', 'mo-ectools' ),
+			];
 		}
 
 		// 寄件人資訊驗證
@@ -45,7 +48,10 @@ final class CreateOrder {
 		$is_cvs  = str_contains( $method_id, '_cvs_' );
 		$is_tcat = str_contains( $method_id, '_tcat_' );
 		if ( ! $is_cvs && ! $is_tcat ) {
-			return [ 'ok' => false, 'message' => __( '不認得此速買配運送方式。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '不認得此速買配運送方式。', 'mo-ectools' ),
+			];
 		}
 
 		// Step 1 — 取 smseid（如果之前沒取過）
@@ -54,7 +60,7 @@ final class CreateOrder {
 			$step1 = self::do_step1_request_smseid( $order, $is_cvs, $method_id );
 			if ( ! $step1['ok'] ) {
 				/* translators: %s: error message */
-				$order->add_order_note( sprintf( __( '速買配 取序號失敗：%s', 'mo-ectools' ), $step1['message'] ) );
+				$order->add_order_note( sprintf( __( '速買配建單失敗：%s', 'mo-ectools' ), $step1['message'] ) );
 				$order->save();
 				return $step1;
 			}
@@ -63,7 +69,10 @@ final class CreateOrder {
 			$order->save();
 		}
 		if ( '' === $smseid ) {
-			return [ 'ok' => false, 'message' => __( 'Step 1 沒取到 smseid。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '速買配建單失敗：未取得物流序號。', 'mo-ectools' ),
+			];
 		}
 
 		// Step 2 — 確認建單
@@ -73,12 +82,15 @@ final class CreateOrder {
 		return self::do_step2_tcat( $order, $smseid, $method_id );
 	}
 
-	
+
 	private static function run_unified_tcat( \WC_Order $order ): array {
 		$method   = self::resolve_order_shipping_method( $order, self::UNIFIED_TCAT_ID );
 		$packages = SplitByTemp::for_order( $order, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], $method instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
 		if ( empty( $packages ) ) {
-			return [ 'ok' => false, 'message' => __( '訂單沒有商品可建立物流單。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單沒有商品可建立物流單。', 'mo-ectools' ),
+			];
 		}
 
 		$is_cod   = 'cod' === (string) $order->get_payment_method();
@@ -105,7 +117,7 @@ final class CreateOrder {
 			}
 
 			// Step 1 — 取 smseid（每包獨立）
-			$args = self::build_smseid_args_for_package( $order, $pkg );
+			$args  = self::build_smseid_args_for_package( $order, $pkg );
 			$step1 = ShippingRequest::request_smseid( $args );
 			if ( ! $step1['ok'] ) {
 				$errors[] = sprintf(
@@ -119,7 +131,7 @@ final class CreateOrder {
 			$smseid = (string) ( $step1['smseid'] ?? '' );
 			if ( '' === $smseid ) {
 				/* translators: %s: temperature layer label */
-				$errors[] = sprintf( __( '溫層 %s 取序號為空。', 'mo-ectools' ), ProductTemp::label( $temp ) );
+				$errors[] = sprintf( __( '溫層 %s 建單失敗：未取得物流序號。', 'mo-ectools' ), ProductTemp::label( $temp ) );
 				continue;
 			}
 
@@ -152,9 +164,12 @@ final class CreateOrder {
 
 		if ( empty( $created ) && empty( $existing ) ) {
 			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'mo-ectools' );
-			$order->add_order_note( __( '速買配 物流單全數建立失敗：', 'mo-ectools' ) . $msg );
+			$order->add_order_note( __( '速買配物流單建立失敗：', 'mo-ectools' ) . $msg );
 			$order->save();
-			return [ 'ok' => false, 'message' => $msg ];
+			return [
+				'ok'      => false,
+				'message' => $msg,
+			];
 		}
 
 		// Append 新 records
@@ -177,28 +192,31 @@ final class CreateOrder {
 			$lines = [];
 			foreach ( $created as $r ) {
 				$lines[] = sprintf(
-					'%s（Pay_zg=%s）— smseid=%s / 託運單號=%s',
+					'%s — 物流序號 %s 託運單號 %s',
 					ProductTemp::label( (int) $r['temp'] ),
-					(string) $r['pay_zg'],
 					(string) $r['smseid'],
 					(string) $r['track_num']
 				);
 			}
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: 1: count, 2: list */
-				__( '速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'mo-ectools' ),
-				count( $created ),
-				"\n" . implode( "\n", $lines )
-			) );
+					__( '速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'mo-ectools' ),
+					count( $created ),
+					"\n" . implode( "\n", $lines )
+				)
+			);
 		} elseif ( ! empty( $created ) ) {
 			$r = $created[0];
-			$order->add_order_note( sprintf(
-				/* translators: 1: temp 2: smseid 3: track_num */
-				__( '速買配 黑貓建單成功 — %1$s（smseid=%2$s 託運單號=%3$s）', 'mo-ectools' ),
-				ProductTemp::label( (int) $r['temp'] ),
-				(string) $r['smseid'],
-				(string) $r['track_num']
-			) );
+			$order->add_order_note(
+				sprintf(
+				/* translators: 1: temp label, 2: smilepay order no, 3: tracking no */
+					__( '速買配黑貓宅配建單成功 — %1$s（物流序號 %2$s 託運單號 %3$s）', 'mo-ectools' ),
+					ProductTemp::label( (int) $r['temp'] ),
+					(string) $r['smseid'],
+					(string) $r['track_num']
+				)
+			);
 		}
 
 		if ( ! empty( $errors ) ) {
@@ -207,7 +225,7 @@ final class CreateOrder {
 
 		$order->save();
 
-		$last = end( $records );
+		$last   = end( $records );
 		$result = [
 			'ok'              => true,
 			'message'         => 'OK',
@@ -237,7 +255,7 @@ final class CreateOrder {
 		};
 	}
 
-	
+
 	private static function build_smseid_args_for_package( \WC_Order $order, array $pkg ): array {
 		$temp     = (int) $pkg['temp'];
 		$pur_name = trim( $order->get_shipping_last_name() . $order->get_shipping_first_name() );
@@ -270,7 +288,7 @@ final class CreateOrder {
 		];
 	}
 
-	
+
 	private static function do_step1_request_smseid( \WC_Order $order, bool $is_cvs, string $method_id ): array {
 		// SmilePay 對應 Pay_zg：78=黑貓常溫 / 79=冷藏 / 80=冷凍 / CVS 是 91 + Pay_subzg
 		// 71/72/73/74 = 7-11/全家/萊爾富/OK C2C 純取貨；FM2/SE2 等是 B2C
@@ -315,7 +333,7 @@ final class CreateOrder {
 		return ShippingRequest::request_smseid( $args );
 	}
 
-	
+
 	private static function do_step2_cvs( \WC_Order $order, string $smseid, string $method_id ): array {
 		$cvs_service_type = Helper::cvs_service_type();
 		[ , $pay_subzg ]  = self::resolve_pay_zg( $method_id );
@@ -324,7 +342,7 @@ final class CreateOrder {
 		$result = ShippingRequest::confirm_cvs( $smseid, $pay_subzg, $cvs_service_type, $is_cod );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			$order->add_order_note( sprintf( __( '速買配 CVS 確認建單失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			$order->add_order_note( sprintf( __( '速買配超商建單失敗：%s', 'mo-ectools' ), $result['message'] ) );
 			$order->save();
 			return $result;
 		}
@@ -333,12 +351,14 @@ final class CreateOrder {
 		if ( ! empty( $result['payment_no'] ) ) {
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_PAY_NO, $result['payment_no'] );
 		}
-		$order->add_order_note( sprintf(
-			/* translators: 1: smseid 2: payment_no */
-			__( '速買配 CVS 建單成功（smseid=%1$s 取貨碼=%2$s）', 'mo-ectools' ),
-			$smseid,
-			$result['payment_no'] ?? $result['eshop_order_no'] ?? '-'
-		) );
+		$order->add_order_note(
+			sprintf(
+			/* translators: 1: smilepay order no, 2: pickup code */
+				__( '速買配超商建單成功（物流序號 %1$s 取貨碼 %2$s）', 'mo-ectools' ),
+				$smseid,
+				$result['payment_no'] ?? $result['eshop_order_no'] ?? '-'
+			)
+		);
 		$order->save();
 		return [
 			'ok'         => true,
@@ -348,9 +368,9 @@ final class CreateOrder {
 		];
 	}
 
-	
+
 	private static function do_step2_tcat( \WC_Order $order, string $smseid, string $method_id ): array {
-		$temp_map = [
+		$temp_map    = [
 			'moksafowo_smilepay_shipping_tcat_normal'  => '0001',
 			'moksafowo_smilepay_shipping_tcat_refrige' => '0002',
 			'moksafowo_smilepay_shipping_tcat_freeze'  => '0003',
@@ -360,18 +380,20 @@ final class CreateOrder {
 		$result = ShippingRequest::confirm_tcat( $smseid, $temperature );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			$order->add_order_note( sprintf( __( '速買配 黑貓 取託運單失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			$order->add_order_note( sprintf( __( '速買配黑貓宅配建單失敗：%s', 'mo-ectools' ), $result['message'] ) );
 			$order->save();
 			return $result;
 		}
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TYPE, 'TCAT' );
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TRACK_NO, $result['track_num'] ?? '' );
-		$order->add_order_note( sprintf(
-			/* translators: 1: smseid 2: track_num */
-			__( '速買配 黑貓建單成功（smseid=%1$s 託運單號=%2$s）', 'mo-ectools' ),
-			$smseid,
-			$result['track_num'] ?? '-'
-		) );
+		$order->add_order_note(
+			sprintf(
+			/* translators: 1: smilepay order no, 2: tracking no */
+				__( '速買配黑貓宅配建單成功（物流序號 %1$s 託運單號 %2$s）', 'mo-ectools' ),
+				$smseid,
+				$result['track_num'] ?? '-'
+			)
+		);
 		$order->save();
 		return [
 			'ok'        => true,
@@ -381,7 +403,7 @@ final class CreateOrder {
 		];
 	}
 
-	
+
 	private static function resolve_order_shipping_method( \WC_Order $order, string $method_id ): ?\WC_Shipping_Method {
 		$map = \MoksaWeb\Mowc\Modules\SmilepayShipping\Module::method_map();
 		if ( ! isset( $map[ $method_id ] ) ) {

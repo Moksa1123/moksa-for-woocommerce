@@ -21,7 +21,7 @@ final class Credentials {
 		$test = self::test_mode_enabled();
 		return self::read_option(
 			$test ? 'moksafowo_payuni_payment_hashkey_test' : 'moksafowo_payuni_payment_hashkey',
-			$test ? 'moksafowo_payuni_payment_hashkey_test'    : 'moksafowo_payuni_payment_hashkey'
+			$test ? 'moksafowo_payuni_payment_hashkey_test' : 'moksafowo_payuni_payment_hashkey'
 		);
 	}
 
@@ -29,7 +29,7 @@ final class Credentials {
 		$test = self::test_mode_enabled();
 		return self::read_option(
 			$test ? 'moksafowo_payuni_payment_hashiv_test' : 'moksafowo_payuni_payment_hashiv',
-			$test ? 'moksafowo_payuni_payment_hashiv_test'    : 'moksafowo_payuni_payment_hashiv'
+			$test ? 'moksafowo_payuni_payment_hashiv_test' : 'moksafowo_payuni_payment_hashiv'
 		);
 	}
 
@@ -37,7 +37,7 @@ final class Credentials {
 		$test = self::test_mode_enabled();
 		return self::read_option(
 			$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id',
-			$test ? 'moksafowo_payuni_payment_merchant_id_test'    : 'moksafowo_payuni_payment_merchant_id'
+			$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id'
 		);
 	}
 

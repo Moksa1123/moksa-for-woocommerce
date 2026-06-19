@@ -70,7 +70,7 @@ final class CardRenderers {
 			}
 		}
 		$provider = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::INVOICE_PROVIDER );
-		$html = '';
+		$html     = '';
 		if ( 'ezpay' === $provider ) {
 			$html = self::render_ezpay_invoice( $order );
 		} elseif ( 'smilepay' === $provider ) {
@@ -134,11 +134,11 @@ final class CardRenderers {
 	}
 
 	private static function render_newebpay( \WC_Order $order ): string {
-		$mtn        = (string) $order->get_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO );
-		$trade_no   = (string) $order->get_meta( Keys::NEWEBPAY_TRADE_NO );
-		$pay_type   = (string) $order->get_meta( Keys::NEWEBPAY_PAYMENT_TYPE );
-		$pay_time   = (string) $order->get_meta( Keys::NEWEBPAY_PAY_TIME );
-		$card4no    = (string) $order->get_meta( Keys::NEWEBPAY_CARD_LAST4 );
+		$mtn      = (string) $order->get_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO );
+		$trade_no = (string) $order->get_meta( Keys::NEWEBPAY_TRADE_NO );
+		$pay_type = (string) $order->get_meta( Keys::NEWEBPAY_PAYMENT_TYPE );
+		$pay_time = (string) $order->get_meta( Keys::NEWEBPAY_PAY_TIME );
+		$card4no  = (string) $order->get_meta( Keys::NEWEBPAY_CARD_LAST4 );
 
 		$method_title = (string) $order->get_payment_method_title();
 
@@ -185,7 +185,11 @@ final class CardRenderers {
 				echo '<span style="font-family:monospace;">' . esc_html( $acct ) . '</span></p>';
 			}
 		} elseif ( 'BARCODE' === $pay_type ) {
-			$barcode_keys = [ 1 => Keys::NEWEBPAY_BARCODE_1, 2 => Keys::NEWEBPAY_BARCODE_2, 3 => Keys::NEWEBPAY_BARCODE_3 ];
+			$barcode_keys = [
+				1 => Keys::NEWEBPAY_BARCODE_1,
+				2 => Keys::NEWEBPAY_BARCODE_2,
+				3 => Keys::NEWEBPAY_BARCODE_3,
+			];
 			for ( $i = 1; $i <= 3; $i++ ) {
 				$bc = (string) $order->get_meta( $barcode_keys[ $i ] );
 				if ( '' !== $bc ) {
@@ -205,13 +209,13 @@ final class CardRenderers {
 	private static function render_linepay( \WC_Order $order ): string {
 		// Linepay 是 fork 模組，meta 用 `_linepay_*`（非 `_moksafowo_linepay_*`）— 已知技術債，
 		// 此卡片直接讀 fork 實際寫入的 key，否則永遠顯示「尚未付款」。
-		$tx          = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
-		$order_id    = '' !== $tx ? (string) $order->get_id() : '';
-		$status      = (string) $order->get_meta( '_moksafowo_linepay_payment_status' );
-		$pay_type    = '';
-		$auth_amt    = (string) $order->get_meta( '_moksafowo_linepay_transaction_balanced_amount' );
-		$auth_at     = '';
-		$refund_tx   = (string) $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
+		$tx        = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
+		$order_id  = '' !== $tx ? (string) $order->get_id() : '';
+		$status    = (string) $order->get_meta( '_moksafowo_linepay_payment_status' );
+		$pay_type  = '';
+		$auth_amt  = (string) $order->get_meta( '_moksafowo_linepay_transaction_balanced_amount' );
+		$auth_at   = '';
+		$refund_tx = (string) $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
 
 		// 沒任何 LinePay 交易資料 → 顯示「尚未付款」（含 checkout-draft 訂單）
 		if ( '' === $tx && '' === $status ) {
@@ -250,15 +254,15 @@ final class CardRenderers {
 	}
 
 	private static function render_ezpay_invoice( \WC_Order $order ): string {
-		$inv         = (string) $order->get_meta( Keys::EZPAY_INVOICE_NUMBER );
-		$rand        = (string) $order->get_meta( Keys::EZPAY_RANDOM_NUM );
-		$issued_at   = (string) $order->get_meta( Keys::EZPAY_CREATE_TIME );
-		$invalid_at  = (string) $order->get_meta( Keys::EZPAY_INVALID_AT );
-		$type        = (string) $order->get_meta( Keys::INVOICE_TYPE );
-		$ubn         = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-		$buyer_name  = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-		$carrier_t   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
-		$carrier_n   = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
+		$inv        = (string) $order->get_meta( Keys::EZPAY_INVOICE_NUMBER );
+		$rand       = (string) $order->get_meta( Keys::EZPAY_RANDOM_NUM );
+		$issued_at  = (string) $order->get_meta( Keys::EZPAY_CREATE_TIME );
+		$invalid_at = (string) $order->get_meta( Keys::EZPAY_INVALID_AT );
+		$type       = (string) $order->get_meta( Keys::INVOICE_TYPE );
+		$ubn        = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+		$buyer_name = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+		$carrier_t  = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
+		$carrier_n  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
 
 		// 沒任何發票 meta（連 type 都沒）— 不顯示卡（讓 placeholder 接手）
 		if ( '' === $inv && '' === $type ) {
@@ -301,7 +305,7 @@ final class CardRenderers {
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
 				echo '<p><strong>' . esc_html__( '載具：', 'mo-ectools' ) . '</strong>' . esc_html( self::ezpay_carrier_label( $carrier_t ) ) . '</p>';
 			}
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立 — 等待自動觸發或商家手動開立。', 'mo-ectools' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'mo-ectools' ) . '</p>';
 		}
 
 		return (string) ob_get_clean();
@@ -325,15 +329,15 @@ final class CardRenderers {
 	}
 
 	private static function render_smilepay_invoice( \WC_Order $order ): string {
-		$inv         = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_NUMBER );
-		$rand        = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_RANDOM );
-		$issued_at   = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_DATE );
-		$invalid_at  = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_INVALID_AT );
-		$type        = (string) $order->get_meta( Keys::INVOICE_TYPE );
-		$ubn         = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-		$buyer_name  = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-		$carrier_t   = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
-		$carrier_n   = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
+		$inv        = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_NUMBER );
+		$rand       = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_RANDOM );
+		$issued_at  = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_DATE );
+		$invalid_at = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_INVALID_AT );
+		$type       = (string) $order->get_meta( Keys::INVOICE_TYPE );
+		$ubn        = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+		$buyer_name = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+		$carrier_t  = (string) $order->get_meta( Keys::INVOICE_CARRIER_TYPE );
+		$carrier_n  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
 
 		if ( '' === $inv && '' === $type ) {
 			return '';
@@ -374,7 +378,7 @@ final class CardRenderers {
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
 				echo '<p><strong>' . esc_html__( '載具：', 'mo-ectools' ) . '</strong>' . esc_html( self::smilepay_carrier_label( $carrier_t ) ) . '</p>';
 			}
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立 — 等待自動觸發或商家手動開立。', 'mo-ectools' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'mo-ectools' ) . '</p>';
 		}
 
 		return (string) ob_get_clean();
@@ -394,10 +398,10 @@ final class CardRenderers {
 		if ( empty( $refunds ) ) {
 			return '';
 		}
-		$total    = (float) $order->get_total( 'edit' );
-		$refunded = (float) $order->get_total_refunded();
-		$net      = $total - $refunded;
-		$is_full  = abs( $net ) < 0.01;
+		$total     = (float) $order->get_total( 'edit' );
+		$refunded  = (float) $order->get_total_refunded();
+		$net       = $total - $refunded;
+		$is_full   = abs( $net ) < 0.01;
 		$net_color = $is_full ? '#d63638' : '#dba617';
 
 		// Batch fetch refund authors — 訂單編輯頁 callback 對每張卡（payment/invoice）都會
@@ -415,10 +419,12 @@ final class CardRenderers {
 		}
 		$authors_by_id = [];
 		if ( ! empty( $author_ids ) ) {
-			$users = get_users( [
-				'include' => array_keys( $author_ids ),
-				'fields'  => [ 'ID', 'display_name' ],
-			] );
+			$users = get_users(
+				[
+					'include' => array_keys( $author_ids ),
+					'fields'  => [ 'ID', 'display_name' ],
+				]
+			);
 			foreach ( $users as $u ) {
 				$authors_by_id[ (int) $u->ID ] = $u;
 			}

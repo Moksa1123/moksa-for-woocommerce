@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 class SettingsTab extends \WC_Settings_Page {
 
-	
+
 	public function __construct() {
 
 		$this->id    = 'moksafowo_payuni';
@@ -32,7 +32,7 @@ class SettingsTab extends \WC_Settings_Page {
 		parent::__construct();
 	}
 
-	
+
 	public function moksafowo_payuni_payment_sections( $sections ) {
 
 		unset( $sections[''] );
@@ -42,9 +42,9 @@ class SettingsTab extends \WC_Settings_Page {
 		return $sections;
 	}
 
-	
+
 	public function get_settings_for_payment_section() {
-		
+
 		$settings = apply_filters(
 			'moksafowo_payuni_payment_settings',
 			array(
@@ -54,12 +54,12 @@ class SettingsTab extends \WC_Settings_Page {
 					'id'    => 'payment_general_setting',
 				),
 				array(
-					'title'   => __( 'Debug 日誌', 'mo-ectools' ),
+					'title'   => __( '偵錯日誌', 'mo-ectools' ),
 					'type'    => 'checkbox',
 					'default' => 'yes',
 					'desc'    => sprintf(
 						/* translators: %s = view logs link */
-						__( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌（來源 <code>mowp-payuni</code>）。 %s', 'mo-ectools' ),
+						__( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。 %s', 'mo-ectools' ),
 						$this->get_log_link()
 					),
 					'id'      => 'moksafowo_payuni_payment_debug_log_enabled',
@@ -77,11 +77,11 @@ class SettingsTab extends \WC_Settings_Page {
 					'id'      => 'moksafowo_payuni_payment_language',
 				),
 				array(
-					'title'    => __( '電子發票', 'mo-ectools' ),
-					'type'     => 'checkbox',
-					'default'  => 'no',
-					'desc'     => __( '啟用 PAYUNi 串接的 Amego 電子發票。需先到 PAYUNi 後台申請 Amego 帳號並啟用發票功能。', 'mo-ectools' ),
-					'id'       => 'moksafowo_payuni_payment_einvoice_enabled',
+					'title'   => __( '電子發票', 'mo-ectools' ),
+					'type'    => 'checkbox',
+					'default' => 'no',
+					'desc'    => __( '啟用 PAYUNi 的電子發票開立。需先到 PAYUNi 後台申請並啟用發票功能。', 'mo-ectools' ),
+					'id'      => 'moksafowo_payuni_payment_einvoice_enabled',
 				),
 				array(
 					'type' => 'sectionend',
@@ -124,7 +124,7 @@ class SettingsTab extends \WC_Settings_Page {
 						'moksafowo_payuni_jkopay'     => __( '街口支付', 'mo-ectools' ),
 						'moksafowo_payuni_credit_red' => __( '信用卡紅利點數', 'mo-ectools' ),
 					),
-					'desc'    => __( '勾選的付款方式才會出現在 WC 付款方式列表，未勾選不會出現（預設全部未勾選）。「合併顯示」模式下此欄位無效。', 'mo-ectools' ),
+					'desc'    => __( '勾選的付款方式才會出現在結帳頁，未勾選不會出現。「合併顯示」模式下此欄位無效。', 'mo-ectools' ),
 					'id'      => 'moksafowo_payuni_enabled_methods',
 				),
 				array(
@@ -143,7 +143,7 @@ class SettingsTab extends \WC_Settings_Page {
 					),
 					'desc'    => sprintf(
 						/* translators: %s = link to WC payment settings */
-						__( '勾選的分期數會在 WC 付款方式列表中各自獨立，仍需到付款方式逐一啟用。 %s', 'mo-ectools' ),
+						__( '勾選的分期數會各自獨立成一個付款方式，仍需到付款方式設定逐一啟用。 %s', 'mo-ectools' ),
 						$this->get_woo_payment_settings_url()
 					),
 					'id'      => 'moksafowo_payuni_payment_installment_number_of_payments',
@@ -206,7 +206,7 @@ class SettingsTab extends \WC_Settings_Page {
 		return $settings;
 	}
 
-	
+
 	public function moksafowo_payuni_redirect_default_tab() {
 
 		global $pagenow;
@@ -229,7 +229,7 @@ class SettingsTab extends \WC_Settings_Page {
 		}
 	}
 
-	
+
 	public function output() {
 		global $current_section;
 
@@ -241,7 +241,7 @@ class SettingsTab extends \WC_Settings_Page {
 		\WC_Admin_Settings::output_fields( $settings );
 	}
 
-	
+
 	public function save() {
 		global $current_section;
 
@@ -253,12 +253,12 @@ class SettingsTab extends \WC_Settings_Page {
 		\WC_Admin_Settings::save_fields( $settings );
 	}
 
-	
+
 	private function get_log_link() {
 		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '" target="_blank">' . __( 'View logs', 'mo-ectools' ) . '</a>';
 	}
 
-	
+
 	private function get_woo_payment_settings_url() {
 		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) . '" target="_blank">' . __( 'Go to Payment Settings', 'mo-ectools' ) . '</a>';
 	}

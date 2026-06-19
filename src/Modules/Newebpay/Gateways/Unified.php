@@ -43,6 +43,6 @@ final class Unified extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '單一入口模式 — 跳轉到藍新收銀台後由顧客自選付款方式（信用卡 / 分期 / ATM / WebATM / 超商代碼 / 超商條碼 / Apple Pay / Google Pay / Samsung Pay / LINE Pay / 玉山 Wallet / 台灣 Pay / TWQR / 支付寶 / 微信 / AFTEE / 銀聯）。', 'mo-ectools' );
+		return __( '跳轉至藍新收銀台，由顧客選擇信用卡、分期、ATM、超商代碼、Apple Pay、LINE Pay 等付款方式。', 'mo-ectools' );
 	}
 }

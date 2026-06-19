@@ -14,25 +14,19 @@ final class BatchPrintAdminUI {
 	private const BULK_ACTION  = 'moksafowo_batchprint_labels';
 
 	public static function init(): void {
-		// 訂單列表 column（HPOS + classic）— 兩種模式都顯示
 		add_filter( 'manage_woocommerce_page_wc-orders_columns', [ __CLASS__, 'register_column' ] );
 		add_action( 'manage_woocommerce_page_wc-orders_custom_column', [ __CLASS__, 'render_column' ], 10, 2 );
 		add_filter( 'manage_edit-shop_order_columns', [ __CLASS__, 'register_column' ] );
 		add_action( 'manage_shop_order_posts_custom_column', [ __CLASS__, 'render_column_classic' ], 10, 2 );
-		// 防止訂單列表新 column 跟 WC 預設 column 互擠（總計 / 來源 斷行）
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_columns_css' ] );
-
-		// 列印輸出頁 — 基本模式 bulk action redirect 的目標（任何請求都註冊）
 		add_action( 'wp_ajax_moksafowo_shipping_batch_print_output', [ __CLASS__, 'render_print_output' ] );
 
 		if ( self::is_advanced() ) {
-			// 進階：工具列「<provider> 標籤」按鈕 + 彈窗（防漏印）
 			add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 			add_action( 'admin_footer', [ __CLASS__, 'render_modal' ] );
 			add_action( 'wp_ajax_moksafowo_shipping_batch_print_list', [ __CLASS__, 'ajax_list' ] );
 			add_action( 'wp_ajax_moksafowo_shipping_batch_print_run', [ __CLASS__, 'ajax_run' ] );
 		} else {
-			// 基本：WooCommerce 內建批次操作下拉（每個 provider 一個動作；選哪個動作就印哪家）
 			add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'register_bulk_actions' ] );
 			add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'register_bulk_actions' ] );
 			add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'handle_bulk_action' ], 10, 3 );
@@ -60,7 +54,6 @@ final class BatchPrintAdminUI {
 	}
 
 	public static function register_column( array $cols ): array {
-		// 在 status 後插「運送方式」+「物流編號」兩欄
 		$new = [];
 		foreach ( $cols as $k => $v ) {
 			$new[ $k ] = $v;
@@ -69,7 +62,6 @@ final class BatchPrintAdminUI {
 				$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
 			}
 		}
-		// fallback: 沒有 order_status 就 append
 		if ( ! isset( $new['moksafowo_shipping_label_no'] ) ) {
 			$new['moksafowo_shipping_method']   = __( '運送方式', 'mo-ectools' );
 			$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
@@ -93,7 +85,7 @@ final class BatchPrintAdminUI {
 			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
-		echo self::format_label_no( self::find_label_no( $order ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses_post( self::format_label_no( self::find_label_no( $order ) ) );
 	}
 
 	public static function render_column_classic( string $column, int $post_id ): void {
@@ -110,12 +102,11 @@ final class BatchPrintAdminUI {
 			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
-		echo self::format_label_no( self::find_label_no( $order ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses_post( self::format_label_no( self::find_label_no( $order ) ) );
 	}
 
 	private static function find_method_label( \WC_Order $order ): string {
-		$registry = BatchPrintRegistry::all();
-		// 先建 method_id → 中文 title 全表
+		$registry    = BatchPrintRegistry::all();
 		$id_to_title = [];
 		foreach ( $registry as $entry ) {
 			foreach ( $entry['method_titles'] ?? [] as $mid => $title ) {
@@ -127,7 +118,6 @@ final class BatchPrintAdminUI {
 			if ( isset( $id_to_title[ $mid ] ) ) {
 				return $id_to_title[ $mid ];
 			}
-			// fallback: order item title (sometimes admin 自訂)
 			$name = (string) $m->get_name();
 			if ( '' !== $name && $name !== $mid ) {
 				return $name;
@@ -140,7 +130,6 @@ final class BatchPrintAdminUI {
 		if ( '' === $no ) {
 			return '—';
 		}
-		// 過長 ID 縮成「前 8 + … + 後 4」並 hover 顯示全文
 		$display = mb_strlen( $no ) > 16 ? mb_substr( $no, 0, 8 ) . '…' . mb_substr( $no, -4 ) : $no;
 		return '<span title="' . esc_attr( $no ) . '" style="font-family:monospace;">' . esc_html( $display ) . '</span>';
 	}
@@ -169,7 +158,6 @@ final class BatchPrintAdminUI {
 	}
 
 	private static function is_orders_screen( string $hook ): bool {
-		// HPOS：'woocommerce_page_wc-orders'；舊式：'edit-shop_order' 在 'edit.php' 上
 		if ( 'woocommerce_page_wc-orders' === $hook ) {
 			return true;
 		}
@@ -190,39 +178,45 @@ final class BatchPrintAdminUI {
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Shipping/assets/js/batch-print.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 		wp_register_script( $handle, MOKSAFOWO_PLUGIN_URL . 'src/Modules/Shipping/assets/js/batch-print.js', [ 'jquery' ], $ver, true );
-		wp_localize_script( $handle, 'moksafowo_shipping_batch_print', [
-			'ajax_url'  => admin_url( 'admin-ajax.php' ),
-			'nonce'     => wp_create_nonce( self::NONCE_ACTION ),
-			'providers' => array_map( static function ( array $p ): array {
-				return [
-					'key'         => $p['key'],
-					'label'       => $p['label'],
-					'category'    => $p['category'],
-					// 預設 ['1', '2'] (A4+A6 都支援)，provider 可宣告 ['1'] 限 A4
-					'paper_modes' => $p['paper_modes'] ?? [ '1', '2' ],
-				];
-			}, array_values( $providers ) ),
-			'i18n'      => [
-				'modal_title' => __( '批次列印', 'mo-ectools' ),
-				'order_no'    => __( '訂單', 'mo-ectools' ),
-				'recipient'   => __( '收件人', 'mo-ectools' ),
-				'method'      => __( '運送方式', 'mo-ectools' ),
-				'status'      => __( '訂單狀態', 'mo-ectools' ),
-				'printable'   => __( '可印', 'mo-ectools' ),
-				'no_orders'   => __( '沒有可列印的訂單。', 'mo-ectools' ),
-				'select_one'  => __( '請至少選擇一筆。', 'mo-ectools' ),
-				/* translators: %d: number of selected orders to print */
-				'print'       => __( '列印 (%d)', 'mo-ectools' ),
-				'cancel'      => __( '取消', 'mo-ectools' ),
-				'loading'     => __( '載入中…', 'mo-ectools' ),
-				'error'       => __( '載入失敗。', 'mo-ectools' ),
-				'yes'         => __( '✓', 'mo-ectools' ),
-				'no'          => __( '—', 'mo-ectools' ),
-				'paper_size'  => __( '紙張：', 'mo-ectools' ),
-				'a4'          => __( 'A4 標準', 'mo-ectools' ),
-				'a6'          => __( 'A6 標籤機', 'mo-ectools' ),
-			],
-		] );
+		wp_localize_script(
+			$handle,
+			'moksafowo_shipping_batch_print',
+			[
+				'ajax_url'  => admin_url( 'admin-ajax.php' ),
+				'nonce'     => wp_create_nonce( self::NONCE_ACTION ),
+				'providers' => array_map(
+					static function ( array $p ): array {
+						return [
+							'key'         => $p['key'],
+							'label'       => $p['label'],
+							'category'    => $p['category'],
+							'paper_modes' => $p['paper_modes'] ?? [ '1', '2' ],
+						];
+					},
+					array_values( $providers )
+				),
+				'i18n'      => [
+					'modal_title' => __( '批次列印', 'mo-ectools' ),
+					'order_no'    => __( '訂單', 'mo-ectools' ),
+					'recipient'   => __( '收件人', 'mo-ectools' ),
+					'method'      => __( '運送方式', 'mo-ectools' ),
+					'status'      => __( '訂單狀態', 'mo-ectools' ),
+					'printable'   => __( '可印', 'mo-ectools' ),
+					'no_orders'   => __( '沒有可列印的訂單。', 'mo-ectools' ),
+					'select_one'  => __( '請至少選擇一筆。', 'mo-ectools' ),
+					/* translators: %d: number of selected orders to print */
+					'print'       => __( '列印 (%d)', 'mo-ectools' ),
+					'cancel'      => __( '取消', 'mo-ectools' ),
+					'loading'     => __( '載入中…', 'mo-ectools' ),
+					'error'       => __( '載入失敗。', 'mo-ectools' ),
+					'yes'         => __( '✓', 'mo-ectools' ),
+					'no'          => __( '—', 'mo-ectools' ),
+					'paper_size'  => __( '紙張：', 'mo-ectools' ),
+					'a4'          => __( 'A4 標準', 'mo-ectools' ),
+					'a6'          => __( 'A6 標籤機', 'mo-ectools' ),
+				],
+			]
+		);
 		wp_enqueue_script( $handle );
 
 		$css_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Shipping/assets/css/batch-print.css';
@@ -277,29 +271,31 @@ final class BatchPrintAdminUI {
 			wp_send_json_error( [ 'message' => __( '找不到此物流模組。', 'mo-ectools' ) ], 404 );
 		}
 
-		// Status 白名單：只列「處理中」+「保留中」— 即「**已建單但未出貨**」的訂單。
-		// 「已出貨 / 已抵店 / 已取件」這些是物流推進後的狀態，邏輯上已經印過了，不應該出現
-		// 在批次列印 modal 裡。要重印 已出貨 訂單請從訂單編輯頁的「列印物流單」按鈕走。
-		// （這個 filter 可被 hook 覆寫）
+		// 只列「處理中/保留中」— 已出貨/抵店/取件的訂單應已印過，不納入（filter 可覆寫）
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
-		$statuses = apply_filters( 'moksafowo_shipping_batch_print_statuses', [
-			'processing',
-			'on-hold',
-		] );
+		$statuses = apply_filters(
+			'moksafowo_shipping_batch_print_statuses',
+			[
+				'processing',
+				'on-hold',
+			]
+		);
 
-		$orders = wc_get_orders( [
-			'status'  => $statuses,
-			'limit'   => 50,
-			'order'   => 'DESC',
-			'orderby' => 'date',
-		] );
+		$orders = wc_get_orders(
+			[
+				'status'  => $statuses,
+				'limit'   => 50,
+				'order'   => 'DESC',
+				'orderby' => 'date',
+			]
+		);
 
-		$method_ids       = $provider['method_ids'];
-		$method_titles    = $provider['method_titles'] ?? [];
-		$provider_modes   = (array) ( $provider['paper_modes'] ?? [ '1', '2' ] );
-		$row_modes_fn     = $provider['row_paper_modes'] ?? null;
-		$temps_fn         = $provider['record_temps'] ?? null;
-		$rows             = [];
+		$method_ids     = $provider['method_ids'];
+		$method_titles  = $provider['method_titles'] ?? [];
+		$provider_modes = (array) ( $provider['paper_modes'] ?? [ '1', '2' ] );
+		$row_modes_fn   = $provider['row_paper_modes'] ?? null;
+		$temps_fn       = $provider['record_temps'] ?? null;
+		$rows           = [];
 		foreach ( $orders as $order ) {
 			$method_obj = self::detect_method( $order, $method_ids );
 			if ( null === $method_obj ) {
@@ -309,18 +305,16 @@ final class BatchPrintAdminUI {
 			$item_name    = (string) $method_obj->get_name();
 			$record_count = self::record_count( $order, $provider['record_counter'] ?? null );
 
-			// row 紙張支援：若 provider 提供 fn 就動態算（依 ECPay subtype），否則用 provider 預設
 			$row_modes = $provider_modes;
 			if ( is_callable( $row_modes_fn ) ) {
 				$dynamic = (array) call_user_func( $row_modes_fn, $order );
-				// 取交集 — provider 沒開的模式不會因 row fn 偷開
+				// 取交集 — provider 未開的模式不會因 row fn 偷開
 				$row_modes = array_values( array_intersect( $provider_modes, $dynamic ) );
 				if ( empty( $row_modes ) ) {
 					$row_modes = $provider_modes;
 				}
 			}
 
-			// 多溫層 records 的溫層集合（拆單訂單會 > 1 個 temp）
 			$temps = is_callable( $temps_fn )
 				? array_values( array_unique( array_map( 'intval', (array) call_user_func( $temps_fn, $order ) ) ) )
 				: [];
@@ -389,6 +383,83 @@ final class BatchPrintAdminUI {
 		return is_array( $forms ) ? array_values( $forms ) : [];
 	}
 
+	/**
+	 * 給程式化呼叫（如 AI ability）：傳訂單 ID，自動分組各物流商、建列印表單、存一次性
+	 * transient token，回傳列印輸出頁 URL（同 bulk action 的目標）。不直接列印，回 URL 供開啟。
+	 *
+	 * @param int[]  $order_ids 訂單 ID。
+	 * @param string $mode      紙張 '1'=A4 / '2'=A6。
+	 * @return array{ok:bool, url?:string, count?:int, skipped?:int, message?:string}
+	 */
+	public static function build_print_url( array $order_ids, string $mode = '1' ): array {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			return [
+				'ok'      => false,
+				'message' => __( '權限不足。', 'mo-ectools' ),
+			];
+		}
+		$ids = array_values( array_filter( array_map( 'absint', $order_ids ) ) );
+		if ( empty( $ids ) ) {
+			return [
+				'ok'      => false,
+				'message' => __( '沒有指定訂單。', 'mo-ectools' ),
+			];
+		}
+		$mode     = '2' === $mode ? '2' : '1';
+		$registry = BatchPrintRegistry::all();
+
+		$by_provider = [];
+		foreach ( $ids as $oid ) {
+			$order = wc_get_order( $oid );
+			if ( ! $order instanceof \WC_Order ) {
+				continue;
+			}
+			foreach ( $registry as $key => $provider ) {
+				if ( null !== self::detect_method( $order, $provider['method_ids'] ) ) {
+					$by_provider[ $key ][] = $oid;
+					break;
+				}
+			}
+		}
+
+		$matched = [];
+		$forms   = [];
+		foreach ( $by_provider as $key => $oids ) {
+			$oids    = array_values( array_unique( $oids ) );
+			$matched = array_merge( $matched, $oids );
+			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, $mode ) );
+		}
+		$skipped = count( $ids ) - count( array_unique( $matched ) );
+
+		if ( empty( $forms ) ) {
+			return [
+				'ok'      => false,
+				'skipped' => $skipped,
+				'message' => __( '所選訂單沒有可列印的物流標籤（可能尚未建立託運單）。', 'mo-ectools' ),
+			];
+		}
+
+		$token = wp_generate_password( 24, false );
+		set_transient( 'moksafowo_bp_' . $token, $forms, 5 * MINUTE_IN_SECONDS );
+
+		$url = add_query_arg(
+			[
+				'action'   => 'moksafowo_shipping_batch_print_output',
+				'token'    => rawurlencode( $token ),
+				'skipped'  => $skipped,
+				'_wpnonce' => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
+			],
+			admin_url( 'admin-ajax.php' )
+		);
+
+		return [
+			'ok'      => true,
+			'url'     => $url,
+			'count'   => count( $forms ),
+			'skipped' => $skipped,
+		];
+	}
+
 	// ── 基本模式：WooCommerce 內建批次操作下拉 ──────────────────────────────
 
 	public static function register_bulk_actions( array $actions ): array {
@@ -409,7 +480,6 @@ final class BatchPrintAdminUI {
 		$ids      = array_values( array_filter( array_map( 'absint', (array) $ids ) ) );
 		$registry = BatchPrintRegistry::all();
 
-		// 每筆訂單自動依運送方式判斷所屬物流商 → 分組（一筆只歸一個 provider）。
 		$by_provider = [];
 		foreach ( $ids as $oid ) {
 			$order = wc_get_order( $oid );
@@ -424,18 +494,17 @@ final class BatchPrintAdminUI {
 			}
 		}
 
-		// 各 provider 各自跑 handler（依 subtype 再分桶），forms 合併。
 		$matched = [];
 		$forms   = [];
 		foreach ( $by_provider as $key => $oids ) {
 			$oids    = array_values( array_unique( $oids ) );
 			$matched = array_merge( $matched, $oids );
-			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, '1' ) );  // 基本模式預設 A4
+			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, '1' ) ); // 基本模式固定 A4
 		}
 		$skipped = count( $ids ) - count( array_unique( $matched ) );
 
 		if ( empty( $forms ) ) {
-			// 沒有可列印標籤 → 用一次性 transient 帶提示（不放網址參數，避免訂單列表重整時一直跳）。
+			// transient 而非 URL 參數，避免重整訂單列表時一直跳
 			set_transient( 'moksafowo_bp_skipped_' . get_current_user_id(), max( 1, $skipped ), MINUTE_IN_SECONDS );
 			return $redirect_to;
 		}
@@ -455,7 +524,7 @@ final class BatchPrintAdminUI {
 	}
 
 	public static function bulk_notices(): void {
-		// 只在訂單列表，且只顯示一次（讀完即刪 transient），避免重整訂單列表時一直跳。
+		// 只在訂單列表顯示，且讀完即刪（避免重整時重複跳通知）
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( ! $screen || ! in_array( $screen->id, [ 'woocommerce_page_wc-orders', 'edit-shop_order' ], true ) ) {
 			return;
@@ -471,10 +540,6 @@ final class BatchPrintAdminUI {
 		);
 	}
 
-	/**
-	 * Standalone print page — 基本模式 bulk action 的 redirect 目標。
-	 * 取出 transient 裡的 forms，輸出自動送出的表單（標準獨立列印頁，inline JS 合理）。
-	 */
 	public static function render_print_output(): void {
 		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
@@ -494,7 +559,8 @@ final class BatchPrintAdminUI {
 		$single  = ( 1 === $count );
 
 		nocache_headers();
-		?><!DOCTYPE html>
+		?>
+		<!DOCTYPE html>
 		<html <?php language_attributes(); ?>>
 		<head>
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
@@ -548,7 +614,7 @@ final class BatchPrintAdminUI {
 
 	private static function record_count( \WC_Order $order, ?callable $counter ): int {
 		if ( null === $counter ) {
-			return 1;  // 沒提供 counter 就當作至少一筆（讓 button 可按）
+			return 1;
 		}
 		return max( 0, (int) call_user_func( $counter, $order ) );
 	}

@@ -76,6 +76,13 @@ if ( $moksafowo_hpos_meta_table === $moksafowo_table_exists ) {
 /* Remove user meta. */
 $wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'moksafowo\_%' OR meta_key LIKE 'mo\_%'" );
 
+/* Drop the order-number lookup index table. */
+$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_order_lookup' ) . '`' );
+
+/* Drop the customer-service threads / messages tables. */
+$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_cs_messages' ) . '`' );
+$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_cs_threads' ) . '`' );
+
 /* Clear scheduled actions. */
 if ( function_exists( 'as_unschedule_all_actions' ) ) {
 	as_unschedule_all_actions( '', array(), 'mo-ectools' );

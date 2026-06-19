@@ -27,14 +27,14 @@ final class PrintLabel {
 			if ( '' === $mtn ) {
 				continue;
 			}
-			$key = $lgs_type . '-' . $ship_type;
+			$key               = $lgs_type . '-' . $ship_type;
 			$buckets[ $key ][] = $mtn;
 		}
 
 		$forms = [];
 		foreach ( $buckets as $key => $mtns ) {
 			[ $lgs_type, $ship_type ] = explode( '-', $key, 2 );
-			$limit = self::print_limit( $lgs_type, $ship_type );
+			$limit                    = self::print_limit( $lgs_type, $ship_type );
 			// 切 chunks 不超過 API 上限
 			foreach ( array_chunk( array_unique( $mtns ), $limit ) as $chunk ) {
 				$result = ShippingRequest::print_label( $chunk, $lgs_type, $ship_type );

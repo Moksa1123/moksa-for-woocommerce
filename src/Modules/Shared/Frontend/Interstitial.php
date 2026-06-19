@@ -14,10 +14,10 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Interstitial {
 
-	private const BODY_STYLE  = 'font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:32px;text-align:center;color:#374151;background:#f0f0f0;margin:0;';
-	private const CARD_STYLE  = 'max-width:480px;margin:0 auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.1);';
-	private const H_STYLE     = 'margin:0 0 12px;color:#333;';
-	private const P_STYLE     = 'margin:4px 0;color:#6b7280;';
+	private const BODY_STYLE = 'font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:32px;text-align:center;color:#374151;background:#f0f0f0;margin:0;';
+	private const CARD_STYLE = 'max-width:480px;margin:0 auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.1);';
+	private const H_STYLE    = 'margin:0 0 12px;color:#333;';
+	private const P_STYLE    = 'margin:4px 0;color:#6b7280;';
 
 	/**
 	 * 輸出整頁過場 HTML 並結束請求前的所有輸出（呼叫端自行 exit）。
@@ -37,7 +37,13 @@ final class Interstitial {
 		echo '<div style="' . esc_attr( self::CARD_STYLE ) . '">';
 		echo '<h2 style="' . esc_attr( self::H_STYLE ) . '">' . esc_html( $heading ) . '</h2>';
 		foreach ( $paragraphs as $p ) {
-			echo '<p style="' . esc_attr( self::P_STYLE ) . '">' . wp_kses( $p, [ 'strong' => [], 'br' => [] ] ) . '</p>';
+			echo '<p style="' . esc_attr( self::P_STYLE ) . '">' . wp_kses(
+				$p,
+				[
+					'strong' => [],
+					'br'     => [],
+				]
+			) . '</p>';
 		}
 		echo '</div>';
 		echo wp_kses( $forms_html, self::form_allowlist() );
@@ -55,10 +61,10 @@ final class Interstitial {
 	public static function form_allowlist(): array {
 		return [
 			'form'  => [
-				'method' => true,
-				'id'     => true,
-				'action' => true,
-				'target' => true,
+				'method'         => true,
+				'id'             => true,
+				'action'         => true,
+				'target'         => true,
 				'accept-charset' => true,
 			],
 			'input' => [
@@ -78,17 +84,50 @@ final class Interstitial {
 	 * @return array<string, array<string, bool>>
 	 */
 	public static function label_allowlist(): array {
-		$attrs  = [ 'id' => true, 'class' => true, 'style' => true, 'align' => true, 'valign' => true, 'width' => true, 'height' => true, 'border' => true, 'cellpadding' => true, 'cellspacing' => true, 'colspan' => true, 'rowspan' => true, 'bgcolor' => true ];
+		$attrs  = [
+			'id'          => true,
+			'class'       => true,
+			'style'       => true,
+			'align'       => true,
+			'valign'      => true,
+			'width'       => true,
+			'height'      => true,
+			'border'      => true,
+			'cellpadding' => true,
+			'cellspacing' => true,
+			'colspan'     => true,
+			'rowspan'     => true,
+			'bgcolor'     => true,
+		];
 		$tags   = [ 'html', 'head', 'body', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em', 'u', 'br', 'hr', 'center', 'font', 'section', 'header', 'footer' ];
 		$result = [];
 		foreach ( $tags as $tag ) {
 			$result[ $tag ] = $attrs;
 		}
-		$result['meta']  = [ 'charset' => true, 'name' => true, 'content' => true, 'http-equiv' => true ];
+		$result['meta']  = [
+			'charset'    => true,
+			'name'       => true,
+			'content'    => true,
+			'http-equiv' => true,
+		];
 		$result['title'] = [];
-		$result['style'] = [ 'type' => true, 'media' => true ];
-		$result['link']  = [ 'rel' => true, 'href' => true, 'type' => true, 'media' => true ];
-		$result['img']   = array_merge( $attrs, [ 'src' => true, 'alt' => true ] );
+		$result['style'] = [
+			'type'  => true,
+			'media' => true,
+		];
+		$result['link']  = [
+			'rel'   => true,
+			'href'  => true,
+			'type'  => true,
+			'media' => true,
+		];
+		$result['img']   = array_merge(
+			$attrs,
+			[
+				'src' => true,
+				'alt' => true,
+			]
+		);
 		return $result;
 	}
 }

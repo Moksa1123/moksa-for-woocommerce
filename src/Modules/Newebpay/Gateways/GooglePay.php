@@ -21,6 +21,6 @@ final class GooglePay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( 'Android / Chrome 上使用 Google Pay 一鍵付款（信用卡 token 化），跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '使用 Google Pay 快速付款，需 Android 或 Chrome 瀏覽器，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

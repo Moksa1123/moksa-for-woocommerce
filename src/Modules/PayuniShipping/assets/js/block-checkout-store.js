@@ -60,43 +60,8 @@
 		return null;
 	}
 
-	/**
-	 * Host 必須塞進 step 的 __content（運送 tab 同層），不能 append 在 fieldset
-	 * 末尾跟 __content 同層 — 後者拿不到 step content padding，會左右各凸出
-	 * ~25px 全寬跑版。
-	 */
-	function findStepContainer() {
-		const block = document.querySelector( '.wp-block-woocommerce-checkout-shipping-method-block' );
-		if ( ! block ) {
-			return null;
-		}
-		return block.querySelector( '.wc-block-components-checkout-step__content' ) || block;
-	}
-
-	function ensureHost() {
-		let host = document.getElementById( HOST_ID );
-		if ( host ) {
-			return host;
-		}
-		host = document.createElement( 'div' );
-		host.id = HOST_ID;
-		host.className = 'mowp-payuni-block-store';
-		return host;
-	}
-
-	function placeHost() {
-		const container = findStepContainer();
-		if ( ! container ) {
-			return null;
-		}
-		const host = ensureHost();
-		// 已在正確位置（container 最末尾）就不重新 insert，避免 reflow loop
-		if ( host.parentNode === container && container.lastElementChild === host ) {
-			return host;
-		}
-		container.appendChild( host );
-		return host;
-	}
+	// host 建立 / step content 定位 / escapeHtml / submitForm 全走共用 MowpCvsStore helper。
+	const M = window.MowpCvsStore;
 
 	function removeHost() {
 		const host = document.getElementById( HOST_ID );
@@ -105,47 +70,21 @@
 		}
 	}
 
-	function escapeHtml( s ) {
-		return String( s )
-			.replace( /&/g, '&amp;' )
-			.replace( /</g, '&lt;' )
-			.replace( />/g, '&gt;' )
-			.replace( /"/g, '&quot;' );
-	}
-
-	function btnHtml( label ) {
-		return '<button type="button" class="mowp-payuni-block-store__btn button wp-element-button">' + escapeHtml( label ) + '</button>';
-	}
-
 	function paint( store ) {
-		const host = placeHost();
+		const host = M.ensureHost( HOST_ID );
 		if ( ! host ) {
 			return;
 		}
-		if ( store && store.id ) {
-			host.classList.add( 'is-selected' );
-			host.innerHTML =
-				'<div>' +
-				'<div class="mowp-payuni-block-store__name">' +
-				'<div class="mowp-payuni-block-store__info">' +
-				'<span class="mowp-payuni-block-store__title">' + escapeHtml( store.name || '' ) + '</span>' +
-				'<span class="mowp-payuni-block-store__address">' + escapeHtml( store.address || '' ) + '</span>' +
-				'<span class="mowp-payuni-block-store__meta">' +
-				'<span class="mowp-payuni-block-store__id">' + escapeHtml( ( cfg.i18n.store_id_label || '' ) + ' ' + ( store.id || '' ) ) + '</span>' +
-				'</span>' +
-				'</div>' +
-				'</div>' +
-				btnHtml( cfg.i18n.change ) +
-				'</div>';
-		} else {
-			host.classList.remove( 'is-selected' );
-			host.innerHTML =
-				'<div>' +
-				'<span class="mowp-payuni-block-store__placeholder">' + escapeHtml( cfg.i18n.none ) + '</span>' +
-				btnHtml( cfg.i18n.select ) +
-				'</div>';
-		}
-		const btn = host.querySelector( '.mowp-payuni-block-store__btn' );
+		host.classList.toggle( 'is-selected', !! ( store && store.id ) );
+		const rightHtml = '<button type="button" class="mowp-cvs-store__btn button wp-element-button">'
+			+ M.escapeHtml( store && store.id ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
+		host.innerHTML = M.cardHtml( {
+			store: store,
+			storeIdLabel: cfg.i18n.store_id_label,
+			noneText: cfg.i18n.none,
+			rightHtml: rightHtml,
+		} );
+		const btn = host.querySelector( '.mowp-cvs-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', onOpenMap );
 		}
@@ -169,24 +108,9 @@
 					alert( ( resp && resp.data && resp.data.message ) || cfg.i18n.error );
 					return;
 				}
-				submitToPayuni( resp.data.api_url, resp.data.form_data );
+				M.submitForm( resp.data.api_url, resp.data.form_data );
 			} )
 			.catch( function () { alert( cfg.i18n.error ); } );
-	}
-
-	function submitToPayuni( apiUrl, formData ) {
-		const f = document.createElement( 'form' );
-		f.method = 'POST';
-		f.action = apiUrl;
-		Object.keys( formData ).forEach( function ( k ) {
-			const i = document.createElement( 'input' );
-			i.type = 'hidden';
-			i.name = k;
-			i.value = formData[ k ];
-			f.appendChild( i );
-		} );
-		document.body.appendChild( f );
-		f.submit();
 	}
 
 	function readUrlToken() {

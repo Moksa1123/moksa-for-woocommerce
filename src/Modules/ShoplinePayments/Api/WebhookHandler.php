@@ -10,14 +10,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class WebhookHandler {
 
-	// Replay 視窗 — 5 分鐘（毫秒）。spec line 44。
-	private const REPLAY_WINDOW_MS = 300000;
+	private const REPLAY_WINDOW_MS = 300000; // 5 min; per SLP webhook spec.
 
-	// 已知 webhook apiVersion（spec 標 V1.2）。未知版本 → log + 200 不重試風暴。
 	private const KNOWN_API_VERSIONS = [ 'V1', 'V1.0', 'V1.1', 'V1.2' ];
 
 	public static function handle(): void {
-		// 1. RAW bytes — 簽章必須對原始 bytes 算（spec line 44 / 73）。
+		// Signature must be computed over raw bytes before any parsing (SLP spec).
 		$raw_body = file_get_contents( 'php://input' );
 		if ( ! is_string( $raw_body ) || '' === $raw_body ) {
 			Helper::log( 'webhook empty body' );
@@ -33,13 +31,11 @@ final class WebhookHandler {
 			self::reply( 400, 'missing headers' );
 		}
 
-		// 2 + 3. HMAC-SHA256(`<timestamp>.<raw_body>`, signKey) → hash_equals。
 		if ( ! self::verify_signature( $timestamp, $raw_body, $sign ) ) {
 			Helper::log( 'webhook signature mismatch — rejected' );
 			self::reply( 401, 'invalid signature' );
 		}
 
-		// 4. 驗簽過後才檢查 replay 視窗（timestamp 為毫秒）。
 		if ( ! self::within_replay_window( $timestamp ) ) {
 			Helper::log( 'webhook replay window exceeded — rejected', [ 'timestamp' => $timestamp ] );
 			self::reply( 401, 'stale timestamp' );
@@ -51,31 +47,52 @@ final class WebhookHandler {
 			self::reply( 400, 'bad request' );
 		}
 
-		// json_decode 不做消毒 — 簽章驗過後仍逐欄 sanitize 才記錄與使用。
 		$event = map_deep( $event, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 
 		$event_id = (string) ( $event['id'] ?? '' );
 		$type     = (string) ( $event['type'] ?? '' );
 		$data     = isset( $event['data'] ) && is_array( $event['data'] ) ? $event['data'] : [];
 
-		// 6. 未知 apiVersion — 記錄後 200，不 500（避免 SLP retry 風暴）。
 		if ( '' !== $api_version && ! in_array( $api_version, self::KNOWN_API_VERSIONS, true ) ) {
-			Helper::log( 'webhook unknown apiVersion — acknowledged without processing', [ 'api_version' => $api_version, 'type' => $type ] );
+			Helper::log(
+				'webhook unknown apiVersion — acknowledged without processing',
+				[
+					'api_version' => $api_version,
+					'type'        => $type,
+				]
+			);
 			self::reply( 200, 'ok' );
 		}
 
-		Helper::log( 'webhook received', [ 'id' => $event_id, 'type' => $type, 'api_version' => $api_version ] );
+		Helper::log(
+			'webhook received',
+			[
+				'id'          => $event_id,
+				'type'        => $type,
+				'api_version' => $api_version,
+			]
+		);
 
 		$order = self::resolve_order( $data );
 		if ( ! $order instanceof \WC_Order ) {
-			Helper::log( 'webhook order not found', [ 'id' => $event_id, 'type' => $type ] );
-			// 找不到訂單也回 200 — SLP 重送也不會改善（避免無止盡 retry）。
-			self::reply( 200, 'order not found' );
+			Helper::log(
+				'webhook order not found',
+				[
+					'id'   => $event_id,
+					'type' => $type,
+				]
+			);
+				self::reply( 200, 'order not found' );
 		}
 
-		// 5. event.id 去重 — 已處理過直接 200（冪等）。
 		if ( '' !== $event_id && self::is_duplicate( $order, $event_id ) ) {
-			Helper::log( 'webhook duplicate event — skipped', [ 'id' => $event_id, 'type' => $type ] );
+			Helper::log(
+				'webhook duplicate event — skipped',
+				[
+					'id'   => $event_id,
+					'type' => $type,
+				]
+			);
 			self::reply( 200, 'duplicate' );
 		}
 
@@ -96,7 +113,6 @@ final class WebhookHandler {
 			return false;
 		}
 		$expected = hash_hmac( 'sha256', $timestamp . '.' . $raw_body, $sign_key );
-		// SLP sign 為 hex；大小寫不敏感比對前先 normalize。
 		return hash_equals( $expected, strtolower( trim( $sign ) ) );
 	}
 
@@ -119,14 +135,16 @@ final class WebhookHandler {
 					return $order;
 				}
 			}
-			$found = wc_get_orders( [
-				'limit'      => 1,
-				'return'     => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'   => Keys::SLP_REFERENCE_ID,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_value' => $reference_id,
-			] );
+			$found = wc_get_orders(
+				[
+					'limit'      => 1,
+					'return'     => 'ids',
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+					'meta_key'   => Keys::SLP_REFERENCE_ID,
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+					'meta_value' => $reference_id,
+				]
+			);
 			if ( ! empty( $found ) ) {
 				$order = wc_get_order( (int) $found[0] );
 				if ( $order instanceof \WC_Order ) {
@@ -135,19 +153,25 @@ final class WebhookHandler {
 			}
 		}
 
-		foreach ( [ 'sessionId' => Keys::SLP_SESSION_ID, 'tradeOrderId' => Keys::SLP_TRADE_ORDER_ID ] as $field => $meta_key ) {
+		$lookup_fields = [
+			'sessionId'    => Keys::SLP_SESSION_ID,
+			'tradeOrderId' => Keys::SLP_TRADE_ORDER_ID,
+		];
+		foreach ( $lookup_fields as $field => $meta_key ) {
 			$value = (string) ( $data[ $field ] ?? '' );
 			if ( '' === $value ) {
 				continue;
 			}
-			$found = wc_get_orders( [
-				'limit'      => 1,
-				'return'     => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'   => $meta_key,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_value' => $value,
-			] );
+			$found = wc_get_orders(
+				[
+					'limit'      => 1,
+					'return'     => 'ids',
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+					'meta_key'   => $meta_key,
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+					'meta_value' => $value,
+				]
+			);
 			if ( ! empty( $found ) ) {
 				$order = wc_get_order( (int) $found[0] );
 				if ( $order instanceof \WC_Order ) {
@@ -202,19 +226,24 @@ final class WebhookHandler {
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
 					$order->payment_complete( $txn );
 				}
-				$order->add_order_note( sprintf(
-					/* translators: %s: payment method */
-					__( 'Shopline Payments 付款完成（%s）。', 'mo-ectools' ),
-					(string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ?: $type
-				) );
+				$order->add_order_note(
+					sprintf(
+						/* translators: %s: payment method */
+						__( 'Shopline Payments 付款完成（%s）。', 'mo-ectools' ),
+						(string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ?: $type
+					)
+				);
 				break;
 
 			case 'trade.failed':
-				$order->update_status( 'failed', sprintf(
-					/* translators: %s: sub status */
-					__( 'Shopline Payments 付款失敗（%s）。', 'mo-ectools' ),
-					(string) $order->get_meta( Keys::SLP_SUB_STATUS ) ?: __( '未提供原因', 'mo-ectools' )
-				) );
+				$order->update_status(
+					'failed',
+					sprintf(
+						/* translators: %s: sub status */
+						__( 'Shopline Payments 付款失敗（%s）。', 'mo-ectools' ),
+						(string) $order->get_meta( Keys::SLP_SUB_STATUS ) ?: __( '未提供原因', 'mo-ectools' )
+					)
+				);
 				break;
 
 			case 'trade.expired':
@@ -225,11 +254,13 @@ final class WebhookHandler {
 				break;
 
 			case 'trade.refund.succeeded':
-				$order->add_order_note( sprintf(
-					/* translators: %s: refund order id */
-					__( 'Shopline Payments 退款成功（退款編號 %s）。', 'mo-ectools' ),
-					(string) $order->get_meta( Keys::SLP_REFUND_ORDER_ID ) ?: __( '無編號', 'mo-ectools' )
-				) );
+				$order->add_order_note(
+					sprintf(
+						/* translators: %s: refund order id */
+						__( 'Shopline Payments 退款成功（退款編號 %s）。', 'mo-ectools' ),
+						(string) $order->get_meta( Keys::SLP_REFUND_ORDER_ID ) ?: __( '無編號', 'mo-ectools' )
+					)
+				);
 				break;
 
 			case 'trade.refund.failed':
@@ -237,20 +268,23 @@ final class WebhookHandler {
 				break;
 
 			case 'session.created':
-				// 資訊型事件：寫 meta 即可，不轉狀態。
-				$order->add_order_note( sprintf(
-					/* translators: %s: event type */
-					__( 'Shopline Payments 通知：%s', 'mo-ectools' ),
-					$type
-				) );
+				$order->add_order_note(
+					sprintf(
+						/* translators: %s: event type */
+						__( 'Shopline Payments 通知：%s', 'mo-ectools' ),
+						$type
+					)
+				);
 				break;
 
 			default:
-				$order->add_order_note( sprintf(
-					/* translators: %s: event type */
-					__( 'Shopline Payments 通知：%s', 'mo-ectools' ),
-					$type
-				) );
+				$order->add_order_note(
+					sprintf(
+						/* translators: %s: event type */
+						__( 'Shopline Payments 通知：%s', 'mo-ectools' ),
+						$type
+					)
+				);
 		}
 	}
 
@@ -268,10 +302,9 @@ final class WebhookHandler {
 	}
 
 	private static function mark_processed( \WC_Order $order, string $event_id ): void {
-		$processed = $order->get_meta( Keys::SLP_PROCESSED_EVENT_IDS );
-		$processed = is_array( $processed ) ? $processed : [];
+		$processed   = $order->get_meta( Keys::SLP_PROCESSED_EVENT_IDS );
+		$processed   = is_array( $processed ) ? $processed : [];
 		$processed[] = $event_id;
-		// 上限 50 筆，避免 meta 無限膨脹。
 		if ( count( $processed ) > 50 ) {
 			$processed = array_slice( $processed, -50 );
 		}

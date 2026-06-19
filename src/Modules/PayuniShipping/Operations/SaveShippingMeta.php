@@ -29,8 +29,7 @@ final class SaveShippingMeta {
 		$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（單號 %s）', 'mo-ectools' ), $data['ShipTradeNo'] ) );
 	}
 
-	// 結帳路徑 LgsType/GoodsType/ShipType 已由 StoreSelector::save_store_selection 處理；
-	// 這支主要服務黑貓宅配場景（沒走 store selector）跟後台訂單編輯
+	// CVS 路徑已由 StoreSelector::save_store_selection 處理；此方法服務黑貓宅配及後台編輯
 	public static function save_hd_shipping_meta( $order, $data ): void {
 		PayuniShipping::log( 'save_hd_shipping_meta data:' . wc_print_r( $data, true ) );
 
@@ -47,7 +46,7 @@ final class SaveShippingMeta {
 			break;
 		}
 
-		// PackageSpec 只在 order 未設時從 zone option 讀（避免 admin 手動改後被覆寫）
+		// PackageSpec 不覆寫已設值，保留 admin 手動調整
 		foreach ( \WC_Shipping_Zones::get_zones() as $shipping_zone ) {
 			foreach ( $shipping_zone['shipping_methods'] as $shipping_method ) {
 				if ( $shipping_method->id !== $shipping_method_id ) {

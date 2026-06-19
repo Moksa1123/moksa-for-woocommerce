@@ -21,6 +21,6 @@ final class TaiwanPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '財金公司 QR Code 跨行行動支付，金融卡 / 信用卡綁定。跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '台灣 Pay QR Code 行動支付，跳轉至藍新付款頁完成。', 'mo-ectools' );
 	}
 }

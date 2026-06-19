@@ -27,7 +27,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function tagline(): string {
-		return __( '7-11 + 黑貓 — C2C/B2C × 常溫/冷藏/冷凍 7 種', 'mo-ectools' );
+		return __( '7-11 超商取貨 + 黑貓宅配（常溫 / 冷藏 / 冷凍）', 'mo-ectools' );
 	}
 
 	public function methods(): array {
@@ -47,16 +47,8 @@ final class Module extends AbstractModule {
 	}
 
 	public function boot(): void {
-		// PayUni payment 模組可能未啟用，但 PayuniShipping 仍會讀同一組
-		// hashkey/iv option（fork 共用 credentials 設計）。
-		// Vault::wrap_option 是 idempotent，PayUni Payment 已啟用時雙重呼叫無害；
-		// PayUni Payment 未啟用時這邊補上，避免 get_option 拿到 MOWPv1: 密文當金鑰。
-		// Phase B（v0.5.63）：同時 wrap 新 mo_* 跟 legacy 兩組。
+		// 共用 PAYUNi Payment hashkey/iv；Payment 未啟用時補 wrap，避免讀到 MOWPv1 密文當金鑰
 		foreach ( [
-			'moksafowo_payuni_payment_hashkey',
-			'moksafowo_payuni_payment_hashkey_test',
-			'moksafowo_payuni_payment_hashiv',
-			'moksafowo_payuni_payment_hashiv_test',
 			'moksafowo_payuni_payment_hashkey',
 			'moksafowo_payuni_payment_hashkey_test',
 			'moksafowo_payuni_payment_hashiv',

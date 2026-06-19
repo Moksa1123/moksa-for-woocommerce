@@ -8,12 +8,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class PaymentInfoBox {
 
-	
+
 	private static array $resolvers = [];
 
 	private static bool $email_registered = false;
 
-	
+
 	public static function register( callable $resolver ): void {
 		self::$resolvers[] = $resolver;
 
@@ -51,7 +51,7 @@ final class PaymentInfoBox {
 		add_action( 'woocommerce_order_details_after_order_table', $render, 15, 1 );
 	}
 
-	
+
 	public static function rows( \WC_Order $order ): array {
 		foreach ( self::$resolvers as $resolver ) {
 			$rows = $resolver( $order );
@@ -62,7 +62,7 @@ final class PaymentInfoBox {
 		return [];
 	}
 
-	
+
 	public static function render_html( array $rows ): string {
 		ob_start();
 		echo '<section class="moksafowo-payment-info woocommerce-order-overview" style="margin:1.5em 0;padding:1em 1.25em;border:1px solid #e0e0e0;border-radius:6px;">';

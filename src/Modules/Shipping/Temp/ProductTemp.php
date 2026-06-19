@@ -33,9 +33,9 @@ final class ProductTemp {
 		return $temp;
 	}
 
-	
+
 	public static function temps_in_package( array $package ): array {
-		$temps = [];
+		$temps    = [];
 		$contents = $package['contents'] ?? [];
 		if ( ! is_array( $contents ) ) {
 			return [ self::NORMAL ];

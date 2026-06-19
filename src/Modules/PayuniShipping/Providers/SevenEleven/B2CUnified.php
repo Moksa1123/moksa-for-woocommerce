@@ -17,8 +17,8 @@ final class B2CUnified extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 7-11 B2C 大宗取貨（多溫層）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi 7-11 大宗 B2C 取貨。商品溫層混合（常溫 / 冷凍）時，後台建單自動拆 N 包送 PAYUNi /logistics/trade API。注意 7-11 不支援冷藏，冷藏商品會以常溫運送。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（多溫層）', 'mo-ectools' );
+		$this->method_description = __( 'PAYUNi 7-11 大宗超商取貨，支援常溫 / 冷凍。7-11 不提供冷藏配送，冷藏商品以常溫方式運送。', 'mo-ectools' );
 		parent::__construct( $instance_id );
 	}
 

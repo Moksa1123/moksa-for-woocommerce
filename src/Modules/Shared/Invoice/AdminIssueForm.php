@@ -33,10 +33,10 @@ final class AdminIssueForm {
 		// 發票類型選項 — 受該 provider「允許捐贈 / 允許統編」設定連動
 		$type_labels = [
 			'b2c_carrier' => __( '個人（載具）', 'mo-ectools' ),
-			'b2b'         => __( '公司（統編三聯式）', 'mo-ectools' ),
+			'b2b'         => __( '公司（統一編號）', 'mo-ectools' ),
 			'b2c_donate'  => __( '捐贈', 'mo-ectools' ),
 		];
-		$type_opts = [];
+		$type_opts   = [];
 		foreach ( InvoiceChannels::enabled_types( $option_prefix ) as $t ) {
 			$type_opts[ $t ] = $type_labels[ $t ];
 		}
@@ -52,7 +52,7 @@ final class AdminIssueForm {
 			'cert'   => __( '自然人憑證', 'mo-ectools' ),
 			'paper'  => __( '紙本', 'mo-ectools' ),
 		];
-		$carrier_opts = [];
+		$carrier_opts   = [];
 		foreach ( InvoiceChannels::enabled_carriers( $option_prefix ) as $c ) {
 			$carrier_opts[ $c ] = $carrier_labels[ $c ];
 		}

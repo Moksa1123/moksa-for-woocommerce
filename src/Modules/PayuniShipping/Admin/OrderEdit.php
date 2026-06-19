@@ -13,30 +13,25 @@ defined( 'ABSPATH' ) || exit;
 
 class OrderEdit {
 
-    use SingletonTrait;
+	use SingletonTrait;
 
 	public static function init() {
 
 			self::get_instance();
-		
+
 			add_filter( 'woocommerce_admin_shipping_fields', array( self::get_instance(), 'moksafowo_payuni_shipping_cvs_fields' ), 10, 1 );
-			
-			// 建立 PAYUNi 物流單.
+
 			add_filter( 'woocommerce_order_actions', array( self::get_instance(), 'moksafowo_payuni_order_actions' ) );
-			
+
 			add_filter( 'woocommerce_order_action_create_moksafowo_payuni_shipping_order', array( ShippingRequest::get_instance(), 'moksafowo_payuni_create_shipping' ) );
 
-			// PAYUNi 物流資訊整合進統一的「金流 / 物流 / 電子發票」metabox（slot=shipping），不再獨立 postbox。
 			OrderInfoLayout::boot();
 			add_filter( 'moksafowo_order_info_cards', array( __NAMESPACE__ . '\\OrderMetaBox', 'add_card' ), 20, 2 );
-		
 	}
 
 	public static function moksafowo_payuni_shipping_cvs_fields( $shipping_fields ) {
 		global $theorder;
 		if ( empty( $theorder ) ) {
-			// 唯讀 fallback：admin 訂單編輯畫面 save 流程中 $theorder 尚未注入時以 post_ID
-			// 解析訂單供欄位顯示；任何寫入由 WC core 的 save 流程自帶 nonce + capability 把關。
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- read-only order context resolution; WC core verifies its own nonce before persisting.
 			if ( isset( $_POST['post_ID'] ) ) {
 				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.Security.NonceVerification.Missing -- WC core metabox callback injects $theorder; read-only context resolution, WC core save flow verifies its own nonce.
@@ -73,14 +68,12 @@ class OrderEdit {
 			$shipping_fields['phone'] = array(
 				'label' => __( 'Shipping Phone', 'mo-ectools' ),
 			);
-			
-		} else {
-			if ( $items_shipping ) {
-				if ( PayuniShipping::is_moksafowo_payuni_shipping_hd( $items_shipping->get_method_id() ) ) {
-					$shipping_fields['phone'] = array(
-						'label' => __( 'Shipping Phone', 'mo-ectools' ),
-					);
-				}
+
+		} elseif ( $items_shipping ) {
+			if ( PayuniShipping::is_moksafowo_payuni_shipping_hd( $items_shipping->get_method_id() ) ) {
+				$shipping_fields['phone'] = array(
+					'label' => __( 'Shipping Phone', 'mo-ectools' ),
+				);
 			}
 		}
 
@@ -101,5 +94,4 @@ class OrderEdit {
 		}
 		return $order_actions;
 	}
-
 }

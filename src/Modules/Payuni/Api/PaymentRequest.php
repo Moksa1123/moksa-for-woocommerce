@@ -17,19 +17,28 @@ class PaymentRequest {
 		if ( ! is_array( $data ) ) {
 			return $data;
 		}
-	static $sensitive = [
-			'BuyerEmail', 'BuyerName', 'BuyerTel', 'BuyerAddress',
-			'CardNumber', 'CardLast4', 'AccountLast5', 'Card4No',
-			'UsrMail', 'UsrEmail', 'UsrPhone',
-			'PayerEmail', 'PayerName', 'PayerTel',
+		static $sensitive = [
+			'BuyerEmail',
+			'BuyerName',
+			'BuyerTel',
+			'BuyerAddress',
+			'CardNumber',
+			'CardLast4',
+			'AccountLast5',
+			'Card4No',
+			'UsrMail',
+			'UsrEmail',
+			'UsrPhone',
+			'PayerEmail',
+			'PayerName',
+			'PayerTel',
 		];
-		$copy = $data;
+		$copy             = $data;
 		foreach ( $sensitive as $k ) {
 			if ( isset( $copy[ $k ] ) ) {
 				$copy[ $k ] = '[REDACTED]';
 			}
 		}
-		// PAYUNi query result wraps records in `Result[0..n]`; recurse into it.
 		if ( isset( $copy['Result'] ) && is_array( $copy['Result'] ) ) {
 			$copy['Result'] = array_map( [ self::class, 'redact_for_log' ], $copy['Result'] );
 		}
@@ -49,16 +58,16 @@ class PaymentRequest {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			'moksafowo_payuni_transaction_args_' . $this->gateway->id,
 			array(
-				'MerID'        => $this->gateway->get_merchant_id(),
-				'MerTradeNo'   => PayuniPayment::build_payuni_order_no( $order->get_id() ),
-				'TradeAmt'     => (int) $order->get_total(),
-				'ProdDesc'     => implode( ';', $prod_desc ),
-				'ReturnURL'    => $this->gateway->return_url, // 前景通知網址付款完成返回指定網址 (感謝頁面).
-				'NotifyURL'    => $this->gateway->notify_url, // 幕後.
-				'UsrMail'      => $order->get_billing_email(), // 付款頁帶入 email.
-				'UsrMailFix'   => '1', // 不可修改 email.
-				'Timestamp'    => time(),
-				'Lang'         => get_option( 'moksafowo_payuni_payment_language', 'zh-tw' ),
+				'MerID'      => $this->gateway->get_merchant_id(),
+				'MerTradeNo' => PayuniPayment::build_payuni_order_no( $order->get_id() ),
+				'TradeAmt'   => (int) $order->get_total(),
+				'ProdDesc'   => implode( ';', $prod_desc ),
+				'ReturnURL'  => $this->gateway->return_url, // 前景通知網址付款完成返回指定網址 (感謝頁面).
+				'NotifyURL'  => $this->gateway->notify_url, // 幕後.
+				'UsrMail'    => $order->get_billing_email(), // 付款頁帶入 email.
+				'UsrMailFix' => '1', // 不可修改 email.
+				'Timestamp'  => time(),
+				'Lang'       => get_option( 'moksafowo_payuni_payment_language', 'zh-tw' ),
 			),
 			$order
 		);
@@ -158,8 +167,8 @@ class PaymentRequest {
 		if ( false === $query_result ) {
 			return new \WP_Error(
 				'process_refund_request',
-				/* translators:  %s is the order id */
-				sprintf( __( 'Unable to Query Order status before refund', 'mo-ectools' ), $order_id ),
+				/* translators: %s: order id */
+				sprintf( __( '退款前查詢訂單狀態失敗(訂單 #%s)。', 'mo-ectools' ), $order_id ),
 				array(
 					'order_id'      => $order_id,
 					'refund_amount' => $amount,
@@ -171,16 +180,13 @@ class PaymentRequest {
 
 		if ( TradeStatus::PAID === $trade_status ) {
 
-			// 請款狀態.
 			$close_status = $query_result['CloseStatus'];
-			// 只有在請款成功時，才能退款.
 			if ( self::is_refundable( $close_status ) ) {
-				// 2=請款成功
 				$encrypt_info = array(
 					'MerID'     => $mer_id,
 					'TradeNo'   => $transaction_id,
 					'Timestamp' => time(),
-					'CloseType' => 2, // 2=退款.
+					'CloseType' => 2,
 					'TradeAmt'  => $amount,
 				);
 				$url          = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/trade/close' : 'https://api.payuni.com.tw/api/trade/close';
@@ -196,7 +202,7 @@ class PaymentRequest {
 						'refund_amount' => $amount,
 					)
 				);
-			}	
+			}
 
 			PayuniPayment::log( 'refund url:' . $url );
 		} else {
@@ -248,7 +254,7 @@ class PaymentRequest {
 			$order->add_order_note( sprintf( __( 'PAYUNi 退款失敗：%1$s（狀態 %2$s）', 'mo-ectools' ), $decrypted['Message'], $result['Status'] ) );
 			throw new \Exception( 'PAYUNi refund failed. Status:' . esc_html( $result['Status'] ) );
 		}
-	}//end refund()
+	}
 
 	public static function query( $order_id, $add_note = true ) {
 
@@ -263,7 +269,7 @@ class PaymentRequest {
 		$payuni_order_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::PAYUNI_ORDER_NO );
 		$payuni_order_no     = $order->get_meta( $payuni_order_no_key );
 
-		$encrypt_info    = array(
+		$encrypt_info = array(
 			'MerID'      => $mer_id,
 			'MerTradeNo' => $payuni_order_no,
 			'Timestamp'  => time(),
@@ -272,7 +278,6 @@ class PaymentRequest {
 
 		$encrypted_info = PayuniPayment::encrypt( $encrypt_info );
 
-		// Set the form data as an array
 		$form_data = array(
 			'MerID'       => $mer_id,
 			'Version'     => '2.0',
@@ -286,7 +291,7 @@ class PaymentRequest {
 			'body'        => $form_data,
 		);
 
-		$url = ( $test_mode ) ? 'https://sandbox-api.payuni.com.tw/api/trade/query' : 'https://api.payuni.com.tw/api/trade/query';
+		$url = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/trade/query' : 'https://api.payuni.com.tw/api/trade/query';
 		PayuniPayment::log( 'query url:' . $url );
 		$response = wp_remote_post( $url, $request_args );
 
@@ -303,11 +308,10 @@ class PaymentRequest {
 		PayuniPayment::log( 'query decrypted info:' . wc_print_r( self::redact_for_log( $decrypted ), true ) );
 
 		if ( 'SUCCESS' === $result['Status'] ) {
-			// Check if Result array exists and has data
 			if ( ! isset( $decrypted['Result'] ) || ! is_array( $decrypted['Result'] ) || empty( $decrypted['Result'] ) ) {
 				PayuniPayment::log( 'PAYUNi query returned SUCCESS but no Result data found.' );
 				if ( $add_note ) {
-					$order->add_order_note( __( 'PAYUNi query returned SUCCESS but no order result found.', 'mo-ectools' ) );
+					$order->add_order_note( __( 'PAYUNi 查詢回應成功，但查無訂單資料。', 'mo-ectools' ) );
 				}
 				return false;
 			}
@@ -320,7 +324,6 @@ class PaymentRequest {
 			$query_result['CreateDay']   = $decrypted['Result'][0]['CreateDay'];
 			$query_result['PaymentType'] = $decrypted['Result'][0]['PaymentType'];
 
-			// 信用卡.
 			if ( '1' === $query_result['PaymentType'] ) {
 				$query_result['CloseStatus'] = $decrypted['Result'][0]['CloseStatus'];
 			}
@@ -329,15 +332,15 @@ class PaymentRequest {
 
 			if ( $add_note ) {
 				$order = wc_get_order( $woo_order_id );
-				/* translators:  %s is the decrypted result */
-				$order->add_order_note( sprintf( __( 'PAYUNi query succeed. Query result: %s', 'mo-ectools' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				/* translators: %s: 查詢結果 */
+				$order->add_order_note( sprintf( __( 'PAYUNi 訂單查詢成功，結果：%s', 'mo-ectools' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
 			}
 			PayuniPayment::log( 'PAYUNi query success. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] . ', Trade Status:' . $query_result['TradeStatus'] );
 			return $query_result;
 		} else {
 			if ( $add_note ) {
-				/* translators:  %s is the decrypted result */
-				$order->add_order_note( sprintf( __( 'PAYUNi query failed. Query result: %s', 'mo-ectools' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				/* translators: %s: 查詢結果 */
+				$order->add_order_note( sprintf( __( 'PAYUNi 訂單查詢失敗，結果：%s', 'mo-ectools' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
 			}
 			PayuniPayment::log( 'PAYUNi query failed. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] );
 			return false;

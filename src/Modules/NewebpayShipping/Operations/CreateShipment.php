@@ -11,15 +11,18 @@ defined( 'ABSPATH' ) || exit;
 
 final class CreateShipment {
 
-	
+
 	public static function run( \WC_Order $order ): array {
 		// 必要 meta：選店時已寫入的 store_id / store_type
-		$store_id  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ID );
+		$store_id = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_STORE_ID );
 		if ( '' === $store_id ) {
 			$store_id = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 		}
 		if ( '' === $store_id ) {
-			return [ 'ok' => false, 'message' => __( '訂單缺少取貨門市資訊，請顧客先選店或商家手動指定。', 'mo-ectools' ) ];
+			return [
+				'ok'      => false,
+				'message' => __( '訂單缺少取貨門市資訊，請顧客先選店或商家手動指定。', 'mo-ectools' ),
+			];
 		}
 
 		$lgs_type  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
@@ -63,17 +66,31 @@ final class CreateShipment {
 			'SenderEmail'     => $sender_email,
 		];
 
-		Helper::log( 'createShipment request', [ 'order_id' => $order->get_id(), 'mtn' => $mtn, 'lgs_type' => $lgs_type, 'ship_type' => $ship_type, 'cod' => $is_cod ] );
+		Helper::log(
+			'createShipment request',
+			[
+				'order_id'  => $order->get_id(),
+				'mtn'       => $mtn,
+				'lgs_type'  => $lgs_type,
+				'ship_type' => $ship_type,
+				'cod'       => $is_cod,
+			]
+		);
 
 		$result = ShippingRequest::create_shipment( $args );
 		if ( ! $result['ok'] ) {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: error */
-				__( '藍新物流建單失敗：%s', 'mo-ectools' ),
-				$result['message']
-			) );
+					__( '藍新物流建單失敗：%s', 'mo-ectools' ),
+					$result['message']
+				)
+			);
 			$order->save();
-			return [ 'ok' => false, 'message' => $result['message'] ];
+			return [
+				'ok'      => false,
+				'message' => $result['message'],
+			];
 		}
 
 		$data     = $result['data'];
@@ -86,15 +103,22 @@ final class CreateShipment {
 		$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE, (string) ( $data['ShipType'] ?? $ship_type ) );
 		$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_TRADE_TYPE, (string) ( $data['TradeType'] ?? '' ) );
 
-		$order->add_order_note( sprintf(
-			/* translators: 1: 物流單號, 2: LgsType */
-			__( '藍新物流建單成功 — 物流單號 %1$s（LgsType=%2$s）', 'mo-ectools' ),
-			$lgs_no,
-			$lgs_type
-		) );
+		$order->add_order_note(
+			sprintf(
+			/* translators: 1: shipping tracking number, 2: logistics service type */
+				__( '藍新物流建單成功 — 物流單號 %1$s（服務類型 %2$s）', 'mo-ectools' ),
+				$lgs_no,
+				$lgs_type
+			)
+		);
 		$order->save();
 
-		return [ 'ok' => true, 'message' => 'OK', 'lgs_no' => $lgs_no, 'trade_no' => $trade_no ];
+		return [
+			'ok'       => true,
+			'message'  => 'OK',
+			'lgs_no'   => $lgs_no,
+			'trade_no' => $trade_no,
+		];
 	}
 
 	private static function generate_mtn( int $order_id ): string {

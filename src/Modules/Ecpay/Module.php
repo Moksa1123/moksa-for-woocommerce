@@ -50,22 +50,22 @@ final class Module extends AbstractGatewayModule {
 	public static function gateway_map(): array {
 		return [
 			Gateways\Unified::GATEWAY_ID => Gateways\Unified::class,
-			'moksafowo_ecpay_credit'            => Gateways\Credit::class,
-			'moksafowo_ecpay_credit_3'          => Gateways\CreditInstallment3::class,
-			'moksafowo_ecpay_credit_6'          => Gateways\CreditInstallment6::class,
-			'moksafowo_ecpay_credit_12'         => Gateways\CreditInstallment12::class,
-			'moksafowo_ecpay_credit_18'         => Gateways\CreditInstallment18::class,
-			'moksafowo_ecpay_credit_24'         => Gateways\CreditInstallment24::class,
-			'moksafowo_ecpay_atm'               => Gateways\Atm::class,
-			'moksafowo_ecpay_cvs'               => Gateways\Cvs::class,
-			'moksafowo_ecpay_barcode'           => Gateways\Barcode::class,
-			'moksafowo_ecpay_webatm'            => Gateways\Webatm::class,
-			'moksafowo_ecpay_applepay'          => Gateways\ApplePay::class,
-			'moksafowo_ecpay_twqr'              => Gateways\Twqr::class,
-			'moksafowo_ecpay_bnpl'              => Gateways\Bnpl::class,
-			'moksafowo_ecpay_weixin'            => Gateways\Weixin::class,
-			'moksafowo_ecpay_jkopay'            => Gateways\Jkopay::class,
-			'moksafowo_ecpay_ipass'             => Gateways\Ipass::class,
+			'moksafowo_ecpay_credit'     => Gateways\Credit::class,
+			'moksafowo_ecpay_credit_3'   => Gateways\CreditInstallment3::class,
+			'moksafowo_ecpay_credit_6'   => Gateways\CreditInstallment6::class,
+			'moksafowo_ecpay_credit_12'  => Gateways\CreditInstallment12::class,
+			'moksafowo_ecpay_credit_18'  => Gateways\CreditInstallment18::class,
+			'moksafowo_ecpay_credit_24'  => Gateways\CreditInstallment24::class,
+			'moksafowo_ecpay_atm'        => Gateways\Atm::class,
+			'moksafowo_ecpay_cvs'        => Gateways\Cvs::class,
+			'moksafowo_ecpay_barcode'    => Gateways\Barcode::class,
+			'moksafowo_ecpay_webatm'     => Gateways\Webatm::class,
+			'moksafowo_ecpay_applepay'   => Gateways\ApplePay::class,
+			'moksafowo_ecpay_twqr'       => Gateways\Twqr::class,
+			'moksafowo_ecpay_bnpl'       => Gateways\Bnpl::class,
+			'moksafowo_ecpay_weixin'     => Gateways\Weixin::class,
+			'moksafowo_ecpay_jkopay'     => Gateways\Jkopay::class,
+			'moksafowo_ecpay_ipass'      => Gateways\Ipass::class,
 		];
 	}
 
@@ -84,7 +84,6 @@ final class Module extends AbstractGatewayModule {
 	protected function boot_extras(): void {
 		add_filter( 'woocommerce_order_get_payment_method_title', [ __CLASS__, 'rebrand_legacy_payment_title' ], 10, 2 );
 
-		// 顧客端取號繳費資訊（ATM/超商代碼/條碼）— thankyou + my-account/view-order。
 		Frontend\CustomerPaymentInfo::init();
 
 		if ( is_admin() ) {

@@ -61,7 +61,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		return Helper::has_credentials();
 	}
 
-	
+
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
@@ -79,19 +79,19 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		}
 
 		$body = [
-			'referenceId'           => $reference_id,
-			'amount'                => [
+			'referenceId'            => $reference_id,
+			'amount'                 => [
 				// ×100：先 round WC total（避免浮點尾差）再轉整數 cents。TWD 仍 ×100。
 				'value'    => (int) round( (float) $order->get_total() * 100 ),
 				'currency' => 'TWD',
 			],
-			'returnUrl'             => $order->get_checkout_order_received_url(),
-			'mode'                  => 'regular',
+			'returnUrl'              => $order->get_checkout_order_received_url(),
+			'mode'                   => 'regular',
 			'allowPaymentMethodList' => $allowed,
-			'order'                 => $this->build_order( $order ),
-			'billing'               => $this->build_billing( $order ),
-			'customer'              => $this->build_customer( $order ),
-			'client'                => $this->build_client(),
+			'order'                  => $this->build_order( $order ),
+			'billing'                => $this->build_billing( $order ),
+			'customer'               => $this->build_customer( $order ),
+			'client'                 => $this->build_client(),
 		];
 
 		$resp        = Client::create_session( $body );
@@ -99,13 +99,16 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		$session_id  = (string) ( $data['sessionId'] ?? '' );
 		$session_url = (string) ( $data['sessionUrl'] ?? '' );
 
-		Helper::log( 'session create', [
-			'order_id'     => $order_id,
-			'reference_id' => $reference_id,
-			'ok'           => $resp['ok'],
-			'code'         => $resp['code'],
-			'session_id'   => $session_id,
-		] );
+		Helper::log(
+			'session create',
+			[
+				'order_id'     => $order_id,
+				'reference_id' => $reference_id,
+				'ok'           => $resp['ok'],
+				'code'         => $resp['code'],
+				'session_id'   => $session_id,
+			]
+		);
 
 		if ( ! $resp['ok'] || '' === $session_url ) {
 			wc_add_notice(
@@ -116,7 +119,10 @@ final class SessionGateway extends \WC_Payment_Gateway {
 				),
 				'error'
 			);
-			return [ 'result' => 'failure', 'redirect' => '' ];
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
 		}
 
 		$order->update_meta_data( Keys::SLP_REFERENCE_ID, $reference_id );
@@ -171,13 +177,16 @@ final class SessionGateway extends \WC_Payment_Gateway {
 
 		$resp = Client::create_refund( $payload, $idempotent_key );
 
-		Helper::log( 'refund create', [
-			'order_id'       => $order_id,
-			'trade_order_id' => $trade_order_id,
-			'value'          => $value,
-			'ok'             => $resp['ok'],
-			'code'           => $resp['code'],
-		] );
+		Helper::log(
+			'refund create',
+			[
+				'order_id'       => $order_id,
+				'trade_order_id' => $trade_order_id,
+				'value'          => $value,
+				'ok'             => $resp['ok'],
+				'code'           => $resp['code'],
+			]
+		);
 
 		if ( ! $resp['ok'] ) {
 			return new \WP_Error(
@@ -194,13 +203,15 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		if ( '' !== $refund_order_id ) {
 			$order->update_meta_data( Keys::SLP_REFUND_ORDER_ID, $refund_order_id );
 		}
-		$order->add_order_note( sprintf(
+		$order->add_order_note(
+			sprintf(
 			/* translators: 1: amount, 2: refund order id, 3: reason */
-			__( 'Shopline Payments 退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'mo-ectools' ),
-			number_format( $value / 100, 0 ),
-			'' !== $refund_order_id ? $refund_order_id : __( '處理中', 'mo-ectools' ),
-			'' !== $reason ? $reason : __( '無原因', 'mo-ectools' )
-		) );
+				__( 'Shopline Payments 退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'mo-ectools' ),
+				number_format( $value / 100, 0 ),
+				'' !== $refund_order_id ? $refund_order_id : __( '處理中', 'mo-ectools' ),
+				'' !== $reason ? $reason : __( '無原因', 'mo-ectools' )
+			)
+		);
 		$order->save();
 		return true;
 	}

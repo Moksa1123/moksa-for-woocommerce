@@ -12,8 +12,7 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// IPN 無法帶 WP nonce — 來源真實性由 CheckMacValue 驗證；驗章需原始值，
-		// 逐欄 sanitize 於驗章通過後進行。
+		// CheckMacValue 驗章需原始值；sanitize 在驗章通過後進行
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- signature input must be untouched; sanitized below after verification.
 		$raw = $_POST;
 
@@ -30,7 +29,6 @@ final class IpnHandler {
 			exit;
 		}
 
-		// 驗章通過 — 全欄位 sanitize 後才允許記錄與使用。
 		$posted = array_map(
 			static fn( $v ) => is_string( $v ) ? sanitize_text_field( wp_unslash( $v ) ) : $v,
 			$raw
@@ -59,22 +57,21 @@ final class IpnHandler {
 		$rtn_msg      = (string) ( $posted['RtnMsg'] ?? '' );
 		$logistics_id = (string) ( $posted['AllPayLogisticsID'] ?? '' );
 
-		// 寫 meta 為審計 — 不論 RtnCode 成功失敗
 		if ( '' !== $logistics_id ) {
 			$order->update_meta_data( Keys::ECPAY_LOGISTIC_ID, $logistics_id );
 		}
 
-		// 把最新貨態 + updated_at 寫進對應 record（讓訂單編輯頁可顯示「狀態更新時間」）
 		CreateOrder::update_record_status( $order, $logistics_id, $rtn_code, $rtn_msg );
 
-		$order->add_order_note( sprintf(
-			/* translators: 1: status code, 2: status message */
-			__( '綠界物流貨態：%2$s（狀態代碼 %1$s）', 'mo-ectools' ),
-			$rtn_code,
-			$rtn_msg
-		) );
+		$order->add_order_note(
+			sprintf(
+				/* translators: 1: status code, 2: status message */
+				__( '綠界物流貨態：%2$s（狀態代碼 %1$s）', 'mo-ectools' ),
+				$rtn_code,
+				$rtn_msg
+			)
+		);
 
-		// 廣播給 StatusMapper 處理 status 對應
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_ecpay_shipping_status_received', $order, $rtn_code, $rtn_msg );
 
@@ -89,9 +86,7 @@ final class IpnHandler {
 			return null;
 		}
 
-		// MTN 格式：
-		//   單包：mowpL001234R<hex>           例 mowpL001857Rfdeeb2
-		//   多包：mowpL001234R<hex>T{1|2|3}    例 mowpL001857Rfdeeb2T1（Phase C 拆單）
+		// MTN 格式：mowpL<6位訂單ID>R<hex>[T<temp>]
 		if ( preg_match( '/^[A-Za-z]+(\d{6})R[a-f0-9]+(?:T\d)?$/', $merchant_trade_no, $m ) ) {
 			$order_id = (int) ltrim( $m[1], '0' );
 			if ( $order_id > 0 && wc_get_order( $order_id ) ) {
@@ -99,30 +94,32 @@ final class IpnHandler {
 			}
 		}
 
-		// Fallback 1：legacy single-key meta（單包訂單 mirror 的最新 MTN）
-		$found = wc_get_orders( [
-			'limit'      => 1,
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_key'   => Keys::ECPAY_LOGISTIC_MERCHANT_TRADE_NO,
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_value' => $merchant_trade_no,
-		] );
+		$found = wc_get_orders(
+			[
+				'limit'      => 1,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_key'   => Keys::ECPAY_LOGISTIC_MERCHANT_TRADE_NO,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_value' => $merchant_trade_no,
+			]
+		);
 		if ( ! empty( $found ) ) {
 			$order = $found[0];
 			return $order instanceof \WC_Order ? $order->get_id() : null;
 		}
 
-		// Fallback 2：拆單訂單的 records list 含多筆 MTN，single mirror 只存最新一筆，
-		// 對 T1/T2 的 IPN 對不到。掃近期 30 天有 records 的訂單找 MTN match。
-		$candidates = wc_get_orders( [
-			'limit'        => 50,
-			'orderby'      => 'date',
-			'order'        => 'DESC',
-			'date_after'   => gmdate( 'Y-m-d', time() - 30 * DAY_IN_SECONDS ),
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-			'meta_key'     => Keys::ECPAY_LOGISTIC_RECORDS,
-			'meta_compare' => 'EXISTS',
-		] );
+		// Fallback：拆單 T1/T2 IPN 對不到 mirror key，掃近 30 天 records 找 MTN
+		$candidates = wc_get_orders(
+			[
+				'limit'        => 50,
+				'orderby'      => 'date',
+				'order'        => 'DESC',
+				'date_after'   => gmdate( 'Y-m-d', time() - 30 * DAY_IN_SECONDS ),
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
+				'meta_key'     => Keys::ECPAY_LOGISTIC_RECORDS,
+				'meta_compare' => 'EXISTS',
+			]
+		);
 		foreach ( $candidates as $candidate ) {
 			$records = $candidate->get_meta( Keys::ECPAY_LOGISTIC_RECORDS );
 			if ( ! is_array( $records ) ) {
@@ -136,5 +133,4 @@ final class IpnHandler {
 		}
 		return null;
 	}
-
 }

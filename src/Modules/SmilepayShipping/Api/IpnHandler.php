@@ -10,11 +10,10 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// 匿名 webhook 無法帶 WP nonce — 走 Verify_key（hash_equals）+ smseid 訂單對應雙重驗證。
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; Verify_key checked below before any state change, fields sanitized at extraction.
 		$payload = wp_unslash( $_REQUEST );
 
-		// SmilePay 用 BIG5 編碼 → 強制轉 UTF-8
+		// SmilePay 回傳 BIG5 編碼，強制轉 UTF-8
 		foreach ( $payload as $k => $v ) {
 			if ( is_string( $v ) && mb_detect_encoding( urldecode( $v ), 'BIG5', true ) ) {
 				$payload[ $k ] = mb_convert_encoding( urldecode( $v ), 'UTF-8', 'BIG5' );
@@ -34,15 +33,27 @@ final class IpnHandler {
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 
 		if ( ! $order instanceof \WC_Order ) {
-			Helper::log( 'IPN order not found', [ 'order_id' => $order_id, 'smseid' => $smseid ] );
+			Helper::log(
+				'IPN order not found',
+				[
+					'order_id' => $order_id,
+					'smseid'   => $smseid,
+				]
+			);
 			status_header( 200 );
 			exit( '<Roturlstatus>order not found</Roturlstatus>' );
 		}
 
-		// 驗 smseid 對應該訂單（防被人偷推 IPN）
 		$order_smseid = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_NO );
 		if ( '' !== $order_smseid && '' !== $smseid && ! hash_equals( $order_smseid, $smseid ) ) {
-			Helper::log( 'IPN smseid mismatch', [ 'order_id' => $order_id, 'expected' => $order_smseid, 'got' => $smseid ] );
+			Helper::log(
+				'IPN smseid mismatch',
+				[
+					'order_id' => $order_id,
+					'expected' => $order_smseid,
+					'got'      => $smseid,
+				]
+			);
 			status_header( 403 );
 			exit( '<Roturlstatus>smseid mismatch</Roturlstatus>' );
 		}
@@ -52,35 +63,45 @@ final class IpnHandler {
 
 		[ $label, $wc_status ] = self::map_status( $ship_status );
 
-		// 寫物流狀態 meta
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STATUS, $label );
 		if ( '' !== $paymentno ) {
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_PAY_NO, $paymentno );
 		}
 		$order->save();
 
-		// 推 WC 訂單狀態（若有 mapping）
 		if ( '' !== $wc_status && $order->get_status() !== $wc_status ) {
-			$order->update_status( $wc_status, sprintf(
+			$order->update_status(
+				$wc_status,
+				sprintf(
 				/* translators: %s: SmilePay status label */
-				__( '速買配物流狀態：%s', 'mo-ectools' ),
-				$label
-			) );
+					__( '速買配物流狀態：%s', 'mo-ectools' ),
+					$label
+				)
+			);
 		} else {
-			$order->add_order_note( sprintf(
+			$order->add_order_note(
+				sprintf(
 				/* translators: %s: SmilePay status label */
-				__( '速買配物流狀態：%s', 'mo-ectools' ),
-				$label
-			) );
+					__( '速買配物流狀態：%s', 'mo-ectools' ),
+					$label
+				)
+			);
 		}
 
-		Helper::log( 'IPN processed', [ 'order_id' => $order_id, 'ship_status' => $ship_status, 'label' => $label ] );
+		Helper::log(
+			'IPN processed',
+			[
+				'order_id'    => $order_id,
+				'ship_status' => $ship_status,
+				'label'       => $label,
+			]
+		);
 
 		status_header( 200 );
 		exit( '<Roturlstatus>mowp1.0</Roturlstatus>' );
 	}
 
-	
+
 	private static function map_status( int $code ): array {
 		switch ( $code ) {
 			case 1:

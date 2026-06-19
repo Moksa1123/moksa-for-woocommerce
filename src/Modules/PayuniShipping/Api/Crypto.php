@@ -22,15 +22,14 @@ final class Crypto {
 	}
 
 	public static function decrypt( string $encrypt_str = '' ): array {
-		$key  = Credentials::hashkey();
-		$iv   = Credentials::hashiv();
+		$key = Credentials::hashkey();
+		$iv  = Credentials::hashiv();
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (EncryptInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$blob = @hex2bin( $encrypt_str );
 		if ( false === $blob ) {
 			return [];
 		}
-		// strrpos 從右側找最後 ':::'（base64(tag) 不含 ':'）— 治 explode 對 ciphertext 隨機 byte 含 ':::' 的切錯 bug
-		$sep_pos = strrpos( $blob, ':::' );
+		$sep_pos = strrpos( $blob, ':::' ); // strrpos 從右：base64(tag) 無 ':'，避免 ciphertext 含 ':::' 切錯
 		if ( false === $sep_pos ) {
 			return [];
 		}
