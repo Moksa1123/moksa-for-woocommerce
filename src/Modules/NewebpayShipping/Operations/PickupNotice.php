@@ -83,14 +83,7 @@ final class PickupNotice {
 		$shop_city     = (string) ( get_option( 'woocommerce_store_city', '' ) );
 		$shop_postcode = (string) ( get_option( 'woocommerce_store_postcode', '' ) );
 
-		ob_start();
-		?>
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<title><?php esc_html_e( '藍新物流託運單', 'mo-ectools' ); ?></title>
-<style>
+		$pickup_css = <<<'CSS'
 	body { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; margin: 0; padding: 12px; color: #000; }
 	.label { width: 100mm; min-height: 150mm; border: 2px solid #000; padding: 12px; margin: 0 auto 12px; box-sizing: border-box; page-break-after: always; background: #fff; }
 	.label:last-child { page-break-after: auto; }
@@ -116,11 +109,23 @@ final class PickupNotice {
 		body { padding: 0; }
 		.label { border: 1px solid #000; margin: 0; }
 	}
-</style>
+CSS;
+		wp_register_style( 'moksafowo-newebpay-pickup', false, array(), MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-newebpay-pickup' );
+		wp_add_inline_style( 'moksafowo-newebpay-pickup', $pickup_css );
+
+		ob_start();
+		?>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title><?php esc_html_e( '藍新物流託運單', 'mo-ectools' ); ?></title>
+		<?php wp_print_styles( 'moksafowo-newebpay-pickup' ); ?>
 </head>
 <body>
 <div class="print-bar">
-	<button onclick="window.print()"><?php esc_html_e( '列印', 'mo-ectools' ); ?></button>
+	<button type="button" id="moksafowo-pickup-print"><?php esc_html_e( '列印', 'mo-ectools' ); ?></button>
 	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單由 mowp 自產，貼於包裹上即可。', 'mo-ectools' ); ?></div>
 </div>
 		<?php foreach ( $orders as $order ) : ?>
@@ -172,6 +177,7 @@ final class PickupNotice {
 		<div class="row" style="margin-top:8px;border-top:1px solid #000;padding-top:6px;"><div class="label-key"><?php esc_html_e( '訂單總額', 'mo-ectools' ); ?></div><div class="label-val big">NT$<?php echo esc_html( (string) (int) $order->get_total() ); ?></div></div>
 	</div>
 		<?php endforeach; ?>
+		<?php wp_print_inline_script_tag( "document.getElementById('moksafowo-pickup-print').addEventListener('click',function(){window.print();});" ); ?>
 </body>
 </html>
 		<?php

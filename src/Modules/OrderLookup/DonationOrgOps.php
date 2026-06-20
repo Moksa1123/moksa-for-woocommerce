@@ -39,32 +39,32 @@ final class DonationOrgOps {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$name = is_array( $args ) && isset( $args['name'] ) ? trim( (string) $args['name'] ) : '';
 		$code = is_array( $args ) && isset( $args['code'] ) ? trim( (string) $args['code'] ) : '';
 		$code = (string) preg_replace( '/[^0-9xX]/', '', $code );
 
 		if ( '' === $name ) {
-			return new \WP_Error( 'mo_ai_no_name', __( '請提供捐贈單位名稱。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_name', __( '請提供捐贈單位名稱。', 'mo-ectools' ) );
 		}
 		if ( str_contains( $name, '|' ) ) {
-			return new \WP_Error( 'mo_ai_bad_name', __( '單位名稱不可含「|」符號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_name', __( '單位名稱不可含「|」符號。', 'mo-ectools' ) );
 		}
 		if ( ! self::valid_code( $code ) ) {
-			return new \WP_Error( 'mo_ai_bad_code', __( '愛心碼格式不正確(應為 3-7 碼數字)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_code', __( '愛心碼格式不正確(應為 3-7 碼數字)。', 'mo-ectools' ) );
 		}
 
 		$active = self::active_invoice();
 		if ( null === $active ) {
-			return new \WP_Error( 'mo_ai_no_invoice', __( '沒有啟用任何電子發票模組。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '沒有啟用任何電子發票模組。', 'mo-ectools' ) );
 		}
 		[ $provider, $prefix ] = $active;
 
 		$dupe = InvoiceChannels::donate_org_name( $prefix, $code );
 		if ( '' !== $dupe ) {
 			return new \WP_Error(
-				'mo_ai_dupe',
+				'moksafowo_ai_dupe',
 				sprintf(
 					/* translators: 1: love code, 2: existing org name */
 					__( '愛心碼 %1$s 已存在(%2$s)。', 'mo-ectools' ),
@@ -94,13 +94,13 @@ final class DonationOrgOps {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$prefix = (string) ( $params['prefix'] ?? '' );
 		$name   = (string) ( $params['name'] ?? '' );
 		$code   = (string) ( $params['code'] ?? '' );
 		if ( '' === $prefix || '' === $name || ! self::valid_code( $code ) ) {
-			return new \WP_Error( 'mo_ai_bad_input', __( '資料不完整,無法新增。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法新增。', 'mo-ectools' ) );
 		}
 
 		$raw  = (string) get_option( $prefix . '_donate_orgs', '' );

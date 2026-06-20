@@ -17,7 +17,7 @@ final class PaymentRequest {
 
 	public function __construct( $gateway ) {
 		$this->gateway = $gateway;
-		add_action( 'linepay_process_confirm_failed', array( $this, 'on_process_confirm_failed' ), 10, 1 );
+		add_action( 'moksafowo_linepay_process_confirm_failed', array( $this, 'on_process_confirm_failed' ), 10, 1 );
 	}
 
 	public function request( $order_id ) {
@@ -73,8 +73,8 @@ final class PaymentRequest {
 				'options' => array(
 					'payment' => array(
 						'payType' => strtoupper( $this->gateway->payment_type ),
-						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-						'capture' => apply_filters( 'Moksafowo_LinePay_payment_capture', true ),
+						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+						'capture' => apply_filters( 'moksafowo_linepay_payment_capture', true ),
 					),
 					'extra'   => array(
 						'branchName' => '',
@@ -211,8 +211,8 @@ final class PaymentRequest {
 			}
 
 			if ( $is_checkout ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-				do_action( 'linepay_process_confirm_failed', $order );
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+				do_action( 'moksafowo_linepay_process_confirm_failed', $order );
 			} else {
 				throw $e;
 			}
@@ -415,7 +415,7 @@ final class PaymentRequest {
 				$resp->returnMessage
 			);
 			$order->add_order_note( $msg );
-			return new WP_Error( 'mowp_linepay_refund_failed', $msg );
+			return new WP_Error( 'moksafowo_linepay_refund_failed', $msg );
 		}
 
 		$refund_ids = $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
@@ -485,8 +485,8 @@ final class PaymentRequest {
 
 			if ( count( $items ) > 1 ) {
 				$order_name = apply_filters(
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-					'Moksafowo_LinePay_checkout_product_name',
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+					'moksafowo_linepay_checkout_product_name',
 					sprintf(
 						/* translators:  %1$s is product name, %2$s is the order item count */
 						__( '%1$s and total %2$s products', 'mo-ectools' ),
@@ -506,8 +506,8 @@ final class PaymentRequest {
 			$thumbnail_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $first_item->get_product_id() ) );
 
 			if ( isset( $thumbnail_image_urls[0] ) ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-				$product['imageUrl'] = apply_filters( 'Moksafowo_LinePay_checkout_product_image', $thumbnail_image_urls[0] );
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+				$product['imageUrl'] = apply_filters( 'moksafowo_linepay_checkout_product_image', $thumbnail_image_urls[0] );
 			}
 
 			array_push( $products, $product );
@@ -527,8 +527,8 @@ final class PaymentRequest {
 	}
 
 	private function check_payment_and_update_order_note( $order, $context ): void {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-		if ( LinePay::$detail_payment_status_note_enabled || apply_filters( 'Moksafowo_LinePay_enable_detail_note', false ) ) {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+		if ( LinePay::$detail_payment_status_note_enabled || apply_filters( 'moksafowo_linepay_enable_detail_note', false ) ) {
 			$check_status = $this->check( $order );
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$check_code = $check_status->returnCode;

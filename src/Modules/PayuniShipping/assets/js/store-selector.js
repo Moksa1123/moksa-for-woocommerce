@@ -124,7 +124,7 @@
          */
         initializeStoreData: function() {
             // Clear the CVS selection flag when returning from store selection
-            window.payuniSelectingStore = false;
+            window.moksafowoPayuniSelectingStore = false;
             
             // Priority 1: Check for WC Session data via PHP
             if (moksafowo_payuni_store_selector.stored_store_data) {
@@ -254,16 +254,7 @@
             
             // Check if it's a PAYUNi CVS method
             const isCVS = methodId && methodId.indexOf(this.config.cvsMethodPrefix) !== -1;
-            
-            // Check for other CVS plugins to avoid conflicts
-            const hasOtherCVS = this.checkOtherCVSPlugins(methodId);
-            
-            // If other CVS plugin is detected, do nothing - let that plugin handle everything
-            if (hasOtherCVS) {
-                this.hideStoreSelector(); // Hide PayUni store selector only
-                return; // Exit early, don't touch any fields
-            }
-            
+
             if (isCVS) {
                 this.showStoreSelector();
                 this.updateFieldVisibility();
@@ -271,20 +262,6 @@
                 this.hideStoreSelector();
                 this.restoreFieldVisibility();
             }
-        },
-
-        /**
-         * Check for other CVS plugins to avoid conflicts
-         */
-        checkOtherCVSPlugins: function(methodId) {
-            // Check for common CVS shipping plugins
-            const otherCVSPrefixes = [
-                'ry_ecpay_shipping',
-                'ry_newebpay_shipping',
-                'ry_smilepay_shipping',
-            ];
-
-            return otherCVSPrefixes.some(prefix => methodId && methodId.indexOf(prefix) !== -1);
         },
 
         /**
@@ -384,11 +361,11 @@
             
             // Save form data before redirecting to CVS selection
             // Set flag to prevent auto-save during CVS selection
-            window.payuniSelectingStore = true;
+            window.moksafowoPayuniSelectingStore = true;
             
             // If save-fields.js is loaded, use its saveForm method
-            if (typeof window.PayuniCheckoutForm !== 'undefined' && window.PayuniCheckoutForm.saveForm) {
-                window.PayuniCheckoutForm.saveForm();
+            if (typeof window.moksafowoPayuniCheckoutForm !== 'undefined' && window.moksafowoPayuniCheckoutForm.saveForm) {
+                window.moksafowoPayuniCheckoutForm.saveForm();
                 this.log('Form data saved before CVS selection');
             }
 
@@ -505,13 +482,7 @@
             const selected = this.getSelectedShippingMethod();
             const methodId = selected ? selected.split(':')[0] : '';
             const isCVS = methodId && methodId.indexOf(this.config.cvsMethodPrefix) !== -1;
-            const hasOtherCVS = this.checkOtherCVSPlugins(methodId);
             const isShipToDifferent = $('#ship-to-different-address-checkbox').is(':checked');
-
-            // Skip field management if other CVS plugin is detected
-            if (hasOtherCVS) {
-                return;
-            }
 
             // Only hide fields if BOTH CVS is selected AND shipping to different address
             if (isCVS && isShipToDifferent) {
@@ -603,15 +574,6 @@
          * Restore normal field visibility
          */
         restoreFieldVisibility: function() {
-            const selected = this.getSelectedShippingMethod();
-            const methodId = selected ? selected.split(':')[0] : '';
-            const hasOtherCVS = this.checkOtherCVSPlugins(methodId);
-            
-            // Skip field management if other CVS plugin is detected
-            if (hasOtherCVS) {
-                return;
-            }
-            
             this.showAddressFields();
             this.restoreCheckboxLabel();
             

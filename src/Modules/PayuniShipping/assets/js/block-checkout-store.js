@@ -60,8 +60,8 @@
 		return null;
 	}
 
-	// host 建立 / step content 定位 / escapeHtml / submitForm 全走共用 MowpCvsStore helper。
-	const M = window.MowpCvsStore;
+	// host 建立 / step content 定位 / escapeHtml / submitForm 全走共用 moksafowoCvsStore helper。
+	const M = window.moksafowoCvsStore;
 
 	function removeHost() {
 		const host = document.getElementById( HOST_ID );

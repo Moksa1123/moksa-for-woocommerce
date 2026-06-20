@@ -42,9 +42,7 @@ class SettingsTab extends \WC_Settings_Page {
 	}
 
 	public function get_settings_for_shipping_section() {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$settings = apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			'moksafowo_payuni_shipping_settings',
 			array(
 				array(

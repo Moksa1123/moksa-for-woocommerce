@@ -48,7 +48,7 @@ final class StoreSelector {
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/SmilepayShipping/assets/js/store-selector.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 
-		// 共用超商選店卡片樣式 + MowpCvsStore helper(對齊 PAYUNi / 藍新)。
+		// 共用超商選店卡片樣式 + moksafowoCvsStore helper(對齊 PAYUNi / 藍新)。
 		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 
 		wp_register_script(
@@ -111,10 +111,14 @@ final class StoreSelector {
 	}
 
 	public static function handle_emap_callback(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- External store callback POST; hash verified inside this method.
-		$store_id      = isset( $_REQUEST['storeid'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeid'] ) ) : '';
-		$store_name    = isset( $_REQUEST['storename'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storename'] ) ) : '';
-		$store_address = isset( $_REQUEST['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeaddress'] ) ) : '';
+		// SmilePay EMAP store callback: no WP nonce possible (SmilePay redirects the browser back here).
+		// SmilePay EMAP protocol does not include a callback hash/signature.
+		// Guard: session-only write (no order state mutation here); storeid is validated to be non-empty
+		// before writing; all fields sanitized at capture via sanitize_text_field + wp_unslash.
+		// Order meta is written only at checkout via save_to_order(), which fires after WC checkout nonce check.
+		$store_id      = isset( $_REQUEST['storeid'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeid'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; no nonce/hash possible (protocol limitation); session-only write, sanitized; order meta written later under WC checkout nonce.
+		$store_name    = isset( $_REQUEST['storename'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storename'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
+		$store_address = isset( $_REQUEST['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeaddress'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
 
 		if ( '' === $store_id ) {
 			Helper::log( 'EMAP callback missing storeid' );

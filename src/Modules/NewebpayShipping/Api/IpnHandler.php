@@ -10,10 +10,13 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// IPN 無 nonce — TradeSha（SHA256）驗簽後才使用；AES hex 對 sanitize_text_field 為恆等
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		// Gateway shipping IPN: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via TradeSha (SHA256 + hash_equals, Helper::verify_trade_sha) on line ~25
+		// before any decryption or state change. AES-encrypted hex is idempotent under sanitize_text_field.
+		// Decoded payload is deep-sanitized via map_deep on line ~38 after decryption succeeds.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- gateway shipping IPN; no WP nonce possible; source verified via TradeSha hash_equals before any use; decoded payload sanitized via map_deep after decryption.
 		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeInfo'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- same as above.
 		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeSha'] ) ) : '';
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
@@ -122,7 +125,6 @@ final class IpnHandler {
 		}
 		$order->save();
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_newebpay_shipping_status_received', $order, $data, $status );
 
 		status_header( 200 );

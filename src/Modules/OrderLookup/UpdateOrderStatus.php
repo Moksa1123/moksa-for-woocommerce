@@ -25,7 +25,7 @@ final class UpdateOrderStatus {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 
 		$ref    = is_array( $args ) && isset( $args['order'] ) ? (string) $args['order'] : '';
@@ -35,14 +35,14 @@ final class UpdateOrderStatus {
 		$order = $id ? wc_get_order( $id ) : false;
 		if ( ! $order ) {
 			/* translators: %s: order reference the user gave */
-			return new \WP_Error( 'mo_ai_no_order', sprintf( __( '找不到訂單:%s。', 'mo-ectools' ), $ref ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', sprintf( __( '找不到訂單:%s。', 'mo-ectools' ), $ref ) );
 		}
 
 		$statuses = wc_get_order_statuses();
 		$to_key   = 'wc-' . $status;
 		if ( ! isset( $statuses[ $to_key ] ) ) {
 			/* translators: %s: status slug the user gave */
-			return new \WP_Error( 'mo_ai_bad_status', sprintf( __( '無效的訂單狀態:%s。', 'mo-ectools' ), $status ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', sprintf( __( '無效的訂單狀態:%s。', 'mo-ectools' ), $status ) );
 		}
 
 		$from_label = wc_get_order_status_name( $order->get_status() );
@@ -67,18 +67,18 @@ final class UpdateOrderStatus {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 
 		$order = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		if ( ! $order ) {
-			return new \WP_Error( 'mo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
 		}
 
 		$to       = (string) ( $params['to_slug'] ?? '' );
 		$statuses = wc_get_order_statuses();
 		if ( ! isset( $statuses[ 'wc-' . $to ] ) ) {
-			return new \WP_Error( 'mo_ai_bad_status', __( '無效的訂單狀態。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', __( '無效的訂單狀態。', 'mo-ectools' ) );
 		}
 
 		$order->update_status( $to, __( '經 Moksa AI 確認執行。', 'mo-ectools' ) );

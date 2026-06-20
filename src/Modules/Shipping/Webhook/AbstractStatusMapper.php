@@ -14,13 +14,10 @@ abstract class AbstractStatusMapper {
 	public function handle_status_received( \WC_Order $order, string $code, string $desc = '' ): void {
 		$provider = $this->provider_slug();
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( "moksafowo_shipping_status_received_{$provider}_{$code}", $order, $desc );
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_shipping_status_received', $order, $code, $desc, $provider );
 
 		$slug = $this->code_map()[ $code ] ?? null;
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$slug = apply_filters( 'moksafowo_shipping_lgs_status_map', $slug, $code, $order, $provider );
 
 		if ( null === $slug || $order->get_status() === $slug ) {
@@ -43,12 +40,10 @@ abstract class AbstractStatusMapper {
 			)
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( "moksafowo_shipping_status_changed_{$slug}", $order, $provider, $code );
 
 		// mo-* 自訂狀態走自家 email；WC 既有狀態走 WC 內建 email pipeline
 		if ( str_starts_with( $slug, 'mo-' ) ) {
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			do_action( 'moksafowo_shipping_status_' . $slug . '_notification', $order->get_id(), $order );
 		}
 	}

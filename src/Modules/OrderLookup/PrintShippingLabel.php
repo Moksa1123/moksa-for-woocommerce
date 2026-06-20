@@ -24,12 +24,12 @@ final class PrintShippingLabel {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要訂單編輯權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要訂單編輯權限。', 'mo-ectools' ) );
 		}
 
 		$refs = self::normalize_refs( is_array( $args ) ? ( $args['orders'] ?? '' ) : '' );
 		if ( empty( $refs ) ) {
-			return new \WP_Error( 'mo_ai_no_orders', __( '沒有指定要列印的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要列印的訂單。', 'mo-ectools' ) );
 		}
 
 		$ids     = array();
@@ -47,7 +47,7 @@ final class PrintShippingLabel {
 		}
 
 		if ( empty( $ids ) ) {
-			return new \WP_Error( 'mo_ai_no_orders', __( '找不到任何有效的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '找不到任何有效的訂單。', 'mo-ectools' ) );
 		}
 
 		$paper   = ( is_array( $args ) && isset( $args['paper'] ) && in_array( (string) $args['paper'], array( '2', 'a6', 'A6' ), true ) ) ? '2' : '1';
@@ -79,14 +79,14 @@ final class PrintShippingLabel {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要訂單編輯權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要訂單編輯權限。', 'mo-ectools' ) );
 		}
 		$ids   = is_array( $params['order_ids'] ?? null ) ? array_map( 'absint', $params['order_ids'] ) : array();
 		$paper = (string) ( $params['paper'] ?? '1' );
 
 		$result = BatchPrintAdminUI::build_print_url( $ids, $paper );
 		if ( empty( $result['ok'] ) ) {
-			return new \WP_Error( 'mo_ai_print_failed', (string) ( $result['message'] ?? __( '無法產生列印標籤。', 'mo-ectools' ) ) );
+			return new \WP_Error( 'moksafowo_ai_print_failed', (string) ( $result['message'] ?? __( '無法產生列印標籤。', 'mo-ectools' ) ) );
 		}
 
 		$message = sprintf(

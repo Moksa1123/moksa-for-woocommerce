@@ -83,7 +83,7 @@ final class Module extends AbstractGatewayModule {
 		);
 		wp_localize_script(
 			'moksafowo-tappay-fields',
-			'moTappaySettings',
+			'moksafowoTappaySettings',
 			[
 				'gatewayId' => Gateways\Credit::GATEWAY_ID,
 				'appId'     => (int) Helper::app_id(),

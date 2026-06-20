@@ -9,8 +9,6 @@ final class AddFee {
 
 	public static function init(): void {
 		add_shortcode( 'moksafowo_addfee', [ self::class, 'render' ] );
-		add_shortcode( 'ry_addfee', [ self::class, 'render' ] ); // RY pro 平移 alias
-		add_shortcode( 'mo_addfee', [ self::class, 'render' ] ); // 2026-06 前綴遷移前已存的 formula
 	}
 
 	public static function render( $atts ): string {

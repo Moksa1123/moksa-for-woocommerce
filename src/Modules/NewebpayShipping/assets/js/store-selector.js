@@ -22,7 +22,7 @@
 		return cfg.cvs_methods.indexOf( methodId ) !== -1;
 	}
 
-	const M = window.MowpCvsStore;
+	const M = window.moksafowoCvsStore;
 
 	function carriers() {
 		return ( cfg.carriers && cfg.carriers.length ) ? cfg.carriers : [ { ship_type: '1', name: '7-ELEVEN' } ];
@@ -64,7 +64,7 @@
 			return;
 		}
 		// Read store from session via AJAX (or local var)
-		renderHost( window.__moNewebpayStore || null );
+		renderHost( window.__moksafowoNewebpayStore || null );
 	}
 
 	function openMap( shipType ) {
@@ -105,7 +105,7 @@
 			.then( ( r ) => r.json() )
 			.then( ( res ) => {
 				if ( res.success ) {
-					window.__moNewebpayStore = res.data;
+					window.__moksafowoNewebpayStore = res.data;
 					// 清掉 query string
 					const u = new URL( window.location.href );
 					u.searchParams.delete( cfg.token_query );

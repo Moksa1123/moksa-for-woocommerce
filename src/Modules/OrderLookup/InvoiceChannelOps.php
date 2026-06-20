@@ -165,18 +165,18 @@ final class InvoiceChannelOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$provider = self::resolve_provider( is_array( $args ) && isset( $args['provider'] ) ? (string) $args['provider'] : '' );
 		if ( '' === $provider ) {
-			return new \WP_Error( 'mo_ai_bad_provider', __( '找不到此發票模組(綠界/ezPay/速買配/PayNow/Amego)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_provider', __( '找不到此發票模組(綠界/ezPay/速買配/PayNow/Amego)。', 'mo-ectools' ) );
 		}
 		[ $matched, $unmatched ] = self::resolve_channels(
 			self::names_arg( is_array( $args ) ? ( $args['channels'] ?? array() ) : array() ),
 			self::supported( $provider )
 		);
 		if ( empty( $matched ) ) {
-			return new \WP_Error( 'mo_ai_no_match', __( '找不到對應的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_match', __( '找不到對應的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)。', 'mo-ectools' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -211,14 +211,14 @@ final class InvoiceChannelOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$provider = (string) ( $params['provider'] ?? '' );
 		$channels = is_array( $params['channels'] ?? null ) ? $params['channels'] : array();
 		$enable   = ! empty( $params['enable'] );
 		$ch       = self::channels();
 		if ( '' === $provider || empty( $channels ) ) {
-			return new \WP_Error( 'mo_ai_bad_input', __( '資料不完整,無法變更。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法變更。', 'mo-ectools' ) );
 		}
 
 		$labels = array();

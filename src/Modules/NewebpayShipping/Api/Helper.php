@@ -21,7 +21,6 @@ final class Helper extends AbstractCredentialHelper {
 	public static function is_sandbox(): bool {
 		$raw = get_option( 'moksafowo_newebpay_shipping_sandbox_enabled', null );
 		if ( null === $raw ) {
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			return (bool) apply_filters( 'moksafowo_newebpay_shipping_sandbox_fallback', false );
 		}
 		return 'yes' === $raw;
@@ -33,7 +32,6 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' !== $val ) {
 			return $val;
 		}
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return (string) apply_filters( 'moksafowo_newebpay_shipping_merchant_id_fallback', '' );
 	}
 
@@ -43,7 +41,6 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' !== $val ) {
 			return $val;
 		}
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_key_fallback', '' );
 	}
 
@@ -53,7 +50,6 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' !== $val ) {
 			return $val;
 		}
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_iv_fallback', '' );
 	}
 
@@ -82,7 +78,6 @@ final class Helper extends AbstractCredentialHelper {
 
 
 	public static function parse_order_id( string $merchant_order_no ): int {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$external = apply_filters( 'moksafowo_newebpay_shipping_parse_order_id', null, $merchant_order_no );
 		if ( null !== $external ) {
 			return (int) $external;

@@ -388,7 +388,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'id'    => 'moksafowo_shipping_status_color_section',
 			],
 			[
-				'type' => 'mowp_status_color_grid',
+				'type' => 'moksafowo_status_color_grid',
 				'id'   => 'moksafowo_status_color_grid',
 			],
 			[
@@ -453,7 +453,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 			[
 				'title' => __( '欄位順序與寬度', 'mo-ectools' ),
-				'type'  => 'mowp_field_manager',
+				'type'  => 'moksafowo_field_manager',
 				'desc'  => __( '半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。', 'mo-ectools' ),
 				'id'    => 'moksafowo_tw_address_field_layout',
 			],

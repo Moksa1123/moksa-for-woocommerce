@@ -55,9 +55,7 @@ abstract class AbstractAdminActions {
 	public function find_unprinted_orders( ?string $kind = null, ?string $carrier = null ): array {
 		$orders = wc_get_orders(
 			[
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 				'limit'      => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 				'status'     => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
 				'meta_query' => [

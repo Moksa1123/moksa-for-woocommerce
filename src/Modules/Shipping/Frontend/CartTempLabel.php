@@ -24,9 +24,9 @@ final class CartTempLabel {
 			return $rates;
 		}
 
-		$registered = WC()->shipping() ? WC()->shipping()->get_shipping_methods() : [];
-		$kept       = [];
-		$mowp_kept  = false;
+		$registered     = WC()->shipping() ? WC()->shipping()->get_shipping_methods() : [];
+		$kept           = [];
+		$moksafowo_kept = false;
 
 		foreach ( $rates as $rate_id => $rate ) {
 			$method_id = (string) $rate->get_method_id();
@@ -45,7 +45,7 @@ final class CartTempLabel {
 			$missing = array_diff( $cart_temps, $supported );
 			if ( empty( $missing ) ) {
 				$kept[ $rate_id ] = $rate;
-				$mowp_kept        = true;
+				$moksafowo_kept   = true;
 			}
 		}
 

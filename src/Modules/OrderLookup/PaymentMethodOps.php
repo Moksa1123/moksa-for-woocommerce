@@ -273,7 +273,7 @@ final class PaymentMethodOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$raw      = is_array( $args ) && isset( $args['provider'] ) ? (string) $args['provider'] : '';
 		$provider = self::resolve_provider( $raw );
@@ -281,19 +281,19 @@ final class PaymentMethodOps {
 			$single = self::resolve_single( $raw );
 			if ( null !== $single ) {
 				/* translators: 1: gateway, 2: the only method */
-				return new \WP_Error( 'mo_ai_single_method', sprintf( __( '%1$s 在本外掛只有「%2$s」一種付款方式,沒有可細分開關的方式(整體啟用 / 停用請用管道開關)。', 'mo-ectools' ), $single['label'], $single['method'] ) );
+				return new \WP_Error( 'moksafowo_ai_single_method', sprintf( __( '%1$s 在本外掛只有「%2$s」一種付款方式,沒有可細分開關的方式(整體啟用 / 停用請用管道開關)。', 'mo-ectools' ), $single['label'], $single['method'] ) );
 			}
 			/* translators: %s: supported gateway list */
-			return new \WP_Error( 'mo_ai_bad_provider', sprintf( __( '找不到此金流(支援細分方式:%s)。', 'mo-ectools' ), self::supported_list() ) );
+			return new \WP_Error( 'moksafowo_ai_bad_provider', sprintf( __( '找不到此金流(支援細分方式:%s)。', 'mo-ectools' ), self::supported_list() ) );
 		}
 		$map = self::method_map( $provider );
 		if ( empty( $map ) ) {
-			return new \WP_Error( 'mo_ai_no_methods', __( '此金流不支援個別付款方式設定。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_methods', __( '此金流不支援個別付款方式設定。', 'mo-ectools' ) );
 		}
 
 		[ $matched, $unmatched ] = self::resolve_methods( self::names_arg( is_array( $args ) ? ( $args['methods'] ?? array() ) : array() ), $map );
 		if ( empty( $matched ) ) {
-			return new \WP_Error( 'mo_ai_no_match', __( '找不到對應的付款方式,請確認名稱。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_match', __( '找不到對應的付款方式,請確認名稱。', 'mo-ectools' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -331,14 +331,14 @@ final class PaymentMethodOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$provider = (string) ( $params['provider'] ?? '' );
 		$ids      = is_array( $params['ids'] ?? null ) ? array_map( 'strval', $params['ids'] ) : array();
 		$enable   = ! empty( $params['enable'] );
 		$map      = self::method_map( $provider );
 		if ( '' === $provider || empty( $map ) || empty( $ids ) ) {
-			return new \WP_Error( 'mo_ai_bad_input', __( '資料不完整,無法變更。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法變更。', 'mo-ectools' ) );
 		}
 
 		$current = self::enabled_ids( $provider );

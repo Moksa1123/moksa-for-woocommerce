@@ -32,8 +32,8 @@ class Credit extends WC_Payment_Gateway {
 			'refunds',
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Moksafowo_LinePay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-		$this->supported_currencies = apply_filters( 'Moksafowo_LinePay_support_currencies', array( 'TWD' ) );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+		$this->supported_currencies = apply_filters( 'moksafowo_linepay_support_currencies', array( 'TWD' ) );
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -46,7 +46,7 @@ class Credit extends WC_Payment_Gateway {
 	public function get_icon() {
 
 		$icon_html = '';
-		if ( 'yes' === get_option( 'Moksafowo_LinePay_display_logo_enabled' ) ) {
+		if ( 'yes' === get_option( 'moksafowo_linepay_display_logo_enabled' ) ) {
 			$icon_html .= sprintf(
 				'<img src="%s" alt="%s" />',
 				esc_url( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' ),

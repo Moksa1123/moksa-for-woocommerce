@@ -96,8 +96,8 @@ final class Unified extends GatewayBase {
 	}
 
 	public function inject_enabled_methods( $args, $order ) {
-		foreach ( self::METHOD_MAP as $mowp_id => $pay_flag ) {
-			$settings = (array) get_option( 'woocommerce_' . $mowp_id . '_settings', array() );
+		foreach ( self::METHOD_MAP as $moksafowo_id => $pay_flag ) {
+			$settings = (array) get_option( 'woocommerce_' . $moksafowo_id . '_settings', array() );
 			if ( 'yes' === ( $settings['enabled'] ?? 'no' ) ) {
 				$args[ $pay_flag ] = '1';
 			}

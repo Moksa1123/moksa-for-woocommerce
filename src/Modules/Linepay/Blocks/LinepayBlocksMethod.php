@@ -32,6 +32,7 @@ final class LinepayBlocksMethod extends AbstractPaymentMethodType {
 				'wc-settings',
 				'wp-element',
 				'wp-html-entities',
+				'wp-i18n',
 			),
 			$ver,
 			true

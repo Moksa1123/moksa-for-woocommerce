@@ -115,12 +115,12 @@ final class ShippingZoneOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$name = is_array( $args ) && isset( $args['method'] ) ? (string) $args['method'] : '';
 		$iids = self::resolve( $name );
 		if ( empty( $iids ) ) {
-			return new \WP_Error( 'mo_ai_no_method', __( '找不到對應的運送方式(可先用列出運送區域確認名稱)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_method', __( '找不到對應的運送方式(可先用列出運送區域確認名稱)。', 'mo-ectools' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -148,13 +148,13 @@ final class ShippingZoneOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$iids   = is_array( $params['instance_ids'] ?? null ) ? array_map( 'absint', $params['instance_ids'] ) : array();
 		$enable = ! empty( $params['enable'] );
 		$iids   = array_values( array_filter( $iids ) );
 		if ( empty( $iids ) ) {
-			return new \WP_Error( 'mo_ai_bad_input', __( '沒有可變更的運送方式。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '沒有可變更的運送方式。', 'mo-ectools' ) );
 		}
 
 		global $wpdb;

@@ -249,7 +249,7 @@ JS
 
 		// 一次性 token：callback 憑此區分合法發起與隨機 ?moksafowo_token= 注入；30min TTL
 		$token = wp_generate_password( 24, false, false );
-		set_transient( 'mowp_payuni_store_' . $token, array( 'pending' => true ), 30 * MINUTE_IN_SECONDS );
+		set_transient( 'moksafowo_payuni_store_' . $token, array( 'pending' => true ), 30 * MINUTE_IN_SECONDS );
 		$callback_url = add_query_arg( 'moksafowo_token', $token, WC()->api_request_url( 'moksafowo_payuni_store_callback' ) );
 
 		$encrypt_info = array(
@@ -286,7 +286,10 @@ JS
 	}
 
 	public static function handle_store_map_return() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- External store callback POST; PAYUNi HashInfo signature verified below.
+		// PAYUNi store-map callback: cross-site POST from PAYUNi; no WP nonce possible.
+		// Source authenticity verified via HashInfo hash_equals (PayuniShipping::hash_info) before decryption.
+		// All fields sanitized via wc_clean + wp_unslash at capture; MapJson content deep-sanitized via map_deep after json_decode.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi store-map callback; no WP nonce possible; source verified via HashInfo hash_equals before any data use; all fields sanitized via wc_clean and map_deep.
 		$posted = wc_clean( wp_unslash( $_POST ) );
 		PayuniShipping::log( 'PAYUNi Store Map Return Data: ' . wc_print_r( $posted, true ) );
 
@@ -327,9 +330,9 @@ JS
 		}
 
 		// PRIMARY: transient by token — PAYUNi cross-site POST 可能在新 session 跑，session key 不可靠
-		$incoming_token = isset( $_GET['moksafowo_token'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_token'] ) ) : '';
-		if ( strlen( $incoming_token ) >= 16 && get_transient( 'mowp_payuni_store_' . $incoming_token ) !== false ) {
-			set_transient( 'mowp_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
+		$incoming_token = isset( $_GET['moksafowo_token'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_token'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- PAYUNi store callback; HashInfo verified above; token is a one-shot transient lookup key, sanitized via sanitize_key.
+		if ( strlen( $incoming_token ) >= 16 && get_transient( 'moksafowo_payuni_store_' . $incoming_token ) !== false ) {
+			set_transient( 'moksafowo_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
 			PayuniShipping::log( 'Store data saved to transient; token=' . substr( $incoming_token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
 		} else {
 			PayuniShipping::log( 'Store callback missing/invalid moksafowo_token (' . $incoming_token . ') — falling back to session only' );
@@ -429,7 +432,7 @@ JS
 		if ( strlen( $token ) < 16 ) {
 			wp_send_json_error( array( 'message' => '無效的 token' ), 400 );
 		}
-		$store_data = get_transient( 'mowp_payuni_store_' . $token );
+		$store_data = get_transient( 'moksafowo_payuni_store_' . $token );
 		PayuniShipping::log( 'ajax_resolve_store_token; token=' . substr( $token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
 
 		if ( ! is_array( $store_data ) || ! isset( $store_data['id'] ) || empty( $store_data['id'] ) ) {
@@ -440,7 +443,7 @@ JS
 		if ( WC()->session ) {
 			WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
 		}
-		delete_transient( 'mowp_payuni_store_' . $token );
+		delete_transient( 'moksafowo_payuni_store_' . $token );
 
 		wp_send_json_success( $store_data );
 	}
@@ -454,7 +457,10 @@ JS
 	}
 
 	public static function save_store_selection( $order, $data ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- WC checkout submit nonce 'woocommerce-process-checkout-nonce' verified by WC core in WC_Checkout::process_checkout() before this callback fires.
+		// Bound to woocommerce_checkout_create_order / woocommerce_store_api_checkout_update_order_from_request.
+		// WC core has already verified the 'woocommerce-process-checkout-nonce' nonce in WC_Checkout::process_checkout()
+		// before this hook fires. $_POST fields used here are sanitized at point of use; JSON decoded then deep-sanitized.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce already verified by WC core before this hook fires; $_POST fields sanitized at use; JSON decoded then map_deep sanitized.
 		PayuniShipping::log( 'save_store_selection called with HPOS-compatible hook' );
 
 		$shipping_methods   = $order->get_shipping_methods();
@@ -508,10 +514,11 @@ JS
 			}
 		}
 
-		PayuniShipping::log( 'All POST data keys: ' . implode( ', ', array_map( 'sanitize_text_field', array_map( 'wp_unslash', array_keys( $_POST ) ) ) ) );
+		// save_store_selection runs on WC checkout save (woocommerce_checkout_create_order); WC core verified the checkout nonce upstream; values sanitized inline.
+		PayuniShipping::log( 'All POST data keys: ' . implode( ', ', array_map( 'sanitize_text_field', array_map( 'wp_unslash', array_keys( $_POST ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream; keys sanitized.
 
-		$selected_store_id   = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
-		$selected_store_data = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
+		$selected_store_id   = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream.
+		$selected_store_data = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream.
 
 		if ( ( empty( $selected_store_id ) || empty( $selected_store_data ) ) && WC()->session ) {
 			try {
@@ -544,6 +551,9 @@ JS
 			return;
 		}
 
+		// json_decode 不等於消毒：逐欄 sanitize 後才寫入 order meta。
+		$store_data = map_deep( $store_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+
 		PayuniShipping::log( sprintf( 'Saving store data - Store ID: %s, Name: %s', $store_data['id'], $store_data['name'] ) );
 
 		$unified_store_data = array(
@@ -570,7 +580,6 @@ JS
 			WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_payuni_shipping_save_cvs_order_meta', $order, $data );
 	}
 
@@ -784,10 +793,11 @@ JS
 			return false;
 		}
 
-		$store_id        = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
-		$store_name      = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : '';
-		$store_address   = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : '';
-		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
+		// restore_store_data_from_post; verify_restore_nonce() (interstitial token or WC native nonce) checked above; values sanitized inline.
+		$store_id        = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
+		$store_name      = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
+		$store_address   = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
+		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
 
 		$store_data = array(
 			'id'      => $store_id,

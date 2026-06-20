@@ -10,9 +10,10 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// IPN 無法帶 WP nonce — 來源真實性由 CheckMacValue（SHA256 + hash_equals）驗證。
-		// 驗章必須用原始值（任何改寫都會使簽章不符），逐欄 sanitize 於驗章通過後進行。
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- signature input must be untouched; sanitized below after verification.
+		// Gateway IPN: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via CheckMacValue SHA256 + hash_equals on line ~25 (Helper::verify_check_mac_value)
+		// before any field is read or state changed. Raw array passed unmodified to verifier; map_deep sanitize follows on line ~32.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gateway IPN; no WP nonce possible; source verified via CheckMacValue hash_equals before any use; sanitized via map_deep below.
 		$raw = $_POST;
 
 		if ( empty( $raw ) ) {
@@ -116,7 +117,6 @@ final class IpnHandler {
 		if ( in_array( $rtn_code, [ 2, 10100073 ], true ) && ! $order->get_meta( Keys::PAYMENT_INFO_EMAIL_SENT ) ) {
 			$order->update_meta_data( Keys::PAYMENT_INFO_EMAIL_SENT, '1' );
 			$order->save();
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			do_action( 'moksafowo_payment_info_email', $order->get_id() );
 		}
 

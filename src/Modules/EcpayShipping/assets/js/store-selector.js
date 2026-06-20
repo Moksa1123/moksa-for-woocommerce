@@ -45,7 +45,7 @@
 			return existing;
 		}
 		// Block — 共用 helper 塞進 step content(對齊 PAYUni / 藍新 / 速買配)。
-		return window.MowpCvsStore ? window.MowpCvsStore.ensureHost( HOST_ID ) : null;
+		return window.moksafowoCvsStore ? window.moksafowoCvsStore.ensureHost( HOST_ID ) : null;
 	}
 
 	function showRow( show ) {
@@ -62,7 +62,7 @@
 		}
 		showRow( true );
 
-		const M = window.MowpCvsStore;
+		const M = window.moksafowoCvsStore;
 		const btnLabel = store && store.id ? cfg.i18n.change : cfg.i18n.select;
 		const rightHtml = '<button type="button" class="button mowp-cvs-store__btn">' + M.escapeHtml( btnLabel ) + '</button>';
 		host.innerHTML = M.cardHtml( {
@@ -111,7 +111,7 @@
 					alert( ( resp && resp.data && resp.data.message ) || cfg.i18n.error );
 					return;
 				}
-				window.MowpCvsStore.submitForm( resp.data.api_url, resp.data.form_data );
+				window.moksafowoCvsStore.submitForm( resp.data.api_url, resp.data.form_data );
 			} )
 			.catch( function () { alert( cfg.i18n.error ); } );
 	}

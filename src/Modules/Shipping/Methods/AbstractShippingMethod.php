@@ -46,9 +46,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 		$supported  = array_map( 'intval', array_keys( $this->supported_temperatures() ) );
 		$missing    = array_diff( $cart_temps, $supported );
 		// hook 給 user 蓋掉行為（例如商家想保守不過濾） — 預設 missing 非空就 hide
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			'moksafowo_shipping_method_is_available',
 			empty( $missing ),
 			$package,
@@ -206,9 +204,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 		if ( $this->split_shipping_fee_enabled() ) {
 			$cost = $this->evaluate_cost_per_temp_from_package( $formula, $package );
 		} else {
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			$args = apply_filters(
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 				'moksafowo_shipping_evaluate_cost_args',
 				[
 					'temps'  => ProductTemp::temps_in_package( $package ),

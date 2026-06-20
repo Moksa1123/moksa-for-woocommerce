@@ -42,8 +42,8 @@ final class Module extends AbstractModule {
 
 	public function boot(): void {
 		// Patch 7: at-rest encryption for channel secrets.
-		Vault::wrap_option( 'Moksafowo_LinePay_channel_secret' );
-		Vault::wrap_option( 'Moksafowo_LinePay_sandbox_channel_secret' );
+		Vault::wrap_option( 'moksafowo_linepay_channel_secret' );
+		Vault::wrap_option( 'moksafowo_linepay_sandbox_channel_secret' );
 
 		LinePay::init();
 

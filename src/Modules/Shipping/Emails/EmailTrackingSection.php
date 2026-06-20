@@ -38,7 +38,6 @@ final class EmailTrackingSection {
 			return [];
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$entries = apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, $method_id );
 		return is_array( $entries ) ? $entries : [];
 	}

@@ -33,18 +33,18 @@ final class ResendPaymentEmail {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'mo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
 		}
 		if ( empty( PaymentInfoBox::rows( $order ) ) ) {
-			return new \WP_Error( 'mo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊(例如信用卡訂單沒有 ATM / 超商繳費資訊)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊(例如信用卡訂單沒有 ATM / 超商繳費資訊)。', 'mo-ectools' ) );
 		}
 		$email = (string) $order->get_billing_email();
 		if ( '' === $email ) {
-			return new \WP_Error( 'mo_ai_no_email', __( '此訂單沒有顧客 Email。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_email', __( '此訂單沒有顧客 Email。', 'mo-ectools' ) );
 		}
 
 		return array(
@@ -66,14 +66,14 @@ final class ResendPaymentEmail {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$order = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		if ( ! $order ) {
-			return new \WP_Error( 'mo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
 		}
 		if ( empty( PaymentInfoBox::rows( $order ) ) ) {
-			return new \WP_Error( 'mo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊。', 'mo-ectools' ) );
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo 為本外掛前綴。

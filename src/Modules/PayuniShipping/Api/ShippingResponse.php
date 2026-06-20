@@ -23,7 +23,10 @@ class ShippingResponse {
 	}
 
 	public static function moksafowo_payuni_711_receive_update() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method.
+		// PAYUNi shipping 7-11 webhook: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
+		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi shipping IPN; no WP nonce possible; source verified via HashInfo hash_equals before decryption and any state change; sanitized via wc_clean and map_deep.
 		$posted = wc_clean( wp_unslash( $_POST ) );
 
 		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
@@ -136,7 +139,10 @@ class ShippingResponse {
 	}
 
 	public static function moksafowo_payuni_tcat_receive_update() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Gateway webhook; HashInfo / EncryptInfo signature verified inside this method.
+		// PAYUNi shipping TCat webhook: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
+		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi shipping IPN; no WP nonce possible; source verified via HashInfo hash_equals before decryption and any state change; sanitized via wc_clean and map_deep.
 		$posted = wc_clean( wp_unslash( $_POST ) );
 
 		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
@@ -213,7 +219,14 @@ class ShippingResponse {
 					PayuniShipping::log( 'PAYUNi NotifyURL response fail: can not find order by ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
 				}
 			} elseif ( 'Print' === $decrypted_info['ApiType'] ) {
-				$json_data    = json_decode( $decrypted_info['JsonData'], true );
+				$raw_json  = is_string( $decrypted_info['JsonData'] ?? null ) ? $decrypted_info['JsonData'] : '';
+				$json_data = $raw_json !== '' ? json_decode( $raw_json, true ) : null;
+				if ( ! is_array( $json_data ) || ! isset( $json_data[0] ) || ! is_array( $json_data[0] ) ) {
+					PayuniShipping::log( 'PAYUNi NotifyURL tcat print: JsonData parse failed' );
+					exit;
+				}
+				// json_decode does not sanitize — deep-sanitize before any use.
+				$json_data    = map_deep( $json_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 				$print_result = $json_data[0];
 				if ( 'SUCCESS' === $print_result['Status'] ) {
 					$ship_trade_no = $print_result['ShipTradeNo'];
@@ -253,7 +266,6 @@ class ShippingResponse {
 			PayuniShipping::log( 'PAYUNi NotifyURL response fail:' . wc_print_r( $decrypted_info, true ) );
 		}
 		exit;
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 
 	public function update_order_status_after_received_update( \WC_Order $order, $ship_status, $ship_status_desc ) {

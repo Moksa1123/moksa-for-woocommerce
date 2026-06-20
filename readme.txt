@@ -4,11 +4,11 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
-WC requires at least: 8.0
+WC requires at least: 9.9
 WC tested up to: 10.7
 
 A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping and e-invoice integrations.
@@ -86,7 +86,7 @@ This plugin can optionally expose a standards-compliant, stateless MCP (Model Co
 
 * PHP 8.2+
 * WordPress 7.0+
-* WooCommerce 8.0+
+* WooCommerce 9.9+
 
 = Setup =
 
@@ -127,6 +127,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.0 - 2026-06-20 =
+* E-invoice fields on the block checkout now show, hide and validate through WooCommerce's native conditional field logic (JSON Schema) instead of custom scripting, for reliable behaviour across WooCommerce updates.
+* The mobile-barcode and personal-certificate carrier inputs are now separate fields, each with its own format validation.
+* Raised the minimum WooCommerce version to 9.9, required by the native conditional checkout fields.
+* Internal consolidation of the e-invoice checkout-field code, plus further hardening of asset loading and input handling.
 
 = 1.3.0 - 2026-06-18 =
 * New Moksa AI in-admin assistant (requires WordPress 7.0 AI Client and a configured AI connector): query and manage orders, e-invoices, shipping labels and module settings in natural language, with a human confirmation step before any change is applied.

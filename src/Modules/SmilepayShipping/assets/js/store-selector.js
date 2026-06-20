@@ -6,7 +6,7 @@
 	const cfg = window.moksafowo_smilepay_shipping;
 
 	const HOST_ID = 'moksafowo-smilepay-shipping-store-host';
-	const M = window.MowpCvsStore;
+	const M = window.moksafowoCvsStore;
 
 	function removeHost() {
 		const h = document.getElementById( HOST_ID );

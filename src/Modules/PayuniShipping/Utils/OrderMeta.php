@@ -6,11 +6,11 @@ defined( 'ABSPATH' ) || exit;
 
 class OrderMeta {
 
-	const StoreId   = '_shipping_payuni_storeid';    // 舊格式，向下相容
-	const StoreName = '_shipping_payuni_storename';
-	const StoreAddr = '_shipping_payuni_storeaddress';
+	const StoreId   = '_moksafowo_payuni_shipping_store_id';
+	const StoreName = '_moksafowo_payuni_shipping_store_name';
+	const StoreAddr = '_moksafowo_payuni_shipping_store_addr';
 
-	const STORE_DATA_JSON = '_wpbr_payuni_store_data_json'; // 主要 JSON 格式
+	const STORE_DATA_JSON = '_moksafowo_payuni_shipping_store_data'; // 主要 JSON 格式
 
 	const ShipNo      = '_moksafowo_payuni_shipping_sno'; // 物流單查詢編號(Seven=Odno+ValidationNo, 黑貓=OBTNumber)
 	const GoodsType   = '_moksafowo_payuni_shipping_goods_type';// 溫層.

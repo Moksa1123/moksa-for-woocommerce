@@ -165,9 +165,12 @@ final class StoreSelector {
 	}
 
 	public static function handle_callback(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- ECPay external POST
-		$posted = $_POST;
-		// phpcs:enable
+		// ECPay store-map callback: cross-site POST from ECPay server; no WP nonce possible.
+		// Anti-tamper guard: MerchantTradeNo must match a transient set when the map was legitimately opened
+		// (STATE_PREFIX . $mtn transient, line ~180). Unknown MTN → 403 before any session write.
+		// All fields sanitized via wc_clean + wp_unslash at capture; only session/transient written (no order state mutation).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- ECPay store-map callback; no WP nonce possible; source verified via MTN transient anti-tamper before any use; session-only write, no state mutation; all fields sanitized via wc_clean.
+		$posted = isset( $_POST ) ? wc_clean( wp_unslash( $_POST ) ) : array();
 
 		Helper::log( 'shipping map callback raw', [ 'data' => $posted ] );
 

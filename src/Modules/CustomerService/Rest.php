@@ -9,10 +9,16 @@ defined( 'ABSPATH' ) || exit;
 /**
  * 前台客服 REST —— 顧客自助查單(未登入可用)。
  *
- * 安全:這兩個端點對外開放(permission __return_true),但
- * - verify:內部 IP+訂單號節流 + 統一失敗訊息,無法寫入任何東西。
- * - order：必須帶有效 token 才回資料,否則拒。
- * 一律唯讀、fail closed,符合 CLAUDE.md §4 nopriv 紅線。
+ * 安全設計（permission_callback 為 __return_true 的理由）：
+ * 這四個端點提供顧客自助查單，必須允許未登入訪客存取，因此無法套用 is_user_logged_in()。
+ * 替代閘門（每個端點都有各自的閘）：
+ *   - /cs/verify：IP + 訂單號雙維度節流（Verify::attempt），5 次失敗後 IP 鎖定 15 分鐘；
+ *                 統一失敗訊息，無法枚舉訂單；完全唯讀。
+ *   - /cs/order：必須帶 Verify::attempt 核發的時效 token（hash_equals 比對），否則拒絕；唯讀。
+ *   - /cs/message：同上 token 閘；訊息長度上限 2000 字元；只寫入當次訂單對話 thread。
+ *   - /cs/messages：同上 token 閘；唯讀輪詢。
+ * 所有輸入皆透過 register_rest_route args.sanitize_callback 消毒後才進 callback。
+ * 端點不暴露任何可枚舉訂單清單的介面，fail-closed（token 無效 → 200 + ok:false，不洩漏原因）。
  */
 final class Rest {
 

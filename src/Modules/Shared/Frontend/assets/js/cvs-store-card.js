@@ -4,7 +4,7 @@
  * 視覺對齊 PAYUni(見 cvs-store.css)。各家只留 provider 專屬邏輯(AJAX endpoint /
  * emap URL / 超商品牌選擇等)。
  *
- * window.MowpCvsStore:
+ * window.moksafowoCvsStore:
  *   escapeHtml(s)
  *   stepContainer()                       — 取結帳運送 step 的 __content
  *   ensureHost(id)                        — 建立 / 定位卡片 host(塞進 step content)
@@ -83,7 +83,7 @@
 		f.submit();
 	}
 
-	window.MowpCvsStore = {
+	window.moksafowoCvsStore = {
 		escapeHtml: escapeHtml,
 		stepContainer: stepContainer,
 		ensureHost: ensureHost,

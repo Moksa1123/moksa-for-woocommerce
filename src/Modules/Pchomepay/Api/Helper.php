@@ -70,7 +70,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	private static function token_transient_key(): string {
-		return 'mowp_pchomepay_token_' . md5( self::app_id() );
+		return 'moksafowo_pchomepay_token_' . md5( self::app_id() );
 	}
 
 	public static function get_token( bool $force = false ): string {

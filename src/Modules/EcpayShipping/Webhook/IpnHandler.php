@@ -12,8 +12,10 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// CheckMacValue 驗章需原始值；sanitize 在驗章通過後進行
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- signature input must be untouched; sanitized below after verification.
+		// Gateway shipping IPN: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via CheckMacValue SHA256 + hash_equals on line ~25 (Helper::verify_check_mac_value)
+		// before any field is read or state changed. Raw array passed unmodified to verifier; map_deep sanitize follows on line ~32.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gateway shipping IPN; no WP nonce possible; source verified via CheckMacValue hash_equals before any use; sanitized via map_deep below.
 		$raw = $_POST;
 
 		if ( empty( $raw ) ) {
@@ -72,7 +74,6 @@ final class IpnHandler {
 			)
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_ecpay_shipping_status_received', $order, $rtn_code, $rtn_msg );
 
 		$order->save();

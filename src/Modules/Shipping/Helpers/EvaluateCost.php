@@ -31,9 +31,10 @@ final class EvaluateCost {
 			esc_attr( (string) $weight )
 		);
 
-		// lookahead 確保只 match shortcode 開頭；mo_addfee 為 2026-06 前舊 token BC 別名
-		$sum = (string) preg_replace( '/\[(moksafowo_addfee|ry_addfee|mo_addfee)(?=[\s\]])/', '[$1' . $injection, $formula );
-		$sum = do_shortcode( $sum );
+		// 舊 token（ry_addfee / mo_addfee）先改寫成現行 shortcode，維持既有運費公式相容（只註冊 moksafowo_addfee）。
+		$formula = (string) preg_replace( '/\[(?:ry|mo)_addfee(?=[\s\]])/', '[moksafowo_addfee', $formula );
+		$sum     = (string) preg_replace( '/\[(moksafowo_addfee)(?=[\s\]])/', '[$1' . $injection, $formula );
+		$sum     = do_shortcode( $sum );
 
 		// WC_Eval_Math 安全 — 不 eval PHP
 		if ( ! class_exists( '\WC_Eval_Math' ) ) {

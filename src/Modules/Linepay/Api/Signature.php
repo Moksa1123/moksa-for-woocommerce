@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace MoksaWeb\Mowc\Modules\Linepay\Api;
 
+use MoksaWeb\Mowc\Modules\Linepay\Constants;
+
 defined( 'ABSPATH' ) || exit;
 
 final class Signature {
@@ -32,13 +34,13 @@ final class Signature {
 		$url_path = wp_parse_url( $url, PHP_URL_PATH );
 		$payload  = 'GET' === strtoupper( $method ) ? (string) wp_parse_url( $url, PHP_URL_QUERY ) : $request_body;
 		$data     = $channel_secret . $url_path . $payload . $nonce;
-		return base64_encode( hash_hmac( \Moksafowo_LinePay_Const::AUTH_ALGRO, $data, $channel_secret, true ) );
+		return base64_encode( hash_hmac( Constants::AUTH_ALGRO, $data, $channel_secret, true ) );
 	}
 
 	public static function generate_request_time(): string {
 		$parts    = explode( '.', (string) microtime( true ) );
 		$fraction = $parts[1] ?? '0';
-		return gmdate( \Moksafowo_LinePay_Const::REQUEST_TIME_FORMAT ) . $fraction;
+		return gmdate( Constants::REQUEST_TIME_FORMAT ) . $fraction;
 	}
 
 	public static function callback_token( $order_id, string $request_type ): string {

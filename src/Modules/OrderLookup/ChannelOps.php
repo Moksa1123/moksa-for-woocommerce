@@ -163,19 +163,19 @@ final class ChannelOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$raw      = is_array( $args ) && isset( $args['channel'] ) ? (string) $args['channel'] : '';
 		$slug     = self::resolve_slug( $raw );
 		$channels = self::channels();
 		if ( ! isset( $channels[ $slug ] ) ) {
-			return new \WP_Error( 'mo_ai_bad_channel', __( '找不到此管道。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_channel', __( '找不到此管道。', 'mo-ectools' ) );
 		}
 		$enable  = self::truthy( is_array( $args ) ? ( $args['enable'] ?? null ) : null );
 		$current = self::is_on( $slug );
 		if ( $enable === $current ) {
 			return new \WP_Error(
-				'mo_ai_noop',
+				'moksafowo_ai_noop',
 				sprintf(
 					/* translators: 1: channel label, 2: state */
 					__( '「%1$s」目前已是%2$s,無需變更。', 'mo-ectools' ),
@@ -203,12 +203,12 @@ final class ChannelOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$slug     = (string) ( $params['slug'] ?? '' );
 		$channels = self::channels();
 		if ( ! isset( $channels[ $slug ] ) ) {
-			return new \WP_Error( 'mo_ai_bad_channel', __( '找不到此管道。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_channel', __( '找不到此管道。', 'mo-ectools' ) );
 		}
 		$enable = ! empty( $params['enable'] );
 		update_option( 'moksafowo_' . $slug . '_enabled', $enable ? 'yes' : 'no' );

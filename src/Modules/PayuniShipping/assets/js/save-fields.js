@@ -233,7 +233,7 @@
 		// Save form data on any change
 		$form.on('change', 'input, select, textarea', function() {
 			// Don't save if we're currently selecting a CVS store
-			if (window.payuniSelectingStore) {
+			if (window.moksafowoPayuniSelectingStore) {
 				return;
 			}
 			
@@ -309,7 +309,7 @@
 	// Initialize when document is ready
 	$(document).ready(function() {
 		// Clear the CVS selection flag on page load
-		window.payuniSelectingStore = false;
+		window.moksafowoPayuniSelectingStore = false;
 		
 		// Check if we have POST data from CVS return (store selector sets these)
 		const hasStoreData = $('#moksafowo_payuni_selected_store_id').length > 0 || 
@@ -325,7 +325,7 @@
 	});
 	
 	// Expose public methods for integration with store-selector.js
-	window.PayuniCheckoutForm = {
+	window.moksafowoPayuniCheckoutForm = {
 		saveForm: checkoutForm.saveForm,
 		clearStorage: function() {
 			window.sessionStorage.removeItem(STORAGE_KEY);

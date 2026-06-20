@@ -2,7 +2,7 @@
  * TapPay 拍付 — Classic checkout（非 Block）TapPay Fields bridge。
  *
  * Module::enqueue_checkout_assets() 在傳統結帳頁載 tpdirect SDK +
- * 這支 + moTappaySettings（appId / appKey / env / gatewayId / i18n）。
+ * 這支 + moksafowoTappaySettings（appId / appKey / env / gatewayId / i18n）。
  *
  * 流程：
  *   1. SDK setupSDK + card.setup 把 iframe 卡號欄位 render 進
@@ -19,7 +19,7 @@
 ( function ( $ ) {
 	'use strict';
 
-	var cfg = window.moTappaySettings || {};
+	var cfg = window.moksafowoTappaySettings || {};
 	var GATEWAY = cfg.gatewayId || 'moksafowo_tappay_credit';
 	var I18N = cfg.i18n || {};
 

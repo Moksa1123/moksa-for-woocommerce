@@ -334,7 +334,6 @@ class PayuniShipping {
 			}
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return apply_filters( 'moksafowo_payuni_shipping_cvs_fields', $fields );
 	}
 

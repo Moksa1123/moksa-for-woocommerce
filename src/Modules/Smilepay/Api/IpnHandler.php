@@ -12,7 +12,10 @@ final class IpnHandler {
 	public const ROTURL_OK = 'woook1.1.23'; // SmilePay expects this token in a successful Roturl response body.
 
 	public static function handle_roturl(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; every field is sanitized below and Mid_smilepay is verified before any state change.
+		// SmilePay Roturl webhook: no WP nonce possible (external server cannot send one).
+		// All fields are sanitized at extraction below. Source authenticity verified via Mid_smilepay
+		// (hash_equals in self::verify_mid, line ~41) before any order state change.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay Roturl IPN; no WP nonce possible; all fields sanitized at capture; Mid_smilepay hash_equals verified before any state change.
 		$req = wp_unslash( $_REQUEST );
 
 		$classif      = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';
@@ -95,7 +98,9 @@ final class IpnHandler {
 	}
 
 	public static function handle_credit_roturl(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; every field is sanitized below and Mid_smilepay is verified before any state change.
+		// SmilePay credit Roturl webhook: no WP nonce possible (external server cannot send one).
+		// All fields sanitized at extraction; Mid_smilepay hash_equals (self::verify_mid) verified before any state change.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay credit Roturl IPN; no WP nonce possible; all fields sanitized at capture; Mid_smilepay hash_equals verified before any state change.
 		$req = wp_unslash( $_REQUEST );
 
 		$classif       = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';

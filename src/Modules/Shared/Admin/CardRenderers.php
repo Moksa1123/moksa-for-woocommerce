@@ -20,10 +20,10 @@ final class CardRenderers {
 		// （ECPay\Admin\OrderMetaBox::init() 也會呼叫 boot()，但 idempotent 重複呼叫無害）
 		OrderInfoLayout::boot();
 		// priority 11 = payment（讓 ECPay 10 先跑，沒命中時才走這裡）
-		add_filter( 'mowp_order_info_cards', [ __CLASS__, 'add_payment_card' ], 11, 2 );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_payment_card' ], 11, 2 );
 		// priority 21 = shipping 由 Shipping\Admin\ShippingCardSection 自行 register（避免 Shared -> Shipping 反向 layering）
 		// priority 31 = invoice（ECPay 30 先跑，沒命中時才走 ezPay 等其他 provider）
-		add_filter( 'mowp_order_info_cards', [ __CLASS__, 'add_invoice_card' ], 31, 2 );
+		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add_invoice_card' ], 31, 2 );
 		// 共用的「複製貨號」clipboard JS — admin 訂單頁需要（PAYUNi / SmilePay tracking buttons 共用）
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_tracking_copy_script' ] );
 	}

@@ -59,11 +59,13 @@ final class IpnHandler {
 	}
 
 	public static function handle_result(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- IPN webhook; CheckMacValue / HMAC / RSA signature verified inside this method.
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended — 3DS return，無 nonce；以 server 端 query 為準
+		// 3DS browser redirect: no WP nonce possible (TapPay redirects the customer browser back here).
+		// These query params are used only to look up the order; authoritative payment status is fetched
+		// server-side from TapPay API (Client::query_by_*) below — no direct trust placed in query string values.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 3DS browser return; no WP nonce possible; order_number/rec_trade_id used only for lookup; authoritative status fetched server-side from TapPay API below.
 		$order_number = isset( $_GET['order_number'] ) ? sanitize_text_field( wp_unslash( $_GET['order_number'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same as above.
 		$rec_trade_id = isset( $_GET['rec_trade_id'] ) ? sanitize_text_field( wp_unslash( $_GET['rec_trade_id'] ) ) : '';
-		// phpcs:enable
 
 		$order = self::resolve_order( $order_number );
 		if ( ! $order instanceof \WC_Order ) {

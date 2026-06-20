@@ -11,11 +11,13 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// IPN 無法帶 WP nonce — 來源真實性由 TradeSha（SHA256 + hash_equals）驗證。
-		// TradeInfo 為 AES 加密 hex 字串，sanitize_text_field 對其為恆等轉換。
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		// Gateway IPN: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via TradeSha (SHA256 + hash_equals, Helper::verify_trade_sha) on line ~28
+		// before any decryption or state change. TradeInfo is AES-encrypted hex; sanitize_text_field is idempotent on hex.
+		// Decoded payload is deep-sanitized via map_deep on line ~43 after decryption succeeds.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- gateway IPN; no WP nonce possible; source verified via TradeSha hash_equals before any use; decoded payload sanitized via map_deep after decryption.
 		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeInfo'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- signed webhook; TradeSha verified below before any use.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- same as above.
 		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
 
 		if ( '' === $trade_info || '' === $trade_sha ) {

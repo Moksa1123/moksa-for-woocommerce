@@ -23,7 +23,7 @@ final class OrderMetaBox {
 
 	private static ?array $registry_titles_cache = null;
 
-	private static function find_mowp_method_id( \WC_Order $order ): string {
+	private static function find_moksafowo_method_id( \WC_Order $order ): string {
 		$oid = $order->get_id();
 		if ( array_key_exists( $oid, self::$method_id_cache ) ) {
 			return self::$method_id_cache[ $oid ];
@@ -66,7 +66,7 @@ final class OrderMetaBox {
 		if ( 'shipping' !== $type || ! $order instanceof \WC_Order ) {
 			return $address;
 		}
-		$method_id = self::find_mowp_method_id( $order );
+		$method_id = self::find_moksafowo_method_id( $order );
 		if ( '' === $method_id || ! str_contains( $method_id, '_cvs_' ) ) {
 			return $address;
 		}
@@ -81,7 +81,7 @@ final class OrderMetaBox {
 	}
 
 	public static function inject_cvs_shipping_address( string $address, $raw_address, \WC_Order $order ): string {
-		$method_id = self::find_mowp_method_id( $order );
+		$method_id = self::find_moksafowo_method_id( $order );
 		if ( '' === $method_id ) {
 			return $address;
 		}
@@ -135,7 +135,7 @@ final class OrderMetaBox {
 	}
 
 	public static function add_card( array $cards, \WC_Order $order ): array {
-		if ( '' === self::find_mowp_method_id( $order ) ) {
+		if ( '' === self::find_moksafowo_method_id( $order ) ) {
 			return $cards;
 		}
 

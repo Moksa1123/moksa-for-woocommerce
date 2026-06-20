@@ -272,7 +272,6 @@ final class BatchPrintAdminUI {
 		}
 
 		// 只列「處理中/保留中」— 已出貨/抵店/取件的訂單應已印過，不納入（filter 可覆寫）
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$statuses = apply_filters(
 			'moksafowo_shipping_batch_print_statuses',
 			[
@@ -558,6 +557,10 @@ final class BatchPrintAdminUI {
 		$count   = count( $forms );
 		$single  = ( 1 === $count );
 
+		wp_register_style( 'moksafowo-bp-print', false, array(), MOKSAFOWO_VERSION );
+		wp_enqueue_style( 'moksafowo-bp-print' );
+		wp_add_inline_style( 'moksafowo-bp-print', 'body{font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;padding:40px;color:#1d2327;}h2{margin:0 0 4px;}p{color:#646970;margin:4px 0 20px;}button{font-size:15px;padding:10px 20px;margin:6px 8px 6px 0;cursor:pointer;border:1px solid #2271b1;background:#2271b1;color:#fff;border-radius:4px;}button:hover{background:#135e96;}form{display:none;}' );
+
 		nocache_headers();
 		?>
 		<!DOCTYPE html>
@@ -566,7 +569,7 @@ final class BatchPrintAdminUI {
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title><?php esc_html_e( '批次列印物流標籤', 'mo-ectools' ); ?></title>
-			<style>body{font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;padding:40px;color:#1d2327;}h2{margin:0 0 4px;}p{color:#646970;margin:4px 0 20px;}button{font-size:15px;padding:10px 20px;margin:6px 8px 6px 0;cursor:pointer;border:1px solid #2271b1;background:#2271b1;color:#fff;border-radius:4px;}button:hover{background:#135e96;}form{display:none;}</style>
+			<?php wp_print_styles( 'moksafowo-bp-print' ); ?>
 		</head>
 		<body>
 			<h2><?php esc_html_e( '批次列印物流標籤', 'mo-ectools' ); ?></h2>
@@ -582,7 +585,7 @@ final class BatchPrintAdminUI {
 				<p><?php esc_html_e( '請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）：', 'mo-ectools' ); ?></p>
 				<?php foreach ( $forms as $i => $spec ) : ?>
 					<?php /* translators: %d: label sequence number */ ?>
-					<button type="button" onclick="document.getElementById('moksafowo-bp-f<?php echo (int) $i; ?>').submit();"><?php printf( esc_html__( '列印第 %d 份', 'mo-ectools' ), (int) $i + 1 ); ?></button>
+					<button type="button" data-bp-target="moksafowo-bp-f<?php echo (int) $i; ?>"><?php printf( esc_html__( '列印第 %d 份', 'mo-ectools' ), (int) $i + 1 ); ?></button>
 				<?php endforeach; ?>
 			<?php endif; ?>
 
@@ -596,6 +599,8 @@ final class BatchPrintAdminUI {
 
 			<?php if ( $single ) : ?>
 				<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-bp-f0").submit();' ); ?>
+			<?php else : ?>
+				<?php wp_print_inline_script_tag( 'document.querySelectorAll("[data-bp-target]").forEach(function(b){b.addEventListener("click",function(){var f=document.getElementById(b.getAttribute("data-bp-target"));if(f){f.submit();}});});' ); ?>
 			<?php endif; ?>
 		</body>
 		</html>

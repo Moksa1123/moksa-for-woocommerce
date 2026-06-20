@@ -43,7 +43,7 @@ final class Registrar {
 		add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'add_bulk_actions' ] );
 		add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'add_bulk_actions' ] );
 
-		add_action( 'woocommerce_admin_field_mowp_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
+		add_action( 'woocommerce_admin_field_moksafowo_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_color_grid_assets' ] );
 		add_action( 'woocommerce_update_options_' . \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
 	}

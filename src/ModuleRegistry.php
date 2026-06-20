@@ -47,7 +47,6 @@ final class ModuleRegistry {
 			$this->booted[ $key ] = $module;
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		do_action( 'moksafowo_modules_booted', $this->booted );
 	}
 

@@ -123,7 +123,7 @@ final class BlockField {
 		}
 		$district = self::posted_district( is_array( $data ) ? $data : [] );
 		if ( '' === $district ) {
-			$errors->add( 'mowp_district_required', __( '宅配訂單請選擇鄉鎮市區。', 'mo-ectools' ) );
+			$errors->add( 'moksafowo_district_required', __( '宅配訂單請選擇鄉鎮市區。', 'mo-ectools' ) );
 		}
 	}
 
@@ -138,7 +138,7 @@ final class BlockField {
 		}
 		if ( '' === $order->get_shipping_city() && '' === $order->get_billing_city() ) {
 			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
-				'mowp_district_required',
+				'moksafowo_district_required',
 				esc_html__( '宅配訂單請選擇鄉鎮市區。', 'mo-ectools' ),
 				400
 			);

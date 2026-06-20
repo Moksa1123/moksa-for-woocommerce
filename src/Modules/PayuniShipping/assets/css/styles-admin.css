@@ -2,11 +2,11 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
- #order_data .order_data_column .form-field._shipping_payuni_storename_field {
+ #order_data .order_data_column .form-field._shipping_moksafowo_payuni_storename_field {
 	float: right;
 	clear: right;
 }
-#order_data .order_data_column .form-field._shipping_payuni_storeaddress_field,
+#order_data .order_data_column .form-field._shipping_moksafowo_payuni_storeaddress_field,
 #order_data .order_data_column .form-field._shipping_phone_field {
 	width: 100%;
 	clear: both;
@@ -74,3 +74,11 @@
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
+
+/* 批次列印工具列 */
+.moksafowo-payuni-batch-print-buttons { display: inline-block; }
+.moksafowo-payuni-batch-print-buttons .button { margin-right: 5px; }
+.moksafowo-payuni-batch-print-buttons .dashicons { margin-right: 3px; }
+.moksafowo-payuni-print-status { line-height: 28px; }
+.moksafowo-payuni-print-status .spinner { margin-top: 3px !important; }
+.moksafowo-payuni-orders-list .wp-list-table { margin-top: 0px !important; }

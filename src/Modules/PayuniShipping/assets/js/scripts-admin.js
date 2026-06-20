@@ -3,7 +3,7 @@
 
 	$(document).on('click', '.edit_address', function () {
 
-		if ($('#_shipping_payuni_storeid').length) {
+		if ($('#_shipping_moksafowo_payuni_storeid').length) {
 			$('a.load_customer_shipping').remove();
 			$('a.billing-same-as-shipping').remove();
 
@@ -751,17 +751,7 @@
 			}
 		});
 		
-		// Add CSS for spinner
-		if ($('#moksafowo-payuni-batch-print-css').length === 0) {
-			$('head').append('<style id="moksafowo-payuni-batch-print-css">' +
-				'.moksafowo-payuni-batch-print-buttons { display: inline-block; }' +
-				'.moksafowo-payuni-batch-print-buttons .button { margin-right: 5px; }' +
-				'.moksafowo-payuni-batch-print-buttons .dashicons { margin-right: 3px; }' +
-				'.moksafowo-payuni-print-status { line-height: 28px; }' +
-				'.moksafowo-payuni-print-status .spinner { margin-top: 3px !important; }' +
-				'.moksafowo-payuni-orders-list .wp-list-table { margin-top: 0px !important; }' +
-			'</style>');
-		}
+		// 批次列印工具列樣式已移至 styles-admin.css（handle moksafowo-payuni-shipping-admin），不再 JS 注入。
 	});
 
 })( jQuery );

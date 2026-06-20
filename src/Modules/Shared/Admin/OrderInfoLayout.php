@@ -22,7 +22,7 @@ final class OrderInfoLayout {
 		$screens = [ 'shop_order', 'woocommerce_page_wc-orders' ];
 		foreach ( $screens as $screen ) {
 			add_meta_box(
-				'mowp_order_info',
+				'moksafowo_order_info',
 				__( '金流 / 物流 / 電子發票', 'mo-ectools' ),
 				[ __CLASS__, 'render' ],
 				$screen,
@@ -40,7 +40,6 @@ final class OrderInfoLayout {
 			return;
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$cards = (array) apply_filters( 'moksafowo_order_info_cards', [], $order );
 
 		// 依 slot 分配（同 slot 多個 callback 後者覆蓋，allow override pattern）
@@ -300,7 +299,7 @@ final class OrderInfoLayout {
 		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
 			return;
 		}
-		$css = '#mowp_order_info .inside { padding: 0 12px 12px; }'
+		$css = '#moksafowo_order_info .inside { padding: 0 12px 12px; }'
 			. '.mowp-order-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }'
 			. '.mowp-order-info-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 16px; min-width: 0; }'
 			. '.mowp-order-info-card__title { margin: 0 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #1d2327; letter-spacing: 0.6px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }'

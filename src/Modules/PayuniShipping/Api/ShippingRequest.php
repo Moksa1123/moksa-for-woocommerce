@@ -180,7 +180,7 @@ class ShippingRequest {
 			wp_die();
 		}
 
-		$post_id = wc_clean( wp_unslash( $_POST['post_id'] ) );
+		$post_id = absint( wp_unslash( $_POST['post_id'] ) );
 		$order   = wc_get_order( $post_id );
 
 		$response = self::query_order( $order );
@@ -249,7 +249,7 @@ class ShippingRequest {
 			wp_die();
 		}
 
-		$order_id     = wc_clean( wp_unslash( $_POST['order_id'] ) );
+		$order_id     = absint( wp_unslash( $_POST['order_id'] ) );
 		$package_spec = wc_clean( wp_unslash( $_POST['package_spec'] ) );
 		$order        = wc_get_order( $order_id );
 
@@ -644,7 +644,6 @@ class ShippingRequest {
 			$args['ShipTradeNo'] = $order->get_meta( OrderMeta::ShipTradeNo );
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return apply_filters( 'moksafowo_payuni_shipping_order_request_args', $args, $order );
 	}
 
@@ -710,7 +709,6 @@ class ShippingRequest {
 	}
 
 	private static function get_prefixed_order_no( $order ) {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$prefix = apply_filters( 'moksafowo_payuni_shipping_order_prefix', '' );
 		return $prefix . $order->get_order_number();
 	}

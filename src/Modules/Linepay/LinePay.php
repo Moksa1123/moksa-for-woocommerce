@@ -30,20 +30,20 @@ final class LinePay {
 
 		self::get_instance();
 
-		self::$fail_order_status                  = get_option( 'Moksafowo_LinePay_payment_fail_order_status', 'wc-failed' );
-		self::$detail_payment_status_note_enabled = wc_string_to_bool( get_option( 'Moksafowo_LinePay_detail_status_note_enabled' ) );
-		self::$log_enabled                        = 'yes' === get_option( 'Moksafowo_LinePay_debug_log_enabled', 'no' );
-		self::$enable_sandbox                     = wc_string_to_bool( get_option( 'Moksafowo_LinePay_sandboxmode_enabled' ) );
+		self::$fail_order_status                  = get_option( 'moksafowo_linepay_payment_fail_order_status', 'wc-failed' );
+		self::$detail_payment_status_note_enabled = wc_string_to_bool( get_option( 'moksafowo_linepay_detail_status_note_enabled' ) );
+		self::$log_enabled                        = 'yes' === get_option( 'moksafowo_linepay_debug_log_enabled', 'no' );
+		self::$enable_sandbox                     = wc_string_to_bool( get_option( 'moksafowo_linepay_sandboxmode_enabled' ) );
 		self::$env_status                         = self::$enable_sandbox ? Constants::ENV_SANDBOX : Constants::ENV_REAL;
 
 		self::$channel_info = array(
 			Constants::ENV_REAL    => array(
-				'channel_id'     => get_option( 'Moksafowo_LinePay_channel_id' ),
-				'channel_secret' => get_option( 'Moksafowo_LinePay_channel_secret' ),
+				'channel_id'     => get_option( 'moksafowo_linepay_channel_id' ),
+				'channel_secret' => get_option( 'moksafowo_linepay_channel_secret' ),
 			),
 			Constants::ENV_SANDBOX => array(
-				'channel_id'     => get_option( 'Moksafowo_LinePay_sandbox_channel_id' ),
-				'channel_secret' => get_option( 'Moksafowo_LinePay_sandbox_channel_secret' ),
+				'channel_id'     => get_option( 'moksafowo_linepay_sandbox_channel_id' ),
+				'channel_secret' => get_option( 'moksafowo_linepay_sandbox_channel_secret' ),
 			),
 		);
 

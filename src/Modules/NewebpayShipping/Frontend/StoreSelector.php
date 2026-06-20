@@ -53,7 +53,7 @@ final class StoreSelector {
 		$js_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/NewebpayShipping/assets/js/store-selector.js';
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 
-		// 共用超商選店卡片樣式 + MowpCvsStore helper(對齊 PAYUNi 視覺)。
+		// 共用超商選店卡片樣式 + moksafowoCvsStore helper(對齊 PAYUNi 視覺)。
 		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 		wp_register_script(
 			$handle,
@@ -192,9 +192,13 @@ final class StoreSelector {
 	}
 
 	public static function handle_callback(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- External store callback POST; hash verified inside this method.
-		$encrypted = isset( $_POST['EncryptData'] ) ? (string) wp_unslash( $_POST['EncryptData'] ) : '';
-		$hash      = isset( $_POST['HashData'] ) ? (string) wp_unslash( $_POST['HashData'] ) : '';
+		// Newebpay store-map callback: cross-site POST from Newebpay; no WP nonce possible.
+		// Source authenticity verified via HashData SHA256 + hash_equals before decryption,
+		// and MerchantOrderNo must match a STATE_PREFIX transient set when the map was opened.
+		// Raw EncryptData/HashData must be captured unmodified for signature verification; remaining
+		// fields are extracted from decrypted payload and sanitized via sanitize_text_field below.
+		$encrypted = isset( $_POST['EncryptData'] ) ? (string) wp_unslash( $_POST['EncryptData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Newebpay store-map callback; no WP nonce possible; raw kept for HashData SHA256 hash_equals (verified before decrypt); fields sanitized after decrypt.
+		$hash      = isset( $_POST['HashData'] ) ? (string) wp_unslash( $_POST['HashData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- raw signature bytes, hash_equals verified before use.
 		if ( '' === $encrypted ) {
 			Helper::log( 'storeMap callback: empty EncryptData' );
 			status_header( 400 );

@@ -53,9 +53,7 @@ class PaymentRequest {
 			$prod_desc[] = $item->get_name() . ' * ' . $item->get_quantity();
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$encrypt_info = apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			'moksafowo_payuni_transaction_args_' . $this->gateway->id,
 			array(
 				'MerID'      => $this->gateway->get_merchant_id(),
@@ -76,7 +74,6 @@ class PaymentRequest {
 			$encrypt_info['TradeInvoice'] = 1;
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		$encrypt_info = apply_filters( 'moksafowo_payuni_transaction_args_data', $encrypt_info, $order );
 
 		PayuniPayment::log( 'request encrypt info:' . wc_print_r( self::redact_for_log( $encrypt_info ), true ) );

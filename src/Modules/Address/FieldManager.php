@@ -111,7 +111,7 @@ final class FieldManager {
 	];
 
 	public static function init(): void {
-		add_action( 'woocommerce_admin_field_mowp_field_manager', [ __CLASS__, 'render_field' ] );
+		add_action( 'woocommerce_admin_field_moksafowo_field_manager', [ __CLASS__, 'render_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_admin_assets' ] );
 
 		if ( 'yes' === get_option( self::OPTION_TOGGLE, 'no' ) ) {

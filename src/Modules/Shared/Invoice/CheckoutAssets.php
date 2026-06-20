@@ -9,7 +9,7 @@ final class CheckoutAssets {
 
 	private static bool $registered = false;
 
-	public static function register( string $default_love_code_option_key = '' ): void {
+	public static function register(): void {
 		if ( self::$registered ) {
 			return;
 		}
@@ -17,7 +17,7 @@ final class CheckoutAssets {
 
 		add_action(
 			'wp_enqueue_scripts',
-			static function () use ( $default_love_code_option_key ): void {
+			static function (): void {
 				if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 					return;
 				}
@@ -29,19 +29,6 @@ final class CheckoutAssets {
 					[],
 					$version,
 					true
-				);
-
-				// 預設捐贈碼 — JS 會自動帶進「愛心碼」欄位（type=donate 時顯示）
-				$default_donate = '';
-				if ( '' !== $default_love_code_option_key ) {
-					$raw            = (string) get_option( $default_love_code_option_key, '' );
-					$default_donate = (string) preg_replace( '/[^0-9]/', '', $raw );
-					$default_donate = substr( $default_donate, 0, 7 );
-				}
-				wp_localize_script(
-					'moksafowo-invoice-checkout-fields',
-					'moksafowo_ecpay_invoice_defaults',  // legacy var name — JS 內部沿用，不換
-					[ 'love_code' => $default_donate ]
 				);
 			}
 		);

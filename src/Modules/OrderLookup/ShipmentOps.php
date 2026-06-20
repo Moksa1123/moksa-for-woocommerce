@@ -98,16 +98,16 @@ final class ShipmentOps {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'mo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
 		}
 		$provider = self::resolve_provider( $order );
 		$map      = self::providers();
 		if ( '' === $provider || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'mo_ai_no_shipping', __( '此訂單的運送方式不支援自動建立託運單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_shipping', __( '此訂單的運送方式不支援自動建立託運單。', 'mo-ectools' ) );
 		}
 
 		$existing = SearchableKeys::field_value( $order, 'shipping' );
@@ -139,19 +139,19 @@ final class ShipmentOps {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		$provider = (string) ( $params['provider'] ?? '' );
 		$map      = self::providers();
 		if ( ! $order || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'mo_ai_no_order', __( '找不到訂單或物流商。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或物流商。', 'mo-ectools' ) );
 		}
 
 		$result = self::create_for( $provider, $order );
 		if ( empty( $result['ok'] ) ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'mo_ai_create_failed', sprintf( __( '建立託運單失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
+			return new \WP_Error( 'moksafowo_ai_create_failed', sprintf( __( '建立託運單失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
 		}
 
 		$ship_no = SearchableKeys::field_value( wc_get_order( $order->get_id() ), 'shipping' );
@@ -197,11 +197,11 @@ final class ShipmentOps {
 	 */
 	public static function batch_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$refs = self::normalize_refs( is_array( $args ) ? ( $args['orders'] ?? '' ) : '' );
 		if ( empty( $refs ) ) {
-			return new \WP_Error( 'mo_ai_no_orders', __( '沒有指定要建立託運單的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要建立託運單的訂單。', 'mo-ectools' ) );
 		}
 		$map         = self::providers();
 		$found       = array();
@@ -225,7 +225,7 @@ final class ShipmentOps {
 			);
 		}
 		if ( empty( $found ) ) {
-			return new \WP_Error( 'mo_ai_no_orders', __( '沒有可建立託運單的訂單(運送方式需為支援的物流商)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有可建立託運單的訂單(運送方式需為支援的物流商)。', 'mo-ectools' ) );
 		}
 
 		$orders  = array_values( $found );
@@ -256,7 +256,7 @@ final class ShipmentOps {
 	 */
 	public static function batch_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'mo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
 		$orders = is_array( $params['orders'] ?? null ) ? $params['orders'] : array();
 		$map    = self::providers();

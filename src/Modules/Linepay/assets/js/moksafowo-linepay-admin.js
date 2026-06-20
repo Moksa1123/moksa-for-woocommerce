@@ -10,12 +10,12 @@ jQuery(function ($) {
 		 * Initialize.
 		 */
 		init: function () {
-			$(document.body).on('change', '#Moksafowo_LinePay_sandboxmode_enabled', function () {
-				var sandbox_channel_id = $('#Moksafowo_LinePay_sandbox_channel_id').parents('tr').eq(0),
-					sandbox_channel_secret = $('#Moksafowo_LinePay_sandbox_channel_secret').parents('tr').eq(0),
+			$(document.body).on('change', '#moksafowo_linepay_sandboxmode_enabled', function () {
+				var sandbox_channel_id = $('#moksafowo_linepay_sandbox_channel_id').parents('tr').eq(0),
+					sandbox_channel_secret = $('#moksafowo_linepay_sandbox_channel_secret').parents('tr').eq(0),
 
-					channel_id = $('#Moksafowo_LinePay_channel_id').parents('tr').eq(0),
-					channel_secret = $('#Moksafowo_LinePay_channel_secret').parents('tr').eq(0);
+					channel_id = $('#moksafowo_linepay_channel_id').parents('tr').eq(0),
+					channel_secret = $('#moksafowo_linepay_channel_secret').parents('tr').eq(0);
 
 
 				if ($(this).is(':checked')) {
@@ -35,7 +35,7 @@ jQuery(function ($) {
 				}
 			});
 
-			$('#Moksafowo_LinePay_sandboxmode_enabled').trigger('change');
+			$('#moksafowo_linepay_sandboxmode_enabled').trigger('change');
 
 			$( document ).on( 'click', '.moksafowo-linepay-confirm-btn', function( event ){
 				event.preventDefault();

@@ -14,9 +14,10 @@ final class IpnHandler {
 	private const IMMEDIATE_TYPES = [ '01', '02', '09', '11' ];
 
 	public static function handle(): void {
-		// 匿名 webhook 無法帶 WP nonce — 走 PassCode（SHA1 + hash_equals）驗簽。
-		// 簽章輸入（OrderNo/TotalPrice/TranStatus）皆為英數字，sanitize_text_field 為恆等轉換。
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- signed webhook; PassCode verified below before any state change, all fields sanitized at capture.
+		// PayNow gateway IPN: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via PassCode (SHA1 + hash_equals, self::verify_pass_code) on line ~62
+		// before any order state change. All fields sanitized at capture via map_deep + sanitize_text_field.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PayNow gateway IPN; no WP nonce possible; source verified via PassCode hash_equals before any state change; all fields sanitized at capture via map_deep.
 		$source = ! empty( $_POST ) ? wp_unslash( $_POST ) : wp_unslash( $_GET );
 
 		if ( empty( $source ) || ! is_array( $source ) ) {

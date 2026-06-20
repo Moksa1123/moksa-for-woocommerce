@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * 共用超商選店卡片資產(CSS + JS helper)。各物流商選店 enqueue 時呼叫 enqueue()
- * 載入共用卡片樣式 + MowpCvsStore helper,並把 SCRIPT handle 當自家 store-selector
+ * 載入共用卡片樣式 + moksafowoCvsStore helper,並把 SCRIPT handle 當自家 store-selector
  * script 的相依,確保 helper 先載入。
  */
 final class CvsStoreAssets {

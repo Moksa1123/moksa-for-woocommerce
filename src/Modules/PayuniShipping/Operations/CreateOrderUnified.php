@@ -251,7 +251,6 @@ final class CreateOrderUnified {
 			$args['NotifyURL']        = wc()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' );
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 		return apply_filters( 'moksafowo_payuni_shipping_unified_order_request_args', $args, $order, $pkg, $method );
 	}
 

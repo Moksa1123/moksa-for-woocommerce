@@ -41,7 +41,7 @@ final class StoreValidation {
 
 		if ( class_exists( '\\Automattic\\WooCommerce\\StoreApi\\Exceptions\\RouteException' ) ) {
 			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
-				'mowp_payuni_cvs_no_store',
+				'moksafowo_payuni_cvs_no_store',
 				esc_html__( '請先選擇取貨門市。', 'mo-ectools' ),
 				400
 			);
@@ -88,7 +88,6 @@ final class StoreValidation {
 			// TW 預設驗證，海外站可 `add_filter('moksafowo_payuni_shipping_phone_valid', '__return_true')` 放寬
 			$valid = (bool) preg_match( '/^[0][1-9]{1,3}[0-9]{6,8}$/', $shipping_phone )
 				&& strlen( $shipping_phone ) >= 10 && strlen( $shipping_phone ) <= 11;
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 			$valid = (bool) apply_filters( 'moksafowo_payuni_shipping_phone_valid', $valid, $shipping_phone );
 			if ( ! $valid ) {
 				wc_add_notice( __( '收件人電話格式不正確，請填入有效的手機或市話號碼。', 'mo-ectools' ), 'error' );

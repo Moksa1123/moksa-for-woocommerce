@@ -198,15 +198,19 @@ final class ProductTempField {
 	}
 
 	public static function save_wc_quick_edit( \WC_Product $product ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC core 已驗 quick edit nonce
+		// WC core fires woocommerce_product_quick_edit_save inside WC_AJAX::product_bulk_edit(), which has
+		// already verified the 'woocommerce-product-inline-edit' nonce and checked manage_product_terms cap.
+		// Value is white-list validated in apply_temp_to_product() — only ProductTemp::{NORMAL,REFRIGERATED,FROZEN} accepted.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC core bulk/quick-edit nonce already verified before this hook fires; value allowlist enforced in apply_temp_to_product().
 		$raw = isset( $_REQUEST['moksafowo_product_temp'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
 
 	public static function save_wc_bulk_edit( \WC_Product $product ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC core 已驗 bulk edit nonce
+		// WC core fires woocommerce_product_bulk_edit_save inside WC_AJAX::product_bulk_edit(), which has
+		// already verified the 'woocommerce-product-inline-edit' nonce and checked manage_product_terms cap.
+		// Value is white-list validated in apply_temp_to_product() — only ProductTemp::{NORMAL,REFRIGERATED,FROZEN} accepted.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC core bulk/quick-edit nonce already verified before this hook fires; value allowlist enforced in apply_temp_to_product().
 		$raw = isset( $_REQUEST['moksafowo_product_temp_bulk'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp_bulk'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
@@ -365,8 +369,10 @@ final class ProductTempField {
 	}
 
 	public static function save_simple_field( \WC_Product $product ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing — WC core 已驗 nonce
+		// Bound to woocommerce_admin_process_product_object, which fires inside WC_Meta_Box_Product_Data::save().
+		// WC core has already verified the post nonce and current_user_can( 'edit_products' ) before this hook.
+		// Value is allowlist-validated below — only known ProductTemp integers are persisted.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC product save nonce already verified by WC core; value allowlist enforced below.
 		$value = isset( $_POST[ Keys::PRODUCT_TEMP ] ) ? absint( wp_unslash( $_POST[ Keys::PRODUCT_TEMP ] ) ) : 0;
 		if ( in_array( $value, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true ) ) {
 			$product->update_meta_data( Keys::PRODUCT_TEMP, (string) $value );
@@ -393,10 +399,9 @@ final class ProductTempField {
 	}
 
 	public static function save_variation_field( int $variation_id, int $loop ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Bound to save_post / quick_edit / bulk_edit; WP core handles nonce + capability check.
-		$raw = ( isset( $_POST['moksafowo_product_temp'][ $loop ] ) && is_scalar( $_POST['moksafowo_product_temp'][ $loop ] ) )
-			? sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_product_temp'][ $loop ] ) )
-			: '';
+		// Bound to woocommerce_save_product_variation; WC core verified the variation save nonce and
+		// current_user_can( 'edit_products' ) before firing this hook. Value allowlist enforced below.
+		$raw = isset( $_POST['moksafowo_product_temp'][ $loop ] ) && is_scalar( $_POST['moksafowo_product_temp'][ $loop ] ) ? sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_product_temp'][ $loop ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC variation save nonce verified by WC core before this hook; value allowlisted below.
 
 		if ( '' === $raw ) {
 			delete_post_meta( $variation_id, Keys::PRODUCT_TEMP );
