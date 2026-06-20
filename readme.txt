@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -127,6 +127,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.1 - 2026-06-20 =
+* Further hardened output escaping on the admin order payment panel and the customer payment-information notice and email (allow-listed HTML at the point of output).
 
 = 1.4.0 - 2026-06-20 =
 * E-invoice fields on the block checkout now show, hide and validate through WooCommerce's native conditional field logic (JSON Schema) instead of custom scripting, for reliable behaviour across WooCommerce updates.

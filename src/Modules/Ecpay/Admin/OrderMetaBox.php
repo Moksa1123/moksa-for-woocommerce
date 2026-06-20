@@ -131,7 +131,7 @@ final class OrderMetaBox {
 			echo '</div>';
 		}
 
-		echo CreditLifecycleBox::lifecycle_html( $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML assembled in CreditLifecycleBox with esc_*.
+		echo wp_kses( CreditLifecycleBox::lifecycle_html( $order ), OrderInfoLayout::card_allowlist() );
 
 		$cards[] = [
 			'slot'  => 'payment',

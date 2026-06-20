@@ -82,7 +82,7 @@ final class OrderInfoLayout {
 	 *
 	 * @return array<string, array<string, bool>>
 	 */
-	private static function card_allowlist(): array {
+	public static function card_allowlist(): array {
 		$common = [
 			'id'    => true,
 			'class' => true,

@@ -71,7 +71,7 @@ final class PaymentInfoEmail extends \WC_Email {
 			]
 		);
 		echo '<p>' . esc_html__( '您好，您的訂單已成立，請於期限內以下列資訊完成付款：', 'mo-ectools' ) . '</p>';
-		echo PaymentInfoBox::render_html( $rows ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( PaymentInfoBox::render_html( $rows ), PaymentInfoBox::kses_allowlist() );
 		if ( $this->object instanceof \WC_Order ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
 			echo wc_get_template_html(

@@ -35,7 +35,7 @@ final class PaymentInfoBox {
 			}
 			$rows = $resolver( $order );
 			if ( ! empty( $rows ) ) {
-				echo self::render_html( $rows ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_html 內已 esc
+				echo wp_kses( self::render_html( $rows ), self::kses_allowlist() );
 			}
 		};
 
@@ -80,5 +80,28 @@ final class PaymentInfoBox {
 		echo '</ul>';
 		echo '</section>';
 		return (string) ob_get_clean();
+	}
+
+
+	/**
+	 * kses allowlist for the 繳費資訊 markup emitted by render_html()
+	 * （static structure；所有動態值在 render_html 內已 esc_html）。
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	public static function kses_allowlist(): array {
+		$style = [
+			'class' => true,
+			'style' => true,
+		];
+		return [
+			'section' => $style,
+			'h2'      => $style,
+			'p'       => $style,
+			'ul'      => $style,
+			'li'      => $style,
+			'span'    => $style,
+			'strong'  => [],
+		];
 	}
 }
