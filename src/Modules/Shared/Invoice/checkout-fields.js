@@ -1,9 +1,10 @@
 ( function () {
 	'use strict';
 
-	// 欄位顯示 / 隱藏 / 必填 / 載具編號 label 全部改由 WC 原生 JSON Schema 條件式處理
-	// （woocommerce_register_additional_checkout_field 的 hidden / required / validation）。
-	// 本檔只留 schema 無法宣告式表達的三件事：Block 預設值帶入、捐贈碼自動填、section 標題改名。
+	// Block 結帳：欄位顯示 / 隱藏 / 必填 / 載具編號 label 全由 WC 原生 JSON Schema 條件式處理
+	// （register_additional_checkout_field 的 hidden / required / validation）。本檔在 Block 端只做
+	// schema 無法宣告式表達的：預設值帶入、捐贈碼自動填、section 標題改名。
+	// Classic 結帳沒有 JSON Schema，欄位顯示靠 classicVisibility() 依下拉 show/hide（純 DOM，不涉 React）。
 
 	function findField( namePart ) {
 		const dashed    = namePart.replace( /_/g, '-' );
@@ -86,8 +87,43 @@
 		} );
 	}
 
+	/**
+	 * Classic 結帳的條件顯示 —— 只作用在 classic 命名欄位（[name="moksafowo_invoice_*"]）。
+	 * Block 欄位用不同 name（mowp/...），不會被這裡選到，維持由 JSON Schema 控制。
+	 */
+	function classicRow( namePart ) {
+		const el = document.querySelector( '[name="moksafowo_' + namePart + '"]' );
+		return el ? ( el.closest( '.form-row, p' ) || el.parentElement ) : null;
+	}
+
+	function showRow( row, visible ) {
+		if ( row ) {
+			row.style.display = visible ? '' : 'none';
+		}
+	}
+
+	function classicVisibility() {
+		const typeSel = document.querySelector( '[name="moksafowo_invoice_type"]' );
+		if ( ! typeSel ) {
+			return; // 非 classic（Block 走 JSON Schema）
+		}
+		const carrierSel = document.querySelector( '[name="moksafowo_invoice_carrier_type"]' );
+		const type       = typeSel.value || 'b2c_carrier';
+		const carrier    = carrierSel ? carrierSel.value : '';
+		const isCarrier  = 'b2c_carrier' === type;
+		const needNum    = isCarrier && ( 'mobile' === carrier || 'cert' === carrier );
+
+		showRow( classicRow( 'invoice_carrier_type' ), isCarrier );
+		showRow( classicRow( 'invoice_carrier_num' ), needNum );
+		showRow( classicRow( 'invoice_buyer_ubn' ), 'b2b' === type );
+		showRow( classicRow( 'invoice_buyer_name' ), 'b2b' === type );
+		showRow( classicRow( 'invoice_donate_org' ), 'b2c_donate' === type );
+		showRow( classicRow( 'invoice_love_code' ), 'b2c_donate' === type );
+	}
+
 	function tick() {
 		preselect();
+		classicVisibility();
 		syncDonate();
 		renameHeading();
 	}
@@ -115,6 +151,7 @@
 			}
 			if (
 				t.matches( '[name*="invoice_type"]' ) ||
+				t.matches( '[name*="invoice_carrier_type"]' ) ||
 				t.matches( '[id*="invoice-type"]' ) ||
 				t.matches( '[name*="mowp/invoice-type"]' ) ||
 				t.matches( '[name*="invoice_donate_org"]' ) ||
