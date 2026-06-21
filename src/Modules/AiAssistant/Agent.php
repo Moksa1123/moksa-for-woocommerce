@@ -43,13 +43,14 @@ final class Agent {
 
 		$history = self::seed_history( $prior );
 		$current = $user_text;
+		$models  = self::MODELS; // 本地可變副本:卡在會回空內容的 provider 時可換家。
 
 		for ( $turn = 0; $turn < self::MAX_TURNS; $turn++ ) {
 			// 逐家 model failover:某家(常見 Gemini 回空 content.parts / connector 失效)失敗就換下一家,
 			// 而不是整個請求失敗。using_model_preference 本身不會在單次呼叫失敗時自動換家。
 			$result   = null;
 			$last_err = '';
-			foreach ( self::MODELS as $model ) {
+			foreach ( $models as $model ) {
 				$builder = wp_ai_client_prompt( $current )
 					->using_system_instruction( $system )
 					->using_abilities( ...$abilities )
@@ -91,6 +92,8 @@ final class Agent {
 				$current   = new \WordPress\AiClient\Messages\DTO\UserMessage(
 					array( new \WordPress\AiClient\Messages\DTO\MessagePart( '請根據前面工具查到的資料,用繁體中文文字簡短回答我的問題。' ) )
 				);
+				// 空內容無工具呼叫:把這家移到隊尾,下個 turn 換別家先試,避免卡在會回空的 provider。
+				$models[] = array_shift( $models );
 				continue;
 			}
 
