@@ -412,9 +412,9 @@ JS
 	}
 
 	public static function ajax_get_store_data() {
-		$cid = WC()->session ? WC()->session->get_customer_id() : '(no session)';
-		PayuniShipping::log( 'ajax_get_store_data called; customer_id=' . $cid . '; nonce=' . ( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : 'missing' ) );
 		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
+		$cid = WC()->session ? WC()->session->get_customer_id() : '(no session)';
+		PayuniShipping::log( 'ajax_get_store_data called; customer_id=' . $cid );
 
 		$store_data = WC()->session ? WC()->session->get( 'moksafowo_payuni_selected_store_data', null ) : null;
 		PayuniShipping::log( 'ajax_get_store_data result: ' . wc_print_r( $store_data, true ) );
