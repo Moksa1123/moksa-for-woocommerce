@@ -765,39 +765,32 @@ JS
 		endif;
 	}
 
-	private static function verify_restore_nonce(): bool {
-		$pairs = array(
-			'moksafowo_payuni_store_nonce'       => 'moksafowo_payuni_restore_store',
-			'woocommerce-process-checkout-nonce' => 'woocommerce-process_checkout',
-			'security'                           => 'update-order-review',
-		);
-		foreach ( $pairs as $field => $action ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- this IS the nonce verification.
-			$nonce = isset( $_POST[ $field ] ) ? sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) : '';
-			if ( '' !== $nonce && wp_verify_nonce( $nonce, $action ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private static function restore_store_data_from_post() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- presence check only; nonce verified in verify_restore_nonce() below before any use.
-		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'] ) || ! isset( $_POST['moksafowo_payuni_selected_store_name'] ) || ! isset( $_POST['moksafowo_payuni_selected_store_address'] ) ) {
+		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'], $_POST['moksafowo_payuni_selected_store_name'], $_POST['moksafowo_payuni_selected_store_address'] ) ) {
 			return false;
 		}
 
-		// 驗 interstitial nonce 或 WC 原生 nonce；皆無效則不還原（token resolve 備援仍有效）
-		if ( ! self::verify_restore_nonce() ) {
+		// Verify the interstitial nonce or a WooCommerce native checkout nonce inline, before reading any field.
+		$verified = false;
+		foreach ( array(
+			'moksafowo_payuni_store_nonce'       => 'moksafowo_payuni_restore_store',
+			'woocommerce-process-checkout-nonce' => 'woocommerce-process_checkout',
+			'security'                           => 'update-order-review',
+		) as $field => $action ) {
+			if ( isset( $_POST[ $field ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ $field ] ) ), $action ) ) {
+				$verified = true;
+				break;
+			}
+		}
+		if ( ! $verified ) {
 			PayuniShipping::log( 'restore_store_data_from_post: nonce missing/invalid — ignored' );
 			return false;
 		}
 
-		// restore_store_data_from_post; verify_restore_nonce() (interstitial token or WC native nonce) checked above; values sanitized inline.
-		$store_id        = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
-		$store_name      = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
-		$store_address   = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
-		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- verify_restore_nonce() checked above.
+		$store_id        = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
+		$store_name      = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : '';
+		$store_address   = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : '';
+		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
 
 		$store_data = array(
 			'id'      => $store_id,

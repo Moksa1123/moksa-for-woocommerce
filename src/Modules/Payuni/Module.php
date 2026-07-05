@@ -6,7 +6,6 @@ namespace MoksaWeb\Mowc\Modules\Payuni;
 use MoksaWeb\Mowc\Crypto\Vault;
 use MoksaWeb\Mowc\Modules\AbstractModule;
 use MoksaWeb\Mowc\Modules\Payuni\Blocks\PayuniBlocksMethod;
-use MoksaWeb\Mowc\Modules\Payuni\Setup\CredentialsMigrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -66,7 +65,6 @@ final class Module extends AbstractModule {
 			Vault::wrap_option( $opt );
 		}
 
-		CredentialsMigrator::run_once();
 		PayuniPayment::init();
 
 		$ids = is_array( PayuniPayment::$allowed_payments ) ? array_keys( PayuniPayment::$allowed_payments ) : [];

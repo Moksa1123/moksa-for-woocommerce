@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -129,6 +129,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.4 - 2026-07-05 =
+* Removed a non-functional leftover PAYUNi credentials migrator (its map used identical source and target option names, so it did nothing).
+* The e-invoice donation-organization option is now written under a statically-prefixed, allow-listed option name.
+* Reworked the PAYUNi store-selection restore so the nonce verification is inline and explicit.
 
 = 1.4.3 - 2026-06-28 =
 * Completed the "External services" documentation in the readme to list every payment, shipping and e-invoice endpoint the plugin can contact, including the credit-card query endpoint and all sandbox/test hostnames.

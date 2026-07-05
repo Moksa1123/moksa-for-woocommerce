@@ -75,10 +75,10 @@ final class DonationOrgOps {
 		}
 
 		return array(
-			'prefix'  => $prefix,
-			'name'    => $name,
-			'code'    => $code,
-			'summary' => sprintf(
+			'provider' => $provider,
+			'name'     => $name,
+			'code'     => $code,
+			'summary'  => sprintf(
 				/* translators: 1: org name, 2: love code, 3: provider */
 				__( '新增捐贈單位「%1$s」(愛心碼 %2$s)到 %3$s 電子發票的捐贈名單。', 'mo-ectools' ),
 				$name,
@@ -96,17 +96,19 @@ final class DonationOrgOps {
 		if ( ! current_user_can( self::CAP ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
 		}
-		$prefix = (string) ( $params['prefix'] ?? '' );
-		$name   = (string) ( $params['name'] ?? '' );
-		$code   = (string) ( $params['code'] ?? '' );
-		if ( '' === $prefix || '' === $name || ! self::valid_code( $code ) ) {
+		$provider = (string) ( $params['provider'] ?? '' );
+		$name     = (string) ( $params['name'] ?? '' );
+		$code     = (string) ( $params['code'] ?? '' );
+		// provider 白名單:option 名一律 moksafowo_<provider>_invoice_donate_orgs（字面前綴,不接受任意值）。
+		if ( ! in_array( $provider, array( 'ecpay', 'ezpay', 'smilepay', 'paynow', 'amego' ), true ) || '' === $name || ! self::valid_code( $code ) ) {
 			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法新增。', 'mo-ectools' ) );
 		}
 
-		$raw  = (string) get_option( $prefix . '_donate_orgs', '' );
-		$line = $name . '|' . $code;
-		$new  = '' === trim( $raw ) ? $line : rtrim( $raw, "\r\n" ) . "\n" . $line;
-		update_option( $prefix . '_donate_orgs', $new );
+		$option = 'moksafowo_' . $provider . '_invoice_donate_orgs';
+		$raw    = (string) get_option( $option, '' );
+		$line   = $name . '|' . $code;
+		$new    = '' === trim( $raw ) ? $line : rtrim( $raw, "\r\n" ) . "\n" . $line;
+		update_option( $option, $new );
 
 		return sprintf(
 			/* translators: 1: org name, 2: love code */
