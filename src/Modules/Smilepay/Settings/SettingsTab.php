@@ -41,7 +41,7 @@ final class SettingsTab {
 				'title' => __( 'Mid — 商家驗證參數', 'mo-ectools' ),
 				'id'    => 'moksafowo_smilepay_mid',
 				'type'  => 'text',
-				'desc'  => __( '用於驗證付款回傳結果。留空則略過驗證（不建議）。', 'mo-ectools' ),
+				'desc'  => __( '用於驗證 SmilePay 付款回傳結果的來源真偽。請填入與 SmilePay 後台一致的值；留空將導致所有付款回傳一律被拒絕（訂單無法自動確認收款）。', 'mo-ectools' ),
 			],
 			[
 				'type' => 'sectionend',

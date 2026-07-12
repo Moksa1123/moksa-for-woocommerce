@@ -74,8 +74,9 @@ final class IpnHandler {
 		if ( '05' === $pay_type && $is_success ) {
 			$pass_code2 = self::pick( $posted, [ 'PassCode2' ] );
 			$email      = (string) $order->get_billing_email();
-			if ( '' !== $pass_code2 && '' !== $email
-				&& ! Signature::verify( Signature::make_pass_code2( $pass_code, $email ), $pass_code2 ) ) {
+			// PassCode2 為此付款方式的必要驗證,未帶或不符一律拒絕(fail-closed)。
+			if ( '' === $pass_code2 || '' === $email
+				|| ! Signature::verify( Signature::make_pass_code2( $pass_code, $email ), $pass_code2 ) ) {
 				Helper::log( 'callback PassCode2 mismatch — rejected', [ 'order_no' => $order_no ] );
 				self::reply( 400, 'PASSCODE2_MISMATCH' );
 			}

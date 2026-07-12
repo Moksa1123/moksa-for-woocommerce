@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -82,7 +82,7 @@ When a shipment has a tracking number, the order screen renders a plain hyperlin
 
 = Moksa AI assistant (optional, admin-only) =
 
-When an administrator actively uses the in-admin Moksa AI assistant, the typed question and the store/order data needed to answer it (for example an order number, status, totals or invoice/shipping numbers) are sent to the AI provider you have connected in WordPress under **Settings → Connectors** — Anthropic, Google or OpenAI — through the WordPress 7.0 AI Client. This never happens automatically and only for the administrator using the assistant. The plugin does not store these conversations on any Moksa server, sends nothing to Moksa, and never transmits your AI provider keys (WordPress manages the connector credentials). The transmitted data is governed by the terms and privacy policy of the provider you choose: Anthropic — Terms: https://www.anthropic.com/legal/commercial-terms — Privacy: https://www.anthropic.com/legal/privacy ; Google — Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy ; OpenAI — Terms: https://openai.com/policies/terms-of-use — Privacy: https://openai.com/policies/privacy-policy
+When an administrator actively uses the in-admin Moksa AI assistant, the typed question and the store/order data needed to answer it (for example an order number, status, totals or invoice/shipping numbers) are sent to the AI provider you have connected in WordPress under **Settings → Connectors** — Anthropic, Google or OpenAI — through the WordPress 7.0 AI Client. This never happens automatically and only for the administrator using the assistant. The plugin does not store these conversations on any Moksa server, sends nothing to Moksa, and never transmits your AI provider keys (WordPress manages the connector credentials). The transmitted data is governed by the terms and privacy policy of the provider you choose: Anthropic — Terms: https://www.anthropic.com/legal/commercial-terms — Privacy: https://www.anthropic.com/legal/privacy ; Google — Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy ; OpenAI — Terms & Privacy (OpenAI's policy hub, linking to both current documents): https://openai.com/policies/
 
 = MCP server (optional, off by default) =
 
@@ -135,6 +135,13 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.6 - 2026-07-12 =
+* Security fix: the NewebPay logistics store-map callback verified its signature only when a HashData value was actually supplied, so an attacker could omit it to skip verification. Now rejected (fail-closed) whenever HashData is missing.
+* Security fix: PayNow's secondary PassCode2 check (barcode/e-wallet payments) was skipped when the field was empty instead of being required; now fail-closed.
+* Settings: corrected the SmilePay "Mid" field description, which still described the old skip-if-empty behaviour after the fail-closed fix.
+* readme: OpenAI's Terms/Privacy links replaced with OpenAI's policy hub, which several individual policy sub-pages intermittently blocked as bot traffic.
+* Added explicit references to the exact WooCommerce core methods (`WC_Settings_Page`, `WC_Shipping_Method::is_available()`) that mandate the `woocommerce_*`-prefixed filter tag names flagged by the automated prefix scan — these are WooCommerce's own extension-point names, not ones this plugin defines.
 
 = 1.4.5 - 2026-07-12 =
 * Security hardening: the SmilePay payment callback now rejects requests when the merchant verification code (參數碼) is not configured (fail-closed) and only accepts callbacks for orders actually paid via SmilePay.

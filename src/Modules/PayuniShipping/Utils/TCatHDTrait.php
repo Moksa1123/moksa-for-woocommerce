@@ -30,7 +30,9 @@ trait TCatHDTrait {
 			$is_available = false;
 		}
 
-		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
+		// WC_Shipping_Method::is_available() 擴充契約規定的 filter tag,見 CVSTrait.php 同一模式的完整說明。
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Shipping_Method::is_available()` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
+		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this );
 	}
 
 	public function init() {

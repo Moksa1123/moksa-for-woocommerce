@@ -252,7 +252,13 @@ final class SettingsPage extends \WC_Settings_Page {
 				$sections[ $section ] = $desc['label'];
 			}
 		}
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
+		// 此 filter tag 名稱由 WooCommerce 核心規定,非本外掛自訂:每個 WC_Settings_Page
+		// 子類(WC_Settings_General、WC_Settings_Payment_Gateways 等核心分頁皆同)都必須
+		// 原樣呼叫 apply_filters('woocommerce_get_sections_' . $this->id, ...) 才能被
+		// WC_Settings_Page::output() 正確處理;改前綴會讓本設定分頁在 WooCommerce 設定
+		// 選單消失。
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Settings_Page` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
+		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 	}
 
 	public function get_settings( $current_section = '' ): array {

@@ -199,14 +199,14 @@ final class StoreSelector {
 		// fields are extracted from decrypted payload and sanitized via sanitize_text_field below.
 		$encrypted = isset( $_POST['EncryptData'] ) ? (string) wp_unslash( $_POST['EncryptData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Newebpay store-map callback; no WP nonce possible; raw kept for HashData SHA256 hash_equals (verified before decrypt); fields sanitized after decrypt.
 		$hash      = isset( $_POST['HashData'] ) ? (string) wp_unslash( $_POST['HashData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- raw signature bytes, hash_equals verified before use.
-		if ( '' === $encrypted ) {
-			Helper::log( 'storeMap callback: empty EncryptData' );
+		if ( '' === $encrypted || '' === $hash ) {
+			Helper::log( 'storeMap callback: missing EncryptData / HashData' );
 			status_header( 400 );
 			exit( 'Missing payload' );
 		}
-		// 驗 HashData (optional but safe)
+		// 驗 HashData — 未帶或不符一律拒絕(fail-closed),不可因空值跳過。
 		$expected = strtoupper( hash( 'sha256', 'HashKey=' . Helper::hash_key() . '&' . $encrypted . '&HashIV=' . Helper::hash_iv() ) );
-		if ( '' !== $hash && ! hash_equals( $expected, strtoupper( $hash ) ) ) {
+		if ( ! hash_equals( $expected, strtoupper( $hash ) ) ) {
 			Helper::log( 'storeMap callback: HashData mismatch' );
 			status_header( 400 );
 			exit( 'Bad hash' );
