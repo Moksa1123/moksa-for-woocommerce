@@ -115,18 +115,20 @@ final class Table {
 		if ( empty( $pairs ) ) {
 			return;
 		}
-		$values = [];
-		$args   = [ self::name() ];
+		// 每張訂單只有個位數的號碼（發票 / 物流 / 金流），逐列走 $wpdb->insert() 即可，
+		// 不需要自組 VALUES 清單 —— 也就沒有任何動態拼接的 SQL。
 		foreach ( $pairs as $p ) {
-			$values[] = '(%d, %s, %s)';
-			$args[]   = $order_id;
-			$args[]   = (string) $p['field'];
-			$args[]   = (string) $p['num'];
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表插入。
+			$wpdb->insert(
+				self::name(),
+				[
+					'order_id' => $order_id,
+					'field'    => (string) $p['field'],
+					'num'      => (string) $p['num'],
+				],
+				[ '%d', '%s', '%s' ]
+			);
 		}
-		// 只有列數是動態的 — 每個 (%d, %s, %s) 都是常數字串，值全部經 prepare 參數化。
-		$placeholders = implode( ',', $values );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- $placeholders 只含常數 placeholder 字串。
-		$wpdb->query( $wpdb->prepare( "INSERT INTO %i (order_id, field, num) VALUES {$placeholders}", $args ) );
 	}
 
 	/**
@@ -143,17 +145,28 @@ final class Table {
 		if ( empty( $fields ) || '' === $term ) {
 			return [];
 		}
-		// $field_ph 是 N 個常數 '%s' — 只有「幾個」是動態的，內容不含任何使用者輸入。
-		$field_ph = implode( ',', array_fill( 0, count( $fields ), '%s' ) );
-		$like     = $wpdb->esc_like( $term ) . '%';
-		// exact (num = term) 排在 prefix 命中之前。表名走 %i，所有值走 %s / %d。
-		$sql = 'SELECT order_id, MAX( num = %s ) AS exact_hit FROM %i'
-			. ' WHERE field IN (' . $field_ph . ') AND ( num = %s OR num LIKE %s )'
-			. ' GROUP BY order_id ORDER BY exact_hit DESC LIMIT %d';
-		// 參數順序：exact 比對的 term、表名、field IN(...)、num=term、LIKE、limit。
-		$prepared_args = array_merge( [ $term, self::name() ], $fields, [ $term, $like, max( 1, $limit ) ] );
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- $sql 由常數片段組成，placeholder 數量隨 $fields 變動故 sniff 無法靜態計數。
-		$rows = $wpdb->get_col( $wpdb->prepare( $sql, $prepared_args ) );
+		// 號碼類型清單用 FIND_IN_SET 當單一 %s 參數傳，而不是拼 IN (%s, %s, ...) —
+		// SQL 因此是完全靜態的字串，placeholder 數量固定。`field` 本來就不在索引裡
+		// （KEY num (num) 才是驅動查詢的），兩種寫法它都只是 post-filter，沒有效能差異。
+		$field_set = implode( ',', $fields );
+		$like      = $wpdb->esc_like( $term ) . '%';
+		// exact (num = term) 排在 prefix 命中之前。
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		$rows = $wpdb->get_col(
+			$wpdb->prepare(
+				'SELECT order_id, MAX( num = %s ) AS exact_hit FROM %i
+					WHERE FIND_IN_SET( field, %s ) AND ( num = %s OR num LIKE %s )
+					GROUP BY order_id
+					ORDER BY exact_hit DESC
+					LIMIT %d',
+				$term,
+				self::name(),
+				$field_set,
+				$term,
+				$like,
+				max( 1, $limit )
+			)
+		);
 		return array_map( 'intval', $rows );
 	}
 }
