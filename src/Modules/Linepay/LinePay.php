@@ -67,13 +67,10 @@ final class LinePay {
 
 	public function ajax_confirm_payment(): void {
 
+		check_ajax_referer( 'moksafowo-linepay-confirm', 'security' );
+
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( '權限不足。', 'mo-ectools' ) ), 403 );
-		}
-
-		$nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
-		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'moksafowo-linepay-confirm' ) ) {
-			wp_send_json_error( array( 'message' => __( '安全驗證失敗，請重新整理後再試。', 'mo-ectools' ) ), 403 );
 		}
 
 		$order_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;

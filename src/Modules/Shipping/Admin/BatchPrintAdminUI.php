@@ -541,8 +541,11 @@ final class BatchPrintAdminUI {
 
 	public static function render_print_output(): void {
 		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
+		if ( '' === $token ) {
+			wp_die( esc_html__( '列印連結已失效，請重試。', 'mo-ectools' ), 403 );
+		}
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
-		if ( '' === $token || ! wp_verify_nonce( $nonce, 'moksafowo_bp_print_' . $token ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'moksafowo_bp_print_' . $token ) ) {
 			wp_die( esc_html__( '列印連結已失效，請重試。', 'mo-ectools' ), 403 );
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {

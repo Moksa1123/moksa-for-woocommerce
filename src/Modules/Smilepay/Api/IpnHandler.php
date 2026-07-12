@@ -41,6 +41,11 @@ final class IpnHandler {
 			self::die_status( __( '查無訂單', 'mo-ectools' ) );
 		}
 
+		if ( ! self::order_uses_smilepay( $order ) ) {
+			Helper::log( 'roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
+			self::die_status( __( '訂單付款方式不符', 'mo-ectools' ) );
+		}
+
 		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
 			Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
 			self::die_status( __( 'Mid_smilepay 不符合', 'mo-ectools' ) );
@@ -123,6 +128,11 @@ final class IpnHandler {
 			self::die_status( __( '查無訂單', 'mo-ectools' ) );
 		}
 
+		if ( ! self::order_uses_smilepay( $order ) ) {
+			Helper::log( 'credit_roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
+			self::die_status( __( '訂單付款方式不符', 'mo-ectools' ) );
+		}
+
 		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
 			Helper::log( 'credit_roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
 			self::die_status( __( 'Mid_smilepay 不符合', 'mo-ectools' ) );
@@ -196,10 +206,18 @@ final class IpnHandler {
 	private static function verify_mid( \WC_Order $order, string $amount, string $smseid, string $mid_smilepay ): bool {
 		$mid = Helper::mid();
 		if ( '' === $mid ) {
-			return true;
+			// Fail closed:未設定參數碼就無法驗證回呼來源,一律拒絕(商家須在設定頁填入
+			// 與 SmilePay 後台一致的參數碼,否則收不到入帳通知)。
+			Helper::log( 'roturl rejected — merchant Mid (參數碼) not configured; cannot verify callback origin' );
+			return false;
 		}
 		$expected = Helper::calc_mid_smilepay( $mid, $amount, $smseid );
 		return hash_equals( $expected, $mid_smilepay );
+	}
+
+	/** 訂單必須是本模組的 SmilePay 付款方式,才接受 SmilePay 回呼改它的狀態。 */
+	private static function order_uses_smilepay( \WC_Order $order ): bool {
+		return 0 === strpos( (string) $order->get_payment_method(), 'moksafowo_smilepay_' );
 	}
 
 	private static function amount_matches( \WC_Order $order, string $amount ): bool {
