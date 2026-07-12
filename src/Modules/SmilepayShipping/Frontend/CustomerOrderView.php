@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Frontend;
+namespace Moksafowo\Modules\SmilepayShipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\Address\TwAddress;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Module;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Address\TwAddress;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Modules\SmilepayShipping\Module;
+use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -146,7 +146,7 @@ final class CustomerOrderView {
 					$track_num     = (string) ( $r['track_num'] ?? '' );
 					$pay_no        = (string) ( $r['pay_no'] ?? '' );
 					$rec_temp      = (int) ( $r['temp'] ?? 0 );
-					$temp_label    = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
+					$temp_label    = $rec_temp > 0 ? \Moksafowo\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_smilepay_record( $r );
 					$primary       = '' !== $track_num ? $track_num : $pay_no;
 					?>

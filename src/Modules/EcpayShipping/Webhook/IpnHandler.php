@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Webhook;
+namespace Moksafowo\Modules\EcpayShipping\Webhook;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

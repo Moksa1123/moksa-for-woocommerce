@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Smilepay\Blocks;
+namespace Moksafowo\Modules\Smilepay\Blocks;
 
-use MoksaWeb\Mowc\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
+use Moksafowo\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
 
 defined( 'ABSPATH' ) || exit;
 

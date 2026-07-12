@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Api;
+namespace Moksafowo\Modules\Linepay\Api;
 
-use MoksaWeb\Mowc\Modules\Linepay\Constants;
+use Moksafowo\Modules\Linepay\Constants;
 
 defined( 'ABSPATH' ) || exit;
 

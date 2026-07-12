@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Methods;
+namespace Moksafowo\Modules\EcpayShipping\Methods;
 
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
 
 defined( 'ABSPATH' ) || exit;
 

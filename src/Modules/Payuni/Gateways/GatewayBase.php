@@ -1,13 +1,13 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+namespace Moksafowo\Modules\Payuni\Gateways;
 
-use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Payuni\Credentials;
-use MoksaWeb\Mowc\Modules\Payuni\PayuniPayment;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\TradeStatus;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\AuthType;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\BankType;
+use Moksafowo\Modules\Payuni\Api\PaymentRequest;
+use Moksafowo\Modules\Payuni\Credentials;
+use Moksafowo\Modules\Payuni\PayuniPayment;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Utils\TradeStatus;
+use Moksafowo\Modules\Payuni\Utils\AuthType;
+use Moksafowo\Modules\Payuni\Utils\BankType;
 
 defined( 'ABSPATH' ) || exit;
 

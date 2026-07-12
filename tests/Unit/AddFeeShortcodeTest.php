@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
-use MoksaWeb\Mowc\Modules\Shipping\Shortcodes\AddFee;
+use Moksafowo\Modules\Shipping\Shortcodes\AddFee;
 use PHPUnit\Framework\TestCase;
 
 final class AddFeeShortcodeTest extends TestCase {

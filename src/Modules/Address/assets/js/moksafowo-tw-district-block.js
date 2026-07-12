@@ -1,10 +1,10 @@
 /**
- * mowp 台灣鄉鎮市區下拉 — Block checkout。
+ * 台灣鄉鎮市區下拉 — Block checkout。
  *
- * mowp/district select 由 WC Blocks register_additional_checkout_field 註冊（一次列入
+ * moksafowo/district select 由 WC Blocks register_additional_checkout_field 註冊（一次列入
  * 全 370 options），這支 JS 只做兩件事：
  *   1. 監聽 country / state select 變更 → 隱藏不屬於該縣市的 options
- *   2. 監聽 mowp/district select 變更 → 自動帶 postcode
+ *   2. 監聽 moksafowo/district select 變更 → 自動帶 postcode
  *
  * 無 React state 注入，無 nativeInputValueSetter — 直接操作 native select.
  */
@@ -21,8 +21,8 @@
 	const PLACEHOLDER = moksafowo_tw_district.placeholder || '請選擇…';
 
 	function fieldKey( prefix ) {
-		// Block 把 mowp/district 渲染成 id="<group>-mowp-district"（slash 換 dash）
-		// 例：shipping-mowp-district / billing-mowp-district
+		// Block 把 moksafowo/district 渲染成 id="<group>-moksafowo-district"（slash 換 dash）
+		// 例：shipping-moksafowo-district / billing-moksafowo-district
 		return prefix + '-' + FIELD_ID.replace( /\//g, '-' );
 	}
 
@@ -88,7 +88,7 @@
 		postcodeInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 	}
 
-	/** 給 mowp/district wrapper 加 class（CSS hook）。 */
+	/** 給 moksafowo/district wrapper 加 class（CSS hook）。 */
 	function tagWrapper( select ) {
 		if ( ! select ) {
 			return null;

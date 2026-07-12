@@ -1,15 +1,15 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Operations;
+namespace Moksafowo\Modules\EcpayShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod;
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractHomeShippingMethod;
-use MoksaWeb\Mowc\Modules\Shipping\Order\SplitByTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\EcpayShipping\Module;
+use Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod;
+use Moksafowo\Modules\Shipping\Methods\AbstractHomeShippingMethod;
+use Moksafowo\Modules\Shipping\Order\SplitByTemp;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -44,7 +44,7 @@ final class CreateOrder {
 		}
 
 		$method_in_order = self::resolve_order_shipping_method( $order, $method_id );
-		$packages        = SplitByTemp::for_order( $order, $supported_temps, $method_in_order instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod ? $method_in_order : null );
+		$packages        = SplitByTemp::for_order( $order, $supported_temps, $method_in_order instanceof \Moksafowo\Modules\Shipping\Methods\AbstractShippingMethod ? $method_in_order : null );
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
@@ -547,7 +547,7 @@ final class CreateOrder {
 		// 鄉鎮市區落地於 shipping_city；city 空才退用 Block 結帳附加欄位
 		$district = (string) $order->get_shipping_city();
 		if ( '' === $district ) {
-			$district = (string) $order->get_meta( '_wc_shipping/mowp/district' );
+			$district = (string) $order->get_meta( '_wc_shipping/moksafowo/district' );
 		}
 
 		return trim(

@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup\Index;
+namespace Moksafowo\Modules\OrderLookup\Index;
 
-use MoksaWeb\Mowc\Modules\OrderLookup\SearchableKeys;
+use Moksafowo\Modules\OrderLookup\SearchableKeys;
 
 defined( 'ABSPATH' ) || exit;
 

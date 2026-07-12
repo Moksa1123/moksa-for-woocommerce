@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceChannels;
+use Moksafowo\Modules\Shared\Invoice\InvoiceChannels;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Pchomepay\Api;
+namespace Moksafowo\Modules\Pchomepay\Api;
 
 defined( 'ABSPATH' ) || exit;
 

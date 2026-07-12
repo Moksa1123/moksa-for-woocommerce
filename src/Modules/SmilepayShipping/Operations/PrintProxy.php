@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Operations;
+namespace Moksafowo\Modules\SmilepayShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Module;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\SmilepayShipping\Api\Helper;
+use Moksafowo\Modules\SmilepayShipping\Module;
+use Moksafowo\Order\Meta\Keys;
 
-use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+use Moksafowo\Modules\Shared\Frontend\Interstitial;
 
 defined( 'ABSPATH' ) || exit;
 

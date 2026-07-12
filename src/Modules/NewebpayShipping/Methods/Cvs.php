@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Methods;
+namespace Moksafowo\Modules\NewebpayShipping\Methods;
 
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod;
+use Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod;
 
 defined( 'ABSPATH' ) || exit;
 

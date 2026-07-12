@@ -1,6 +1,6 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Settings;
+namespace Moksafowo\Modules\PayuniShipping\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,7 +16,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 		add_action( 'admin_init', array( $this, 'moksafowo_payuni_shipping_redirect_default_tab' ) );
 
-		add_filter( 'woocommerce_get_sections_' . $this->id, array( $this, 'moksafowo_payuni_shipping_sections' ), 11, 1 );
+		add_filter( 'moksafowo_get_sections_' . $this->id, array( $this, 'moksafowo_payuni_shipping_sections' ), 11, 1 );
 
 		parent::__construct();
 	}
@@ -36,9 +36,7 @@ class SettingsTab extends \WC_Settings_Page {
 			$sections = array(
 				'shipping' => __( '物流設定', 'mo-ectools' ),
 			);
-			// WC_Settings_Page 擴充契約規定的 filter tag,見 src/Settings/SettingsPage.php 同一模式的完整說明。
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Settings_Page` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			return apply_filters( 'moksafowo_get_sections_' . $this->id, $sections );
 		}
 		return array();
 	}

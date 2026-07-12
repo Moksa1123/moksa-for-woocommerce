@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayInvoice\Operations;
+namespace Moksafowo\Modules\EcpayInvoice\Operations;
 
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Api\Helper;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayInvoice\Api\Helper;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

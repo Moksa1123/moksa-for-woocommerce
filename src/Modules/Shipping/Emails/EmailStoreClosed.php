@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Emails;
+namespace Moksafowo\Modules\Shipping\Emails;
 
 defined( 'ABSPATH' ) || exit;
 

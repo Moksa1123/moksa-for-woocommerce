@@ -1,5 +1,5 @@
 /**
- * mowp 台灣地址工具 — Classic + Block checkout 共用 CSS。
+ * 台灣地址工具 — Classic + Block checkout 共用 CSS。
  *
  * 為什麼用 !important：
  * Block 用 flexbox + @container queries 排版，預設規則：
@@ -32,7 +32,7 @@
 	display: none !important;
 }
 
-/* === v0.2.0: 啟用 mowp/district additional field 時隱藏 Block 核心 city ===
+/* === v0.2.0: 啟用 moksafowo/district additional field 時隱藏 Block 核心 city ===
    district 取代核心 city 的角色，core city 走 woocommerce_set_additional_field_value
    sync 寫入但 UI 不再顯示。Classic 不走這條（Classic 直接 render city as select）。
    也要隱藏 .wc-block-components-address-card__address-section--secondary 的 city 部分？不，

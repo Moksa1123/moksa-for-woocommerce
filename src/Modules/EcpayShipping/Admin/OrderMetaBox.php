@@ -1,14 +1,14 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Admin;
+namespace Moksafowo\Modules\EcpayShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\PrintLabel;
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayShipping\Module;
+use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
+use Moksafowo\Modules\EcpayShipping\Operations\PrintLabel;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,7 +43,7 @@ final class OrderMetaBox {
 	private static function registry_titles(): array {
 		if ( null === self::$registry_titles_cache ) {
 			$titles = [];
-			foreach ( \MoksaWeb\Mowc\Modules\Shipping\Admin\BatchPrintRegistry::all() as $entry ) {
+			foreach ( \Moksafowo\Modules\Shipping\Admin\BatchPrintRegistry::all() as $entry ) {
 				foreach ( $entry['method_titles'] ?? [] as $mid_k => $title ) {
 					$titles[ $mid_k ] = $title;
 				}
@@ -121,7 +121,7 @@ final class OrderMetaBox {
 				$lines[] = esc_html( $store_addr );
 			}
 		} else {
-			foreach ( \MoksaWeb\Mowc\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
+			foreach ( \Moksafowo\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
 				$lines[] = esc_html( $line );
 			}
 		}
@@ -183,7 +183,7 @@ final class OrderMetaBox {
 							$temp = 'UNIMARTFREEZE' === $subtype ? 3 : 1;
 						}
 						$amount          = isset( $r['amount'] ) ? (int) $r['amount'] : $order_total;
-						$temp_label      = \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp );
+						$temp_label      = \Moksafowo\Modules\Shipping\Temp\ProductTemp::label( $temp );
 						$temp_pill_color = match ( $temp ) { // 常溫灰、冷藏藍、冷凍紫
 							2       => [ '#dbeafe', '#1e40af' ],
 							3       => [ '#ede9fe', '#6d28d9' ],

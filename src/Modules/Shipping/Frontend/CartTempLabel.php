@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Frontend;
+namespace Moksafowo\Modules\Shipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,8 +30,8 @@ final class CartTempLabel {
 
 		foreach ( $rates as $rate_id => $rate ) {
 			$method_id = (string) $rate->get_method_id();
-			$is_mowp   = str_starts_with( $method_id, 'moksafowo_' );
-			if ( ! $is_mowp ) {
+			$is_ours   = str_starts_with( $method_id, 'moksafowo_' );
+			if ( ! $is_ours ) {
 				$kept[ $rate_id ] = $rate;
 				continue;
 			}
@@ -39,7 +39,7 @@ final class CartTempLabel {
 			if ( $method && method_exists( $method, 'supported_temperatures' ) ) {
 				$supported = array_map( 'intval', array_keys( $method->supported_temperatures() ) );
 			} else {
-				// legacy method（如 PAYUNi ShippingBase）不繼承 mowp Abstract，從 id 推溫層
+				// legacy method（如 PAYUNi ShippingBase）不繼承本外掛 Abstract，從 id 推溫層
 				$supported = self::infer_supported_from_id( $method_id );
 			}
 			$missing = array_diff( $cart_temps, $supported );

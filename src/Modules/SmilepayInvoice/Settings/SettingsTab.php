@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayInvoice\Settings;
+namespace Moksafowo\Modules\SmilepayInvoice\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

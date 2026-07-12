@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Pchomepay\Api;
+namespace Moksafowo\Modules\Pchomepay\Api;
 
-use MoksaWeb\Mowc\Order\Lookup;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Lookup;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -76,7 +76,7 @@ final class IpnHandler {
 		self::apply_notify( $order, $notify_type, $message );
 		$order->save();
 
-		\MoksaWeb\Mowc\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
 
 		// 3 秒內回純文字 success（不是 JSON）。
 		status_header( 200 );
@@ -219,10 +219,10 @@ final class IpnHandler {
 	}
 
 	private static function pay_type_label( string $type ): string {
-		return \MoksaWeb\Mowc\Modules\Pchomepay\PaymentTypeCatalog::label( $type, $type );
+		return \Moksafowo\Modules\Pchomepay\PaymentTypeCatalog::label( $type, $type );
 	}
 
 	private static function logistic_label( string $notify_type ): string {
-		return \MoksaWeb\Mowc\Modules\Pchomepay\PaymentTypeCatalog::logistic_label( $notify_type, $notify_type );
+		return \Moksafowo\Modules\Pchomepay\PaymentTypeCatalog::logistic_label( $notify_type, $notify_type );
 	}
 }

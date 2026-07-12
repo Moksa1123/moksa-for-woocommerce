@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PaynowInvoice\Frontend;
+namespace Moksafowo\Modules\PaynowInvoice\Frontend;
 
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceCheckoutFields;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceFieldConfig;
+use Moksafowo\Modules\Shared\Invoice\InvoiceCheckoutFields;
+use Moksafowo\Modules\Shared\Invoice\InvoiceFieldConfig;
 
 defined( 'ABSPATH' ) || exit;
 

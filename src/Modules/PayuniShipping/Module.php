@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping;
+namespace Moksafowo\Modules\PayuniShipping;
 
-use MoksaWeb\Mowc\Crypto\Vault;
-use MoksaWeb\Mowc\Modules\AbstractModule;
+use Moksafowo\Crypto\Vault;
+use Moksafowo\Modules\AbstractModule;
 
 defined( 'ABSPATH' ) || exit;
 

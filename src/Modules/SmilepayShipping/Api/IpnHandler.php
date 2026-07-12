@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Api;
+namespace Moksafowo\Modules\SmilepayShipping\Api;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

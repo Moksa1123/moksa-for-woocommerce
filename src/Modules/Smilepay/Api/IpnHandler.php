@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Smilepay\Api;
+namespace Moksafowo\Modules\Smilepay\Api;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -97,7 +97,7 @@ final class IpnHandler {
 		}
 		$order->save();
 
-		\MoksaWeb\Mowc\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
 
 		self::die_ok();
 	}

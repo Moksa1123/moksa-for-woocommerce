@@ -1,6 +1,6 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Settings;
+namespace Moksafowo\Modules\PayuniShipping\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

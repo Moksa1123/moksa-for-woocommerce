@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay\Gateways;
+namespace Moksafowo\Modules\Ecpay\Gateways;
 
-use MoksaWeb\Mowc\Modules\Ecpay\Api\Helper;
-use MoksaWeb\Mowc\Modules\Shared\Gateways\AbstractMowcGateway;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Ecpay\Api\Helper;
+use Moksafowo\Modules\Shared\Gateways\AbstractMowcGateway;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

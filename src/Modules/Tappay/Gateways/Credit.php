@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Tappay\Gateways;
+namespace Moksafowo\Modules\Tappay\Gateways;
 
-use MoksaWeb\Mowc\Modules\Tappay\Api\Client;
-use MoksaWeb\Mowc\Modules\Tappay\Api\Helper;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Tappay\Api\Client;
+use Moksafowo\Modules\Tappay\Api\Helper;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

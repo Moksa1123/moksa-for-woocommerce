@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Tappay\Blocks;
+namespace Moksafowo\Modules\Tappay\Blocks;
 
-use MoksaWeb\Mowc\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
-use MoksaWeb\Mowc\Modules\Tappay\Api\Helper;
+use Moksafowo\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
+use Moksafowo\Modules\Tappay\Api\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Statuses;
+namespace Moksafowo\Modules\Shipping\Statuses;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -45,7 +45,7 @@ final class Registrar {
 
 		add_action( 'woocommerce_admin_field_moksafowo_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_color_grid_assets' ] );
-		add_action( 'woocommerce_update_options_' . \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
+		add_action( 'woocommerce_update_options_' . \Moksafowo\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );
 	}
 
 	public static function color_status_labels(): array {
@@ -80,7 +80,7 @@ final class Registrar {
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only 畫面判斷，無狀態變更。
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
-		if ( \MoksaWeb\Mowc\Settings\SettingsTab::TAB_ID !== $tab ) {
+		if ( \Moksafowo\Settings\SettingsTab::TAB_ID !== $tab ) {
 			return;
 		}
 		wp_enqueue_style( 'wp-color-picker' );

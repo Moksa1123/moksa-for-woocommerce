@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Paynow;
+namespace Moksafowo\Modules\Paynow;
 
-use MoksaWeb\Mowc\Modules\Shared\AbstractGatewayModule;
+use Moksafowo\Modules\Shared\AbstractGatewayModule;
 
 defined( 'ABSPATH' ) || exit;
 

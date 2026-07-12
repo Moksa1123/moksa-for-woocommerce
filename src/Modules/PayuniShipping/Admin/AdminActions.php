@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Admin;
+namespace Moksafowo\Modules\PayuniShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\Shipping\Admin\AbstractAdminActions;
-use MoksaWeb\Mowc\Modules\Shipping\AbstractProvider;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\Shipping\Admin\AbstractAdminActions;
+use Moksafowo\Modules\Shipping\AbstractProvider;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -10,9 +10,9 @@
 		const dashed    = namePart.replace( /_/g, '-' );
 		const selectors = [
 			'[name="moksafowo_' + namePart + '"]', // classic
-			'[id$="-mowp-' + dashed + '"]',        // block（location group prefix）
-			'[name$="-mowp-' + dashed + '"]',
-			'[name*="mowp/' + dashed + '"]',
+			'[id$="-moksafowo-' + dashed + '"]',        // block（location group prefix）
+			'[name$="-moksafowo-' + dashed + '"]',
+			'[name*="moksafowo/' + dashed + '"]',
 		];
 		for ( let i = 0; i < selectors.length; i++ ) {
 			const el = document.querySelector( selectors[ i ] );
@@ -89,7 +89,7 @@
 
 	/**
 	 * Classic 結帳的條件顯示 —— 只作用在 classic 命名欄位（[name="moksafowo_invoice_*"]）。
-	 * Block 欄位用不同 name（mowp/...），不會被這裡選到，維持由 JSON Schema 控制。
+	 * Block 欄位用不同 name（moksafowo/...），不會被這裡選到，維持由 JSON Schema 控制。
 	 */
 	function classicRow( namePart ) {
 		const el = document.querySelector( '[name="moksafowo_' + namePart + '"]' );
@@ -153,10 +153,10 @@
 				t.matches( '[name*="invoice_type"]' ) ||
 				t.matches( '[name*="invoice_carrier_type"]' ) ||
 				t.matches( '[id*="invoice-type"]' ) ||
-				t.matches( '[name*="mowp/invoice-type"]' ) ||
+				t.matches( '[name*="moksafowo/invoice-type"]' ) ||
 				t.matches( '[name*="invoice_donate_org"]' ) ||
 				t.matches( '[id*="invoice-donate-org"]' ) ||
-				t.matches( '[name*="mowp/invoice-donate-org"]' )
+				t.matches( '[name*="moksafowo/invoice-donate-org"]' )
 			) {
 				schedule();
 			}

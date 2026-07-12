@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Http;
+namespace Moksafowo\Http;
 
-use MoksaWeb\Mowc\Crypto\Sha;
+use Moksafowo\Crypto\Sha;
 
 defined( 'ABSPATH' ) || exit;
 

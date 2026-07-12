@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay;
+namespace Moksafowo\Modules\Linepay;
 
 defined( 'ABSPATH' ) || exit;
 

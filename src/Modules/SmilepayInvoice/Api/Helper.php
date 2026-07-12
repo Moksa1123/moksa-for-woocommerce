@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayInvoice\Api;
+namespace Moksafowo\Modules\SmilepayInvoice\Api;
 
-use MoksaWeb\Mowc\Modules\Shared\Api\AbstractCredentialHelper;
+use Moksafowo\Modules\Shared\Api\AbstractCredentialHelper;
 
 defined( 'ABSPATH' ) || exit;
 

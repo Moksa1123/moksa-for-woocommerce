@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Api;
+namespace Moksafowo\Modules\Linepay\Api;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,8 +21,8 @@ final class Currency {
 		}
 		$currency_code = strtoupper( $currency_code );
 		// 用 array_key_exists 而非 in_array — 修 wpbr-moksafowo-linepay 1.3.3 對非 TWD 幣別錯誤匹配的 bug
-		if ( array_key_exists( $currency_code, \MoksaWeb\Mowc\Modules\Linepay\LinePay::$currency_scales ) ) {
-			return (int) \MoksaWeb\Mowc\Modules\Linepay\LinePay::$currency_scales[ $currency_code ];
+		if ( array_key_exists( $currency_code, \Moksafowo\Modules\Linepay\LinePay::$currency_scales ) ) {
+			return (int) \Moksafowo\Modules\Linepay\LinePay::$currency_scales[ $currency_code ];
 		}
 		return 0;
 	}

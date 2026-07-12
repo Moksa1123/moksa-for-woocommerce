@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Invoice;
+namespace Moksafowo\Modules\Shared\Invoice;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

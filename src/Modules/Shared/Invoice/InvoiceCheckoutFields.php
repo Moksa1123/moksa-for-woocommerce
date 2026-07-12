@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Invoice;
+namespace Moksafowo\Modules\Shared\Invoice;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * 共用同一份 Classic + Block 欄位邏輯，差異走 InvoiceFieldConfig 注入。
  *
  * 協調：多家發票同時啟用時，依固定優先序只讓最高優先者註冊欄位（單向讓位，無重複註冊）。
- * 欄位 namespace `mowp/invoice-*`、meta 走 Order\Meta\Keys，跨 provider 一致。
+ * 欄位 namespace `moksafowo/invoice-*`、meta 走 Order\Meta\Keys，跨 provider 一致。
  */
 final class InvoiceCheckoutFields {
 
@@ -56,7 +56,7 @@ final class InvoiceCheckoutFields {
 	}
 
 	/**
-	 * JSON Schema 片段：當 mowp/invoice-type === $type 時命中。
+	 * JSON Schema 片段：當 moksafowo/invoice-type === $type 時命中。
 	 * 用於 Block 欄位的 required（正向）。WC 對 hidden 用反轉（not+const），見 when_type_not()。
 	 */
 	private static function when_type( string $type ): array {
@@ -67,7 +67,7 @@ final class InvoiceCheckoutFields {
 					'properties' => [
 						'additional_fields' => [
 							'properties' => [
-								'mowp/invoice-type' => [ 'const' => $type ],
+								'moksafowo/invoice-type' => [ 'const' => $type ],
 							],
 						],
 					],
@@ -76,7 +76,7 @@ final class InvoiceCheckoutFields {
 		];
 	}
 
-	/** 反轉：mowp/invoice-type !== $type 時命中（用於 hidden — 不該顯示就藏）。 */
+	/** 反轉：moksafowo/invoice-type !== $type 時命中（用於 hidden — 不該顯示就藏）。 */
 	private static function when_type_not( string $type ): array {
 		return [
 			'type'       => 'object',
@@ -85,7 +85,7 @@ final class InvoiceCheckoutFields {
 					'properties' => [
 						'additional_fields' => [
 							'properties' => [
-								'mowp/invoice-type' => [ 'not' => [ 'const' => $type ] ],
+								'moksafowo/invoice-type' => [ 'not' => [ 'const' => $type ] ],
 							],
 						],
 					],
@@ -94,7 +94,7 @@ final class InvoiceCheckoutFields {
 		];
 	}
 
-	/** 反轉：mowp/invoice-carrier-type !== $carrier 時命中（用於 hidden）。 */
+	/** 反轉：moksafowo/invoice-carrier-type !== $carrier 時命中（用於 hidden）。 */
 	private static function when_carrier_not( string $carrier ): array {
 		return [
 			'type'       => 'object',
@@ -103,7 +103,7 @@ final class InvoiceCheckoutFields {
 					'properties' => [
 						'additional_fields' => [
 							'properties' => [
-								'mowp/invoice-carrier-type' => [ 'not' => [ 'const' => $carrier ] ],
+								'moksafowo/invoice-carrier-type' => [ 'not' => [ 'const' => $carrier ] ],
 							],
 						],
 					],
@@ -112,7 +112,7 @@ final class InvoiceCheckoutFields {
 		];
 	}
 
-	/** mowp/invoice-type === $type 「且」mowp/invoice-carrier-type === $carrier 時命中（用於 required，AND）。 */
+	/** moksafowo/invoice-type === $type 「且」moksafowo/invoice-carrier-type === $carrier 時命中（用於 required，AND）。 */
 	private static function when_type_and_carrier( string $type, string $carrier ): array {
 		return [
 			'type'       => 'object',
@@ -121,8 +121,8 @@ final class InvoiceCheckoutFields {
 					'properties' => [
 						'additional_fields' => [
 							'properties' => [
-								'mowp/invoice-type' => [ 'const' => $type ],
-								'mowp/invoice-carrier-type' => [ 'const' => $carrier ],
+								'moksafowo/invoice-type' => [ 'const' => $type ],
+								'moksafowo/invoice-carrier-type' => [ 'const' => $carrier ],
 							],
 						],
 					],
@@ -302,32 +302,32 @@ final class InvoiceCheckoutFields {
 			return;
 		}
 		$data = is_array( $data ) ? $data : [];
-		$type = self::field_value( $data, [ 'moksafowo_invoice_type', '_mowp/invoice-type', 'mowp/invoice-type' ] );
+		$type = self::field_value( $data, [ 'moksafowo_invoice_type', '_moksafowo/invoice-type', 'moksafowo/invoice-type' ] );
 
 		if ( 'b2b' === $type ) {
-			$ubn = self::field_value( $data, [ 'moksafowo_invoice_buyer_ubn', '_mowp/invoice-buyer-ubn', 'mowp/invoice-buyer-ubn' ] );
+			$ubn = self::field_value( $data, [ 'moksafowo_invoice_buyer_ubn', '_moksafowo/invoice-buyer-ubn', 'moksafowo/invoice-buyer-ubn' ] );
 			if ( ! Ubn::is_valid( $ubn ) ) {
 				$errors->add( 'moksafowo_invoice_ubn', __( '統一編號格式或檢查碼不正確。', 'mo-ectools' ) );
 			}
 		}
 
 		if ( 'b2c_donate' === $type ) {
-			$code = self::field_value( $data, [ 'moksafowo_invoice_love_code', '_mowp/invoice-love-code', 'mowp/invoice-love-code' ] );
+			$code = self::field_value( $data, [ 'moksafowo_invoice_love_code', '_moksafowo/invoice-love-code', 'moksafowo/invoice-love-code' ] );
 			if ( ! preg_match( '/^([xX]\d{2,6}|\d{3,7})$/', $code ) ) {
 				$errors->add( 'moksafowo_invoice_love_code', __( '愛心碼格式錯誤（3-7 碼數字）。', 'mo-ectools' ) );
 			}
 		}
 
 		if ( 'b2c_carrier' === $type ) {
-			$carrier     = self::field_value( $data, [ 'moksafowo_invoice_carrier_type', '_mowp/invoice-carrier-type', 'mowp/invoice-carrier-type' ] );
+			$carrier     = self::field_value( $data, [ 'moksafowo_invoice_carrier_type', '_moksafowo/invoice-carrier-type', 'moksafowo/invoice-carrier-type' ] );
 			$carrier_num = self::field_value(
 				$data,
 				[
 					'moksafowo_invoice_carrier_num', // Classic 單一欄位
-					'_mowp/invoice-mobile-barcode',
-					'mowp/invoice-mobile-barcode',
-					'_mowp/invoice-cert-code',
-					'mowp/invoice-cert-code',
+					'_moksafowo/invoice-mobile-barcode',
+					'moksafowo/invoice-mobile-barcode',
+					'_moksafowo/invoice-cert-code',
+					'moksafowo/invoice-cert-code',
 				]
 			);
 			if ( 'mobile' === $carrier && ! preg_match( '#^/[0-9A-Z+\-.]{7}$#', $carrier_num ) ) {
@@ -351,7 +351,7 @@ final class InvoiceCheckoutFields {
 		}
 		// 本方法只在 woocommerce_after_checkout_validation 內被呼叫 — Classic 由
 		// WC_Checkout::process_checkout() 先驗 checkout nonce，Block 由 Store API 認證層把關，
-		// 值一律 sanitize 後回傳。Block additional fields 帶 `additional_fields[mowp/invoice-...]`。
+		// 值一律 sanitize 後回傳。Block additional fields 帶 `additional_fields[moksafowo/invoice-...]`。
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- upstream WC checkout nonce / Store API auth verified before this validation callback fires.
 		if ( isset( $_POST['additional_fields'] ) && is_array( $_POST['additional_fields'] ) ) {
 			foreach ( $keys as $k ) {
@@ -424,7 +424,7 @@ final class InvoiceCheckoutFields {
 
 		woocommerce_register_additional_checkout_field(
 			[
-				'id'       => 'mowp/invoice-type',
+				'id'       => 'moksafowo/invoice-type',
 				'label'    => __( '發票類型', 'mo-ectools' ),
 				'location' => 'order',
 				'type'     => 'select',
@@ -434,7 +434,7 @@ final class InvoiceCheckoutFields {
 		);
 		woocommerce_register_additional_checkout_field(
 			[
-				'id'       => 'mowp/invoice-carrier-type',
+				'id'       => 'moksafowo/invoice-carrier-type',
 				'label'    => __( '載具類型', 'mo-ectools' ),
 				'location' => 'order',
 				'type'     => 'select',
@@ -448,7 +448,7 @@ final class InvoiceCheckoutFields {
 		// carrier-type 值同步清空、本欄也隨之隱藏（實測無殘留）。required 用 type+carrier 雙條件 AND。
 		woocommerce_register_additional_checkout_field(
 			[
-				'id'         => 'mowp/invoice-mobile-barcode',
+				'id'         => 'moksafowo/invoice-mobile-barcode',
 				'label'      => __( '手機條碼（/ 開頭 + 7 碼大寫英數）', 'mo-ectools' ),
 				'location'   => 'order',
 				'type'       => 'text',
@@ -463,7 +463,7 @@ final class InvoiceCheckoutFields {
 		);
 		woocommerce_register_additional_checkout_field(
 			[
-				'id'         => 'mowp/invoice-cert-code',
+				'id'         => 'moksafowo/invoice-cert-code',
 				'label'      => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
 				'location'   => 'order',
 				'type'       => 'text',
@@ -479,7 +479,7 @@ final class InvoiceCheckoutFields {
 		if ( $allow_b2b ) {
 			woocommerce_register_additional_checkout_field(
 				[
-					'id'                => 'mowp/invoice-buyer-ubn',
+					'id'                => 'moksafowo/invoice-buyer-ubn',
 					'label'             => __( '統一編號', 'mo-ectools' ),
 					'location'          => 'order',
 					'type'              => 'text',
@@ -490,7 +490,7 @@ final class InvoiceCheckoutFields {
 			);
 			woocommerce_register_additional_checkout_field(
 				[
-					'id'       => 'mowp/invoice-buyer-name',
+					'id'       => 'moksafowo/invoice-buyer-name',
 					'label'    => __( '公司名稱', 'mo-ectools' ),
 					'location' => 'order',
 					'type'     => 'text',
@@ -504,7 +504,7 @@ final class InvoiceCheckoutFields {
 				// 捐贈單位（名稱下拉）+ 捐贈碼（唯讀文字，JS 依選到的單位帶入）。
 				woocommerce_register_additional_checkout_field(
 					[
-						'id'       => 'mowp/invoice-donate-org',
+						'id'       => 'moksafowo/invoice-donate-org',
 						'label'    => __( '捐贈單位', 'mo-ectools' ),
 						'location' => 'order',
 						'type'     => 'select',
@@ -516,7 +516,7 @@ final class InvoiceCheckoutFields {
 			}
 			woocommerce_register_additional_checkout_field(
 				[
-					'id'                => 'mowp/invoice-love-code',
+					'id'                => 'moksafowo/invoice-love-code',
 					'label'             => __( '捐贈碼', 'mo-ectools' ),
 					'location'          => 'order',
 					'type'              => 'text',
@@ -533,20 +533,20 @@ final class InvoiceCheckoutFields {
 			return;
 		}
 		$map = [
-			'mowp/invoice-type'           => Keys::INVOICE_TYPE,
-			'mowp/invoice-carrier-type'   => Keys::INVOICE_CARRIER_TYPE,
-			'mowp/invoice-mobile-barcode' => Keys::INVOICE_CARRIER_NUM,
-			'mowp/invoice-cert-code'      => Keys::INVOICE_CARRIER_NUM,
-			'mowp/invoice-buyer-ubn'      => Keys::INVOICE_BUYER_UBN,
-			'mowp/invoice-buyer-name'     => Keys::INVOICE_BUYER_NAME,
-			'mowp/invoice-love-code'      => Keys::INVOICE_LOVE_CODE,
+			'moksafowo/invoice-type'           => Keys::INVOICE_TYPE,
+			'moksafowo/invoice-carrier-type'   => Keys::INVOICE_CARRIER_TYPE,
+			'moksafowo/invoice-mobile-barcode' => Keys::INVOICE_CARRIER_NUM,
+			'moksafowo/invoice-cert-code'      => Keys::INVOICE_CARRIER_NUM,
+			'moksafowo/invoice-buyer-ubn'      => Keys::INVOICE_BUYER_UBN,
+			'moksafowo/invoice-buyer-name'     => Keys::INVOICE_BUYER_NAME,
+			'moksafowo/invoice-love-code'      => Keys::INVOICE_LOVE_CODE,
 		];
 		if ( ! isset( $map[ $key ] ) ) {
 			return;
 		}
 		// 手機條碼 / 自然人憑證共用同一 carrier-num meta — 隱藏欄位送來的空字串不可覆寫已填值。
 		if ( '' === (string) $value
-			&& in_array( $key, [ 'mowp/invoice-mobile-barcode', 'mowp/invoice-cert-code' ], true ) ) {
+			&& in_array( $key, [ 'moksafowo/invoice-mobile-barcode', 'moksafowo/invoice-cert-code' ], true ) ) {
 			return;
 		}
 		$wc_object->update_meta_data( $map[ $key ], (string) $value );

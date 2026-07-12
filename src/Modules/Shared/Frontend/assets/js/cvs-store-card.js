@@ -36,8 +36,8 @@
 			host = document.createElement( 'div' );
 			host.id = id;
 		}
-		if ( ( ' ' + host.className + ' ' ).indexOf( ' mowp-cvs-store ' ) === -1 ) {
-			host.className = ( 'mowp-cvs-store ' + host.className ).trim();
+		if ( ( ' ' + host.className + ' ' ).indexOf( ' moksafowo-cvs-store ' ) === -1 ) {
+			host.className = ( 'moksafowo-cvs-store ' + host.className ).trim();
 		}
 		var c = stepContainer();
 		if ( c ) {
@@ -55,17 +55,17 @@
 		var store = opts.store;
 		var info;
 		if ( store && store.id ) {
-			info = '<div class="mowp-cvs-store__info">'
-				+ '<span class="mowp-cvs-store__title">' + escapeHtml( store.name ) + '</span>'
-				+ ( store.address ? '<span class="mowp-cvs-store__address">' + escapeHtml( store.address ) + '</span>' : '' )
-				+ '<span class="mowp-cvs-store__meta"><span class="mowp-cvs-store__id">'
+			info = '<div class="moksafowo-cvs-store__info">'
+				+ '<span class="moksafowo-cvs-store__title">' + escapeHtml( store.name ) + '</span>'
+				+ ( store.address ? '<span class="moksafowo-cvs-store__address">' + escapeHtml( store.address ) + '</span>' : '' )
+				+ '<span class="moksafowo-cvs-store__meta"><span class="moksafowo-cvs-store__id">'
 				+ escapeHtml( ( ( opts.storeIdLabel || '' ) + ' ' + store.id ).trim() )
 				+ '</span></span>'
 				+ '</div>';
 		} else {
-			info = '<span class="mowp-cvs-store__placeholder">' + escapeHtml( opts.noneText || '' ) + '</span>';
+			info = '<span class="moksafowo-cvs-store__placeholder">' + escapeHtml( opts.noneText || '' ) + '</span>';
 		}
-		return '<div class="mowp-cvs-store__row">' + info + ( opts.rightHtml || '' ) + '</div>' + ( opts.belowHtml || '' );
+		return '<div class="moksafowo-cvs-store__row">' + info + ( opts.rightHtml || '' ) + '</div>' + ( opts.belowHtml || '' );
 	}
 
 	function submitForm( apiUrl, formData ) {

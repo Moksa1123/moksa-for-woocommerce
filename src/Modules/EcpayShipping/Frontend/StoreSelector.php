@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Frontend;
+namespace Moksafowo\Modules\EcpayShipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\EcpayShipping\Module;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -57,12 +57,12 @@ final class StoreSelector {
 		$css_path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/EcpayShipping/assets/css/store-selector.css';
 		$css_ver  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : MOKSAFOWO_VERSION;
 
-		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
+		\Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 
 		wp_register_script(
 			$handle,
 			MOKSAFOWO_PLUGIN_URL . 'src/Modules/EcpayShipping/assets/js/store-selector.js',
-			[ 'jquery', 'wp-i18n', \MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
+			[ 'jquery', 'wp-i18n', \Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
 			$js_ver,
 			true
 		);
@@ -75,7 +75,7 @@ final class StoreSelector {
 				'cvs_methods' => array_keys(
 					array_filter(
 						Module::method_map(),
-						static fn( string $cls ) => is_subclass_of( $cls, \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod::class )
+						static fn( string $cls ) => is_subclass_of( $cls, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class )
 					)
 				),
 				'token_query' => self::TOKEN_QUERY,
@@ -117,7 +117,7 @@ final class StoreSelector {
 		}
 
 		$class = $map[ $method_id ];
-		if ( ! is_subclass_of( $class, \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
+		if ( ! is_subclass_of( $class, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
 			wp_send_json_error( [ 'message' => __( '此物流方式不需選店。', 'mo-ectools' ) ] );
 		}
 
@@ -277,7 +277,7 @@ final class StoreSelector {
 			$mid = $method->get_method_id();
 			if ( isset( Module::method_map()[ $mid ] ) ) {
 				$cls = Module::method_map()[ $mid ];
-				if ( is_subclass_of( $cls, \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
+				if ( is_subclass_of( $cls, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
 					$is_ecpay_cvs = true;
 					break;
 				}

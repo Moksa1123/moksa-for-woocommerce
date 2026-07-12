@@ -1,12 +1,12 @@
 /* Moksa settings tab — 全頁優化（h2 + p + form-table 包成一個 card） */
-.mowp-section-card{
+.moksafowo-section-card{
 	margin:20px 0 0;
 	background:#fff;
 	border:1px solid #e5e7eb;
 	border-radius:8px;
 	overflow:hidden;
 }
-.mowp-section-card > h2{
+.moksafowo-section-card > h2{
 	position:relative;
 	padding:14px 44px 14px 24px !important;
 	margin:0 !important;
@@ -20,11 +20,11 @@
 	user-select:none;
 	transition:background .15s ease;
 }
-.mowp-section-card > h2:hover{
+.moksafowo-section-card > h2:hover{
 	background:linear-gradient(180deg,#f1f5f9 0%,#e2e8f0 100%);
 }
 /* Chevron 箭頭 — 點 heading 收合 */
-.mowp-section-card > h2 .moksafowo-h2-chevron{
+.moksafowo-section-card > h2 .moksafowo-h2-chevron{
 	position:absolute;
 	right:20px;
 	top:50%;
@@ -35,31 +35,31 @@
 	margin-top:-3px;
 	transition:transform .2s ease;
 }
-.mowp-section-card.is-collapsed > h2 .moksafowo-h2-chevron{
+.moksafowo-section-card.is-collapsed > h2 .moksafowo-h2-chevron{
 	transform:translateY(-50%) rotate(-135deg);
 	margin-top:0;
 }
-.mowp-section-card:not(.is-collapsed) > h2 .moksafowo-h2-chevron{
+.moksafowo-section-card:not(.is-collapsed) > h2 .moksafowo-h2-chevron{
 	transform:translateY(-50%) rotate(45deg);
 	margin-top:-3px;
 }
-.mowp-section-card.is-collapsed > h2{
+.moksafowo-section-card.is-collapsed > h2{
 	border-bottom:0;
 }
-.mowp-section-card.is-collapsed > h2 .moksafowo-h2-text::after{
+.moksafowo-section-card.is-collapsed > h2 .moksafowo-h2-text::after{
 	display:none;
 }
-.mowp-section-card.is-collapsed > p,
-.mowp-section-card.is-collapsed > div:not(.mowp-section-card),
-.mowp-section-card.is-collapsed > table.form-table{
+.moksafowo-section-card.is-collapsed > p,
+.moksafowo-section-card.is-collapsed > div:not(.moksafowo-section-card),
+.moksafowo-section-card.is-collapsed > table.form-table{
 	display:none !important;
 }
 /* heading 文字外包一層 span（由 JS 加），漸層 accent 跟著文字長度延伸 */
-.mowp-section-card > h2 .moksafowo-h2-text{
+.moksafowo-section-card > h2 .moksafowo-h2-text{
 	position:relative;
 	display:inline-block;
 }
-.mowp-section-card > h2 .moksafowo-h2-text::after{
+.moksafowo-section-card > h2 .moksafowo-h2-text::after{
 	content:"";
 	position:absolute;
 	left:0;
@@ -71,27 +71,27 @@
 	pointer-events:none;
 }
 /* desc 段：純文字直接接 heading，不另外開區塊裝飾 */
-.mowp-section-card > p,
-.mowp-section-card > div:not(.mowp-section-card){
+.moksafowo-section-card > p,
+.moksafowo-section-card > div:not(.moksafowo-section-card){
 	margin:0 !important;
 	padding:8px 24px 4px !important;
 	color:#475569;
 	font-size:13px;
 	line-height:1.5;
 }
-.mowp-section-card > table.form-table{
+.moksafowo-section-card > table.form-table{
 	margin:0 !important;
 }
 /* form-table 內 cells 加左 padding 對齊 card heading（24px from card edge）；
    不改 right padding 避免影響 WC help-tip absolute 定位邏輯 */
-.mowp-section-card table.form-table th{
+.moksafowo-section-card table.form-table th{
 	padding-left:24px !important;
 }
-.mowp-section-card table.form-table td:not([colspan]){
+.moksafowo-section-card table.form-table td:not([colspan]){
 	padding-left:0 !important;
 }
 /* full-width row (colspan=2) — 也對齊 24px，跟 th 一致，不另搞一套 */
-.mowp-section-card table.form-table td[colspan]{
+.moksafowo-section-card table.form-table td[colspan]{
 	padding-left:24px !important;
 	padding-right:24px !important;
 }

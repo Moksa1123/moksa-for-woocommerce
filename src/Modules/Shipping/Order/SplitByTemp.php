@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Order;
+namespace Moksafowo\Modules\Shipping\Order;
 
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Methods\AbstractShippingMethod;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
 
 defined( 'ABSPATH' ) || exit;
 

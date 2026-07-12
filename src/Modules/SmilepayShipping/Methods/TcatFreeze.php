@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Methods;
+namespace Moksafowo\Modules\SmilepayShipping\Methods;
 
-use MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractHomeShippingMethod;
+use Moksafowo\Modules\Shipping\Methods\AbstractHomeShippingMethod;
 
 defined( 'ABSPATH' ) || exit;
 

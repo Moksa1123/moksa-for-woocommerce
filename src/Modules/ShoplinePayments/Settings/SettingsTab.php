@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\ShoplinePayments\Settings;
+namespace Moksafowo\Modules\ShoplinePayments\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

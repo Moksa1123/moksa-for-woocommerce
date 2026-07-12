@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Admin;
+namespace Moksafowo\Modules\Shared\Admin;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,7 +69,7 @@ final class CardRenderers {
 				return $cards;
 			}
 		}
-		$provider = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::INVOICE_PROVIDER );
+		$provider = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_PROVIDER );
 		$html     = '';
 		if ( 'ezpay' === $provider ) {
 			$html = self::render_ezpay_invoice( $order );
@@ -203,7 +203,7 @@ final class CardRenderers {
 	}
 
 	private static function newebpay_pay_type_label( string $type ): string {
-		return \MoksaWeb\Mowc\Modules\Newebpay\PaymentTypeCatalog::label( $type, '' );
+		return \Moksafowo\Modules\Newebpay\PaymentTypeCatalog::label( $type, '' );
 	}
 
 	private static function render_linepay( \WC_Order $order ): string {

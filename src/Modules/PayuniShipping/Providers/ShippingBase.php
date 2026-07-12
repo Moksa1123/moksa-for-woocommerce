@@ -1,6 +1,6 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Providers;
+namespace Moksafowo\Modules\PayuniShipping\Providers;
 
 defined( 'ABSPATH' ) || exit;
 

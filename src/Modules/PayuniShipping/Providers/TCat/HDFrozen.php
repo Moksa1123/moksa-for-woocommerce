@@ -1,14 +1,14 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat;
+namespace Moksafowo\Modules\PayuniShipping\Providers\TCat;
 
 defined( 'ABSPATH' ) || exit;
 
 
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\ShippingBase;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\TCatHDTrait;
+use Moksafowo\Modules\PayuniShipping\Providers\ShippingBase;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Utils\TCatHDTrait;
 
 class HDFrozen extends ShippingBase {
 

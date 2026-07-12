@@ -1,19 +1,19 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Operations;
+namespace Moksafowo\Modules\PayuniShipping\Operations;
 
 use Automattic\Jetpack\Constants;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDFrozen;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDNormal;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDRefrigerated;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ServiceType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingRequest;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDFrozen;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDNormal;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDRefrigerated;
+use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ServiceType;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
 
 defined( 'ABSPATH' ) || exit;
 

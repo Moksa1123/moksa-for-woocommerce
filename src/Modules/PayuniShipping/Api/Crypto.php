@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Api;
+namespace Moksafowo\Modules\PayuniShipping\Api;
 
-use MoksaWeb\Mowc\Modules\Payuni\Credentials;
+use Moksafowo\Modules\Payuni\Credentials;
 
 defined( 'ABSPATH' ) || exit;
 

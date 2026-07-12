@@ -2,13 +2,13 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Address;
+namespace Moksafowo\Modules\Address;
 
 defined( 'ABSPATH' ) || exit;
 
 final class BlockField {
 
-	private const FIELD_ID = 'mowp/district';
+	private const FIELD_ID = 'moksafowo/district';
 
 	public static function init(): void {
 		if ( 'yes' !== get_option( 'moksafowo_tw_address_dropdown_enabled', 'no' ) ) {
@@ -80,7 +80,7 @@ final class BlockField {
 			if ( ! is_array( $arr ) ) {
 				return '';
 			}
-			$v = $arr[ self::FIELD_ID ] ?? ( $arr['mowp/district'] ?? '' );
+			$v = $arr[ self::FIELD_ID ] ?? ( $arr['moksafowo/district'] ?? '' );
 			if ( ! is_string( $v ) || '' === $v ) {
 				return '';
 			}
@@ -101,7 +101,7 @@ final class BlockField {
 
 	public static function strip_district_additional_meta( \WC_Order $order ): void {
 		$changed = false;
-		foreach ( [ '_wc_billing/mowp/district', '_wc_shipping/mowp/district' ] as $key ) {
+		foreach ( [ '_wc_billing/moksafowo/district', '_wc_shipping/moksafowo/district' ] as $key ) {
 			if ( '' !== (string) $order->get_meta( $key ) ) {
 				$order->delete_meta_data( $key );
 				$changed = true;
@@ -132,7 +132,7 @@ final class BlockField {
 		$methods = ( function_exists( 'WC' ) && WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
 		foreach ( $order->get_shipping_methods() as $sm ) {
 			$inst = $methods[ $sm->get_method_id() ] ?? null;
-			if ( $inst instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
+			if ( $inst instanceof \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
 				return; // CVS 取貨 → 免填
 			}
 		}
@@ -154,7 +154,7 @@ final class BlockField {
 		foreach ( $chosen as $entry ) {
 			$id = ( false !== strpos( (string) $entry, ':' ) ) ? strstr( (string) $entry, ':', true ) : (string) $entry;
 			$m  = $methods[ $id ] ?? null;
-			if ( $m instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
+			if ( $m instanceof \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
 				return true;
 			}
 		}
@@ -167,7 +167,7 @@ final class BlockField {
 				return (string) $data[ $k ];
 			}
 		}
-		// Block Store API：additional_fields[mowp/district]
+		// Block Store API：additional_fields[moksafowo/district]
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- 讀值供驗證，下單流程自有 nonce
 		if ( isset( $_POST['additional_fields'] ) && is_array( $_POST['additional_fields'] ) ) {
 			$v = isset( $_POST['additional_fields'][ self::FIELD_ID ] ) ? sanitize_text_field( wp_unslash( $_POST['additional_fields'][ self::FIELD_ID ] ) ) : '';

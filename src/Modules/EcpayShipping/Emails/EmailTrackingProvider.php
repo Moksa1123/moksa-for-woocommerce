@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Emails;
+namespace Moksafowo\Modules\EcpayShipping\Emails;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Modules\EcpayShipping\Module;
+use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
 
 defined( 'ABSPATH' ) || exit;
 

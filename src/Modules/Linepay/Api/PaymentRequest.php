@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Api;
+namespace Moksafowo\Modules\Linepay\Api;
 
 use Exception;
-use MoksaWeb\Mowc\Modules\Linepay\Constants;
-use MoksaWeb\Mowc\Modules\Linepay\LinePay;
-use MoksaWeb\Mowc\Modules\Linepay\StatusCode;
+use Moksafowo\Modules\Linepay\Constants;
+use Moksafowo\Modules\Linepay\LinePay;
+use Moksafowo\Modules\Linepay\StatusCode;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

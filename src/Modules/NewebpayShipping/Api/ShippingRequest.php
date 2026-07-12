@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Api;
+namespace Moksafowo\Modules\NewebpayShipping\Api;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -173,7 +173,7 @@ final class ShippingRequest {
 		try {
 			$query = http_build_query( $args );
 			try {
-				$hex = \MoksaWeb\Mowc\Crypto\Aes::encrypt_cbc_hex( $query, Helper::hash_key(), Helper::hash_iv() );
+				$hex = \Moksafowo\Crypto\Aes::encrypt_cbc_hex( $query, Helper::hash_key(), Helper::hash_iv() );
 			} catch ( \Throwable $e ) {
 				return [
 					'ok'      => false,

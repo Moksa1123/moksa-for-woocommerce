@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -61,11 +61,11 @@ final class PaymentStatus {
 		if ( 0 !== strpos( (string) $order->get_payment_method(), 'moksafowo_newebpay' ) ) {
 			return null;
 		}
-		$class = 'MoksaWeb\\Mowc\\Modules\\Newebpay\\Api\\PaymentRequest';
+		$class = 'Moksafowo\\Modules\\Newebpay\\Api\\PaymentRequest';
 		if ( ! class_exists( $class ) ) {
 			return null;
 		}
-		$mtn = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_MERCHANT_ORDER_NO );
+		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
 			return null;
 		}

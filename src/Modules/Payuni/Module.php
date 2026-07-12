@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Payuni;
+namespace Moksafowo\Modules\Payuni;
 
-use MoksaWeb\Mowc\Crypto\Vault;
-use MoksaWeb\Mowc\Modules\AbstractModule;
-use MoksaWeb\Mowc\Modules\Payuni\Blocks\PayuniBlocksMethod;
+use Moksafowo\Crypto\Vault;
+use Moksafowo\Modules\AbstractModule;
+use Moksafowo\Modules\Payuni\Blocks\PayuniBlocksMethod;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -78,7 +78,7 @@ final class Module extends AbstractModule {
 				}
 			)
 		);
-		\MoksaWeb\Mowc\Modules\Shared\Setup\GatewayAllowlistMigrator::seed_if_unseeded( 'payuni', $ids );
+		\Moksafowo\Modules\Shared\Setup\GatewayAllowlistMigrator::seed_if_unseeded( 'payuni', $ids );
 
 		add_action( 'woocommerce_blocks_payment_method_type_registration', [ self::class, 'register_block_methods' ] );
 	}

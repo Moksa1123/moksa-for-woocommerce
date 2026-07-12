@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Product\Meta;
+namespace Moksafowo\Product\Meta;
 
 defined( 'ABSPATH' ) || exit;
 

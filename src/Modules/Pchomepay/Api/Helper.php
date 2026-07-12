@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Pchomepay\Api;
+namespace Moksafowo\Modules\Pchomepay\Api;
 
-use MoksaWeb\Mowc\Http\Request;
-use MoksaWeb\Mowc\Modules\Shared\Api\AbstractCredentialHelper;
+use Moksafowo\Http\Request;
+use Moksafowo\Modules\Shared\Api\AbstractCredentialHelper;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\ShoplinePayments\Api;
+namespace Moksafowo\Modules\ShoplinePayments\Api;
 
-use MoksaWeb\Mowc\Http\Response;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Http\Response;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

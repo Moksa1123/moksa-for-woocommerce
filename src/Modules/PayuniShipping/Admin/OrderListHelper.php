@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Admin;
+namespace Moksafowo\Modules\PayuniShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDUnified;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDUnified;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -54,7 +54,7 @@ final class OrderListHelper {
 				$lines[] = esc_html( $store_addr );
 			}
 		} else {
-			foreach ( \MoksaWeb\Mowc\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
+			foreach ( \Moksafowo\Modules\Address\TwAddress::shipping_address_lines( $order ) as $line ) {
 				$lines[] = esc_html( $line );
 			}
 		}

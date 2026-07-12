@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven;
+namespace Moksafowo\Modules\PayuniShipping\Providers\SevenEleven;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\ShippingBase;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\CVSTrait;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Providers\ShippingBase;
+use Moksafowo\Modules\PayuniShipping\Utils\CVSTrait;
+use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
 
 defined( 'ABSPATH' ) || exit;
 

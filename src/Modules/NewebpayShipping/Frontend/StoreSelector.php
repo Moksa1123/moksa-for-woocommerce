@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Frontend;
+namespace Moksafowo\Modules\NewebpayShipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\NewebpayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\NewebpayShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\NewebpayShipping\Module;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\NewebpayShipping\Api\Helper;
+use Moksafowo\Modules\NewebpayShipping\Api\ShippingRequest;
+use Moksafowo\Modules\NewebpayShipping\Module;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -54,11 +54,11 @@ final class StoreSelector {
 		$ver     = file_exists( $js_path ) ? (string) filemtime( $js_path ) : MOKSAFOWO_VERSION;
 
 		// 共用超商選店卡片樣式 + moksafowoCvsStore helper(對齊 PAYUNi 視覺)。
-		\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
+		\Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 		wp_register_script(
 			$handle,
 			MOKSAFOWO_PLUGIN_URL . 'src/Modules/NewebpayShipping/assets/js/store-selector.js',
-			[ 'jquery', \MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
+			[ 'jquery', \Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ],
 			$ver,
 			true
 		);

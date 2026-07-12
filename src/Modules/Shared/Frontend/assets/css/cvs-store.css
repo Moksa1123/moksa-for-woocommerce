@@ -1,10 +1,10 @@
 /**
  * 共用超商選店卡片 UI — 各物流商(NewebPay / SmilePay …)的結帳選店區共用,
- * 視覺對齊 PAYUNi 物流(目前最完整的一版)。中性 class `mowp-cvs-store__*`,
+ * 視覺對齊 PAYUNi 物流(目前最完整的一版)。中性 class `moksafowo-cvs-store__*`,
  * 不綁特定 provider,各家 store-selector.js 用同一組 markup 即可一致外觀。
  */
 
-.mowp-cvs-store {
+.moksafowo-cvs-store {
 	display: block;
 	box-sizing: border-box;
 	padding: 12px 14px;
@@ -19,7 +19,7 @@
 }
 
 /* 已選門市 / 未選 的上排:資訊在左、按鈕在右 */
-.mowp-cvs-store__row {
+.moksafowo-cvs-store__row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -27,7 +27,7 @@
 	gap: 12px;
 }
 
-.mowp-cvs-store__info {
+.moksafowo-cvs-store__info {
 	flex: 1 1 auto;
 	min-width: 0;
 	display: flex;
@@ -35,14 +35,14 @@
 	gap: 2px;
 }
 
-.mowp-cvs-store__title {
+.moksafowo-cvs-store__title {
 	font-size: 14px;
 	font-weight: 600;
 	color: #1d2327;
 	margin-bottom: 2px;
 }
 
-.mowp-cvs-store__address {
+.moksafowo-cvs-store__address {
 	display: block;
 	font-size: 12px;
 	color: #50575e;
@@ -50,14 +50,14 @@
 	word-break: break-word;
 }
 
-.mowp-cvs-store__meta {
+.moksafowo-cvs-store__meta {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 6px;
 	margin-top: 4px;
 }
 
-.mowp-cvs-store__id {
+.moksafowo-cvs-store__id {
 	display: inline-block;
 	padding: 1px 8px;
 	background: #fff;
@@ -68,14 +68,14 @@
 	line-height: 18px;
 }
 
-.mowp-cvs-store__placeholder {
+.moksafowo-cvs-store__placeholder {
 	margin: 0;
 	color: #646970;
 	font-size: 13px;
 }
 
 /* 主動覆寫主題的 .button(Blocksy 等的大按鈕跟卡片不協調) */
-.mowp-cvs-store__btn {
+.moksafowo-cvs-store__btn {
 	flex: 0 0 auto;
 	cursor: pointer;
 	min-height: auto;
@@ -85,24 +85,24 @@
 	transition: opacity .15s ease;
 }
 
-.mowp-cvs-store__btn:focus-visible {
+.moksafowo-cvs-store__btn:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
 }
 
 /* 超商品牌選擇(NewebPay 一個方式涵蓋四大超商,開圖前先選) */
-.mowp-cvs-store__carriers {
+.moksafowo-cvs-store__carriers {
 	margin-top: 10px;
 }
 
-.mowp-cvs-store__carriers-tip {
+.moksafowo-cvs-store__carriers-tip {
 	margin: 0 0 6px;
 	font-size: 13px;
 	color: #1d2327;
 	font-weight: 600;
 }
 
-.mowp-cvs-store__carrier {
+.moksafowo-cvs-store__carrier {
 	flex: 0 0 auto;
 	cursor: pointer;
 	min-height: auto;
@@ -113,24 +113,24 @@
 }
 
 @container (max-width: 260px) {
-	.mowp-cvs-store__row {
+	.moksafowo-cvs-store__row {
 		flex-direction: column;
 		align-items: flex-start;
 	}
 
-	.mowp-cvs-store__info {
+	.moksafowo-cvs-store__info {
 		width: 100%;
 	}
 }
 
 @supports not (container-type: inline-size) {
 	@media (max-width: 360px) {
-		.mowp-cvs-store__row {
+		.moksafowo-cvs-store__row {
 			flex-direction: column;
 			align-items: flex-start;
 		}
 
-		.mowp-cvs-store__info {
+		.moksafowo-cvs-store__info {
 			width: 100%;
 		}
 	}

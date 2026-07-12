@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,13 +33,13 @@ final class PaymentMethodOps {
 
 	private static function tab_class( string $provider ): string {
 		$map = array(
-			'ecpay'             => 'MoksaWeb\\Mowc\\Modules\\Ecpay\\Settings\\SettingsTab',
-			'newebpay'          => 'MoksaWeb\\Mowc\\Modules\\Newebpay\\Settings\\SettingsTab',
-			'payuni'            => 'MoksaWeb\\Mowc\\Modules\\Payuni\\Settings\\SettingsTab',
-			'smilepay'          => 'MoksaWeb\\Mowc\\Modules\\Smilepay\\Settings\\SettingsTab',
-			'paynow'            => 'MoksaWeb\\Mowc\\Modules\\Paynow\\Settings\\SettingsTab',
-			'pchomepay'         => 'MoksaWeb\\Mowc\\Modules\\Pchomepay\\Settings\\SettingsTab',
-			'shopline_payments' => 'MoksaWeb\\Mowc\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
+			'ecpay'             => 'Moksafowo\\Modules\\Ecpay\\Settings\\SettingsTab',
+			'newebpay'          => 'Moksafowo\\Modules\\Newebpay\\Settings\\SettingsTab',
+			'payuni'            => 'Moksafowo\\Modules\\Payuni\\Settings\\SettingsTab',
+			'smilepay'          => 'Moksafowo\\Modules\\Smilepay\\Settings\\SettingsTab',
+			'paynow'            => 'Moksafowo\\Modules\\Paynow\\Settings\\SettingsTab',
+			'pchomepay'         => 'Moksafowo\\Modules\\Pchomepay\\Settings\\SettingsTab',
+			'shopline_payments' => 'Moksafowo\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
 		);
 		return $map[ $provider ] ?? '';
 	}

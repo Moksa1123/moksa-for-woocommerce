@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Settings;
+namespace Moksafowo\Modules\Linepay\Settings;
 
 use WC_Admin_Settings;
 use WC_Settings_Page;
@@ -28,9 +28,7 @@ class SettingsTab extends WC_Settings_Page {
 			'' => __( '付款設定', 'mo-ectools' ),
 		);
 
-		// WC_Settings_Page 擴充契約規定的 filter tag,見 SettingsPage.php 同一模式的完整說明。
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Settings_Page` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		return apply_filters( 'moksafowo_get_sections_' . $this->id, $sections );
 	}
 
 	public function get_settings( $current_section = '' ) {
@@ -125,11 +123,7 @@ class SettingsTab extends WC_Settings_Page {
 			)
 		);
 
-		// 同 get_sections():WC_Settings_Page 子類(WC_Settings_Payment_Gateways 等核心
-		// 分頁皆同)須原樣呼叫此 filter 名稱,才能讓其他外掛比照 WC 核心設定頁擴充本分頁;
-		// tag 名稱由 WooCommerce 核心規定,非本外掛自訂。
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Settings_Page` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
-		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
+		return apply_filters( 'moksafowo_get_settings_' . $this->id, $settings, $current_section );
 	}
 
 	public function output(): void {

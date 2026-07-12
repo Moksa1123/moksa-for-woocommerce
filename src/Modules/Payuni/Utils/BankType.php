@@ -1,6 +1,6 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\Payuni\Utils;
+namespace Moksafowo\Modules\Payuni\Utils;
 
 defined( 'ABSPATH' ) || exit;
 

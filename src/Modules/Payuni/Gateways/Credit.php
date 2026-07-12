@@ -1,8 +1,8 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+namespace Moksafowo\Modules\Payuni\Gateways;
 
-use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Api\PaymentRequest;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
 defined( 'ABSPATH' ) || exit;
 

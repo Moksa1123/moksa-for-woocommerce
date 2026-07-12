@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay;
+namespace Moksafowo\Modules\Ecpay;
 
-use MoksaWeb\Mowc\Modules\Shared\AbstractGatewayModule;
+use Moksafowo\Modules\Shared\AbstractGatewayModule;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -119,7 +119,7 @@ final class Module extends AbstractGatewayModule {
 		}
 
 		if ( Gateways\Unified::GATEWAY_ID === $method ) {
-			$pay_type = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::ECPAY_PAYMENT_TYPE );
+			$pay_type = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::ECPAY_PAYMENT_TYPE );
 			if ( '' !== $pay_type ) {
 				$sub = Admin\OrderMetaBox::pay_type_label( $pay_type );
 				$sub = preg_replace( '/ — (.+)$/u', '（$1）', $sub );

@@ -1,5 +1,5 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+namespace Moksafowo\Modules\Payuni\Gateways;
 
 defined( 'ABSPATH' ) || exit;
 

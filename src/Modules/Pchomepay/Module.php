@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Pchomepay;
+namespace Moksafowo\Modules\Pchomepay;
 
-use MoksaWeb\Mowc\Modules\Shared\AbstractGatewayModule;
+use Moksafowo\Modules\Shared\AbstractGatewayModule;
 
 defined( 'ABSPATH' ) || exit;
 

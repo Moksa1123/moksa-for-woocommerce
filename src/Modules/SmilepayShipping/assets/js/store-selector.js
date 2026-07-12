@@ -32,14 +32,14 @@
 		const store     = cfg.selected_store && cfg.selected_store.id ? cfg.selected_store : null;
 		const host      = M.ensureHost( HOST_ID );
 		host.classList.add( 'moksafowo-smilepay-shipping-store' );
-		const rightHtml = '<button type="button" class="mowp-cvs-store__btn button">' + M.escapeHtml( store ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
+		const rightHtml = '<button type="button" class="moksafowo-cvs-store__btn button">' + M.escapeHtml( store ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
 		host.innerHTML  = M.cardHtml( {
 			store: store,
 			storeIdLabel: cfg.i18n.store_id,
 			noneText: cfg.i18n.none_selected,
 			rightHtml: rightHtml,
 		} );
-		const btn = host.querySelector( '.mowp-cvs-store__btn' );
+		const btn = host.querySelector( '.moksafowo-cvs-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', function ( e ) {
 				e.preventDefault();

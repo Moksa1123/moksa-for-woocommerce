@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Settings;
+namespace Moksafowo\Modules\Newebpay\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

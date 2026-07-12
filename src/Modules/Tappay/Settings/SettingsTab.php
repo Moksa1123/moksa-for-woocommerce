@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Tappay\Settings;
+namespace Moksafowo\Modules\Tappay\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

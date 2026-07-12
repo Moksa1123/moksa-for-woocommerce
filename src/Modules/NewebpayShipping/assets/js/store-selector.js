@@ -35,11 +35,11 @@
 		const list = carriers();
 		if ( list.length === 1 ) {
 			const c = list[ 0 ];
-			return `<div class="mowp-cvs-store__carriers"><button type="button" class="mowp-cvs-store__btn button" data-ship-type="${ esc( c.ship_type ) }">${ esc( btnPrefix ) }（${ esc( c.name ) }）</button></div>`;
+			return `<div class="moksafowo-cvs-store__carriers"><button type="button" class="moksafowo-cvs-store__btn button" data-ship-type="${ esc( c.ship_type ) }">${ esc( btnPrefix ) }（${ esc( c.name ) }）</button></div>`;
 		}
-		const tip = `<div class="mowp-cvs-store__carriers-tip">${ esc( cfg.i18n.pick_carrier ) }</div>`;
-		const btns = list.map( ( c ) => `<button type="button" class="mowp-cvs-store__carrier button" data-ship-type="${ esc( c.ship_type ) }">${ esc( c.name ) }</button>` ).join( '' );
-		return `<div class="mowp-cvs-store__carriers">${ tip }<div>${ btns }</div></div>`;
+		const tip = `<div class="moksafowo-cvs-store__carriers-tip">${ esc( cfg.i18n.pick_carrier ) }</div>`;
+		const btns = list.map( ( c ) => `<button type="button" class="moksafowo-cvs-store__carrier button" data-ship-type="${ esc( c.ship_type ) }">${ esc( c.name ) }</button>` ).join( '' );
+		return `<div class="moksafowo-cvs-store__carriers">${ tip }<div>${ btns }</div></div>`;
 	}
 
 	function renderHost( store ) {

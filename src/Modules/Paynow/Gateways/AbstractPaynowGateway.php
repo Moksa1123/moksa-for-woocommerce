@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Paynow\Gateways;
+namespace Moksafowo\Modules\Paynow\Gateways;
 
-use MoksaWeb\Mowc\Modules\Paynow\Api\Helper;
-use MoksaWeb\Mowc\Modules\Paynow\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Shared\Gateways\AbstractMowcGateway;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Paynow\Api\Helper;
+use Moksafowo\Modules\Paynow\Api\PaymentRequest;
+use Moksafowo\Modules\Shared\Gateways\AbstractMowcGateway;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

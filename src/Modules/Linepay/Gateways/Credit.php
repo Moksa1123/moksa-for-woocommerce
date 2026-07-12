@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Gateways;
+namespace Moksafowo\Modules\Linepay\Gateways;
 
-use MoksaWeb\Mowc\Modules\Linepay\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Linepay\Constants;
-use MoksaWeb\Mowc\Modules\Linepay\LinePay;
+use Moksafowo\Modules\Linepay\Api\PaymentRequest;
+use Moksafowo\Modules\Linepay\Constants;
+use Moksafowo\Modules\Linepay\LinePay;
 use WC_Payment_Gateway;
 
 defined( 'ABSPATH' ) || exit;

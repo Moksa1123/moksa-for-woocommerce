@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EzpayInvoice\Api;
+namespace Moksafowo\Modules\EzpayInvoice\Api;
 
-use MoksaWeb\Mowc\Modules\Shared\Api\AbstractCredentialHelper;
+use Moksafowo\Modules\Shared\Api\AbstractCredentialHelper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -89,12 +89,12 @@ final class Helper extends AbstractCredentialHelper {
 		// Forward to plugin-wide Crypto\Aes：ezPay wire format（aes-256-cbc + bin2hex + 32-byte
 		// PKCS#7 pad block）跟 Crypto\Aes::encrypt_cbc_hex 100% 介面對上，原本 in-place 自寫
 		// pad + openssl_encrypt 的 implementation 改 forward 後消除重複。
-		return \MoksaWeb\Mowc\Crypto\Aes::encrypt_cbc_hex( $plain, self::hash_key(), self::hash_iv() );
+		return \Moksafowo\Crypto\Aes::encrypt_cbc_hex( $plain, self::hash_key(), self::hash_iv() );
 	}
 
 	public static function decrypt_result( string $hex_cipher ): ?array {
 		try {
-			$plain = \MoksaWeb\Mowc\Crypto\Aes::decrypt_cbc_hex( $hex_cipher, self::hash_key(), self::hash_iv() );
+			$plain = \Moksafowo\Crypto\Aes::decrypt_cbc_hex( $hex_cipher, self::hash_key(), self::hash_iv() );
 		} catch ( \RuntimeException $e ) {
 			return null;
 		}

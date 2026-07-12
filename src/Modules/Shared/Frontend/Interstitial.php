@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Frontend;
+namespace Moksafowo\Modules\Shared\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Operations;
+namespace Moksafowo\Modules\NewebpayShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\NewebpayShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\NewebpayShipping\Api\ShippingRequest;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

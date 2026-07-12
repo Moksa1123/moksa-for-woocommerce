@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay\Api;
+namespace Moksafowo\Modules\Ecpay\Api;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -146,6 +146,6 @@ final class IpnHandler {
 	}
 
 	private static function payment_type_label( string $raw ): string {
-		return \MoksaWeb\Mowc\Modules\Ecpay\PaymentTypeCatalog::label( $raw, $raw );
+		return \Moksafowo\Modules\Ecpay\PaymentTypeCatalog::label( $raw, $raw );
 	}
 }

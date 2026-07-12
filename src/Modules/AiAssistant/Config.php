@@ -2,19 +2,19 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\AiAssistant;
+namespace Moksafowo\Modules\AiAssistant;
 
-use MoksaWeb\Mowc\Modules\OrderLookup\BatchUpdateOrderStatus;
-use MoksaWeb\Mowc\Modules\OrderLookup\ChannelOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\DonationOrgOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\InvoiceChannelOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\InvoiceOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\PaymentMethodOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\PrintShippingLabel;
-use MoksaWeb\Mowc\Modules\OrderLookup\ResendPaymentEmail;
-use MoksaWeb\Mowc\Modules\OrderLookup\ShipmentOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\ShippingZoneOps;
-use MoksaWeb\Mowc\Modules\OrderLookup\UpdateOrderStatus;
+use Moksafowo\Modules\OrderLookup\BatchUpdateOrderStatus;
+use Moksafowo\Modules\OrderLookup\ChannelOps;
+use Moksafowo\Modules\OrderLookup\DonationOrgOps;
+use Moksafowo\Modules\OrderLookup\InvoiceChannelOps;
+use Moksafowo\Modules\OrderLookup\InvoiceOps;
+use Moksafowo\Modules\OrderLookup\PaymentMethodOps;
+use Moksafowo\Modules\OrderLookup\PrintShippingLabel;
+use Moksafowo\Modules\OrderLookup\ResendPaymentEmail;
+use Moksafowo\Modules\OrderLookup\ShipmentOps;
+use Moksafowo\Modules\OrderLookup\ShippingZoneOps;
+use Moksafowo\Modules\OrderLookup\UpdateOrderStatus;
 
 defined( 'ABSPATH' ) || exit;
 

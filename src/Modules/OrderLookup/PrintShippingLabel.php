@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\Shipping\Admin\BatchPrintAdminUI;
+use Moksafowo\Modules\Shipping\Admin\BatchPrintAdminUI;
 
 defined( 'ABSPATH' ) || exit;
 

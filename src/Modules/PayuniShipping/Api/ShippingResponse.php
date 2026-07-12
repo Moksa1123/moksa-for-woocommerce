@@ -1,14 +1,14 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Api;
+namespace Moksafowo\Modules\PayuniShipping\Api;
 
 defined( 'ABSPATH' ) || exit;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShippingStatus;
+use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ShippingStatus;
 
 class ShippingResponse {
 

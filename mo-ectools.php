@@ -3,7 +3,7 @@
  * Plugin Name:        Moksa for WooCommerce
  * Plugin URI:         https://github.com/Moksa1123/moksa-for-woocommerce
  * Description:        Taiwan payment, shipping and e-invoice toolkit for WooCommerce. Enable the provider modules you need (ECPay, NewebPay, PAYUNi, SmilePay, LINE Pay, PayNow, PChomePay, TapPay, Shopline Payments, ezPay, AMEGO). HPOS-ready, Block Checkout-ready.
- * Version:            1.4.6
+ * Version:            1.4.7
  * Requires at least:  7.0
  * Tested up to:       7.0
  * Requires PHP:       8.2
@@ -17,7 +17,7 @@
  * Text Domain:        mo-ectools
  * Domain Path:        /languages
  *
- * @package MoksaWeb\Mowc
+ * @package Moksafowo
  */
 
 declare( strict_types=1 );
@@ -25,7 +25,7 @@ declare( strict_types=1 );
 defined( 'ABSPATH' ) || exit;
 
 /* Constants */
-const MOKSAFOWO_VERSION    = '1.4.6';
+const MOKSAFOWO_VERSION    = '1.4.7';
 const MOKSAFOWO_MIN_PHP    = '8.2';
 const MOKSAFOWO_MIN_WP     = '7.0';
 const MOKSAFOWO_MIN_WC     = '9.9';
@@ -76,7 +76,7 @@ add_action(
 add_action(
 	'plugins_loaded',
 	static function (): void {
-		\MoksaWeb\Mowc\Plugin::instance()->boot();
+		\Moksafowo\Plugin::instance()->boot();
 	},
 	5
 );

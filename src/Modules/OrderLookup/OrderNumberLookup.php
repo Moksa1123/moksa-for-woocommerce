@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Table;
+use Moksafowo\Modules\OrderLookup\Index\Table;
 
 defined( 'ABSPATH' ) || exit;
 

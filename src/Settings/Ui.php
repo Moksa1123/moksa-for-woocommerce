@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Settings;
+namespace Moksafowo\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -17,7 +17,7 @@ final class Ui {
 
 	public static function open_shell(): void {
 		self::print_styles();
-		echo '<div class="mowp-shell">';
+		echo '<div class="moksafowo-shell">';
 	}
 
 	public static function close_shell(): void {
@@ -26,7 +26,7 @@ final class Ui {
 
 	public static function intro( string $title, string $description ): void {
 		?>
-		<div class="mowp-intro">
+		<div class="moksafowo-intro">
 			<h2><?php echo esc_html( $title ); ?></h2>
 			<?php if ( $description !== '' ) : ?>
 				<p><?php echo esc_html( $description ); ?></p>
@@ -40,9 +40,9 @@ final class Ui {
 			return;
 		}
 		?>
-		<section class="mowp-category">
-			<h3 class="mowp-category__title"><?php echo esc_html( $title ); ?></h3>
-			<div class="mowp-list">
+		<section class="moksafowo-category">
+			<h3 class="moksafowo-category__title"><?php echo esc_html( $title ); ?></h3>
+			<div class="moksafowo-list">
 				<?php
 				foreach ( $cards as $card ) {
 					self::card( $card );
@@ -61,30 +61,30 @@ final class Ui {
 		$toggle_name  = (string) ( $card['toggle_name'] ?? '' );
 		$settings_url = (string) ( $card['settings_url'] ?? '' );
 		?>
-		<div class="mowp-card<?php echo $enabled ? ' is-on' : ''; ?>">
-			<div class="mowp-card__main">
-				<div class="mowp-card__head">
-					<span class="mowp-card__name"><?php echo esc_html( $name ); ?></span>
+		<div class="moksafowo-card<?php echo $enabled ? ' is-on' : ''; ?>">
+			<div class="moksafowo-card__main">
+				<div class="moksafowo-card__head">
+					<span class="moksafowo-card__name"><?php echo esc_html( $name ); ?></span>
 					<?php if ( $tagline !== '' ) : ?>
-						<span class="mowp-card__tagline"><?php echo esc_html( $tagline ); ?></span>
+						<span class="moksafowo-card__tagline"><?php echo esc_html( $tagline ); ?></span>
 					<?php endif; ?>
 				</div>
 				<?php if ( $methods !== [] ) : ?>
-					<div class="mowp-card__methods">
+					<div class="moksafowo-card__methods">
 						<?php foreach ( $methods as $method ) : ?>
-							<span class="mowp-chip"><?php echo esc_html( (string) $method ); ?></span>
+							<span class="moksafowo-chip"><?php echo esc_html( (string) $method ); ?></span>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
 			</div>
-			<div class="mowp-card__action">
+			<div class="moksafowo-card__action">
 				<?php if ( $enabled && $settings_url !== '' ) : ?>
-					<a class="mowp-link" href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( '設定 →', 'mo-ectools' ); ?></a>
+					<a class="moksafowo-link" href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( '設定 →', 'mo-ectools' ); ?></a>
 				<?php endif; ?>
 				<?php if ( $toggle_name !== '' ) : ?>
-					<label class="mowp-toggle">
+					<label class="moksafowo-toggle">
 						<input type="checkbox" name="<?php echo esc_attr( $toggle_name ); ?>" value="yes"<?php checked( $enabled ); ?> />
-						<span class="mowp-toggle__slider"></span>
+						<span class="moksafowo-toggle__slider"></span>
 					</label>
 				<?php endif; ?>
 			</div>
@@ -96,13 +96,13 @@ final class Ui {
 		self::print_styles();
 		unset( $back_url );
 		?>
-		<div class="mowp-subsection-banner">
-			<div class="mowp-subsection-banner__head">
-				<h2 class="mowp-subsection-banner__title"><?php echo esc_html( $name ); ?></h2>
+		<div class="moksafowo-subsection-banner">
+			<div class="moksafowo-subsection-banner__head">
+				<h2 class="moksafowo-subsection-banner__title"><?php echo esc_html( $name ); ?></h2>
 				<?php if ( $enabled ) : ?>
-					<span class="mowp-subsection-banner__status is-on">✓ <?php esc_html_e( '已啟用', 'mo-ectools' ); ?></span>
+					<span class="moksafowo-subsection-banner__status is-on">✓ <?php esc_html_e( '已啟用', 'mo-ectools' ); ?></span>
 				<?php else : ?>
-					<span class="mowp-subsection-banner__status is-off">✗ <?php esc_html_e( '已停用', 'mo-ectools' ); ?></span>
+					<span class="moksafowo-subsection-banner__status is-off">✗ <?php esc_html_e( '已停用', 'mo-ectools' ); ?></span>
 				<?php endif; ?>
 			</div>
 		</div>

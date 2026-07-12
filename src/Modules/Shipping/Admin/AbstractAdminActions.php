@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Admin;
+namespace Moksafowo\Modules\Shipping\Admin;
 
-use MoksaWeb\Mowc\Modules\Shipping\AbstractProvider;
+use Moksafowo\Modules\Shipping\AbstractProvider;
 
 defined( 'ABSPATH' ) || exit;
 

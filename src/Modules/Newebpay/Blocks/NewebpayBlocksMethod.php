@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Blocks;
+namespace Moksafowo\Modules\Newebpay\Blocks;
 
-use MoksaWeb\Mowc\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
+use Moksafowo\Modules\Shared\Blocks\AbstractMowcBlocksMethod;
 
 defined( 'ABSPATH' ) || exit;
 

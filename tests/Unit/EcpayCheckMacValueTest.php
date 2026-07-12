@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 

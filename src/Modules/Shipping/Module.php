@@ -1,14 +1,14 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping;
+namespace Moksafowo\Modules\Shipping;
 
-use MoksaWeb\Mowc\Modules\Shipping\Admin\BatchPrintAdminUI;
-use MoksaWeb\Mowc\Modules\Shipping\Admin\ShippingCardSection;
-use MoksaWeb\Mowc\Modules\Shipping\Frontend\CartTempLabel;
-use MoksaWeb\Mowc\Modules\Shipping\Shortcodes\AddFee;
-use MoksaWeb\Mowc\Modules\Shipping\Statuses\Registrar;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTempField;
+use Moksafowo\Modules\Shipping\Admin\BatchPrintAdminUI;
+use Moksafowo\Modules\Shipping\Admin\ShippingCardSection;
+use Moksafowo\Modules\Shipping\Frontend\CartTempLabel;
+use Moksafowo\Modules\Shipping\Shortcodes\AddFee;
+use Moksafowo\Modules\Shipping\Statuses\Registrar;
+use Moksafowo\Modules\Shipping\Temp\ProductTempField;
 
 defined( 'ABSPATH' ) || exit;
 

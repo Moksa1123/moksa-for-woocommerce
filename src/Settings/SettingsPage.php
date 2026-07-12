@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Settings;
+namespace Moksafowo\Settings;
 
-use MoksaWeb\Mowc\Plugin;
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Backfill;
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Table;
+use Moksafowo\Plugin;
+use Moksafowo\Modules\OrderLookup\Index\Backfill;
+use Moksafowo\Modules\OrderLookup\Index\Table;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -111,7 +111,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'ecpay',
 				'label'       => __( '綠界金流', 'mo-ectools' ),
 				'banner_name' => __( '綠界金流', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\Ecpay\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\Ecpay\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => null,
 			],
@@ -119,7 +119,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'ecpay_shipping',
 				'label'       => __( '綠界物流', 'mo-ectools' ),
 				'banner_name' => __( '綠界物流', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\EcpayShipping\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\EcpayShipping\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => null,
 			],
@@ -127,49 +127,49 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'ecpay_invoice',
 				'label'       => __( '綠界電子發票', 'mo-ectools' ),
 				'banner_name' => __( '綠界電子發票', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\EcpayInvoice\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\EcpayInvoice\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => null,
 			],
 			'newebpay'                  => [
 				'enable_key' => 'newebpay',
 				'label'      => __( '藍新金流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Newebpay\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\Newebpay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'newebpay-shipping'         => [
 				'enable_key' => 'newebpay_shipping',
 				'label'      => __( '藍新物流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\NewebpayShipping\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\NewebpayShipping\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'ezpay-invoice'             => [
 				'enable_key' => 'ezpay_invoice',
 				'label'      => __( 'ezPay 電子發票', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\EzpayInvoice\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\EzpayInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'smilepay-invoice'          => [
 				'enable_key' => 'smilepay_invoice',
 				'label'      => __( 'SmilePay 電子發票', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\SmilepayInvoice\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\SmilepayInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'paynow-invoice'            => [
 				'enable_key' => 'paynow_invoice',
 				'label'      => __( 'PayNow 電子發票', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\PaynowInvoice\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\PaynowInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'amego-invoice'             => [
 				'enable_key' => 'amego_invoice',
 				'label'      => __( 'AMEGO 電子發票', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\AmegoInvoice\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\AmegoInvoice\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
@@ -177,7 +177,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'linepay',
 				'label'       => __( 'LINE Pay', 'mo-ectools' ),
 				'banner_name' => __( 'LINE Pay 台灣', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\Linepay\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\Linepay\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings',
 				'tab_arg'     => '',
 			],
@@ -185,7 +185,7 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'payuni',
 				'label'       => __( 'PAYUNi 金流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 統一金流', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\Payuni\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\Payuni\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings_for_payment_section',
 				'tab_arg'     => null,
 			],
@@ -193,49 +193,49 @@ final class SettingsPage extends \WC_Settings_Page {
 				'enable_key'  => 'payuni_shipping',
 				'label'       => __( 'PAYUNi 物流', 'mo-ectools' ),
 				'banner_name' => __( 'PAYUNi 物流', 'mo-ectools' ),
-				'tab_class'   => 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Settings\\SettingsTab',
+				'tab_class'   => 'Moksafowo\\Modules\\PayuniShipping\\Settings\\SettingsTab',
 				'tab_method'  => 'get_settings_for_shipping_section',
 				'tab_arg'     => null,
 			],
 			'smilepay-shipping'         => [
 				'enable_key' => 'smilepay_shipping',
 				'label'      => __( '速買配 物流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\SmilepayShipping\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\SmilepayShipping\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'smilepay-payment'          => [
 				'enable_key' => 'smilepay',
 				'label'      => __( 'SmilePay 速買配 金流', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Smilepay\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\Smilepay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'pchomepay'                 => [
 				'enable_key' => 'pchomepay',
 				'label'      => __( 'PChomePay 支付連', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Pchomepay\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\Pchomepay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'tappay'                    => [
 				'enable_key' => 'tappay',
 				'label'      => __( 'TapPay 拍付', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Tappay\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\Tappay\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'paynow'                    => [
 				'enable_key' => 'paynow',
 				'label'      => __( 'PayNow 立即富', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\Paynow\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\Paynow\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
 			'shopline-payments'         => [
 				'enable_key' => 'shopline_payments',
 				'label'      => __( 'Shopline Payments', 'mo-ectools' ),
-				'tab_class'  => 'MoksaWeb\\Mowc\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
+				'tab_class'  => 'Moksafowo\\Modules\\ShoplinePayments\\Settings\\SettingsTab',
 				'tab_method' => 'get_settings',
 				'tab_arg'    => null,
 			],
@@ -252,13 +252,9 @@ final class SettingsPage extends \WC_Settings_Page {
 				$sections[ $section ] = $desc['label'];
 			}
 		}
-		// 此 filter tag 名稱由 WooCommerce 核心規定,非本外掛自訂:每個 WC_Settings_Page
-		// 子類(WC_Settings_General、WC_Settings_Payment_Gateways 等核心分頁皆同)都必須
-		// 原樣呼叫 apply_filters('woocommerce_get_sections_' . $this->id, ...) 才能被
-		// WC_Settings_Page::output() 正確處理;改前綴會讓本設定分頁在 WooCommerce 設定
-		// 選單消失。
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Settings_Page` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
-		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+		// 本類完全覆寫 WC_Settings_Page::get_sections()(未呼叫 parent::),WC 核心
+		// 本身只用回傳陣列渲染分頁、不要求特定 filter tag 名稱 —— 走自家前綴。
+		return apply_filters( 'moksafowo_get_sections_' . $this->id, $sections );
 	}
 
 	public function get_settings( $current_section = '' ): array {

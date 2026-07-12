@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay;
+namespace Moksafowo\Modules\Ecpay;
 
 defined( 'ABSPATH' ) || exit;
 

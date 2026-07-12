@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EzpayInvoice\Settings;
+namespace Moksafowo\Modules\EzpayInvoice\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

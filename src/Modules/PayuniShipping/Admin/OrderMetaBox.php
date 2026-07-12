@@ -1,13 +1,13 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Admin;
+namespace Moksafowo\Modules\PayuniShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ServiceType;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ServiceType;
 
 
 

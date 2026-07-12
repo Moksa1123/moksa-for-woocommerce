@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Api;
+namespace Moksafowo\Modules\Newebpay\Api;
 
-use MoksaWeb\Mowc\Order\Lookup;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Lookup;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -151,7 +151,7 @@ final class IpnHandler {
 
 		$order->save();
 
-		\MoksaWeb\Mowc\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
 
 		echo '1|OK';
 		exit;
@@ -224,6 +224,6 @@ final class IpnHandler {
 	}
 
 	private static function payment_type_label( string $type ): string {
-		return \MoksaWeb\Mowc\Modules\Newebpay\PaymentTypeCatalog::label( $type, $type );
+		return \Moksafowo\Modules\Newebpay\PaymentTypeCatalog::label( $type, $type );
 	}
 }

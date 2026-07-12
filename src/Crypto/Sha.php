@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Crypto;
+namespace Moksafowo\Crypto;
 
 defined( 'ABSPATH' ) || exit;
 

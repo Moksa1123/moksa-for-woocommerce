@@ -1,17 +1,17 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Api;
+namespace Moksafowo\Modules\PayuniShipping\Api;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 use DOMDocument;
 
 
 
-use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+use Moksafowo\Modules\Shared\Frontend\Interstitial;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -87,13 +87,13 @@ class ShippingRequest {
 		}
 
 		$unified_ids = [
-			\MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDUnified::ID,
-			\MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified::ID,
-			\MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified::ID,
+			\Moksafowo\Modules\PayuniShipping\Providers\TCat\HDUnified::ID,
+			\Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified::ID,
+			\Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified::ID,
 		];
 		foreach ( $shipping_methods as $shipping_method ) {
 			if ( in_array( $shipping_method->get_method_id(), $unified_ids, true ) ) {
-				\MoksaWeb\Mowc\Modules\PayuniShipping\Operations\CreateOrderUnified::run( $order );
+				\Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::run( $order );
 				return;
 			}
 		}
@@ -260,7 +260,7 @@ class ShippingRequest {
 
 		$goods_type  = $order->get_meta( OrderMeta::GoodsType );
 		$valid_specs = array( '1', '2', '3' );
-		if ( $goods_type === \MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType::NORMAL ) {
+		if ( $goods_type === \Moksafowo\Modules\PayuniShipping\Utils\GoodsType::NORMAL ) {
 			$valid_specs[] = '4'; // 150cm 僅常溫支援
 		}
 
@@ -698,10 +698,10 @@ class ShippingRequest {
 		// 黑貓 API 需完整中文地址；鄉鎮市區落地於 shipping_city，city 空才退用 district 附加欄位
 		$district = (string) $order->get_shipping_city();
 		if ( '' === $district ) {
-			$district = (string) $order->get_meta( '_wc_shipping/mowp/district' );
+			$district = (string) $order->get_meta( '_wc_shipping/moksafowo/district' );
 		}
 		$address  = '';
-		$address .= \MoksaWeb\Mowc\Modules\Address\TwAddress::state_label( (string) $order->get_shipping_state() );
+		$address .= \Moksafowo\Modules\Address\TwAddress::state_label( (string) $order->get_shipping_state() );
 		$address .= $district;
 		$address .= $order->get_shipping_address_1();
 		$address .= $order->get_shipping_address_2();

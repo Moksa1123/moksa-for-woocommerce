@@ -1,19 +1,19 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Frontend;
+namespace Moksafowo\Modules\PayuniShipping\Frontend;
 
 use Automattic\Jetpack\Constants;
-use MoksaWeb\Mowc\Modules\Payuni\Credentials;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Order\Meta\Keys;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ServiceType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
+use Moksafowo\Modules\Payuni\Credentials;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingRequest;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
+use Moksafowo\Modules\PayuniShipping\Utils\ServiceType;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 
-use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
+use Moksafowo\Modules\Shared\Frontend\Interstitial;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -161,11 +161,11 @@ class StoreSelector {
 		if ( $post && has_block( 'woocommerce/checkout', $post ) ) {
 			$path    = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/block-checkout-store.js';
 			$version = file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION;
-			\MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
+			\Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::enqueue();
 			wp_enqueue_script(
 				'moksafowo-payuni-block-checkout-store',
 				( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/block-checkout-store.js',
-				array( \MoksaWeb\Mowc\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ),
+				array( \Moksafowo\Modules\Shared\Frontend\CvsStoreAssets::SCRIPT ),
 				$version,
 				true
 			);

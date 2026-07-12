@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay\Settings;
+namespace Moksafowo\Modules\Ecpay\Settings;
 
-use MoksaWeb\Mowc\Modules\Ecpay\Api\Helper;
+use Moksafowo\Modules\Ecpay\Api\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

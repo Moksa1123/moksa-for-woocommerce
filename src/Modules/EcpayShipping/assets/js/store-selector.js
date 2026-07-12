@@ -64,14 +64,14 @@
 
 		const M = window.moksafowoCvsStore;
 		const btnLabel = store && store.id ? cfg.i18n.change : cfg.i18n.select;
-		const rightHtml = '<button type="button" class="button mowp-cvs-store__btn">' + M.escapeHtml( btnLabel ) + '</button>';
+		const rightHtml = '<button type="button" class="button moksafowo-cvs-store__btn">' + M.escapeHtml( btnLabel ) + '</button>';
 		host.innerHTML = M.cardHtml( {
 			store: store,
 			storeIdLabel: cfg.i18n.store_id,
 			noneText: cfg.i18n.none_selected,
 			rightHtml: rightHtml,
 		} );
-		const btn = host.querySelector( '.mowp-cvs-store__btn' );
+		const btn = host.querySelector( '.moksafowo-cvs-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', onSelect );
 		}

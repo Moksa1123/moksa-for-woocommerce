@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Admin;
+namespace Moksafowo\Modules\NewebpayShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\Shared\Admin\CardRenderers;
+use Moksafowo\Modules\Shared\Admin\CardRenderers;
 
 defined( 'ABSPATH' ) || exit;
 

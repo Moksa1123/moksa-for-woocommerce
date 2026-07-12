@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Crypto;
+namespace Moksafowo\Crypto;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,6 +28,10 @@ final class Aes {
 	}
 
 	public static function decrypt_cbc_hex( string $hex, string $key, string $iv ): string {
+		// 先驗證再 hex2bin — 直接餵非法字串會先噴 PHP warning 才回 false。
+		if ( '' === $hex || 0 !== strlen( $hex ) % 2 || ! ctype_xdigit( $hex ) ) {
+			throw new \RuntimeException( 'invalid hex input' );
+		}
 		$bin = hex2bin( $hex );
 		if ( false === $bin ) {
 			throw new \RuntimeException( 'invalid hex input' );

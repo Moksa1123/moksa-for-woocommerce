@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay\Admin;
+namespace Moksafowo\Modules\Ecpay\Admin;
 
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -142,6 +142,6 @@ final class OrderMetaBox {
 	}
 
 	public static function pay_type_label( string $raw ): string {
-		return \MoksaWeb\Mowc\Modules\Ecpay\PaymentTypeCatalog::label( $raw );
+		return \Moksafowo\Modules\Ecpay\PaymentTypeCatalog::label( $raw );
 	}
 }

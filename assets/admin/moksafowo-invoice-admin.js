@@ -1,5 +1,5 @@
 /**
- * mowp 共用發票 admin metabox JS — Issue / Update / Invalid / Allowance。
+ * 共用發票 admin metabox JS — Issue / Update / Invalid / Allowance。
  *
  * 各 provider 透過 AbstractAdminMetaBox 渲染 div.moksafowo-invoice-meta with
  * data-provider + data-prefix="moksafowo_amego_invoice" + nonce field；本 JS 從 data attr

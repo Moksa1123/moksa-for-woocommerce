@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Gateways;
+namespace Moksafowo\Modules\Newebpay\Gateways;
 
-use MoksaWeb\Mowc\Modules\Newebpay\Api\Helper;
-use MoksaWeb\Mowc\Modules\Shared\Gateways\AbstractMowcGateway;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Newebpay\Api\Helper;
+use Moksafowo\Modules\Shared\Gateways\AbstractMowcGateway;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -63,19 +63,19 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 
 	private static function do_card_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
 		// 用 B02 query 看 CloseStatus
-		$query              = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
+		$query              = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
 		$close_status       = $query['ok'] ? (string) ( $query['data']['CloseStatus'] ?? '0' ) : '0';
 		$is_authorized_only = '0' === $close_status;
 
 		$result = $is_authorized_only
-			? \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::cancel(
+			? \Moksafowo\Modules\Newebpay\Api\PaymentRequest::cancel(
 				[
 					'Amt'             => $amt,
 					'MerchantOrderNo' => $mtn,
 					'IndexType'       => 1,
 				]
 			)
-			: \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::refund(
+			: \Moksafowo\Modules\Newebpay\Api\PaymentRequest::refund(
 				[
 					'Amt'             => $amt,
 					'MerchantOrderNo' => $mtn,
@@ -100,7 +100,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	}
 
 	private static function do_wallet_refund( \WC_Order $order, string $payment_type, string $mtn, int $amt, string $reason ) {
-		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::wallet_refund(
+		$result = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::wallet_refund(
 			[
 				'MerchantOrderNo' => $mtn,
 				'Amount'          => $amt,
@@ -125,7 +125,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	}
 
 	private static function do_bnpl_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
-		$result = \MoksaWeb\Mowc\Modules\Newebpay\Api\PaymentRequest::bnpl_refund(
+		$result = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::bnpl_refund(
 			[
 				'MerchantOrderNo' => $mtn,
 				'Amt'             => $amt,

@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Settings;
+namespace Moksafowo\Modules\EcpayShipping\Settings;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
 
 defined( 'ABSPATH' ) || exit;
 

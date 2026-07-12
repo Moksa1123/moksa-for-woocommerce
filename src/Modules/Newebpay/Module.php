@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay;
+namespace Moksafowo\Modules\Newebpay;
 
-use MoksaWeb\Mowc\Modules\Shared\AbstractGatewayModule;
+use Moksafowo\Modules\Shared\AbstractGatewayModule;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -107,7 +107,7 @@ final class Module extends AbstractGatewayModule {
 		if ( Gateways\Unified::GATEWAY_ID !== $method ) {
 			return $title;
 		}
-		$pay_type = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_PAYMENT_TYPE );
+		$pay_type = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_PAYMENT_TYPE );
 		if ( '' === $pay_type ) {
 			return $title;
 		}

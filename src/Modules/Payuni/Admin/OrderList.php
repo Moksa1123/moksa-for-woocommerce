@@ -1,12 +1,12 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\Payuni\Admin;
+namespace Moksafowo\Modules\Payuni\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
-use MoksaWeb\Mowc\Modules\Payuni\PayuniPayment;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\SingletonTrait;
+use Moksafowo\Modules\Payuni\PayuniPayment;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Utils\SingletonTrait;
 
 class OrderList {
 

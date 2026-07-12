@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Email;
+namespace Moksafowo\Modules\Shared\Email;
 
-use MoksaWeb\Mowc\Modules\Shared\Frontend\PaymentInfoBox;
+use Moksafowo\Modules\Shared\Frontend\PaymentInfoBox;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Webhook;
+namespace Moksafowo\Modules\Shipping\Webhook;
 
 defined( 'ABSPATH' ) || exit;
 

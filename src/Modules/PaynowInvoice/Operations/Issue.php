@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PaynowInvoice\Operations;
+namespace Moksafowo\Modules\PaynowInvoice\Operations;
 
-use MoksaWeb\Mowc\Modules\PaynowInvoice\Api\Helper;
-use MoksaWeb\Mowc\Modules\PaynowInvoice\Api\Request;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\PaynowInvoice\Api\Helper;
+use Moksafowo\Modules\PaynowInvoice\Api\Request;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

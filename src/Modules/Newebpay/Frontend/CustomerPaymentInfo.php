@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Frontend;
+namespace Moksafowo\Modules\Newebpay\Frontend;
 
-use MoksaWeb\Mowc\Modules\Shared\Frontend\PaymentInfoBox;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shared\Frontend\PaymentInfoBox;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

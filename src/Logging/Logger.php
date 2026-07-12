@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Logging;
+namespace Moksafowo\Logging;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -64,7 +64,7 @@ final class Logger {
 		self::logger()->log(
 			$level,
 			$message,
-			[ 'source' => 'mowp-' . $source ]
+			[ 'source' => 'moksafowo-' . $source ]
 		);
 	}
 }

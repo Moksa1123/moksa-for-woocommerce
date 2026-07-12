@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PaynowInvoice\Settings;
+namespace Moksafowo\Modules\PaynowInvoice\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

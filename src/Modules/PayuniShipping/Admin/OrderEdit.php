@@ -1,12 +1,12 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Admin;
+namespace Moksafowo\Modules\PayuniShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingRequest;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
 
 
 defined( 'ABSPATH' ) || exit;

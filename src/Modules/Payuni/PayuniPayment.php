@@ -1,33 +1,33 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\Payuni;
+namespace Moksafowo\Modules\Payuni;
 
-use MoksaWeb\Mowc\Modules\Payuni\Admin\OrderList;
-use MoksaWeb\Mowc\Modules\Payuni\Admin\OrderMetaBoxes;
-use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Payuni\Api\PaymentResponse;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Aftee;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\ApplePay;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Atm;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Credit;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditRed;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\ICash;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\JKoPay;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Unified;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment6;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment9;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment12;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment18;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment24;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment30;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditUnionPay;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\GooglePay;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\LinePay;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\SamsungPay;
-use MoksaWeb\Mowc\Modules\Payuni\Settings\SettingsTab;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Admin\OrderList;
+use Moksafowo\Modules\Payuni\Admin\OrderMetaBoxes;
+use Moksafowo\Modules\Payuni\Api\PaymentRequest;
+use Moksafowo\Modules\Payuni\Api\PaymentResponse;
+use Moksafowo\Modules\Payuni\Gateways\Aftee;
+use Moksafowo\Modules\Payuni\Gateways\ApplePay;
+use Moksafowo\Modules\Payuni\Gateways\Atm;
+use Moksafowo\Modules\Payuni\Gateways\Credit;
+use Moksafowo\Modules\Payuni\Gateways\CreditRed;
+use Moksafowo\Modules\Payuni\Gateways\ICash;
+use Moksafowo\Modules\Payuni\Gateways\JKoPay;
+use Moksafowo\Modules\Payuni\Gateways\Unified;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment3;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment6;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment9;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment12;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment18;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment24;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment30;
+use Moksafowo\Modules\Payuni\Gateways\CreditUnionPay;
+use Moksafowo\Modules\Payuni\Gateways\Cvs;
+use Moksafowo\Modules\Payuni\Gateways\GooglePay;
+use Moksafowo\Modules\Payuni\Gateways\LinePay;
+use Moksafowo\Modules\Payuni\Gateways\SamsungPay;
+use Moksafowo\Modules\Payuni\Settings\SettingsTab;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
 
 
@@ -91,31 +91,31 @@ class PayuniPayment {
 		PaymentResponse::init();
 
 		self::$allowed_payments = array(
-			Unified::GATEWAY_ID        => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Unified',
-			Credit::GATEWAY_ID         => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Credit',
-			Cvs::GATEWAY_ID            => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs',
-			Atm::GATEWAY_ID            => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Atm',
-			Aftee::GATEWAY_ID          => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\Aftee',
-			ApplePay::GATEWAY_ID       => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\ApplePay',
-			GooglePay::GATEWAY_ID      => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\GooglePay',
-			SamsungPay::GATEWAY_ID     => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\SamsungPay',
-			LinePay::GATEWAY_ID        => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\LinePay',
-			CreditUnionPay::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditUnionPay',
-			ICash::GATEWAY_ID          => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\ICash',
-			JKoPay::GATEWAY_ID         => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\JKoPay',
-			CreditRed::GATEWAY_ID      => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditRed',
+			Unified::GATEWAY_ID        => '\Moksafowo\Modules\Payuni\Gateways\Unified',
+			Credit::GATEWAY_ID         => '\Moksafowo\Modules\Payuni\Gateways\Credit',
+			Cvs::GATEWAY_ID            => '\Moksafowo\Modules\Payuni\Gateways\Cvs',
+			Atm::GATEWAY_ID            => '\Moksafowo\Modules\Payuni\Gateways\Atm',
+			Aftee::GATEWAY_ID          => '\Moksafowo\Modules\Payuni\Gateways\Aftee',
+			ApplePay::GATEWAY_ID       => '\Moksafowo\Modules\Payuni\Gateways\ApplePay',
+			GooglePay::GATEWAY_ID      => '\Moksafowo\Modules\Payuni\Gateways\GooglePay',
+			SamsungPay::GATEWAY_ID     => '\Moksafowo\Modules\Payuni\Gateways\SamsungPay',
+			LinePay::GATEWAY_ID        => '\Moksafowo\Modules\Payuni\Gateways\LinePay',
+			CreditUnionPay::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\CreditUnionPay',
+			ICash::GATEWAY_ID          => '\Moksafowo\Modules\Payuni\Gateways\ICash',
+			JKoPay::GATEWAY_ID         => '\Moksafowo\Modules\Payuni\Gateways\JKoPay',
+			CreditRed::GATEWAY_ID      => '\Moksafowo\Modules\Payuni\Gateways\CreditRed',
 		);
 
 		$number_of_payments = get_option( 'moksafowo_payuni_payment_installment_number_of_payments', array() );
 
 		self::$available_installments = array(
-			CreditInstallment3::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3',
-			CreditInstallment6::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment6',
-			CreditInstallment9::GATEWAY_ID  => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment9',
-			CreditInstallment12::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment12',
-			CreditInstallment18::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment18',
-			CreditInstallment24::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment24',
-			CreditInstallment30::GATEWAY_ID => '\MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment30',
+			CreditInstallment3::GATEWAY_ID  => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment3',
+			CreditInstallment6::GATEWAY_ID  => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment6',
+			CreditInstallment9::GATEWAY_ID  => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment9',
+			CreditInstallment12::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment12',
+			CreditInstallment18::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment18',
+			CreditInstallment24::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment24',
+			CreditInstallment30::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\CreditInstallment30',
 		);
 
 		foreach ( self::$available_installments as $key => $installment ) {
@@ -403,7 +403,7 @@ class PayuniPayment {
 		}
 		$msg    = is_string( $message ) ? $message : (string) wp_json_encode( $message );
 		$method = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
-		\MoksaWeb\Mowc\Logging\Logger::{$method}( 'moksafowo-payuni-payment', $msg );
+		\Moksafowo\Logging\Logger::{$method}( 'moksafowo-payuni-payment', $msg );
 	}
 
 

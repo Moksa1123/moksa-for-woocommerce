@@ -1,37 +1,37 @@
 <?php
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping;
+namespace Moksafowo\Modules\PayuniShipping;
 
 use Automattic\Jetpack\Constants;
-use MoksaWeb\Mowc\Modules\Payuni\Credentials;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\Crypto;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Frontend\AddressFormatter;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Frontend\EnqueueScripts;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Frontend\CheckoutFields;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Frontend\StoreValidation;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Operations\SaveShippingMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Settings\SettingsTab;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\MethodIdPredicates;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CFrozen;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CNormal;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CFrozen;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CNormal;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified as Seven711B2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified as Seven711C2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDFrozen;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDNormal;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDRefrigerated;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\SingletonTrait;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\GoodsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ServiceType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Admin\OrderEdit;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Api\ShippingResponse;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Frontend\StoreSelector;
+use Moksafowo\Modules\Payuni\Credentials;
+use Moksafowo\Modules\PayuniShipping\Api\Crypto;
+use Moksafowo\Modules\PayuniShipping\Frontend\AddressFormatter;
+use Moksafowo\Modules\PayuniShipping\Frontend\EnqueueScripts;
+use Moksafowo\Modules\PayuniShipping\Frontend\CheckoutFields;
+use Moksafowo\Modules\PayuniShipping\Frontend\StoreValidation;
+use Moksafowo\Modules\PayuniShipping\Operations\SaveShippingMeta;
+use Moksafowo\Modules\PayuniShipping\Settings\SettingsTab;
+use Moksafowo\Modules\PayuniShipping\Utils\MethodIdPredicates;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CFrozen;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CNormal;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CFrozen;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CNormal;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified as Seven711B2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified as Seven711C2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDFrozen;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDNormal;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDRefrigerated;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDUnified;
+use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ServiceType;
+use Moksafowo\Modules\PayuniShipping\Admin\OrderEdit;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingRequest;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingResponse;
+use Moksafowo\Modules\PayuniShipping\Frontend\StoreSelector;
 
 
 
@@ -573,10 +573,10 @@ class PayuniShipping {
 		}
 		$msg_str = is_string( $message ) ? $message : (string) wp_json_encode( $message );
 		$method  = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
-		\MoksaWeb\Mowc\Logging\Logger::{$method}( 'moksafowo-payuni-shipping', $msg_str );
+		\Moksafowo\Logging\Logger::{$method}( 'moksafowo-payuni-shipping', $msg_str );
 
-		$redacted = \MoksaWeb\Mowc\Logging\Redactor::redact_string( $msg_str );
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- belt-and-suspenders fallback when WC log dir not writable; mowp Logger does not propagate redacted result back.
+		$redacted = \Moksafowo\Logging\Redactor::redact_string( $msg_str );
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- belt-and-suspenders fallback when WC log dir not writable; plugin Logger does not propagate redacted result back.
 		error_log( '[mo-ectools-payuni-shipping][' . $method . '] ' . $redacted );
 	}
 

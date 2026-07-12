@@ -1,15 +1,15 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Admin;
+namespace Moksafowo\Modules\Payuni\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
-use MoksaWeb\Mowc\Modules\Payuni\PayuniPayment;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\AuthType;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\BankType;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\TradeStatus;
-use MoksaWeb\Mowc\Modules\Payuni\Utils\SingletonTrait;
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Modules\Payuni\PayuniPayment;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Utils\AuthType;
+use Moksafowo\Modules\Payuni\Utils\BankType;
+use Moksafowo\Modules\Payuni\Utils\TradeStatus;
+use Moksafowo\Modules\Payuni\Utils\SingletonTrait;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
 
 class OrderMetaBoxes {
 

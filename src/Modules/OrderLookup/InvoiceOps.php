@@ -2,22 +2,22 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Allowance as AmegoAllowance;
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Invalid as AmegoInvalid;
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Issue as AmegoIssue;
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Allowance as EcpayAllowance;
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Invalid as EcpayInvalid;
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Issue as EcpayIssue;
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Allowance as EzpayAllowance;
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Invalid as EzpayInvalid;
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Issue as EzpayIssue;
-use MoksaWeb\Mowc\Modules\PaynowInvoice\Operations\Invalid as PaynowInvalid;
-use MoksaWeb\Mowc\Modules\PaynowInvoice\Operations\Issue as PaynowIssue;
-use MoksaWeb\Mowc\Modules\SmilepayInvoice\Operations\Invalid as SmilepayInvalid;
-use MoksaWeb\Mowc\Modules\SmilepayInvoice\Operations\Issue as SmilepayIssue;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\AmegoInvoice\Operations\Allowance as AmegoAllowance;
+use Moksafowo\Modules\AmegoInvoice\Operations\Invalid as AmegoInvalid;
+use Moksafowo\Modules\AmegoInvoice\Operations\Issue as AmegoIssue;
+use Moksafowo\Modules\EcpayInvoice\Operations\Allowance as EcpayAllowance;
+use Moksafowo\Modules\EcpayInvoice\Operations\Invalid as EcpayInvalid;
+use Moksafowo\Modules\EcpayInvoice\Operations\Issue as EcpayIssue;
+use Moksafowo\Modules\EzpayInvoice\Operations\Allowance as EzpayAllowance;
+use Moksafowo\Modules\EzpayInvoice\Operations\Invalid as EzpayInvalid;
+use Moksafowo\Modules\EzpayInvoice\Operations\Issue as EzpayIssue;
+use Moksafowo\Modules\PaynowInvoice\Operations\Invalid as PaynowInvalid;
+use Moksafowo\Modules\PaynowInvoice\Operations\Issue as PaynowIssue;
+use Moksafowo\Modules\SmilepayInvoice\Operations\Invalid as SmilepayInvalid;
+use Moksafowo\Modules\SmilepayInvoice\Operations\Issue as SmilepayIssue;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

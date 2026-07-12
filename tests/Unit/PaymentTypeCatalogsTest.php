@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
-use MoksaWeb\Mowc\Modules\Ecpay\PaymentTypeCatalog as EcpayCatalog;
-use MoksaWeb\Mowc\Modules\Newebpay\PaymentTypeCatalog as NewebpayCatalog;
-use MoksaWeb\Mowc\Modules\Paynow\PaymentTypeCatalog as PaynowCatalog;
-use MoksaWeb\Mowc\Modules\Pchomepay\PaymentTypeCatalog as PchomepayCatalog;
+use Moksafowo\Modules\Ecpay\PaymentTypeCatalog as EcpayCatalog;
+use Moksafowo\Modules\Newebpay\PaymentTypeCatalog as NewebpayCatalog;
+use Moksafowo\Modules\Paynow\PaymentTypeCatalog as PaynowCatalog;
+use Moksafowo\Modules\Pchomepay\PaymentTypeCatalog as PchomepayCatalog;
 use PHPUnit\Framework\TestCase;
 
 final class PaymentTypeCatalogsTest extends TestCase {

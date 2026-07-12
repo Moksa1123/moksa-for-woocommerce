@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Tappay\Api;
+namespace Moksafowo\Modules\Tappay\Api;
 
-use MoksaWeb\Mowc\Modules\Shared\Api\AbstractCredentialHelper;
+use Moksafowo\Modules\Shared\Api\AbstractCredentialHelper;
 
 defined( 'ABSPATH' ) || exit;
 

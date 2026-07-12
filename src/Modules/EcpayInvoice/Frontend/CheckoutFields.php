@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayInvoice\Frontend;
+namespace Moksafowo\Modules\EcpayInvoice\Frontend;
 
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Api\Helper;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceCheckoutFields;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceFieldConfig;
+use Moksafowo\Modules\EcpayInvoice\Api\Helper;
+use Moksafowo\Modules\Shared\Invoice\InvoiceCheckoutFields;
+use Moksafowo\Modules\Shared\Invoice\InvoiceFieldConfig;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -36,19 +36,19 @@ final class CheckoutFields {
 			return;
 		}
 
-		$type        = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_type', '_mowp/invoice-type', 'mowp/invoice-type' ] );
-		$carrier     = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_carrier_type', '_mowp/invoice-carrier-type', 'mowp/invoice-carrier-type' ] );
+		$type        = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_type', '_moksafowo/invoice-type', 'moksafowo/invoice-type' ] );
+		$carrier     = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_carrier_type', '_moksafowo/invoice-carrier-type', 'moksafowo/invoice-carrier-type' ] );
 		$carrier_num = InvoiceCheckoutFields::field_value(
 			$data,
 			[
 				'moksafowo_invoice_carrier_num', // Classic 單一欄位
-				'_mowp/invoice-mobile-barcode',
-				'mowp/invoice-mobile-barcode',
-				'_mowp/invoice-cert-code',
-				'mowp/invoice-cert-code',
+				'_moksafowo/invoice-mobile-barcode',
+				'moksafowo/invoice-mobile-barcode',
+				'_moksafowo/invoice-cert-code',
+				'moksafowo/invoice-cert-code',
 			]
 		);
-		$love_code   = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_love_code', '_mowp/invoice-love-code', 'mowp/invoice-love-code' ] );
+		$love_code   = InvoiceCheckoutFields::field_value( $data, [ 'moksafowo_invoice_love_code', '_moksafowo/invoice-love-code', 'moksafowo/invoice-love-code' ] );
 
 		// 個人 + 手機條碼 → CheckBarcode。真驗失敗（exists=N）才擋；HTTP / 解密錯不擋（避免服務問題擋單）。
 		if ( 'b2c_carrier' === $type && 'mobile' === $carrier && '' !== $carrier_num ) {

@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EzpayInvoice\Operations;
+namespace Moksafowo\Modules\EzpayInvoice\Operations;
 
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Api\Helper;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EzpayInvoice\Api\Helper;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,7 +19,7 @@ final class Invalid {
 				'message' => __( '此訂單沒有可作廢的 ezPay 發票。', 'mo-ectools' ),
 			];
 		}
-		// zero / negative 是 mowp 自己 mark 的 marker，不打 ezPay API，直接清掉 meta
+		// zero / negative 是本外掛自己 mark 的 marker，不打 ezPay API，直接清掉 meta
 		if ( in_array( $invoice_no, [ 'zero', 'negative' ], true ) ) {
 			$order->delete_meta_data( Keys::EZPAY_INVOICE_NUMBER );
 			$order->save();

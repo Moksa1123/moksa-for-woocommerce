@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
-use MoksaWeb\Mowc\Logging\Redactor;
+use Moksafowo\Logging\Redactor;
 use PHPUnit\Framework\TestCase;
 
 final class RedactorTest extends TestCase {

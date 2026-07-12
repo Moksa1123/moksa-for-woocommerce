@@ -1,18 +1,18 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Operations;
+namespace Moksafowo\Modules\PayuniShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Providers\TCat\HDUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\LgsType;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\Shipping\Order\SplitByTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
+use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDUnified;
+use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\Shipping\Order\SplitByTemp;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -63,7 +63,7 @@ final class CreateOrderUnified {
 		}
 
 		$supported_temps = array_map( 'intval', array_keys( $method->supported_temperatures() ) );
-		$packages        = SplitByTemp::for_order( $order, $supported_temps, $method instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
+		$packages        = SplitByTemp::for_order( $order, $supported_temps, $method instanceof \Moksafowo\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
@@ -262,11 +262,11 @@ final class CreateOrderUnified {
 
 	private static function get_shipping_address( \WC_Order $order ): string {
 		// shipping_state 可能是英文，走 state_label 轉中文；否則黑貓 HOME01064。
-		$state = \MoksaWeb\Mowc\Modules\Address\TwAddress::state_label( (string) $order->get_shipping_state() );
+		$state = \Moksafowo\Modules\Address\TwAddress::state_label( (string) $order->get_shipping_state() );
 		// 鄉鎮市區落地於 shipping_city；city 空才退用 Block 結帳附加欄位
 		$city = (string) $order->get_shipping_city();
 		if ( '' === $city ) {
-			$city = (string) $order->get_meta( '_wc_shipping/mowp/district' );
+			$city = (string) $order->get_meta( '_wc_shipping/moksafowo/district' );
 		}
 
 		if ( '' !== $city && '' !== $state && $city === $state ) {

@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Smilepay\Gateways;
+namespace Moksafowo\Modules\Smilepay\Gateways;
 
-use MoksaWeb\Mowc\Modules\Shared\Gateways\AbstractMowcGateway;
-use MoksaWeb\Mowc\Modules\Smilepay\Api\Helper;
-use MoksaWeb\Mowc\Modules\Smilepay\Api\IpnHandler;
-use MoksaWeb\Mowc\Modules\Smilepay\Api\Request;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shared\Gateways\AbstractMowcGateway;
+use Moksafowo\Modules\Smilepay\Api\Helper;
+use Moksafowo\Modules\Smilepay\Api\IpnHandler;
+use Moksafowo\Modules\Smilepay\Api\Request;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

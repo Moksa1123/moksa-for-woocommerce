@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Invoice;
+namespace Moksafowo\Modules\Shared\Invoice;
 
 defined( 'ABSPATH' ) || exit;
 

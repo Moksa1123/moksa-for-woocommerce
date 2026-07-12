@@ -2,7 +2,7 @@
 /**
  * Uninstall Moksa for WooCommerce. Removes all plugin options and meta keys.
  *
- * @package MoksaWeb\Mowc
+ * @package Moksafowo
  */
 
 declare( strict_types=1 );

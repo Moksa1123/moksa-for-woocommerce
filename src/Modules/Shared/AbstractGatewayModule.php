@@ -2,10 +2,10 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared;
+namespace Moksafowo\Modules\Shared;
 
-use MoksaWeb\Mowc\Modules\AbstractModule;
-use MoksaWeb\Mowc\Modules\Shared\Setup\GatewayAllowlistMigrator;
+use Moksafowo\Modules\AbstractModule;
+use Moksafowo\Modules\Shared\Setup\GatewayAllowlistMigrator;
 
 defined( 'ABSPATH' ) || exit;
 

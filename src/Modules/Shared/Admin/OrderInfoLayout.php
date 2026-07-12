@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Admin;
+namespace Moksafowo\Modules\Shared\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -58,17 +58,17 @@ final class OrderInfoLayout {
 			$by_slot[ $slot ] = $card;
 		}
 
-		echo '<div class="mowp-order-info-grid">';
+		echo '<div class="moksafowo-order-info-grid">';
 		foreach ( self::SLOT_ORDER as $slot ) {
 			$card = $by_slot[ $slot ] ?? null;
 			if ( $card ) {
-				echo '<div class="mowp-order-info-card mowp-order-info-card--' . esc_attr( $slot ) . '">';
-				echo '<h4 class="mowp-order-info-card__title">' . esc_html( (string) ( $card['title'] ?? self::default_title( $slot ) ) ) . '</h4>';
+				echo '<div class="moksafowo-order-info-card moksafowo-order-info-card--' . esc_attr( $slot ) . '">';
+				echo '<h4 class="moksafowo-order-info-card__title">' . esc_html( (string) ( $card['title'] ?? self::default_title( $slot ) ) ) . '</h4>';
 				echo wp_kses( (string) $card['html'], self::card_allowlist() );
 				echo '</div>';
 			} else {
-				echo '<div class="mowp-order-info-card mowp-order-info-card--' . esc_attr( $slot ) . ' mowp-order-info-card--empty">';
-				echo '<h4 class="mowp-order-info-card__title">' . esc_html( self::default_title( $slot ) ) . '</h4>';
+				echo '<div class="moksafowo-order-info-card moksafowo-order-info-card--' . esc_attr( $slot ) . ' moksafowo-order-info-card--empty">';
+				echo '<h4 class="moksafowo-order-info-card__title">' . esc_html( self::default_title( $slot ) ) . '</h4>';
 				echo wp_kses( self::default_placeholder( $slot, $order ), self::card_allowlist() );
 				echo '</div>';
 			}
@@ -244,12 +244,12 @@ final class OrderInfoLayout {
 					esc_html( $where )
 				);
 			}
-			// 其他 gateway — 區分「mowp 模組但 card 未實作」vs「完全外掛 gateway」
+			// 其他 gateway — 區分「本外掛模組但 card 未實作」vs「完全外掛 gateway」
 			if ( '' !== $method_title ) {
-				$is_mowp = str_starts_with( $method, 'moksafowo_' ) || 'moksafowo-linepay' === $method;
-				$note    = $is_mowp
-					? __( '此付款方式由 mowp 處理但詳情卡尚未實作。', 'mo-ectools' )
-					: __( '此付款方式未由 mowp 處理，無額外資訊可顯示。', 'mo-ectools' );
+				$is_ours = str_starts_with( $method, 'moksafowo_' ) || 'moksafowo-linepay' === $method;
+				$note    = $is_ours
+					? __( '此付款方式由本外掛處理，但尚無額外詳情可顯示。', 'mo-ectools' )
+					: __( '此付款方式非由本外掛處理，無額外資訊可顯示。', 'mo-ectools' );
 				return sprintf(
 					'<p><strong>%s</strong>%s</p><p style="color:#646970;font-size:12px;">%s</p>',
 					esc_html__( '付款方式：', 'mo-ectools' ),
@@ -266,19 +266,19 @@ final class OrderInfoLayout {
 			if ( empty( $methods ) ) {
 				return '<p style="color:#646970;font-size:12px;">' . esc_html__( '此訂單無運送（虛擬商品 / 自取）。', 'mo-ectools' ) . '</p>';
 			}
-			// 區分「mowp 物流模組但 card 未實作」vs「完全外掛 method」
-			$is_mowp = false;
+			// 區分「本外掛物流模組但 card 未實作」vs「完全外掛 method」
+			$is_ours = false;
 			$titles  = [];
 			foreach ( $methods as $m ) {
 				$mid = (string) $m->get_method_id();
 				if ( str_starts_with( $mid, 'moksafowo_' ) ) {
-					$is_mowp = true;
+					$is_ours = true;
 				}
 				$titles[] = $m->get_name();
 			}
-			$note = $is_mowp
-				? __( '此物流由 mowp 處理但詳情卡尚未實作（例如 PAYUNi 物流）。', 'mo-ectools' )
-				: __( '此運送方式未由 mowp 物流模組處理。', 'mo-ectools' );
+			$note = $is_ours
+				? __( '此物流由本外掛處理，但尚無額外詳情可顯示。', 'mo-ectools' )
+				: __( '此運送方式非由本外掛的物流模組處理。', 'mo-ectools' );
 			return sprintf(
 				'<p><strong>%s</strong>%s</p><p style="color:#646970;font-size:12px;">%s</p>',
 				esc_html__( '運送方式：', 'mo-ectools' ),
@@ -300,14 +300,14 @@ final class OrderInfoLayout {
 			return;
 		}
 		$css = '#moksafowo_order_info .inside { padding: 0 12px 12px; }'
-			. '.mowp-order-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }'
-			. '.mowp-order-info-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 16px; min-width: 0; }'
-			. '.mowp-order-info-card__title { margin: 0 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #1d2327; letter-spacing: 0.6px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }'
-			. '.mowp-order-info-card p { margin: 0.3em 0; font-size: 13px; word-break: break-word; }'
-			. '.mowp-order-info-card p:first-of-type { margin-top: 0; }'
-			. '.mowp-order-info-card .button { margin-top: 6px; }'
-			. '@media (max-width: 1280px) { .mowp-order-info-grid { grid-template-columns: 1fr 1fr; } }'
-			. '@media (max-width: 782px) { .mowp-order-info-grid { grid-template-columns: 1fr; } }';
+			. '.moksafowo-order-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }'
+			. '.moksafowo-order-info-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 14px 16px; min-width: 0; }'
+			. '.moksafowo-order-info-card__title { margin: 0 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #1d2327; letter-spacing: 0.6px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }'
+			. '.moksafowo-order-info-card p { margin: 0.3em 0; font-size: 13px; word-break: break-word; }'
+			. '.moksafowo-order-info-card p:first-of-type { margin-top: 0; }'
+			. '.moksafowo-order-info-card .button { margin-top: 6px; }'
+			. '@media (max-width: 1280px) { .moksafowo-order-info-grid { grid-template-columns: 1fr 1fr; } }'
+			. '@media (max-width: 782px) { .moksafowo-order-info-grid { grid-template-columns: 1fr; } }';
 		wp_register_style( 'moksafowo-order-info-layout', false, [], MOKSAFOWO_VERSION );
 		wp_enqueue_style( 'moksafowo-order-info-layout' );
 		wp_add_inline_style( 'moksafowo-order-info-layout', $css );

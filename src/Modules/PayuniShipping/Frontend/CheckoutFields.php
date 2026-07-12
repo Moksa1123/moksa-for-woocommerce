@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Frontend;
+namespace Moksafowo\Modules\PayuniShipping\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 

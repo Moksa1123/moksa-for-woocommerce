@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Paynow\Gateways;
+namespace Moksafowo\Modules\Paynow\Gateways;
 
 defined( 'ABSPATH' ) || exit;
 

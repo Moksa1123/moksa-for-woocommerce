@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Frontend;
+namespace Moksafowo\Modules\Shared\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,7 +23,7 @@ final class PaymentInfoBox {
 			add_filter(
 				'woocommerce_email_classes',
 				static function ( array $emails ): array {
-					$emails['MO_Payment_Info'] = new \MoksaWeb\Mowc\Modules\Shared\Email\PaymentInfoEmail();
+					$emails['MO_Payment_Info'] = new \Moksafowo\Modules\Shared\Email\PaymentInfoEmail();
 					return $emails;
 				}
 			);

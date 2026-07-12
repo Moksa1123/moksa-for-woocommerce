@@ -2,10 +2,10 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

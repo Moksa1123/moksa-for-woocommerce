@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay\Api;
+namespace Moksafowo\Modules\Newebpay\Api;
 
-use MoksaWeb\Mowc\Crypto\Aes;
+use Moksafowo\Crypto\Aes;
 
 defined( 'ABSPATH' ) || exit;
 

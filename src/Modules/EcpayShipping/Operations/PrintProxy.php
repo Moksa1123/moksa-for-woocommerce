@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Operations;
+namespace Moksafowo\Modules\EcpayShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\Shared\Frontend\Interstitial;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\Shared\Frontend\Interstitial;
+use Moksafowo\Modules\EcpayShipping\Module;
 
 defined( 'ABSPATH' ) || exit;
 

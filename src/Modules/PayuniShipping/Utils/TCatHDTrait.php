@@ -1,5 +1,5 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Utils;
+namespace Moksafowo\Modules\PayuniShipping\Utils;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,9 +30,8 @@ trait TCatHDTrait {
 			$is_available = false;
 		}
 
-		// WC_Shipping_Method::is_available() 擴充契約規定的 filter tag,見 CVSTrait.php 同一模式的完整說明。
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core `WC_Shipping_Method::is_available()` extension contract; tag name mandated by WooCommerce itself, not plugin-defined.
-		return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this );
+		// 同 CVSTrait:完全覆寫 is_available(),走自家前綴 tag。
+		return apply_filters( 'moksafowo_shipping_' . $this->id . '_is_available', $is_available, $package, $this );
 	}
 
 	public function init() {

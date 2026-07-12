@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Api;
+namespace Moksafowo\Modules\Linepay\Api;
 
-use MoksaWeb\Mowc\Modules\Linepay\Constants;
+use Moksafowo\Modules\Linepay\Constants;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ final class Url {
 	}
 
 	public static function request_host(): string {
-		switch ( \MoksaWeb\Mowc\Modules\Linepay\LinePay::$env_status ) {
+		switch ( \Moksafowo\Modules\Linepay\LinePay::$env_status ) {
 			case Constants::ENV_SANDBOX:
 				return Constants::HOST_SANDBOX;
 			case Constants::ENV_REAL:

@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay\Blocks;
+namespace Moksafowo\Modules\Linepay\Blocks;
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
-use MoksaWeb\Mowc\Modules\Linepay\Constants;
+use Moksafowo\Modules\Linepay\Constants;
 
 defined( 'ABSPATH' ) || exit;
 

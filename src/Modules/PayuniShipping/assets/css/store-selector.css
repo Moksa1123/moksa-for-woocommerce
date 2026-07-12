@@ -45,7 +45,7 @@
 /* Block：host 現在塞進 .wc-block-components-checkout-step 內部，繼承 step 的
    card padding + border。不需自己邊框 — 但保留留白讓 store info 跟上方 shipping
    tabs 有呼吸距離。 */
-.mowp-payuni-block-store {
+.moksafowo-payuni-block-store {
 	display: block;
 	box-sizing: border-box;
 	padding: 12px 14px;
@@ -81,24 +81,24 @@
    Block 的「使用相同地址接收帳單」勾選邏輯跟 Classic 相反：勾選=同地址（不顯示
    billing form），取消=不同地址（billing form 顯示）。當 user 取消勾選時，billing
    form 顯示出來，跟 shipping 同樣只該保留姓名電話。 */
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__country,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_1,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2-toggle,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__city,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__state,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__postcode,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__company,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__country,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_1,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2-toggle,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__city,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__state,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__postcode,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__company,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .moksafowo-tw-district-wrapper,
-body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .moksafowo-tw-district-wrapper {
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__country,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_1,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__address_2-toggle,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__city,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__state,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__postcode,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form__company,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__country,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_1,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__address_2-toggle,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__city,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__state,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__postcode,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__company,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .moksafowo-tw-district-wrapper,
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .moksafowo-tw-district-wrapper {
 	display: none !important;
 }
 
@@ -108,7 +108,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 
 .moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
 .moksafowo-payuni-store-selector .moksafowo-payuni-no-store,
-.mowp-payuni-block-store > div {
+.moksafowo-payuni-block-store > div {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -117,13 +117,13 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 }
 
 .moksafowo-payuni-selected-store .store-info,
-.mowp-payuni-block-store .mowp-payuni-block-store__name {
+.moksafowo-payuni-block-store .moksafowo-payuni-block-store__name {
 	flex: 1 1 auto;
 	min-width: 0;
 }
 
 .moksafowo-payuni-selected-store .store-name,
-.mowp-payuni-block-store__title {
+.moksafowo-payuni-block-store__title {
 	font-size: 14px;
 	font-weight: 600;
 	color: #1d2327;
@@ -131,7 +131,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 }
 
 .moksafowo-payuni-selected-store .store-address,
-.mowp-payuni-block-store__address {
+.moksafowo-payuni-block-store__address {
 	display: block;
 	font-size: 12px;
 	color: #50575e;
@@ -140,7 +140,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 }
 
 .moksafowo-payuni-selected-store .store-meta,
-.mowp-payuni-block-store__meta {
+.moksafowo-payuni-block-store__meta {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 6px;
@@ -149,7 +149,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 
 .moksafowo-payuni-selected-store .store-id,
 .moksafowo-payuni-selected-store .store-outside,
-.mowp-payuni-block-store__id {
+.moksafowo-payuni-block-store__id {
 	display: inline-block;
 	padding: 1px 8px;
 	background: #fff;
@@ -167,13 +167,13 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 }
 
 .moksafowo-payuni-no-store p,
-.mowp-payuni-block-store__placeholder {
+.moksafowo-payuni-block-store__placeholder {
 	margin: 0;
 	color: #646970;
 	font-size: 13px;
 }
 
-.mowp-payuni-block-store__info {
+.moksafowo-payuni-block-store__info {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -182,7 +182,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 
 /* 主動覆寫主題的 .button — Blocksy 等的 50px 高大按鈕跟選店卡片視覺不協調 */
 .moksafowo-payuni-store-selector .moksafowo-payuni-store-map-btn,
-.mowp-payuni-block-store .mowp-payuni-block-store__btn {
+.moksafowo-payuni-block-store .moksafowo-payuni-block-store__btn {
 	flex: 0 0 auto;
 	cursor: pointer;
 	min-height: auto;
@@ -193,7 +193,7 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 }
 
 .moksafowo-payuni-store-selector .moksafowo-payuni-store-map-btn:focus-visible,
-.mowp-payuni-block-store .mowp-payuni-block-store__btn:focus-visible {
+.moksafowo-payuni-block-store .moksafowo-payuni-block-store__btn:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
 }
@@ -201,13 +201,13 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 @container (max-width: 260px) {
 	.moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
 	.moksafowo-payuni-store-selector .moksafowo-payuni-no-store,
-	.mowp-payuni-block-store > div {
+	.moksafowo-payuni-block-store > div {
 		flex-direction: column;
 		align-items: flex-start;
 	}
 
 	.moksafowo-payuni-selected-store .store-info,
-	.mowp-payuni-block-store .mowp-payuni-block-store__name {
+	.moksafowo-payuni-block-store .moksafowo-payuni-block-store__name {
 		width: 100%;
 	}
 }
@@ -216,13 +216,13 @@ body.mowp-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-blo
 	@media (max-width: 360px) {
 		.moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
 		.moksafowo-payuni-store-selector .moksafowo-payuni-no-store,
-		.mowp-payuni-block-store > div {
+		.moksafowo-payuni-block-store > div {
 			flex-direction: column;
 			align-items: flex-start;
 		}
 
 		.moksafowo-payuni-selected-store .store-info,
-		.mowp-payuni-block-store .mowp-payuni-block-store__name {
+		.moksafowo-payuni-block-store .moksafowo-payuni-block-store__name {
 			width: 100%;
 		}
 	}

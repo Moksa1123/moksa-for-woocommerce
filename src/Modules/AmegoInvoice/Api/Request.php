@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\AmegoInvoice\Api;
+namespace Moksafowo\Modules\AmegoInvoice\Api;
 
 defined( 'ABSPATH' ) || exit;
 

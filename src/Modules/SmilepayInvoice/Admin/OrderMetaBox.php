@@ -1,12 +1,12 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayInvoice\Admin;
+namespace Moksafowo\Modules\SmilepayInvoice\Admin;
 
-use MoksaWeb\Mowc\Modules\Shared\Invoice\AbstractAdminMetaBox;
-use MoksaWeb\Mowc\Modules\SmilepayInvoice\Operations\Invalid;
-use MoksaWeb\Mowc\Modules\SmilepayInvoice\Operations\Issue;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shared\Invoice\AbstractAdminMetaBox;
+use Moksafowo\Modules\SmilepayInvoice\Operations\Invalid;
+use Moksafowo\Modules\SmilepayInvoice\Operations\Issue;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

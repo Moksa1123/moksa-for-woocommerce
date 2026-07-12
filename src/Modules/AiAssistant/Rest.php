@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\AiAssistant;
+namespace Moksafowo\Modules\AiAssistant;
 
 defined( 'ABSPATH' ) || exit;
 

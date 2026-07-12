@@ -1,15 +1,15 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayInvoice\Admin;
+namespace Moksafowo\Modules\EcpayInvoice\Admin;
 
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Allowance;
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Invalid;
-use MoksaWeb\Mowc\Modules\EcpayInvoice\Operations\Issue;
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\AdminIssueForm;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\InvoiceChannels;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EcpayInvoice\Operations\Allowance;
+use Moksafowo\Modules\EcpayInvoice\Operations\Invalid;
+use Moksafowo\Modules\EcpayInvoice\Operations\Issue;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Modules\Shared\Invoice\AdminIssueForm;
+use Moksafowo\Modules\Shared\Invoice\InvoiceChannels;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,7 +35,7 @@ final class OrderMetaBox {
 
 	public static function hide_invoice_in_admin_shipping( array $fields ): array {
 		foreach ( array_keys( $fields ) as $key ) {
-			if ( str_contains( (string) $key, 'mowp/invoice' ) ) {
+			if ( str_contains( (string) $key, 'moksafowo/invoice' ) ) {
 				unset( $fields[ $key ] );
 			}
 		}

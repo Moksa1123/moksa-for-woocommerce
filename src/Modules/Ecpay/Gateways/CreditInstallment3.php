@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Ecpay\Gateways;
+namespace Moksafowo\Modules\Ecpay\Gateways;
 
 defined( 'ABSPATH' ) || exit;
 

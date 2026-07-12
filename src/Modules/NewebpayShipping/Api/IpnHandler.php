@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Api;
+namespace Moksafowo\Modules\NewebpayShipping\Api;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,7 +69,7 @@ final class IpnHandler {
 		// NPA-B58 Retld → StatusMapper 轉 WC status
 		$retld      = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
 		$ret_string = (string) ( $data['RetString'] ?? '' );
-		$mapped     = '' !== $retld ? \MoksaWeb\Mowc\Modules\NewebpayShipping\Operations\StatusMapper::map( $retld ) : null;
+		$mapped     = '' !== $retld ? \Moksafowo\Modules\NewebpayShipping\Operations\StatusMapper::map( $retld ) : null;
 
 		if ( '' !== $lgs_no ) {
 			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_LGS_NO, $lgs_no );

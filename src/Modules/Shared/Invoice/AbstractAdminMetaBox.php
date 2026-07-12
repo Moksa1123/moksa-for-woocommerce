@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Invoice;
+namespace Moksafowo\Modules\Shared\Invoice;
 
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -78,7 +78,7 @@ abstract class AbstractAdminMetaBox {
 
 	public static function hide_invoice_in_admin_shipping( array $fields ): array {
 		foreach ( array_keys( $fields ) as $key ) {
-			if ( str_contains( (string) $key, 'mowp/invoice' ) ) {
+			if ( str_contains( (string) $key, 'moksafowo/invoice' ) ) {
 				unset( $fields[ $key ] );
 			}
 		}

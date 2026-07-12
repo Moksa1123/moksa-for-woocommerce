@@ -6,7 +6,7 @@
  *   2. 點擊 → AJAX query → render 狀態 + 動態按鈕（依 ECPay 回傳的 Status）
  *   3. 點 [取消授權 / 請款 / 退款] → confirm dialog → AJAX action → 重 query 刷新
  *
- * 對標 RY pro pattern，但走 mowp 自己的 nonce / capability check。
+ * 對標 RY pro pattern，但走本外掛自己的 nonce / capability check。
  */
 (function ($) {
   'use strict';

@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\CustomerService;
+namespace Moksafowo\Modules\CustomerService;
 
 defined( 'ABSPATH' ) || exit;
 

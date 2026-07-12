@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Operations;
+namespace Moksafowo\Modules\EcpayShipping\Operations;
 
 defined( 'ABSPATH' ) || exit;
 

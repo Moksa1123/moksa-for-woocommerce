@@ -1,6 +1,6 @@
-// WC settings 沒提供 wrapper hook，用 JS 把 h2 + p + form-table 三組元素打包成 .mowp-section-card
+// WC settings 沒提供 wrapper hook，用 JS 把 h2 + p + form-table 三組元素打包成 .moksafowo-section-card
 (function(){
-	var STORAGE_KEY = 'mowp_settings_collapsed_v1';
+	var STORAGE_KEY = 'moksafowo_settings_collapsed_v1';
 	function loadCollapsed(){
 		try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e){ return {}; }
 	}
@@ -11,7 +11,7 @@
 		var collapsedState = loadCollapsed();
 		var heads = document.querySelectorAll('#mainform h2');
 		heads.forEach(function(h2, idx){
-			if(h2.classList.contains('screen-reader-text') || h2.closest('.mowp-section-card') || h2.closest('.mowp-intro') || h2.closest('.mowp-subsection-banner')) return;
+			if(h2.classList.contains('screen-reader-text') || h2.closest('.moksafowo-section-card') || h2.closest('.moksafowo-intro') || h2.closest('.moksafowo-subsection-banner')) return;
 			// 把 h2 內的文字節點包進 span — accent line 跟著文字寬度延伸
 			if(!h2.querySelector('.moksafowo-h2-text')){
 				var span = document.createElement('span');
@@ -27,7 +27,7 @@
 				h2.appendChild(chev);
 			}
 			var card = document.createElement('div');
-			card.className = 'mowp-section-card';
+			card.className = 'moksafowo-section-card';
 			// 用 heading 文字當 stable key（i18n 後仍同名）
 			var key = h2.querySelector('.moksafowo-h2-text').textContent.trim();
 			card.setAttribute('data-moksafowo-key', key);
@@ -55,7 +55,7 @@
 			});
 			var next = card.nextElementSibling;
 			while(next){
-				var isDesc  = (next.tagName === 'P' || next.tagName === 'DIV') && !next.classList.contains('mowp-section-card');
+				var isDesc  = (next.tagName === 'P' || next.tagName === 'DIV') && !next.classList.contains('moksafowo-section-card');
 				var isTable = next.tagName === 'TABLE' && /\bform-table\b/.test(next.className);
 				if(!isDesc && !isTable) break;
 				var temp = next.nextElementSibling;

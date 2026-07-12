@@ -1,15 +1,15 @@
 <?php
 
 
-namespace MoksaWeb\Mowc\Modules\Payuni\Settings;
+namespace Moksafowo\Modules\Payuni\Settings;
 
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment12;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment18;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment24;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment3;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment30;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment6;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\CreditInstallment9;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment12;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment18;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment24;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment3;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment30;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment6;
+use Moksafowo\Modules\Payuni\Gateways\CreditInstallment9;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\AmegoInvoice\Admin;
+namespace Moksafowo\Modules\AmegoInvoice\Admin;
 
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Allowance;
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Invalid;
-use MoksaWeb\Mowc\Modules\AmegoInvoice\Operations\Issue;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\AbstractAdminMetaBox;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\AmegoInvoice\Operations\Allowance;
+use Moksafowo\Modules\AmegoInvoice\Operations\Invalid;
+use Moksafowo\Modules\AmegoInvoice\Operations\Issue;
+use Moksafowo\Modules\Shared\Invoice\AbstractAdminMetaBox;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

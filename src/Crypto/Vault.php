@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Crypto;
+namespace Moksafowo\Crypto;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -108,12 +108,10 @@ final class Vault {
 	}
 
 	private static function master_key(): string {
-		// MOWP_VAULT_KEY kept as fallback for sites that defined the legacy constant before the rename.
 		$source = defined( 'MOKSAFOWO_VAULT_KEY' ) ? (string) MOKSAFOWO_VAULT_KEY
-			: ( defined( 'MOWP_VAULT_KEY' ) ? (string) MOWP_VAULT_KEY
 			: ( defined( 'AUTH_KEY' ) ? (string) AUTH_KEY
 			: ( defined( 'SECURE_AUTH_KEY' ) ? (string) SECURE_AUTH_KEY
-			: '' ) ) );
+			: '' ) );
 		if ( '' === $source ) {
 			throw new \RuntimeException( 'Vault: no master key (define AUTH_KEY in wp-config.php).' );
 		}

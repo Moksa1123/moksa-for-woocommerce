@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Admin;
+namespace Moksafowo\Modules\SmilepayShipping\Admin;
 
-use MoksaWeb\Mowc\Modules\Shared\Admin\OrderInfoLayout;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Module;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Operations\CreateOrder;
+use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
+use Moksafowo\Modules\SmilepayShipping\Module;
+use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -99,7 +99,7 @@ final class OrderMetaBox {
 						$temp            = isset( $r['temp'] ) ? (int) $r['temp'] : 0;
 						$created_at      = (string) ( $r['created_at'] ?? '' );
 						$status_msg      = (string) ( $r['status_msg'] ?? '' );
-						$temp_label      = $temp ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $temp ) : '';
+						$temp_label      = $temp ? \Moksafowo\Modules\Shipping\Temp\ProductTemp::label( $temp ) : '';
 						$temp_pill_color = match ( $temp ) {
 							2       => [ '#dbeafe', '#1e40af' ],
 							3       => [ '#ede9fe', '#6d28d9' ],

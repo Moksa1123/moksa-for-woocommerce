@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Compatibility;
+namespace Moksafowo\Compatibility;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EzpayInvoice\Admin;
+namespace Moksafowo\Modules\EzpayInvoice\Admin;
 
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Allowance;
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Invalid;
-use MoksaWeb\Mowc\Modules\EzpayInvoice\Operations\Issue;
-use MoksaWeb\Mowc\Modules\Shared\Invoice\AbstractAdminMetaBox;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\EzpayInvoice\Operations\Allowance;
+use Moksafowo\Modules\EzpayInvoice\Operations\Invalid;
+use Moksafowo\Modules\EzpayInvoice\Operations\Issue;
+use Moksafowo\Modules\Shared\Invoice\AbstractAdminMetaBox;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

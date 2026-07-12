@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Webhook;
+namespace Moksafowo\Modules\PayuniShipping\Webhook;
 
-use MoksaWeb\Mowc\Modules\Shipping\Webhook\AbstractStatusMapper;
+use Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper;
 
 defined( 'ABSPATH' ) || exit;
 

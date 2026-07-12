@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Api;
+namespace Moksafowo\Modules\Shared\Api;
 
-use MoksaWeb\Mowc\Logging\Logger;
+use Moksafowo\Logging\Logger;
 
 defined( 'ABSPATH' ) || exit;
 

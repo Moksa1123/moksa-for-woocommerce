@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shared\Gateways;
+namespace Moksafowo\Modules\Shared\Gateways;
 
 defined( 'ABSPATH' ) || exit;
 

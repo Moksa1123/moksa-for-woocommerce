@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Paynow;
+namespace Moksafowo\Modules\Paynow;
 
 defined( 'ABSPATH' ) || exit;
 

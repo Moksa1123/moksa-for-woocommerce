@@ -12,7 +12,7 @@
 		return;
 	}
 	const cfg = window.moksafowo_payuni_block;
-	const HOST_ID = 'mowp-payuni-block-store-host';
+	const HOST_ID = 'moksafowo-payuni-block-store-host';
 
 	function isCvs( methodId ) {
 		return typeof methodId === 'string' && methodId.indexOf( cfg.cvs_method_prefix ) !== -1;
@@ -76,7 +76,7 @@
 			return;
 		}
 		host.classList.toggle( 'is-selected', !! ( store && store.id ) );
-		const rightHtml = '<button type="button" class="mowp-cvs-store__btn button wp-element-button">'
+		const rightHtml = '<button type="button" class="moksafowo-cvs-store__btn button wp-element-button">'
 			+ M.escapeHtml( store && store.id ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
 		host.innerHTML = M.cardHtml( {
 			store: store,
@@ -84,7 +84,7 @@
 			noneText: cfg.i18n.none,
 			rightHtml: rightHtml,
 		} );
-		const btn = host.querySelector( '.mowp-cvs-store__btn' );
+		const btn = host.querySelector( '.moksafowo-cvs-store__btn' );
 		if ( btn ) {
 			btn.addEventListener( 'click', onOpenMap );
 		}
@@ -166,7 +166,7 @@
 	}
 
 	function setBodyCvsFlag( on ) {
-		document.body.classList.toggle( 'mowp-cvs-shipping-active', !! on );
+		document.body.classList.toggle( 'moksafowo-cvs-shipping-active', !! on );
 	}
 
 	let renderRequestId = 0;

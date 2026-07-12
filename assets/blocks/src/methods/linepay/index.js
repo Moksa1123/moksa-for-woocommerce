@@ -3,7 +3,7 @@
  *
  * Server side: src/Modules/Linepay/Blocks/PaymentMethodType.php
  *
- * @package mowp
+ * @package Moksafowo
  */
 
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';

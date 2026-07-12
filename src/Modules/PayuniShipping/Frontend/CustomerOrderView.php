@@ -1,15 +1,15 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\PayuniShipping\Frontend;
+namespace Moksafowo\Modules\PayuniShipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\Address\TwAddress;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Operations\CreateOrderUnified;
-use MoksaWeb\Mowc\Modules\PayuniShipping\PayuniShipping;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Utils\ShipType;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Address\TwAddress;
+use Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -160,7 +160,7 @@ final class CustomerOrderView {
 					$ship_trade_no = (string) ( $r['ship_trade_no'] ?? '' );
 					$odno          = (string) ( $r['odno'] ?? '' );
 					$rec_temp      = (int) ( $r['temp'] ?? 0 );
-					$temp_label    = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
+					$temp_label    = $rec_temp > 0 ? \Moksafowo\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_payuni_record( $r );
 					?>
 					<div class="moksafowo-shipping-card__row">

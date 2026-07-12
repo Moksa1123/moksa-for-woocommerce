@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Paynow\Api;
+namespace Moksafowo\Modules\Paynow\Api;
 
-use MoksaWeb\Mowc\Http\Response;
-use MoksaWeb\Mowc\Order\Lookup;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Http\Response;
+use Moksafowo\Order\Lookup;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -87,7 +87,7 @@ final class IpnHandler {
 		self::apply_status( $order, $pay_type, $is_success, $posted );
 		$order->save();
 
-		\MoksaWeb\Mowc\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
 
 		self::reply( 200, 'OK' );
 	}
@@ -292,7 +292,7 @@ final class IpnHandler {
 	}
 
 	private static function pay_type_label( string $type ): string {
-		return \MoksaWeb\Mowc\Modules\Paynow\PaymentTypeCatalog::label( $type, $type );
+		return \Moksafowo\Modules\Paynow\PaymentTypeCatalog::label( $type, $type );
 	}
 
 	private static function reply( int $status, string $body ): void {

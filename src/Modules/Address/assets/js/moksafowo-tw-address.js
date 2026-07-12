@@ -1,5 +1,5 @@
 /**
- * mowp 台灣地址下拉 — Classic checkout 動態 city dropdown。
+ * 台灣地址下拉 — Classic checkout 動態 city dropdown。
  *
  * 流程：
  *   1. 切換 country → state，state_select / state_changing 事件

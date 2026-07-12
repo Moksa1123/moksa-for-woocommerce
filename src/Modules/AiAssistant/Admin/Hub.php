@@ -2,12 +2,12 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\AiAssistant\Admin;
+namespace Moksafowo\Modules\AiAssistant\Admin;
 
-use MoksaWeb\Mowc\Modules\AiAssistant\Config;
-use MoksaWeb\Mowc\Modules\CustomerService\Admin\Inbox;
-use MoksaWeb\Mowc\Modules\CustomerService\Schema;
-use MoksaWeb\Mowc\Modules\CustomerService\Threads;
+use Moksafowo\Modules\AiAssistant\Config;
+use Moksafowo\Modules\CustomerService\Admin\Inbox;
+use Moksafowo\Modules\CustomerService\Schema;
+use Moksafowo\Modules\CustomerService\Threads;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -125,13 +125,13 @@ final class Hub {
 	}
 
 	private static function render_mcp_help(): void {
-		if ( ! \MoksaWeb\Mowc\Mcp\Server::enabled() ) {
+		if ( ! \Moksafowo\Mcp\Server::enabled() ) {
 			return;
 		}
 		echo '<div class="moksafowo-ai-card">';
 		echo '<p class="moksafowo-ai-card-t">' . esc_html__( '如何用 MCP 連線', 'mo-ectools' ) . '</p>';
 		echo '<p class="moksafowo-ai-card-d">' . esc_html__( '外部 AI 工具(mcp-remote / Claude 等標準 MCP 客戶端)可直接連到以下端點,不需橋接器(本端點為 stateless,免 session）:', 'mo-ectools' ) . '</p>';
-		echo '<p><code>' . esc_html( \MoksaWeb\Mowc\Mcp\Server::endpoint_url() ) . '</code></p>';
+		echo '<p><code>' . esc_html( \Moksafowo\Mcp\Server::endpoint_url() ) . '</code></p>';
 		echo '<ol class="moksafowo-ai-card-d" style="margin:6px 0 0 18px;line-height:1.9;">';
 		echo '<li>' . wp_kses_post( __( '用一個有「編輯訂單」權限的帳號(建議<strong>專用受限帳號,不要用管理員</strong>),到「使用者 → 個人資料 → 應用程式密碼」建立一組密碼。', 'mo-ectools' ) ) . '</li>';
 		echo '<li>' . wp_kses_post( __( '把「帳號:應用程式密碼(去掉空格)」做 Base64,當成 <code>Authorization: Basic &lt;base64&gt;</code> 標頭。', 'mo-ectools' ) ) . '</li>';
@@ -202,7 +202,7 @@ final class Hub {
 				'desc'    => sprintf(
 					/* translators: %s: MCP 端點網址 */
 					__( '開啟後,外部 AI 工具可透過 MCP 連到本站查訂單 / 報表(需用 WordPress 應用程式密碼登入,權限同「編輯訂單」)。端點:%s', 'mo-ectools' ),
-					'<code>' . esc_url( \MoksaWeb\Mowc\Mcp\Server::endpoint_url() ) . '</code>'
+					'<code>' . esc_url( \Moksafowo\Mcp\Server::endpoint_url() ) . '</code>'
 				),
 			),
 			array(

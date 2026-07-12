@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Shortcodes;
+namespace Moksafowo\Modules\Shipping\Shortcodes;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Smilepay\Api;
+namespace Moksafowo\Modules\Smilepay\Api;
 
-use MoksaWeb\Mowc\Http\Request as HttpRequest;
+use Moksafowo\Http\Request as HttpRequest;
 
 defined( 'ABSPATH' ) || exit;
 

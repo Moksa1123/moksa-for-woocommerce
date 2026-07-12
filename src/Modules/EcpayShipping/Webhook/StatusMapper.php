@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Webhook;
+namespace Moksafowo\Modules\EcpayShipping\Webhook;
 
-use MoksaWeb\Mowc\Modules\Shipping\Webhook\AbstractStatusMapper;
+use Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper;
 
 defined( 'ABSPATH' ) || exit;
 

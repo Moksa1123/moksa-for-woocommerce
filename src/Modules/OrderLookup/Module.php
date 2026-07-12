@@ -2,12 +2,12 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\AbstractModule;
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Backfill;
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Indexer;
-use MoksaWeb\Mowc\Modules\OrderLookup\Index\Table;
+use Moksafowo\Modules\AbstractModule;
+use Moksafowo\Modules\OrderLookup\Index\Backfill;
+use Moksafowo\Modules\OrderLookup\Index\Indexer;
+use Moksafowo\Modules\OrderLookup\Index\Table;
 
 defined( 'ABSPATH' ) || exit;
 

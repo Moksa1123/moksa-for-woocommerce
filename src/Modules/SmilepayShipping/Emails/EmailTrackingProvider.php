@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Emails;
+namespace Moksafowo\Modules\SmilepayShipping\Emails;
 
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Module;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Modules\SmilepayShipping\Module;
+use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Newebpay;
+namespace Moksafowo\Modules\Newebpay;
 
 defined( 'ABSPATH' ) || exit;
 

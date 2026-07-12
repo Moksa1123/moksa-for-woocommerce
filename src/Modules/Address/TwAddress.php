@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Address;
+namespace Moksafowo\Modules\Address;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -352,7 +352,7 @@ final class TwAddress {
 		}
 		$city = (string) $order->get_shipping_city();
 		if ( '' === $city ) {
-			$city = (string) $order->get_meta( '_wc_shipping/mowp/district' );
+			$city = (string) $order->get_meta( '_wc_shipping/moksafowo/district' );
 		}
 		$state_city = trim( self::state_label( (string) $order->get_shipping_state() ) . ' ' . $city );
 		if ( '' !== $state_city ) {
@@ -369,7 +369,7 @@ final class TwAddress {
 		// 鄉鎮市區落地於 WC 標準 shipping_city；city 空才退用 block 結帳的 district 附加欄位。
 		$district = (string) $order->get_shipping_city();
 		if ( '' === $district ) {
-			$district = (string) $order->get_meta( '_wc_shipping/mowp/district' );
+			$district = (string) $order->get_meta( '_wc_shipping/moksafowo/district' );
 		}
 		$parts = array_filter(
 			[

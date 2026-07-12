@@ -2,12 +2,12 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\OrderLookup;
+namespace Moksafowo\Modules\OrderLookup;
 
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\CreateOrder as EcpayCreate;
-use MoksaWeb\Mowc\Modules\NewebpayShipping\Operations\CreateShipment as NewebpayCreate;
-use MoksaWeb\Mowc\Modules\PayuniShipping\Operations\CreateOrderUnified as PayuniCreate;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Operations\CreateOrder as SmilepayCreate;
+use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder as EcpayCreate;
+use Moksafowo\Modules\NewebpayShipping\Operations\CreateShipment as NewebpayCreate;
+use Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified as PayuniCreate;
+use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder as SmilepayCreate;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,7 +60,7 @@ final class ShipmentOps {
 	 */
 	private static function create_for( string $provider, \WC_Order $order ): array {
 		if ( 'payuni' === $provider ) {
-			$class = 'MoksaWeb\\Mowc\\Modules\\PayuniShipping\\Api\\ShippingRequest';
+			$class = 'Moksafowo\\Modules\\PayuniShipping\\Api\\ShippingRequest';
 			if ( ! class_exists( $class ) ) {
 				return array(
 					'ok'      => false,

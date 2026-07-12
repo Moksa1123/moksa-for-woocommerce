@@ -1,14 +1,14 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Linepay;
+namespace Moksafowo\Modules\Linepay;
 
 use Exception;
-use MoksaWeb\Mowc\Logging\Logger;
-use MoksaWeb\Mowc\Modules\Linepay\Admin\OrderMetaBox;
-use MoksaWeb\Mowc\Modules\Linepay\Api\PaymentRequest;
-use MoksaWeb\Mowc\Modules\Linepay\Api\PaymentResponse;
-use MoksaWeb\Mowc\Modules\Linepay\Gateways\Credit;
+use Moksafowo\Logging\Logger;
+use Moksafowo\Modules\Linepay\Admin\OrderMetaBox;
+use Moksafowo\Modules\Linepay\Api\PaymentRequest;
+use Moksafowo\Modules\Linepay\Api\PaymentResponse;
+use Moksafowo\Modules\Linepay\Gateways\Credit;
 
 defined( 'ABSPATH' ) || exit;
 

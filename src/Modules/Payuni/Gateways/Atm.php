@@ -1,7 +1,7 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Gateways;
+namespace Moksafowo\Modules\Payuni\Gateways;
 
-use MoksaWeb\Mowc\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
 defined( 'ABSPATH' ) || exit;
 

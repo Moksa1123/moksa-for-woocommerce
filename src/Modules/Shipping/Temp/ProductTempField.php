@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Temp;
+namespace Moksafowo\Modules\Shipping\Temp;
 
-use MoksaWeb\Mowc\Product\Meta\Keys;
+use Moksafowo\Product\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

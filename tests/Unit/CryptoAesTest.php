@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
-use MoksaWeb\Mowc\Crypto\Aes;
+use Moksafowo\Crypto\Aes;
 use PHPUnit\Framework\TestCase;
 
 final class CryptoAesTest extends TestCase {
@@ -21,12 +21,12 @@ final class CryptoAesTest extends TestCase {
 	}
 
 	public function test_cbc_block_aligned_padding(): void {
-		// 32-byte（剛好整塊）— PKCS#7 應補一整塊（32 bytes of 0x20）
+		// AES block = 16 bytes。32-byte 明文剛好整塊 → PKCS#7 補一整塊（16 bytes of 0x10）。
 		$plain  = str_repeat( 'A', 32 );
 		$cipher = Aes::encrypt_cbc_hex( $plain, self::KEY_32, self::IV_16 );
 		self::assertSame( $plain, Aes::decrypt_cbc_hex( $cipher, self::KEY_32, self::IV_16 ) );
-		// 結果應是 64 bytes (128 hex chars) = 2 個 32-byte block（明文 1 + padding 1）
-		self::assertSame( 128, strlen( $cipher ) );
+		// 48 bytes (96 hex chars) = 3 個 16-byte block（明文 2 + padding 1）
+		self::assertSame( 96, strlen( $cipher ) );
 	}
 
 	public function test_cbc_throws_on_bad_hex(): void {

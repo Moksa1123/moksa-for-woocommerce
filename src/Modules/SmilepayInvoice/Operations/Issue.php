@@ -1,10 +1,10 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayInvoice\Operations;
+namespace Moksafowo\Modules\SmilepayInvoice\Operations;
 
-use MoksaWeb\Mowc\Modules\SmilepayInvoice\Api\Helper;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\SmilepayInvoice\Api\Helper;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 

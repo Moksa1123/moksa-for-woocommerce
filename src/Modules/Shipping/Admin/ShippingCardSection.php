@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Shipping\Admin;
+namespace Moksafowo\Modules\Shipping\Admin;
 
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -90,8 +90,8 @@ final class ShippingCardSection {
 	}
 
 	private static function render_payuni_shipping( \WC_Order $order ): string {
-		$mod_meta = '\MoksaWeb\Mowc\Modules\PayuniShipping\Utils\OrderMeta';
-		$records  = \MoksaWeb\Mowc\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order );
+		$mod_meta = '\Moksafowo\Modules\PayuniShipping\Utils\OrderMeta';
+		$records  = \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order );
 		$trade_no = (string) $order->get_meta( $mod_meta::ShipTradeNo );
 		$ship_no  = (string) $order->get_meta( $mod_meta::ShipNo );
 

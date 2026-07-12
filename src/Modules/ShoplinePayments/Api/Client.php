@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\ShoplinePayments\Api;
+namespace Moksafowo\Modules\ShoplinePayments\Api;
 
-use MoksaWeb\Mowc\Http\Request;
+use Moksafowo\Http\Request;
 
 defined( 'ABSPATH' ) || exit;
 

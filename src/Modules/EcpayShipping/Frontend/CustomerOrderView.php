@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\EcpayShipping\Frontend;
+namespace Moksafowo\Modules\EcpayShipping\Frontend;
 
-use MoksaWeb\Mowc\Modules\Address\TwAddress;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Module;
-use MoksaWeb\Mowc\Modules\EcpayShipping\Operations\CreateOrder;
-use MoksaWeb\Mowc\Modules\Shipping\Tracking\TrackingLink;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Address\TwAddress;
+use Moksafowo\Modules\EcpayShipping\Module;
+use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -201,7 +201,7 @@ final class CustomerOrderView {
 					$rec_val       = (string) ( $r['cvs_validation_no'] ?? '' );
 					$rec_book      = (string) ( $r['booking_note'] ?? '' );
 					$rec_temp      = (int) ( $r['temp'] ?? 0 );
-					$temp_label    = $rec_temp > 0 ? \MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
+					$temp_label    = $rec_temp > 0 ? \Moksafowo\Modules\Shipping\Temp\ProductTemp::label( $rec_temp ) : '';
 					$tracking_info = TrackingLink::for_ecpay_record( $r );
 					?>
 					<div class="moksafowo-shipping-card__row">

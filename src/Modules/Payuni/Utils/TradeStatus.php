@@ -1,11 +1,11 @@
 <?php
-namespace MoksaWeb\Mowc\Modules\Payuni\Utils;
+namespace Moksafowo\Modules\Payuni\Utils;
 
 defined( 'ABSPATH' ) || exit;
 
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Aftee;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Atm;
-use MoksaWeb\Mowc\Modules\Payuni\Gateways\Cvs;
+use Moksafowo\Modules\Payuni\Gateways\Aftee;
+use Moksafowo\Modules\Payuni\Gateways\Atm;
+use Moksafowo\Modules\Payuni\Gateways\Cvs;
 
 class TradeStatus {
 

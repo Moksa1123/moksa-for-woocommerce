@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MoksaWeb\\Mowc\\": "src/"
+            "Moksafowo\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MoksaWeb\\Mowc\\Tests\\": "tests/"
+            "Moksafowo\\Tests\\": "tests/"
         }
     },
     "scripts": {

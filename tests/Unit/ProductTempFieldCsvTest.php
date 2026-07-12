@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Tests\Unit;
+namespace Moksafowo\Tests\Unit;
 
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTempField;
+use Moksafowo\Modules\Shipping\Temp\ProductTempField;
 use PHPUnit\Framework\TestCase;
 
 /**

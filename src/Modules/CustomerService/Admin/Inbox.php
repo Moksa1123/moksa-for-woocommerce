@@ -2,9 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\CustomerService\Admin;
+namespace Moksafowo\Modules\CustomerService\Admin;
 
-use MoksaWeb\Mowc\Modules\CustomerService\Threads;
+use Moksafowo\Modules\CustomerService\Threads;
 
 defined( 'ABSPATH' ) || exit;
 

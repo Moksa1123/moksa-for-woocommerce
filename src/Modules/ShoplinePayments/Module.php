@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\ShoplinePayments;
+namespace Moksafowo\Modules\ShoplinePayments;
 
-use MoksaWeb\Mowc\Modules\Shared\AbstractGatewayModule;
+use Moksafowo\Modules\Shared\AbstractGatewayModule;
 
 defined( 'ABSPATH' ) || exit;
 

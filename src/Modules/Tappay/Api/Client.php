@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Tappay\Api;
+namespace Moksafowo\Modules\Tappay\Api;
 
-use MoksaWeb\Mowc\Http\Request;
+use Moksafowo\Http\Request;
 
 defined( 'ABSPATH' ) || exit;
 

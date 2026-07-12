@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping\Operations;
+namespace Moksafowo\Modules\NewebpayShipping\Operations;
 
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -126,7 +126,7 @@ CSS;
 <body>
 <div class="print-bar">
 	<button type="button" id="moksafowo-pickup-print"><?php esc_html_e( '列印', 'mo-ectools' ); ?></button>
-	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單由 mowp 自產，貼於包裹上即可。', 'mo-ectools' ); ?></div>
+	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單為系統自產，貼於包裹上即可。', 'mo-ectools' ); ?></div>
 </div>
 		<?php foreach ( $orders as $order ) : ?>
 			<?php

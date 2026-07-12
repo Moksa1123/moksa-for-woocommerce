@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Order\Meta;
+namespace Moksafowo\Order\Meta;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -98,7 +98,7 @@ final class Keys {
 	public const SMILEPAY_PAY_DATE     = '_moksafowo_smilepay_pay_date';
 
 	public const SMILEPAY_PAY_ZG           = '_moksafowo_smilepay_pay_zg';           // Pay_zg 代碼: 1/2/3/4/6/11.
-	public const SMILEPAY_PAY_GATEWAY      = '_moksafowo_smilepay_pay_gateway';      // 送單的 mowp gateway id.
+	public const SMILEPAY_PAY_GATEWAY      = '_moksafowo_smilepay_pay_gateway';      // 送單的本外掛 gateway id.
 	public const SMILEPAY_PAY_SMILEPAY_NO  = '_moksafowo_smilepay_pay_smilepay_no';  // SmilePay 金流追蹤碼 (SmilePayNO / Smseid).
 	public const SMILEPAY_PAY_ATM_BANK_NO  = '_moksafowo_smilepay_pay_atm_bank_no';  // 虛擬帳號銀行代碼.
 	public const SMILEPAY_PAY_ATM_NO       = '_moksafowo_smilepay_pay_atm_no';       // 虛擬帳號.

@@ -1,9 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\NewebpayShipping;
+namespace Moksafowo\Modules\NewebpayShipping;
 
-use MoksaWeb\Mowc\Modules\AbstractModule;
+use Moksafowo\Modules\AbstractModule;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -112,7 +112,7 @@ final class Module extends AbstractModule {
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
 		}
-		$mtn = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
+		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
 			wp_send_json_error( [ 'message' => __( '訂單尚未建單，無 MerchantOrderNo 可查詢。', 'mo-ectools' ) ] );
 		}
@@ -125,7 +125,7 @@ final class Module extends AbstractModule {
 		$retld  = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
 		$mapped = '' !== $retld ? Operations\StatusMapper::map( $retld ) : null;
 		if ( null !== $mapped ) {
-			$order->update_meta_data( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_SHIPPING_STATUS, $mapped['label'] );
+			$order->update_meta_data( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STATUS, $mapped['label'] );
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: status label */
@@ -156,7 +156,7 @@ final class Module extends AbstractModule {
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
 		}
-		$mtn = (string) $order->get_meta( \MoksaWeb\Mowc\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
+		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
 			wp_send_json_error( [ 'message' => __( '訂單尚未建單。', 'mo-ectools' ) ] );
 		}

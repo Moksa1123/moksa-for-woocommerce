@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Smilepay\Gateways;
+namespace Moksafowo\Modules\Smilepay\Gateways;
 
 defined( 'ABSPATH' ) || exit;
 

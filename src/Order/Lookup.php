@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Order;
+namespace Moksafowo\Order;
 
 defined( 'ABSPATH' ) || exit;
 

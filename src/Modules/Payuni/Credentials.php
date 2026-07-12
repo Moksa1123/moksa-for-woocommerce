@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\Payuni;
+namespace Moksafowo\Modules\Payuni;
 
 defined( 'ABSPATH' ) || exit;
 

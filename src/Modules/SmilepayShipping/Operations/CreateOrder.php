@@ -1,14 +1,14 @@
 <?php
 declare( strict_types=1 );
 
-namespace MoksaWeb\Mowc\Modules\SmilepayShipping\Operations;
+namespace Moksafowo\Modules\SmilepayShipping\Operations;
 
-use MoksaWeb\Mowc\Modules\Shipping\Order\SplitByTemp;
-use MoksaWeb\Mowc\Modules\Shipping\Temp\ProductTemp;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Api\Helper;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Api\ShippingRequest;
-use MoksaWeb\Mowc\Modules\SmilepayShipping\Methods\Tcat;
-use MoksaWeb\Mowc\Order\Meta\Keys;
+use Moksafowo\Modules\Shipping\Order\SplitByTemp;
+use Moksafowo\Modules\Shipping\Temp\ProductTemp;
+use Moksafowo\Modules\SmilepayShipping\Api\Helper;
+use Moksafowo\Modules\SmilepayShipping\Api\ShippingRequest;
+use Moksafowo\Modules\SmilepayShipping\Methods\Tcat;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -85,7 +85,7 @@ final class CreateOrder {
 
 	private static function run_unified_tcat( \WC_Order $order ): array {
 		$method   = self::resolve_order_shipping_method( $order, self::UNIFIED_TCAT_ID );
-		$packages = SplitByTemp::for_order( $order, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], $method instanceof \MoksaWeb\Mowc\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
+		$packages = SplitByTemp::for_order( $order, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], $method instanceof \Moksafowo\Modules\Shipping\Methods\AbstractShippingMethod ? $method : null );
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
@@ -405,7 +405,7 @@ final class CreateOrder {
 
 
 	private static function resolve_order_shipping_method( \WC_Order $order, string $method_id ): ?\WC_Shipping_Method {
-		$map = \MoksaWeb\Mowc\Modules\SmilepayShipping\Module::method_map();
+		$map = \Moksafowo\Modules\SmilepayShipping\Module::method_map();
 		if ( ! isset( $map[ $method_id ] ) ) {
 			return null;
 		}
