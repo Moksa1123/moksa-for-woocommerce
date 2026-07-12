@@ -11,31 +11,52 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Uninstall context: direct $wpdb queries are canonical (object cache not bootstrapped, schema reads required).
-// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-// phpcs:disable WordPress.DB.DirectDatabaseQuery.SchemaChange
-
 global $wpdb;
 
-/* Remove all moksafowo_* options and transients (incl. legacy mo_* from pre-1.0 builds). */
+/**
+ * Uninstall runs outside the object cache and has to touch tables the WP API does not expose
+ * (postmeta / usermeta / HPOS meta by pattern, plus our own tables). Every table name goes through
+ * prepare()'s %i identifier placeholder and every LIKE pattern through %s — nothing is interpolated.
+ */
+
+// Remove all moksafowo_* options and transients (incl. legacy mo_* from pre-1.0 builds).
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
-	"DELETE FROM {$wpdb->options} WHERE option_name LIKE 'moksafowo\_%'
-		OR option_name LIKE '\_transient\_moksafowo\_%'
-		OR option_name LIKE '\_transient\_timeout\_moksafowo\_%'
-		OR option_name LIKE 'mo\_%'
-		OR option_name LIKE '\_transient\_mo\_%'
-		OR option_name LIKE '\_transient\_timeout\_mo\_%'"
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name LIKE %s',
+		$wpdb->options,
+		$wpdb->esc_like( 'moksafowo_' ) . '%',
+		$wpdb->esc_like( '_transient_moksafowo_' ) . '%',
+		$wpdb->esc_like( '_transient_timeout_moksafowo_' ) . '%',
+		$wpdb->esc_like( 'mo_' ) . '%',
+		$wpdb->esc_like( '_transient_mo_' ) . '%',
+		$wpdb->esc_like( '_transient_timeout_mo_' ) . '%'
+	)
 );
 
-/* Remove gateway settings stored under WC's own woocommerce_{gateway_id}_settings convention. */
+// Remove gateway settings stored under WC's own woocommerce_{gateway_id}_settings convention.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
-	"DELETE FROM {$wpdb->options} WHERE option_name LIKE 'woocommerce\_moksafowo\_%\_settings'
-		OR option_name LIKE 'woocommerce\_moksafowo-%\_settings'
-		OR option_name LIKE 'woocommerce\_mo\_%\_settings'
-		OR option_name = 'woocommerce_linepay-tw_settings'
-		OR option_name = 'woocommerce_payuni_settings'
-		OR option_name LIKE 'woocommerce\_payuni-%\_settings'"
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name LIKE %s
+			OR option_name = %s
+			OR option_name = %s
+			OR option_name LIKE %s',
+		$wpdb->options,
+		$wpdb->esc_like( 'woocommerce_moksafowo_' ) . '%' . $wpdb->esc_like( '_settings' ),
+		$wpdb->esc_like( 'woocommerce_moksafowo-' ) . '%' . $wpdb->esc_like( '_settings' ),
+		$wpdb->esc_like( 'woocommerce_mo_' ) . '%' . $wpdb->esc_like( '_settings' ),
+		'woocommerce_linepay-tw_settings',
+		'woocommerce_payuni_settings',
+		$wpdb->esc_like( 'woocommerce_payuni-' ) . '%' . $wpdb->esc_like( '_settings' )
+	)
 );
 
 /*
@@ -58,32 +79,68 @@ foreach ( $moksafowo_fork_options as $moksafowo_opt ) {
 	delete_option( str_replace( 'Moksafowo_', 'Mo_', $moksafowo_opt ) ); // legacy
 }
 
-/* Legacy payuni_* options from pre-1.0 builds. */
-$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'payuni\_payment\_%' OR option_name LIKE 'moksafowo\_payuni\_%'" );
-
-/* Remove all plugin postmeta (legacy CPT orders). */
+// Legacy payuni_* options from pre-1.0 builds.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
-	"DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '\_moksafowo\_%' OR meta_key LIKE '\_mo\_%' OR meta_key LIKE '\_linepay\_%'"
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s',
+		$wpdb->options,
+		$wpdb->esc_like( 'payuni_payment_' ) . '%',
+		$wpdb->esc_like( 'moksafowo_payuni_' ) . '%'
+	)
 );
 
-/* Remove all plugin HPOS order meta if HPOS table exists. */
+// Remove all plugin postmeta (legacy CPT orders).
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$wpdb->query(
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s OR meta_key LIKE %s',
+		$wpdb->postmeta,
+		$wpdb->esc_like( '_moksafowo_' ) . '%',
+		$wpdb->esc_like( '_mo_' ) . '%',
+		$wpdb->esc_like( '_linepay_' ) . '%'
+	)
+);
+
+// Remove all plugin HPOS order meta if HPOS table exists.
 $moksafowo_hpos_meta_table = $wpdb->prefix . 'wc_orders_meta';
-$moksafowo_table_exists    = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $moksafowo_hpos_meta_table ) );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$moksafowo_table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $moksafowo_hpos_meta_table ) );
 if ( $moksafowo_hpos_meta_table === $moksafowo_table_exists ) {
-	$wpdb->query( 'DELETE FROM `' . esc_sql( $moksafowo_hpos_meta_table ) . "` WHERE meta_key LIKE '\_moksafowo\_%' OR meta_key LIKE '\_mo\_%' OR meta_key LIKE '\_linepay\_%'" );
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$wpdb->query(
+		$wpdb->prepare(
+			'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s OR meta_key LIKE %s',
+			$moksafowo_hpos_meta_table,
+			$wpdb->esc_like( '_moksafowo_' ) . '%',
+			$wpdb->esc_like( '_mo_' ) . '%',
+			$wpdb->esc_like( '_linepay_' ) . '%'
+		)
+	);
 }
 
-/* Remove user meta. */
-$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'moksafowo\_%' OR meta_key LIKE 'mo\_%'" );
+// Remove user meta.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$wpdb->query(
+	$wpdb->prepare(
+		'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s',
+		$wpdb->usermeta,
+		$wpdb->esc_like( 'moksafowo_' ) . '%',
+		$wpdb->esc_like( 'mo_' ) . '%'
+	)
+);
 
-/* Drop the order-number lookup index table. */
-$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_order_lookup' ) . '`' );
+// Drop the order-number lookup index table.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'moksafowo_order_lookup' ) );
 
-/* Drop the customer-service threads / messages tables. */
-$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_cs_messages' ) . '`' );
-$wpdb->query( 'DROP TABLE IF EXISTS `' . esc_sql( $wpdb->prefix . 'moksafowo_cs_threads' ) . '`' );
+// Drop the customer-service threads / messages tables.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'moksafowo_cs_messages' ) );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'moksafowo_cs_threads' ) );
 
-/* Clear scheduled actions. */
+// Clear scheduled actions.
 if ( function_exists( 'as_unschedule_all_actions' ) ) {
 	as_unschedule_all_actions( '', array(), 'mo-ectools' );
 }

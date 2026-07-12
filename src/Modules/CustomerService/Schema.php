@@ -77,12 +77,10 @@ final class Schema {
 
 	public static function drop(): void {
 		global $wpdb;
-		$threads  = self::threads_table();
-		$messages = self::messages_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表 DDL,表名由 prefix 組成。
-		$wpdb->query( "DROP TABLE IF EXISTS {$messages}" );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表 DDL,表名由 prefix 組成。
-		$wpdb->query( "DROP TABLE IF EXISTS {$threads}" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表 DDL。
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', self::messages_table() ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表 DDL。
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', self::threads_table() ) );
 		delete_option( self::DB_VERSION_OPTION );
 	}
 }

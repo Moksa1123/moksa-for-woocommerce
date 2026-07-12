@@ -17,8 +17,8 @@ final class Threads {
 	public static function open_or_get( int $order_id, string $customer_ref ): int {
 		global $wpdb;
 		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表查詢,表名由 prefix 組成、值參數化。
-		$id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$t} WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", $order_id ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		$id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", $t, $order_id ) );
 		if ( $id > 0 ) {
 			return $id;
 		}
@@ -69,9 +69,8 @@ final class Threads {
 	 */
 	public static function get_messages( int $thread_id ): array {
 		global $wpdb;
-		$m = Schema::messages_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表查詢,表名由 prefix 組成、值參數化。
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, sender, body, created_at FROM {$m} WHERE thread_id = %d ORDER BY id ASC", $thread_id ), ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT id, sender, body, created_at FROM %i WHERE thread_id = %d ORDER BY id ASC', Schema::messages_table(), $thread_id ), ARRAY_A );
 		return is_array( $rows ) ? $rows : array();
 	}
 
@@ -80,9 +79,8 @@ final class Threads {
 	 */
 	public static function get_thread( int $id ): ?array {
 		global $wpdb;
-		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表查詢,表名由 prefix 組成、值參數化。
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$t} WHERE id = %d", $id ), ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', Schema::threads_table(), $id ), ARRAY_A );
 		return is_array( $row ) ? $row : null;
 	}
 
@@ -91,9 +89,8 @@ final class Threads {
 	 */
 	public static function thread_id_for_order( int $order_id ): int {
 		global $wpdb;
-		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表查詢,表名由 prefix 組成、值參數化。
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$t} WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", $order_id ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", Schema::threads_table(), $order_id ) );
 	}
 
 	/**
@@ -103,17 +100,15 @@ final class Threads {
 	 */
 	public static function list_threads( int $limit = 50 ): array {
 		global $wpdb;
-		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表查詢,表名由 prefix 組成、值參數化。
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$t} ORDER BY updated_at DESC LIMIT %d", max( 1, $limit ) ), ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY updated_at DESC LIMIT %d', Schema::threads_table(), max( 1, $limit ) ), ARRAY_A );
 		return is_array( $rows ) ? $rows : array();
 	}
 
 	public static function count_unread(): int {
 		global $wpdb;
-		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- 自有表計數,表名由 prefix 組成。
-		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$t} WHERE unread_staff = 1" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE unread_staff = 1', Schema::threads_table() ) );
 	}
 
 	public static function mark_staff_read( int $id ): void {

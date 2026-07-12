@@ -140,6 +140,7 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 * Naming: the PHP namespace root was changed from `MoksaWeb\Mowc\` to `Moksafowo\`, so every global identifier the plugin declares (namespaces, constants, options, hooks, AJAX actions, database tables) now shares the single `moksafowo` prefix.
 * Naming: six filters were still published under WooCommerce-prefixed hook names (`woocommerce_get_sections_*`, `woocommerce_get_settings_*`, `woocommerce_shipping_*_is_available`) even though the methods that fire them fully override WooCommerce and never call the parent implementation. They are now `moksafowo_*`.
 * Naming: the checkout field namespace and admin CSS class prefix were unified under `moksafowo`; the unused legacy `MOWP_VAULT_KEY` constant fallback was removed.
+* Database: every table name now goes through `$wpdb->prepare()` using the `%i` identifier placeholder, and every `LIKE` pattern through `%s`. No table name or search term is interpolated into SQL anywhere in the plugin, including `uninstall.php`.
 * Fix: `Aes::decrypt_cbc_hex()` validated its input only after calling `hex2bin()`, which emitted a PHP warning on malformed input before the exception was thrown. It now validates first.
 * Admin: order detail notes no longer expose the internal plugin codename.
 
