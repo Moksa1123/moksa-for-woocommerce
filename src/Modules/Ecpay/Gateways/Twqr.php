@@ -17,11 +17,11 @@ final class Twqr extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 TWQR 行動支付', 'mo-ectools' );
+		return __( '綠界 TWQR 行動支付', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用台灣 Pay / 玉山 Wallet 等 TWQR 聯盟錢包掃碼付款。', 'mo-ectools' );
+		return __( '使用台灣 Pay / 玉山 Wallet 等 TWQR 聯盟錢包掃碼付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function supports_credit_action(): bool {

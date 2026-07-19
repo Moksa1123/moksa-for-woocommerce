@@ -47,7 +47,7 @@ final class OrderDetails {
 			'number'          => (string) $order->get_order_number(),
 			'status'          => wc_get_order_status_name( $order->get_status() ),
 			'date'            => $date ? $date->date_i18n( 'Y-m-d H:i' ) : '',
-			'customer'        => '' !== $name ? $name : __( '（無姓名）', 'mo-ectools' ),
+			'customer'        => '' !== $name ? $name : __( '（無姓名）', 'moksa-for-woocommerce' ),
 			'phone'           => (string) $order->get_billing_phone(),
 			'email'           => (string) $order->get_billing_email(),
 			'payment_method'  => (string) $order->get_payment_method_title(),

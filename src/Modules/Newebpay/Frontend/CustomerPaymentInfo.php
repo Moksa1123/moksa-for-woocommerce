@@ -30,18 +30,18 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::NEWEBPAY_ATM_BANK_CODE );
 			if ( '' !== $bank ) {
 				$rows[] = [
-					'label' => __( '銀行代碼', 'mo-ectools' ),
+					'label' => __( '銀行代碼', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
-				'label' => __( '虛擬帳號', 'mo-ectools' ),
+				'label' => __( '虛擬帳號', 'moksa-for-woocommerce' ),
 				'value' => $atm_acct,
 			];
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_ATM_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
-					'label' => __( '繳費期限', 'mo-ectools' ),
+					'label' => __( '繳費期限', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
 			}
@@ -51,14 +51,14 @@ final class CustomerPaymentInfo {
 		if ( '' !== $cvs_no ) {
 			$rows   = [
 				[
-					'label' => __( '繳費代碼', 'mo-ectools' ),
+					'label' => __( '繳費代碼', 'moksa-for-woocommerce' ),
 					'value' => $cvs_no,
 				],
 			];
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_CVS_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
-					'label' => __( '繳費期限', 'mo-ectools' ),
+					'label' => __( '繳費期限', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
 			}
@@ -72,7 +72,7 @@ final class CustomerPaymentInfo {
 				if ( '' !== $bc ) {
 					$rows[] = [
 						/* translators: %d: barcode segment index */
-						'label' => sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 ),
+						'label' => sprintf( __( '條碼第 %d 段', 'moksa-for-woocommerce' ), $i + 1 ),
 						'value' => $bc,
 					];
 				}
@@ -80,7 +80,7 @@ final class CustomerPaymentInfo {
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_BARCODE_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
-					'label' => __( '繳費期限', 'mo-ectools' ),
+					'label' => __( '繳費期限', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
 			}

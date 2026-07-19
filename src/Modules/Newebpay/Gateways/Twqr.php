@@ -17,10 +17,10 @@ final class Twqr extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 TWQR 行動支付', 'mo-ectools' );
+		return __( '藍新 TWQR 行動支付', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跨業共通 QR Code 行動支付（街口 / 全盈 / Pi 拍錢包等多家整合），跳轉至藍新支付頁完成。', 'mo-ectools' );
+		return __( '跨業共通 QR Code 行動支付（街口 / 全盈 / Pi 拍錢包等多家整合），跳轉至藍新支付頁完成。', 'moksa-for-woocommerce' );
 	}
 }

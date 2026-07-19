@@ -45,7 +45,7 @@ abstract class AbstractAdminActions {
 			return $redirect_to;
 		}
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( '權限不足', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		$pure_action = substr( $action, strlen( $prefix ) );
@@ -101,7 +101,7 @@ abstract class AbstractAdminActions {
 	public function ajax_get_unprinted_orders(): void {
 		check_ajax_referer( 'moksafowo_shipping_bulk_print', 'security' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( __( '權限不足', 'mo-ectools' ), 403 );
+			wp_send_json_error( __( '權限不足', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		$kind    = isset( $_POST['kind'] ) ? sanitize_text_field( wp_unslash( $_POST['kind'] ) ) : null;

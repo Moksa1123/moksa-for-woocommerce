@@ -17,11 +17,11 @@ final class Ipass extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 一卡通 iPASS', 'mo-ectools' );
+		return __( '綠界 一卡通 iPASS', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用一卡通 iPASS Money 電子錢包付款。', 'mo-ectools' );
+		return __( '使用一卡通 iPASS Money 電子錢包付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_aio_params( \WC_Order $order ): array {

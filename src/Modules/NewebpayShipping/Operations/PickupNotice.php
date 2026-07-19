@@ -40,7 +40,7 @@ final class PickupNotice {
 
 	public static function output(): void {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ) );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ) );
 		}
 		check_admin_referer( self::ACTION );
 
@@ -55,7 +55,7 @@ final class PickupNotice {
 			}
 		}
 		if ( empty( $orders ) ) {
-			wp_die( esc_html__( '沒有可列印的託運單（訂單缺少取貨門市資訊）。', 'mo-ectools' ) );
+			wp_die( esc_html__( '沒有可列印的託運單（訂單缺少取貨門市資訊）。', 'moksa-for-woocommerce' ) );
 		}
 
 		nocache_headers();
@@ -120,13 +120,13 @@ CSS;
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<title><?php esc_html_e( '藍新物流託運單', 'mo-ectools' ); ?></title>
+<title><?php esc_html_e( '藍新物流託運單', 'moksa-for-woocommerce' ); ?></title>
 		<?php wp_print_styles( 'moksafowo-newebpay-pickup' ); ?>
 </head>
 <body>
 <div class="print-bar">
-	<button type="button" id="moksafowo-pickup-print"><?php esc_html_e( '列印', 'mo-ectools' ); ?></button>
-	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單為系統自產，貼於包裹上即可。', 'mo-ectools' ); ?></div>
+	<button type="button" id="moksafowo-pickup-print"><?php esc_html_e( '列印', 'moksa-for-woocommerce' ); ?></button>
+	<div class="note"><?php esc_html_e( '提示：藍新物流無 API 託運標籤，本單為系統自產，貼於包裹上即可。', 'moksa-for-woocommerce' ); ?></div>
 </div>
 		<?php foreach ( $orders as $order ) : ?>
 			<?php
@@ -145,25 +145,25 @@ CSS;
 			?>
 	<div class="label">
 		<div class="label__head">
-			<h1><?php esc_html_e( '藍新物流託運單', 'mo-ectools' ); ?></h1>
+			<h1><?php esc_html_e( '藍新物流託運單', 'moksa-for-woocommerce' ); ?></h1>
 			<div class="subline"><?php echo esc_html( $order->get_date_created()?->date( 'Y-m-d H:i' ) ?? '' ); ?></div>
 		</div>
-		<div class="row"><div class="label-key"><?php esc_html_e( '訂單編號', 'mo-ectools' ); ?></div><div class="label-val big">#<?php echo esc_html( (string) $order->get_id() ); ?></div></div>
-		<div class="row"><div class="label-key"><?php esc_html_e( '寄件人', 'mo-ectools' ); ?></div><div class="label-val"><?php echo esc_html( $shop_name ); ?></div></div>
+		<div class="row"><div class="label-key"><?php esc_html_e( '訂單編號', 'moksa-for-woocommerce' ); ?></div><div class="label-val big">#<?php echo esc_html( (string) $order->get_id() ); ?></div></div>
+		<div class="row"><div class="label-key"><?php esc_html_e( '寄件人', 'moksa-for-woocommerce' ); ?></div><div class="label-val"><?php echo esc_html( $shop_name ); ?></div></div>
 			<?php if ( '' !== $shop_address ) : ?>
-		<div class="row"><div class="label-key"><?php esc_html_e( '寄件地址', 'mo-ectools' ); ?></div><div class="label-val"><?php echo esc_html( trim( $shop_postcode . ' ' . $shop_city . ' ' . $shop_address ) ); ?></div></div>
+		<div class="row"><div class="label-key"><?php esc_html_e( '寄件地址', 'moksa-for-woocommerce' ); ?></div><div class="label-val"><?php echo esc_html( trim( $shop_postcode . ' ' . $shop_city . ' ' . $shop_address ) ); ?></div></div>
 		<?php endif; ?>
-		<div class="row"><div class="label-key"><?php esc_html_e( '收件人', 'mo-ectools' ); ?></div><div class="label-val big"><?php echo esc_html( $customer ); ?></div></div>
-		<div class="row"><div class="label-key"><?php esc_html_e( '收件電話', 'mo-ectools' ); ?></div><div class="label-val"><?php echo esc_html( $order->get_billing_phone() ); ?></div></div>
+		<div class="row"><div class="label-key"><?php esc_html_e( '收件人', 'moksa-for-woocommerce' ); ?></div><div class="label-val big"><?php echo esc_html( $customer ); ?></div></div>
+		<div class="row"><div class="label-key"><?php esc_html_e( '收件電話', 'moksa-for-woocommerce' ); ?></div><div class="label-val"><?php echo esc_html( $order->get_billing_phone() ); ?></div></div>
 		<div class="store">
-			<div class="store-id"><?php esc_html_e( '取貨門市', 'mo-ectools' ); ?>：<?php echo esc_html( $store_name ); ?> <span style="font-weight:normal;">(<?php echo esc_html( $store_id ); ?>)</span></div>
+			<div class="store-id"><?php esc_html_e( '取貨門市', 'moksa-for-woocommerce' ); ?>：<?php echo esc_html( $store_name ); ?> <span style="font-weight:normal;">(<?php echo esc_html( $store_id ); ?>)</span></div>
 			<?php if ( '' !== $store_addr ) : ?>
 				<div style="margin-top:4px;"><?php echo esc_html( $store_addr ); ?></div>
 			<?php endif; ?>
 		</div>
 		<div class="items">
 			<table>
-				<thead><tr><th><?php esc_html_e( '商品', 'mo-ectools' ); ?></th><th style="width:50px;text-align:right;"><?php esc_html_e( '數量', 'mo-ectools' ); ?></th></tr></thead>
+				<thead><tr><th><?php esc_html_e( '商品', 'moksa-for-woocommerce' ); ?></th><th style="width:50px;text-align:right;"><?php esc_html_e( '數量', 'moksa-for-woocommerce' ); ?></th></tr></thead>
 				<tbody>
 				<?php foreach ( $order->get_items() as $item ) : ?>
 					<tr>
@@ -174,7 +174,7 @@ CSS;
 				</tbody>
 			</table>
 		</div>
-		<div class="row" style="margin-top:8px;border-top:1px solid #000;padding-top:6px;"><div class="label-key"><?php esc_html_e( '訂單總額', 'mo-ectools' ); ?></div><div class="label-val big">NT$<?php echo esc_html( (string) (int) $order->get_total() ); ?></div></div>
+		<div class="row" style="margin-top:8px;border-top:1px solid #000;padding-top:6px;"><div class="label-key"><?php esc_html_e( '訂單總額', 'moksa-for-woocommerce' ); ?></div><div class="label-val big">NT$<?php echo esc_html( (string) (int) $order->get_total() ); ?></div></div>
 	</div>
 		<?php endforeach; ?>
 		<?php wp_print_inline_script_tag( "document.getElementById('moksafowo-pickup-print').addEventListener('click',function(){window.print();});" ); ?>

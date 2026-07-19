@@ -22,8 +22,8 @@ class Credit extends WC_Payment_Gateway {
 		$this->title              = $this->get_option( 'title' );
 		$this->description        = $this->get_option( 'description' );
 		$this->has_fields         = false;
-		$this->method_title       = __( 'LINE Pay', 'mo-ectools' );
-		$this->method_description = __( '使用 LINE Pay 行動支付完成結帳。', 'mo-ectools' );
+		$this->method_title       = __( 'LINE Pay', 'moksa-for-woocommerce' );
+		$this->method_description = __( '使用 LINE Pay 行動支付完成結帳。', 'moksa-for-woocommerce' );
 
 		$this->payment_type = 'NORMAL';
 
@@ -50,7 +50,7 @@ class Credit extends WC_Payment_Gateway {
 			$icon_html .= sprintf(
 				'<img src="%s" alt="%s" />',
 				esc_url( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' ),
-				esc_attr__( 'LINE Pay Taiwan', 'mo-ectools' )
+				esc_attr__( 'LINE Pay Taiwan', 'moksa-for-woocommerce' )
 			);
 		}
 
@@ -102,11 +102,11 @@ class Credit extends WC_Payment_Gateway {
 			}
 
 			if ( 'on-hold' === $order->get_status() ) {
-				$text = esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'mo-ectools' );
+				$text = esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'moksa-for-woocommerce' );
 			}
 
 			if ( 'pending' === $order->get_status() ) {
-				$text = esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'mo-ectools' );
+				$text = esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'moksa-for-woocommerce' );
 			}
 		}
 
@@ -120,11 +120,11 @@ class Credit extends WC_Payment_Gateway {
 		}
 
 		if ( 'on-hold' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		if ( 'pending' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'mo-ectools' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 	}
 }

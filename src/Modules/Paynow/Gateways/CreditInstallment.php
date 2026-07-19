@@ -19,10 +19,10 @@ final class CreditInstallment extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow 信用卡分期', 'mo-ectools' );
+		return __( 'PayNow 信用卡分期', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 PayNow 付款頁，使用信用卡分期付款。', 'mo-ectools' );
+		return __( '跳轉至 PayNow 付款頁，使用信用卡分期付款。', 'moksa-for-woocommerce' );
 	}
 }

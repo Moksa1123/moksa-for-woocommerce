@@ -18,7 +18,7 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 	}
 
 	protected static function provider_label(): string {
-		return __( 'ezPay', 'mo-ectools' );
+		return __( 'ezPay', 'moksa-for-woocommerce' );
 	}
 
 	protected static function nonce_action(): string {
@@ -67,7 +67,7 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 
 	protected static function extra_card_meta( \WC_Order $order ): array {
 		return [
-			__( '隨機碼', 'mo-ectools' ) => (string) $order->get_meta( Keys::EZPAY_RANDOM_NUM ),
+			__( '隨機碼', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::EZPAY_RANDOM_NUM ),
 		];
 	}
 }

@@ -18,22 +18,22 @@ final class InvoiceChannelOps {
 
 	private static function providers(): array {
 		return array(
-			'ecpay'    => __( '綠界電子發票', 'mo-ectools' ),
-			'ezpay'    => __( 'ezPay 電子發票', 'mo-ectools' ),
-			'smilepay' => __( '速買配電子發票', 'mo-ectools' ),
-			'paynow'   => __( 'PayNow 電子發票', 'mo-ectools' ),
-			'amego'    => __( 'Amego 電子發票', 'mo-ectools' ),
+			'ecpay'    => __( '綠界電子發票', 'moksa-for-woocommerce' ),
+			'ezpay'    => __( 'ezPay 電子發票', 'moksa-for-woocommerce' ),
+			'smilepay' => __( '速買配電子發票', 'moksa-for-woocommerce' ),
+			'paynow'   => __( 'PayNow 電子發票', 'moksa-for-woocommerce' ),
+			'amego'    => __( 'Amego 電子發票', 'moksa-for-woocommerce' ),
 		);
 	}
 
 	private static function channels(): array {
 		return array(
-			'member' => array( 'channel_member', __( '會員載具', 'mo-ectools' ) ),
-			'mobile' => array( 'channel_mobile', __( '手機條碼', 'mo-ectools' ) ),
-			'cert'   => array( 'channel_cert', __( '自然人憑證', 'mo-ectools' ) ),
-			'paper'  => array( 'channel_paper', __( '紙本發票', 'mo-ectools' ) ),
-			'donate' => array( 'allow_donate', __( '捐贈', 'mo-ectools' ) ),
-			'b2b'    => array( 'allow_b2b', __( '統一編號（公司戶）', 'mo-ectools' ) ),
+			'member' => array( 'channel_member', __( '會員載具', 'moksa-for-woocommerce' ) ),
+			'mobile' => array( 'channel_mobile', __( '手機條碼', 'moksa-for-woocommerce' ) ),
+			'cert'   => array( 'channel_cert', __( '自然人憑證', 'moksa-for-woocommerce' ) ),
+			'paper'  => array( 'channel_paper', __( '紙本發票', 'moksa-for-woocommerce' ) ),
+			'donate' => array( 'allow_donate', __( '捐贈', 'moksa-for-woocommerce' ) ),
+			'b2b'    => array( 'allow_b2b', __( '統一編號（公司戶）', 'moksa-for-woocommerce' ) ),
 		);
 	}
 
@@ -141,7 +141,7 @@ final class InvoiceChannelOps {
 		if ( '' === $provider ) {
 			return array(
 				'channels' => array(),
-				'message'  => __( '找不到此發票模組。', 'mo-ectools' ),
+				'message'  => __( '找不到此發票模組。', 'moksa-for-woocommerce' ),
 			);
 		}
 		$ch   = self::channels();
@@ -165,18 +165,18 @@ final class InvoiceChannelOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$provider = self::resolve_provider( is_array( $args ) && isset( $args['provider'] ) ? (string) $args['provider'] : '' );
 		if ( '' === $provider ) {
-			return new \WP_Error( 'moksafowo_ai_bad_provider', __( '找不到此發票模組(綠界/ezPay/速買配/PayNow/Amego)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_provider', __( '找不到此發票模組(綠界/ezPay/速買配/PayNow/Amego)。', 'moksa-for-woocommerce' ) );
 		}
 		[ $matched, $unmatched ] = self::resolve_channels(
 			self::names_arg( is_array( $args ) ? ( $args['channels'] ?? array() ) : array() ),
 			self::supported( $provider )
 		);
 		if ( empty( $matched ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_match', __( '找不到對應的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_match', __( '找不到對應的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)。', 'moksa-for-woocommerce' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -184,15 +184,15 @@ final class InvoiceChannelOps {
 		$labels  = array_map( static fn( $k ) => $ch[ $k ][1], $matched );
 		$summary = sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: channel labels */
-			__( '%1$s %2$s 的開立方式:%3$s。', 'mo-ectools' ),
-			$enable ? __( '啟用', 'mo-ectools' ) : __( '停用', 'mo-ectools' ),
+			__( '%1$s %2$s 的開立方式:%3$s。', 'moksa-for-woocommerce' ),
+			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
 			self::providers()[ $provider ],
 			implode( '、', $labels )
 		);
 		if ( ! empty( $unmatched ) ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: unmatched names */
-				__( '(無法對應並略過:%s)', 'mo-ectools' ),
+				__( '(無法對應並略過:%s)', 'moksa-for-woocommerce' ),
 				implode( '、', $unmatched )
 			);
 		}
@@ -211,14 +211,14 @@ final class InvoiceChannelOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$provider = (string) ( $params['provider'] ?? '' );
 		$channels = is_array( $params['channels'] ?? null ) ? $params['channels'] : array();
 		$enable   = ! empty( $params['enable'] );
 		$ch       = self::channels();
 		if ( '' === $provider || empty( $channels ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法變更。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法變更。', 'moksa-for-woocommerce' ) );
 		}
 
 		$labels = array();
@@ -232,8 +232,8 @@ final class InvoiceChannelOps {
 
 		return sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: channel labels */
-			__( '✅ 已%1$s %2$s 的開立方式:%3$s。', 'mo-ectools' ),
-			$enable ? __( '啟用', 'mo-ectools' ) : __( '停用', 'mo-ectools' ),
+			__( '✅ 已%1$s %2$s 的開立方式:%3$s。', 'moksa-for-woocommerce' ),
+			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
 			self::providers()[ $provider ] ?? $provider,
 			implode( '、', $labels )
 		);

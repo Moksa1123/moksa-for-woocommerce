@@ -31,7 +31,7 @@ trait TraitCreditInstallment {
 	public function init_form_fields() {
 		$this->form_fields = include MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Payuni/Settings/CreditInstallmentSetting.php';
 		/* translators: %s: number of installments */
-		$this->form_fields['title']['default'] = sprintf( __( 'PAYUNi 信用卡分期 %s 期', 'mo-ectools' ), $this->installs );
+		$this->form_fields['title']['default'] = sprintf( __( 'PAYUNi 信用卡分期 %s 期', 'moksa-for-woocommerce' ), $this->installs );
 	}
 
 	public function is_available() {
@@ -65,13 +65,13 @@ trait TraitCreditInstallment {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::CREDIT_AUTH_TYPE => __( '授權方式', 'mo-ectools' ),
-			OrderMeta::CREDIT_CARD_4NO  => __( '卡號末四碼', 'mo-ectools' ),
-			OrderMeta::CREDIT_INSTALL   => __( '分期期數', 'mo-ectools' ),
-			OrderMeta::CREDIT_FIRST_AMT => __( '首期金額', 'mo-ectools' ),
-			OrderMeta::CREDIT_EACH_AMT  => __( '每期金額', 'mo-ectools' ),
-			OrderMeta::CREDIT_AUTH_DAY  => __( '授權日期', 'mo-ectools' ),
-			OrderMeta::CREDIT_AUTH_TIME => __( '授權時間', 'mo-ectools' ),
+			OrderMeta::CREDIT_AUTH_TYPE => __( '授權方式', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_CARD_4NO  => __( '卡號末四碼', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_INSTALL   => __( '分期期數', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_FIRST_AMT => __( '首期金額', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_EACH_AMT  => __( '每期金額', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_AUTH_DAY  => __( '授權日期', 'moksa-for-woocommerce' ),
+			OrderMeta::CREDIT_AUTH_TIME => __( '授權時間', 'moksa-for-woocommerce' ),
 		);
 
 		return $order_metas;

@@ -104,7 +104,7 @@ final class IpnHandler {
 			exit;
 		}
 
-		wc_add_notice( __( 'TapPay 3D 驗證未完成或付款失敗，請重新嘗試。', 'mo-ectools' ), 'error' );
+		wc_add_notice( __( 'TapPay 3D 驗證未完成或付款失敗，請重新嘗試。', 'moksa-for-woocommerce' ), 'error' );
 		wp_safe_redirect( $order->get_checkout_payment_url( false ) );
 		exit;
 	}
@@ -177,7 +177,7 @@ final class IpnHandler {
 		$rec_trade_id  = (string) ( $payload['rec_trade_id'] ?? $order->get_meta( Keys::TAPPAY_REC_TRADE_ID ) );
 
 		if ( 2 === $record_status ) {
-			$order->add_order_note( __( 'TapPay 交易已於 TapPay 後台退款。', 'mo-ectools' ) );
+			$order->add_order_note( __( 'TapPay 交易已於 TapPay 後台退款。', 'moksa-for-woocommerce' ) );
 			return;
 		}
 
@@ -190,7 +190,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 						/* translators: 1: rec_trade_id, 2: card last4 */
-						__( 'TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）', 'mo-ectools' ),
+						__( 'TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）', 'moksa-for-woocommerce' ),
 						$rec_trade_id,
 						(string) $order->get_meta( Keys::TAPPAY_CARD_LAST4 )
 					)
@@ -200,7 +200,7 @@ final class IpnHandler {
 		}
 
 		if ( 1 === $record_status ) {
-			$order->update_status( 'pending', __( 'TapPay 等待顧客完成 3D 驗證。', 'mo-ectools' ) );
+			$order->update_status( 'pending', __( 'TapPay 等待顧客完成 3D 驗證。', 'moksa-for-woocommerce' ) );
 			return;
 		}
 
@@ -210,7 +210,7 @@ final class IpnHandler {
 			'failed',
 			sprintf(
 				/* translators: 1: status code, 2: message */
-				__( 'TapPay 付款失敗（狀態碼 %1$d）：%2$s', 'mo-ectools' ),
+				__( 'TapPay 付款失敗（狀態碼 %1$d）：%2$s', 'moksa-for-woocommerce' ),
 				$code,
 				$msg
 			)

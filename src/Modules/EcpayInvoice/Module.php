@@ -16,7 +16,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '綠界電子發票 — B2C / B2B / 手機條碼 / 自然人憑證 / 會員載具 / 捐贈 / 折讓 / 作廢', 'mo-ectools' );
+		return __( '綠界電子發票 — B2C / B2B / 手機條碼 / 自然人憑證 / 會員載具 / 捐贈 / 折讓 / 作廢', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -24,23 +24,23 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '綠界電子發票', 'mo-ectools' );
+		return __( '綠界電子發票', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( 'B2C / B2B / 載具 / 捐贈 — 自動開立、折讓、作廢', 'mo-ectools' );
+		return __( 'B2C / B2B / 載具 / 捐贈 — 自動開立、折讓、作廢', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( 'B2C 一般發票', 'mo-ectools' ),
-			__( 'B2B 三聯式', 'mo-ectools' ),
-			__( '手機條碼', 'mo-ectools' ),
-			__( '自然人憑證', 'mo-ectools' ),
-			__( '會員載具', 'mo-ectools' ),
-			__( '愛心碼捐贈', 'mo-ectools' ),
-			__( '折讓單', 'mo-ectools' ),
-			__( '作廢發票', 'mo-ectools' ),
+			__( 'B2C 一般發票', 'moksa-for-woocommerce' ),
+			__( 'B2B 三聯式', 'moksa-for-woocommerce' ),
+			__( '手機條碼', 'moksa-for-woocommerce' ),
+			__( '自然人憑證', 'moksa-for-woocommerce' ),
+			__( '會員載具', 'moksa-for-woocommerce' ),
+			__( '愛心碼捐贈', 'moksa-for-woocommerce' ),
+			__( '折讓單', 'moksa-for-woocommerce' ),
+			__( '作廢發票', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -108,7 +108,7 @@ final class Module extends AbstractModule {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %d: delay days */
-					__( '綠界發票排程於 %d 天後開立。', 'mo-ectools' ),
+					__( '綠界發票排程於 %d 天後開立。', 'moksa-for-woocommerce' ),
 					$delay_days
 				)
 			);
@@ -125,7 +125,7 @@ final class Module extends AbstractModule {
 			return;
 		}
 		if ( in_array( $order->get_status(), [ 'cancelled', 'refunded', 'failed' ], true ) ) {
-			$order->add_order_note( __( '綠界發票排程取消（訂單已取消 / 退款 / 失敗）。', 'mo-ectools' ) );
+			$order->add_order_note( __( '綠界發票排程取消（訂單已取消 / 退款 / 失敗）。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return;
 		}

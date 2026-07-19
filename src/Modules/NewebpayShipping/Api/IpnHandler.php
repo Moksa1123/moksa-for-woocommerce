@@ -90,21 +90,21 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_STATUS, $status );
 		}
 
-		$parts = [ __( '藍新物流貨態回傳', 'mo-ectools' ) ];
+		$parts = [ __( '藍新物流貨態回傳', 'moksa-for-woocommerce' ) ];
 		if ( '' !== $lgs_no ) {
 			/* translators: %s: shipping tracking number */
-			$parts[] = sprintf( __( '物流單號 %s', 'mo-ectools' ), $lgs_no );
+			$parts[] = sprintf( __( '物流單號 %s', 'moksa-for-woocommerce' ), $lgs_no );
 		}
 		if ( null !== $mapped ) {
 			/* translators: %s: shipping status label */
-			$parts[] = sprintf( __( '狀態 %s', 'mo-ectools' ), $mapped['label'] );
+			$parts[] = sprintf( __( '狀態 %s', 'moksa-for-woocommerce' ), $mapped['label'] );
 		} elseif ( '' !== $status ) {
 			/* translators: %s: shipping status code */
-			$parts[] = sprintf( __( '狀態 %s', 'mo-ectools' ), $status );
+			$parts[] = sprintf( __( '狀態 %s', 'moksa-for-woocommerce' ), $status );
 		}
 		if ( '' !== $store_name ) {
 			/* translators: %s: convenience store name */
-			$parts[] = sprintf( __( '門市 %s', 'mo-ectools' ), $store_name );
+			$parts[] = sprintf( __( '門市 %s', 'moksa-for-woocommerce' ), $store_name );
 		}
 		$order->add_order_note( implode( '，', $parts ) );
 
@@ -115,7 +115,7 @@ final class IpnHandler {
 					$mapped['wc_status'],
 					sprintf(
 					/* translators: 1: from, 2: to, 3: retld */
-						__( '藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）', 'mo-ectools' ),
+						__( '藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）', 'moksa-for-woocommerce' ),
 						$current,
 						$mapped['wc_status'],
 						$retld

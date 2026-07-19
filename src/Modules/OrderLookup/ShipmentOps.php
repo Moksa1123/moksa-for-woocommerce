@@ -27,10 +27,10 @@ final class ShipmentOps {
 	 */
 	private static function providers(): array {
 		return array(
-			'ecpay'    => array( EcpayCreate::class, __( '綠界', 'mo-ectools' ) ),
-			'payuni'   => array( PayuniCreate::class, __( 'PAYUNi', 'mo-ectools' ) ),
-			'newebpay' => array( NewebpayCreate::class, __( '藍新', 'mo-ectools' ) ),
-			'smilepay' => array( SmilepayCreate::class, __( '速買配', 'mo-ectools' ) ),
+			'ecpay'    => array( EcpayCreate::class, __( '綠界', 'moksa-for-woocommerce' ) ),
+			'payuni'   => array( PayuniCreate::class, __( 'PAYUNi', 'moksa-for-woocommerce' ) ),
+			'newebpay' => array( NewebpayCreate::class, __( '藍新', 'moksa-for-woocommerce' ) ),
+			'smilepay' => array( SmilepayCreate::class, __( '速買配', 'moksa-for-woocommerce' ) ),
 		);
 	}
 
@@ -64,7 +64,7 @@ final class ShipmentOps {
 			if ( ! class_exists( $class ) ) {
 				return array(
 					'ok'      => false,
-					'message' => __( 'PAYUNi 物流模組未啟用。', 'mo-ectools' ),
+					'message' => __( 'PAYUNi 物流模組未啟用。', 'moksa-for-woocommerce' ),
 				);
 			}
 			$before = SearchableKeys::field_value( $order, 'shipping' );
@@ -78,7 +78,7 @@ final class ShipmentOps {
 			}
 			return array(
 				'ok'      => false,
-				'message' => __( 'PAYUNi 建單未取得物流單號(可能 provider 設定或訂單資料問題,詳見訂單備註)。', 'mo-ectools' ),
+				'message' => __( 'PAYUNi 建單未取得物流單號(可能 provider 設定或訂單資料問題,詳見訂單備註)。', 'moksa-for-woocommerce' ),
 			);
 		}
 
@@ -86,7 +86,7 @@ final class ShipmentOps {
 		if ( ! isset( $map[ $provider ] ) ) {
 			return array(
 				'ok'      => false,
-				'message' => __( '不支援的物流商。', 'mo-ectools' ),
+				'message' => __( '不支援的物流商。', 'moksa-for-woocommerce' ),
 			);
 		}
 		return (array) call_user_func( array( $map[ $provider ][0], 'run' ), $order );
@@ -98,29 +98,29 @@ final class ShipmentOps {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 		$provider = self::resolve_provider( $order );
 		$map      = self::providers();
 		if ( '' === $provider || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_shipping', __( '此訂單的運送方式不支援自動建立託運單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_shipping', __( '此訂單的運送方式不支援自動建立託運單。', 'moksa-for-woocommerce' ) );
 		}
 
 		$existing = SearchableKeys::field_value( $order, 'shipping' );
 		$summary  = sprintf(
 			/* translators: 1: order number, 2: provider name */
-			__( '為訂單 #%1$s 建立託運單(物流商:%2$s)。', 'mo-ectools' ),
+			__( '為訂單 #%1$s 建立託運單(物流商:%2$s)。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			$map[ $provider ][1]
 		);
 		if ( '' !== $existing ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: existing shipping number */
-				__( '(注意:此訂單已有物流單號 %s,可能會新增另一筆。)', 'mo-ectools' ),
+				__( '(注意:此訂單已有物流單號 %s,可能會新增另一筆。)', 'moksa-for-woocommerce' ),
 				$existing
 			);
 		}
@@ -139,30 +139,30 @@ final class ShipmentOps {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		$provider = (string) ( $params['provider'] ?? '' );
 		$map      = self::providers();
 		if ( ! $order || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或物流商。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或物流商。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = self::create_for( $provider, $order );
 		if ( empty( $result['ok'] ) ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_ai_create_failed', sprintf( __( '建立託運單失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
+			return new \WP_Error( 'moksafowo_ai_create_failed', sprintf( __( '建立託運單失敗:%s', 'moksa-for-woocommerce' ), (string) ( $result['message'] ?? '' ) ) );
 		}
 
 		$ship_no = SearchableKeys::field_value( wc_get_order( $order->get_id() ), 'shipping' );
 		$suffix  = '';
 		if ( '' !== $ship_no ) {
 			/* translators: %s: shipping number */
-			$suffix = sprintf( __( ':物流單號 %s', 'mo-ectools' ), $ship_no );
+			$suffix = sprintf( __( ':物流單號 %s', 'moksa-for-woocommerce' ), $ship_no );
 		}
 		return sprintf(
 			/* translators: 1: order number, 2: shipping number suffix(可能為空) */
-			__( '✅ 已為訂單 #%1$s 建立託運單%2$s。', 'mo-ectools' ),
+			__( '✅ 已為訂單 #%1$s 建立託運單%2$s。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			$suffix
 		);
@@ -197,11 +197,11 @@ final class ShipmentOps {
 	 */
 	public static function batch_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$refs = self::normalize_refs( is_array( $args ) ? ( $args['orders'] ?? '' ) : '' );
 		if ( empty( $refs ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要建立託運單的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要建立託運單的訂單。', 'moksa-for-woocommerce' ) );
 		}
 		$map         = self::providers();
 		$found       = array();
@@ -225,21 +225,21 @@ final class ShipmentOps {
 			);
 		}
 		if ( empty( $found ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有可建立託運單的訂單(運送方式需為支援的物流商)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有可建立託運單的訂單(運送方式需為支援的物流商)。', 'moksa-for-woocommerce' ) );
 		}
 
 		$orders  = array_values( $found );
 		$numbers = implode( ' ', array_map( static fn( $o ) => '#' . $o['number'], $orders ) );
 		$summary = sprintf(
 			/* translators: 1: count, 2: order numbers */
-			__( '為 %1$d 筆訂單建立託運單(%2$s)。', 'mo-ectools' ),
+			__( '為 %1$d 筆訂單建立託運單(%2$s)。', 'moksa-for-woocommerce' ),
 			count( $orders ),
 			$numbers
 		);
 		if ( ! empty( $unsupported ) ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: skipped refs */
-				__( '(略過無法建單:%s)', 'mo-ectools' ),
+				__( '(略過無法建單:%s)', 'moksa-for-woocommerce' ),
 				implode( '、', $unsupported )
 			);
 		}
@@ -256,7 +256,7 @@ final class ShipmentOps {
 	 */
 	public static function batch_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$orders = is_array( $params['orders'] ?? null ) ? $params['orders'] : array();
 		$map    = self::providers();
@@ -280,7 +280,7 @@ final class ShipmentOps {
 
 		$msg = sprintf(
 			/* translators: 1: success, 2: total, 3: order:tracking list */
-			__( '✅ 已為 %1$d/%2$d 筆建立託運單:%3$s。', 'mo-ectools' ),
+			__( '✅ 已為 %1$d/%2$d 筆建立託運單:%3$s。', 'moksa-for-woocommerce' ),
 			count( $done ),
 			count( $done ) + count( $failed ),
 			implode( ' ', $done )
@@ -288,7 +288,7 @@ final class ShipmentOps {
 		if ( ! empty( $failed ) ) {
 			$msg .= ' ' . sprintf(
 				/* translators: %s: failed order numbers */
-				__( '⚠️ 失敗:%s。', 'mo-ectools' ),
+				__( '⚠️ 失敗:%s。', 'moksa-for-woocommerce' ),
 				implode( ' ', $failed )
 			);
 		}

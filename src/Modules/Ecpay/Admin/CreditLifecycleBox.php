@@ -31,14 +31,14 @@ final class CreditLifecycleBox {
 			data-nonce="<?php echo esc_attr( $nonce ); ?>"
 			data-total="<?php echo esc_attr( (string) (int) round( (float) $order->get_total() ) ); ?>">
 			<p style="margin:0 0 4px;color:#646970;font-size:11px;text-transform:uppercase;letter-spacing:.4px;">
-				<?php esc_html_e( '信用卡交易動作', 'mo-ectools' ); ?>
+				<?php esc_html_e( '信用卡交易動作', 'moksa-for-woocommerce' ); ?>
 			</p>
 			<p class="moksafowo-ecpay-credit-lifecycle__placeholder" style="margin:0;color:#646970;font-size:12px;">
-				<?php esc_html_e( '點下方按鈕查詢最新交易狀態…', 'mo-ectools' ); ?>
+				<?php esc_html_e( '點下方按鈕查詢最新交易狀態…', 'moksa-for-woocommerce' ); ?>
 			</p>
 			<p style="margin:8px 0 0;">
 				<button type="button" class="button button-secondary moksafowo-ecpay-credit-lifecycle__refresh">
-					<?php esc_html_e( '查詢交易狀態', 'mo-ectools' ); ?>
+					<?php esc_html_e( '查詢交易狀態', 'moksa-for-woocommerce' ); ?>
 				</button>
 			</p>
 		</div>
@@ -49,12 +49,12 @@ final class CreditLifecycleBox {
 	public static function ajax_query(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || ! self::is_credit_order( $order ) ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單或非信用卡付款。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '找不到訂單或非信用卡付款。', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$result = Helper::query_credit_trade( $order );
@@ -68,18 +68,18 @@ final class CreditLifecycleBox {
 	public static function ajax_action(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$action   = isset( $_POST['credit_action'] ) ? sanitize_text_field( wp_unslash( $_POST['credit_action'] ) ) : '';
 		$amount   = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
 		if ( ! in_array( $action, [ 'N', 'C', 'R' ], true ) ) {
-			wp_send_json_error( [ 'message' => __( '無效的動作。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '無效的動作。', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || ! self::is_credit_order( $order ) ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單或非信用卡付款。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '找不到訂單或非信用卡付款。', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$run_amount = ( 'R' === $action ) ? max( 1, $amount ) : (int) round( (float) $order->get_total() );
@@ -89,7 +89,7 @@ final class CreditLifecycleBox {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: action label, 2: error msg */
-					__( '綠界 %1$s 失敗：%2$s', 'mo-ectools' ),
+					__( '綠界 %1$s 失敗：%2$s', 'moksa-for-woocommerce' ),
 					self::action_label( $action ),
 					$result->get_error_message()
 				)
@@ -102,7 +102,7 @@ final class CreditLifecycleBox {
 		if ( 1 !== $rtn_code ) {
 			$msg = sprintf(
 				/* translators: 1: action label, 2: ECPay msg, 3: code */
-				__( '綠界 %1$s 失敗：%2$s（代碼 %3$d）', 'mo-ectools' ),
+				__( '綠界 %1$s 失敗：%2$s（代碼 %3$d）', 'moksa-for-woocommerce' ),
 				self::action_label( $action ),
 				$rtn_msg,
 				$rtn_code
@@ -114,7 +114,7 @@ final class CreditLifecycleBox {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: action label, 2: amount */
-				__( '綠界 %1$s 成功（金額 NT$%2$d）。', 'mo-ectools' ),
+				__( '綠界 %1$s 成功（金額 NT$%2$d）。', 'moksa-for-woocommerce' ),
 				self::action_label( $action ),
 				$run_amount
 			)
@@ -122,7 +122,7 @@ final class CreditLifecycleBox {
 
 		$query = Helper::query_credit_trade( $order );
 		if ( is_wp_error( $query ) ) {
-			wp_send_json_success( [ 'html' => '<p style="color:#00a32a;">' . esc_html( __( '動作成功，但查詢最新狀態失敗。請手動重新整理。', 'mo-ectools' ) ) . '</p>' ] );
+			wp_send_json_success( [ 'html' => '<p style="color:#00a32a;">' . esc_html( __( '動作成功，但查詢最新狀態失敗。請手動重新整理。', 'moksa-for-woocommerce' ) ) . '</p>' ] );
 		}
 		wp_send_json_success( [ 'html' => self::build_panel_html( $order, $query ) ] );
 	}
@@ -147,12 +147,12 @@ final class CreditLifecycleBox {
 			[
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'i18n'    => [
-					'querying'       => __( '查詢中…', 'mo-ectools' ),
-					'cancelConfirm'  => __( '確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。', 'mo-ectools' ),
-					'closureConfirm' => __( '確定要請款？銀行會實際扣顧客款項。', 'mo-ectools' ),
-					'refundConfirm'  => __( '確定要退款？金額：', 'mo-ectools' ),
-					'refundAmtErr'   => __( '退款金額需大於 0。', 'mo-ectools' ),
-					'genericErr'     => __( '操作失敗：', 'mo-ectools' ),
+					'querying'       => __( '查詢中…', 'moksa-for-woocommerce' ),
+					'cancelConfirm'  => __( '確定要取消這筆授權？此動作會把銀行扣的額度退回給顧客，且無法復原。', 'moksa-for-woocommerce' ),
+					'closureConfirm' => __( '確定要請款？銀行會實際扣顧客款項。', 'moksa-for-woocommerce' ),
+					'refundConfirm'  => __( '確定要退款？金額：', 'moksa-for-woocommerce' ),
+					'refundAmtErr'   => __( '退款金額需大於 0。', 'moksa-for-woocommerce' ),
+					'genericErr'     => __( '操作失敗：', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -176,26 +176,26 @@ final class CreditLifecycleBox {
 		?>
 		<div class="moksafowo-ecpay-credit-lifecycle__info">
 			<p style="margin:0 0 6px;">
-				<strong><?php esc_html_e( '交易狀態', 'mo-ectools' ); ?>：</strong>
+				<strong><?php esc_html_e( '交易狀態', 'moksa-for-woocommerce' ); ?>：</strong>
 				<span style="color:<?php echo esc_attr( $status_color ); ?>;font-weight:600;">
 					<?php echo esc_html( $status_label ); ?>
 				</span>
 			</p>
 			<p style="margin:0 0 6px;">
-				<strong><?php esc_html_e( '授權金額', 'mo-ectools' ); ?>：</strong>NT$<?php echo esc_html( (string) $amount ); ?>
+				<strong><?php esc_html_e( '授權金額', 'moksa-for-woocommerce' ); ?>：</strong>NT$<?php echo esc_html( (string) $amount ); ?>
 			</p>
 			<p style="margin:0 0 6px;">
-				<strong><?php esc_html_e( '已請款金額', 'mo-ectools' ); ?>：</strong>NT$<?php echo esc_html( (string) $cls_amt ); ?>
+				<strong><?php esc_html_e( '已請款金額', 'moksa-for-woocommerce' ); ?>：</strong>NT$<?php echo esc_html( (string) $cls_amt ); ?>
 			</p>
 			<?php if ( '' !== $auth_time ) : ?>
 				<p style="margin:0 0 6px;">
-					<strong><?php esc_html_e( '授權時間', 'mo-ectools' ); ?>：</strong><?php echo esc_html( $auth_time ); ?>
+					<strong><?php esc_html_e( '授權時間', 'moksa-for-woocommerce' ); ?>：</strong><?php echo esc_html( $auth_time ); ?>
 				</p>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $history ) ) : ?>
 				<details style="margin:8px 0;">
-					<summary style="cursor:pointer;font-weight:600;"><?php esc_html_e( '交易歷史', 'mo-ectools' ); ?> (<?php echo count( $history ); ?>)</summary>
+					<summary style="cursor:pointer;font-weight:600;"><?php esc_html_e( '交易歷史', 'moksa-for-woocommerce' ); ?> (<?php echo count( $history ); ?>)</summary>
 					<ul style="margin:6px 0 0 0;padding-left:18px;font-size:12px;">
 						<?php foreach ( $history as $h ) : ?>
 							<li style="margin-bottom:4px;">
@@ -214,23 +214,23 @@ final class CreditLifecycleBox {
 		<div class="moksafowo-ecpay-credit-lifecycle__actions" style="margin-top:12px;border-top:1px solid #e0e0e0;padding-top:10px;">
 			<?php if ( 'Authorized' === $status ) : ?>
 				<p style="margin:0 0 6px;color:#646970;font-size:11px;">
-					<?php esc_html_e( '此筆已授權但未請款，可請款後扣顧客款項，或取消授權退回額度。', 'mo-ectools' ); ?>
+					<?php esc_html_e( '此筆已授權但未請款，可請款後扣顧客款項，或取消授權退回額度。', 'moksa-for-woocommerce' ); ?>
 				</p>
 				<button type="button" class="button moksafowo-ecpay-credit-lifecycle__action" data-action="N">
-					<?php esc_html_e( '取消授權', 'mo-ectools' ); ?>
+					<?php esc_html_e( '取消授權', 'moksa-for-woocommerce' ); ?>
 				</button>
 				&nbsp;
 				<button type="button" class="button button-primary moksafowo-ecpay-credit-lifecycle__action" data-action="C">
 					<?php
 					/* translators: %d: 請款金額 */
-					echo esc_html( sprintf( __( '請款 NT$%d', 'mo-ectools' ), $total ) );
+					echo esc_html( sprintf( __( '請款 NT$%d', 'moksa-for-woocommerce' ), $total ) );
 					?>
 				</button>
 			<?php elseif ( in_array( $status, [ 'Captured', 'To be captured' ], true ) ) : ?>
 				<p style="margin:0 0 6px;color:#646970;font-size:11px;">
 					<?php
 					/* translators: %d: 已請款金額 */
-					echo esc_html( sprintf( __( '已請款 NT$%d，可部分或全額退款。', 'mo-ectools' ), $cls_amt ) );
+					echo esc_html( sprintf( __( '已請款 NT$%d，可部分或全額退款。', 'moksa-for-woocommerce' ), $cls_amt ) );
 					?>
 				</p>
 				<input type="number" min="1" max="<?php echo esc_attr( (string) $cls_amt ); ?>"
@@ -238,18 +238,18 @@ final class CreditLifecycleBox {
 	class="small-text moksafowo-ecpay-credit-lifecycle__amount"
 					style="width:80px;">
 				<button type="button" class="button button-primary moksafowo-ecpay-credit-lifecycle__action" data-action="R">
-					<?php esc_html_e( '退款', 'mo-ectools' ); ?>
+					<?php esc_html_e( '退款', 'moksa-for-woocommerce' ); ?>
 				</button>
 			<?php else : ?>
 				<p style="margin:0;color:#646970;font-size:11px;">
-					<?php esc_html_e( '此狀態無可用動作。', 'mo-ectools' ); ?>
+					<?php esc_html_e( '此狀態無可用動作。', 'moksa-for-woocommerce' ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
 
 		<p style="margin:10px 0 0;text-align:right;">
 			<button type="button" class="button-link moksafowo-ecpay-credit-lifecycle__refresh" style="font-size:11px;">
-				<?php esc_html_e( '重新查詢', 'mo-ectools' ); ?>
+				<?php esc_html_e( '重新查詢', 'moksa-for-woocommerce' ); ?>
 			</button>
 		</p>
 		<?php
@@ -276,22 +276,22 @@ final class CreditLifecycleBox {
 
 	private static function action_label( string $action ): string {
 		return [
-			'N' => __( '取消授權', 'mo-ectools' ),
-			'C' => __( '請款', 'mo-ectools' ),
-			'R' => __( '退款', 'mo-ectools' ),
+			'N' => __( '取消授權', 'moksa-for-woocommerce' ),
+			'C' => __( '請款', 'moksa-for-woocommerce' ),
+			'R' => __( '退款', 'moksa-for-woocommerce' ),
 		][ $action ] ?? $action;
 	}
 
 	private static function status_label( string $raw ): string {
 		$map = [
-			'Authorized'     => __( '已授權（未請款）', 'mo-ectools' ),
-			'Captured'       => __( '已請款', 'mo-ectools' ),
-			'To be captured' => __( '請款處理中', 'mo-ectools' ),
-			'Refunded'       => __( '已退刷', 'mo-ectools' ),
-			'Cancelled'      => __( '已取消授權', 'mo-ectools' ),
-			'Failed'         => __( '失敗', 'mo-ectools' ),
+			'Authorized'     => __( '已授權（未請款）', 'moksa-for-woocommerce' ),
+			'Captured'       => __( '已請款', 'moksa-for-woocommerce' ),
+			'To be captured' => __( '請款處理中', 'moksa-for-woocommerce' ),
+			'Refunded'       => __( '已退刷', 'moksa-for-woocommerce' ),
+			'Cancelled'      => __( '已取消授權', 'moksa-for-woocommerce' ),
+			'Failed'         => __( '失敗', 'moksa-for-woocommerce' ),
 		];
-		return $map[ $raw ] ?? ( '' === $raw ? __( '未知', 'mo-ectools' ) : $raw );
+		return $map[ $raw ] ?? ( '' === $raw ? __( '未知', 'moksa-for-woocommerce' ) : $raw );
 	}
 
 	private static function status_color( string $raw ): string {

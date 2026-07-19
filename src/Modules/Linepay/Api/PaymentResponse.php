@@ -41,7 +41,7 @@ final class PaymentResponse {
 			$order = wc_get_order( $order_id );
 
 			if ( ! $order ) {
-				throw new Exception( sprintf( Constants::LOG_TEMPLATE_HANDLE_CALLBANK_NOT_FOUND_ORDER_ID, $order_id, __( 'Unable to process callback.', 'mo-ectools' ) ) );
+				throw new Exception( sprintf( Constants::LOG_TEMPLATE_HANDLE_CALLBANK_NOT_FOUND_ORDER_ID, $order_id, __( 'Unable to process callback.', 'moksa-for-woocommerce' ) ) );
 			}
 
 			$payment_status = $order->get_meta( '_moksafowo_linepay_payment_status' );

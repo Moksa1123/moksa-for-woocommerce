@@ -24,7 +24,7 @@ final class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'payment',
-			'title' => __( '金流資訊', 'mo-ectools' ),
+			'title' => __( '金流資訊', 'moksa-for-woocommerce' ),
 			'html'  => self::card_html( $order ),
 		];
 		return $cards;
@@ -33,22 +33,22 @@ final class OrderMetaBox {
 	private static function card_html( \WC_Order $order ): string {
 		$raw_status    = (string) $order->get_meta( '_moksafowo_linepay_payment_status' );
 		$status_labels = array(
-			Constants::PAYMENT_STATUS_RESERVED  => __( '已預授權（待請款）', 'mo-ectools' ),
-			Constants::PAYMENT_STATUS_AUTHED    => __( '已授權（待請款）', 'mo-ectools' ),
-			Constants::PAYMENT_STATUS_CONFIRMED => __( '已請款', 'mo-ectools' ),
-			Constants::PAYMENT_STATUS_CANCELLED => __( '已取消', 'mo-ectools' ),
-			Constants::PAYMENT_STATUS_REFUNDED  => __( '已退款', 'mo-ectools' ),
-			Constants::PAYMENT_STATUS_FAILED    => __( '失敗', 'mo-ectools' ),
+			Constants::PAYMENT_STATUS_RESERVED  => __( '已預授權（待請款）', 'moksa-for-woocommerce' ),
+			Constants::PAYMENT_STATUS_AUTHED    => __( '已授權（待請款）', 'moksa-for-woocommerce' ),
+			Constants::PAYMENT_STATUS_CONFIRMED => __( '已請款', 'moksa-for-woocommerce' ),
+			Constants::PAYMENT_STATUS_CANCELLED => __( '已取消', 'moksa-for-woocommerce' ),
+			Constants::PAYMENT_STATUS_REFUNDED  => __( '已退款', 'moksa-for-woocommerce' ),
+			Constants::PAYMENT_STATUS_FAILED    => __( '失敗', 'moksa-for-woocommerce' ),
 		);
 		$status_label  = $status_labels[ $raw_status ] ?? $raw_status;
 
 		ob_start();
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
-		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '交易編號', 'mo-ectools' ) . '</div></th><td style="word-break:break-all;">' . esc_html( (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;"><div>' . esc_html__( '交易狀態', 'mo-ectools' ) . '</div></th><td>' . esc_html( $status_label ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '交易編號', 'moksa-for-woocommerce' ) . '</div></th><td style="word-break:break-all;">' . esc_html( (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;"><div>' . esc_html__( '交易狀態', 'moksa-for-woocommerce' ) . '</div></th><td>' . esc_html( $status_label ) . '</td></tr>';
 
 		if ( Constants::PAYMENT_STATUS_AUTHED === $raw_status ) {
-			echo '<tr id="moksafowo-linepay-action"><th style="text-align:left;">' . esc_html__( '付款動作', 'mo-ectools' ) . '</th><td><button class="button moksafowo-linepay-confirm-btn" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '確認請款', 'mo-ectools' ) . '</button></td></tr>';
+			echo '<tr id="moksafowo-linepay-action"><th style="text-align:left;">' . esc_html__( '付款動作', 'moksa-for-woocommerce' ) . '</th><td><button class="button moksafowo-linepay-confirm-btn" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '確認請款', 'moksa-for-woocommerce' ) . '</button></td></tr>';
 		}
 
 		echo '</table>';

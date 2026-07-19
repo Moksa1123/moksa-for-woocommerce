@@ -53,26 +53,26 @@ class OrderEdit {
 		if ( false !== $shipping_method ) {
 
 			$shipping_fields['moksafowo_payuni_storeid']      = array(
-				'label' => __( 'Store ID', 'mo-ectools' ),
+				'label' => __( 'Store ID', 'moksa-for-woocommerce' ),
 				'show'  => false,
 			);
 			$shipping_fields['moksafowo_payuni_storename']    = array(
-				'label' => __( 'Store Name', 'mo-ectools' ),
+				'label' => __( 'Store Name', 'moksa-for-woocommerce' ),
 				'show'  => false,
 			);
 			$shipping_fields['moksafowo_payuni_storeaddress'] = array(
-				'label' => __( 'Store Address', 'mo-ectools' ),
+				'label' => __( 'Store Address', 'moksa-for-woocommerce' ),
 				'show'  => false,
 			);
 
 			$shipping_fields['phone'] = array(
-				'label' => __( 'Shipping Phone', 'mo-ectools' ),
+				'label' => __( 'Shipping Phone', 'moksa-for-woocommerce' ),
 			);
 
 		} elseif ( $items_shipping ) {
 			if ( PayuniShipping::is_moksafowo_payuni_shipping_hd( $items_shipping->get_method_id() ) ) {
 				$shipping_fields['phone'] = array(
-					'label' => __( 'Shipping Phone', 'mo-ectools' ),
+					'label' => __( 'Shipping Phone', 'moksa-for-woocommerce' ),
 				);
 			}
 		}
@@ -86,9 +86,9 @@ class OrderEdit {
 		foreach ( $theorder->get_items( 'shipping' ) as $item_id => $item ) {
 			if ( PayuniShipping::is_payuni_shipping( $item->get_method_id() ) !== false ) {
 				if ( empty( $theorder->get_meta( OrderMeta::ShipTradeNo ) ) ) {
-					$order_actions['create_moksafowo_payuni_shipping_order'] = __( 'Create PAYUNi Shipping Order', 'mo-ectools' );
+					$order_actions['create_moksafowo_payuni_shipping_order'] = __( 'Create PAYUNi Shipping Order', 'moksa-for-woocommerce' );
 				} else {
-					$order_actions['create_moksafowo_payuni_shipping_order'] = __( 'Re-Create PAYUNi Shipping Order', 'mo-ectools' );
+					$order_actions['create_moksafowo_payuni_shipping_order'] = __( 'Re-Create PAYUNi Shipping Order', 'moksa-for-woocommerce' );
 				}
 			}
 		}

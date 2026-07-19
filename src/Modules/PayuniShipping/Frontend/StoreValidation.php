@@ -42,11 +42,11 @@ final class StoreValidation {
 		if ( class_exists( '\\Automattic\\WooCommerce\\StoreApi\\Exceptions\\RouteException' ) ) {
 			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
 				'moksafowo_payuni_cvs_no_store',
-				esc_html__( '請先選擇取貨門市。', 'mo-ectools' ),
+				esc_html__( '請先選擇取貨門市。', 'moksa-for-woocommerce' ),
 				400
 			);
 		}
-		throw new \Exception( esc_html__( '請先選擇取貨門市。', 'mo-ectools' ) );
+		throw new \Exception( esc_html__( '請先選擇取貨門市。', 'moksa-for-woocommerce' ) );
 	}
 
 	public static function classic_fields_validation(): void {
@@ -77,7 +77,7 @@ final class StoreValidation {
 		}
 
 		if ( $need_cvs && empty( $store_id ) ) {
-			wc_add_notice( __( '請選擇取貨超商門市。', 'mo-ectools' ), 'error' );
+			wc_add_notice( __( '請選擇取貨超商門市。', 'moksa-for-woocommerce' ), 'error' );
 		}
 
 		$shipping_phone = isset( $_POST['shipping_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_phone'] ) ) : '';
@@ -90,7 +90,7 @@ final class StoreValidation {
 				&& strlen( $shipping_phone ) >= 10 && strlen( $shipping_phone ) <= 11;
 			$valid = (bool) apply_filters( 'moksafowo_payuni_shipping_phone_valid', $valid, $shipping_phone );
 			if ( ! $valid ) {
-				wc_add_notice( __( '收件人電話格式不正確，請填入有效的手機或市話號碼。', 'mo-ectools' ), 'error' );
+				wc_add_notice( __( '收件人電話格式不正確，請填入有效的手機或市話號碼。', 'moksa-for-woocommerce' ), 'error' );
 			}
 		}
 

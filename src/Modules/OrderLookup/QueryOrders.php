@@ -66,7 +66,7 @@ final class QueryOrders {
 				$orders[] = array(
 					'id'       => (int) $id,
 					'number'   => (string) $order->get_order_number(),
-					'name'     => '' !== $name ? $name : __( '（無姓名）', 'mo-ectools' ),
+					'name'     => '' !== $name ? $name : __( '（無姓名）', 'moksa-for-woocommerce' ),
 					'total'    => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
 					'edit_url' => $order->get_edit_order_url(),
 				);

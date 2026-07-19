@@ -13,13 +13,13 @@ class BankType {
 	public static function get_name( $bank_type ) {
 		switch ( $bank_type ) {
 			case self::TWBank:
-				return __( 'Taiwan Bank', 'mo-ectools' );
+				return __( 'Taiwan Bank', 'moksa-for-woocommerce' );
 			case self::CTBCBank:
-				return __( 'CTBC Bank', 'mo-ectools' );
+				return __( 'CTBC Bank', 'moksa-for-woocommerce' );
 			case self::CATHAYBank:
-				return __( 'Cathay Bank', 'mo-ectools' );
+				return __( 'Cathay Bank', 'moksa-for-woocommerce' );
 			default:
-				return __( 'Unknown Bank', 'mo-ectools' );
+				return __( 'Unknown Bank', 'moksa-for-woocommerce' );
 		}
 	}
 }

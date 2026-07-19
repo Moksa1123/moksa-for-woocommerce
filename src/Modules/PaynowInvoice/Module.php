@@ -18,7 +18,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'PayNow 電子發票 — B2C / B2B / 手機條碼 / 自然人憑證 / 捐贈', 'mo-ectools' );
+		return __( 'PayNow 電子發票 — B2C / B2B / 手機條碼 / 自然人憑證 / 捐贈', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -26,21 +26,21 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'PayNow 電子發票', 'mo-ectools' );
+		return __( 'PayNow 電子發票', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( 'B2C / B2B / 載具 / 捐贈 — 立即富旗下', 'mo-ectools' );
+		return __( 'B2C / B2B / 載具 / 捐贈 — 立即富旗下', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( 'B2C 一般發票', 'mo-ectools' ),
-			__( 'B2B 三聯式', 'mo-ectools' ),
-			__( '手機條碼', 'mo-ectools' ),
-			__( '自然人憑證', 'mo-ectools' ),
-			__( '愛心碼捐贈', 'mo-ectools' ),
-			__( '作廢發票', 'mo-ectools' ),
+			__( 'B2C 一般發票', 'moksa-for-woocommerce' ),
+			__( 'B2B 三聯式', 'moksa-for-woocommerce' ),
+			__( '手機條碼', 'moksa-for-woocommerce' ),
+			__( '自然人憑證', 'moksa-for-woocommerce' ),
+			__( '愛心碼捐贈', 'moksa-for-woocommerce' ),
+			__( '作廢發票', 'moksa-for-woocommerce' ),
 		];
 	}
 

@@ -31,11 +31,11 @@ final class Atm extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay ATM 虛擬帳號', 'mo-ectools' );
+		return __( 'SmilePay ATM 虛擬帳號', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得虛擬帳號後，於期限內至 ATM / 網銀轉帳完成付款。', 'mo-ectools' );
+		return __( '取得虛擬帳號後，於期限內至 ATM / 網銀轉帳完成付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

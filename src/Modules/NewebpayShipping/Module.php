@@ -14,7 +14,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '藍新物流 — 超商取貨（搭配藍新超商代碼付款效果最佳）', 'mo-ectools' );
+		return __( '藍新物流 — 超商取貨（搭配藍新超商代碼付款效果最佳）', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -22,19 +22,19 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '藍新物流', 'mo-ectools' );
+		return __( '藍新物流', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '超商取貨 — 7-11 / 全家 / 萊爾富 / OK', 'mo-ectools' );
+		return __( '超商取貨 — 7-11 / 全家 / 萊爾富 / OK', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '7-11 取貨', 'mo-ectools' ),
-			__( '全家取貨', 'mo-ectools' ),
-			__( '萊爾富取貨', 'mo-ectools' ),
-			__( 'OK 取貨', 'mo-ectools' ),
+			__( '7-11 取貨', 'moksa-for-woocommerce' ),
+			__( '全家取貨', 'moksa-for-woocommerce' ),
+			__( '萊爾富取貨', 'moksa-for-woocommerce' ),
+			__( 'OK 取貨', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -62,11 +62,11 @@ final class Module extends AbstractModule {
 
 	public static function register_batch_print( array $providers ): array {
 		$titles                    = [
-			'moksafowo_newebpay_shipping_cvs' => __( '藍新超商取貨', 'mo-ectools' ),
+			'moksafowo_newebpay_shipping_cvs' => __( '藍新超商取貨', 'moksa-for-woocommerce' ),
 		];
 		$counter                   = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
 		$providers['newebpay-cvs'] = [
-			'label'          => __( '藍新 物流託運單', 'mo-ectools' ),
+			'label'          => __( '藍新 物流託運單', 'moksa-for-woocommerce' ),
 			'category'       => 'cvs',
 			'method_ids'     => $titles,
 			'handler'        => [ Operations\PrintLabel::class, 'render' ],
@@ -80,12 +80,12 @@ final class Module extends AbstractModule {
 	public static function ajax_create_shipment(): void {
 		check_ajax_referer( 'moksafowo_newebpay_shipping_create' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ] );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'moksa-for-woocommerce' ) ] );
 		}
 		$result = Operations\CreateShipment::run( $order );
 		if ( $result['ok'] ) {
@@ -93,7 +93,7 @@ final class Module extends AbstractModule {
 				[
 					'message' => sprintf(
 						/* translators: %s: lgs_no */
-						__( '藍新物流單建立成功（單號 %s）', 'mo-ectools' ),
+						__( '藍新物流單建立成功（單號 %s）', 'moksa-for-woocommerce' ),
 						$result['lgs_no']
 					),
 				]
@@ -105,21 +105,21 @@ final class Module extends AbstractModule {
 	public static function ajax_query_shipment(): void {
 		check_ajax_referer( 'moksafowo_newebpay_shipping_query' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ] );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'moksa-for-woocommerce' ) ] );
 		}
 		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
-			wp_send_json_error( [ 'message' => __( '訂單尚未建單，無 MerchantOrderNo 可查詢。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單尚未建單，無 MerchantOrderNo 可查詢。', 'moksa-for-woocommerce' ) ] );
 		}
 		$result = Api\ShippingRequest::query_shipment( $mtn );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			wp_send_json_error( [ 'message' => sprintf( __( '查詢失敗：%s', 'mo-ectools' ), $result['message'] ) ] );
+			wp_send_json_error( [ 'message' => sprintf( __( '查詢失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) ] );
 		}
 		$data   = $result['data'] ?? [];
 		$retld  = (string) ( $data['Retld'] ?? $data['RetId'] ?? '' );
@@ -129,7 +129,7 @@ final class Module extends AbstractModule {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: status label */
-					__( '查詢藍新物流：%s', 'mo-ectools' ),
+					__( '查詢藍新物流：%s', 'moksa-for-woocommerce' ),
 					$mapped['label']
 				)
 			);
@@ -139,7 +139,7 @@ final class Module extends AbstractModule {
 			[
 				'message' => sprintf(
 					/* translators: %s: status */
-					__( '查詢成功 — %s', 'mo-ectools' ),
+					__( '查詢成功 — %s', 'moksa-for-woocommerce' ),
 					null !== $mapped ? $mapped['label'] : ( $data['RetString'] ?? 'OK' )
 				),
 			]
@@ -149,21 +149,21 @@ final class Module extends AbstractModule {
 	public static function ajax_trace_shipment(): void {
 		check_ajax_referer( 'moksafowo_newebpay_shipping_trace' );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ] );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'moksa-for-woocommerce' ) ] );
 		}
 		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
-			wp_send_json_error( [ 'message' => __( '訂單尚未建單。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單尚未建單。', 'moksa-for-woocommerce' ) ] );
 		}
 		$result = Api\ShippingRequest::trace( $mtn );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			wp_send_json_error( [ 'message' => sprintf( __( '追蹤失敗：%s', 'mo-ectools' ), $result['message'] ) ] );
+			wp_send_json_error( [ 'message' => sprintf( __( '追蹤失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) ] );
 		}
 		$data    = $result['data'] ?? [];
 		$history = is_array( $data['History'] ?? null ) ? $data['History'] : [];

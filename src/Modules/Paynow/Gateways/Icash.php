@@ -23,11 +23,11 @@ final class Icash extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow iCash 錢包', 'mo-ectools' );
+		return __( 'PayNow iCash 錢包', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 iCash Pay 完成付款。', 'mo-ectools' );
+		return __( '跳轉至 iCash Pay 完成付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

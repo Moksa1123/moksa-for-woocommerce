@@ -61,12 +61,12 @@ class PaymentResponse {
 		$pay_type        = $decrypted_info['PaymentType'];
 		$trade_no        = $decrypted_info['TradeNo'];
 
-		$text_log        = __( 'PAYUNi Notify', 'mo-ectools' );
-		$text_code       = __( 'Status code:', 'mo-ectools' );
-		$text_message    = __( 'Transaction message:', 'mo-ectools' );
-		$text_mertradeno = __( 'MerTradeNo:', 'mo-ectools' );
-		$text_number     = __( 'UNi number:', 'mo-ectools' );
-		$text_paytype    = __( 'Payment type:', 'mo-ectools' );
+		$text_log        = __( 'PAYUNi Notify', 'moksa-for-woocommerce' );
+		$text_code       = __( 'Status code:', 'moksa-for-woocommerce' );
+		$text_message    = __( 'Transaction message:', 'moksa-for-woocommerce' );
+		$text_mertradeno = __( 'MerTradeNo:', 'moksa-for-woocommerce' );
+		$text_number     = __( 'UNi number:', 'moksa-for-woocommerce' );
+		$text_paytype    = __( 'Payment type:', 'moksa-for-woocommerce' );
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $payuni_order_no );
 		$order        = wc_get_order( $woo_order_id );
@@ -132,12 +132,12 @@ class PaymentResponse {
 		$pay_type = $decrypted_info['PaymentType'];
 		$trade_no = $decrypted_info['TradeNo'];
 
-		$text_log        = __( 'PAYUNi Return', 'mo-ectools' );
-		$text_code       = __( 'Status code:', 'mo-ectools' );
-		$text_message    = __( 'Transaction message:', 'mo-ectools' );
-		$text_mertradeno = __( 'MerTradeNo:', 'mo-ectools' );
-		$text_number     = __( 'UNi number:', 'mo-ectools' );
-		$text_paytype    = __( 'Payment type:', 'mo-ectools' );
+		$text_log        = __( 'PAYUNi Return', 'moksa-for-woocommerce' );
+		$text_code       = __( 'Status code:', 'moksa-for-woocommerce' );
+		$text_message    = __( 'Transaction message:', 'moksa-for-woocommerce' );
+		$text_mertradeno = __( 'MerTradeNo:', 'moksa-for-woocommerce' );
+		$text_number     = __( 'UNi number:', 'moksa-for-woocommerce' );
+		$text_paytype    = __( 'Payment type:', 'moksa-for-woocommerce' );
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $order_id );
 		$order        = wc_get_order( $woo_order_id );

@@ -15,7 +15,7 @@ final class CheckoutFields {
 			new InvoiceFieldConfig(
 				provider_slug: 'amego',
 				option_prefix: 'moksafowo_amego_invoice',
-				member_label: __( 'AMEGO 會員載具', 'mo-ectools' ),
+				member_label: __( 'AMEGO 會員載具', 'moksa-for-woocommerce' ),
 			)
 		);
 	}

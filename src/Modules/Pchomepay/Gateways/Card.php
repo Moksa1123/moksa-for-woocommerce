@@ -27,11 +27,11 @@ final class Card extends AbstractPchomepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '支付連 信用卡', 'mo-ectools' );
+		return __( '支付連 信用卡', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至支付連支付頁，使用信用卡（含分期）完成付款。', 'mo-ectools' );
+		return __( '跳轉至支付連支付頁，使用信用卡（含分期）完成付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

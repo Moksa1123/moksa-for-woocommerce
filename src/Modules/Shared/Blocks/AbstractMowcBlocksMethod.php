@@ -75,7 +75,7 @@ abstract class AbstractMowcBlocksMethod extends AbstractPaymentMethodType {
 
 		if ( ! wp_script_is( $handle, 'registered' ) ) {
 			wp_register_script( $handle, $build_url . 'index.js', array_merge( $deps, $extras ), $version, true );
-			wp_set_script_translations( $handle, 'mo-ectools' );
+			wp_set_script_translations( $handle, 'moksa-for-woocommerce' );
 		}
 		return [ $handle ];
 	}

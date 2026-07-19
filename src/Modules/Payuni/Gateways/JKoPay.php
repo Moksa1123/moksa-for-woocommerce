@@ -11,8 +11,8 @@ class JKoPay extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 街口支付', 'mo-ectools' );
-		$this->method_description = __( '使用街口支付付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 街口支付', 'moksa-for-woocommerce' );
+		$this->method_description = __( '使用街口支付付款，跳轉至 PAYUNi 付款頁完成。', 'moksa-for-woocommerce' );
 		$this->supports           = array( 'products' );
 
 		$this->init_form_fields();
@@ -29,18 +29,18 @@ class JKoPay extends GatewayBase {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'     => array(
-				'title'   => __( '啟用', 'mo-ectools' ),
+				'title'   => __( '啟用', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( '啟用 PAYUNi JKoPay 街口支付', 'mo-ectools' ),
+				'label'   => __( '啟用 PAYUNi JKoPay 街口支付', 'moksa-for-woocommerce' ),
 				'default' => 'no',
 			),
 			'title'       => array(
-				'title'   => __( '結帳顯示名稱', 'mo-ectools' ),
+				'title'   => __( '結帳顯示名稱', 'moksa-for-woocommerce' ),
 				'type'    => 'text',
-				'default' => __( 'JKoPay 街口支付', 'mo-ectools' ),
+				'default' => __( 'JKoPay 街口支付', 'moksa-for-woocommerce' ),
 			),
 			'description' => array(
-				'title'   => __( '結帳顯示說明', 'mo-ectools' ),
+				'title'   => __( '結帳顯示說明', 'moksa-for-woocommerce' ),
 				'type'    => 'textarea',
 				'default' => '',
 			),

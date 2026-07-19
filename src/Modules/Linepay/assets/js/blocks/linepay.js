@@ -1,6 +1,6 @@
 const linepay_settings = window.wc.wcSettings.getSetting( 'moksafowo-linepay_data', {} );
 const linepay_label = window.wp.htmlEntities.decodeEntities( linepay_settings.title )
-	|| window.wp.i18n.__( 'LINE Pay', 'mo-ectools' );
+	|| window.wp.i18n.__( 'LINE Pay', 'moksa-for-woocommerce' );
 
 const linepay_content = () => {
 	return window.wp.htmlEntities.decodeEntities( linepay_settings.description || '' );

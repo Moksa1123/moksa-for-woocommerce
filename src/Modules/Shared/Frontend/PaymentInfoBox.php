@@ -66,8 +66,8 @@ final class PaymentInfoBox {
 	public static function render_html( array $rows ): string {
 		ob_start();
 		echo '<section class="moksafowo-payment-info woocommerce-order-overview" style="margin:1.5em 0;padding:1em 1.25em;border:1px solid #e0e0e0;border-radius:6px;">';
-		echo '<h2 style="margin-top:0;">' . esc_html__( '繳費資訊', 'mo-ectools' ) . '</h2>';
-		echo '<p style="color:#646970;font-size:13px;margin-top:-.5em;">' . esc_html__( '請於期限內以下列資訊完成付款。', 'mo-ectools' ) . '</p>';
+		echo '<h2 style="margin-top:0;">' . esc_html__( '繳費資訊', 'moksa-for-woocommerce' ) . '</h2>';
+		echo '<p style="color:#646970;font-size:13px;margin-top:-.5em;">' . esc_html__( '請於期限內以下列資訊完成付款。', 'moksa-for-woocommerce' ) . '</p>';
 		echo '<ul style="list-style:none;padding:0;margin:0;">';
 		foreach ( $rows as $row ) {
 			$label = isset( $row['label'] ) ? (string) $row['label'] : '';

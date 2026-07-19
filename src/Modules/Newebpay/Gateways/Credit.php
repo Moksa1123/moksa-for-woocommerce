@@ -17,10 +17,10 @@ final class Credit extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 信用卡', 'mo-ectools' );
+		return __( '藍新 信用卡', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用信用卡一次付清，跳轉至藍新支付頁完成付款。', 'mo-ectools' );
+		return __( '使用信用卡一次付清，跳轉至藍新支付頁完成付款。', 'moksa-for-woocommerce' );
 	}
 }

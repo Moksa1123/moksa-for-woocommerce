@@ -108,7 +108,7 @@ final class InvoiceChannels {
 
 	/** 「捐贈單位」下拉（傳統結帳 / metabox）的 options（value=愛心碼、label=單位名稱，前置 placeholder）。 */
 	public static function donate_select_options( string $option_prefix ): array {
-		$opts = [ '' => __( '請選擇捐贈單位', 'mo-ectools' ) ];
+		$opts = [ '' => __( '請選擇捐贈單位', 'moksa-for-woocommerce' ) ];
 		foreach ( self::donate_orgs( $option_prefix ) as $o ) {
 			$opts[ $o['code'] ] = $o['name'];
 		}

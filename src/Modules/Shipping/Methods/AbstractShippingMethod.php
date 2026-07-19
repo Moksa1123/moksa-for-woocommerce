@@ -32,7 +32,7 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 	}
 
 	public function supported_temperatures(): array {
-		return [ ProductTemp::NORMAL => __( '常溫', 'mo-ectools' ) ];
+		return [ ProductTemp::NORMAL => __( '常溫', 'moksa-for-woocommerce' ) ];
 	}
 
 	public function is_available( $package ): bool {
@@ -57,24 +57,24 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 	public function init_form_fields(): void {
 		$this->instance_form_fields = [
 			'title'                         => [
-				'title'       => __( '物流名稱', 'mo-ectools' ),
+				'title'       => __( '物流名稱', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( '結帳頁顯示的物流名稱', 'mo-ectools' ),
+				'description' => __( '結帳頁顯示的物流名稱', 'moksa-for-woocommerce' ),
 				'default'     => $this->method_title,
 				'desc_tip'    => true,
 			],
 			'tax_status'                    => [
-				'title'   => __( '稅率', 'mo-ectools' ),
+				'title'   => __( '稅率', 'moksa-for-woocommerce' ),
 				'type'    => 'select',
 				'class'   => 'wc-enhanced-select',
 				'default' => 'taxable',
 				'options' => [
-					'taxable' => __( '應稅', 'mo-ectools' ),
-					'none'    => _x( '不收稅', 'Tax status', 'mo-ectools' ),
+					'taxable' => __( '應稅', 'moksa-for-woocommerce' ),
+					'none'    => _x( '不收稅', 'Tax status', 'moksa-for-woocommerce' ),
 				],
 			],
 			'cost'                          => [
-				'title'       => __( '運費', 'mo-ectools' ),
+				'title'       => __( '運費', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'placeholder' => '0',
 				'default'     => '0',
@@ -82,74 +82,74 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 				'desc_tip'    => false,
 			],
 			'free_min'                      => [
-				'title'       => __( '免運門檻', 'mo-ectools' ),
+				'title'       => __( '免運門檻', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
-				'placeholder' => __( '訂單金額 ≥ 此值免運。空白 = 不啟用免運', 'mo-ectools' ),
+				'placeholder' => __( '訂單金額 ≥ 此值免運。空白 = 不啟用免運', 'moksa-for-woocommerce' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			],
 			'split_shipping_fee'            => [
-				'title'       => __( '依溫層分別計算運費（進階）', 'mo-ectools' ),
+				'title'       => __( '依溫層分別計算運費（進階）', 'moksa-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( '多溫層訂單，每個溫層的物流單帶該溫層自己的運費', 'mo-ectools' ),
+				'label'       => __( '多溫層訂單，每個溫層的物流單帶該溫層自己的運費', 'moksa-for-woocommerce' ),
 				'default'     => 'no',
-				'description' => __( '預設關閉：cost formula 依整車一次性算出單一運費，整單運費全數塞給第一張物流單（COD 第一張代收所有運費）。開啟後：cost formula 會對每個溫層的商品「分別」評估一次，顧客結帳顯示的運費 = 各溫層運費總和（多溫層 = 多份基本費），每張物流單的 GoodsAmount / COD 代收金額會帶該溫層自己評估出來的運費。需搭配 `[moksafowo_addfee cool_2="X" cool_3="Y"]` 的 cost formula 才能讓不同溫層算出不同運費。', 'mo-ectools' ),
+				'description' => __( '預設關閉：cost formula 依整車一次性算出單一運費，整單運費全數塞給第一張物流單（COD 第一張代收所有運費）。開啟後：cost formula 會對每個溫層的商品「分別」評估一次，顧客結帳顯示的運費 = 各溫層運費總和（多溫層 = 多份基本費），每張物流單的 GoodsAmount / COD 代收金額會帶該溫層自己評估出來的運費。需搭配 `[moksafowo_addfee cool_2="X" cool_3="Y"]` 的 cost formula 才能讓不同溫層算出不同運費。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => false,
 			],
 			'breakdown_enabled'             => [
-				'title'       => __( '結帳顯示溫層拆解（進階）', 'mo-ectools' ),
+				'title'       => __( '結帳顯示溫層拆解（進階）', 'moksa-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( '多溫層訂單，物流名稱後面顯示各溫層件數與運費', 'mo-ectools' ),
+				'label'       => __( '多溫層訂單，物流名稱後面顯示各溫層件數與運費', 'moksa-for-woocommerce' ),
 				'default'     => 'yes',
-				'description' => __( '預設開啟：結帳頁的物流選項會在物流名稱後面附上「🟫 常溫 ×1　🟦 冷藏 ×2」之類的拆解。純常溫訂單、或單溫層 method 不會顯示。', 'mo-ectools' ),
+				'description' => __( '預設開啟：結帳頁的物流選項會在物流名稱後面附上「🟫 常溫 ×1　🟦 冷藏 ×2」之類的拆解。純常溫訂單、或單溫層 method 不會顯示。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => false,
 			],
 			'breakdown_marker_normal'       => [
-				'title'       => __( '常溫 marker', 'mo-ectools' ),
+				'title'       => __( '常溫 marker', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => '🟫',
-				'description' => __( '拆解文字前的視覺符號（emoji 或任意字元）。留空 = 用「·」', 'mo-ectools' ),
+				'description' => __( '拆解文字前的視覺符號（emoji 或任意字元）。留空 = 用「·」', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'breakdown_marker_refrigerated' => [
-				'title'       => __( '冷藏 marker', 'mo-ectools' ),
+				'title'       => __( '冷藏 marker', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => '🟦',
-				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'mo-ectools' ),
+				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'breakdown_marker_frozen'       => [
-				'title'       => __( '冷凍 marker', 'mo-ectools' ),
+				'title'       => __( '冷凍 marker', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => '🟪',
-				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'mo-ectools' ),
+				'description' => __( '拆解文字前的視覺符號。留空 = 用「·」', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'breakdown_separator'           => [
-				'title'       => __( '拆解分隔符', 'mo-ectools' ),
+				'title'       => __( '拆解分隔符', 'moksa-for-woocommerce' ),
 				'type'        => 'select',
 				'class'       => 'wc-enhanced-select',
 				'default'     => 'fullspace',
 				'options'     => [
-					'fullspace' => __( '全形空格（　）— 視覺隔開但不換行', 'mo-ectools' ),
-					'pipe'      => __( '直線（｜）— 明確分隔', 'mo-ectools' ),
-					'dot'       => __( '點（·）— 簡潔', 'mo-ectools' ),
-					'comma'     => __( '頓號（、）— 中文閱讀習慣', 'mo-ectools' ),
+					'fullspace' => __( '全形空格（　）— 視覺隔開但不換行', 'moksa-for-woocommerce' ),
+					'pipe'      => __( '直線（｜）— 明確分隔', 'moksa-for-woocommerce' ),
+					'dot'       => __( '點（·）— 簡潔', 'moksa-for-woocommerce' ),
+					'comma'     => __( '頓號（、）— 中文閱讀習慣', 'moksa-for-woocommerce' ),
 				],
-				'description' => __( '多溫層之間如何分隔。Block 結帳會把 \n 換行 normalize 成 space，所以走全形字元最穩。', 'mo-ectools' ),
+				'description' => __( '多溫層之間如何分隔。Block 結帳會把 \n 換行 normalize 成 space，所以走全形字元最穩。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => false,
 			],
 			'breakdown_format'              => [
-				'title'       => __( '拆解顯示密度', 'mo-ectools' ),
+				'title'       => __( '拆解顯示密度', 'moksa-for-woocommerce' ),
 				'type'        => 'select',
 				'class'       => 'wc-enhanced-select',
 				'default'     => 'full',
 				'options'     => [
-					'full'    => __( '完整 — 🟫 常溫 ×3　🟦 冷藏 ×5　🟪 冷凍 ×2', 'mo-ectools' ),
-					'compact' => __( '精簡 — 🟫×3 🟦×5 🟪×2（emoji 已有顏色語意，省 30%）', 'mo-ectools' ),
-					'summary' => __( '摘要 — 🟫🟦🟪 共 10 件（最短，多溫層只看到圖示組合）', 'mo-ectools' ),
+					'full'    => __( '完整 — 🟫 常溫 ×3　🟦 冷藏 ×5　🟪 冷凍 ×2', 'moksa-for-woocommerce' ),
+					'compact' => __( '精簡 — 🟫×3 🟦×5 🟪×2（emoji 已有顏色語意，省 30%）', 'moksa-for-woocommerce' ),
+					'summary' => __( '摘要 — 🟫🟦🟪 共 10 件（最短，多溫層只看到圖示組合）', 'moksa-for-woocommerce' ),
 				],
-				'description' => __( '多 qty + 多溫層訂單，完整版可能在結帳頁因為太長 wrap 被斷成兩行（「冷藏」跟「×5」可能拆到不同行）。精簡版去掉中文 label 用 emoji 顏色辨識，多半能一行顯示。摘要版只顯示溫層 emoji 組合 + 總件數，最節省空間。', 'mo-ectools' ),
+				'description' => __( '多 qty + 多溫層訂單，完整版可能在結帳頁因為太長 wrap 被斷成兩行（「冷藏」跟「×5」可能拆到不同行）。精簡版去掉中文 label 用 emoji 顏色辨識，多半能一行顯示。摘要版只顯示溫層 emoji 組合 + 總件數，最節省空間。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => false,
 			],
 		];
@@ -317,14 +317,14 @@ abstract class AbstractShippingMethod extends \WC_Shipping_Method {
 
 	protected static function cost_field_description(): string {
 		$lines = [
-			__( '支援純數字或含 shortcode 的算式，計算結果為新台幣金額。', 'mo-ectools' ),
-			__( '範例：', 'mo-ectools' ),
-			__( '<code>100</code> — 固定 100 元', 'mo-ectools' ),
-			__( '<code>100 + [moksafowo_addfee cool_2="50" cool_3="100"]</code> — 常溫 100、含冷藏訂單 +50、含冷凍訂單 +100', 'mo-ectools' ),
-			__( '<code>[moksafowo_addfee temp_1="100" temp_2="150" temp_3="200"]</code> — 常溫 100 / 冷藏 150 / 冷凍 200（搭配下方「依溫層分別計算運費」勾起來，每張物流單就帶該溫層的價格）', 'mo-ectools' ),
-			__( '<code>50 + [moksafowo_addfee qty="10"]</code> — 50 + 每件 10 元', 'mo-ectools' ),
-			__( '<code>[moksafowo_addfee weight="20"]</code> — 每公斤 20 元', 'mo-ectools' ),
-			__( '屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 base、<code>temp_3</code>=冷凍 base、<code>cool</code>=任一冷的就加、<code>cool_2</code>=冷藏額外加、<code>cool_3</code>=冷凍額外加、<code>qty</code>=每件加、<code>weight</code>=每公斤加。', 'mo-ectools' ),
+			__( '支援純數字或含 shortcode 的算式，計算結果為新台幣金額。', 'moksa-for-woocommerce' ),
+			__( '範例：', 'moksa-for-woocommerce' ),
+			__( '<code>100</code> — 固定 100 元', 'moksa-for-woocommerce' ),
+			__( '<code>100 + [moksafowo_addfee cool_2="50" cool_3="100"]</code> — 常溫 100、含冷藏訂單 +50、含冷凍訂單 +100', 'moksa-for-woocommerce' ),
+			__( '<code>[moksafowo_addfee temp_1="100" temp_2="150" temp_3="200"]</code> — 常溫 100 / 冷藏 150 / 冷凍 200（搭配下方「依溫層分別計算運費」勾起來，每張物流單就帶該溫層的價格）', 'moksa-for-woocommerce' ),
+			__( '<code>50 + [moksafowo_addfee qty="10"]</code> — 50 + 每件 10 元', 'moksa-for-woocommerce' ),
+			__( '<code>[moksafowo_addfee weight="20"]</code> — 每公斤 20 元', 'moksa-for-woocommerce' ),
+			__( '屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 base、<code>temp_3</code>=冷凍 base、<code>cool</code>=任一冷的就加、<code>cool_2</code>=冷藏額外加、<code>cool_3</code>=冷凍額外加、<code>qty</code>=每件加、<code>weight</code>=每公斤加。', 'moksa-for-woocommerce' ),
 		];
 		return wp_kses_post( implode( '<br>', $lines ) );
 	}

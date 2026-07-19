@@ -32,7 +32,7 @@ final class Client {
 			self::log( 'request skipped — credentials unset', [ 'url' => $url ] );
 			return [
 				'ok'      => false,
-				'message' => __( '尚未設定 Shopline Payments 商家憑證。', 'mo-ectools' ),
+				'message' => __( '尚未設定 Shopline Payments 商家憑證。', 'moksa-for-woocommerce' ),
 				'code'    => 'NO_CREDENTIALS',
 				'data'    => [],
 			];
@@ -101,7 +101,7 @@ final class Client {
 			);
 			return [
 				'ok'      => false,
-				'message' => (string) ( $decoded['msg'] ?? $decoded['message'] ?? __( 'Shopline Payments API 失敗', 'mo-ectools' ) ),
+				'message' => (string) ( $decoded['msg'] ?? $decoded['message'] ?? __( 'Shopline Payments API 失敗', 'moksa-for-woocommerce' ) ),
 				'code'    => $code,
 				'data'    => $decoded,
 			];

@@ -24,8 +24,8 @@ class B2CNormal extends ShippingBase {
 
 		$this->instance_id        = absint( $instance_id );
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（常溫）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi — 7-11 大宗超商取貨（常溫）', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（常溫）', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi — 7-11 大宗超商取貨（常溫）', 'moksa-for-woocommerce' );
 
 		$this->goods_type = GoodsType::NORMAL; // 1: 常溫, 2:冷凍
 		$this->lgs_type   = LgsType::B2C;

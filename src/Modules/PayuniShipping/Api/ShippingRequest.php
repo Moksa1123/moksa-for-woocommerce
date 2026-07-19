@@ -99,7 +99,7 @@ class ShippingRequest {
 		}
 
 		if ( empty( $order->get_meta( OrderMeta::ShipType ) ) ) {
-			$order->add_order_note( __( 'PAYUNi 物流類型未設定', 'mo-ectools' ) );
+			$order->add_order_note( __( 'PAYUNi 物流類型未設定', 'moksa-for-woocommerce' ) );
 			return;
 		}
 
@@ -125,7 +125,7 @@ class ShippingRequest {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: PAYUNi status code, 2: error message */
-						__( 'PAYUNi 建立物流單失敗：%1$s（%2$s）', 'mo-ectools' ),
+						__( 'PAYUNi 建立物流單失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
 						(string) ( $resp_info['Status'] ?? '' ),
 						(string) ( $resp_info['Message'] ?? '' )
 					)
@@ -149,11 +149,11 @@ class ShippingRequest {
 			$order->save();
 
 			/* translators: %s: PAYUNi ship trade number */
-			$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（物流單號 %s）', 'mo-ectools' ), $resp_info['ShipTradeNo'] ) );
+			$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（物流單號 %s）', 'moksa-for-woocommerce' ), $resp_info['ShipTradeNo'] ) );
 
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		} catch ( \Exception $e ) {
-			PayuniShipping::log( __( 'PAYUNi 建立物流單失敗：', 'mo-ectools' ) . ' ' . $e->getMessage(), 'error' );
+			PayuniShipping::log( __( 'PAYUNi 建立物流單失敗：', 'moksa-for-woocommerce' ) . ' ' . $e->getMessage(), 'error' );
 		}
 	}
 
@@ -163,20 +163,20 @@ class ShippingRequest {
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce
 		// only, allowing any logged-in user to query other people's orders.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'mo-ectools' ), 403 );
+			wp_send_json_error( __( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		if ( ! check_ajax_referer( 'moksafowo-payuni-shipping-order', 'security', false ) ) {
 			$return = array(
 				'success' => false,
-				'result'  => __( 'Invalid security token sent.', 'mo-ectools' ),
+				'result'  => __( 'Invalid security token sent.', 'moksa-for-woocommerce' ),
 			);
 			wp_send_json( $return );
 			wp_die();
 		}
 
 		if ( ! isset( $_POST['post_id'] ) ) {
-			wp_send_json_error( __( 'Missing Ajax Parameter.', 'mo-ectools' ) );
+			wp_send_json_error( __( 'Missing Ajax Parameter.', 'moksa-for-woocommerce' ) );
 			wp_die();
 		}
 
@@ -202,7 +202,7 @@ class ShippingRequest {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: status, 2: lgs status code, 3: description */
-				__( 'PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s', 'mo-ectools' ),
+				__( 'PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s', 'moksa-for-woocommerce' ),
 				(string) ( $resp_info['Status'] ?? '' ),
 				(string) ( $resp_info['LgsStatus'] ?? $resp_info['LgsType'] ?? '' ),
 				(string) ( $resp_info['Message'] ?? '' )
@@ -232,20 +232,20 @@ class ShippingRequest {
 
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce only.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'mo-ectools' ), 403 );
+			wp_send_json_error( __( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		if ( ! check_ajax_referer( 'moksafowo-payuni-shipping-order', 'security', false ) ) {
 			$return = array(
 				'success' => false,
-				'result'  => __( 'Invalid security token sent.', 'mo-ectools' ),
+				'result'  => __( 'Invalid security token sent.', 'moksa-for-woocommerce' ),
 			);
 			wp_send_json( $return );
 			wp_die();
 		}
 
 		if ( ! isset( $_POST['order_id'] ) || ! isset( $_POST['package_spec'] ) ) {
-			wp_send_json_error( __( 'Missing Ajax Parameter.', 'mo-ectools' ) );
+			wp_send_json_error( __( 'Missing Ajax Parameter.', 'moksa-for-woocommerce' ) );
 			wp_die();
 		}
 
@@ -254,7 +254,7 @@ class ShippingRequest {
 		$order        = wc_get_order( $order_id );
 
 		if ( ! $order ) {
-			wp_send_json_error( __( 'Order not found.', 'mo-ectools' ) );
+			wp_send_json_error( __( 'Order not found.', 'moksa-for-woocommerce' ) );
 			wp_die();
 		}
 
@@ -267,7 +267,7 @@ class ShippingRequest {
 		if ( ! in_array( $package_spec, $valid_specs, true ) ) {
 			$return = array(
 				'success' => false,
-				'result'  => __( 'Invalid package spec for this goods type.', 'mo-ectools' ),
+				'result'  => __( 'Invalid package spec for this goods type.', 'moksa-for-woocommerce' ),
 			);
 			wp_send_json( $return );
 			wp_die();
@@ -284,11 +284,11 @@ class ShippingRequest {
 		);
 		$spec_label  = isset( $spec_labels[ $package_spec ] ) ? $spec_labels[ $package_spec ] : $package_spec;
 		/* translators: %s: package spec label (e.g. 60cm / 90cm) */
-		$order->add_order_note( sprintf( __( '包裹規格已更新為：%s', 'mo-ectools' ), $spec_label ) );
+		$order->add_order_note( sprintf( __( '包裹規格已更新為：%s', 'moksa-for-woocommerce' ), $spec_label ) );
 
 		$return = array(
 			'success' => true,
-			'result'  => __( 'Package spec updated successfully.', 'mo-ectools' ),
+			'result'  => __( 'Package spec updated successfully.', 'moksa-for-woocommerce' ),
 		);
 		wp_send_json( $return );
 	}
@@ -299,13 +299,13 @@ class ShippingRequest {
 		// only checked the nonce when `security` was present in the URL, which
 		// meant an attacker could omit it and bypass verification entirely.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
 		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'moksafowo-payuni-shipping-order' ) ) {
-			wp_die( esc_html__( 'Invalid security token.', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( 'Invalid security token.', 'moksa-for-woocommerce' ), 403 );
 		}
 		if ( ! isset( $_GET['orderids'] ) || ! isset( $_GET['service'] ) ) {
-			esc_html_e( 'Missing Ajax Parameter.', 'mo-ectools' );
+			esc_html_e( 'Missing Ajax Parameter.', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -318,7 +318,7 @@ class ShippingRequest {
 		} elseif ( ShipType::TCAT === $service ) {
 			$api_url = PayuniShipping::$api_url . '/home_delivery/get_obt_number_pdf';
 		} else {
-			esc_html_e( 'Unsupported shipping service.', 'mo-ectools' );
+			esc_html_e( 'Unsupported shipping service.', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -333,7 +333,7 @@ class ShippingRequest {
 		);
 
 		if ( empty( $orders ) ) {
-			esc_html_e( 'No such Orders', 'mo-ectools' );
+			esc_html_e( 'No such Orders', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -388,7 +388,7 @@ class ShippingRequest {
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php esc_html_e( '正在送出列印請求…', 'mo-ectools' ); ?></title>
+		<title><?php esc_html_e( '正在送出列印請求…', 'moksa-for-woocommerce' ); ?></title>
 	</head>
 	<body>
 		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
@@ -396,7 +396,7 @@ class ShippingRequest {
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
 			<noscript>
-				<button type="submit"><?php esc_html_e( '送出', 'mo-ectools' ); ?></button>
+				<button type="submit"><?php esc_html_e( '送出', 'moksa-for-woocommerce' ); ?></button>
 			</noscript>
 		</form>
 			<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
@@ -443,7 +443,7 @@ class ShippingRequest {
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php esc_html_e( '正在送出列印請求…', 'mo-ectools' ); ?></title>
+		<title><?php esc_html_e( '正在送出列印請求…', 'moksa-for-woocommerce' ); ?></title>
 	</head>
 	<body>
 		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
@@ -451,7 +451,7 @@ class ShippingRequest {
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
 			<noscript>
-				<button type="submit"><?php esc_html_e( '送出', 'mo-ectools' ); ?></button>
+				<button type="submit"><?php esc_html_e( '送出', 'moksa-for-woocommerce' ); ?></button>
 			</noscript>
 		</form>
 			<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
@@ -469,14 +469,14 @@ class ShippingRequest {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
 		if ( ! isset( $_GET['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['security'] ) ), 'moksafowo-payuni-shipping-order' ) ) {
-			wp_die( esc_html__( 'Invalid security token.', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( 'Invalid security token.', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		if ( ! isset( $_GET['orderids'] ) || ! isset( $_GET['service'] ) ) {
-			esc_html_e( 'Missing Ajax Parameter.', 'mo-ectools' );
+			esc_html_e( 'Missing Ajax Parameter.', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -484,7 +484,7 @@ class ShippingRequest {
 		$service         = wc_clean( wp_unslash( $_GET['service'] ) );
 
 		if ( ShipType::TCAT !== $service ) {
-			esc_html_e( 'Unsupported Ship Type', 'mo-ectools' );
+			esc_html_e( 'Unsupported Ship Type', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -493,7 +493,7 @@ class ShippingRequest {
 		$order = wc_get_order( $order_ids_param );
 
 		if ( ! $order ) {
-			esc_html_e( 'Cant find Order.', 'mo-ectools' );
+			esc_html_e( 'Cant find Order.', 'moksa-for-woocommerce' );
 			wp_die();
 		}
 
@@ -525,8 +525,8 @@ class ShippingRequest {
 		$forms_html .= '</form>';
 
 		Interstitial::render(
-			__( '下載物流標籤', 'mo-ectools' ),
-			__( '正在下載 PAYUNi 物流標籤…', 'mo-ectools' ),
+			__( '下載物流標籤', 'moksa-for-woocommerce' ),
+			__( '正在下載 PAYUNi 物流標籤…', 'moksa-for-woocommerce' ),
 			[],
 			$forms_html,
 			'document.getElementById("moksafowo-payuni-print-label-form").submit();'
@@ -561,7 +561,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'PAYUNi 建立物流單失敗：', 'mo-ectools' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( __( 'PAYUNi 建立物流單失敗：', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
 			PayuniShipping::log( 'Create PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}
@@ -596,7 +596,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'PAYUNi 物流單查詢失敗：', 'mo-ectools' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( __( 'PAYUNi 物流單查詢失敗：', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
 			PayuniShipping::log( 'Query PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}

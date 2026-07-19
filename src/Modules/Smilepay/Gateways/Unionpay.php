@@ -27,10 +27,10 @@ final class Unionpay extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay 銀聯線上刷卡', 'mo-ectools' );
+		return __( 'SmilePay 銀聯線上刷卡', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 SmilePay 完成銀聯卡線上刷卡。', 'mo-ectools' );
+		return __( '跳轉至 SmilePay 完成銀聯卡線上刷卡。', 'moksa-for-woocommerce' );
 	}
 }

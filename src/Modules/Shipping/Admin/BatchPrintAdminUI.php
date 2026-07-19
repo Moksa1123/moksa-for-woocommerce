@@ -58,13 +58,13 @@ final class BatchPrintAdminUI {
 		foreach ( $cols as $k => $v ) {
 			$new[ $k ] = $v;
 			if ( 'order_status' === $k ) {
-				$new['moksafowo_shipping_method']   = __( '運送方式', 'mo-ectools' );
-				$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
+				$new['moksafowo_shipping_method']   = __( '運送方式', 'moksa-for-woocommerce' );
+				$new['moksafowo_shipping_label_no'] = __( '物流編號', 'moksa-for-woocommerce' );
 			}
 		}
 		if ( ! isset( $new['moksafowo_shipping_label_no'] ) ) {
-			$new['moksafowo_shipping_method']   = __( '運送方式', 'mo-ectools' );
-			$new['moksafowo_shipping_label_no'] = __( '物流編號', 'mo-ectools' );
+			$new['moksafowo_shipping_method']   = __( '運送方式', 'moksa-for-woocommerce' );
+			$new['moksafowo_shipping_label_no'] = __( '物流編號', 'moksa-for-woocommerce' );
 		}
 		return $new;
 	}
@@ -196,24 +196,24 @@ final class BatchPrintAdminUI {
 					array_values( $providers )
 				),
 				'i18n'      => [
-					'modal_title' => __( '批次列印', 'mo-ectools' ),
-					'order_no'    => __( '訂單', 'mo-ectools' ),
-					'recipient'   => __( '收件人', 'mo-ectools' ),
-					'method'      => __( '運送方式', 'mo-ectools' ),
-					'status'      => __( '訂單狀態', 'mo-ectools' ),
-					'printable'   => __( '可印', 'mo-ectools' ),
-					'no_orders'   => __( '沒有可列印的訂單。', 'mo-ectools' ),
-					'select_one'  => __( '請至少選擇一筆。', 'mo-ectools' ),
+					'modal_title' => __( '批次列印', 'moksa-for-woocommerce' ),
+					'order_no'    => __( '訂單', 'moksa-for-woocommerce' ),
+					'recipient'   => __( '收件人', 'moksa-for-woocommerce' ),
+					'method'      => __( '運送方式', 'moksa-for-woocommerce' ),
+					'status'      => __( '訂單狀態', 'moksa-for-woocommerce' ),
+					'printable'   => __( '可印', 'moksa-for-woocommerce' ),
+					'no_orders'   => __( '沒有可列印的訂單。', 'moksa-for-woocommerce' ),
+					'select_one'  => __( '請至少選擇一筆。', 'moksa-for-woocommerce' ),
 					/* translators: %d: number of selected orders to print */
-					'print'       => __( '列印 (%d)', 'mo-ectools' ),
-					'cancel'      => __( '取消', 'mo-ectools' ),
-					'loading'     => __( '載入中…', 'mo-ectools' ),
-					'error'       => __( '載入失敗。', 'mo-ectools' ),
-					'yes'         => __( '✓', 'mo-ectools' ),
-					'no'          => __( '—', 'mo-ectools' ),
-					'paper_size'  => __( '紙張：', 'mo-ectools' ),
-					'a4'          => __( 'A4 標準', 'mo-ectools' ),
-					'a6'          => __( 'A6 標籤機', 'mo-ectools' ),
+					'print'       => __( '列印 (%d)', 'moksa-for-woocommerce' ),
+					'cancel'      => __( '取消', 'moksa-for-woocommerce' ),
+					'loading'     => __( '載入中…', 'moksa-for-woocommerce' ),
+					'error'       => __( '載入失敗。', 'moksa-for-woocommerce' ),
+					'yes'         => __( '✓', 'moksa-for-woocommerce' ),
+					'no'          => __( '—', 'moksa-for-woocommerce' ),
+					'paper_size'  => __( '紙張：', 'moksa-for-woocommerce' ),
+					'a4'          => __( 'A4 標準', 'moksa-for-woocommerce' ),
+					'a6'          => __( 'A6 標籤機', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -241,15 +241,15 @@ final class BatchPrintAdminUI {
 			<div class="moksafowo-batch-modal__panel">
 				<div class="moksafowo-batch-modal__header">
 					<h2 class="moksafowo-batch-modal__title"></h2>
-					<button type="button" class="moksafowo-batch-modal__close" aria-label="<?php esc_attr_e( '關閉', 'mo-ectools' ); ?>">×</button>
+					<button type="button" class="moksafowo-batch-modal__close" aria-label="<?php esc_attr_e( '關閉', 'moksa-for-woocommerce' ); ?>">×</button>
 				</div>
 				<div class="moksafowo-batch-modal__body"></div>
 				<div class="moksafowo-batch-modal__footer">
 					<label class="moksafowo-batch-mode" style="margin-right:auto;display:flex;align-items:center;gap:8px;font-size:13px;">
-						<span><?php esc_html_e( '紙張：', 'mo-ectools' ); ?></span>
+						<span><?php esc_html_e( '紙張：', 'moksa-for-woocommerce' ); ?></span>
 						<select class="moksafowo-batch-mode__select">
-							<option value="1"><?php esc_html_e( 'A4 標準', 'mo-ectools' ); ?></option>
-							<option value="2"><?php esc_html_e( 'A6 標籤機', 'mo-ectools' ); ?></option>
+							<option value="1"><?php esc_html_e( 'A4 標準', 'moksa-for-woocommerce' ); ?></option>
+							<option value="2"><?php esc_html_e( 'A6 標籤機', 'moksa-for-woocommerce' ); ?></option>
 						</select>
 					</label>
 					<button type="button" class="button button-primary moksafowo-batch-modal__print" disabled></button>
@@ -263,12 +263,12 @@ final class BatchPrintAdminUI {
 	public static function ajax_list(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$key      = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
 		$provider = BatchPrintRegistry::get( $key );
 		if ( null === $provider ) {
-			wp_send_json_error( [ 'message' => __( '找不到此物流模組。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到此物流模組。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		// 只列「處理中/保留中」— 已出貨/抵店/取件的訂單應已印過，不納入（filter 可覆寫）
@@ -343,23 +343,23 @@ final class BatchPrintAdminUI {
 	public static function ajax_run(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$key      = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
 		$provider = BatchPrintRegistry::get( $key );
 		if ( null === $provider ) {
-			wp_send_json_error( [ 'message' => __( '找不到此物流模組。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到此物流模組。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		$ids = isset( $_POST['order_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['order_ids'] ) ) : [];
 		$ids = array_values( array_filter( $ids ) );
 		if ( empty( $ids ) ) {
-			wp_send_json_error( [ 'message' => __( '請至少選擇一筆訂單。', 'mo-ectools' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( '請至少選擇一筆訂單。', 'moksa-for-woocommerce' ) ], 400 );
 		}
 
 		$mode  = isset( $_POST['mode'] ) && '2' === sanitize_text_field( wp_unslash( $_POST['mode'] ) ) ? '2' : '1';
 		$forms = self::run_provider( $provider, $ids, $mode );
 		if ( empty( $forms ) ) {
-			wp_send_json_error( [ 'message' => __( '沒有可列印的內容。', 'mo-ectools' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( '沒有可列印的內容。', 'moksa-for-woocommerce' ) ], 400 );
 		}
 		wp_send_json_success( [ 'forms' => $forms ] );
 	}
@@ -394,14 +394,14 @@ final class BatchPrintAdminUI {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '權限不足。', 'mo-ectools' ),
+				'message' => __( '權限不足。', 'moksa-for-woocommerce' ),
 			];
 		}
 		$ids = array_values( array_filter( array_map( 'absint', $order_ids ) ) );
 		if ( empty( $ids ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '沒有指定訂單。', 'mo-ectools' ),
+				'message' => __( '沒有指定訂單。', 'moksa-for-woocommerce' ),
 			];
 		}
 		$mode     = '2' === $mode ? '2' : '1';
@@ -434,7 +434,7 @@ final class BatchPrintAdminUI {
 			return [
 				'ok'      => false,
 				'skipped' => $skipped,
-				'message' => __( '所選訂單沒有可列印的物流標籤（可能尚未建立託運單）。', 'mo-ectools' ),
+				'message' => __( '所選訂單沒有可列印的物流標籤（可能尚未建立託運單）。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -463,7 +463,7 @@ final class BatchPrintAdminUI {
 
 	public static function register_bulk_actions( array $actions ): array {
 		if ( ! empty( BatchPrintRegistry::all() ) ) {
-			$actions[ self::BULK_ACTION ] = __( '列印物流單（自動判斷物流商）', 'mo-ectools' );
+			$actions[ self::BULK_ACTION ] = __( '列印物流單（自動判斷物流商）', 'moksa-for-woocommerce' );
 		}
 		return $actions;
 	}
@@ -473,7 +473,7 @@ final class BatchPrintAdminUI {
 			return $redirect_to;
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), 403 );
 		}
 
 		$ids      = array_values( array_filter( array_map( 'absint', (array) $ids ) ) );
@@ -535,26 +535,26 @@ final class BatchPrintAdminUI {
 		delete_transient( $key );
 		printf(
 			'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
-			esc_html__( '所選訂單沒有符合此物流的可列印標籤（已全部跳過）。', 'mo-ectools' )
+			esc_html__( '所選訂單沒有符合此物流的可列印標籤（已全部跳過）。', 'moksa-for-woocommerce' )
 		);
 	}
 
 	public static function render_print_output(): void {
 		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
 		if ( '' === $token ) {
-			wp_die( esc_html__( '列印連結已失效，請重試。', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( '列印連結已失效，請重試。', 'moksa-for-woocommerce' ), 403 );
 		}
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'moksafowo_bp_print_' . $token ) ) {
-			wp_die( esc_html__( '列印連結已失效，請重試。', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( '列印連結已失效，請重試。', 'moksa-for-woocommerce' ), 403 );
 		}
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), 403 );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), 403 );
 		}
 		$forms = get_transient( 'moksafowo_bp_' . $token );
 		delete_transient( 'moksafowo_bp_' . $token );
 		if ( ! is_array( $forms ) || empty( $forms ) ) {
-			wp_die( esc_html__( '沒有可列印的內容，或連結已過期。', 'mo-ectools' ) );
+			wp_die( esc_html__( '沒有可列印的內容，或連結已過期。', 'moksa-for-woocommerce' ) );
 		}
 		$skipped = isset( $_GET['skipped'] ) ? absint( wp_unslash( $_GET['skipped'] ) ) : 0;
 		$count   = count( $forms );
@@ -571,24 +571,24 @@ final class BatchPrintAdminUI {
 		<head>
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title><?php esc_html_e( '批次列印物流標籤', 'mo-ectools' ); ?></title>
+			<title><?php esc_html_e( '批次列印物流標籤', 'moksa-for-woocommerce' ); ?></title>
 			<?php wp_print_styles( 'moksafowo-bp-print' ); ?>
 		</head>
 		<body>
-			<h2><?php esc_html_e( '批次列印物流標籤', 'mo-ectools' ); ?></h2>
+			<h2><?php esc_html_e( '批次列印物流標籤', 'moksa-for-woocommerce' ); ?></h2>
 			<?php if ( $skipped > 0 ) : ?>
 				<?php /* translators: 1: number of labels produced, 2: number of skipped orders */ ?>
-				<p><?php printf( esc_html__( '已產生 %1$d 份標籤；略過 %2$d 筆（非此物流的訂單）。', 'mo-ectools' ), (int) $count, (int) $skipped ); ?></p>
+				<p><?php printf( esc_html__( '已產生 %1$d 份標籤；略過 %2$d 筆（非此物流的訂單）。', 'moksa-for-woocommerce' ), (int) $count, (int) $skipped ); ?></p>
 			<?php else : ?>
 				<?php /* translators: %d: number of labels produced */ ?>
-				<p><?php printf( esc_html__( '已產生 %d 份標籤。', 'mo-ectools' ), (int) $count ); ?></p>
+				<p><?php printf( esc_html__( '已產生 %d 份標籤。', 'moksa-for-woocommerce' ), (int) $count ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( ! $single ) : ?>
-				<p><?php esc_html_e( '請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）：', 'mo-ectools' ); ?></p>
+				<p><?php esc_html_e( '請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）：', 'moksa-for-woocommerce' ); ?></p>
 				<?php foreach ( $forms as $i => $spec ) : ?>
 					<?php /* translators: %d: label sequence number */ ?>
-					<button type="button" data-bp-target="moksafowo-bp-f<?php echo (int) $i; ?>"><?php printf( esc_html__( '列印第 %d 份', 'mo-ectools' ), (int) $i + 1 ); ?></button>
+					<button type="button" data-bp-target="moksafowo-bp-f<?php echo (int) $i; ?>"><?php printf( esc_html__( '列印第 %d 份', 'moksa-for-woocommerce' ), (int) $i + 1 ); ?></button>
 				<?php endforeach; ?>
 			<?php endif; ?>
 

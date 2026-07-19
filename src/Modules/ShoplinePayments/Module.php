@@ -14,24 +14,24 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'Shopline Payments — 信用卡 / Apple Pay / Google Pay / LINE Pay / 街口（託管結帳）', 'mo-ectools' );
+		return __( 'Shopline Payments — 信用卡 / Apple Pay / Google Pay / LINE Pay / 街口（託管結帳）', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'Shopline Payments', 'mo-ectools' );
+		return __( 'Shopline Payments', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 行動支付（轉跳付款頁）', 'mo-ectools' );
+		return __( '信用卡 / 行動支付（轉跳付款頁）', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( 'Apple Pay', 'mo-ectools' ),
-			__( 'Google Pay', 'mo-ectools' ),
-			__( 'LINE Pay', 'mo-ectools' ),
-			__( '街口支付', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( 'Apple Pay', 'moksa-for-woocommerce' ),
+			__( 'Google Pay', 'moksa-for-woocommerce' ),
+			__( 'LINE Pay', 'moksa-for-woocommerce' ),
+			__( '街口支付', 'moksa-for-woocommerce' ),
 		];
 	}
 

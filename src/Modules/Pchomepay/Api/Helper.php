@@ -131,7 +131,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' === $token ) {
 			return [
 				'ok'      => false,
-				'message' => __( '無法取得支付連 token，請確認 APP ID / Secret。', 'mo-ectools' ),
+				'message' => __( '無法取得支付連 token，請確認 APP ID / Secret。', 'moksa-for-woocommerce' ),
 				'code'    => 'NO_TOKEN',
 				'data'    => [],
 			];
@@ -177,7 +177,7 @@ final class Helper extends AbstractCredentialHelper {
 			);
 			return [
 				'ok'      => false,
-				'message' => (string) ( $decoded['message'] ?? __( '支付連 API 失敗', 'mo-ectools' ) ),
+				'message' => (string) ( $decoded['message'] ?? __( '支付連 API 失敗', 'moksa-for-woocommerce' ) ),
 				'code'    => $code,
 				'data'    => $decoded,
 			];
@@ -197,6 +197,61 @@ final class Helper extends AbstractCredentialHelper {
 			'message' => 'OK',
 			'code'    => '',
 			'data'    => $decoded,
+		];
+	}
+
+	/**
+	 * 向支付連查單（GET /v1/payment/{order_id}）— webhook 二次確認用的權威狀態來源。
+	 */
+	public static function api_get_payment( string $pchome_order_id, bool $retried = false ): array {
+		$token = self::get_token( $retried );
+		if ( '' === $token ) {
+			return [
+				'ok'   => false,
+				'code' => 'NO_TOKEN',
+				'data' => [],
+			];
+		}
+
+		try {
+			$resp = Request::get( self::payment_url() . '/' . rawurlencode( $pchome_order_id ), [], [ 'pcpay-token' => $token ] );
+		} catch ( \RuntimeException $e ) {
+			self::log( 'query transport error', [ 'error' => $e->getMessage() ] );
+			return [
+				'ok'   => false,
+				'code' => 'TRANSPORT',
+				'data' => [],
+			];
+		}
+
+		$decoded = $resp->json();
+		$code    = (string) ( $decoded['code'] ?? '' );
+
+		if ( in_array( $code, [ '10003', '10004' ], true ) && ! $retried ) {
+			self::bust_token();
+			return self::api_get_payment( $pchome_order_id, true );
+		}
+
+		if ( '' !== $code || ! $resp->ok() ) {
+			self::log(
+				'query failed',
+				[
+					'order_id' => $pchome_order_id,
+					'status'   => $resp->status,
+					'code'     => $code,
+				]
+			);
+			return [
+				'ok'   => false,
+				'code' => '' !== $code ? $code : (string) $resp->status,
+				'data' => $decoded,
+			];
+		}
+
+		return [
+			'ok'   => true,
+			'code' => '',
+			'data' => $decoded,
 		];
 	}
 

@@ -16,7 +16,7 @@ final class PrintLabel {
 		if ( empty( $records ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單尚未建立物流單，無法列印。', 'mo-ectools' ),
+				'message' => __( '此訂單尚未建立物流單，無法列印。', 'moksa-for-woocommerce' ),
 			];
 		}
 		$latest = end( $records );
@@ -29,13 +29,13 @@ final class PrintLabel {
 		if ( empty( $logistics_ids ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '沒有可列印的物流單。', 'mo-ectools' ),
+				'message' => __( '沒有可列印的物流單。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( '' === $subtype ) {
 			return [
 				'ok'      => false,
-				'message' => __( '物流型別缺漏。', 'mo-ectools' ),
+				'message' => __( '物流型別缺漏。', 'moksa-for-woocommerce' ),
 			];
 		}
 

@@ -79,7 +79,7 @@ final class Ui {
 			</div>
 			<div class="moksafowo-card__action">
 				<?php if ( $enabled && $settings_url !== '' ) : ?>
-					<a class="moksafowo-link" href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( '設定 →', 'mo-ectools' ); ?></a>
+					<a class="moksafowo-link" href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( '設定 →', 'moksa-for-woocommerce' ); ?></a>
 				<?php endif; ?>
 				<?php if ( $toggle_name !== '' ) : ?>
 					<label class="moksafowo-toggle">
@@ -100,9 +100,9 @@ final class Ui {
 			<div class="moksafowo-subsection-banner__head">
 				<h2 class="moksafowo-subsection-banner__title"><?php echo esc_html( $name ); ?></h2>
 				<?php if ( $enabled ) : ?>
-					<span class="moksafowo-subsection-banner__status is-on">✓ <?php esc_html_e( '已啟用', 'mo-ectools' ); ?></span>
+					<span class="moksafowo-subsection-banner__status is-on">✓ <?php esc_html_e( '已啟用', 'moksa-for-woocommerce' ); ?></span>
 				<?php else : ?>
-					<span class="moksafowo-subsection-banner__status is-off">✗ <?php esc_html_e( '已停用', 'mo-ectools' ); ?></span>
+					<span class="moksafowo-subsection-banner__status is-off">✗ <?php esc_html_e( '已停用', 'moksa-for-woocommerce' ); ?></span>
 				<?php endif; ?>
 			</div>
 		</div>

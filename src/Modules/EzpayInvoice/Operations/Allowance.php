@@ -16,13 +16,13 @@ final class Allowance {
 		if ( '' === $inv || 'zero' === $inv || 'negative' === $inv ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有可折讓的 ezPay 發票。', 'mo-ectools' ),
+				'message' => __( '此訂單沒有可折讓的 ezPay 發票。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $amount <= 0 ) {
 			return [
 				'ok'      => false,
-				'message' => __( '折讓金額需大於 0。', 'mo-ectools' ),
+				'message' => __( '折讓金額需大於 0。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -40,7 +40,7 @@ final class Allowance {
 			'MerchantOrderNo' => Helper::generate_merchant_order_no( $order->get_id() ) . 'A',
 			'ItemName'        => mb_substr( $item_name, 0, 30 ),
 			'ItemCount'       => '1',
-			'ItemUnit'        => __( '式', 'mo-ectools' ),
+			'ItemUnit'        => __( '式', 'moksa-for-woocommerce' ),
 			'ItemPrice'       => (string) $amount,
 			'ItemAmt'         => (string) $amount,
 			'ItemTaxAmt'      => '0',
@@ -63,7 +63,7 @@ final class Allowance {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error */
-					__( 'ezPay 折讓失敗：%s', 'mo-ectools' ),
+					__( 'ezPay 折讓失敗：%s', 'moksa-for-woocommerce' ),
 					$result['message'] ?? ''
 				)
 			);
@@ -82,7 +82,7 @@ final class Allowance {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: allowance no, 2: amount */
-				__( 'ezPay 折讓單 %1$s 開立成功（金額 NT$%2$d）', 'mo-ectools' ),
+				__( 'ezPay 折讓單 %1$s 開立成功（金額 NT$%2$d）', 'moksa-for-woocommerce' ),
 				$allowance_no,
 				$amount
 			)

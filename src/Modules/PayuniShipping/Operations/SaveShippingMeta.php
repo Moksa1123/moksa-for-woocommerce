@@ -26,7 +26,7 @@ final class SaveShippingMeta {
 		$order->update_meta_data( OrderMeta::ShipTradeNo, $data['ShipTradeNo'] );
 		$order->save();
 		/* translators: %s: PAYUNi ship trade no */
-		$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（單號 %s）', 'mo-ectools' ), $data['ShipTradeNo'] ) );
+		$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（單號 %s）', 'moksa-for-woocommerce' ), $data['ShipTradeNo'] ) );
 	}
 
 	// CVS 路徑已由 StoreSelector::save_store_selection 處理；此方法服務黑貓宅配及後台編輯

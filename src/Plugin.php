@@ -70,7 +70,7 @@ final class Plugin {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wc-settings&tab=' . Settings\SettingsTab::TAB_ID ) ),
-			esc_html__( '設定', 'mo-ectools' )
+			esc_html__( '設定', 'moksa-for-woocommerce' )
 		);
 		array_unshift( $links, $settings_link );
 		return $links;
@@ -83,7 +83,7 @@ final class Plugin {
 		$links[] = sprintf(
 			'<a href="%s" target="_blank" rel="noreferrer">%s</a>',
 			'https://github.com/Moksa1123/moksa-for-woocommerce',
-			esc_html__( 'GitHub', 'mo-ectools' )
+			esc_html__( 'GitHub', 'moksa-for-woocommerce' )
 		);
 		return $links;
 	}

@@ -14,8 +14,8 @@ class CreditInstallment24 extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 信用卡分期 24 期', 'mo-ectools' );
-		$this->method_description = __( '信用卡分 24 期付款，跳轉至 PAYUNi 付款頁完成。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 信用卡分期 24 期', 'moksa-for-woocommerce' );
+		$this->method_description = __( '信用卡分 24 期付款，跳轉至 PAYUNi 付款頁完成。', 'moksa-for-woocommerce' );
 
 		$this->init_installment( 24, $this->min_amount );
 

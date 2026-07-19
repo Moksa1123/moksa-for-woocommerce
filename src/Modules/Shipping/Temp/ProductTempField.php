@@ -58,11 +58,11 @@ final class ProductTempField {
 		foreach ( $cols as $k => $v ) {
 			$new_cols[ $k ] = $v;
 			if ( $k === $insert_after ) {
-				$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
+				$new_cols['moksafowo_product_temp'] = __( '溫層', 'moksa-for-woocommerce' );
 			}
 		}
 		if ( ! isset( $new_cols['moksafowo_product_temp'] ) ) {
-			$new_cols['moksafowo_product_temp'] = __( '溫層', 'mo-ectools' );
+			$new_cols['moksafowo_product_temp'] = __( '溫層', 'moksa-for-woocommerce' );
 		}
 		return $new_cols;
 	}
@@ -91,7 +91,7 @@ final class ProductTempField {
 			$title = '';
 		} else {
 			$style = 'background:transparent;color:#8c8f94;border:1px dashed #c3c4c7;';
-			$title = esc_attr__( '未明確設定 — cart 階段預設為常溫', 'mo-ectools' );
+			$title = esc_attr__( '未明確設定 — cart 階段預設為常溫', 'moksa-for-woocommerce' );
 		}
 		printf(
 			'<span class="moksafowo-product-temp-pill%s" data-temp="%d" title="%s" style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;line-height:1.5;white-space:nowrap;%s">%s</span>',
@@ -110,7 +110,7 @@ final class ProductTempField {
 		}
 		$current = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
 		echo '<select name="moksafowo_product_temp_filter" id="moksafowo_product_temp_filter">';
-		echo '<option value="">' . esc_html__( '所有溫層', 'mo-ectools' ) . '</option>';
+		echo '<option value="">' . esc_html__( '所有溫層', 'moksa-for-woocommerce' ) . '</option>';
 		foreach ( ProductTemp::options( false ) as $value => $label ) {
 			printf(
 				'<option value="%d"%s>%s</option>',
@@ -119,7 +119,7 @@ final class ProductTempField {
 				esc_html( $label )
 			);
 		}
-		echo '<option value="unset"' . selected( $current, 'unset', false ) . '>' . esc_html__( '未明確設定（預設常溫）', 'mo-ectools' ) . '</option>';
+		echo '<option value="unset"' . selected( $current, 'unset', false ) . '>' . esc_html__( '未明確設定（預設常溫）', 'moksa-for-woocommerce' ) . '</option>';
 		echo '</select>';
 	}
 
@@ -167,7 +167,7 @@ final class ProductTempField {
 	public static function render_wc_quick_edit_field(): void {
 		?>
 		<label class="alignleft moksafowo-product-temp-field-quick">
-			<span class="title"><?php esc_html_e( '物流溫層', 'mo-ectools' ); ?></span>
+			<span class="title"><?php esc_html_e( '物流溫層', 'moksa-for-woocommerce' ); ?></span>
 			<span class="input-text-wrap">
 				<select name="moksafowo_product_temp" class="moksafowo-product-temp-select">
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
@@ -183,10 +183,10 @@ final class ProductTempField {
 	public static function render_wc_bulk_edit_field(): void {
 		?>
 		<label class="alignleft moksafowo-product-temp-field-bulk">
-			<span class="title"><?php esc_html_e( '物流溫層', 'mo-ectools' ); ?></span>
+			<span class="title"><?php esc_html_e( '物流溫層', 'moksa-for-woocommerce' ); ?></span>
 			<span class="input-text-wrap">
 				<select name="moksafowo_product_temp_bulk">
-					<option value=""><?php esc_html_e( '— 不變更 —', 'mo-ectools' ); ?></option>
+					<option value=""><?php esc_html_e( '— 不變更 —', 'moksa-for-woocommerce' ); ?></option>
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
 						<option value="<?php echo esc_attr( (string) (int) $val ); ?>"><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
@@ -198,19 +198,27 @@ final class ProductTempField {
 	}
 
 	public static function save_wc_quick_edit( \WC_Product $product ): void {
-		// WC core fires woocommerce_product_quick_edit_save inside WC_AJAX::product_bulk_edit(), which has
-		// already verified the 'woocommerce-product-inline-edit' nonce and checked manage_product_terms cap.
-		// Value is white-list validated in apply_temp_to_product() — only ProductTemp::{NORMAL,REFRIGERATED,FROZEN} accepted.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC core bulk/quick-edit nonce already verified before this hook fires; value allowlist enforced in apply_temp_to_product().
+		// 原地重驗 WC quick-edit 的 nonce 與權限（fail-closed），不倚賴上游已驗的假設。
+		$nonce = isset( $_REQUEST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['security'] ) ) : '';
+		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce-product-inline-edit' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
+			return;
+		}
 		$raw = isset( $_REQUEST['moksafowo_product_temp'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
 
 	public static function save_wc_bulk_edit( \WC_Product $product ): void {
-		// WC core fires woocommerce_product_bulk_edit_save inside WC_AJAX::product_bulk_edit(), which has
-		// already verified the 'woocommerce-product-inline-edit' nonce and checked manage_product_terms cap.
-		// Value is white-list validated in apply_temp_to_product() — only ProductTemp::{NORMAL,REFRIGERATED,FROZEN} accepted.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC core bulk/quick-edit nonce already verified before this hook fires; value allowlist enforced in apply_temp_to_product().
+		// 原地重驗 WC bulk-edit 的 nonce 與權限（fail-closed），不倚賴上游已驗的假設。
+		$nonce = isset( $_REQUEST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['security'] ) ) : '';
+		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce-product-inline-edit' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
+			return;
+		}
 		$raw = isset( $_REQUEST['moksafowo_product_temp_bulk'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['moksafowo_product_temp_bulk'] ) ) : null;
 		self::apply_temp_to_product( $product, $raw );
 	}
@@ -259,7 +267,7 @@ final class ProductTempField {
 	/* ============== CSV import / export ============== */
 
 	public static function csv_add_column( array $columns ): array {
-		$columns['moksafowo_product_temp'] = __( '物流溫層', 'mo-ectools' );
+		$columns['moksafowo_product_temp'] = __( '物流溫層', 'moksa-for-woocommerce' );
 		return $columns;
 	}
 
@@ -276,7 +284,7 @@ final class ProductTempField {
 	}
 
 	public static function csv_import_mapping_options( array $options ): array {
-		$options['moksafowo_product_temp'] = __( '物流溫層', 'mo-ectools' );
+		$options['moksafowo_product_temp'] = __( '物流溫層', 'moksa-for-woocommerce' );
 		return $options;
 	}
 
@@ -359,8 +367,8 @@ final class ProductTempField {
 		woocommerce_wp_select(
 			[
 				'id'            => Keys::PRODUCT_TEMP,
-				'label'         => __( '物流溫層', 'mo-ectools' ),
-				'description'   => __( '此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物流單時會獨立成單，供需要分艙運送的物流業者使用。', 'mo-ectools' ),
+				'label'         => __( '物流溫層', 'moksa-for-woocommerce' ),
+				'description'   => __( '此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物流單時會獨立成單，供需要分艙運送的物流業者使用。', 'moksa-for-woocommerce' ),
 				'desc_tip'      => true,
 				'wrapper_class' => 'moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( false ) ),
@@ -369,10 +377,14 @@ final class ProductTempField {
 	}
 
 	public static function save_simple_field( \WC_Product $product ): void {
-		// Bound to woocommerce_admin_process_product_object, which fires inside WC_Meta_Box_Product_Data::save().
-		// WC core has already verified the post nonce and current_user_can( 'edit_products' ) before this hook.
-		// Value is allowlist-validated below — only known ProductTemp integers are persisted.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC product save nonce already verified by WC core; value allowlist enforced below.
+		// 原地重驗產品儲存的 nonce 與權限（fail-closed）。
+		$nonce = isset( $_POST['woocommerce_meta_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ) : '';
+		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce_save_data' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
+			return;
+		}
 		$value = isset( $_POST[ Keys::PRODUCT_TEMP ] ) ? absint( wp_unslash( $_POST[ Keys::PRODUCT_TEMP ] ) ) : 0;
 		if ( in_array( $value, [ ProductTemp::NORMAL, ProductTemp::REFRIGERATED, ProductTemp::FROZEN ], true ) ) {
 			$product->update_meta_data( Keys::PRODUCT_TEMP, (string) $value );
@@ -389,8 +401,8 @@ final class ProductTempField {
 				'id'            => 'moksafowo_product_temp_' . $loop,
 				'name'          => 'moksafowo_product_temp[' . $loop . ']',
 				'value'         => $current,
-				'label'         => __( '物流溫層', 'mo-ectools' ),
-				'description'   => __( '空 / 繼承 = 跟父商品設定走。', 'mo-ectools' ),
+				'label'         => __( '物流溫層', 'moksa-for-woocommerce' ),
+				'description'   => __( '空 / 繼承 = 跟父商品設定走。', 'moksa-for-woocommerce' ),
 				'desc_tip'      => true,
 				'wrapper_class' => 'form-row form-row-full moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( true ) ),
@@ -399,9 +411,16 @@ final class ProductTempField {
 	}
 
 	public static function save_variation_field( int $variation_id, int $loop ): void {
-		// Bound to woocommerce_save_product_variation; WC core verified the variation save nonce and
-		// current_user_can( 'edit_products' ) before firing this hook. Value allowlist enforced below.
-		$raw = isset( $_POST['moksafowo_product_temp'][ $loop ] ) && is_scalar( $_POST['moksafowo_product_temp'][ $loop ] ) ? sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_product_temp'][ $loop ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC variation save nonce verified by WC core before this hook; value allowlisted below.
+		// 原地重驗 nonce（variations AJAX 走 security=save-variations；產品編輯頁走 woocommerce_meta_nonce）+ 權限，fail-closed。
+		$ajax_nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['security'] ) ) : '';
+		$meta_nonce = isset( $_POST['woocommerce_meta_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ) : '';
+		if ( ! wp_verify_nonce( $ajax_nonce, 'save-variations' ) && ! wp_verify_nonce( $meta_nonce, 'woocommerce_save_data' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $variation_id ) ) {
+			return;
+		}
+		$raw = isset( $_POST['moksafowo_product_temp'][ $loop ] ) && is_scalar( $_POST['moksafowo_product_temp'][ $loop ] ) ? sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_product_temp'][ $loop ] ) ) : '';
 
 		if ( '' === $raw ) {
 			delete_post_meta( $variation_id, Keys::PRODUCT_TEMP );

@@ -25,7 +25,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號', 'mo-ectools' );
+		return __( '訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -33,11 +33,11 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '訂單查號搜尋', 'mo-ectools' );
+		return __( '訂單查號搜尋', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '用發票號 / 物流單號 / 金流交易序號找訂單（訂單列表 + Ctrl+K）', 'mo-ectools' );
+		return __( '用發票號 / 物流單號 / 金流交易序號找訂單（訂單列表 + Ctrl+K）', 'moksa-for-woocommerce' );
 	}
 
 	public function boot(): void {
@@ -115,7 +115,7 @@ final class Module extends AbstractModule {
 			return;
 		}
 		echo '<div class="notice notice-success is-dismissible"><p>'
-			. esc_html__( '訂單查號索引重建已在背景開始。', 'mo-ectools' )
+			. esc_html__( '訂單查號索引重建已在背景開始。', 'moksa-for-woocommerce' )
 			. '</p></div>';
 	}
 

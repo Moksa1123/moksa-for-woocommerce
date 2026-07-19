@@ -14,28 +14,28 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'PayNow 立即富 — 信用卡 / 分期 / WebATM / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'mo-ectools' );
+		return __( 'PayNow 立即富 — 信用卡 / 分期 / WebATM / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'PayNow 立即富', 'mo-ectools' );
+		return __( 'PayNow 立即富', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'mo-ectools' );
+		return __( '信用卡 / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( '信用卡分期', 'mo-ectools' ),
-			__( 'WebATM', 'mo-ectools' ),
-			__( 'ATM 虛擬帳號', 'mo-ectools' ),
-			__( '超商條碼繳費', 'mo-ectools' ),
-			__( 'ibon 代碼繳費', 'mo-ectools' ),
-			__( 'FamiPort 代碼繳費', 'mo-ectools' ),
-			__( 'iCash 錢包', 'mo-ectools' ),
-			__( '銀聯卡', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'WebATM', 'moksa-for-woocommerce' ),
+			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
+			__( '超商條碼繳費', 'moksa-for-woocommerce' ),
+			__( 'ibon 代碼繳費', 'moksa-for-woocommerce' ),
+			__( 'FamiPort 代碼繳費', 'moksa-for-woocommerce' ),
+			__( 'iCash 錢包', 'moksa-for-woocommerce' ),
+			__( '銀聯卡', 'moksa-for-woocommerce' ),
 		];
 	}
 

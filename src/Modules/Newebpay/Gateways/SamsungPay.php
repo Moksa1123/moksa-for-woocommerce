@@ -17,10 +17,10 @@ final class SamsungPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 Samsung Pay', 'mo-ectools' );
+		return __( '藍新 Samsung Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( 'Samsung 手機上使用 Samsung Pay 付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
+		return __( 'Samsung 手機上使用 Samsung Pay 付款，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
 	}
 }

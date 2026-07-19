@@ -40,13 +40,13 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'moksafowo_ecpay_refund_invalid_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_refund_invalid_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! $this->supports_credit_action() ) {
 			return new \WP_Error(
 				'moksafowo_ecpay_refund_unsupported',
-				__( '此付款方式不支援自動退款，請至綠界後台手動操作。', 'mo-ectools' )
+				__( '此付款方式不支援自動退款，請至綠界後台手動操作。', 'moksa-for-woocommerce' )
 			);
 		}
 
@@ -58,7 +58,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 				'moksafowo_ecpay_refund_offline_payment',
 				sprintf(
 					/* translators: %s: ECPay payment type */
-					__( '此訂單為線下付款（%s），綠界沒有自動退款 API，請至綠界後台手動退款。', 'mo-ectools' ),
+					__( '此訂單為線下付款（%s），綠界沒有自動退款 API，請至綠界後台手動退款。', 'moksa-for-woocommerce' ),
 					$payment_type
 				)
 			);
@@ -66,7 +66,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 
 		$amount_int = (int) round( (float) $amount );
 		if ( $amount_int <= 0 ) {
-			return new \WP_Error( 'moksafowo_ecpay_refund_amount', __( '退款金額需大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ecpay_refund_amount', __( '退款金額需大於 0。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = Helper::credit_action( $order, 'R', $amount_int );
@@ -74,7 +74,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error message */
-					__( '綠界退款失敗：%s', 'mo-ectools' ),
+					__( '綠界退款失敗：%s', 'moksa-for-woocommerce' ),
 					$result->get_error_message()
 				)
 			);
@@ -88,7 +88,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		if ( 1 !== $rtn_code ) {
 			$msg = sprintf(
 				/* translators: 1: amount, 2: ECPay message, 3: code */
-				__( '綠界退款失敗（金額 NT$%1$d）：%2$s（代碼 %3$d）', 'mo-ectools' ),
+				__( '綠界退款失敗（金額 NT$%1$d）：%2$s（代碼 %3$d）', 'moksa-for-woocommerce' ),
 				$amount_int,
 				$rtn_msg,
 				$rtn_code
@@ -100,9 +100,9 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: amount, 2: reason */
-				__( '綠界退款成功（金額 NT$%1$d）。原因：%2$s', 'mo-ectools' ),
+				__( '綠界退款成功（金額 NT$%1$d）。原因：%2$s', 'moksa-for-woocommerce' ),
 				$amount_int,
-				'' === $reason ? __( '（未填寫）', 'mo-ectools' ) : $reason
+				'' === $reason ? __( '（未填寫）', 'moksa-for-woocommerce' ) : $reason
 			)
 		);
 		return true;
@@ -111,7 +111,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			throw new \Exception( esc_html__( 'Invalid order', 'mo-ectools' ) );
+			throw new \Exception( esc_html__( 'Invalid order', 'moksa-for-woocommerce' ) );
 		}
 
 		$merchant_trade_no = Helper::generate_merchant_trade_no( (int) $order_id );
@@ -152,7 +152,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		if ( '' === $item_name ) {
 			$item_name = sprintf(
 				/* translators: %s: site name */
-				__( '%s 訂單', 'mo-ectools' ),
+				__( '%s 訂單', 'moksa-for-woocommerce' ),
 				get_bloginfo( 'name' )
 			) . ' #' . $order->get_order_number();
 		}
@@ -187,7 +187,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		foreach ( $params as $k => $v ) {
 			echo '<input type="hidden" name="' . esc_attr( (string) $k ) . '" value="' . esc_attr( (string) $v ) . '" />';
 		}
-		echo '<noscript><button type="submit">' . esc_html__( '前往綠界付款', 'mo-ectools' ) . '</button></noscript>';
+		echo '<noscript><button type="submit">' . esc_html__( '前往綠界付款', 'moksa-for-woocommerce' ) . '</button></noscript>';
 		echo '</form>';
 		wp_print_inline_script_tag( 'document.getElementById("moksafowo-ecpay-aio").submit();' );
 	}

@@ -27,10 +27,10 @@ final class CvsHilife extends AbstractPchomepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '支付連 萊爾富超商取貨付款', 'mo-ectools' );
+		return __( '支付連 萊爾富超商取貨付款', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '於支付連付款頁選擇萊爾富門市，到店取貨並付款。', 'mo-ectools' );
+		return __( '於支付連付款頁選擇萊爾富門市，到店取貨並付款。', 'moksa-for-woocommerce' );
 	}
 }

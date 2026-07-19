@@ -32,9 +32,9 @@ final class AdminIssueForm {
 
 		// 發票類型選項 — 受該 provider「允許捐贈 / 允許統編」設定連動
 		$type_labels = [
-			'b2c_carrier' => __( '個人（載具）', 'mo-ectools' ),
-			'b2b'         => __( '公司（統一編號）', 'mo-ectools' ),
-			'b2c_donate'  => __( '捐贈', 'mo-ectools' ),
+			'b2c_carrier' => __( '個人（載具）', 'moksa-for-woocommerce' ),
+			'b2b'         => __( '公司（統一編號）', 'moksa-for-woocommerce' ),
+			'b2c_donate'  => __( '捐贈', 'moksa-for-woocommerce' ),
 		];
 		$type_opts   = [];
 		foreach ( InvoiceChannels::enabled_types( $option_prefix ) as $t ) {
@@ -47,10 +47,10 @@ final class AdminIssueForm {
 
 		// 載具選項 — 受該 provider 能力 + 逐項開關連動（PayNow 無會員載具等）
 		$carrier_labels = [
-			'member' => __( '會員載具', 'mo-ectools' ),
-			'mobile' => __( '手機條碼', 'mo-ectools' ),
-			'cert'   => __( '自然人憑證', 'mo-ectools' ),
-			'paper'  => __( '紙本', 'mo-ectools' ),
+			'member' => __( '會員載具', 'moksa-for-woocommerce' ),
+			'mobile' => __( '手機條碼', 'moksa-for-woocommerce' ),
+			'cert'   => __( '自然人憑證', 'moksa-for-woocommerce' ),
+			'paper'  => __( '紙本', 'moksa-for-woocommerce' ),
 		];
 		$carrier_opts   = [];
 		foreach ( InvoiceChannels::enabled_carriers( $option_prefix ) as $c ) {
@@ -67,11 +67,11 @@ final class AdminIssueForm {
 		$hide_b2b     = ( 'b2b' === $cur_type ) ? '' : 'display:none;';
 		$hide_donate  = ( 'b2c_donate' === $cur_type ) ? '' : 'display:none;';
 		// 載具編號 label 也先依目前載具算好（手機條碼 / 自然人憑證），避免重整時 label 閃動。
-		$cnum_label = __( '載具編號', 'mo-ectools' );
+		$cnum_label = __( '載具編號', 'moksa-for-woocommerce' );
 		if ( 'b2c_carrier' === $cur_type && 'mobile' === $cur_carrier ) {
-			$cnum_label = __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' );
+			$cnum_label = __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'moksa-for-woocommerce' );
 		} elseif ( 'b2c_carrier' === $cur_type && 'cert' === $cur_carrier ) {
-			$cnum_label = __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' );
+			$cnum_label = __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'moksa-for-woocommerce' );
 		}
 
 		// data-saved-* = 目前訂單 meta 原值，admin JS 用來比對「表單是否有未存的修改」決定可否開立。
@@ -83,14 +83,14 @@ final class AdminIssueForm {
 			. ' data-saved-name="' . esc_attr( $cur_name ) . '"'
 			. ' data-saved-donate="' . esc_attr( $cur_donate ) . '">';
 
-		echo '<p class="moksafowo-inv-row" style="margin:.2em 0;"><label><strong>' . esc_html__( '發票類型', 'mo-ectools' ) . '</strong></label>';
+		echo '<p class="moksafowo-inv-row" style="margin:.2em 0;"><label><strong>' . esc_html__( '發票類型', 'moksa-for-woocommerce' ) . '</strong></label>';
 		echo '<select class="moksafowo-inv-type" style="display:block;width:100%;">';
 		foreach ( $type_opts as $v => $label ) {
 			echo '<option value="' . esc_attr( $v ) . '"' . selected( $cur_type, $v, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select></p>';
 
-		echo '<p class="moksafowo-inv-row moksafowo-inv-carrier" style="margin:.4em 0;' . esc_attr( $hide_carrier ) . '"><label>' . esc_html__( '載具類型', 'mo-ectools' ) . '</label>';
+		echo '<p class="moksafowo-inv-row moksafowo-inv-carrier" style="margin:.4em 0;' . esc_attr( $hide_carrier ) . '"><label>' . esc_html__( '載具類型', 'moksa-for-woocommerce' ) . '</label>';
 		echo '<select class="moksafowo-inv-carrier-type" style="display:block;width:100%;">';
 		foreach ( $carrier_opts as $v => $label ) {
 			echo '<option value="' . esc_attr( $v ) . '"' . selected( $cur_carrier, $v, false ) . '>' . esc_html( $label ) . '</option>';
@@ -100,27 +100,27 @@ final class AdminIssueForm {
 		echo '<p class="moksafowo-inv-row moksafowo-inv-cnum" style="margin:.4em 0;' . esc_attr( $hide_cnum ) . '"><label class="moksafowo-inv-cnum-label">' . esc_html( $cnum_label ) . '</label>';
 		echo '<input type="text" class="moksafowo-inv-carrier-num" style="display:block;width:100%;" value="' . esc_attr( $cur_cnum ) . '"></p>';
 
-		echo '<p class="moksafowo-inv-row moksafowo-inv-ubn" style="margin:.4em 0;' . esc_attr( $hide_b2b ) . '"><label>' . esc_html__( '統一編號', 'mo-ectools' ) . '</label>';
+		echo '<p class="moksafowo-inv-row moksafowo-inv-ubn" style="margin:.4em 0;' . esc_attr( $hide_b2b ) . '"><label>' . esc_html__( '統一編號', 'moksa-for-woocommerce' ) . '</label>';
 		echo '<input type="text" class="moksafowo-inv-buyer-ubn" style="display:block;width:100%;" maxlength="8" value="' . esc_attr( $cur_ubn ) . '"></p>';
 
-		echo '<p class="moksafowo-inv-row moksafowo-inv-name" style="margin:.4em 0;' . esc_attr( $hide_b2b ) . '"><label>' . esc_html__( '公司抬頭', 'mo-ectools' ) . '</label>';
+		echo '<p class="moksafowo-inv-row moksafowo-inv-name" style="margin:.4em 0;' . esc_attr( $hide_b2b ) . '"><label>' . esc_html__( '公司抬頭', 'moksa-for-woocommerce' ) . '</label>';
 		echo '<input type="text" class="moksafowo-inv-buyer-name" style="display:block;width:100%;" value="' . esc_attr( $cur_name ) . '"></p>';
 
 		echo '<div class="moksafowo-inv-row moksafowo-inv-donate" style="margin:.4em 0;' . esc_attr( $hide_donate ) . '">';
 		if ( InvoiceChannels::has_donate_orgs( $option_prefix ) ) {
 			// 有設定捐贈單位 → 捐贈單位下拉（名稱）+ 捐贈碼唯讀（選了單位自動帶入，不開放自填）。
-			echo '<label style="display:block;">' . esc_html__( '捐贈單位', 'mo-ectools' ) . '</label>';
+			echo '<label style="display:block;">' . esc_html__( '捐贈單位', 'moksa-for-woocommerce' ) . '</label>';
 			echo '<select class="moksafowo-inv-donate-org" style="display:block;width:100%;margin-bottom:.4em;">';
 			foreach ( InvoiceChannels::donate_select_options( $option_prefix ) as $v => $label ) {
 				echo '<option value="' . esc_attr( $v ) . '"' . selected( $cur_donate, $v, false ) . '>' . esc_html( $label ) . '</option>';
 			}
 			echo '</select>';
-			echo '<label style="display:block;">' . esc_html__( '捐贈碼', 'mo-ectools' ) . '</label>';
+			echo '<label style="display:block;">' . esc_html__( '捐贈碼', 'moksa-for-woocommerce' ) . '</label>';
 			echo '<input type="text" class="moksafowo-inv-love-code" readonly style="display:block;width:100%;background:#f0f0f1;" value="' . esc_attr( $cur_donate ) . '">';
 		} else {
 			// 沒設定捐贈單位 → 捐贈碼開放自填。
-			echo '<label style="display:block;">' . esc_html__( '捐贈碼', 'mo-ectools' ) . '</label>';
-			echo '<input type="text" class="moksafowo-inv-love-code" style="display:block;width:100%;" value="' . esc_attr( $cur_donate ) . '" placeholder="' . esc_attr__( '3-7 碼愛心碼', 'mo-ectools' ) . '">';
+			echo '<label style="display:block;">' . esc_html__( '捐贈碼', 'moksa-for-woocommerce' ) . '</label>';
+			echo '<input type="text" class="moksafowo-inv-love-code" style="display:block;width:100%;" value="' . esc_attr( $cur_donate ) . '" placeholder="' . esc_attr__( '3-7 碼愛心碼', 'moksa-for-woocommerce' ) . '">';
 		}
 		echo '</div>';
 
@@ -141,21 +141,21 @@ final class AdminIssueForm {
 		if ( 'b2b' === $type ) {
 			$ubn = isset( $_POST['inv_ubn'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_ubn'] ) ) : '';
 			if ( ! Ubn::is_valid( $ubn ) ) {
-				return __( '統一編號格式或檢查碼不正確（需 8 碼數字且檢查碼正確）。', 'mo-ectools' );
+				return __( '統一編號格式或檢查碼不正確（需 8 碼數字且檢查碼正確）。', 'moksa-for-woocommerce' );
 			}
 		} elseif ( 'b2c_donate' === $type ) {
 			$code = isset( $_POST['inv_donate'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_donate'] ) ) : '';
 			if ( ! preg_match( '/^([xX]\d{2,6}|\d{3,7})$/', $code ) ) {
-				return __( '愛心碼格式錯誤（3-7 碼數字）。', 'mo-ectools' );
+				return __( '愛心碼格式錯誤（3-7 碼數字）。', 'moksa-for-woocommerce' );
 			}
 		} elseif ( 'b2c_carrier' === $type ) {
 			$carrier = isset( $_POST['inv_carrier'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier'] ) ) : '';
 			$cnum    = isset( $_POST['inv_carrier_num'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier_num'] ) ) : '';
 			if ( 'mobile' === $carrier && ! preg_match( '#^/[0-9A-Z+\-.]{7}$#', $cnum ) ) {
-				return __( '手機條碼格式錯誤（/ 開頭 + 7 碼，限 0-9 A-Z . + -）。', 'mo-ectools' );
+				return __( '手機條碼格式錯誤（/ 開頭 + 7 碼，限 0-9 A-Z . + -）。', 'moksa-for-woocommerce' );
 			}
 			if ( 'cert' === $carrier && ! preg_match( '/^[A-Z]{2}\d{14}$/', $cnum ) ) {
-				return __( '自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。', 'mo-ectools' );
+				return __( '自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。', 'moksa-for-woocommerce' );
 			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing

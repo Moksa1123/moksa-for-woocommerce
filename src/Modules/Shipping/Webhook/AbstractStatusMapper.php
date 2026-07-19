@@ -25,15 +25,15 @@ abstract class AbstractStatusMapper {
 		}
 
 		$provider_label_map = [
-			'ecpay'  => __( '綠界', 'mo-ectools' ),
-			'payuni' => __( 'PAYUNi', 'mo-ectools' ),
+			'ecpay'  => __( '綠界', 'moksa-for-woocommerce' ),
+			'payuni' => __( 'PAYUNi', 'moksa-for-woocommerce' ),
 		];
 		$provider_label     = $provider_label_map[ $provider ] ?? strtoupper( $provider );
 		$order->update_status(
 			$slug,
 			sprintf(
 				/* translators: 1: provider label, 2: description, 3: code */
-				__( '%1$s 物流貨態：%2$s（狀態代碼 %3$s）', 'mo-ectools' ),
+				__( '%1$s 物流貨態：%2$s（狀態代碼 %3$s）', 'moksa-for-woocommerce' ),
 				$provider_label,
 				$desc,
 				$code

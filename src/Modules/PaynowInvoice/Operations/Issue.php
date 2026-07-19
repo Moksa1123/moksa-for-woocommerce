@@ -17,7 +17,7 @@ final class Issue {
 		if ( '' !== $existing ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ),
+				'message' => __( '此訂單已開立發票，不可重複。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -25,25 +25,25 @@ final class Issue {
 		if ( '' === $type ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ),
+				'message' => __( '訂單沒設定發票類型。', 'moksa-for-woocommerce' ),
 			];
 		}
 
 		if ( ! Helper::has_credentials() ) {
 			return [
 				'ok'      => false,
-				'message' => __( 'PayNow 發票憑證未設定。', 'mo-ectools' ),
+				'message' => __( 'PayNow 發票憑證未設定。', 'moksa-for-woocommerce' ),
 			];
 		}
 
 		$total = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded(), 0 );
 		if ( $total <= 0 ) {
 			$order->update_meta_data( Keys::PAYNOW_INVOICE_NUMBER, 'zero' );
-			$order->add_order_note( __( '訂單金額為 0 或負，不開立 PayNow 發票。', 'mo-ectools' ) );
+			$order->add_order_note( __( '訂單金額為 0 或負，不開立 PayNow 發票。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'      => false,
-				'message' => __( '訂單金額為 0 或負。', 'mo-ectools' ),
+				'message' => __( '訂單金額為 0 或負。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -52,7 +52,7 @@ final class Issue {
 		if ( empty( $rows ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒有可開立的品項。', 'mo-ectools' ),
+				'message' => __( '訂單沒有可開立的品項。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -74,7 +74,7 @@ final class Issue {
 		if ( ! $resp['ok'] ) {
 			$msg = sprintf(
 				/* translators: %s: error message */
-				__( 'PayNow 發票開立失敗：%s', 'mo-ectools' ),
+				__( 'PayNow 發票開立失敗：%s', 'moksa-for-woocommerce' ),
 				$resp['message']
 			);
 			$order->update_meta_data( Keys::PAYNOW_INVOICE_STATUS, 'F' );
@@ -106,7 +106,7 @@ final class Issue {
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: raw API response text from PayNow */
-					__( 'PayNow 回應成功但無法解析發票號碼。原始：%s', 'mo-ectools' ),
+					__( 'PayNow 回應成功但無法解析發票號碼。原始：%s', 'moksa-for-woocommerce' ),
 					$resp['raw']
 				)
 			);
@@ -127,7 +127,7 @@ final class Issue {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: orderno */
-				__( 'PayNow 發票已開立 — 號碼 %1$s（送單號 %2$s）', 'mo-ectools' ),
+				__( 'PayNow 發票已開立 — 號碼 %1$s（送單號 %2$s）', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$orderno
 			)
@@ -235,7 +235,7 @@ final class Issue {
 					$carrier_1,
 					$carrier_2,
 					$love_param,
-					__( '運費', 'mo-ectools' ),
+					__( '運費', 'moksa-for-woocommerce' ),
 					'1',
 					(string) (int) round( $shipping, 0 ),
 					(string) (int) round( $shipping, 0 ),

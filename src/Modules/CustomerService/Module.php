@@ -21,7 +21,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '前台客服 — 顧客自助查單(訂單號 + 電話末三碼驗證)', 'mo-ectools' );
+		return __( '前台客服 — 顧客自助查單(訂單號 + 電話末三碼驗證)', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -29,11 +29,11 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '前台客服', 'mo-ectools' );
+		return __( '前台客服', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '顧客自助查訂單狀態 / 物流 / 發票(二次驗證)', 'mo-ectools' );
+		return __( '顧客自助查訂單狀態 / 物流 / 發票(二次驗證)', 'moksa-for-woocommerce' );
 	}
 
 	public function boot(): void {
@@ -74,35 +74,35 @@ final class Module extends AbstractModule {
 			array(
 				'rest'  => esc_url_raw( rest_url( Rest::NS . '/cs' ) ),
 				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'title' => (string) get_option( 'moksafowo_customer_service_title', __( '訂單查詢', 'mo-ectools' ) ),
+				'title' => (string) get_option( 'moksafowo_customer_service_title', __( '訂單查詢', 'moksa-for-woocommerce' ) ),
 				'i18n'  => array(
-					'bubble'      => __( '訂單查詢', 'mo-ectools' ),
-					'order_label' => __( '訂單編號', 'mo-ectools' ),
-					'phone_label' => __( '帳單電話末三碼', 'mo-ectools' ),
-					'submit'      => __( '查詢', 'mo-ectools' ),
-					'querying'    => __( '查詢中…', 'mo-ectools' ),
-					'again'       => __( '查其他訂單', 'mo-ectools' ),
-					'close'       => __( '關閉', 'mo-ectools' ),
-					'paid'        => __( '已付款', 'mo-ectools' ),
-					'unpaid'      => __( '未付款', 'mo-ectools' ),
-					'status'      => __( '訂單狀態', 'mo-ectools' ),
-					'total'       => __( '訂單金額', 'mo-ectools' ),
-					'payment'     => __( '付款方式', 'mo-ectools' ),
-					'atm'         => __( 'ATM 轉帳虛擬帳號', 'mo-ectools' ),
-					'cvs'         => __( '超商繳費代碼', 'mo-ectools' ),
-					'shipping'    => __( '運送方式', 'mo-ectools' ),
-					'ship_no'     => __( '物流單號', 'mo-ectools' ),
-					'invoice'     => __( '電子發票號碼', 'mo-ectools' ),
-					'items'       => __( '商品', 'mo-ectools' ),
-					'hint'        => __( '輸入訂單編號與帳單電話末三碼即可查詢訂單進度。', 'mo-ectools' ),
-					'contact'     => __( '聯絡客服', 'mo-ectools' ),
-					'back'        => __( '← 返回訂單', 'mo-ectools' ),
-					'send'        => __( '送出', 'mo-ectools' ),
-					'msg_ph'      => __( '輸入訊息…', 'mo-ectools' ),
-					'you'         => __( '您', 'mo-ectools' ),
-					'staff'       => __( '客服', 'mo-ectools' ),
-					'ai_label'    => __( 'AI 客服', 'mo-ectools' ),
-					'no_msg'      => __( '有問題嗎?輸入訊息,我們會盡快回覆。', 'mo-ectools' ),
+					'bubble'      => __( '訂單查詢', 'moksa-for-woocommerce' ),
+					'order_label' => __( '訂單編號', 'moksa-for-woocommerce' ),
+					'phone_label' => __( '帳單電話末三碼', 'moksa-for-woocommerce' ),
+					'submit'      => __( '查詢', 'moksa-for-woocommerce' ),
+					'querying'    => __( '查詢中…', 'moksa-for-woocommerce' ),
+					'again'       => __( '查其他訂單', 'moksa-for-woocommerce' ),
+					'close'       => __( '關閉', 'moksa-for-woocommerce' ),
+					'paid'        => __( '已付款', 'moksa-for-woocommerce' ),
+					'unpaid'      => __( '未付款', 'moksa-for-woocommerce' ),
+					'status'      => __( '訂單狀態', 'moksa-for-woocommerce' ),
+					'total'       => __( '訂單金額', 'moksa-for-woocommerce' ),
+					'payment'     => __( '付款方式', 'moksa-for-woocommerce' ),
+					'atm'         => __( 'ATM 轉帳虛擬帳號', 'moksa-for-woocommerce' ),
+					'cvs'         => __( '超商繳費代碼', 'moksa-for-woocommerce' ),
+					'shipping'    => __( '運送方式', 'moksa-for-woocommerce' ),
+					'ship_no'     => __( '物流單號', 'moksa-for-woocommerce' ),
+					'invoice'     => __( '電子發票號碼', 'moksa-for-woocommerce' ),
+					'items'       => __( '商品', 'moksa-for-woocommerce' ),
+					'hint'        => __( '輸入訂單編號與帳單電話末三碼即可查詢訂單進度。', 'moksa-for-woocommerce' ),
+					'contact'     => __( '聯絡客服', 'moksa-for-woocommerce' ),
+					'back'        => __( '← 返回訂單', 'moksa-for-woocommerce' ),
+					'send'        => __( '送出', 'moksa-for-woocommerce' ),
+					'msg_ph'      => __( '輸入訊息…', 'moksa-for-woocommerce' ),
+					'you'         => __( '您', 'moksa-for-woocommerce' ),
+					'staff'       => __( '客服', 'moksa-for-woocommerce' ),
+					'ai_label'    => __( 'AI 客服', 'moksa-for-woocommerce' ),
+					'no_msg'      => __( '有問題嗎?輸入訊息,我們會盡快回覆。', 'moksa-for-woocommerce' ),
 				),
 			)
 		);

@@ -81,11 +81,11 @@ class ShippingResponse {
 						$order->update_meta_data( OrderMeta::ShipStatusTime, $decrypted_info['ShipStatusTime'] );
 						$order->save();
 
-						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'mo-ectools' );
-						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'mo-ectools' );
-						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'mo-ectools' );
-						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'mo-ectools' );
-						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'mo-ectools' );
+						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'moksa-for-woocommerce' );
+						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'moksa-for-woocommerce' );
 
 						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
 
@@ -123,9 +123,9 @@ class ShippingResponse {
 						$order->save();
 					}
 
-					$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'mo-ectools' );
-					$print_status  = _x( 'Print Status: ', 'Shipping Note', 'mo-ectools' );
-					$print_message = _x( 'Message: ', 'Shipping Note', 'mo-ectools' );
+					$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'moksa-for-woocommerce' );
+					$print_status  = _x( 'Print Status: ', 'Shipping Note', 'moksa-for-woocommerce' );
+					$print_message = _x( 'Message: ', 'Shipping Note', 'moksa-for-woocommerce' );
 
 					$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$print_status}{$decrypted_info['Status']}<br>{$print_message}{$decrypted_info['Message']}" );
 
@@ -205,11 +205,11 @@ class ShippingResponse {
 
 					if ( array_key_exists( 'ShipStatus', $decrypted_info ) ) {
 
-						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'mo-ectools' );
-						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'mo-ectools' );
-						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'mo-ectools' );
-						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'mo-ectools' );
-						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'mo-ectools' );
+						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'moksa-for-woocommerce' );
+						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'moksa-for-woocommerce' );
 
 						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
 
@@ -249,9 +249,9 @@ class ShippingResponse {
 						$order->update_meta_data( OrderMeta::PrintDate, $print_result['PrintDate'] );
 						$order->save();
 
-						$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'mo-ectools' );
-						$print_status  = _x( 'Print Status: ', 'Shipping Note', 'mo-ectools' );
-						$print_message = _x( 'Message: ', 'Shipping Note', 'mo-ectools' );
+						$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'moksa-for-woocommerce' );
+						$print_status  = _x( 'Print Status: ', 'Shipping Note', 'moksa-for-woocommerce' );
+						$print_message = _x( 'Message: ', 'Shipping Note', 'moksa-for-woocommerce' );
 
 						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$print_status}{$decrypted_info['Status']}<br>{$print_message}{$decrypted_info['Message']}" );
 

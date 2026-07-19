@@ -23,10 +23,10 @@ final class Webatm extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow WebATM', 'mo-ectools' );
+		return __( 'PayNow WebATM', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 PayNow 付款頁，使用 WebATM 即時轉帳付款（非約定帳戶單日上限 NT$3 萬）。', 'mo-ectools' );
+		return __( '跳轉至 PayNow 付款頁，使用 WebATM 即時轉帳付款（非約定帳戶單日上限 NT$3 萬）。', 'moksa-for-woocommerce' );
 	}
 }

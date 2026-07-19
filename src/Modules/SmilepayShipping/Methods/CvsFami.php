@@ -11,8 +11,8 @@ final class CvsFami extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_smilepay_shipping_cvs_fami';
-		$this->method_title       = __( '速買配 — 全家取貨', 'mo-ectools' );
-		$this->method_description = __( '速買配全家超商取貨。', 'mo-ectools' );
+		$this->method_title       = __( '速買配 — 全家取貨', 'moksa-for-woocommerce' );
+		$this->method_description = __( '速買配全家超商取貨。', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -21,7 +21,7 @@ final class CvsFami extends AbstractCvsShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '全家', 'mo-ectools' );
+		return __( '全家', 'moksa-for-woocommerce' );
 	}
 
 	public function types_server(): string {

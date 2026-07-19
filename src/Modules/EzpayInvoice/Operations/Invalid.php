@@ -16,7 +16,7 @@ final class Invalid {
 		if ( '' === $invoice_no ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有可作廢的 ezPay 發票。', 'mo-ectools' ),
+				'message' => __( '此訂單沒有可作廢的 ezPay 發票。', 'moksa-for-woocommerce' ),
 			];
 		}
 		// zero / negative 是本外掛自己 mark 的 marker，不打 ezPay API，直接清掉 meta
@@ -25,18 +25,18 @@ final class Invalid {
 			$order->save();
 			return [
 				'ok'      => true,
-				'message' => __( '清除「未開立」標記。', 'mo-ectools' ),
+				'message' => __( '清除「未開立」標記。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $order->get_meta( Keys::EZPAY_INVALID_AT ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( 'ezPay 發票已作廢。', 'mo-ectools' ),
+				'message' => __( 'ezPay 發票已作廢。', 'moksa-for-woocommerce' ),
 			];
 		}
 		$reason = trim( $reason );
 		if ( '' === $reason ) {
-			$reason = __( '訂單取消', 'mo-ectools' );
+			$reason = __( '訂單取消', 'moksa-for-woocommerce' );
 		}
 
 		$now = new \DateTime( 'now', new \DateTimeZone( 'Asia/Taipei' ) );
@@ -62,7 +62,7 @@ final class Invalid {
 		if ( ! $result['ok'] ) {
 			$msg = sprintf(
 				/* translators: 1: error message, 2: status code */
-				__( 'ezPay 發票作廢失敗：%1$s（%2$s）', 'mo-ectools' ),
+				__( 'ezPay 發票作廢失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
 				$result['message'] ?? '',
 				$result['status'] ?? ''
 			);
@@ -79,7 +79,7 @@ final class Invalid {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: reason */
-				__( 'ezPay 發票 %1$s 已作廢 — 原因：%2$s', 'mo-ectools' ),
+				__( 'ezPay 發票 %1$s 已作廢 — 原因：%2$s', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$reason
 			)

@@ -48,7 +48,7 @@ abstract class AbstractAutoInvalid {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: provider label */
-					__( '%1$s 發票自動作廢已取消（訂單已切回非取消 / 退款狀態）。', 'mo-ectools' ),
+					__( '%1$s 發票自動作廢已取消（訂單已切回非取消 / 退款狀態）。', 'moksa-for-woocommerce' ),
 					static::provider_label()
 				)
 			);
@@ -76,12 +76,12 @@ abstract class AbstractAutoInvalid {
 				$cancelled
 					? sprintf(
 						/* translators: 1: provider label */
-						__( '%1$s 發票延後開立排程已取消（訂單退款 / 取消）。', 'mo-ectools' ),
+						__( '%1$s 發票延後開立排程已取消（訂單退款 / 取消）。', 'moksa-for-woocommerce' ),
 						static::provider_label()
 					)
 					: sprintf(
 						/* translators: 1: provider label */
-						__( '%1$s 發票延後開立排程取消失敗或排程已過期 — 請手動確認 %1$s 後台。', 'mo-ectools' ),
+						__( '%1$s 發票延後開立排程取消失敗或排程已過期 — 請手動確認 %1$s 後台。', 'moksa-for-woocommerce' ),
 						static::provider_label()
 					)
 			);
@@ -91,10 +91,10 @@ abstract class AbstractAutoInvalid {
 
 	protected static function reason_for_status( string $status ): string {
 		return match ( $status ) {
-			'refunded'  => __( '訂單退款（自動作廢）', 'mo-ectools' ),
-			'cancelled' => __( '訂單取消（自動作廢）', 'mo-ectools' ),
-			'failed'    => __( '訂單失敗（自動作廢）', 'mo-ectools' ),
-			default     => __( '訂單狀態變更（自動作廢）', 'mo-ectools' ),
+			'refunded'  => __( '訂單退款（自動作廢）', 'moksa-for-woocommerce' ),
+			'cancelled' => __( '訂單取消（自動作廢）', 'moksa-for-woocommerce' ),
+			'failed'    => __( '訂單失敗（自動作廢）', 'moksa-for-woocommerce' ),
+			default     => __( '訂單狀態變更（自動作廢）', 'moksa-for-woocommerce' ),
 		};
 	}
 }

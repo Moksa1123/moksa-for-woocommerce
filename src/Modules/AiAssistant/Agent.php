@@ -31,7 +31,7 @@ final class Agent {
 	 */
 	public static function run( string $user_text, array $abilities, string $system, array $prior = array() ): array {
 		if ( ! function_exists( 'wp_ai_client_prompt' ) || empty( $abilities ) ) {
-			return self::err( __( 'AI Client 不可用（需 WordPress 7.0）。', 'mo-ectools' ) );
+			return self::err( __( 'AI Client 不可用（需 WordPress 7.0）。', 'moksa-for-woocommerce' ) );
 		}
 
 		$resolver = new \WP_AI_Client_Ability_Function_Resolver( ...$abilities );
@@ -66,7 +66,7 @@ final class Agent {
 				$last_err = $attempt->get_error_message();
 			}
 			if ( null === $result ) {
-				return self::err( $last_err !== '' ? $last_err : __( 'AI 暫時無法回應,請稍後再試。', 'mo-ectools' ) );
+				return self::err( $last_err !== '' ? $last_err : __( 'AI 暫時無法回應,請稍後再試。', 'moksa-for-woocommerce' ) );
 			}
 
 			$assistant = $result->toMessage();
@@ -105,7 +105,7 @@ final class Agent {
 			$current       = $tool_response;
 		}
 
-		return self::err( __( 'AI 多次嘗試後仍未完成,請換個問法。', 'mo-ectools' ) );
+		return self::err( __( 'AI 多次嘗試後仍未完成,請換個問法。', 'moksa-for-woocommerce' ) );
 	}
 
 	/**
@@ -190,7 +190,7 @@ final class Agent {
 	private static function prepare_confirm( string $ability, array $args ): array {
 		$handlers = Config::destructive_handlers();
 		if ( ! isset( $handlers[ $ability ]['prepare'] ) || ! is_callable( $handlers[ $ability ]['prepare'] ) ) {
-			return self::err( __( '不支援的操作。', 'mo-ectools' ) );
+			return self::err( __( '不支援的操作。', 'moksa-for-woocommerce' ) );
 		}
 
 		$prepared = call_user_func( $handlers[ $ability ]['prepare'], $args );
@@ -198,7 +198,7 @@ final class Agent {
 			return self::err( $prepared->get_error_message() );
 		}
 		if ( ! is_array( $prepared ) || empty( $prepared['summary'] ) ) {
-			return self::err( __( '無法準備此操作。', 'mo-ectools' ) );
+			return self::err( __( '無法準備此操作。', 'moksa-for-woocommerce' ) );
 		}
 
 		$token = wp_generate_password( 24, false, false );

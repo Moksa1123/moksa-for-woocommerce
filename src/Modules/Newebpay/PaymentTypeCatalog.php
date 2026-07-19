@@ -11,22 +11,22 @@ final class PaymentTypeCatalog {
 
 	public static function label( string $type, ?string $fallback = null ): string {
 		$map = [
-			'CREDIT'     => __( '信用卡', 'mo-ectools' ),
-			'WEBATM'     => __( 'WebATM', 'mo-ectools' ),
-			'VACC'       => __( 'ATM 虛擬帳號', 'mo-ectools' ),
-			'CVS'        => __( '超商代碼', 'mo-ectools' ),
-			'BARCODE'    => __( '超商條碼', 'mo-ectools' ),
-			'APPLEPAY'   => __( 'Apple Pay', 'mo-ectools' ),
-			'ANDROIDPAY' => __( 'Google Pay', 'mo-ectools' ),
-			'SAMSUNGPAY' => __( 'Samsung Pay', 'mo-ectools' ),
-			'LINEPAY'    => __( 'LINE Pay', 'mo-ectools' ),
-			'ESUNWALLET' => __( '玉山 Wallet', 'mo-ectools' ),
-			'TAIWANPAY'  => __( '台灣 Pay', 'mo-ectools' ),
-			'TWQR'       => __( 'TWQR 行動支付', 'mo-ectools' ),
-			'EZPALIPAY'  => __( '支付寶', 'mo-ectools' ),
-			'EZPWECHAT'  => __( '微信支付', 'mo-ectools' ),
-			'AFTEE'      => __( 'AFTEE 無卡分期', 'mo-ectools' ),
-			'UNIONPAY'   => __( '銀聯卡', 'mo-ectools' ),
+			'CREDIT'     => __( '信用卡', 'moksa-for-woocommerce' ),
+			'WEBATM'     => __( 'WebATM', 'moksa-for-woocommerce' ),
+			'VACC'       => __( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
+			'CVS'        => __( '超商代碼', 'moksa-for-woocommerce' ),
+			'BARCODE'    => __( '超商條碼', 'moksa-for-woocommerce' ),
+			'APPLEPAY'   => __( 'Apple Pay', 'moksa-for-woocommerce' ),
+			'ANDROIDPAY' => __( 'Google Pay', 'moksa-for-woocommerce' ),
+			'SAMSUNGPAY' => __( 'Samsung Pay', 'moksa-for-woocommerce' ),
+			'LINEPAY'    => __( 'LINE Pay', 'moksa-for-woocommerce' ),
+			'ESUNWALLET' => __( '玉山 Wallet', 'moksa-for-woocommerce' ),
+			'TAIWANPAY'  => __( '台灣 Pay', 'moksa-for-woocommerce' ),
+			'TWQR'       => __( 'TWQR 行動支付', 'moksa-for-woocommerce' ),
+			'EZPALIPAY'  => __( '支付寶', 'moksa-for-woocommerce' ),
+			'EZPWECHAT'  => __( '微信支付', 'moksa-for-woocommerce' ),
+			'AFTEE'      => __( 'AFTEE 無卡分期', 'moksa-for-woocommerce' ),
+			'UNIONPAY'   => __( '銀聯卡', 'moksa-for-woocommerce' ),
 		];
 		return $map[ $type ] ?? ( $fallback ?? $type );
 	}

@@ -31,11 +31,11 @@ final class Barcode extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay 四大超商條碼', 'mo-ectools' );
+		return __( 'SmilePay 四大超商條碼', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得繳費條碼後，於期限內至四大超商繳款。', 'mo-ectools' );
+		return __( '取得繳費條碼後，於期限內至四大超商繳款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

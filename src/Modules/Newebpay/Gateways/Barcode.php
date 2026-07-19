@@ -17,11 +17,11 @@ final class Barcode extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 超商條碼繳費', 'mo-ectools' );
+		return __( '藍新 超商條碼繳費', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '列印 3 段超商條碼到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。最低 20 元 / 最高 40,000 元（藍新限制）。', 'mo-ectools' );
+		return __( '列印 3 段超商條碼到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。最低 20 元 / 最高 40,000 元（藍新限制）。', 'moksa-for-woocommerce' );
 	}
 
 	protected function min_amount(): int {

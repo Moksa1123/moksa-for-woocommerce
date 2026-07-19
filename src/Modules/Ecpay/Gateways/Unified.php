@@ -20,11 +20,11 @@ final class Unified extends AbstractEcpayGateway {
 
 	protected function build_method_title(): string {
 		// 簡短版 — 跟 WC 自動 note「透過 [title] 付款」連讀比較順。
-		return __( '綠界', 'mo-ectools' );
+		return __( '綠界', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至綠界收銀台，由顧客選擇信用卡、ATM、超商代碼、超商條碼、WebATM、Apple Pay、TWQR 等付款方式。', 'mo-ectools' );
+		return __( '跳轉至綠界收銀台，由顧客選擇信用卡、ATM、超商代碼、超商條碼、WebATM、Apple Pay、TWQR 等付款方式。', 'moksa-for-woocommerce' );
 	}
 
 	protected function supports_credit_action(): bool {

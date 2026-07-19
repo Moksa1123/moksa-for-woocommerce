@@ -12,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2026-06-20T05:05:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: mo-ectools\n"
+"X-Domain: moksa-for-woocommerce\n"
 
 #. Plugin Name of the plugin
 #: mo-ectools.php

@@ -76,7 +76,7 @@ final class IpnHandler {
 					$order->add_order_note(
 						sprintf(
 						/* translators: %s: 中文化的付款方式名稱 */
-							__( '付款方式：%s', 'mo-ectools' ),
+							__( '付款方式：%s', 'moksa-for-woocommerce' ),
 							self::payment_type_label( (string) $payment_type )
 						)
 					);
@@ -85,7 +85,7 @@ final class IpnHandler {
 				self::store_payment_info( $order, $posted );
 				$note = sprintf(
 					/* translators: 1: 中文化的付款方式名稱, 2: rtn code */
-					__( '綠界取號完成（%1$s，等待付款。狀態代碼 %2$s）', 'mo-ectools' ),
+					__( '綠界取號完成（%1$s，等待付款。狀態代碼 %2$s）', 'moksa-for-woocommerce' ),
 					self::payment_type_label( (string) $payment_type ),
 					(string) $rtn_code
 				);
@@ -101,7 +101,7 @@ final class IpnHandler {
 			$msg  = $posted['RtnMsg'] ?? '';
 			$note = sprintf(
 				/* translators: 1: rtn message, 2: rtn code */
-				__( '綠界付款失敗：%1$s（狀態代碼 %2$s）', 'mo-ectools' ),
+				__( '綠界付款失敗：%1$s（狀態代碼 %2$s）', 'moksa-for-woocommerce' ),
 				wc_clean( wp_unslash( (string) $msg ) ),
 				(string) $rtn_code
 			);

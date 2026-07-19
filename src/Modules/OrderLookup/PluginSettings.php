@@ -55,7 +55,7 @@ final class PluginSettings {
 			'invoice_issue_timing' => $invoice_timing,
 			'order_search_fields'  => $search_fields,
 			'ai_assistant_enabled' => 'yes' === get_option( 'moksafowo_ai_assistant_enabled', 'no' ),
-			'note'                 => __( '此處不含任何憑證(MerchantID/HashKey 等)。', 'mo-ectools' ),
+			'note'                 => __( '此處不含任何憑證(MerchantID/HashKey 等)。', 'moksa-for-woocommerce' ),
 		);
 	}
 }

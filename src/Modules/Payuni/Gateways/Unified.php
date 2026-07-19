@@ -28,8 +28,8 @@ final class Unified extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 統一金流（單一入口）', 'mo-ectools' );
-		$this->method_description = __( '結帳呈現模式為「單一入口」時啟用。顧客點選後跳轉至 PAYUNi 收銀台選擇具體付款方式。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 統一金流（單一入口）', 'moksa-for-woocommerce' );
+		$this->method_description = __( '結帳呈現模式為「單一入口」時啟用。顧客點選後跳轉至 PAYUNi 收銀台選擇具體付款方式。', 'moksa-for-woocommerce' );
 		$this->supports           = array( 'products', 'refunds' );
 
 		$this->init_form_fields();
@@ -46,30 +46,30 @@ final class Unified extends GatewayBase {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'             => array(
-				'title'       => __( '啟用', 'mo-ectools' ),
+				'title'       => __( '啟用', 'moksa-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( '啟用 PAYUNi 統一金流（單一入口）', 'mo-ectools' ),
-				'description' => __( '注意：啟用「單一入口」顯示模式時才會出現在結帳頁。', 'mo-ectools' ),
+				'label'       => __( '啟用 PAYUNi 統一金流（單一入口）', 'moksa-for-woocommerce' ),
+				'description' => __( '注意：啟用「單一入口」顯示模式時才會出現在結帳頁。', 'moksa-for-woocommerce' ),
 				'default'     => 'yes',
 			),
 			'title'               => array(
-				'title'   => __( '結帳顯示名稱', 'mo-ectools' ),
+				'title'   => __( '結帳顯示名稱', 'moksa-for-woocommerce' ),
 				'type'    => 'text',
-				'default' => __( '統一金流 PAYUNi', 'mo-ectools' ),
+				'default' => __( '統一金流 PAYUNi', 'moksa-for-woocommerce' ),
 			),
 			'description'         => array(
-				'title'   => __( '結帳顯示說明', 'mo-ectools' ),
+				'title'   => __( '結帳顯示說明', 'moksa-for-woocommerce' ),
 				'type'    => 'textarea',
-				'default' => __( '整合各式付款工具，按下「下單」後將跳轉至 PAYUNi 收銀台。', 'mo-ectools' ),
+				'default' => __( '整合各式付款工具，按下「下單」後將跳轉至 PAYUNi 收銀台。', 'moksa-for-woocommerce' ),
 			),
 			'allow_installment'   => array(
-				'title'   => __( '允許分期付款', 'mo-ectools' ),
+				'title'   => __( '允許分期付款', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( '在 PAYUNi 收銀台顯示信用卡分期選項', 'mo-ectools' ),
+				'label'   => __( '在 PAYUNi 收銀台顯示信用卡分期選項', 'moksa-for-woocommerce' ),
 				'default' => 'no',
 			),
 			'installment_periods' => array(
-				'title'    => __( '可用分期數', 'mo-ectools' ),
+				'title'    => __( '可用分期數', 'moksa-for-woocommerce' ),
 				'type'     => 'multiselect',
 				'class'    => 'wc-enhanced-select',
 				'css'      => 'width: 400px;',
@@ -82,7 +82,7 @@ final class Unified extends GatewayBase {
 					24 => '24',
 					30 => '30',
 				),
-				'desc'     => __( '勾選「允許分期付款」時生效，勾選的期數將在 PAYUNi 付款頁供顧客選擇。', 'mo-ectools' ),
+				'desc'     => __( '勾選「允許分期付款」時生效，勾選的期數將在 PAYUNi 付款頁供顧客選擇。', 'moksa-for-woocommerce' ),
 				'desc_tip' => true,
 			),
 		);

@@ -17,11 +17,11 @@ final class Atm extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 ATM 轉帳', 'mo-ectools' );
+		return __( '綠界 ATM 轉帳', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得虛擬帳號後 3 天內，可至 ATM 或網路銀行轉帳。', 'mo-ectools' );
+		return __( '取得虛擬帳號後 3 天內，可至 ATM 或網路銀行轉帳。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_aio_params( \WC_Order $order ): array {

@@ -70,7 +70,7 @@ final class ListOrders {
 				'status'         => wc_get_order_status_name( $order->get_status() ),
 				'date'           => $date ? $date->date_i18n( 'Y-m-d' ) : '',
 				'total'          => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
-				'customer'       => '' !== $name ? $name : __( '（無姓名）', 'mo-ectools' ),
+				'customer'       => '' !== $name ? $name : __( '（無姓名）', 'moksa-for-woocommerce' ),
 				'payment_method' => (string) $order->get_payment_method_title(),
 			);
 		}

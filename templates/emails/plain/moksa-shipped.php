@@ -7,8 +7,8 @@ defined( 'ABSPATH' ) || exit;
 
 echo "= " . esc_html( wp_strip_all_tags( $email_heading ) ) . " =\n\n";
 /* translators: %s: customer first name */
-echo sprintf( esc_html__( '%s 您好，', 'mo-ectools' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
-echo esc_html__( '您的訂單已出貨，物流商正在處理運送中。', 'mo-ectools' ) . "\n\n";
+echo sprintf( esc_html__( '%s 您好，', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
+echo esc_html__( '您的訂單已出貨，物流商正在處理運送中。', 'moksa-for-woocommerce' ) . "\n\n";
 
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 echo "\n----------------------------------------\n\n";

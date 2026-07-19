@@ -34,7 +34,7 @@ final class ShippingZoneOps {
 		}
 		foreach ( array_unique( $zone_ids ) as $zid ) {
 			$zone = new \WC_Shipping_Zone( $zid );
-			$name = 0 === $zid ? __( '其他地區', 'mo-ectools' ) : $zone->get_zone_name();
+			$name = 0 === $zid ? __( '其他地區', 'moksa-for-woocommerce' ) : $zone->get_zone_name();
 			foreach ( $zone->get_shipping_methods( false ) as $m ) {
 				$out[ (int) $m->get_instance_id() ] = array(
 					'title'     => (string) $m->get_title(),
@@ -115,12 +115,12 @@ final class ShippingZoneOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$name = is_array( $args ) && isset( $args['method'] ) ? (string) $args['method'] : '';
 		$iids = self::resolve( $name );
 		if ( empty( $iids ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_method', __( '找不到對應的運送方式(可先用列出運送區域確認名稱)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_method', __( '找不到對應的運送方式(可先用列出運送區域確認名稱)。', 'moksa-for-woocommerce' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -135,8 +135,8 @@ final class ShippingZoneOps {
 			'enable'       => $enable,
 			'summary'      => sprintf(
 				/* translators: 1: enable/disable, 2: method titles */
-				__( '%1$s 運送方式:%2$s。', 'mo-ectools' ),
-				$enable ? __( '啟用', 'mo-ectools' ) : __( '停用', 'mo-ectools' ),
+				__( '%1$s 運送方式:%2$s。', 'moksa-for-woocommerce' ),
+				$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
 				implode( '、', $titles )
 			),
 		);
@@ -148,13 +148,13 @@ final class ShippingZoneOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$iids   = is_array( $params['instance_ids'] ?? null ) ? array_map( 'absint', $params['instance_ids'] ) : array();
 		$enable = ! empty( $params['enable'] );
 		$iids   = array_values( array_filter( $iids ) );
 		if ( empty( $iids ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( '沒有可變更的運送方式。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '沒有可變更的運送方式。', 'moksa-for-woocommerce' ) );
 		}
 
 		global $wpdb;
@@ -172,8 +172,8 @@ final class ShippingZoneOps {
 
 		return sprintf(
 			/* translators: 1: enable/disable, 2: method titles */
-			__( '✅ 已%1$s運送方式:%2$s。', 'mo-ectools' ),
-			$enable ? __( '啟用', 'mo-ectools' ) : __( '停用', 'mo-ectools' ),
+			__( '✅ 已%1$s運送方式:%2$s。', 'moksa-for-woocommerce' ),
+			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
 			implode( '、', $done )
 		);
 	}

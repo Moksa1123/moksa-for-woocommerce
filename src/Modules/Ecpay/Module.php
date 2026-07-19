@@ -15,31 +15,31 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( '綠界金流 — 信用卡 / ATM / 超商代碼 / 超商條碼 / 網路 ATM', 'mo-ectools' );
+		return __( '綠界金流 — 信用卡 / ATM / 超商代碼 / 超商條碼 / 網路 ATM', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( '綠界金流', 'mo-ectools' );
+		return __( '綠界金流', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / ATM / 超商 / 條碼 / 網路 ATM', 'mo-ectools' );
+		return __( '信用卡 / ATM / 超商 / 條碼 / 網路 ATM', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( '信用卡分期', 'mo-ectools' ),
-			__( 'ATM 轉帳', 'mo-ectools' ),
-			__( '超商代碼', 'mo-ectools' ),
-			__( '超商條碼', 'mo-ectools' ),
-			__( 'WebATM', 'mo-ectools' ),
-			__( 'Apple Pay', 'mo-ectools' ),
-			__( 'TWQR', 'mo-ectools' ),
-			__( '無卡分期（裕富 / 中租）', 'mo-ectools' ),
-			__( '微信支付', 'mo-ectools' ),
-			__( '街口支付', 'mo-ectools' ),
-			__( '一卡通', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'ATM 轉帳', 'moksa-for-woocommerce' ),
+			__( '超商代碼', 'moksa-for-woocommerce' ),
+			__( '超商條碼', 'moksa-for-woocommerce' ),
+			__( 'WebATM', 'moksa-for-woocommerce' ),
+			__( 'Apple Pay', 'moksa-for-woocommerce' ),
+			__( 'TWQR', 'moksa-for-woocommerce' ),
+			__( '無卡分期（裕富 / 中租）', 'moksa-for-woocommerce' ),
+			__( '微信支付', 'moksa-for-woocommerce' ),
+			__( '街口支付', 'moksa-for-woocommerce' ),
+			__( '一卡通', 'moksa-for-woocommerce' ),
 		];
 	}
 

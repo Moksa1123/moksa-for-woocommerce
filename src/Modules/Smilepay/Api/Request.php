@@ -49,7 +49,7 @@ final class Request {
 			return [
 				'ok'      => false,
 				'status'  => 'PARSE_FAIL',
-				'message' => __( 'SmilePay 回傳格式無法解析（連線異常）', 'mo-ectools' ),
+				'message' => __( 'SmilePay 回傳格式無法解析（連線異常）', 'moksa-for-woocommerce' ),
 				'data'    => [],
 			];
 		}

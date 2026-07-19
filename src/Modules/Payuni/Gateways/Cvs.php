@@ -16,8 +16,8 @@ class Cvs extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 超商代碼繳費', 'mo-ectools' );
-		$this->method_description = __( '取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi 超商代碼繳費', 'moksa-for-woocommerce' );
+		$this->method_description = __( '取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。', 'moksa-for-woocommerce' );
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -50,9 +50,9 @@ class Cvs extends GatewayBase {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::CVS_PAY_NO      => __( '繳費代碼', 'mo-ectools' ),
-			OrderMeta::CVS_STORE       => __( '超商門市', 'mo-ectools' ),
-			OrderMeta::CVS_EXPIRE_DATE => __( '繳費期限', 'mo-ectools' ),
+			OrderMeta::CVS_PAY_NO      => __( '繳費代碼', 'moksa-for-woocommerce' ),
+			OrderMeta::CVS_STORE       => __( '超商門市', 'moksa-for-woocommerce' ),
+			OrderMeta::CVS_EXPIRE_DATE => __( '繳費期限', 'moksa-for-woocommerce' ),
 		);
 
 		return $order_metas;

@@ -68,7 +68,7 @@ final class IpnHandler {
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: status code, 2: status message */
-				__( '綠界物流貨態：%2$s（狀態代碼 %1$s）', 'mo-ectools' ),
+				__( '綠界物流貨態：%2$s（狀態代碼 %1$s）', 'moksa-for-woocommerce' ),
 				$rtn_code,
 				$rtn_msg
 			)

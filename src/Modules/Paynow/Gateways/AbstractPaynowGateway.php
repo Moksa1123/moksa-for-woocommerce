@@ -38,7 +38,7 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			throw new \Exception( esc_html__( '找不到訂單', 'mo-ectools' ) );
+			throw new \Exception( esc_html__( '找不到訂單', 'moksa-for-woocommerce' ) );
 		}
 
 		$order_no = Helper::generate_order_no( (int) $order_id );
@@ -140,7 +140,7 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 			return $joined;
 		}
 		/* translators: %s: site name */
-		return sprintf( __( '%s 訂單', 'mo-ectools' ), get_bloginfo( 'name' ) ) . ' #' . $order->get_order_number();
+		return sprintf( __( '%s 訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ) . ' #' . $order->get_order_number();
 	}
 
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
@@ -149,16 +149,16 @@ abstract class AbstractPaynowGateway extends AbstractMowcGateway {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: amount, 2: reason */
-					__( 'PayNow 退款請至 PayNow 商家後台手動操作（金額 NT$%1$s）— %2$s', 'mo-ectools' ),
+					__( 'PayNow 退款請至 PayNow 商家後台手動操作（金額 NT$%1$s）— %2$s', 'moksa-for-woocommerce' ),
 					(int) ceil( (float) $amount ),
-					'' !== (string) $reason ? $reason : __( '無原因', 'mo-ectools' )
+					'' !== (string) $reason ? $reason : __( '無原因', 'moksa-for-woocommerce' )
 				)
 			);
 			$order->save();
 		}
 		return new \WP_Error(
 			'moksafowo_paynow_manual_refund',
-			__( 'PayNow 退款請至 PayNow 商家後台手動操作（避免自動退款觸發停權）。', 'mo-ectools' )
+			__( 'PayNow 退款請至 PayNow 商家後台手動操作（避免自動退款觸發停權）。', 'moksa-for-woocommerce' )
 		);
 	}
 }

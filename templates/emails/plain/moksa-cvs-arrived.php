@@ -14,20 +14,20 @@ $mo_store_address = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_ad
 
 echo "= " . esc_html( wp_strip_all_tags( $email_heading ) ) . " =\n\n";
 /* translators: %s: customer first name */
-echo sprintf( esc_html__( '%s 您好，', 'mo-ectools' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
-echo esc_html__( '您的包裹已送達取件門市，請於 7 天內持證件至門市取貨。', 'mo-ectools' ) . "\n\n";
+echo sprintf( esc_html__( '%s 您好，', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
+echo esc_html__( '您的包裹已送達取件門市，請於 7 天內持證件至門市取貨。', 'moksa-for-woocommerce' ) . "\n\n";
 
 if ( $mo_store_name ) {
-	echo esc_html__( '取件門市', 'mo-ectools' ) . ': ' . esc_html( $mo_store_name ) . "\n";
+	echo esc_html__( '取件門市', 'moksa-for-woocommerce' ) . ': ' . esc_html( $mo_store_name ) . "\n";
 }
 if ( $mo_store_id ) {
-	echo esc_html__( '門市代號', 'mo-ectools' ) . ': ' . esc_html( $mo_store_id ) . "\n";
+	echo esc_html__( '門市代號', 'moksa-for-woocommerce' ) . ': ' . esc_html( $mo_store_id ) . "\n";
 }
 if ( $mo_store_address ) {
-	echo esc_html__( '門市地址', 'mo-ectools' ) . ': ' . esc_html( $mo_store_address ) . "\n";
+	echo esc_html__( '門市地址', 'moksa-for-woocommerce' ) . ': ' . esc_html( $mo_store_address ) . "\n";
 }
 echo "\n";
-echo esc_html__( '逾期未取件，包裹將退回物流中心，並可能產生退運費用。', 'mo-ectools' ) . "\n\n";
+echo esc_html__( '逾期未取件，包裹將退回物流中心，並可能產生退運費用。', 'moksa-for-woocommerce' ) . "\n\n";
 
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 echo "\n----------------------------------------\n\n";

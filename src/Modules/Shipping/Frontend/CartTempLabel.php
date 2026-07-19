@@ -160,7 +160,7 @@ final class CartTempLabel {
 			}
 			$tail = sprintf(
 				/* translators: 1: NBSP separator (non-breaking space), 2: total item count */
-				__( '共%1$s%2$d 件', 'mo-ectools' ),
+				__( '共%1$s%2$d 件', 'moksa-for-woocommerce' ),
 				$nbsp,
 				$total_qty
 			);

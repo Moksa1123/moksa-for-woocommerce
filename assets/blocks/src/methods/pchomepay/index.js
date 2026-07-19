@@ -44,7 +44,7 @@ PCHOMEPAY_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( '支付連付款', 'mo-ectools' )
+			settings.title || __( '支付連付款', 'moksa-for-woocommerce' )
 		),
 		content: <Content />,
 		edit: <Content />,

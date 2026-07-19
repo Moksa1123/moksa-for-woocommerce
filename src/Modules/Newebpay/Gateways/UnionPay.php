@@ -17,10 +17,10 @@ final class UnionPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 銀聯卡', 'mo-ectools' );
+		return __( '藍新 銀聯卡', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '銀聯卡跨境付款，跳轉至藍新付款頁完成。', 'mo-ectools' );
+		return __( '銀聯卡跨境付款，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
 	}
 }

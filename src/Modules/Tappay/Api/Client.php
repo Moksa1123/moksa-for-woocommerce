@@ -73,7 +73,7 @@ final class Client {
 			return [
 				'ok'     => false,
 				'status' => -1,
-				'msg'    => __( 'TapPay Partner Key 未設定。', 'mo-ectools' ),
+				'msg'    => __( 'TapPay Partner Key 未設定。', 'moksa-for-woocommerce' ),
 				'data'   => [],
 			];
 		}

@@ -47,7 +47,7 @@ final class CreateOrderUnified {
 		if ( null === $method ) {
 			return [
 				'ok'      => false,
-				'message' => __( '不是 PAYUNi unified method 訂單。', 'mo-ectools' ),
+				'message' => __( '不是 PAYUNi unified method 訂單。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -57,7 +57,7 @@ final class CreateOrderUnified {
 			if ( '' === $store_id ) {
 				return [
 					'ok'      => false,
-					'message' => __( '尚未選擇取貨門市。', 'mo-ectools' ),
+					'message' => __( '尚未選擇取貨門市。', 'moksa-for-woocommerce' ),
 				];
 			}
 		}
@@ -67,7 +67,7 @@ final class CreateOrderUnified {
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒有商品可建立物流單。', 'mo-ectools' ),
+				'message' => __( '訂單沒有商品可建立物流單。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -95,7 +95,7 @@ final class CreateOrderUnified {
 			if ( ! $response['ok'] ) {
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: msg */
-					__( '溫層 %1$s 建單失敗：%2$s', 'mo-ectools' ),
+					__( '溫層 %1$s 建單失敗：%2$s', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$response['message']
 				);
@@ -121,8 +121,8 @@ final class CreateOrderUnified {
 		}
 
 		if ( empty( $created ) && empty( $existing ) ) {
-			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'mo-ectools' );
-			$order->add_order_note( __( 'PAYUNi 物流單全數建立失敗：', 'mo-ectools' ) . $msg );
+			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'moksa-for-woocommerce' );
+			$order->add_order_note( __( 'PAYUNi 物流單全數建立失敗：', 'moksa-for-woocommerce' ) . $msg );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -162,7 +162,7 @@ final class CreateOrderUnified {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: count, 2: list */
-					__( 'PAYUNi 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'mo-ectools' ),
+					__( 'PAYUNi 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'moksa-for-woocommerce' ),
 					count( $created ),
 					"\n" . implode( "\n", $lines )
 				)
@@ -172,7 +172,7 @@ final class CreateOrderUnified {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: temp label, 2: PAYUNi ship trade no, 3: pickup no */
-					__( 'PAYUNi 黑貓宅配建單成功 — %1$s（物流序號 %2$s 取件編號 %3$s）', 'mo-ectools' ),
+					__( 'PAYUNi 黑貓宅配建單成功 — %1$s（物流序號 %2$s 取件編號 %3$s）', 'moksa-for-woocommerce' ),
 					ProductTemp::label( (int) $r['temp'] ),
 					(string) $r['ship_trade_no'],
 					(string) $r['odno']
@@ -181,7 +181,7 @@ final class CreateOrderUnified {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( '部分溫層建單失敗：', 'mo-ectools' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( __( '部分溫層建單失敗：', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
 		}
 
 		$order->save();

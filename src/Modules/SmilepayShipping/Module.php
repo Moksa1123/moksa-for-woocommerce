@@ -14,7 +14,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'SmilePay 物流 — 7-11 / 全家 / 黑貓 (常溫/冷藏/冷凍)', 'mo-ectools' );
+		return __( 'SmilePay 物流 — 7-11 / 全家 / 黑貓 (常溫/冷藏/冷凍)', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -22,20 +22,20 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'SmilePay 物流', 'mo-ectools' );
+		return __( 'SmilePay 物流', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '7-11 / 全家 取貨 + 黑貓 常溫/冷藏/冷凍', 'mo-ectools' );
+		return __( '7-11 / 全家 取貨 + 黑貓 常溫/冷藏/冷凍', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '7-11 取貨', 'mo-ectools' ),
-			__( '全家取貨', 'mo-ectools' ),
-			__( '黑貓常溫', 'mo-ectools' ),
-			__( '黑貓冷藏', 'mo-ectools' ),
-			__( '黑貓冷凍', 'mo-ectools' ),
+			__( '7-11 取貨', 'moksa-for-woocommerce' ),
+			__( '全家取貨', 'moksa-for-woocommerce' ),
+			__( '黑貓常溫', 'moksa-for-woocommerce' ),
+			__( '黑貓冷藏', 'moksa-for-woocommerce' ),
+			__( '黑貓冷凍', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -85,11 +85,11 @@ final class Module extends AbstractModule {
 		$counter = static fn( \WC_Order $o ): int => Operations\BatchPrint::record_count( $o );
 
 		$cvs_titles                = [
-			'moksafowo_smilepay_shipping_cvs_711'  => __( '速買配 7-11 取貨', 'mo-ectools' ),
-			'moksafowo_smilepay_shipping_cvs_fami' => __( '速買配 全家取貨', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_cvs_711'  => __( '速買配 7-11 取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_smilepay_shipping_cvs_fami' => __( '速買配 全家取貨', 'moksa-for-woocommerce' ),
 		];
 		$providers['smilepay-cvs'] = [
-			'label'          => __( '速買配 超商標籤', 'mo-ectools' ),
+			'label'          => __( '速買配 超商標籤', 'moksa-for-woocommerce' ),
 			'category'       => 'cvs',
 			'method_ids'     => $cvs_titles,
 			'handler'        => [ Operations\BatchPrint::class, 'cvs' ],
@@ -99,10 +99,10 @@ final class Module extends AbstractModule {
 		];
 
 		$home_titles                = [
-			'moksafowo_smilepay_shipping_tcat'         => __( '速買配 黑貓宅配', 'mo-ectools' ),
-			'moksafowo_smilepay_shipping_tcat_normal'  => __( '速買配 黑貓常溫', 'mo-ectools' ),
-			'moksafowo_smilepay_shipping_tcat_refrige' => __( '速買配 黑貓冷藏', 'mo-ectools' ),
-			'moksafowo_smilepay_shipping_tcat_freeze'  => __( '速買配 黑貓冷凍', 'mo-ectools' ),
+			'moksafowo_smilepay_shipping_tcat'         => __( '速買配 黑貓宅配', 'moksa-for-woocommerce' ),
+			'moksafowo_smilepay_shipping_tcat_normal'  => __( '速買配 黑貓常溫', 'moksa-for-woocommerce' ),
+			'moksafowo_smilepay_shipping_tcat_refrige' => __( '速買配 黑貓冷藏', 'moksa-for-woocommerce' ),
+			'moksafowo_smilepay_shipping_tcat_freeze'  => __( '速買配 黑貓冷凍', 'moksa-for-woocommerce' ),
 		];
 		$temps                      = static function ( \WC_Order $o ): array {
 			$out = [];
@@ -115,7 +115,7 @@ final class Module extends AbstractModule {
 			return array_keys( $out );
 		};
 		$providers['smilepay-home'] = [
-			'label'          => __( '速買配 黑貓標籤', 'mo-ectools' ),
+			'label'          => __( '速買配 黑貓標籤', 'moksa-for-woocommerce' ),
 			'category'       => 'home',
 			'method_ids'     => $home_titles,
 			'handler'        => [ Operations\BatchPrint::class, 'home' ],

@@ -151,7 +151,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'status'  => 'HTTP_' . $code,
 				/* translators: %d: HTTP response code */
-				'message' => sprintf( __( 'ezPay 回傳 HTTP %d', 'mo-ectools' ), $code ),
+				'message' => sprintf( __( 'ezPay 回傳 HTTP %d', 'moksa-for-woocommerce' ), $code ),
 			];
 		}
 
@@ -161,7 +161,7 @@ final class Helper extends AbstractCredentialHelper {
 			return [
 				'ok'      => false,
 				'status'  => 'PARSE_FAIL',
-				'message' => __( 'ezPay 回傳格式無法解析', 'mo-ectools' ),
+				'message' => __( 'ezPay 回傳格式無法解析', 'moksa-for-woocommerce' ),
 				'raw'     => $raw,
 			];
 		}

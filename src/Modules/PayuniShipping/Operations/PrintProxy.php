@@ -46,7 +46,7 @@ final class PrintProxy {
 		);
 		$actions['moksafowo_payuni_print'] = [
 			'url'    => $url,
-			'name'   => __( '列印 PAYUNi 標籤', 'mo-ectools' ),
+			'name'   => __( '列印 PAYUNi 標籤', 'moksa-for-woocommerce' ),
 			'action' => 'moksafowo-payuni-print',
 		];
 		return $actions;
@@ -86,14 +86,14 @@ CSS;
 
 	public static function handle_quick(): void {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), '', 403 );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), '', 403 );
 		}
 		$order_id = isset( $_GET['order_id'] ) ? absint( wp_unslash( $_GET['order_id'] ) ) : 0;
 		check_admin_referer( self::NONCE_ACTION_QUICK . '_' . $order_id );
 
 		$order = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_die( esc_html__( '找不到訂單。', 'mo-ectools' ), '', 404 );
+			wp_die( esc_html__( '找不到訂單。', 'moksa-for-woocommerce' ), '', 404 );
 		}
 
 		$ship_type = '';
@@ -109,7 +109,7 @@ CSS;
 			: BatchPrint::home( [ $order_id ] );
 
 		if ( empty( $forms ) ) {
-			wp_die( esc_html__( '此訂單尚未建立物流單。', 'mo-ectools' ), '', 400 );
+			wp_die( esc_html__( '此訂單尚未建立物流單。', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		$forms_html = '';
@@ -122,8 +122,8 @@ CSS;
 		}
 
 		Interstitial::render(
-			__( '列印 PAYUNi 標籤', 'mo-ectools' ),
-			__( '正在列印 PAYUNi 物流標籤…', 'mo-ectools' ),
+			__( '列印 PAYUNi 標籤', 'moksa-for-woocommerce' ),
+			__( '正在列印 PAYUNi 物流標籤…', 'moksa-for-woocommerce' ),
 			[],
 			$forms_html,
 			'var forms=document.querySelectorAll("form[id^=f]");forms.forEach(function(f,i){setTimeout(function(){f.submit();},i*800);});'

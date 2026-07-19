@@ -48,7 +48,7 @@ final class Rest {
 				'id'       => $order['id'],
 				'label'    => sprintf(
 					/* translators: 1: order number, 2: buyer name, 3: order status, 4: order total */
-					__( '訂單 #%1$s · %2$s · %3$s · %4$s', 'mo-ectools' ),
+					__( '訂單 #%1$s · %2$s · %3$s · %4$s', 'moksa-for-woocommerce' ),
 					$order['number'],
 					$order['name'],
 					$order['status'],

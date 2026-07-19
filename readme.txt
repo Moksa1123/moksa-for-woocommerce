@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -44,7 +44,7 @@ These run when a customer selects the gateway at checkout (to create the payment
 * **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **NewebPay (藍新金流)** — credit card, ATM, CVS, barcode, wallets. Endpoints: core.newebpay.com. Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
 * **PAYUNi (統一金流)** — credit card, ATM, CVS, wallets. Endpoints: api.payuni.com.tw. Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
-* **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw. Terms & Privacy (SmilePay publishes a single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
+* **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname — smse.com.tw and smilepay.net are both operated by the same company, 訊航科技 Shinhang Technology; its policies are published on the smilepay.net brand site). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
 * **PayNow (立吉富)** — credit card, ATM, CVS, installments. Endpoints: www.paynow.com.tw. Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
 * **PChomePay (支付連)** — credit card, ATM, CVS, barcode. Endpoints: api.pchomepay.com.tw. Terms: https://www.pchomepay.com.tw/other/service_treaty — Privacy: https://web.pchomepay.com.tw/introduction/privacy
 * **LINE Pay** — LINE Pay wallet. Endpoints: api-pay.line.me. Terms: https://terms2.line.me/linepay_TW_TermsofUse?lang=zh-Hant — Privacy: https://terms2.line.me/linepay_TW_PP
@@ -58,7 +58,7 @@ These run when a customer opens the convenience-store map at checkout (the store
 * **ECPay Logistics (綠界物流)** — 7-11 / FamilyMart / Hi-Life / OK / home delivery. Endpoints: logistics.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **NewebPay Logistics (藍新物流)** — CVS / home delivery. Endpoints: core.newebpay.com. Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
 * **PAYUNi Logistics (統一物流)** — 7-11 / home delivery (incl. cold chain). Endpoints: api.payuni.com.tw. Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
-* **SmilePay Logistics (速買配物流)** — 7-11 / FamilyMart / home delivery. Endpoints: ssl.smse.com.tw. Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
+* **SmilePay Logistics (速買配物流)** — 7-11 / FamilyMart / home delivery. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
 
 = E-invoice (Taiwan electronic invoicing) =
 
@@ -66,7 +66,7 @@ These run when an invoice is issued for an order (immediately on payment, on com
 
 * **ECPay e-Invoice (綠界電子發票)** — Endpoints: einvoice.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **ezPay e-Invoice (ezPay 電子發票)** — Endpoints: inv.ezpay.com.tw. Terms & Privacy (single combined membership & data-protection terms page): https://www.ezpay.com.tw/info/Site_description/service_page/member
-* **SmilePay e-Invoice (速買配電子發票)** — Endpoints: ssl.smse.com.tw. Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
+* **SmilePay e-Invoice (速買配電子發票)** — Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
 * **PayNow e-Invoice (立吉富電子發票)** — Endpoints: invoice.paynow.com.tw. Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
 * **AMEGO e-Invoice (光貿電子發票)** — Endpoints: invoice-api.amego.tw. Terms: https://invoice.amego.tw/ — Privacy: https://invoice.amego.tw/privacy
 
@@ -82,7 +82,7 @@ When a shipment has a tracking number, the order screen renders a plain hyperlin
 
 = Moksa AI assistant (optional, admin-only) =
 
-When an administrator actively uses the in-admin Moksa AI assistant, the typed question and the store/order data needed to answer it (for example an order number, status, totals or invoice/shipping numbers) are sent to the AI provider you have connected in WordPress under **Settings → Connectors** — Anthropic, Google or OpenAI — through the WordPress 7.0 AI Client. This never happens automatically and only for the administrator using the assistant. The plugin does not store these conversations on any Moksa server, sends nothing to Moksa, and never transmits your AI provider keys (WordPress manages the connector credentials). The transmitted data is governed by the terms and privacy policy of the provider you choose: Anthropic — Terms: https://www.anthropic.com/legal/commercial-terms — Privacy: https://www.anthropic.com/legal/privacy ; Google — Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy ; OpenAI — Terms & Privacy (OpenAI's policy hub, linking to both current documents): https://openai.com/policies/
+When an administrator actively uses the in-admin Moksa AI assistant, the typed question and the store/order data needed to answer it (for example an order number, status, totals or invoice/shipping numbers) are sent to the AI provider you have connected in WordPress under **Settings → Connectors** — Anthropic, Google or OpenAI — through the WordPress 7.0 AI Client. This never happens automatically and only for the administrator using the assistant. The plugin does not store these conversations on any Moksa server, sends nothing to Moksa, and never transmits your AI provider keys (WordPress manages the connector credentials). The transmitted data is governed by the terms and privacy policy of the provider you choose: Anthropic — Terms: https://www.anthropic.com/legal/commercial-terms — Privacy: https://www.anthropic.com/legal/privacy ; Google — Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy ; OpenAI — Terms: https://openai.com/policies/terms-of-use/ — Privacy: https://openai.com/policies/privacy-policy/
 
 = MCP server (optional, off by default) =
 
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.8 - 2026-07-19 =
+* i18n: the text domain is now `moksa-for-woocommerce`, matching the assigned plugin slug (all 4,000+ gettext calls, the plugin header, the block-checkout scripts and the bundled zh_TW translation files were updated; the main plugin file was renamed accordingly).
+* Security: the PChomePay webhook no longer trusts its payload at all. On top of the source-IP allowlist, every notification now triggers a server-to-server query back to PChomePay (`GET /v1/payment/{id}`) and the authoritative API response gates the order transition: `order_confirm` requires API status S with a matching amount, and expiry/failure notifications are rejected for orders the API reports as paid. The allowlisted IPs are now filterable via `moksafowo_pchomepay_notify_ips`.
+* Security: the product temperature quick-edit / bulk-edit / product-save / variation-save handlers now re-verify the WooCommerce nonce and check `edit_product` capability in-place (fail-closed) instead of relying on the upstream caller having done so.
+* readme: each SmilePay integration now explains that ssl.smse.com.tw is SmilePay's own API hostname (smse.com.tw and smilepay.net are operated by the same company, 訊航科技); OpenAI policy links point at the individual terms and privacy pages.
 
 = 1.4.7 - 2026-07-12 =
 * Naming: the PHP namespace root was changed from `MoksaWeb\Mowc\` to `Moksafowo\`, so every global identifier the plugin declares (namespaces, constants, options, hooks, AJAX actions, database tables) now shares the single `moksafowo` prefix.

@@ -18,13 +18,13 @@ final class Allowance {
 		if ( '' === $inv || 'zero' === $inv || 'negative' === $inv ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有可折讓的 Amego 發票。', 'mo-ectools' ),
+				'message' => __( '此訂單沒有可折讓的 Amego 發票。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $amount <= 0 ) {
 			return [
 				'ok'      => false,
-				'message' => __( '折讓金額需大於 0。', 'mo-ectools' ),
+				'message' => __( '折讓金額需大於 0。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -74,7 +74,7 @@ final class Allowance {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error */
-					__( 'Amego 折讓失敗：%s', 'mo-ectools' ),
+					__( 'Amego 折讓失敗：%s', 'moksa-for-woocommerce' ),
 					$resp['message']
 				)
 			);
@@ -93,7 +93,7 @@ final class Allowance {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: allowance no, 2: amount */
-				__( 'Amego 折讓單 %1$s 開立成功（金額 NT$%2$d）', 'mo-ectools' ),
+				__( 'Amego 折讓單 %1$s 開立成功（金額 NT$%2$d）', 'moksa-for-woocommerce' ),
 				$allowance_no,
 				$amount
 			)

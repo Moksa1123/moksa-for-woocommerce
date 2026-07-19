@@ -17,7 +17,7 @@ final class Issue {
 		if ( '' !== $existing ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單已開立發票，不可重複。', 'mo-ectools' ),
+				'message' => __( '此訂單已開立發票，不可重複。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -26,7 +26,7 @@ final class Issue {
 		if ( '' === $type ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒設定發票類型。', 'mo-ectools' ),
+				'message' => __( '訂單沒設定發票類型。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -35,21 +35,21 @@ final class Issue {
 		// 0 元跟負額 — 不送 API（同 RY pattern）
 		if ( 0 === (int) $args['TotalAmt'] ) {
 			$order->update_meta_data( Keys::EZPAY_INVOICE_NUMBER, 'zero' );
-			$order->add_order_note( __( '訂單金額為 0，不開立 ezPay 發票。', 'mo-ectools' ) );
+			$order->add_order_note( __( '訂單金額為 0，不開立 ezPay 發票。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'             => true,
-				'message'        => __( '訂單金額為 0，未開立。', 'mo-ectools' ),
+				'message'        => __( '訂單金額為 0，未開立。', 'moksa-for-woocommerce' ),
 				'invoice_number' => 'zero',
 			];
 		}
 		if ( (int) $args['TotalAmt'] < 0 ) {
 			$order->update_meta_data( Keys::EZPAY_INVOICE_NUMBER, 'negative' );
-			$order->add_order_note( __( '訂單金額為負，無法開立 ezPay 發票（需走折讓單）。', 'mo-ectools' ) );
+			$order->add_order_note( __( '訂單金額為負，無法開立 ezPay 發票（需走折讓單）。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'             => false,
-				'message'        => __( '訂單金額為負，無法開立。', 'mo-ectools' ),
+				'message'        => __( '訂單金額為負，無法開立。', 'moksa-for-woocommerce' ),
 				'invoice_number' => 'negative',
 			];
 		}
@@ -74,7 +74,7 @@ final class Issue {
 		if ( ! $result['ok'] ) {
 			$msg = sprintf(
 				/* translators: 1: error message, 2: status code */
-				__( 'ezPay 發票開立失敗：%1$s（%2$s）', 'mo-ectools' ),
+				__( 'ezPay 發票開立失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
 				$result['message'] ?? '',
 				$result['status'] ?? ''
 			);
@@ -93,7 +93,7 @@ final class Issue {
 		$trans_no   = (string) ( $data['InvoiceTransNo'] ?? '' );
 
 		if ( '' === $invoice_no ) {
-			$order->add_order_note( __( 'ezPay 回應 SUCCESS 但沒帶 InvoiceNumber，請檢查 ezPay 後台。', 'mo-ectools' ) );
+			$order->add_order_note( __( 'ezPay 回應 SUCCESS 但沒帶 InvoiceNumber，請檢查 ezPay 後台。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -112,7 +112,7 @@ final class Issue {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: random number, 3: create time */
-				__( 'ezPay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'mo-ectools' ),
+				__( 'ezPay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$random,
 				$created
@@ -226,14 +226,14 @@ final class Issue {
 		$shipping_fee    = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
 		$total_refunded -= (float) $order->get_total_shipping_refunded();
 		if ( 0.0 !== $shipping_fee ) {
-			$args['ItemName'][]  = __( '運費', 'mo-ectools' );
+			$args['ItemName'][]  = __( '運費', 'moksa-for-woocommerce' );
 			$args['ItemCount'][] = '1';
 			$args['ItemAmt'][]   = $shipping_fee;
 		}
 
 		// 額外退款（部分退款超過商品/運費的部份）
 		if ( 0.0 !== $total_refunded ) {
-			$args['ItemName'][]  = __( '退款', 'mo-ectools' );
+			$args['ItemName'][]  = __( '退款', 'moksa-for-woocommerce' );
 			$args['ItemCount'][] = '1';
 			$args['ItemAmt'][]   = -$total_refunded;
 		}
@@ -249,7 +249,7 @@ final class Issue {
 			$args['ItemPrice'][ $i ] = (string) $price;
 			$args['ItemAmt'][ $i ]   = (string) (int) round( $count * $price, 0 );
 			$args['ItemCount'][ $i ] = (string) $count;
-			$args['ItemUnit'][ $i ]  = __( '件', 'mo-ectools' );
+			$args['ItemUnit'][ $i ]  = __( '件', 'moksa-for-woocommerce' );
 		}
 
 		$args['Comment'] = mb_substr( $args['Comment'], 0, 100 );

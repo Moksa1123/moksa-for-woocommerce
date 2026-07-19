@@ -31,11 +31,11 @@ final class FamiPort extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay FamiPort 代碼繳費', 'mo-ectools' );
+		return __( 'SmilePay FamiPort 代碼繳費', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得繳費代碼後，於全家 FamiPort 或 LifeET 列印繳費單繳款。', 'mo-ectools' );
+		return __( '取得繳費代碼後，於全家 FamiPort 或 LifeET 列印繳費單繳款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

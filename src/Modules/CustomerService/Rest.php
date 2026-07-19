@@ -118,7 +118,7 @@ final class Rest {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( '連線已過期,請重新驗證。', 'mo-ectools' ),
+					'message' => __( '連線已過期,請重新驗證。', 'moksa-for-woocommerce' ),
 				),
 				200
 			);
@@ -127,7 +127,7 @@ final class Rest {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( '請輸入留言內容。', 'mo-ectools' ),
+					'message' => __( '請輸入留言內容。', 'moksa-for-woocommerce' ),
 				),
 				200
 			);
@@ -188,13 +188,13 @@ final class Rest {
 		}
 		$subject = sprintf(
 			/* translators: %s: order ref */
-			__( '[客服留言] 訂單 %s 有新留言', 'mo-ectools' ),
+			__( '[客服留言] 訂單 %s 有新留言', 'moksa-for-woocommerce' ),
 			$ref
 		);
 		$link = admin_url( 'admin.php?page=moksafowo-ai&tab=inbox' );
 		$line = sprintf(
 			/* translators: 1: order ref, 2: inbox url */
-			__( '訂單 %1$s 的顧客在前台客服留言。請至後台客服訊息回覆:%2$s', 'mo-ectools' ),
+			__( '訂單 %1$s 的顧客在前台客服留言。請至後台客服訊息回覆:%2$s', 'moksa-for-woocommerce' ),
 			$ref,
 			$link
 		);
@@ -214,7 +214,7 @@ final class Rest {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( '查無此訂單或驗證失敗,請確認訂單編號與帳單電話末三碼後再試。', 'mo-ectools' ),
+					'message' => __( '查無此訂單或驗證失敗,請確認訂單編號與帳單電話末三碼後再試。', 'moksa-for-woocommerce' ),
 				),
 				200
 			);
@@ -241,7 +241,7 @@ final class Rest {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( '連線已過期,請重新輸入訂單編號驗證。', 'mo-ectools' ),
+					'message' => __( '連線已過期,請重新輸入訂單編號驗證。', 'moksa-for-woocommerce' ),
 				),
 				200
 			);
@@ -252,7 +252,7 @@ final class Rest {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( '查無訂單資料。', 'mo-ectools' ),
+					'message' => __( '查無訂單資料。', 'moksa-for-woocommerce' ),
 				),
 				200
 			);

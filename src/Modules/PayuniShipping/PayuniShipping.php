@@ -171,18 +171,18 @@ class PayuniShipping {
 
 	public static function register_batch_print( array $providers ): array {
 		$cvs_titles = [
-			'moksafowo_payuni_shipping_711_c2c'        => __( 'PAYUNi 7-11 C2C 取貨', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c'        => __( 'PAYUNi 7-11 B2C 取貨', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_c2c_normal' => __( 'PAYUNi 7-11 店到店常溫', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_c2c_frozen' => __( 'PAYUNi 7-11 店到店冷凍', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c_normal' => __( 'PAYUNi 7-11 大宗常溫', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_711_b2c_frozen' => __( 'PAYUNi 7-11 大宗冷凍', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_711_c2c'        => __( 'PAYUNi 7-11 C2C 取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_711_b2c'        => __( 'PAYUNi 7-11 B2C 取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_711_c2c_normal' => __( 'PAYUNi 7-11 店到店常溫', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_711_c2c_frozen' => __( 'PAYUNi 7-11 店到店冷凍', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_711_b2c_normal' => __( 'PAYUNi 7-11 大宗常溫', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_711_b2c_frozen' => __( 'PAYUNi 7-11 大宗冷凍', 'moksa-for-woocommerce' ),
 		];
 		$hd_titles  = [
-			'moksafowo_payuni_shipping_tcat'              => __( 'PAYUNi 黑貓宅配', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_tcat_normal'       => __( 'PAYUNi 黑貓常溫', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_tcat_frozen'       => __( 'PAYUNi 黑貓冷凍', 'mo-ectools' ),
-			'moksafowo_payuni_shipping_tcat_refrigerated' => __( 'PAYUNi 黑貓冷藏', 'mo-ectools' ),
+			'moksafowo_payuni_shipping_tcat'              => __( 'PAYUNi 黑貓宅配', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_tcat_normal'       => __( 'PAYUNi 黑貓常溫', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_tcat_frozen'       => __( 'PAYUNi 黑貓冷凍', 'moksa-for-woocommerce' ),
+			'moksafowo_payuni_shipping_tcat_refrigerated' => __( 'PAYUNi 黑貓冷藏', 'moksa-for-woocommerce' ),
 		];
 		$cvs        = array_intersect_key( $cvs_titles, self::$cvs_methods );
 		$hd         = array_intersect_key( $hd_titles, self::$hd_methods );
@@ -208,7 +208,7 @@ class PayuniShipping {
 
 		if ( ! empty( $cvs ) ) {
 			$providers['moksafowo-payuni-cvs'] = [
-				'label'           => __( 'PAYUNi 超商標籤', 'mo-ectools' ),
+				'label'           => __( 'PAYUNi 超商標籤', 'moksa-for-woocommerce' ),
 				'category'        => 'cvs',
 				'method_ids'      => $cvs,
 				'handler'         => [ Operations\BatchPrint::class, 'cvs' ],
@@ -224,7 +224,7 @@ class PayuniShipping {
 		}
 		if ( ! empty( $hd ) ) {
 			$providers['moksafowo-payuni-home'] = [
-				'label'          => __( 'PAYUNi 宅配標籤', 'mo-ectools' ),
+				'label'          => __( 'PAYUNi 宅配標籤', 'moksa-for-woocommerce' ),
 				'category'       => 'home',
 				'method_ids'     => $hd,
 				'handler'        => [ Operations\BatchPrint::class, 'home' ],
@@ -302,7 +302,7 @@ class PayuniShipping {
 
 		if ( ( $is_payuni_cvs || $is_payuni_hd ) && ! isset( $fields['shipping']['shipping_phone'] ) ) {
 			$fields['shipping']['shipping_phone'] = array(
-				'label'    => __( 'Shipping Phone', 'mo-ectools' ),
+				'label'    => __( 'Shipping Phone', 'moksa-for-woocommerce' ),
 				'required' => true,
 				'type'     => 'tel',
 				'validate' => array( 'phone' ),
@@ -560,8 +560,8 @@ class PayuniShipping {
 
 	public function moksafowo_payuni_add_action_links( $links ) {
 		$setting_links = array(
-			'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=payuni&section=shipping' ) . '">' . __( 'General Settings', 'mo-ectools' ) . '</a>',
-			'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping' ) . '">' . __( 'Shipping Settings', 'mo-ectools' ) . '</a>',
+			'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=payuni&section=shipping' ) . '">' . __( 'General Settings', 'moksa-for-woocommerce' ) . '</a>',
+			'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping' ) . '">' . __( 'Shipping Settings', 'moksa-for-woocommerce' ) . '</a>',
 		);
 		return array_merge( $links, $setting_links );
 	}

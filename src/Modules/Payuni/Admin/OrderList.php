@@ -32,7 +32,7 @@ class OrderList {
 		$add_index   = array_search( 'shipping_address', array_keys( $columns ), true ) + 1;
 		$pre_array   = array_splice( $columns, 0, $add_index );
 		$new_columns = array(
-			'moksafowo_payuni_invoice_no' => __( '發票號碼', 'mo-ectools' ),
+			'moksafowo_payuni_invoice_no' => __( '發票號碼', 'moksa-for-woocommerce' ),
 		);
 		return array_merge( $pre_array, $new_columns, $columns );
 	}
@@ -44,7 +44,7 @@ class OrderList {
 			if ( $invoice_no ) {
 				echo esc_html( $invoice_no );
 			} else {
-				echo esc_html__( '未開立', 'mo-ectools' );
+				echo esc_html__( '未開立', 'moksa-for-woocommerce' );
 			}
 		}
 	}

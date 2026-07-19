@@ -82,7 +82,7 @@ final class ShippingCardSection {
 		if ( '' !== $html ) {
 			$cards[] = [
 				'slot'  => 'shipping',
-				'title' => __( '物流資訊', 'mo-ectools' ),
+				'title' => __( '物流資訊', 'moksa-for-woocommerce' ),
 				'html'  => $html,
 			];
 		}
@@ -104,15 +104,15 @@ final class ShippingCardSection {
 		if ( empty( $records ) && '' === $trade_no && '' === $ship_no ) {
 			ob_start();
 			if ( '' !== $method_title ) {
-				echo '<p><strong>' . esc_html__( '運送方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ) . '</p>';
+				echo '<p><strong>' . esc_html__( '運送方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ) . '</p>';
 			}
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未建立 PAYUNi 物流單。', 'mo-ectools' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未建立 PAYUNi 物流單。', 'moksa-for-woocommerce' ) . '</p>';
 			return (string) ob_get_clean();
 		}
 
 		ob_start();
 		if ( '' !== $method_title ) {
-			echo '<p><strong>' . esc_html__( '運送方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ) . '</p>';
+			echo '<p><strong>' . esc_html__( '運送方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ) . '</p>';
 		}
 
 		if ( ! empty( $records ) ) {
@@ -121,7 +121,7 @@ final class ShippingCardSection {
 			if ( $is_split ) {
 				echo '<p style="margin:0 0 8px;font-size:11px;color:#646970;">';
 				/* translators: %d: number of split shipping records */
-				echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'mo-ectools' ), count( $records ) ) );
+				echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'moksa-for-woocommerce' ), count( $records ) ) );
 				echo '</p>';
 			}
 			echo '<div class="moksafowo-payuni-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">';
@@ -135,9 +135,9 @@ final class ShippingCardSection {
 					default => [ '#e5e7eb', '#374151' ],
 				};
 				/* translators: %d: cash-on-delivery amount in TWD */
-				$cod_label     = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
+				$cod_label     = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'moksa-for-woocommerce' ), $amount ) : __( '否', 'moksa-for-woocommerce' );
 				$ship_t        = (string) ( $r['ship_type'] ?? '' );
-				$type_label    = '1' === $ship_t ? __( '7-11', 'mo-ectools' ) : ( '2' === $ship_t ? __( '黑貓宅配', 'mo-ectools' ) : '' );
+				$type_label    = '1' === $ship_t ? __( '7-11', 'moksa-for-woocommerce' ) : ( '2' === $ship_t ? __( '黑貓宅配', 'moksa-for-woocommerce' ) : '' );
 				$ship_trade_no = (string) ( $r['ship_trade_no'] ?? '' );
 				$rtn_msg_p     = (string) ( $r['rtn_msg'] ?? '' );
 				$open_attr     = $is_split ? '' : 'open';
@@ -156,18 +156,18 @@ final class ShippingCardSection {
 				echo '</summary>';
 				echo '<div class="moksafowo-payuni-record__body">';
 				if ( ! empty( $r['odno'] ) ) {
-					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '物流商出貨編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( (string) $r['odno'] ) . '</span></p>';
+					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '物流商出貨編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( (string) $r['odno'] ) . '</span></p>';
 				}
 				if ( ! empty( $r['validation_no'] ) ) {
-					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '驗證碼：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( (string) $r['validation_no'] ) . '</span></p>';
+					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '驗證碼：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( (string) $r['validation_no'] ) . '</span></p>';
 				}
 				if ( $amount > 0 ) {
 					/* translators: %d: declared value amount in TWD */
-					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '申報價值：', 'mo-ectools' ) . '</strong>' . esc_html( sprintf( __( 'NT$%d', 'mo-ectools' ), $amount ) ) . '</p>';
-					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '代收貨款：', 'mo-ectools' ) . '</strong>' . esc_html( $cod_label ) . '</p>';
+					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '申報價值：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( sprintf( __( 'NT$%d', 'moksa-for-woocommerce' ), $amount ) ) . '</p>';
+					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '代收貨款：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $cod_label ) . '</p>';
 				}
 				if ( ! empty( $r['created_at'] ) ) {
-					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '建立時間：', 'mo-ectools' ) . '</strong>' . esc_html( (string) $r['created_at'] ) . '</p>';
+					echo '<p style="margin:.2em 0;"><strong>' . esc_html__( '建立時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( (string) $r['created_at'] ) . '</p>';
 				}
 				$tracking_info = TrackingLink::for_payuni_record( $r );
 				if ( null !== $tracking_info ) {
@@ -188,32 +188,32 @@ final class ShippingCardSection {
 		$service_t = (string) $order->get_meta( $mod_meta::ServiceType );
 
 		if ( '' !== $trade_no ) {
-			echo '<p><strong>' . esc_html__( 'PAYUNi 物流編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $trade_no ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( 'PAYUNi 物流編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $trade_no ) . '</span></p>';
 		}
 		if ( '' !== $odno ) {
-			echo '<p><strong>' . esc_html__( '物流商出貨編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $odno ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '物流商出貨編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $odno ) . '</span></p>';
 		}
 		if ( '' !== $ship_no ) {
-			echo '<p><strong>' . esc_html__( '物流單號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $ship_no ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '物流單號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $ship_no ) . '</span></p>';
 		}
 		if ( '' !== $trade_amt ) {
 			$is_cod = '1' === $service_t;
-			echo '<p><strong>' . esc_html__( '代收貨款：', 'mo-ectools' ) . '</strong>';
+			echo '<p><strong>' . esc_html__( '代收貨款：', 'moksa-for-woocommerce' ) . '</strong>';
 			echo $is_cod
 				/* translators: %d: cash-on-delivery amount in TWD */
-				? esc_html( sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), (int) $trade_amt ) )
-				: esc_html__( '否', 'mo-ectools' );
+				? esc_html( sprintf( __( 'NT$%d (貨到付款)', 'moksa-for-woocommerce' ), (int) $trade_amt ) )
+				: esc_html__( '否', 'moksa-for-woocommerce' );
 			echo '</p>';
 		}
 		if ( '' !== $status_d ) {
-			echo '<p><strong>' . esc_html__( '物流狀態：', 'mo-ectools' ) . '</strong>' . esc_html( $status_d );
+			echo '<p><strong>' . esc_html__( '物流狀態：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $status_d );
 			if ( '' !== $status ) {
 				echo ' <span style="color:#646970;font-size:11px;">(' . esc_html( $status ) . ')</span>';
 			}
 			echo '</p>';
 		}
 		if ( '' !== $status_t ) {
-			echo '<p><strong>' . esc_html__( '狀態更新時間：', 'mo-ectools' ) . '</strong>' . esc_html( $status_t ) . '</p>';
+			echo '<p><strong>' . esc_html__( '狀態更新時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $status_t ) . '</p>';
 		}
 		$tracking_info = TrackingLink::for_payuni_record(
 			[
@@ -248,21 +248,21 @@ final class ShippingCardSection {
 
 		ob_start();
 		if ( '' !== $method_title ) {
-			echo '<p><strong>' . esc_html__( '運送方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ) . '</p>';
+			echo '<p><strong>' . esc_html__( '運送方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ) . '</p>';
 		}
 		if ( '' === $lgs_no && '' === $store_id ) {
 			echo '<p style="color:#646970;font-size:12px;margin-bottom:10px;">';
-			echo esc_html__( '尚未取得藍新物流資訊。顧客可在結帳頁選店，或商家自行建立物流單。', 'mo-ectools' );
+			echo esc_html__( '尚未取得藍新物流資訊。顧客可在結帳頁選店，或商家自行建立物流單。', 'moksa-for-woocommerce' );
 			echo '</p>';
 		}
 		if ( '' !== $lgs_no ) {
-			echo '<p><strong>' . esc_html__( '藍新物流編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $lgs_no ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '藍新物流編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $lgs_no ) . '</span></p>';
 		}
 		if ( '' !== $lgs_type ) {
-			echo '<p><strong>' . esc_html__( '物流類型：', 'mo-ectools' ) . '</strong>' . esc_html( $lgs_type ) . '</p>';
+			echo '<p><strong>' . esc_html__( '物流類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $lgs_type ) . '</p>';
 		}
 		if ( '' !== $store_id || '' !== $store_name ) {
-			echo '<p><strong>' . esc_html__( '取貨門市：', 'mo-ectools' ) . '</strong>';
+			echo '<p><strong>' . esc_html__( '取貨門市：', 'moksa-for-woocommerce' ) . '</strong>';
 			if ( '' !== $store_name ) {
 				echo esc_html( $store_name );
 			}
@@ -272,19 +272,19 @@ final class ShippingCardSection {
 			echo '</p>';
 		}
 		if ( '' !== $store_addr ) {
-			echo '<p><strong>' . esc_html__( '門市地址：', 'mo-ectools' ) . '</strong>' . esc_html( $store_addr ) . '</p>';
+			echo '<p><strong>' . esc_html__( '門市地址：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $store_addr ) . '</p>';
 		}
 		if ( '' !== $status ) {
-			echo '<p><strong>' . esc_html__( '物流狀態：', 'mo-ectools' ) . '</strong>' . esc_html( $status ) . '</p>';
+			echo '<p><strong>' . esc_html__( '物流狀態：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $status ) . '</p>';
 		}
 
 		echo '<p style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
 		if ( '' === $lgs_no && '' !== $store_id ) {
-			echo '<button type="button" class="button button-primary moksafowo-newebpay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立藍新物流單', 'mo-ectools' ) . '</button> ';
+			echo '<button type="button" class="button button-primary moksafowo-newebpay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立藍新物流單', 'moksa-for-woocommerce' ) . '</button> ';
 		}
 		if ( '' !== $lgs_no ) {
-			echo '<button type="button" class="button moksafowo-newebpay-shipping-query" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_query ) . '">' . esc_html__( '查詢即時狀態', 'mo-ectools' ) . '</button> ';
-			echo '<button type="button" class="button moksafowo-newebpay-shipping-trace" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_trace ) . '">' . esc_html__( '物流追蹤', 'mo-ectools' ) . '</button>';
+			echo '<button type="button" class="button moksafowo-newebpay-shipping-query" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_query ) . '">' . esc_html__( '查詢即時狀態', 'moksa-for-woocommerce' ) . '</button> ';
+			echo '<button type="button" class="button moksafowo-newebpay-shipping-trace" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_trace ) . '">' . esc_html__( '物流追蹤', 'moksa-for-woocommerce' ) . '</button>';
 		}
 		echo '</p>';
 
@@ -313,16 +313,16 @@ final class ShippingCardSection {
 
 		ob_start();
 		if ( '' !== $method_title ) {
-			echo '<p><strong>' . esc_html__( '運送方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ) . '</p>';
+			echo '<p><strong>' . esc_html__( '運送方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ) . '</p>';
 		}
 		if ( '' !== $smseid ) {
-			echo '<p><strong>' . esc_html__( '速買配序號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $smseid ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '速買配序號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $smseid ) . '</span></p>';
 		}
 		if ( '' !== $ship_type ) {
-			echo '<p><strong>' . esc_html__( '物流類型：', 'mo-ectools' ) . '</strong>' . esc_html( $ship_type ) . ( '' !== $lgs_type ? ' (' . esc_html( $lgs_type ) . ')' : '' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '物流類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $ship_type ) . ( '' !== $lgs_type ? ' (' . esc_html( $lgs_type ) . ')' : '' ) . '</p>';
 		}
 		if ( '' !== $store_id || '' !== $store_name ) {
-			echo '<p><strong>' . esc_html__( '取貨門市：', 'mo-ectools' ) . '</strong>';
+			echo '<p><strong>' . esc_html__( '取貨門市：', 'moksa-for-woocommerce' ) . '</strong>';
 			if ( '' !== $store_name ) {
 				echo esc_html( $store_name );
 			}
@@ -332,16 +332,16 @@ final class ShippingCardSection {
 			echo '</p>';
 		}
 		if ( '' !== $store_addr ) {
-			echo '<p><strong>' . esc_html__( '門市地址：', 'mo-ectools' ) . '</strong>' . esc_html( $store_addr ) . '</p>';
+			echo '<p><strong>' . esc_html__( '門市地址：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $store_addr ) . '</p>';
 		}
 		if ( '' !== $pay_no ) {
-			echo '<p><strong>' . esc_html__( '取貨碼：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $pay_no ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '取貨碼：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $pay_no ) . '</span></p>';
 		}
 		if ( '' !== $track_no ) {
-			echo '<p><strong>' . esc_html__( '黑貓託運單號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $track_no ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '黑貓託運單號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $track_no ) . '</span></p>';
 		}
 		if ( '' !== $status ) {
-			echo '<p><strong>' . esc_html__( '物流狀態：', 'mo-ectools' ) . '</strong>' . esc_html( $status ) . '</p>';
+			echo '<p><strong>' . esc_html__( '物流狀態：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $status ) . '</p>';
 		}
 		$tracking_info = TrackingLink::for_smilepay_record(
 			[
@@ -355,15 +355,15 @@ final class ShippingCardSection {
 		}
 		if ( '' === $smseid && '' === $store_id ) {
 			echo '<p style="color:#646970;font-size:12px;margin-bottom:10px;">';
-			echo esc_html__( '尚未建立速買配物流單。', 'mo-ectools' );
+			echo esc_html__( '尚未建立速買配物流單。', 'moksa-for-woocommerce' );
 			echo '</p>';
 		}
 
 		echo '<p style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
 		if ( '' === $pay_no && '' === $track_no ) {
-			echo '<button type="button" class="button button-primary moksafowo-smilepay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立速買配物流單', 'mo-ectools' ) . '</button>';
+			echo '<button type="button" class="button button-primary moksafowo-smilepay-shipping-create" data-order="' . esc_attr( (string) $order_id ) . '" data-nonce="' . esc_attr( $nonce_create ) . '">' . esc_html__( '建立速買配物流單', 'moksa-for-woocommerce' ) . '</button>';
 		} else {
-			echo '<span style="color:#00a32a;">' . esc_html__( '已建單', 'mo-ectools' ) . '</span>';
+			echo '<span style="color:#00a32a;">' . esc_html__( '已建單', 'moksa-for-woocommerce' ) . '</span>';
 		}
 		echo '</p>';
 

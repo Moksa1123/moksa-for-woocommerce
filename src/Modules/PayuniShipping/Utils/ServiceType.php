@@ -13,10 +13,10 @@ class ServiceType {
 		$name = '';
 		switch ( $service_type ) {
 			case self::COD:
-				$name = _x( 'COD', 'service type', 'mo-ectools' );
+				$name = _x( 'COD', 'service type', 'moksa-for-woocommerce' );
 				break;
 			case self::NOT_COD:
-				$name = _x( 'Not COD', 'service type', 'mo-ectools' );
+				$name = _x( 'Not COD', 'service type', 'moksa-for-woocommerce' );
 				break;
 		}
 		return $name;

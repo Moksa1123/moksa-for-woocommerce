@@ -64,7 +64,7 @@ final class TrackingLookup {
 		if ( ! $order || 'shop_order' !== $order->get_type() ) {
 			return array(
 				'links'   => array(),
-				'message' => __( '找不到訂單。', 'mo-ectools' ),
+				'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ),
 			);
 		}
 		return array(

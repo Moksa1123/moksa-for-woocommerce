@@ -157,7 +157,7 @@ final class OrderMetaBox {
 					<p style="margin:0 0 8px;font-size:11px;color:#646970;">
 						<?php
 						/* translators: %d: package count */
-						echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'mo-ectools' ), count( $records ) ) );
+						echo esc_html( sprintf( __( '本訂單依商品溫層拆成 %d 張物流單，每張獨立列印與追蹤。', 'moksa-for-woocommerce' ), count( $records ) ) );
 						?>
 					</p>
 				<?php endif; ?>
@@ -190,7 +190,7 @@ final class OrderMetaBox {
 							default => [ '#e5e7eb', '#374151' ],
 						};
 						/* translators: %d: cash-on-delivery amount in TWD */
-						$cod_label = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'mo-ectools' ), $amount ) : __( '否', 'mo-ectools' );
+						$cod_label = $is_cod ? sprintf( __( 'NT$%d (貨到付款)', 'moksa-for-woocommerce' ), $amount ) : __( '否', 'moksa-for-woocommerce' );
 						?>
 					<details class="moksafowo-ecpay-record"
 						data-logistics-id="<?php echo esc_attr( $id ); ?>"
@@ -209,23 +209,23 @@ final class OrderMetaBox {
 						</summary>
 						<div class="moksafowo-ecpay-record__body">
 						<?php if ( $is_cvs && '' !== $pay ) : ?>
-							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay ); ?>
+							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'moksa-for-woocommerce' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay ); ?>
 							<?php
 							if ( '' !== $val ) :
 								?>
 								/ <?php echo esc_html( $val ); ?><?php endif; ?></span></p>
 						<?php elseif ( ! $is_cvs && '' !== $bk ) : ?>
-							<p style="margin:.2em 0;"><strong><?php esc_html_e( '託運單號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $bk ); ?></span></p>
+							<p style="margin:.2em 0;"><strong><?php esc_html_e( '託運單號：', 'moksa-for-woocommerce' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $bk ); ?></span></p>
 						<?php endif; ?>
 						<?php /* translators: %d: declared value amount in TWD */ ?>
-						<p style="margin:.2em 0;"><strong><?php esc_html_e( '申報價值：', 'mo-ectools' ); ?></strong><?php echo esc_html( sprintf( __( 'NT$%d', 'mo-ectools' ), $amount ) ); ?></p>
-						<p style="margin:.2em 0;"><strong><?php esc_html_e( '代收貨款：', 'mo-ectools' ); ?></strong><?php echo esc_html( $cod_label ); ?></p>
+						<p style="margin:.2em 0;"><strong><?php esc_html_e( '申報價值：', 'moksa-for-woocommerce' ); ?></strong><?php echo esc_html( sprintf( __( 'NT$%d', 'moksa-for-woocommerce' ), $amount ) ); ?></p>
+						<p style="margin:.2em 0;"><strong><?php esc_html_e( '代收貨款：', 'moksa-for-woocommerce' ); ?></strong><?php echo esc_html( $cod_label ); ?></p>
 						<?php
 						if ( '' !== $at ) :
 							$days_ago = self::days_since( $at );
 							?>
 							<p style="margin:.2em 0;">
-								<strong><?php esc_html_e( '建立時間：', 'mo-ectools' ); ?></strong><?php echo esc_html( $at ); ?>
+								<strong><?php esc_html_e( '建立時間：', 'moksa-for-woocommerce' ); ?></strong><?php echo esc_html( $at ); ?>
 								<?php
 								if ( null !== $days_ago ) :
 									$pill_color = $days_ago >= 14 ? '#d63638' : ( $days_ago >= 7 ? '#dba617' : '#646970' );
@@ -233,10 +233,10 @@ final class OrderMetaBox {
 									<span style="color:<?php echo esc_attr( $pill_color ); ?>;font-size:11px;margin-left:4px;">
 										<?php
 										if ( 0 === $days_ago ) {
-											esc_html_e( '（今天）', 'mo-ectools' );
+											esc_html_e( '（今天）', 'moksa-for-woocommerce' );
 										} else {
 											/* translators: %d: 天數 */
-											echo esc_html( sprintf( __( '（%d 天前）', 'mo-ectools' ), $days_ago ) );
+											echo esc_html( sprintf( __( '（%d 天前）', 'moksa-for-woocommerce' ), $days_ago ) );
 										}
 										?>
 									</span>
@@ -244,15 +244,15 @@ final class OrderMetaBox {
 							</p>
 						<?php endif; ?>
 						<p style="margin:.2em 0;">
-							<strong><?php esc_html_e( '狀態更新時間：', 'mo-ectools' ); ?></strong>
+							<strong><?php esc_html_e( '狀態更新時間：', 'moksa-for-woocommerce' ); ?></strong>
 							<?php if ( '' !== $updated_at && $updated_at !== $at ) : ?>
 								<?php echo esc_html( $updated_at ); ?>
 							<?php else : ?>
-								<em style="color:#646970;"><?php esc_html_e( '尚未更新', 'mo-ectools' ); ?></em>
+								<em style="color:#646970;"><?php esc_html_e( '尚未更新', 'moksa-for-woocommerce' ); ?></em>
 							<?php endif; ?>
 						</p>
 						<?php if ( '' !== $rtn_msg ) : ?>
-							<p style="margin:.2em 0;color:#646970;"><strong><?php esc_html_e( '狀態：', 'mo-ectools' ); ?></strong><?php echo esc_html( $rtn_msg ); ?></p>
+							<p style="margin:.2em 0;color:#646970;"><strong><?php esc_html_e( '狀態：', 'moksa-for-woocommerce' ); ?></strong><?php echo esc_html( $rtn_msg ); ?></p>
 						<?php endif; ?>
 						<?php
 						$tracking_info = TrackingLink::for_ecpay_record( $r );
@@ -269,19 +269,19 @@ final class OrderMetaBox {
 	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="1"
-								title="<?php esc_attr_e( '列印 A4', 'mo-ectools' ); ?>"><?php esc_html_e( 'A4', 'mo-ectools' ); ?></button>
+								title="<?php esc_attr_e( '列印 A4', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'A4', 'moksa-for-woocommerce' ); ?></button>
 							<?php if ( $show_a6 ) : ?>
 							<button type="button"
 	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="2"
-								title="<?php esc_attr_e( '列印 A6 標籤機', 'mo-ectools' ); ?>"><?php esc_html_e( 'A6', 'mo-ectools' ); ?></button>
+								title="<?php esc_attr_e( '列印 A6 標籤機', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'A6', 'moksa-for-woocommerce' ); ?></button>
 							<?php endif; ?>
 							<button type="button"
 	class="button button-small button-link-delete moksafowo-ecpay-shipping-delete-record"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
-								title="<?php esc_attr_e( '刪除此筆', 'mo-ectools' ); ?>"
-								style="color:#b32d2e;"><?php esc_html_e( '刪除', 'mo-ectools' ); ?></button>
+								title="<?php esc_attr_e( '刪除此筆', 'moksa-for-woocommerce' ); ?>"
+								style="color:#b32d2e;"><?php esc_html_e( '刪除', 'moksa-for-woocommerce' ); ?></button>
 						</div>
 						</div>
 					</details>
@@ -291,7 +291,7 @@ final class OrderMetaBox {
 
 			<p style="margin:8px 0 0;">
 				<button type="button" class="button button-primary moksafowo-ecpay-shipping-create"<?php echo empty( $records ) ? '' : ' data-has-records="1"'; ?>>
-					<?php echo empty( $records ) ? esc_html__( '建立物流單', 'mo-ectools' ) : esc_html__( '重新建立物流單', 'mo-ectools' ); ?>
+					<?php echo empty( $records ) ? esc_html__( '建立物流單', 'moksa-for-woocommerce' ) : esc_html__( '重新建立物流單', 'moksa-for-woocommerce' ); ?>
 				</button>
 			</p>
 
@@ -300,7 +300,7 @@ final class OrderMetaBox {
 		<?php
 		$cards[] = [
 			'slot'  => 'shipping',
-			'title' => __( '物流資訊', 'mo-ectools' ),
+			'title' => __( '物流資訊', 'moksa-for-woocommerce' ),
 			'html'  => (string) ob_get_clean(),
 		];
 		return $cards;
@@ -326,18 +326,18 @@ final class OrderMetaBox {
 			[
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'i18n'     => [
-					'creating'         => __( '建立中…', 'mo-ectools' ),
-					'create_ok'        => __( '物流單已建立，重新整理頁面取得完整資訊。', 'mo-ectools' ),
-					'create_fail'      => __( '建立失敗：', 'mo-ectools' ),
-					'recreate_confirm' => __( '此訂單已有物流單記錄，僅補建缺少的部分。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
-					'no_order'         => __( '找不到訂單。', 'mo-ectools' ),
-					'delete_confirm'   => __( '確定刪除此筆物流單記錄？', 'mo-ectools' ),
-					'delete_ok'        => __( '已刪除，重新整理頁面。', 'mo-ectools' ),
-					'delete_fail'      => __( '刪除失敗：', 'mo-ectools' ),
-					'print_fail'       => __( '列印失敗：', 'mo-ectools' ),
-					'printing'         => __( '列印中…', 'mo-ectools' ),
-					'unknown_error'    => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
-					'ajax_error'       => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
+					'creating'         => __( '建立中…', 'moksa-for-woocommerce' ),
+					'create_ok'        => __( '物流單已建立，重新整理頁面取得完整資訊。', 'moksa-for-woocommerce' ),
+					'create_fail'      => __( '建立失敗：', 'moksa-for-woocommerce' ),
+					'recreate_confirm' => __( '此訂單已有物流單記錄，僅補建缺少的部分。若要整批重建，請先刪除既有記錄。是否繼續？', 'moksa-for-woocommerce' ),
+					'no_order'         => __( '找不到訂單。', 'moksa-for-woocommerce' ),
+					'delete_confirm'   => __( '確定刪除此筆物流單記錄？', 'moksa-for-woocommerce' ),
+					'delete_ok'        => __( '已刪除，重新整理頁面。', 'moksa-for-woocommerce' ),
+					'delete_fail'      => __( '刪除失敗：', 'moksa-for-woocommerce' ),
+					'print_fail'       => __( '列印失敗：', 'moksa-for-woocommerce' ),
+					'printing'         => __( '列印中…', 'moksa-for-woocommerce' ),
+					'unknown_error'    => __( '未知錯誤，請稍後再試或查看記錄。', 'moksa-for-woocommerce' ),
+					'ajax_error'       => __( '連線錯誤，請稍後再試。', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -375,17 +375,17 @@ final class OrderMetaBox {
 
 	private static function subtype_label( string $subtype ): string {
 		$map = [
-			'UNIMARTC2C'    => __( '7-11 取貨', 'mo-ectools' ),
-			'FAMIC2C'       => __( '全家取貨', 'mo-ectools' ),
-			'HILIFEC2C'     => __( '萊爾富取貨', 'mo-ectools' ),
-			'OKMARTC2C'     => __( 'OK 取貨', 'mo-ectools' ),
-			'UNIMART'       => __( '7-11 大宗', 'mo-ectools' ),
-			'UNIMARTFREEZE' => __( '7-11 冷凍', 'mo-ectools' ),
-			'FAMI'          => __( '全家大宗', 'mo-ectools' ),
-			'HILIFE'        => __( '萊爾富大宗', 'mo-ectools' ),
-			'OKMART'        => __( 'OK 大宗', 'mo-ectools' ),
-			'TCAT'          => __( '黑貓宅配', 'mo-ectools' ),
-			'POST'          => __( '中華郵政', 'mo-ectools' ),
+			'UNIMARTC2C'    => __( '7-11 取貨', 'moksa-for-woocommerce' ),
+			'FAMIC2C'       => __( '全家取貨', 'moksa-for-woocommerce' ),
+			'HILIFEC2C'     => __( '萊爾富取貨', 'moksa-for-woocommerce' ),
+			'OKMARTC2C'     => __( 'OK 取貨', 'moksa-for-woocommerce' ),
+			'UNIMART'       => __( '7-11 大宗', 'moksa-for-woocommerce' ),
+			'UNIMARTFREEZE' => __( '7-11 冷凍', 'moksa-for-woocommerce' ),
+			'FAMI'          => __( '全家大宗', 'moksa-for-woocommerce' ),
+			'HILIFE'        => __( '萊爾富大宗', 'moksa-for-woocommerce' ),
+			'OKMART'        => __( 'OK 大宗', 'moksa-for-woocommerce' ),
+			'TCAT'          => __( '黑貓宅配', 'moksa-for-woocommerce' ),
+			'POST'          => __( '中華郵政', 'moksa-for-woocommerce' ),
 		];
 		return $map[ $subtype ] ?? $subtype;
 	}
@@ -393,12 +393,12 @@ final class OrderMetaBox {
 	public static function ajax_create_order(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$result = CreateOrder::run( $order );
@@ -411,12 +411,12 @@ final class OrderMetaBox {
 	public static function ajax_print_label(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$specific_id = isset( $_POST['logistics_id'] ) ? sanitize_text_field( wp_unslash( $_POST['logistics_id'] ) ) : '';
@@ -431,7 +431,7 @@ final class OrderMetaBox {
 				}
 			}
 			if ( null === $found ) {
-				wp_send_json_error( [ 'message' => __( '找不到指定的物流單。', 'mo-ectools' ) ], 404 );
+				wp_send_json_error( [ 'message' => __( '找不到指定的物流單。', 'moksa-for-woocommerce' ) ], 404 );
 			}
 			$result = PrintLabel::build_for_ids( [ (string) $found['id'] ], (string) $found['subtype'], $order, $mode );
 		} else {
@@ -447,20 +447,20 @@ final class OrderMetaBox {
 	public static function ajax_delete_record(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id     = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$logistics_id = isset( $_POST['logistics_id'] ) ? sanitize_text_field( wp_unslash( $_POST['logistics_id'] ) ) : '';
 		$order        = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		if ( '' === $logistics_id ) {
-			wp_send_json_error( [ 'message' => __( '缺少物流編號。', 'mo-ectools' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( '缺少物流編號。', 'moksa-for-woocommerce' ) ], 400 );
 		}
 		$ok = CreateOrder::delete_record( $order, $logistics_id );
 		if ( ! $ok ) {
-			wp_send_json_error( [ 'message' => __( '找不到此筆物流單記錄。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到此筆物流單記錄。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		wp_send_json_success( [ 'message' => 'deleted' ] );
 	}

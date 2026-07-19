@@ -16,7 +16,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'PAYUNi 統一金流 — 13 種付款（信用卡/ATM/超商代碼/愛金卡/街口/Aftee/銀聯/紅利/Apple/Google/Samsung Pay/LINE Pay/分期）+ 電子發票，可切換多入口/單一入口呈現', 'mo-ectools' );
+		return __( 'PAYUNi 統一金流 — 13 種付款（信用卡/ATM/超商代碼/愛金卡/街口/Aftee/銀聯/紅利/Apple/Google/Samsung Pay/LINE Pay/分期）+ 電子發票，可切換多入口/單一入口呈現', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -24,28 +24,28 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'PAYUNi 統一金流', 'mo-ectools' );
+		return __( 'PAYUNi 統一金流', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '13 種付款工具 + 電子發票', 'mo-ectools' );
+		return __( '13 種付款工具 + 電子發票', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( 'ATM 轉帳', 'mo-ectools' ),
-			__( '超商代碼', 'mo-ectools' ),
-			__( '愛金卡', 'mo-ectools' ),
-			__( '街口支付', 'mo-ectools' ),
-			__( 'Aftee 後付', 'mo-ectools' ),
-			__( '銀聯卡', 'mo-ectools' ),
-			__( '信用卡紅利', 'mo-ectools' ),
-			__( 'Apple Pay', 'mo-ectools' ),
-			__( 'Google Pay', 'mo-ectools' ),
-			__( 'Samsung Pay', 'mo-ectools' ),
-			__( 'LINE Pay', 'mo-ectools' ),
-			__( '信用卡分期', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( 'ATM 轉帳', 'moksa-for-woocommerce' ),
+			__( '超商代碼', 'moksa-for-woocommerce' ),
+			__( '愛金卡', 'moksa-for-woocommerce' ),
+			__( '街口支付', 'moksa-for-woocommerce' ),
+			__( 'Aftee 後付', 'moksa-for-woocommerce' ),
+			__( '銀聯卡', 'moksa-for-woocommerce' ),
+			__( '信用卡紅利', 'moksa-for-woocommerce' ),
+			__( 'Apple Pay', 'moksa-for-woocommerce' ),
+			__( 'Google Pay', 'moksa-for-woocommerce' ),
+			__( 'Samsung Pay', 'moksa-for-woocommerce' ),
+			__( 'LINE Pay', 'moksa-for-woocommerce' ),
+			__( '信用卡分期', 'moksa-for-woocommerce' ),
 		];
 	}
 

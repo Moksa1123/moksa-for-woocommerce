@@ -16,20 +16,20 @@ final class Invalid {
 		if ( '' === $inv ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有可作廢的發票。', 'mo-ectools' ),
+				'message' => __( '此訂單沒有可作廢的發票。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '發票已作廢。', 'mo-ectools' ),
+				'message' => __( '發票已作廢。', 'moksa-for-woocommerce' ),
 			];
 		}
 		$reason = trim( $reason );
 		if ( '' === $reason ) {
 			return [
 				'ok'      => false,
-				'message' => __( '請輸入作廢原因。', 'mo-ectools' ),
+				'message' => __( '請輸入作廢原因。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -45,7 +45,7 @@ final class Invalid {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error message */
-					__( '綠界發票作廢失敗：%s', 'mo-ectools' ),
+					__( '綠界發票作廢失敗：%s', 'moksa-for-woocommerce' ),
 					$result['message']
 				)
 			);
@@ -60,7 +60,7 @@ final class Invalid {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: reason */
-				__( '綠界發票 %1$s 已作廢 — 原因：%2$s', 'mo-ectools' ),
+				__( '綠界發票 %1$s 已作廢 — 原因：%2$s', 'moksa-for-woocommerce' ),
 				$inv,
 				$reason
 			)

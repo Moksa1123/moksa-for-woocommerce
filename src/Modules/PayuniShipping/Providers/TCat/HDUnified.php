@@ -17,8 +17,8 @@ final class HDUnified extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 黑貓宅配（多溫層）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi 黑貓宅急便，支援常溫 / 冷藏 / 冷凍多溫層配送。', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 黑貓宅配（多溫層）', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi 黑貓宅急便，支援常溫 / 冷藏 / 冷凍多溫層配送。', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -27,7 +27,7 @@ final class HDUnified extends AbstractHomeShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '黑貓宅配', 'mo-ectools' );
+		return __( '黑貓宅配', 'moksa-for-woocommerce' );
 	}
 
 	public function logistics_sub_type(): string {
@@ -56,17 +56,17 @@ final class HDUnified extends AbstractHomeShippingMethod {
 
 	public function supported_temperatures(): array {
 		return [
-			ProductTemp::NORMAL       => __( '常溫', 'mo-ectools' ),
-			ProductTemp::REFRIGERATED => __( '冷藏', 'mo-ectools' ),
-			ProductTemp::FROZEN       => __( '冷凍', 'mo-ectools' ),
+			ProductTemp::NORMAL       => __( '常溫', 'moksa-for-woocommerce' ),
+			ProductTemp::REFRIGERATED => __( '冷藏', 'moksa-for-woocommerce' ),
+			ProductTemp::FROZEN       => __( '冷凍', 'moksa-for-woocommerce' ),
 		];
 	}
 
 	public function supported_package_specs(): array {
 		return [
-			'1' => __( '60cm', 'mo-ectools' ),
-			'2' => __( '90cm', 'mo-ectools' ),
-			'3' => __( '120cm', 'mo-ectools' ),
+			'1' => __( '60cm', 'moksa-for-woocommerce' ),
+			'2' => __( '90cm', 'moksa-for-woocommerce' ),
+			'3' => __( '120cm', 'moksa-for-woocommerce' ),
 		];
 	}
 }

@@ -27,10 +27,10 @@ final class Pi extends AbstractPchomepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '支付連 拍錢包', 'mo-ectools' );
+		return __( '支付連 拍錢包', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用 PChomePay 拍錢包 App 完成付款。', 'mo-ectools' );
+		return __( '使用 PChomePay 拍錢包 App 完成付款。', 'moksa-for-woocommerce' );
 	}
 }

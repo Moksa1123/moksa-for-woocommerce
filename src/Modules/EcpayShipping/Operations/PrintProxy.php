@@ -61,7 +61,7 @@ final class PrintProxy {
 			);
 			$actions[ 'moksafowo_ecpay_print_' . $tone ] = [
 				'url'    => $url,
-				'name'   => 'a4' === $tone ? __( '列印物流標籤 A4', 'mo-ectools' ) : __( '列印物流標籤 A6', 'mo-ectools' ),
+				'name'   => 'a4' === $tone ? __( '列印物流標籤 A4', 'moksa-for-woocommerce' ) : __( '列印物流標籤 A6', 'moksa-for-woocommerce' ),
 				'action' => 'moksafowo-ecpay-print moksafowo-ecpay-print-' . $tone,
 			];
 		}
@@ -137,7 +137,7 @@ JS;
 
 	public static function handle_quick(): void {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), '', 403 );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), '', 403 );
 		}
 		$order_id = isset( $_GET['order_id'] ) ? absint( wp_unslash( $_GET['order_id'] ) ) : 0;
 		$mode     = isset( $_GET['mode'] ) && '2' === sanitize_text_field( wp_unslash( $_GET['mode'] ) ) ? '2' : '1';
@@ -145,11 +145,11 @@ JS;
 
 		$order = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_die( esc_html__( '找不到訂單。', 'mo-ectools' ), '', 404 );
+			wp_die( esc_html__( '找不到訂單。', 'moksa-for-woocommerce' ), '', 404 );
 		}
 		$records = CreateOrder::get_records( $order );
 		if ( empty( $records ) ) {
-			wp_die( esc_html__( '此訂單尚未建立物流單。', 'mo-ectools' ), '', 400 );
+			wp_die( esc_html__( '此訂單尚未建立物流單。', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		// 多溫層：各 subtype 各一筆 API；同 subtype 多筆 ID comma-separated（一張 PDF）
@@ -162,7 +162,7 @@ JS;
 			}
 		}
 		if ( empty( $buckets ) ) {
-			wp_die( esc_html__( '物流單資料不完整。', 'mo-ectools' ), '', 400 );
+			wp_die( esc_html__( '物流單資料不完整。', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		// TCAT / FAMI / HILIFE / OK 不支援 A6；自動降 A4
@@ -175,8 +175,8 @@ JS;
 		$paragraphs = [];
 		if ( count( $buckets ) > 1 ) {
 			/* translators: 1: number of shipping subtypes, 2: number of print windows that will open */
-			$paragraphs[] = sprintf( __( '此訂單含 %1$d 種物流通路（subtype），會分別開啟 %2$d 個列印視窗。', 'mo-ectools' ), count( $buckets ), count( $buckets ) );
-			$paragraphs[] = __( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印物流標籤」。', 'mo-ectools' );
+			$paragraphs[] = sprintf( __( '此訂單含 %1$d 種物流通路（subtype），會分別開啟 %2$d 個列印視窗。', 'moksa-for-woocommerce' ), count( $buckets ), count( $buckets ) );
+			$paragraphs[] = __( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印物流標籤」。', 'moksa-for-woocommerce' );
 		}
 
 		$forms = '';
@@ -192,9 +192,9 @@ JS;
 		}
 
 		Interstitial::render(
-			__( '列印物流標籤', 'mo-ectools' ),
+			__( '列印物流標籤', 'moksa-for-woocommerce' ),
 			/* translators: %d: total number of shipping labels across all subtypes */
-			sprintf( __( '正在列印 %d 張物流標籤…', 'mo-ectools' ), array_sum( array_map( 'count', $buckets ) ) ),
+			sprintf( __( '正在列印 %d 張物流標籤…', 'moksa-for-woocommerce' ), array_sum( array_map( 'count', $buckets ) ) ),
 			$paragraphs,
 			$forms,
 			'var forms=document.querySelectorAll("form[id^=f]");forms.forEach(function(f,i){setTimeout(function(){f.submit();},i*800);});'
@@ -212,7 +212,7 @@ JS;
 
 	public static function handle(): void {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足。', 'mo-ectools' ), '', 403 );
+			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), '', 403 );
 		}
 		check_admin_referer( self::NONCE_ACTION );
 
@@ -222,7 +222,7 @@ JS;
 
 		$ids = array_values( array_filter( array_map( 'trim', explode( ',', $ids_csv ) ) ) );
 		if ( empty( $ids ) || '' === $subtype ) {
-			wp_die( esc_html__( '缺少必要參數。', 'mo-ectools' ), '', 400 );
+			wp_die( esc_html__( '缺少必要參數。', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		$mer = Helper::merchant_id( $subtype );
@@ -312,7 +312,7 @@ JS;
 
 		if ( $is_forward ) {
 			// 隱藏 ECPay 中繼頁（避免閃亂碼），由下方 script 程式化 submit
-			echo '<!DOCTYPE html><meta charset="utf-8"><div style="font-family:-apple-system,\'Microsoft JhengHei\',sans-serif;text-align:center;margin-top:18vh;color:#1d2327;font-size:16px">' . esc_html__( '物流標籤產生中，請稍候…', 'mo-ectools' ) . '</div>';
+			echo '<!DOCTYPE html><meta charset="utf-8"><div style="font-family:-apple-system,\'Microsoft JhengHei\',sans-serif;text-align:center;margin-top:18vh;color:#1d2327;font-size:16px">' . esc_html__( '物流標籤產生中，請稍候…', 'moksa-for-woocommerce' ) . '</div>';
 			echo '<div style="display:none">' . wp_kses( $body, $allow ) . '</div>';
 		} else {
 			echo wp_kses( $body, $allow );

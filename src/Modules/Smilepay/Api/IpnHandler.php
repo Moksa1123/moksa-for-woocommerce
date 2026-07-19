@@ -27,28 +27,28 @@ final class IpnHandler {
 		$process_time = isset( $req['Process_time'] ) ? sanitize_text_field( Helper::big5_to_utf8( (string) $req['Process_time'] ) ) : '';
 
 		if ( '' === $classif ) {
-			self::die_status( __( '無 Classif', 'mo-ectools' ) );
+			self::die_status( __( '無 Classif', 'moksa-for-woocommerce' ) );
 		}
 		if ( '' === $amount || false !== strpos( $amount, '.' ) ) {
-			self::die_status( __( '金額異常', 'mo-ectools' ) );
+			self::die_status( __( '金額異常', 'moksa-for-woocommerce' ) );
 		}
 		if ( '0' === $amount ) {
-			self::die_status( __( '未付款或金額為 0', 'mo-ectools' ) );
+			self::die_status( __( '未付款或金額為 0', 'moksa-for-woocommerce' ) );
 		}
 
 		$order = $order_id > 0 ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			self::die_status( __( '查無訂單', 'mo-ectools' ) );
+			self::die_status( __( '查無訂單', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::order_uses_smilepay( $order ) ) {
 			Helper::log( 'roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
-			self::die_status( __( '訂單付款方式不符', 'mo-ectools' ) );
+			self::die_status( __( '訂單付款方式不符', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
 			Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
-			self::die_status( __( 'Mid_smilepay 不符合', 'mo-ectools' ) );
+			self::die_status( __( 'Mid_smilepay 不符合', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::amount_matches( $order, $amount ) ) {
@@ -63,14 +63,14 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: reported amount, 2: order total */
-					__( 'SmilePay 回報金額 %1$s 與訂單金額 %2$s 不符，已標記失敗待商家確認。', 'mo-ectools' ),
+					__( 'SmilePay 回報金額 %1$s 與訂單金額 %2$s 不符，已標記失敗待商家確認。', 'moksa-for-woocommerce' ),
 					$amount,
 					(string) (int) ceil( (float) $order->get_total() )
 				)
 			);
 			$order->update_status( 'failed' );
 			$order->save();
-			self::die_status( __( '金額不符', 'mo-ectools' ) );
+			self::die_status( __( '金額不符', 'moksa-for-woocommerce' ) );
 		}
 
 		$state = $order->get_status();
@@ -84,7 +84,7 @@ final class IpnHandler {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: date, 2: time */
-				__( 'SmilePay 已收到款項（%1$s %2$s）', 'mo-ectools' ),
+				__( 'SmilePay 已收到款項（%1$s %2$s）', 'moksa-for-woocommerce' ),
 				$process_date,
 				$process_time
 			)
@@ -93,7 +93,7 @@ final class IpnHandler {
 		if ( 'T' === $classif || 'O' === $classif ) {
 			$order->payment_complete( $smseid );
 		} else {
-			$order->update_status( 'processing', __( 'SmilePay 取號式付款已入帳。', 'mo-ectools' ) );
+			$order->update_status( 'processing', __( 'SmilePay 取號式付款已入帳。', 'moksa-for-woocommerce' ) );
 		}
 		$order->save();
 
@@ -120,22 +120,22 @@ final class IpnHandler {
 		$mid_smilepay  = isset( $req['Mid_smilepay'] ) ? sanitize_text_field( (string) $req['Mid_smilepay'] ) : '';
 
 		if ( '' === $classif && '' === $response_id ) {
-			self::die_status( __( '缺乏參數', 'mo-ectools' ) );
+			self::die_status( __( '缺乏參數', 'moksa-for-woocommerce' ) );
 		}
 
 		$order = $order_id > 0 ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			self::die_status( __( '查無訂單', 'mo-ectools' ) );
+			self::die_status( __( '查無訂單', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::order_uses_smilepay( $order ) ) {
 			Helper::log( 'credit_roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
-			self::die_status( __( '訂單付款方式不符', 'mo-ectools' ) );
+			self::die_status( __( '訂單付款方式不符', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
 			Helper::log( 'credit_roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
-			self::die_status( __( 'Mid_smilepay 不符合', 'mo-ectools' ) );
+			self::die_status( __( 'Mid_smilepay 不符合', 'moksa-for-woocommerce' ) );
 		}
 
 		$order->update_meta_data( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
@@ -152,22 +152,22 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: reported amount, 2: order total */
-						__( 'SmilePay 授權金額 %1$s 與訂單金額 %2$s 不符，請聯絡商家。', 'mo-ectools' ),
+						__( 'SmilePay 授權金額 %1$s 與訂單金額 %2$s 不符，請聯絡商家。', 'moksa-for-woocommerce' ),
 						$amount,
 						(string) (int) ceil( (float) $order->get_total() )
 					)
 				);
 				$order->update_status( 'failed' );
-				$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, esc_html__( '訂單金額有誤，請聯絡商家或重新下單。', 'mo-ectools' ) );
+				$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, esc_html__( '訂單金額有誤，請聯絡商家或重新下單。', 'moksa-for-woocommerce' ) );
 				$order->save();
 				self::redirect_to_received( $order );
 			}
 
 			$info = sprintf(
 				'<div><p>%1$s</p><p>%2$s</p><p>%3$s</p></div>',
-				esc_html( sprintf( /* translators: %s: pay method */ __( '繳費方式：%s', 'mo-ectools' ), $payment_title ) ),
-				esc_html( sprintf( /* translators: %s: amount */ __( '授權金額：%s', 'mo-ectools' ), $amount ) ),
-				esc_html( sprintf( /* translators: %s: datetime */ __( '交易時間：%s', 'mo-ectools' ), trim( $date . ' ' . $time ) ) )
+				esc_html( sprintf( /* translators: %s: pay method */ __( '繳費方式：%s', 'moksa-for-woocommerce' ), $payment_title ) ),
+				esc_html( sprintf( /* translators: %s: amount */ __( '授權金額：%s', 'moksa-for-woocommerce' ), $amount ) ),
+				esc_html( sprintf( /* translators: %s: datetime */ __( '交易時間：%s', 'moksa-for-woocommerce' ), trim( $date . ' ' . $time ) ) )
 			);
 			$order->update_meta_data( Keys::SMILEPAY_PAY_AMOUNT, $amount );
 			$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $info );
@@ -175,7 +175,7 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: pay method */
-					__( 'SmilePay 信用卡授權成功（%s）', 'mo-ectools' ),
+					__( 'SmilePay 信用卡授權成功（%s）', 'moksa-for-woocommerce' ),
 					$payment_title
 				)
 			);
@@ -185,14 +185,14 @@ final class IpnHandler {
 		} else {
 			$info = sprintf(
 				'<div><p>%1$s</p><p>%2$s</p></div>',
-				esc_html( sprintf( /* translators: %s: pay method */ __( '繳費方式：%s', 'mo-ectools' ), $payment_title ) ),
-				esc_html( sprintf( /* translators: %s: reason */ __( '授權失敗：%s', 'mo-ectools' ), $err_desc ) )
+				esc_html( sprintf( /* translators: %s: pay method */ __( '繳費方式：%s', 'moksa-for-woocommerce' ), $payment_title ) ),
+				esc_html( sprintf( /* translators: %s: reason */ __( '授權失敗：%s', 'moksa-for-woocommerce' ), $err_desc ) )
 			);
 			$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $info );
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: reason */
-					__( 'SmilePay 信用卡授權失敗：%s', 'mo-ectools' ),
+					__( 'SmilePay 信用卡授權失敗：%s', 'moksa-for-woocommerce' ),
 					$err_desc
 				)
 			);

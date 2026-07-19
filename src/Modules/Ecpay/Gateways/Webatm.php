@@ -17,10 +17,10 @@ final class Webatm extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 網路 ATM', 'mo-ectools' );
+		return __( '綠界 網路 ATM', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用晶片金融卡 + 讀卡機，即時轉帳完成付款。', 'mo-ectools' );
+		return __( '使用晶片金融卡 + 讀卡機，即時轉帳完成付款。', 'moksa-for-woocommerce' );
 	}
 }

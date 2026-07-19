@@ -14,26 +14,26 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'SmilePay 速買配 — 信用卡 / 分期 / ATM / 超商條碼 / ibon / FamiPort / 銀聯', 'mo-ectools' );
+		return __( 'SmilePay 速買配 — 信用卡 / 分期 / ATM / 超商條碼 / ibon / FamiPort / 銀聯', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'SmilePay 速買配', 'mo-ectools' );
+		return __( 'SmilePay 速買配', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 信用卡分期 / ATM / 四大超商條碼 / ibon / FamiPort / 銀聯', 'mo-ectools' );
+		return __( '信用卡 / 信用卡分期 / ATM / 四大超商條碼 / ibon / FamiPort / 銀聯', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( '信用卡分期', 'mo-ectools' ),
-			__( 'ATM 虛擬帳號', 'mo-ectools' ),
-			__( '四大超商條碼', 'mo-ectools' ),
-			__( 'ibon 代碼繳費', 'mo-ectools' ),
-			__( 'FamiPort 代碼繳費', 'mo-ectools' ),
-			__( '銀聯線上刷卡', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
+			__( '四大超商條碼', 'moksa-for-woocommerce' ),
+			__( 'ibon 代碼繳費', 'moksa-for-woocommerce' ),
+			__( 'FamiPort 代碼繳費', 'moksa-for-woocommerce' ),
+			__( '銀聯線上刷卡', 'moksa-for-woocommerce' ),
 		];
 	}
 

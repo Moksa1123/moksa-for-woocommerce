@@ -39,25 +39,25 @@ final class DonationOrgOps {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$name = is_array( $args ) && isset( $args['name'] ) ? trim( (string) $args['name'] ) : '';
 		$code = is_array( $args ) && isset( $args['code'] ) ? trim( (string) $args['code'] ) : '';
 		$code = (string) preg_replace( '/[^0-9xX]/', '', $code );
 
 		if ( '' === $name ) {
-			return new \WP_Error( 'moksafowo_ai_no_name', __( '請提供捐贈單位名稱。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_name', __( '請提供捐贈單位名稱。', 'moksa-for-woocommerce' ) );
 		}
 		if ( str_contains( $name, '|' ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_name', __( '單位名稱不可含「|」符號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_name', __( '單位名稱不可含「|」符號。', 'moksa-for-woocommerce' ) );
 		}
 		if ( ! self::valid_code( $code ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_code', __( '愛心碼格式不正確(應為 3-7 碼數字)。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_code', __( '愛心碼格式不正確(應為 3-7 碼數字)。', 'moksa-for-woocommerce' ) );
 		}
 
 		$active = self::active_invoice();
 		if ( null === $active ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '沒有啟用任何電子發票模組。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '沒有啟用任何電子發票模組。', 'moksa-for-woocommerce' ) );
 		}
 		[ $provider, $prefix ] = $active;
 
@@ -67,7 +67,7 @@ final class DonationOrgOps {
 				'moksafowo_ai_dupe',
 				sprintf(
 					/* translators: 1: love code, 2: existing org name */
-					__( '愛心碼 %1$s 已存在(%2$s)。', 'mo-ectools' ),
+					__( '愛心碼 %1$s 已存在(%2$s)。', 'moksa-for-woocommerce' ),
 					$code,
 					$dupe
 				)
@@ -80,7 +80,7 @@ final class DonationOrgOps {
 			'code'     => $code,
 			'summary'  => sprintf(
 				/* translators: 1: org name, 2: love code, 3: provider */
-				__( '新增捐贈單位「%1$s」(愛心碼 %2$s)到 %3$s 電子發票的捐贈名單。', 'mo-ectools' ),
+				__( '新增捐贈單位「%1$s」(愛心碼 %2$s)到 %3$s 電子發票的捐贈名單。', 'moksa-for-woocommerce' ),
 				$name,
 				$code,
 				$provider
@@ -94,14 +94,14 @@ final class DonationOrgOps {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$provider = (string) ( $params['provider'] ?? '' );
 		$name     = (string) ( $params['name'] ?? '' );
 		$code     = (string) ( $params['code'] ?? '' );
 		// provider 白名單:option 名一律 moksafowo_<provider>_invoice_donate_orgs（字面前綴,不接受任意值）。
 		if ( ! in_array( $provider, array( 'ecpay', 'ezpay', 'smilepay', 'paynow', 'amego' ), true ) || '' === $name || ! self::valid_code( $code ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法新增。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法新增。', 'moksa-for-woocommerce' ) );
 		}
 
 		$option = 'moksafowo_' . $provider . '_invoice_donate_orgs';
@@ -112,7 +112,7 @@ final class DonationOrgOps {
 
 		return sprintf(
 			/* translators: 1: org name, 2: love code */
-			__( '✅ 已新增捐贈單位「%1$s」(愛心碼 %2$s),結帳捐贈選單即可選用。', 'mo-ectools' ),
+			__( '✅ 已新增捐贈單位「%1$s」(愛心碼 %2$s),結帳捐贈選單即可選用。', 'moksa-for-woocommerce' ),
 			$name,
 			$code
 		);

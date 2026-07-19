@@ -31,7 +31,7 @@ final class OrderNumberLookup {
 		if ( ctype_digit( $term ) ) {
 			$order = wc_get_order( (int) $term );
 			if ( $order && 'shop_order' === $order->get_type() ) {
-				return [ self::format( $order, __( '訂單編號', 'mo-ectools' ) ) ];
+				return [ self::format( $order, __( '訂單編號', 'moksa-for-woocommerce' ) ) ];
 			}
 		}
 
@@ -92,7 +92,7 @@ final class OrderNumberLookup {
 		return [
 			'id'       => (int) $order->get_id(),
 			'number'   => (string) $order->get_order_number(),
-			'name'     => '' !== $name ? $name : __( '（無姓名）', 'mo-ectools' ),
+			'name'     => '' !== $name ? $name : __( '（無姓名）', 'moksa-for-woocommerce' ),
 			'status'   => wc_get_order_status_name( $order->get_status() ),
 			'total'    => html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' ),
 			'matched'  => $matched,

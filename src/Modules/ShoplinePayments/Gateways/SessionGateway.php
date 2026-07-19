@@ -16,8 +16,8 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	public function __construct() {
 		$this->id                 = self::GATEWAY_ID;
 		$this->has_fields         = false;
-		$this->method_title       = __( 'Shopline Payments', 'mo-ectools' );
-		$this->method_description = __( '跳轉至 Shopline Payments 託管結帳頁，支援信用卡 / Apple Pay / Google Pay / LINE Pay / 街口等。', 'mo-ectools' );
+		$this->method_title       = __( 'Shopline Payments', 'moksa-for-woocommerce' );
+		$this->method_description = __( '跳轉至 Shopline Payments 託管結帳頁，支援信用卡 / Apple Pay / Google Pay / LINE Pay / 街口等。', 'moksa-for-woocommerce' );
 		$this->supports           = [ 'products', 'refunds' ];
 
 		$this->init_form_fields();
@@ -33,22 +33,22 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	public function init_form_fields(): void {
 		$this->form_fields = [
 			'enabled'     => [
-				'title'   => __( '啟用此付款方式', 'mo-ectools' ),
+				'title'   => __( '啟用此付款方式', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'default' => 'no',
 			],
 			'title'       => [
-				'title'       => __( '前台顯示名稱', 'mo-ectools' ),
+				'title'       => __( '前台顯示名稱', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => $this->method_title,
-				'description' => __( '結帳頁顯示給顧客看的名稱。', 'mo-ectools' ),
+				'description' => __( '結帳頁顯示給顧客看的名稱。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'description' => [
-				'title'       => __( '前台顯示描述', 'mo-ectools' ),
+				'title'       => __( '前台顯示描述', 'moksa-for-woocommerce' ),
 				'type'        => 'textarea',
 				'default'     => '',
-				'description' => __( '結帳頁付款方式描述。', 'mo-ectools' ),
+				'description' => __( '結帳頁付款方式描述。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 		];
@@ -65,7 +65,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			throw new \Exception( esc_html__( '找不到訂單', 'mo-ectools' ) );
+			throw new \Exception( esc_html__( '找不到訂單', 'moksa-for-woocommerce' ) );
 		}
 
 		// 曾送過（失敗重試）→ referenceId 加時間後綴避免 SLP 端撞號。
@@ -114,7 +114,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 			wc_add_notice(
 				sprintf(
 					/* translators: %s: error message */
-					__( '無法建立 Shopline Payments 付款：%s', 'mo-ectools' ),
+					__( '無法建立 Shopline Payments 付款：%s', 'moksa-for-woocommerce' ),
 					$resp['message']
 				),
 				'error'
@@ -129,7 +129,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		$order->update_meta_data( Keys::SLP_SESSION_ID, $session_id );
 		$order->update_meta_data( Keys::SLP_SESSION_URL, $session_url );
 		$order->update_meta_data( Keys::SLP_STATUS, (string) ( $data['status'] ?? 'CREATED' ) );
-		$order->update_status( 'pending', __( '等待顧客於 Shopline Payments 完成付款。', 'mo-ectools' ) );
+		$order->update_status( 'pending', __( '等待顧客於 Shopline Payments 完成付款。', 'moksa-for-woocommerce' ) );
 		$order->save();
 
 		return [
@@ -141,12 +141,12 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'moksafowo_slp_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_invalid_order', __( '訂單不存在。', 'moksa-for-woocommerce' ) );
 		}
 
 		$trade_order_id = (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID );
 		if ( '' === $trade_order_id ) {
-			return new \WP_Error( 'moksafowo_slp_missing_trade_order_id', __( '訂單缺少 Shopline Payments 交易編號（tradeOrderId）。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_missing_trade_order_id', __( '訂單缺少 Shopline Payments 交易編號（tradeOrderId）。', 'moksa-for-woocommerce' ) );
 		}
 
 		$reference_order_id = (string) $order->get_meta( Keys::SLP_REFERENCE_ID );
@@ -156,7 +156,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 
 		$value = (int) round( (float) $amount * 100 );
 		if ( $value <= 0 ) {
-			return new \WP_Error( 'moksafowo_slp_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_slp_invalid_amount', __( '退款金額必須大於 0。', 'moksa-for-woocommerce' ) );
 		}
 
 		// WC refund id（this request 的退款記錄）— 無法直接取得，用 time 後綴穩定識別。
@@ -193,7 +193,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 				'moksafowo_slp_refund_fail',
 				sprintf(
 					/* translators: %s: error message */
-					__( 'Shopline Payments 退款失敗：%s', 'mo-ectools' ),
+					__( 'Shopline Payments 退款失敗：%s', 'moksa-for-woocommerce' ),
 					$resp['message']
 				)
 			);
@@ -206,10 +206,10 @@ final class SessionGateway extends \WC_Payment_Gateway {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: amount, 2: refund order id, 3: reason */
-				__( 'Shopline Payments 退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'mo-ectools' ),
+				__( 'Shopline Payments 退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'moksa-for-woocommerce' ),
 				number_format( $value / 100, 0 ),
-				'' !== $refund_order_id ? $refund_order_id : __( '處理中', 'mo-ectools' ),
-				'' !== $reason ? $reason : __( '無原因', 'mo-ectools' )
+				'' !== $refund_order_id ? $refund_order_id : __( '處理中', 'moksa-for-woocommerce' ),
+				'' !== $reason ? $reason : __( '無原因', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -251,7 +251,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 			$products[] = [
 				'id'       => (string) $order->get_id(),
 				/* translators: %s: site name */
-				'name'     => sprintf( __( '%s 訂單', 'mo-ectools' ), get_bloginfo( 'name' ) ),
+				'name'     => sprintf( __( '%s 訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ),
 				'quantity' => 1,
 				'sku'      => '',
 				'amount'   => [

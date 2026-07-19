@@ -30,7 +30,7 @@ class OrderMetaBoxes {
 
 		$cards[] = [
 			'slot'  => 'payment',
-			'title' => __( '金流資訊', 'mo-ectools' ),
+			'title' => __( '金流資訊', 'moksa-for-woocommerce' ),
 			'html'  => self::card_html( $order ),
 		];
 		return $cards;
@@ -45,7 +45,7 @@ class OrderMetaBoxes {
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
 
 		$payuni_order_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::PAYUNI_ORDER_NO );
-		echo '<tr><td><strong>' . esc_html__( '交易序號', 'mo-ectools' ) . '</strong></td><td style="word-break:break-all;">' . esc_html( $order->get_meta( $payuni_order_no_key ) ) . '</td></tr>';
+		echo '<tr><td><strong>' . esc_html__( '交易序號', 'moksa-for-woocommerce' ) . '</strong></td><td style="word-break:break-all;">' . esc_html( $order->get_meta( $payuni_order_no_key ) ) . '</td></tr>';
 		foreach ( $gateway::get_order_metas() as $key => $value ) {
 			// for backward compatibility.
 			$key = PayuniPayment::get_order_meta_key( $order, $key );
@@ -69,50 +69,50 @@ class OrderMetaBoxes {
 
 		if ( PayuniPayment::$einvoice_enabled ) {
 
-			echo '<tr><td><strong>' . esc_html__( '發票號碼', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';
-			echo '<tr><td><strong>' . esc_html__( '發票金額', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
-			echo '<tr><td><strong>' . esc_html__( '開立時間', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '發票號碼', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '發票金額', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '開立時間', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
 
 			$einvoice_type = $order->get_meta( OrderMeta::EINVOICE_TYPE );
 			if ( $einvoice_type === 'C0401' ) {
-				$einvoice_type_desc = __( '開立', 'mo-ectools' );
+				$einvoice_type_desc = __( '開立', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_type === 'C0501' ) {
-				$einvoice_type_desc = __( '作廢', 'mo-ectools' );
+				$einvoice_type_desc = __( '作廢', 'moksa-for-woocommerce' );
 			} else {
-				$einvoice_type_desc = __( '未知類型', 'mo-ectools' );
+				$einvoice_type_desc = __( '未知類型', 'moksa-for-woocommerce' );
 			}
-			echo '<tr><td><strong>' . esc_html__( '發票類型', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '發票類型', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
 
 			$einvoice_info = $order->get_meta( OrderMeta::EINVOICE_INFO );
 			if ( $einvoice_info === '3J0002' ) {
-				$einvoice_info_desc = __( '手機條碼', 'mo-ectools' );
+				$einvoice_info_desc = __( '手機條碼', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_info === 'CQ0001' ) {
-				$einvoice_info_desc = __( '自然人憑證', 'mo-ectools' );
+				$einvoice_info_desc = __( '自然人憑證', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_info === 'amego' ) {
-				$einvoice_info_desc = __( 'Amego 會員', 'mo-ectools' );
+				$einvoice_info_desc = __( 'Amego 會員', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_info === 'Donate' ) {
-				$einvoice_info_desc = __( '捐贈', 'mo-ectools' );
+				$einvoice_info_desc = __( '捐贈', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_info === 'Company' ) {
-				$einvoice_info_desc = __( '公司', 'mo-ectools' );
+				$einvoice_info_desc = __( '公司', 'moksa-for-woocommerce' );
 			} else {
-				$einvoice_info_desc = __( '未知載具', 'mo-ectools' );
+				$einvoice_info_desc = __( '未知載具', 'moksa-for-woocommerce' );
 			}
-			echo '<tr><td><strong>' . esc_html__( '載具資訊', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '載具資訊', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
 
 			$einvoice_status = $order->get_meta( OrderMeta::EINVOICE_STATUS );
 			if ( $einvoice_status === '1' ) {
-				$einvoice_status_desc = __( '已開立', 'mo-ectools' );
+				$einvoice_status_desc = __( '已開立', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_status === '2' ) {
-				$einvoice_status_desc = __( '開立失敗', 'mo-ectools' );
+				$einvoice_status_desc = __( '開立失敗', 'moksa-for-woocommerce' );
 			} elseif ( $einvoice_status === '5' ) {
-				$einvoice_status_desc = __( '已作廢', 'mo-ectools' );
+				$einvoice_status_desc = __( '已作廢', 'moksa-for-woocommerce' );
 			} else {
-				$einvoice_status_desc = __( '未知狀態', 'mo-ectools' );
+				$einvoice_status_desc = __( '未知狀態', 'moksa-for-woocommerce' );
 			}
-			echo '<tr><td><strong>' . esc_html__( '開立狀態', 'mo-ectools' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
+			echo '<tr><td><strong>' . esc_html__( '開立狀態', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
 		}// end einvoice enabled
 
-		echo '<tr id="moksafowo-payuni-action"><td colspan="2"><button id="moksafowo-payuni-query-btn" class="button" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '查詢', 'mo-ectools' ) . '</button></td></tr>';
+		echo '<tr id="moksafowo-payuni-action"><td colspan="2"><button id="moksafowo-payuni-query-btn" class="button" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( '查詢', 'moksa-for-woocommerce' ) . '</button></td></tr>';
 		echo '</table>';
 
 		return (string) ob_get_clean();

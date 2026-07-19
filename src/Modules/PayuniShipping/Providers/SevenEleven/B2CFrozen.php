@@ -22,8 +22,8 @@ class B2CFrozen extends ShippingBase {
 
 		$this->instance_id        = absint( (int) $instance_id );
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi — 7-11 大宗超商取貨（冷凍）', 'moksa-for-woocommerce' );
 
 		$this->goods_type = GoodsType::FROZEN;
 		$this->lgs_type   = LgsType::B2C;

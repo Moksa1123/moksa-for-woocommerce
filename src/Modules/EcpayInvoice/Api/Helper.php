@@ -197,7 +197,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1040',
-				'message' => __( '請輸入手機條碼。', 'mo-ectools' ),
+				'message' => __( '請輸入手機條碼。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( ! preg_match( '#^/[0-9a-zA-Z+\-.]{7}$#', $barcode ) ) {
@@ -205,7 +205,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1041',
-				'message' => __( '手機條碼格式錯誤（需 / 開頭 + 7 碼字母/數字/+ - .）。', 'mo-ectools' ),
+				'message' => __( '手機條碼格式錯誤（需 / 開頭 + 7 碼字母/數字/+ - .）。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -225,7 +225,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => true,
 				'exists'  => true,
 				'code'    => '1042',
-				'message' => __( '財政部系統維護中，已跳過載具驗證。', 'mo-ectools' ),
+				'message' => __( '財政部系統維護中，已跳過載具驗證。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -234,7 +234,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1049',
-				'message' => $result['message'] ?? __( '驗證失敗。', 'mo-ectools' ),
+				'message' => $result['message'] ?? __( '驗證失敗。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -244,7 +244,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => true,
 				'exists'  => false,
 				'code'    => '1043',
-				'message' => __( '此手機條碼不存在，請確認是否輸入正確。', 'mo-ectools' ),
+				'message' => __( '此手機條碼不存在，請確認是否輸入正確。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -263,7 +263,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1020',
-				'message' => __( '請輸入愛心碼。', 'mo-ectools' ),
+				'message' => __( '請輸入愛心碼。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( ! preg_match( '#^([xX][0-9]{2,6}|[0-9]{3,7})$#', $love_code ) ) {
@@ -271,7 +271,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1021',
-				'message' => __( '愛心碼格式錯誤（需 3-7 碼數字，或 X + 2-6 碼數字）。', 'mo-ectools' ),
+				'message' => __( '愛心碼格式錯誤（需 3-7 碼數字，或 X + 2-6 碼數字）。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -290,7 +290,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => true,
 				'exists'  => true,
 				'code'    => '1022',
-				'message' => __( '財政部系統維護中，已跳過愛心碼驗證。', 'mo-ectools' ),
+				'message' => __( '財政部系統維護中，已跳過愛心碼驗證。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -299,7 +299,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'exists'  => false,
 				'code'    => '1029',
-				'message' => $result['message'] ?? __( '驗證失敗。', 'mo-ectools' ),
+				'message' => $result['message'] ?? __( '驗證失敗。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -309,7 +309,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => true,
 				'exists'  => false,
 				'code'    => '1023',
-				'message' => __( '此愛心碼不存在，請確認是否輸入正確。', 'mo-ectools' ),
+				'message' => __( '此愛心碼不存在，請確認是否輸入正確。', 'moksa-for-woocommerce' ),
 			];
 		}
 

@@ -16,15 +16,15 @@ final class Credit extends \WC_Payment_Gateway {
 	public function __construct() {
 		$this->id                 = self::GATEWAY_ID;
 		$this->has_fields         = true; // 結帳頁要渲染 TapPay Fields。
-		$this->method_title       = __( 'TapPay 信用卡', 'mo-ectools' );
-		$this->method_description = __( '安全信用卡付款，支援 3D 驗證。卡號資訊不流經本站。', 'mo-ectools' );
+		$this->method_title       = __( 'TapPay 信用卡', 'moksa-for-woocommerce' );
+		$this->method_description = __( '安全信用卡付款，支援 3D 驗證。卡號資訊不流經本站。', 'moksa-for-woocommerce' );
 		$this->supports           = [ 'products', 'refunds' ];
 
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title       = (string) $this->get_option( 'title', __( 'TapPay 信用卡', 'mo-ectools' ) );
-		$this->description = (string) $this->get_option( 'description', __( '使用信用卡安全付款（由 TapPay 處理）。', 'mo-ectools' ) );
+		$this->title       = (string) $this->get_option( 'title', __( 'TapPay 信用卡', 'moksa-for-woocommerce' ) );
+		$this->description = (string) $this->get_option( 'description', __( '使用信用卡安全付款（由 TapPay 處理）。', 'moksa-for-woocommerce' ) );
 		$this->enabled     = (string) $this->get_option( 'enabled', 'no' );
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, [ $this, 'process_admin_options' ] );
@@ -33,22 +33,22 @@ final class Credit extends \WC_Payment_Gateway {
 	public function init_form_fields(): void {
 		$this->form_fields = [
 			'enabled'     => [
-				'title'   => __( '啟用此付款方式', 'mo-ectools' ),
+				'title'   => __( '啟用此付款方式', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'default' => 'no',
 			],
 			'title'       => [
-				'title'       => __( '前台顯示名稱', 'mo-ectools' ),
+				'title'       => __( '前台顯示名稱', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
-				'default'     => __( 'TapPay 信用卡', 'mo-ectools' ),
-				'description' => __( '結帳頁顯示給顧客看的名稱。', 'mo-ectools' ),
+				'default'     => __( 'TapPay 信用卡', 'moksa-for-woocommerce' ),
+				'description' => __( '結帳頁顯示給顧客看的名稱。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'description' => [
-				'title'       => __( '前台顯示描述', 'mo-ectools' ),
+				'title'       => __( '前台顯示描述', 'moksa-for-woocommerce' ),
 				'type'        => 'textarea',
-				'default'     => __( '使用信用卡安全付款（由 TapPay 處理）。', 'mo-ectools' ),
-				'description' => __( '結帳頁付款方式描述。', 'mo-ectools' ),
+				'default'     => __( '使用信用卡安全付款（由 TapPay 處理）。', 'moksa-for-woocommerce' ),
+				'description' => __( '結帳頁付款方式描述。', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 		];
@@ -68,15 +68,15 @@ final class Credit extends \WC_Payment_Gateway {
 		?>
 		<div class="moksafowo-tappay-fields" data-moksafowo-tappay-gateway="<?php echo esc_attr( $this->id ); ?>">
 			<p class="form-row form-row-wide">
-				<label for="moksafowo-tappay-card-number"><?php esc_html_e( '卡號', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<label for="moksafowo-tappay-card-number"><?php esc_html_e( '卡號', 'moksa-for-woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
 				<span id="moksafowo-tappay-card-number" class="moksafowo-tappay-field input-text"></span>
 			</p>
 			<p class="form-row form-row-first">
-				<label for="moksafowo-tappay-card-expiry"><?php esc_html_e( '有效期限（MM / YY）', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<label for="moksafowo-tappay-card-expiry"><?php esc_html_e( '有效期限（MM / YY）', 'moksa-for-woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
 				<span id="moksafowo-tappay-card-expiry" class="moksafowo-tappay-field input-text"></span>
 			</p>
 			<p class="form-row form-row-last">
-				<label for="moksafowo-tappay-card-ccv"><?php esc_html_e( '安全碼 CVC', 'mo-ectools' ); ?>&nbsp;<span class="required">*</span></label>
+				<label for="moksafowo-tappay-card-ccv"><?php esc_html_e( '安全碼 CVC', 'moksa-for-woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
 				<span id="moksafowo-tappay-card-ccv" class="moksafowo-tappay-field input-text"></span>
 			</p>
 			<input type="hidden" name="moksafowo_tappay_prime" class="moksafowo-tappay-prime" value="" />
@@ -92,7 +92,7 @@ final class Credit extends \WC_Payment_Gateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			throw new \Exception( esc_html__( '找不到訂單', 'mo-ectools' ) );
+			throw new \Exception( esc_html__( '找不到訂單', 'moksa-for-woocommerce' ) );
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC checkout 在上游已驗 nonce；此處僅讀前端取得的一次性 prime
@@ -103,7 +103,7 @@ final class Credit extends \WC_Payment_Gateway {
 		// phpcs:enable
 
 		if ( '' === $prime ) {
-			wc_add_notice( __( '無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。', 'mo-ectools' ), 'error' );
+			wc_add_notice( __( '無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。', 'moksa-for-woocommerce' ), 'error' );
 			return [
 				'result'   => 'failure',
 				'redirect' => '',
@@ -180,7 +180,7 @@ final class Credit extends \WC_Payment_Gateway {
 			wc_add_notice(
 				sprintf(
 					/* translators: 1: status code, 2: message */
-					__( 'TapPay 付款失敗（狀態碼 %1$d）：%2$s', 'mo-ectools' ),
+					__( 'TapPay 付款失敗（狀態碼 %1$d）：%2$s', 'moksa-for-woocommerce' ),
 					$resp['status'],
 					$resp['msg']
 				),
@@ -195,7 +195,7 @@ final class Credit extends \WC_Payment_Gateway {
 		// 3DS challenge — 導去 TapPay payment_url，完成後回 result_url。
 		if ( $resp['needs_3ds'] ) {
 			$order->update_meta_data( Keys::TAPPAY_PAYMENT_URL, $resp['payment_url'] );
-			$order->update_status( 'pending', __( '等待顧客完成 TapPay 3D 驗證。', 'mo-ectools' ) );
+			$order->update_status( 'pending', __( '等待顧客完成 TapPay 3D 驗證。', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'result'   => 'success',
@@ -217,7 +217,7 @@ final class Credit extends \WC_Payment_Gateway {
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: rec_trade_id, 2: card last4 */
-				__( 'TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）', 'mo-ectools' ),
+				__( 'TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）', 'moksa-for-woocommerce' ),
 				$rec_trade_id,
 				$last4
 			)
@@ -237,16 +237,16 @@ final class Credit extends \WC_Payment_Gateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'moksafowo_tappay_invalid_order', __( '訂單不存在。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_invalid_order', __( '訂單不存在。', 'moksa-for-woocommerce' ) );
 		}
 		$rec_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
 		if ( '' === $rec_trade_id ) {
-			return new \WP_Error( 'moksafowo_tappay_missing_rec_trade_id', __( '訂單缺少 TapPay 交易編號。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_missing_rec_trade_id', __( '訂單缺少 TapPay 交易編號。', 'moksa-for-woocommerce' ) );
 		}
 
 		$amt = (int) round( (float) $amount );
 		if ( $amt <= 0 ) {
-			return new \WP_Error( 'moksafowo_tappay_invalid_amount', __( '退款金額必須大於 0。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_tappay_invalid_amount', __( '退款金額必須大於 0。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = Client::refund( $rec_trade_id, $amt );
@@ -266,7 +266,7 @@ final class Credit extends \WC_Payment_Gateway {
 				'moksafowo_tappay_refund_fail',
 				sprintf(
 					/* translators: 1: status code, 2: message */
-					__( 'TapPay 退款失敗（狀態碼 %1$d）：%2$s', 'mo-ectools' ),
+					__( 'TapPay 退款失敗（狀態碼 %1$d）：%2$s', 'moksa-for-woocommerce' ),
 					$result['status'],
 					$result['msg']
 				)
@@ -276,10 +276,10 @@ final class Credit extends \WC_Payment_Gateway {
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: amount, 2: rec_trade_id, 3: reason */
-				__( 'TapPay 退款已送出（NT$%1$s，交易編號 %2$s）— %3$s', 'mo-ectools' ),
+				__( 'TapPay 退款已送出（NT$%1$s，交易編號 %2$s）— %3$s', 'moksa-for-woocommerce' ),
 				$amt,
 				$rec_trade_id,
-				'' !== $reason ? $reason : __( '無原因', 'mo-ectools' )
+				'' !== $reason ? $reason : __( '無原因', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -294,7 +294,7 @@ final class Credit extends \WC_Payment_Gateway {
 		$detail = '' !== implode( ',', $names )
 			? implode( ',', $names )
 			/* translators: %s: site name */
-			: sprintf( __( '%s 訂單', 'mo-ectools' ), get_bloginfo( 'name' ) );
+			: sprintf( __( '%s 訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) );
 		return mb_substr( $detail, 0, 100 );
 	}
 }

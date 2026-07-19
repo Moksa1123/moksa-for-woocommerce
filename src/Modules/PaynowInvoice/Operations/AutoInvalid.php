@@ -17,7 +17,7 @@ final class AutoInvalid extends AbstractAutoInvalid {
 	}
 
 	protected static function provider_label(): string {
-		return __( 'PayNow', 'mo-ectools' );
+		return __( 'PayNow', 'moksa-for-woocommerce' );
 	}
 
 	protected static function invoice_number_meta_key(): string {

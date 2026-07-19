@@ -23,7 +23,7 @@ final class OrderInfoLayout {
 		foreach ( $screens as $screen ) {
 			add_meta_box(
 				'moksafowo_order_info',
-				__( '金流 / 物流 / 電子發票', 'mo-ectools' ),
+				__( '金流 / 物流 / 電子發票', 'moksa-for-woocommerce' ),
 				[ __CLASS__, 'render' ],
 				$screen,
 				'normal',
@@ -208,9 +208,9 @@ final class OrderInfoLayout {
 
 	private static function default_title( string $slot ): string {
 		return [
-			'payment'  => __( '金流資訊', 'mo-ectools' ),
-			'shipping' => __( '物流資訊', 'mo-ectools' ),
-			'invoice'  => __( '發票資訊', 'mo-ectools' ),
+			'payment'  => __( '金流資訊', 'moksa-for-woocommerce' ),
+			'shipping' => __( '物流資訊', 'moksa-for-woocommerce' ),
+			'invoice'  => __( '發票資訊', 'moksa-for-woocommerce' ),
 		][ $slot ] ?? '';
 	}
 
@@ -233,13 +233,13 @@ final class OrderInfoLayout {
 				// CVS 取貨：顧客自己到門市付款
 				// 宅配：宅配員送到家時當場付款
 				$where = $is_cvs
-					? __( '顧客至超商取貨時於門市付款。', 'mo-ectools' )
-					: __( '宅配送達時由顧客當場付款給宅配員。', 'mo-ectools' );
+					? __( '顧客至超商取貨時於門市付款。', 'moksa-for-woocommerce' )
+					: __( '宅配送達時由顧客當場付款給宅配員。', 'moksa-for-woocommerce' );
 				return sprintf(
 					'<p><strong>%s</strong>%s</p><p><strong>%s</strong>NT$%d</p><p style="color:#646970;font-size:12px;">%s</p>',
-					esc_html__( '付款方式：', 'mo-ectools' ),
-					esc_html__( '貨到付款（COD）', 'mo-ectools' ),
-					esc_html__( '應收金額：', 'mo-ectools' ),
+					esc_html__( '付款方式：', 'moksa-for-woocommerce' ),
+					esc_html__( '貨到付款（COD）', 'moksa-for-woocommerce' ),
+					esc_html__( '應收金額：', 'moksa-for-woocommerce' ),
 					$amount,
 					esc_html( $where )
 				);
@@ -248,23 +248,23 @@ final class OrderInfoLayout {
 			if ( '' !== $method_title ) {
 				$is_ours = str_starts_with( $method, 'moksafowo_' ) || 'moksafowo-linepay' === $method;
 				$note    = $is_ours
-					? __( '此付款方式由本外掛處理，但尚無額外詳情可顯示。', 'mo-ectools' )
-					: __( '此付款方式非由本外掛處理，無額外資訊可顯示。', 'mo-ectools' );
+					? __( '此付款方式由本外掛處理，但尚無額外詳情可顯示。', 'moksa-for-woocommerce' )
+					: __( '此付款方式非由本外掛處理，無額外資訊可顯示。', 'moksa-for-woocommerce' );
 				return sprintf(
 					'<p><strong>%s</strong>%s</p><p style="color:#646970;font-size:12px;">%s</p>',
-					esc_html__( '付款方式：', 'mo-ectools' ),
+					esc_html__( '付款方式：', 'moksa-for-woocommerce' ),
 					esc_html( $method_title ),
 					esc_html( $note )
 				);
 			}
 			// 完全未付款
-			return '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款。', 'mo-ectools' ) . '</p>';
+			return '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		if ( 'shipping' === $slot ) {
 			$methods = $order->get_shipping_methods();
 			if ( empty( $methods ) ) {
-				return '<p style="color:#646970;font-size:12px;">' . esc_html__( '此訂單無運送（虛擬商品 / 自取）。', 'mo-ectools' ) . '</p>';
+				return '<p style="color:#646970;font-size:12px;">' . esc_html__( '此訂單無運送（虛擬商品 / 自取）。', 'moksa-for-woocommerce' ) . '</p>';
 			}
 			// 區分「本外掛物流模組但 card 未實作」vs「完全外掛 method」
 			$is_ours = false;
@@ -277,18 +277,18 @@ final class OrderInfoLayout {
 				$titles[] = $m->get_name();
 			}
 			$note = $is_ours
-				? __( '此物流由本外掛處理，但尚無額外詳情可顯示。', 'mo-ectools' )
-				: __( '此運送方式非由本外掛的物流模組處理。', 'mo-ectools' );
+				? __( '此物流由本外掛處理，但尚無額外詳情可顯示。', 'moksa-for-woocommerce' )
+				: __( '此運送方式非由本外掛的物流模組處理。', 'moksa-for-woocommerce' );
 			return sprintf(
 				'<p><strong>%s</strong>%s</p><p style="color:#646970;font-size:12px;">%s</p>',
-				esc_html__( '運送方式：', 'mo-ectools' ),
+				esc_html__( '運送方式：', 'moksa-for-woocommerce' ),
 				esc_html( implode( ' / ', $titles ) ),
 				esc_html( $note )
 			);
 		}
 
 		if ( 'invoice' === $slot ) {
-			return '<p style="color:#646970;font-size:12px;">' . esc_html__( '此訂單未啟用電子發票模組。', 'mo-ectools' ) . '</p>';
+			return '<p style="color:#646970;font-size:12px;">' . esc_html__( '此訂單未啟用電子發票模組。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		return '';

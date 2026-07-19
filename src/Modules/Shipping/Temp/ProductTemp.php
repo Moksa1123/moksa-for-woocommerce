@@ -99,16 +99,16 @@ final class ProductTemp {
 
 	public static function label( int $temp ): string {
 		return match ( $temp ) {
-			self::REFRIGERATED => __( '冷藏', 'mo-ectools' ),
-			self::FROZEN       => __( '冷凍', 'mo-ectools' ),
-			default            => __( '常溫', 'mo-ectools' ),
+			self::REFRIGERATED => __( '冷藏', 'moksa-for-woocommerce' ),
+			self::FROZEN       => __( '冷凍', 'moksa-for-woocommerce' ),
+			default            => __( '常溫', 'moksa-for-woocommerce' ),
 		};
 	}
 
 	public static function options( bool $include_inherit = false ): array {
 		$options = [];
 		if ( $include_inherit ) {
-			$options[''] = __( '繼承父商品設定', 'mo-ectools' );
+			$options[''] = __( '繼承父商品設定', 'moksa-for-woocommerce' );
 		}
 		$options[ self::NORMAL ]       = self::label( self::NORMAL );
 		$options[ self::REFRIGERATED ] = self::label( self::REFRIGERATED );

@@ -14,7 +14,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '綠界物流 — 7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 中華郵政 宅配', 'mo-ectools' );
+		return __( '綠界物流 — 7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 中華郵政 宅配', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -22,21 +22,21 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '綠界物流', 'mo-ectools' );
+		return __( '綠界物流', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配', 'mo-ectools' );
+		return __( '7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '7-11 取貨', 'mo-ectools' ),
-			__( '全家取貨', 'mo-ectools' ),
-			__( '萊爾富取貨', 'mo-ectools' ),
-			__( 'OK 取貨', 'mo-ectools' ),
-			__( '黑貓宅配', 'mo-ectools' ),
-			__( '中華郵政', 'mo-ectools' ),
+			__( '7-11 取貨', 'moksa-for-woocommerce' ),
+			__( '全家取貨', 'moksa-for-woocommerce' ),
+			__( '萊爾富取貨', 'moksa-for-woocommerce' ),
+			__( 'OK 取貨', 'moksa-for-woocommerce' ),
+			__( '黑貓宅配', 'moksa-for-woocommerce' ),
+			__( '中華郵政', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -64,13 +64,13 @@ final class Module extends AbstractModule {
 
 	public static function register_batch_print( array $providers ): array {
 		$titles = [
-			'moksafowo_ecpay_shipping_cvs_711'            => __( '綠界 7-11 取貨', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( '綠界 7-11 B2C 冷凍', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_cvs_family'         => __( '綠界 全家取貨', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_cvs_hilife'         => __( '綠界 萊爾富取貨', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_cvs_okmart'         => __( '綠界 OK 取貨', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'mo-ectools' ),
-			'moksafowo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'mo-ectools' ),
+			'moksafowo_ecpay_shipping_cvs_711'            => __( '綠界 7-11 取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( '綠界 7-11 B2C 冷凍', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_family'         => __( '綠界 全家取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_hilife'         => __( '綠界 萊爾富取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_okmart'         => __( '綠界 OK 取貨', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'moksa-for-woocommerce' ),
 		];
 		$cvs    = [];
 		$home   = [];
@@ -107,7 +107,7 @@ final class Module extends AbstractModule {
 		};
 		if ( ! empty( $cvs ) ) {
 			$providers['ecpay-cvs'] = [
-				'label'           => __( '綠界 超商標籤', 'mo-ectools' ),
+				'label'           => __( '綠界 超商標籤', 'moksa-for-woocommerce' ),
 				'category'        => 'cvs',
 				'method_ids'      => $cvs,
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
@@ -119,7 +119,7 @@ final class Module extends AbstractModule {
 		}
 		if ( ! empty( $home ) ) {
 			$providers['ecpay-home'] = [
-				'label'           => __( '綠界 宅配標籤', 'mo-ectools' ),
+				'label'           => __( '綠界 宅配標籤', 'moksa-for-woocommerce' ),
 				'category'        => 'home',
 				'method_ids'      => $home,
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],

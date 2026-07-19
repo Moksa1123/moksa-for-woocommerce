@@ -163,8 +163,8 @@ final class TrackingLink {
 				<button type="button"
 	class="moksafowo-tracking-copy"
 					data-tracking="<?php echo esc_attr( $tn ); ?>"
-					title="<?php esc_attr_e( '複製貨號', 'mo-ectools' ); ?>"
-					style="background:#fff;border:1px solid #cbd5e1;border-radius:3px;cursor:pointer;padding:2px 8px;font-size:11px;line-height:1.4;color:#475569;"><?php esc_html_e( '複製', 'mo-ectools' ); ?></button>
+					title="<?php esc_attr_e( '複製貨號', 'moksa-for-woocommerce' ); ?>"
+					style="background:#fff;border:1px solid #cbd5e1;border-radius:3px;cursor:pointer;padding:2px 8px;font-size:11px;line-height:1.4;color:#475569;"><?php esc_html_e( '複製', 'moksa-for-woocommerce' ); ?></button>
 			<?php endif; ?>
 			<a href="<?php echo esc_url( $url ); ?>"
 				target="_blank"
@@ -174,10 +174,10 @@ final class TrackingLink {
 				<?php
 				if ( $direct ) {
 					/* translators: %s: carrier name */
-					echo esc_html( sprintf( __( '查詢 %s 貨態', 'mo-ectools' ), $info['carrier'] ) );
+					echo esc_html( sprintf( __( '查詢 %s 貨態', 'moksa-for-woocommerce' ), $info['carrier'] ) );
 				} else {
 					/* translators: %s: carrier name */
-					echo esc_html( sprintf( __( '前往 %s 查詢', 'mo-ectools' ), $info['carrier'] ) );
+					echo esc_html( sprintf( __( '前往 %s 查詢', 'moksa-for-woocommerce' ), $info['carrier'] ) );
 				}
 				?>
 			</a>

@@ -25,21 +25,21 @@ final class BatchUpdateOrderStatus {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 
 		$status = is_array( $args ) && isset( $args['status'] ) ? str_replace( 'wc-', '', sanitize_key( (string) $args['status'] ) ) : '';
 		$refs   = self::normalize_refs( is_array( $args ) ? ( $args['orders'] ?? '' ) : '' );
 
 		if ( empty( $refs ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要變更的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要變更的訂單。', 'moksa-for-woocommerce' ) );
 		}
 
 		$statuses = wc_get_order_statuses();
 		$to_key   = 'wc-' . $status;
 		if ( ! isset( $statuses[ $to_key ] ) ) {
 			/* translators: %s: status slug the user gave */
-			return new \WP_Error( 'moksafowo_ai_bad_status', sprintf( __( '無效的訂單狀態:%s。', 'mo-ectools' ), $status ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', sprintf( __( '無效的訂單狀態:%s。', 'moksa-for-woocommerce' ), $status ) );
 		}
 
 		$found   = array();
@@ -59,14 +59,14 @@ final class BatchUpdateOrderStatus {
 		}
 
 		if ( empty( $found ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '找不到任何有效的訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( '找不到任何有效的訂單。', 'moksa-for-woocommerce' ) );
 		}
 
 		$orders  = array_values( $found );
 		$numbers = implode( ' ', array_map( static fn( $o ) => '#' . $o['number'], $orders ) );
 		$summary = sprintf(
 			/* translators: 1: order count, 2: order numbers, 3: target status */
-			__( '將 %1$d 筆訂單(%2$s)的狀態改為「%3$s」。', 'mo-ectools' ),
+			__( '將 %1$d 筆訂單(%2$s)的狀態改為「%3$s」。', 'moksa-for-woocommerce' ),
 			count( $orders ),
 			$numbers,
 			$statuses[ $to_key ]
@@ -74,7 +74,7 @@ final class BatchUpdateOrderStatus {
 		if ( ! empty( $invalid ) ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: invalid order references */
-				__( '(找不到並略過:%s)', 'mo-ectools' ),
+				__( '(找不到並略過:%s)', 'moksa-for-woocommerce' ),
 				implode( '、', $invalid )
 			);
 		}
@@ -96,13 +96,13 @@ final class BatchUpdateOrderStatus {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 
 		$to       = (string) ( $params['to_slug'] ?? '' );
 		$statuses = wc_get_order_statuses();
 		if ( ! isset( $statuses[ 'wc-' . $to ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_status', __( '無效的訂單狀態。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', __( '無效的訂單狀態。', 'moksa-for-woocommerce' ) );
 		}
 
 		$orders = is_array( $params['orders'] ?? null ) ? $params['orders'] : array();
@@ -114,7 +114,7 @@ final class BatchUpdateOrderStatus {
 				$failed[] = '#' . ( $o['number'] ?? '?' );
 				continue;
 			}
-			$order->update_status( $to, __( '經 Moksa AI 批次確認執行。', 'mo-ectools' ) );
+			$order->update_status( $to, __( '經 Moksa AI 批次確認執行。', 'moksa-for-woocommerce' ) );
 			$fresh = wc_get_order( $order->get_id() );
 			if ( $fresh && $fresh->get_status() === $to ) {
 				$done[] = '#' . $order->get_order_number();
@@ -126,7 +126,7 @@ final class BatchUpdateOrderStatus {
 		$label = $statuses[ 'wc-' . $to ];
 		$msg   = sprintf(
 			/* translators: 1: success count, 2: total count, 3: status label, 4: order numbers */
-			__( '✅ 已將 %1$d/%2$d 筆訂單改為「%3$s」:%4$s。', 'mo-ectools' ),
+			__( '✅ 已將 %1$d/%2$d 筆訂單改為「%3$s」:%4$s。', 'moksa-for-woocommerce' ),
 			count( $done ),
 			count( $done ) + count( $failed ),
 			$label,
@@ -135,7 +135,7 @@ final class BatchUpdateOrderStatus {
 		if ( ! empty( $failed ) ) {
 			$msg .= ' ' . sprintf(
 				/* translators: %s: failed order numbers */
-				__( '⚠️ 失敗:%s,請至訂單頁確認。', 'mo-ectools' ),
+				__( '⚠️ 失敗:%s,請至訂單頁確認。', 'moksa-for-woocommerce' ),
 				implode( ' ', $failed )
 			);
 		}

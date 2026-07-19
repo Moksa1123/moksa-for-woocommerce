@@ -113,7 +113,7 @@ final class PaymentRequest {
 
 			LinePay::log( 'process payment request error:' . $e->getMessage(), 'error' );
 
-			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。', 'mo-ectools' ) ) );
+			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。', 'moksa-for-woocommerce' ) ) );
 
 			return array(
 				'result'   => 'success',
@@ -253,26 +253,26 @@ final class PaymentRequest {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_AUTHED );
 				$order->save();
 				$order->update_status( 'on-hold' );
-				$order->add_order_note( __( 'LINE Pay 付款已授權，等待確認', 'mo-ectools' ) );
+				$order->add_order_note( __( 'LINE Pay 付款已授權，等待確認', 'moksa-for-woocommerce' ) );
 
 			} elseif ( StatusCode::CANCELLED_EXPIRED === $check_code ) {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
-				$order->add_order_note( __( 'LINE Pay 付款已取消或過期', 'mo-ectools' ) );
+				$order->add_order_note( __( 'LINE Pay 付款已取消或過期', 'moksa-for-woocommerce' ) );
 
 			} elseif ( StatusCode::FAILED === $check_code ) {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_FAILED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
-				$order->add_order_note( __( 'LINE Pay 交易失敗', 'mo-ectools' ) );
+				$order->add_order_note( __( 'LINE Pay 交易失敗', 'moksa-for-woocommerce' ) );
 
 			} else {
 				$order->update_status( 'on-hold' );
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: LINE Pay check status return code */
-						__( 'LINE Pay 確認付款失敗（狀態代碼 %s）', 'mo-ectools' ),
+						__( 'LINE Pay 確認付款失敗（狀態代碼 %s）', 'moksa-for-woocommerce' ),
 						$check_code
 					)
 				);
@@ -308,7 +308,7 @@ final class PaymentRequest {
 				'process_refund_request',
 				sprintf(
 					/* translators: %s: WooCommerce order ID being refunded */
-					__( 'Unable to find order #%s', 'mo-ectools' ),
+					__( 'Unable to find order #%s', 'moksa-for-woocommerce' ),
 					$order_id
 				),
 				array(
@@ -332,7 +332,7 @@ final class PaymentRequest {
 		$reserved_transaction_id = $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 
 		if ( empty( $reserved_transaction_id ) ) {
-			throw new Exception( esc_html__( 'no transaction_id is found', 'mo-ectools' ) );
+			throw new Exception( esc_html__( 'no transaction_id is found', 'moksa-for-woocommerce' ) );
 		}
 
 		$url = Url::request_url( Constants::REQUEST_TYPE_CHECK, array( 'transaction_id' => $reserved_transaction_id ) );
@@ -409,7 +409,7 @@ final class PaymentRequest {
 		if ( '0000' !== $resp->returnCode ) {
 			$msg = sprintf(
 				/* translators: 1: refund transaction id, 2: returnCode, 3: returnMessage */
-				__( 'Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s', 'mo-ectools' ),
+				__( 'Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s', 'moksa-for-woocommerce' ),
 				isset( $resp->info->refundTransactionId ) ? $resp->info->refundTransactionId : 'n/a',
 				$resp->returnCode,
 				$resp->returnMessage
@@ -436,7 +436,7 @@ final class PaymentRequest {
 		$order->add_order_note(
 			sprintf(
 				/* translators: %s: LINE Pay refund transaction id returned by API */
-				__( 'LINE Pay 退款成功（退款編號 %s）', 'mo-ectools' ),
+				__( 'LINE Pay 退款成功（退款編號 %s）', 'moksa-for-woocommerce' ),
 				$resp->info->refundTransactionId
 			)
 		);
@@ -489,7 +489,7 @@ final class PaymentRequest {
 					'moksafowo_linepay_checkout_product_name',
 					sprintf(
 						/* translators:  %1$s is product name, %2$s is the order item count */
-						__( '%1$s and total %2$s products', 'mo-ectools' ),
+						__( '%1$s and total %2$s products', 'moksa-for-woocommerce' ),
 						$order_name,
 						$order->get_item_count()
 					)

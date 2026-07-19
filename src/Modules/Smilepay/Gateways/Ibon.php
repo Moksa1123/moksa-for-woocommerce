@@ -31,11 +31,11 @@ final class Ibon extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay ibon 代碼繳費', 'mo-ectools' );
+		return __( 'SmilePay ibon 代碼繳費', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得繳費代碼後，於 7-11 ibon 或 LifeET 列印繳費單繳款。', 'mo-ectools' );
+		return __( '取得繳費代碼後，於 7-11 ibon 或 LifeET 列印繳費單繳款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

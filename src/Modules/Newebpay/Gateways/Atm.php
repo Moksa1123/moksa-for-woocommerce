@@ -17,11 +17,11 @@ final class Atm extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 ATM 虛擬帳號', 'mo-ectools' );
+		return __( '藍新 ATM 虛擬帳號', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得虛擬帳號後 3 天內至 ATM 轉帳完成付款。', 'mo-ectools' );
+		return __( '取得虛擬帳號後 3 天內至 ATM 轉帳完成付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

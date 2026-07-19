@@ -125,17 +125,17 @@ class PayuniPayment {
 		}
 
 		self::$order_metas = array(
-			OrderMeta::UNI_NO       => __( 'Trade No', 'mo-ectools' ),
-			OrderMeta::TRADE_AMOUNT => __( 'Trade Amount', 'mo-ectools' ),
-			OrderMeta::TRADE_STATUS => __( 'Trade Status', 'mo-ectools' ),
-			OrderMeta::MESSAGE      => __( 'Message', 'mo-ectools' ),
-			OrderMeta::PAID_AT      => __( 'Paid At', 'mo-ectools' ),
-			OrderMeta::CLOSE_STATUS => __( 'Close Status', 'mo-ectools' ),
-			OrderMeta::CLOSE_TIME   => __( 'Close Time', 'mo-ectools' ),
-			OrderMeta::CLOSE_AUTH   => __( 'Close Auth', 'mo-ectools' ),
-			OrderMeta::REFUND_NO    => __( 'Refund No', 'mo-ectools' ),
-			OrderMeta::REFUND_AMT   => __( 'Refund Amount', 'mo-ectools' ),
-			OrderMeta::REFUND_TIME  => __( 'Refund Time', 'mo-ectools' ),
+			OrderMeta::UNI_NO       => __( 'Trade No', 'moksa-for-woocommerce' ),
+			OrderMeta::TRADE_AMOUNT => __( 'Trade Amount', 'moksa-for-woocommerce' ),
+			OrderMeta::TRADE_STATUS => __( 'Trade Status', 'moksa-for-woocommerce' ),
+			OrderMeta::MESSAGE      => __( 'Message', 'moksa-for-woocommerce' ),
+			OrderMeta::PAID_AT      => __( 'Paid At', 'moksa-for-woocommerce' ),
+			OrderMeta::CLOSE_STATUS => __( 'Close Status', 'moksa-for-woocommerce' ),
+			OrderMeta::CLOSE_TIME   => __( 'Close Time', 'moksa-for-woocommerce' ),
+			OrderMeta::CLOSE_AUTH   => __( 'Close Auth', 'moksa-for-woocommerce' ),
+			OrderMeta::REFUND_NO    => __( 'Refund No', 'moksa-for-woocommerce' ),
+			OrderMeta::REFUND_AMT   => __( 'Refund Amount', 'moksa-for-woocommerce' ),
+			OrderMeta::REFUND_TIME  => __( 'Refund Time', 'moksa-for-woocommerce' ),
 		);
 	}
 
@@ -203,7 +203,7 @@ class PayuniPayment {
 			array(
 				'ajax_url'    => admin_url( 'admin-ajax.php' ),
 				'query_nonce' => wp_create_nonce( 'moksafowo-payuni-query' ),
-				'error_msg'   => __( '連線錯誤，請稍後再試。', 'mo-ectools' ),
+				'error_msg'   => __( '連線錯誤，請稍後再試。', 'moksa-for-woocommerce' ),
 			)
 		);
 	}
@@ -212,17 +212,17 @@ class PayuniPayment {
 	public function moksafowo_payuni_ajax_query_payment() {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- AJAX handler; wp_verify_nonce() called at method entry; nonce token raw read is intentional.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( '權限不足。', 'mo-ectools' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ), 403 );
 		}
 		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'moksafowo-payuni-query' ) ) {
-			wp_send_json_error( array( 'message' => __( '安全驗證失敗，請重新整理後再試。', 'mo-ectools' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( '安全驗證失敗，請重新整理後再試。', 'moksa-for-woocommerce' ) ), 403 );
 		}
 
 		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( '找不到此訂單。', 'mo-ectools' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( '找不到此訂單。', 'moksa-for-woocommerce' ) ), 404 );
 		}
 
 		$reserved_transaction_id = $order->get_transaction_id();
@@ -232,19 +232,19 @@ class PayuniPayment {
 			if ( $request->query( $order->get_id() ) !== false ) {
 				$return = array(
 					'success' => true,
-					'message' => __( 'PAYUNi 訂單查詢成功。', 'mo-ectools' ),
+					'message' => __( 'PAYUNi 訂單查詢成功。', 'moksa-for-woocommerce' ),
 				);
 				wp_send_json( $return );
 			} else {
 				$return = array(
 					'success' => false,
-					'message' => __( 'PAYUNi 訂單查詢失敗，詳情請見訂單備註。', 'mo-ectools' ),
+					'message' => __( 'PAYUNi 訂單查詢失敗，詳情請見訂單備註。', 'moksa-for-woocommerce' ),
 				);
 				wp_send_json( $return );
 			}
 		} catch ( \Exception $e ) {
 
-			$order->add_order_note( __( 'PAYUNi 訂單查詢失敗：', 'mo-ectools' ) . $e->getMessage() );
+			$order->add_order_note( __( 'PAYUNi 訂單查詢失敗：', 'moksa-for-woocommerce' ) . $e->getMessage() );
 			$return = array(
 				'success' => false,
 				'message' => $e->getMessage(),

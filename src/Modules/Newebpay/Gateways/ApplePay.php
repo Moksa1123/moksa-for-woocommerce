@@ -17,10 +17,10 @@ final class ApplePay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 Apple Pay', 'mo-ectools' );
+		return __( '藍新 Apple Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用 Apple Pay 快速付款，需 Safari 或 iOS 裝置，跳轉至藍新付款頁完成。', 'mo-ectools' );
+		return __( '使用 Apple Pay 快速付款，需 Safari 或 iOS 裝置，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
 	}
 }

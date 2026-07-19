@@ -43,19 +43,19 @@ final class EmailTrackingSection {
 	}
 
 	private static function render_html( array $entries ): void {
-		echo '<h2 style="color:#1f2937;font-size:18px;margin:24px 0 10px;">' . esc_html__( '貨態查詢', 'mo-ectools' ) . '</h2>';
+		echo '<h2 style="color:#1f2937;font-size:18px;margin:24px 0 10px;">' . esc_html__( '貨態查詢', 'moksa-for-woocommerce' ) . '</h2>';
 		echo '<table cellspacing="0" cellpadding="8" border="1" style="width:100%;border-collapse:collapse;border-color:#e5e7eb;margin-bottom:16px;">';
 		echo '<thead><tr style="background:#f8fafc;">';
-		echo '<th align="left">' . esc_html__( '物流商', 'mo-ectools' ) . '</th>';
-		echo '<th align="left">' . esc_html__( '貨號', 'mo-ectools' ) . '</th>';
-		echo '<th align="left">' . esc_html__( '查詢連結', 'mo-ectools' ) . '</th>';
+		echo '<th align="left">' . esc_html__( '物流商', 'moksa-for-woocommerce' ) . '</th>';
+		echo '<th align="left">' . esc_html__( '貨號', 'moksa-for-woocommerce' ) . '</th>';
+		echo '<th align="left">' . esc_html__( '查詢連結', 'moksa-for-woocommerce' ) . '</th>';
 		echo '</tr></thead><tbody>';
 		foreach ( $entries as $e ) {
 			$is_direct = 'direct' === $e['mode'];
 			$carrier   = '' !== $e['temp_label'] ? $e['carrier'] . '（' . $e['temp_label'] . '）' : $e['carrier'];
 			$link_text = $is_direct
-				? __( '一鍵查詢', 'mo-ectools' )
-				: __( '前往查詢頁', 'mo-ectools' );
+				? __( '一鍵查詢', 'moksa-for-woocommerce' )
+				: __( '前往查詢頁', 'moksa-for-woocommerce' );
 			echo '<tr>';
 			echo '<td>' . esc_html( $carrier ) . '</td>';
 			echo '<td style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;">' . esc_html( $e['tracking_no'] ) . '</td>';
@@ -63,18 +63,18 @@ final class EmailTrackingSection {
 			echo '</tr>';
 		}
 		echo '</tbody></table>';
-		echo '<p style="font-size:12px;color:#64748b;margin:-8px 0 16px;">' . esc_html__( '※ 黑貓宅急便為一鍵查詢，其他物流請複製貨號後到該物流網站貼上查詢。', 'mo-ectools' ) . '</p>';
+		echo '<p style="font-size:12px;color:#64748b;margin:-8px 0 16px;">' . esc_html__( '※ 黑貓宅急便為一鍵查詢，其他物流請複製貨號後到該物流網站貼上查詢。', 'moksa-for-woocommerce' ) . '</p>';
 	}
 
 	private static function render_plain( array $entries ): void {
-		echo "\n= " . esc_html__( '貨態查詢', 'mo-ectools' ) . " =\n\n";
+		echo "\n= " . esc_html__( '貨態查詢', 'moksa-for-woocommerce' ) . " =\n\n";
 		foreach ( $entries as $e ) {
 			$carrier = '' !== $e['temp_label'] ? $e['carrier'] . '（' . $e['temp_label'] . '）' : $e['carrier'];
 			echo esc_html( $carrier ) . " — \n";
 			if ( '' !== $e['tracking_no'] ) {
-				echo '  ' . esc_html__( '貨號：', 'mo-ectools' ) . esc_html( $e['tracking_no'] ) . "\n";
+				echo '  ' . esc_html__( '貨號：', 'moksa-for-woocommerce' ) . esc_html( $e['tracking_no'] ) . "\n";
 			}
-			echo '  ' . esc_html__( '查詢：', 'mo-ectools' ) . esc_url( $e['url'] ) . "\n\n";
+			echo '  ' . esc_html__( '查詢：', 'moksa-for-woocommerce' ) . esc_url( $e['url'] ) . "\n\n";
 		}
 	}
 }

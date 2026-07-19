@@ -27,7 +27,7 @@ final class CreateOrder {
 		if ( '' === $method_id ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單無速買配運送方式。', 'mo-ectools' ),
+				'message' => __( '訂單無速買配運送方式。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -36,7 +36,7 @@ final class CreateOrder {
 		if ( '' === $sender['name'] || '' === $sender['phone'] ) {
 			return [
 				'ok'      => false,
-				'message' => __( '請先到「WooCommerce → Moksa → 速買配 物流 → 寄件人資料」填入姓名與手機。', 'mo-ectools' ),
+				'message' => __( '請先到「WooCommerce → Moksa → 速買配 物流 → 寄件人資料」填入姓名與手機。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -50,7 +50,7 @@ final class CreateOrder {
 		if ( ! $is_cvs && ! $is_tcat ) {
 			return [
 				'ok'      => false,
-				'message' => __( '不認得此速買配運送方式。', 'mo-ectools' ),
+				'message' => __( '不認得此速買配運送方式。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -60,7 +60,7 @@ final class CreateOrder {
 			$step1 = self::do_step1_request_smseid( $order, $is_cvs, $method_id );
 			if ( ! $step1['ok'] ) {
 				/* translators: %s: error message */
-				$order->add_order_note( sprintf( __( '速買配建單失敗：%s', 'mo-ectools' ), $step1['message'] ) );
+				$order->add_order_note( sprintf( __( '速買配建單失敗：%s', 'moksa-for-woocommerce' ), $step1['message'] ) );
 				$order->save();
 				return $step1;
 			}
@@ -71,7 +71,7 @@ final class CreateOrder {
 		if ( '' === $smseid ) {
 			return [
 				'ok'      => false,
-				'message' => __( '速買配建單失敗：未取得物流序號。', 'mo-ectools' ),
+				'message' => __( '速買配建單失敗：未取得物流序號。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -89,7 +89,7 @@ final class CreateOrder {
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒有商品可建立物流單。', 'mo-ectools' ),
+				'message' => __( '訂單沒有商品可建立物流單。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -122,7 +122,7 @@ final class CreateOrder {
 			if ( ! $step1['ok'] ) {
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: msg */
-					__( '溫層 %1$s 取序號失敗：%2$s', 'mo-ectools' ),
+					__( '溫層 %1$s 取序號失敗：%2$s', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$step1['message']
 				);
@@ -131,7 +131,7 @@ final class CreateOrder {
 			$smseid = (string) ( $step1['smseid'] ?? '' );
 			if ( '' === $smseid ) {
 				/* translators: %s: temperature layer label */
-				$errors[] = sprintf( __( '溫層 %s 建單失敗：未取得物流序號。', 'mo-ectools' ), ProductTemp::label( $temp ) );
+				$errors[] = sprintf( __( '溫層 %s 建單失敗：未取得物流序號。', 'moksa-for-woocommerce' ), ProductTemp::label( $temp ) );
 				continue;
 			}
 
@@ -141,7 +141,7 @@ final class CreateOrder {
 			if ( ! $step2['ok'] ) {
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: msg */
-					__( '溫層 %1$s 取託運單失敗：%2$s', 'mo-ectools' ),
+					__( '溫層 %1$s 取託運單失敗：%2$s', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$step2['message']
 				);
@@ -163,8 +163,8 @@ final class CreateOrder {
 		}
 
 		if ( empty( $created ) && empty( $existing ) ) {
-			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'mo-ectools' );
-			$order->add_order_note( __( '速買配物流單建立失敗：', 'mo-ectools' ) . $msg );
+			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'moksa-for-woocommerce' );
+			$order->add_order_note( __( '速買配物流單建立失敗：', 'moksa-for-woocommerce' ) . $msg );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -201,7 +201,7 @@ final class CreateOrder {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: count, 2: list */
-					__( '速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'mo-ectools' ),
+					__( '速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s', 'moksa-for-woocommerce' ),
 					count( $created ),
 					"\n" . implode( "\n", $lines )
 				)
@@ -211,7 +211,7 @@ final class CreateOrder {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: temp label, 2: smilepay order no, 3: tracking no */
-					__( '速買配黑貓宅配建單成功 — %1$s（物流序號 %2$s 託運單號 %3$s）', 'mo-ectools' ),
+					__( '速買配黑貓宅配建單成功 — %1$s（物流序號 %2$s 託運單號 %3$s）', 'moksa-for-woocommerce' ),
 					ProductTemp::label( (int) $r['temp'] ),
 					(string) $r['smseid'],
 					(string) $r['track_num']
@@ -220,7 +220,7 @@ final class CreateOrder {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( '部分溫層建單失敗：', 'mo-ectools' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( __( '部分溫層建單失敗：', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
 		}
 
 		$order->save();
@@ -300,7 +300,7 @@ final class CreateOrder {
 		if ( $is_cvs && '' === $store_id ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此 CVS 訂單尚未選店。請顧客在結帳頁選店或商家手動指定。', 'mo-ectools' ),
+				'message' => __( '此 CVS 訂單尚未選店。請顧客在結帳頁選店或商家手動指定。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -342,7 +342,7 @@ final class CreateOrder {
 		$result = ShippingRequest::confirm_cvs( $smseid, $pay_subzg, $cvs_service_type, $is_cod );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			$order->add_order_note( sprintf( __( '速買配超商建單失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			$order->add_order_note( sprintf( __( '速買配超商建單失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) );
 			$order->save();
 			return $result;
 		}
@@ -354,7 +354,7 @@ final class CreateOrder {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: smilepay order no, 2: pickup code */
-				__( '速買配超商建單成功（物流序號 %1$s 取貨碼 %2$s）', 'mo-ectools' ),
+				__( '速買配超商建單成功（物流序號 %1$s 取貨碼 %2$s）', 'moksa-for-woocommerce' ),
 				$smseid,
 				$result['payment_no'] ?? $result['eshop_order_no'] ?? '-'
 			)
@@ -380,7 +380,7 @@ final class CreateOrder {
 		$result = ShippingRequest::confirm_tcat( $smseid, $temperature );
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			$order->add_order_note( sprintf( __( '速買配黑貓宅配建單失敗：%s', 'mo-ectools' ), $result['message'] ) );
+			$order->add_order_note( sprintf( __( '速買配黑貓宅配建單失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) );
 			$order->save();
 			return $result;
 		}
@@ -389,7 +389,7 @@ final class CreateOrder {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: smilepay order no, 2: tracking no */
-				__( '速買配黑貓宅配建單成功（物流序號 %1$s 託運單號 %2$s）', 'mo-ectools' ),
+				__( '速買配黑貓宅配建單成功（物流序號 %1$s 託運單號 %2$s）', 'moksa-for-woocommerce' ),
 				$smseid,
 				$result['track_num'] ?? '-'
 			)

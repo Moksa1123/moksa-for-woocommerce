@@ -18,7 +18,7 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 	}
 
 	protected static function provider_label(): string {
-		return __( 'AMEGO', 'mo-ectools' );
+		return __( 'AMEGO', 'moksa-for-woocommerce' );
 	}
 
 	protected static function nonce_action(): string {
@@ -67,8 +67,8 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 
 	protected static function extra_card_meta( \WC_Order $order ): array {
 		return [
-			__( '隨機碼', 'mo-ectools' ) => (string) $order->get_meta( Keys::AMEGO_INVOICE_RANDOM_NUM ),
-			__( '條碼', 'mo-ectools' )  => (string) $order->get_meta( Keys::AMEGO_INVOICE_BARCODE ),
+			__( '隨機碼', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::AMEGO_INVOICE_RANDOM_NUM ),
+			__( '條碼', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::AMEGO_INVOICE_BARCODE ),
 		];
 	}
 }

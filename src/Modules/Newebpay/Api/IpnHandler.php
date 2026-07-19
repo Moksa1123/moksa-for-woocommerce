@@ -122,7 +122,7 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: payment type, 2: trade no */
-					__( '藍新付款完成 — %1$s（交易編號 %2$s）', 'mo-ectools' ),
+					__( '藍新付款完成 — %1$s（交易編號 %2$s）', 'moksa-for-woocommerce' ),
 					self::payment_type_label( $payment_type ),
 					$trade_no
 				)
@@ -132,7 +132,7 @@ final class IpnHandler {
 				'on-hold',
 				sprintf(
 				/* translators: 1: payment type, 2: status */
-					__( '藍新已產生 %1$s 付款資訊，等待顧客付款（狀態 %2$s）', 'mo-ectools' ),
+					__( '藍新已產生 %1$s 付款資訊，等待顧客付款（狀態 %2$s）', 'moksa-for-woocommerce' ),
 					self::payment_type_label( $payment_type ),
 					$status
 				)
@@ -141,7 +141,7 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: status, 2: message */
-					__( '藍新付款失敗：%1$s（%2$s）', 'mo-ectools' ),
+					__( '藍新付款失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
 					$status,
 					$message
 				)

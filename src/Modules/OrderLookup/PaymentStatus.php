@@ -26,7 +26,7 @@ final class PaymentStatus {
 		$id    = absint( preg_replace( '/[^0-9]/', '', $ref ) );
 		$order = $id ? wc_get_order( $id ) : false;
 		if ( ! $order || 'shop_order' !== $order->get_type() ) {
-			return array( 'message' => __( '找不到訂單。', 'mo-ectools' ) );
+			return array( 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 
 		$date_paid = $order->get_date_paid();
@@ -74,7 +74,7 @@ final class PaymentStatus {
 		if ( empty( $result['ok'] ) ) {
 			return array(
 				'ok'      => false,
-				'message' => (string) ( $result['message'] ?? __( '查詢失敗', 'mo-ectools' ) ),
+				'message' => (string) ( $result['message'] ?? __( '查詢失敗', 'moksa-for-woocommerce' ) ),
 			);
 		}
 		$data = (array) ( $result['data'] ?? array() );

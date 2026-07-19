@@ -31,12 +31,12 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::SMILEPAY_PAY_ATM_BANK_NO );
 			if ( '' !== $bank ) {
 				$rows[] = [
-					'label' => __( '銀行代碼', 'mo-ectools' ),
+					'label' => __( '銀行代碼', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
-				'label' => __( '虛擬帳號', 'mo-ectools' ),
+				'label' => __( '虛擬帳號', 'moksa-for-woocommerce' ),
 				'value' => $atm_acct,
 			];
 			return $rows;
@@ -45,7 +45,7 @@ final class CustomerPaymentInfo {
 		if ( '' !== $ibon_no ) {
 			return [
 				[
-					'label' => __( 'ibon 繳費代碼', 'mo-ectools' ),
+					'label' => __( 'ibon 繳費代碼', 'moksa-for-woocommerce' ),
 					'value' => $ibon_no,
 				],
 			];
@@ -54,7 +54,7 @@ final class CustomerPaymentInfo {
 		if ( '' !== $fami_no ) {
 			return [
 				[
-					'label' => __( 'FamiPort 繳費代碼', 'mo-ectools' ),
+					'label' => __( 'FamiPort 繳費代碼', 'moksa-for-woocommerce' ),
 					'value' => $fami_no,
 				],
 			];
@@ -66,7 +66,7 @@ final class CustomerPaymentInfo {
 				$bc = (string) $order->get_meta( $key );
 				if ( '' !== $bc ) {
 					/* translators: %d: barcode segment index */
-					$label  = sprintf( __( '條碼第 %d 段', 'mo-ectools' ), $i + 1 );
+					$label  = sprintf( __( '條碼第 %d 段', 'moksa-for-woocommerce' ), $i + 1 );
 					$rows[] = [
 						'label' => $label,
 						'value' => $bc,

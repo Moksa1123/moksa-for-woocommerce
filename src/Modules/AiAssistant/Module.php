@@ -22,7 +22,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'Moksa AI（Beta）— 用一句話查訂單 / 數量 / 狀態', 'mo-ectools' );
+		return __( 'Moksa AI（Beta）— 用一句話查訂單 / 數量 / 狀態', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -34,7 +34,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function tagline(): string {
-		return __( '需 WordPress 7.0 並設定 AI 金鑰', 'mo-ectools' );
+		return __( '需 WordPress 7.0 並設定 AI 金鑰', 'moksa-for-woocommerce' );
 	}
 
 	public function boot(): void {
@@ -67,8 +67,8 @@ final class Module extends AbstractModule {
 			$ver,
 			true
 		);
-		$greeting = (string) get_option( 'moksafowo_ai_greeting', __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'mo-ectools' ) );
-		$ex_raw   = (string) get_option( 'moksafowo_ai_examples', __( '待出貨有幾筆?,各狀態訂單數量', 'mo-ectools' ) );
+		$greeting = (string) get_option( 'moksafowo_ai_greeting', __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'moksa-for-woocommerce' ) );
+		$ex_raw   = (string) get_option( 'moksafowo_ai_examples', __( '待出貨有幾筆?,各狀態訂單數量', 'moksa-for-woocommerce' ) );
 		$examples = array_values( array_filter( array_map( 'trim', explode( ',', $ex_raw ) ) ) );
 
 		wp_localize_script(
@@ -78,13 +78,13 @@ final class Module extends AbstractModule {
 				'name'        => Config::NAME,
 				'userId'      => get_current_user_id(),
 				'greeting'    => $greeting,
-				'placeholder' => __( '例如:待出貨有幾筆?', 'mo-ectools' ),
+				'placeholder' => __( '例如:待出貨有幾筆?', 'moksa-for-woocommerce' ),
 				'examples'    => $examples,
-				'sendLabel'   => __( '送出', 'mo-ectools' ),
-				'thinking'    => __( '查詢中', 'mo-ectools' ),
-				'clearLabel'  => __( '清除', 'mo-ectools' ),
-				'errorPrefix' => __( '發生錯誤', 'mo-ectools' ),
-				'emptyReply'  => __( '（無回覆）', 'mo-ectools' ),
+				'sendLabel'   => __( '送出', 'moksa-for-woocommerce' ),
+				'thinking'    => __( '查詢中', 'moksa-for-woocommerce' ),
+				'clearLabel'  => __( '清除', 'moksa-for-woocommerce' ),
+				'errorPrefix' => __( '發生錯誤', 'moksa-for-woocommerce' ),
+				'emptyReply'  => __( '（無回覆）', 'moksa-for-woocommerce' ),
 			]
 		);
 	}

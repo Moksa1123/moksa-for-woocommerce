@@ -30,7 +30,7 @@ class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'shipping',
-			'title' => __( '物流資訊', 'mo-ectools' ),
+			'title' => __( '物流資訊', 'moksa-for-woocommerce' ),
 			'html'  => self::card_html( $order ),
 		];
 		return $cards;
@@ -60,28 +60,28 @@ class OrderMetaBox {
 
 		ob_start();
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
-		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '物流交易序號', 'mo-ectools' ) . '</div></th><td>' . esc_html( $order->get_meta( OrderMeta::ShipTradeNo ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '物流交易序號', 'moksa-for-woocommerce' ) . '</div></th><td>' . esc_html( $order->get_meta( OrderMeta::ShipTradeNo ) ) . '</td></tr>';
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $provider_query_html built locally with esc_url applied
-		echo '<tr><th style="text-align:left;">' . esc_html__( '物流單號', 'mo-ectools' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流單號', 'moksa-for-woocommerce' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
 
 		if ( $ship_type === ShipType::SEVEN ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( '門市代碼', 'mo-ectools' ) . '</th><td>' . esc_html( $partner_id ) . '</td></tr>';
-			echo '<tr><th style="text-align:left;">' . esc_html__( '訂單號碼', 'mo-ectools' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '門市代碼', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $partner_id ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '訂單號碼', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
 
 			if ( $lgs_type === LgsType::C2C ) {
-				echo '<tr><th style="text-align:left;">' . esc_html__( '驗證碼', 'mo-ectools' ) . '</th><td>' . esc_html( $validation_no ) . '</td></tr>';
+				echo '<tr><th style="text-align:left;">' . esc_html__( '驗證碼', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $validation_no ) . '</td></tr>';
 			}
 		}
-		echo '<tr><th style="text-align:left;">' . esc_html__( '物流類型', 'mo-ectools' ) . '</th><td>' . esc_html( ShipType::get_name( $ship_type ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( '配送方式', 'mo-ectools' ) . '</th><td>' . esc_html( LgsType::get_name( $lgs_type ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( '商品類型', 'mo-ectools' ) . '</th><td>' . esc_html( GoodsType::get_name( $goods_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流類型', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( ShipType::get_name( $ship_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '配送方式', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( LgsType::get_name( $lgs_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '商品類型', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( GoodsType::get_name( $goods_type ) ) . '</td></tr>';
 
 		if ( $ship_type === ShipType::TCAT ) {
 			$package_spec         = $order->get_meta( OrderMeta::PackageSpec );
 			$package_spec_options = self::get_package_spec_options( $goods_type );
 
-			echo '<tr><th style="text-align:left;">' . esc_html__( '包裹規格', 'mo-ectools' ) . '</th><td>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '包裹規格', 'moksa-for-woocommerce' ) . '</th><td>';
 			echo '<select id="package-spec-select" style="font-size:12px;height:24px;line-height:22px;padding:0 4px;margin:0;vertical-align:middle;box-sizing:border-box;max-width:140px;" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
 			foreach ( $package_spec_options as $value => $label ) {
 				$selected = selected( $package_spec, $value, false );
@@ -92,28 +92,28 @@ class OrderMetaBox {
 			echo '</td></tr>';
 		}
 
-		echo '<tr><th style="text-align:left;">' . esc_html__( '服務類型', 'mo-ectools' ) . '</th><td>' . esc_html( ServiceType::get_name( $service_type ) ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '服務類型', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( ServiceType::get_name( $service_type ) ) . '</td></tr>';
 
 		if ( $order->get_payment_method() === 'cod' || $service_type === ServiceType::COD ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( '代收金額', 'mo-ectools' ) . '</th><td>' . esc_html( $trade_amt ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '代收金額', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $trade_amt ) . '</td></tr>';
 		}
 
-		echo '<tr><th style="text-align:left;">' . esc_html__( '物流狀態', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態說明', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_desc ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態時間', 'mo-ectools' ) . '</th><td>' . esc_html( $ship_status_time ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '物流狀態', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $ship_status ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態說明', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $ship_status_desc ) . '</td></tr>';
+		echo '<tr><th style="text-align:left;">' . esc_html__( '狀態時間', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $ship_status_time ) . '</td></tr>';
 
 		if ( $ship_type === ShipType::TCAT ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( '列印時間', 'mo-ectools' ) . '</th><td>' . esc_html( $print_date ) . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( '列印時間', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $print_date ) . '</td></tr>';
 		}
 
 		if ( ! empty( $shipping_no ) && $ship_type === ShipType::TCAT ) {
-			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_download_label">' . esc_html__( '下載標籤', 'mo-ectools' ) . '</button>';
+			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_download_label">' . esc_html__( '下載標籤', 'moksa-for-woocommerce' ) . '</button>';
 		} else {
-			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( '列印標籤', 'mo-ectools' ) . '</button>';
+			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( '列印標籤', 'moksa-for-woocommerce' ) . '</button>';
 		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label_btn built locally with esc_attr/esc_html applied
-		echo '<tr id="moksafowo-payuni-action"><th style="text-align:left;">' . esc_html__( '物流單動作', 'mo-ectools' ) . '</th><td>' . $label_btn . '<button class="button update-delivery-status" data-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '查詢', 'mo-ectools' ) . '</button></td></tr>';
+		echo '<tr id="moksafowo-payuni-action"><th style="text-align:left;">' . esc_html__( '物流單動作', 'moksa-for-woocommerce' ) . '</th><td>' . $label_btn . '<button class="button update-delivery-status" data-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( '查詢', 'moksa-for-woocommerce' ) . '</button></td></tr>';
 		echo '</table>';
 
 		return (string) ob_get_clean();

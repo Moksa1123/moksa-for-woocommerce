@@ -21,7 +21,7 @@ final class CreateShipment {
 		if ( '' === $store_id ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單缺少取貨門市資訊，請顧客先選店或商家手動指定。', 'mo-ectools' ),
+				'message' => __( '訂單缺少取貨門市資訊，請顧客先選店或商家手動指定。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -43,7 +43,7 @@ final class CreateShipment {
 		if ( '' === $sender_name || ( '' === $sender_phone && '' === $sender_cellphone ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '請先到「WooCommerce → Moksa → 藍新物流 → 寄件人資料」填入姓名與電話。', 'mo-ectools' ),
+				'message' => __( '請先到「WooCommerce → Moksa → 藍新物流 → 寄件人資料」填入姓名與電話。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -82,7 +82,7 @@ final class CreateShipment {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error */
-					__( '藍新物流建單失敗：%s', 'mo-ectools' ),
+					__( '藍新物流建單失敗：%s', 'moksa-for-woocommerce' ),
 					$result['message']
 				)
 			);
@@ -106,7 +106,7 @@ final class CreateShipment {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: shipping tracking number, 2: logistics service type */
-				__( '藍新物流建單成功 — 物流單號 %1$s（服務類型 %2$s）', 'mo-ectools' ),
+				__( '藍新物流建單成功 — 物流單號 %1$s（服務類型 %2$s）', 'moksa-for-woocommerce' ),
 				$lgs_no,
 				$lgs_type
 			)

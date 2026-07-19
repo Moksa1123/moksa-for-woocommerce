@@ -39,7 +39,7 @@ final class LinepayBlocksMethod extends AbstractPaymentMethodType {
 		);
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'moksafowo-linepay-blocks', 'mo-ectools' );
+			wp_set_script_translations( 'moksafowo-linepay-blocks', 'moksa-for-woocommerce' );
 		}
 
 		return array( 'moksafowo-linepay-blocks' );

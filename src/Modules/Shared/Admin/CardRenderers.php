@@ -56,7 +56,7 @@ final class CardRenderers {
 		if ( '' !== $html ) {
 			$cards[] = [
 				'slot'  => 'payment',
-				'title' => __( '金流資訊', 'mo-ectools' ),
+				'title' => __( '金流資訊', 'moksa-for-woocommerce' ),
 				'html'  => $html . self::render_refund_block( $order ),
 			];
 		}
@@ -79,7 +79,7 @@ final class CardRenderers {
 		if ( '' !== $html ) {
 			$cards[] = [
 				'slot'  => 'invoice',
-				'title' => __( '發票資訊', 'mo-ectools' ),
+				'title' => __( '發票資訊', 'moksa-for-woocommerce' ),
 				'html'  => $html,
 			];
 		}
@@ -101,34 +101,34 @@ final class CardRenderers {
 		// 沒任何 PAYUNi 交易資料 → 顯示「尚未付款」明確訊息（不 fallback 到 placeholder）
 		if ( '' === $mer_trade_no && '' === $trade_no ) {
 			ob_start();
-			echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ?: 'PAYUNi' ) . '</p>';
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客完成 PAYUNi 付款流程。', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ?: 'PAYUNi' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客完成 PAYUNi 付款流程。', 'moksa-for-woocommerce' ) . '</p>';
 			return (string) ob_get_clean();
 		}
 
 		ob_start();
-		echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ?: 'PAYUNi' ) . '</p>';
+		echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ?: 'PAYUNi' ) . '</p>';
 		if ( '' !== $trade_no ) {
-			echo '<p><strong>' . esc_html__( 'PAYUNi 交易編號：', 'mo-ectools' ) . '</strong>' . esc_html( $trade_no ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'PAYUNi 交易編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $trade_no ) . '</p>';
 		}
 		if ( '' !== $mer_trade_no ) {
-			echo '<p><strong>' . esc_html__( '商家交易編號：', 'mo-ectools' ) . '</strong>' . esc_html( $mer_trade_no ) . '</p>';
+			echo '<p><strong>' . esc_html__( '商家交易編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $mer_trade_no ) . '</p>';
 		}
 		if ( '' !== $card4no ) {
-			echo '<p><strong>' . esc_html__( '卡末四碼：', 'mo-ectools' ) . '</strong>' . esc_html( $card4no );
+			echo '<p><strong>' . esc_html__( '卡末四碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $card4no );
 			if ( '' !== $bank ) {
 				echo ' <span style="color:#646970;font-size:11px;">(' . esc_html( $bank ) . ')</span>';
 			}
 			echo '</p>';
 		}
 		if ( '' !== $auth_code ) {
-			echo '<p><strong>' . esc_html__( '授權碼：', 'mo-ectools' ) . '</strong>' . esc_html( $auth_code ) . '</p>';
+			echo '<p><strong>' . esc_html__( '授權碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $auth_code ) . '</p>';
 		}
 		if ( '' !== $inst && '0' !== $inst ) {
-			echo '<p><strong>' . esc_html__( '分期：', 'mo-ectools' ) . '</strong>' . esc_html( $inst ) . esc_html__( ' 期', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '分期：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $inst ) . esc_html__( ' 期', 'moksa-for-woocommerce' ) . '</p>';
 		}
 		if ( '' !== $paid_at ) {
-			echo '<p><strong>' . esc_html__( '付款時間：', 'mo-ectools' ) . '</strong>' . esc_html( $paid_at ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $paid_at ) . '</p>';
 		}
 		return (string) ob_get_clean();
 	}
@@ -145,42 +145,42 @@ final class CardRenderers {
 		// 沒任何 NewebPay 交易資料 → 顯示「尚未付款」
 		if ( '' === $mtn && '' === $trade_no ) {
 			ob_start();
-			echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html( $method_title ?: 'NewebPay' ) . '</p>';
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客在藍新付款頁完成付款。', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ?: 'NewebPay' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客在藍新付款頁完成付款。', 'moksa-for-woocommerce' ) . '</p>';
 			return (string) ob_get_clean();
 		}
 
 		ob_start();
-		echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html( self::newebpay_pay_type_label( $pay_type ) ?: ( $method_title ?: 'NewebPay' ) ) . '</p>';
+		echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::newebpay_pay_type_label( $pay_type ) ?: ( $method_title ?: 'NewebPay' ) ) . '</p>';
 		if ( '' !== $trade_no ) {
-			echo '<p><strong>' . esc_html__( '藍新交易編號：', 'mo-ectools' ) . '</strong>' . esc_html( $trade_no ) . '</p>';
+			echo '<p><strong>' . esc_html__( '藍新交易編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $trade_no ) . '</p>';
 		}
 		if ( '' !== $mtn ) {
-			echo '<p><strong>' . esc_html__( '商家交易編號：', 'mo-ectools' ) . '</strong>' . esc_html( $mtn ) . '</p>';
+			echo '<p><strong>' . esc_html__( '商家交易編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $mtn ) . '</p>';
 		}
 		if ( '' !== $card4no ) {
-			echo '<p><strong>' . esc_html__( '卡末四碼：', 'mo-ectools' ) . '</strong>' . esc_html( $card4no ) . '</p>';
+			echo '<p><strong>' . esc_html__( '卡末四碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $card4no ) . '</p>';
 		}
 		if ( '' !== $pay_time ) {
-			echo '<p><strong>' . esc_html__( '付款時間：', 'mo-ectools' ) . '</strong>' . esc_html( $pay_time ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $pay_time ) . '</p>';
 		}
 		// 各付款類型專屬：CVS 代碼 / VACC 帳號 / Barcode 條碼
 		if ( 'CVS' === $pay_type ) {
 			$code   = (string) $order->get_meta( Keys::NEWEBPAY_CVS_CODE_NO );
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_CVS_EXPIRE_DATE );
 			if ( '' !== $code ) {
-				echo '<p><strong>' . esc_html__( '繳費代碼：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $code ) . '</span></p>';
+				echo '<p><strong>' . esc_html__( '繳費代碼：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $code ) . '</span></p>';
 			}
 			if ( '' !== $expire ) {
-				echo '<p><strong>' . esc_html__( '繳費期限：', 'mo-ectools' ) . '</strong>' . esc_html( $expire ) . '</p>';
+				echo '<p><strong>' . esc_html__( '繳費期限：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $expire ) . '</p>';
 			}
 		} elseif ( 'VACC' === $pay_type ) {
 			$bank = (string) $order->get_meta( Keys::NEWEBPAY_ATM_BANK_CODE );
 			$acct = (string) $order->get_meta( Keys::NEWEBPAY_ATM_CODE_NO );
 			if ( '' !== $acct ) {
-				echo '<p><strong>' . esc_html__( '虛擬帳號：', 'mo-ectools' ) . '</strong>';
+				echo '<p><strong>' . esc_html__( '虛擬帳號：', 'moksa-for-woocommerce' ) . '</strong>';
 				if ( '' !== $bank ) {
-					echo esc_html__( '銀行 ', 'mo-ectools' ) . esc_html( $bank ) . ' - ';
+					echo esc_html__( '銀行 ', 'moksa-for-woocommerce' ) . esc_html( $bank ) . ' - ';
 				}
 				echo '<span style="font-family:monospace;">' . esc_html( $acct ) . '</span></p>';
 			}
@@ -194,7 +194,7 @@ final class CardRenderers {
 				$bc = (string) $order->get_meta( $barcode_keys[ $i ] );
 				if ( '' !== $bc ) {
 					/* translators: %d: barcode index */
-					echo '<p><strong>' . esc_html( sprintf( __( '條碼 %d：', 'mo-ectools' ), $i ) ) . '</strong><span style="font-family:monospace;">' . esc_html( $bc ) . '</span></p>';
+					echo '<p><strong>' . esc_html( sprintf( __( '條碼 %d：', 'moksa-for-woocommerce' ), $i ) ) . '</strong><span style="font-family:monospace;">' . esc_html( $bc ) . '</span></p>';
 				}
 			}
 		}
@@ -220,35 +220,35 @@ final class CardRenderers {
 		// 沒任何 LinePay 交易資料 → 顯示「尚未付款」（含 checkout-draft 訂單）
 		if ( '' === $tx && '' === $status ) {
 			ob_start();
-			echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html__( 'LINE Pay', 'mo-ectools' ) . '</p>';
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客在 LINE Pay 完成付款。', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'LINE Pay', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未付款 — 等待顧客在 LINE Pay 完成付款。', 'moksa-for-woocommerce' ) . '</p>';
 			return (string) ob_get_clean();
 		}
 
 		$status_label = self::linepay_status_label( $status );
 
 		ob_start();
-		echo '<p><strong>' . esc_html__( '付款方式：', 'mo-ectools' ) . '</strong>' . esc_html__( 'LINE Pay', 'mo-ectools' ) . '</p>';
+		echo '<p><strong>' . esc_html__( '付款方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'LINE Pay', 'moksa-for-woocommerce' ) . '</p>';
 		if ( '' !== $tx ) {
-			echo '<p><strong>' . esc_html__( 'LINE Pay 交易編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $tx ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( 'LINE Pay 交易編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $tx ) . '</span></p>';
 		}
 		if ( '' !== $order_id ) {
-			echo '<p><strong>' . esc_html__( '商家交易編號：', 'mo-ectools' ) . '</strong><span style="font-family:monospace;">' . esc_html( $order_id ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( '商家交易編號：', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $order_id ) . '</span></p>';
 		}
 		if ( '' !== $status_label ) {
-			echo '<p><strong>' . esc_html__( '交易狀態：', 'mo-ectools' ) . '</strong>' . esc_html( $status_label ) . '</p>';
+			echo '<p><strong>' . esc_html__( '交易狀態：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $status_label ) . '</p>';
 		}
 		if ( '' !== $pay_type && 'NORMAL' !== $pay_type ) {
-			echo '<p><strong>' . esc_html__( '付款類型：', 'mo-ectools' ) . '</strong>' . esc_html( $pay_type ) . '</p>';
+			echo '<p><strong>' . esc_html__( '付款類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $pay_type ) . '</p>';
 		}
 		if ( '' !== $auth_amt ) {
-			echo '<p><strong>' . esc_html__( '授權金額：', 'mo-ectools' ) . '</strong>NT$' . esc_html( (string) (int) $auth_amt ) . '</p>';
+			echo '<p><strong>' . esc_html__( '授權金額：', 'moksa-for-woocommerce' ) . '</strong>NT$' . esc_html( (string) (int) $auth_amt ) . '</p>';
 		}
 		if ( '' !== $auth_at ) {
-			echo '<p><strong>' . esc_html__( '授權時間：', 'mo-ectools' ) . '</strong>' . esc_html( $auth_at ) . '</p>';
+			echo '<p><strong>' . esc_html__( '授權時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $auth_at ) . '</p>';
 		}
 		if ( '' !== $refund_tx ) {
-			echo '<p style="color:#646970;font-size:11px;"><strong>' . esc_html__( '退款交易編號：', 'mo-ectools' ) . '</strong>' . esc_html( $refund_tx ) . '</p>';
+			echo '<p style="color:#646970;font-size:11px;"><strong>' . esc_html__( '退款交易編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $refund_tx ) . '</p>';
 		}
 		return (string) ob_get_clean();
 	}
@@ -273,39 +273,39 @@ final class CardRenderers {
 
 		if ( '' !== $inv ) {
 			if ( 'zero' === $inv ) {
-				echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '訂單金額為 0，未開立發票。', 'mo-ectools' ) . '</p>';
+				echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '訂單金額為 0，未開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 			} elseif ( 'negative' === $inv ) {
-				echo '<p style="color:#d63638;font-size:12px;">' . esc_html__( '訂單金額為負，無法開立發票。', 'mo-ectools' ) . '</p>';
+				echo '<p style="color:#d63638;font-size:12px;">' . esc_html__( '訂單金額為負，無法開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 			} else {
-				echo '<p><strong>' . esc_html__( '發票號碼：', 'mo-ectools' ) . '</strong>' . esc_html( $inv ) . '</p>';
+				echo '<p><strong>' . esc_html__( '發票號碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $inv ) . '</p>';
 				if ( '' !== $issued_at ) {
-					echo '<p><strong>' . esc_html__( '開立時間：', 'mo-ectools' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
+					echo '<p><strong>' . esc_html__( '開立時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
 				}
 				if ( '' !== $rand ) {
-					echo '<p><strong>' . esc_html__( '隨機碼：', 'mo-ectools' ) . '</strong>' . esc_html( $rand ) . '</p>';
+					echo '<p><strong>' . esc_html__( '隨機碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $rand ) . '</p>';
 				}
-				echo '<p><strong>' . esc_html__( '發票服務：', 'mo-ectools' ) . '</strong>' . esc_html__( 'ezPay', 'mo-ectools' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '發票服務：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'ezPay', 'moksa-for-woocommerce' ) . '</p>';
 				if ( '' !== $type ) {
-					echo '<p><strong>' . esc_html__( '發票類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
+					echo '<p><strong>' . esc_html__( '發票類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
 				}
 				if ( '' !== $ubn ) {
-					echo '<p><strong>' . esc_html__( '統一編號：', 'mo-ectools' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
+					echo '<p><strong>' . esc_html__( '統一編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
 				}
 				if ( '' !== $carrier_n ) {
-					echo '<p><strong>' . esc_html__( '載具編號：', 'mo-ectools' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
+					echo '<p><strong>' . esc_html__( '載具編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
 				}
 				if ( '' !== $invalid_at ) {
-					echo '<p style="color:#d63638;"><strong>' . esc_html__( '已作廢：', 'mo-ectools' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
+					echo '<p style="color:#d63638;"><strong>' . esc_html__( '已作廢：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
 				}
 			}
 		} else {
 			// 還沒開立發票，顯示已選的類型 + 「待開立」
-			echo '<p><strong>' . esc_html__( '發票服務：', 'mo-ectools' ) . '</strong>' . esc_html__( 'ezPay', 'mo-ectools' ) . '</p>';
-			echo '<p><strong>' . esc_html__( '發票類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票服務：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'ezPay', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
-				echo '<p><strong>' . esc_html__( '載具：', 'mo-ectools' ) . '</strong>' . esc_html( self::ezpay_carrier_label( $carrier_t ) ) . '</p>';
+				echo '<p><strong>' . esc_html__( '載具：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::ezpay_carrier_label( $carrier_t ) ) . '</p>';
 			}
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'mo-ectools' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		return (string) ob_get_clean();
@@ -313,18 +313,18 @@ final class CardRenderers {
 
 	private static function invoice_type_label( string $type ): string {
 		return [
-			'b2c_carrier' => __( '個人（含載具）', 'mo-ectools' ),
-			'b2b'         => __( '公司（三聯式）', 'mo-ectools' ),
-			'b2c_donate'  => __( '捐贈', 'mo-ectools' ),
+			'b2c_carrier' => __( '個人（含載具）', 'moksa-for-woocommerce' ),
+			'b2b'         => __( '公司（三聯式）', 'moksa-for-woocommerce' ),
+			'b2c_donate'  => __( '捐贈', 'moksa-for-woocommerce' ),
 		][ $type ] ?? $type;
 	}
 
 	private static function ezpay_carrier_label( string $carrier ): string {
 		return [
-			'member' => __( 'ezPay 會員載具', 'mo-ectools' ),
-			'mobile' => __( '手機條碼', 'mo-ectools' ),
-			'cert'   => __( '自然人憑證', 'mo-ectools' ),
-			'paper'  => __( '紙本', 'mo-ectools' ),
+			'member' => __( 'ezPay 會員載具', 'moksa-for-woocommerce' ),
+			'mobile' => __( '手機條碼', 'moksa-for-woocommerce' ),
+			'cert'   => __( '自然人憑證', 'moksa-for-woocommerce' ),
+			'paper'  => __( '紙本', 'moksa-for-woocommerce' ),
 		][ $carrier ] ?? $carrier;
 	}
 
@@ -347,38 +347,38 @@ final class CardRenderers {
 
 		if ( '' !== $inv ) {
 			if ( 'zero' === $inv ) {
-				echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '訂單金額為 0，未開立發票。', 'mo-ectools' ) . '</p>';
+				echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '訂單金額為 0，未開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 			} elseif ( 'negative' === $inv ) {
-				echo '<p style="color:#d63638;font-size:12px;">' . esc_html__( '訂單金額為負，無法開立發票。', 'mo-ectools' ) . '</p>';
+				echo '<p style="color:#d63638;font-size:12px;">' . esc_html__( '訂單金額為負，無法開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 			} else {
-				echo '<p><strong>' . esc_html__( '發票號碼：', 'mo-ectools' ) . '</strong>' . esc_html( $inv ) . '</p>';
+				echo '<p><strong>' . esc_html__( '發票號碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $inv ) . '</p>';
 				if ( '' !== $issued_at ) {
-					echo '<p><strong>' . esc_html__( '開立時間：', 'mo-ectools' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
+					echo '<p><strong>' . esc_html__( '開立時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
 				}
 				if ( '' !== $rand ) {
-					echo '<p><strong>' . esc_html__( '隨機碼：', 'mo-ectools' ) . '</strong>' . esc_html( $rand ) . '</p>';
+					echo '<p><strong>' . esc_html__( '隨機碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $rand ) . '</p>';
 				}
-				echo '<p><strong>' . esc_html__( '發票服務：', 'mo-ectools' ) . '</strong>' . esc_html__( 'SmilePay', 'mo-ectools' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '發票服務：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'SmilePay', 'moksa-for-woocommerce' ) . '</p>';
 				if ( '' !== $type ) {
-					echo '<p><strong>' . esc_html__( '發票類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
+					echo '<p><strong>' . esc_html__( '發票類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
 				}
 				if ( '' !== $ubn ) {
-					echo '<p><strong>' . esc_html__( '統一編號：', 'mo-ectools' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
+					echo '<p><strong>' . esc_html__( '統一編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
 				}
 				if ( '' !== $carrier_n ) {
-					echo '<p><strong>' . esc_html__( '載具編號：', 'mo-ectools' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
+					echo '<p><strong>' . esc_html__( '載具編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
 				}
 				if ( '' !== $invalid_at ) {
-					echo '<p style="color:#d63638;"><strong>' . esc_html__( '已作廢：', 'mo-ectools' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
+					echo '<p style="color:#d63638;"><strong>' . esc_html__( '已作廢：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
 				}
 			}
 		} else {
-			echo '<p><strong>' . esc_html__( '發票服務：', 'mo-ectools' ) . '</strong>' . esc_html__( 'SmilePay', 'mo-ectools' ) . '</p>';
-			echo '<p><strong>' . esc_html__( '發票類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票服務：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'SmilePay', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::invoice_type_label( $type ) ) . '</p>';
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
-				echo '<p><strong>' . esc_html__( '載具：', 'mo-ectools' ) . '</strong>' . esc_html( self::smilepay_carrier_label( $carrier_t ) ) . '</p>';
+				echo '<p><strong>' . esc_html__( '載具：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::smilepay_carrier_label( $carrier_t ) ) . '</p>';
 			}
-			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'mo-ectools' ) . '</p>';
+			echo '<p style="color:#646970;font-size:12px;">' . esc_html__( '尚未開立，可在此手動開立發票。', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		return (string) ob_get_clean();
@@ -386,10 +386,10 @@ final class CardRenderers {
 
 	private static function smilepay_carrier_label( string $carrier ): string {
 		return [
-			'member' => __( 'SmilePay 會員載具', 'mo-ectools' ),
-			'mobile' => __( '手機條碼', 'mo-ectools' ),
-			'cert'   => __( '自然人憑證', 'mo-ectools' ),
-			'paper'  => __( '紙本', 'mo-ectools' ),
+			'member' => __( 'SmilePay 會員載具', 'moksa-for-woocommerce' ),
+			'mobile' => __( '手機條碼', 'moksa-for-woocommerce' ),
+			'cert'   => __( '自然人憑證', 'moksa-for-woocommerce' ),
+			'paper'  => __( '紙本', 'moksa-for-woocommerce' ),
 		][ $carrier ] ?? $carrier;
 	}
 
@@ -432,7 +432,7 @@ final class CardRenderers {
 
 		ob_start();
 		echo '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #c0c0c0;">';
-		echo '<p style="margin:0 0 4px;color:#646970;font-size:11px;text-transform:uppercase;letter-spacing:.4px;">' . esc_html__( '退款紀錄', 'mo-ectools' ) . '</p>';
+		echo '<p style="margin:0 0 4px;color:#646970;font-size:11px;text-transform:uppercase;letter-spacing:.4px;">' . esc_html__( '退款紀錄', 'moksa-for-woocommerce' ) . '</p>';
 		foreach ( $refunds as $refund ) {
 			if ( ! $refund instanceof \WC_Order_Refund ) {
 				continue;
@@ -456,10 +456,10 @@ final class CardRenderers {
 			echo '</p>';
 		}
 		echo '<p style="margin:6px 0 0;padding-top:6px;border-top:1px solid #e0e0e0;font-size:12px;">';
-		echo '<strong>' . esc_html__( '訂單淨額：', 'mo-ectools' ) . '</strong>';
+		echo '<strong>' . esc_html__( '訂單淨額：', 'moksa-for-woocommerce' ) . '</strong>';
 		echo '<span style="color:' . esc_attr( $net_color ) . ';font-weight:600;">NT$' . esc_html( (string) (int) $net ) . '</span>';
 		if ( $is_full ) {
-			echo ' <span style="color:#d63638;font-size:11px;">(' . esc_html__( '全額退款', 'mo-ectools' ) . ')</span>';
+			echo ' <span style="color:#d63638;font-size:11px;">(' . esc_html__( '全額退款', 'moksa-for-woocommerce' ) . ')</span>';
 		}
 		echo '</p>';
 		echo '</div>';
@@ -468,12 +468,12 @@ final class CardRenderers {
 
 	private static function linepay_status_label( string $raw ): string {
 		return [
-			'reserved'  => __( '已預授權（待請款）', 'mo-ectools' ),
-			'authed'    => __( '已授權（待請款）', 'mo-ectools' ),
-			'confirmed' => __( '已請款', 'mo-ectools' ),
-			'cancelled' => __( '已取消', 'mo-ectools' ),
-			'refunded'  => __( '已退款', 'mo-ectools' ),
-			'failed'    => __( '失敗', 'mo-ectools' ),
+			'reserved'  => __( '已預授權（待請款）', 'moksa-for-woocommerce' ),
+			'authed'    => __( '已授權（待請款）', 'moksa-for-woocommerce' ),
+			'confirmed' => __( '已請款', 'moksa-for-woocommerce' ),
+			'cancelled' => __( '已取消', 'moksa-for-woocommerce' ),
+			'refunded'  => __( '已退款', 'moksa-for-woocommerce' ),
+			'failed'    => __( '失敗', 'moksa-for-woocommerce' ),
 		][ $raw ] ?? $raw;
 	}
 }

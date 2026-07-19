@@ -14,26 +14,26 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'PChomePay 支付連 — 信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨', 'mo-ectools' );
+		return __( 'PChomePay 支付連 — 信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'PChomePay 支付連', 'mo-ectools' );
+		return __( 'PChomePay 支付連', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨付款', 'mo-ectools' );
+		return __( '信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨付款', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'mo-ectools' ),
-			__( '拍錢包', 'mo-ectools' ),
-			__( 'ATM 虛擬帳號', 'mo-ectools' ),
-			__( '超商代碼繳費', 'mo-ectools' ),
-			__( '7-11 取貨付款', 'mo-ectools' ),
-			__( '全家取貨付款', 'mo-ectools' ),
-			__( '萊爾富取貨付款', 'mo-ectools' ),
+			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( '拍錢包', 'moksa-for-woocommerce' ),
+			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
+			__( '超商代碼繳費', 'moksa-for-woocommerce' ),
+			__( '7-11 取貨付款', 'moksa-for-woocommerce' ),
+			__( '全家取貨付款', 'moksa-for-woocommerce' ),
+			__( '萊爾富取貨付款', 'moksa-for-woocommerce' ),
 		];
 	}
 

@@ -15,7 +15,7 @@ final class CheckoutFields {
 			new InvoiceFieldConfig(
 				provider_slug: 'ezpay',
 				option_prefix: 'moksafowo_ezpay_invoice',
-				member_label: __( 'ezPay 會員載具', 'mo-ectools' ),
+				member_label: __( 'ezPay 會員載具', 'moksa-for-woocommerce' ),
 			)
 		);
 	}

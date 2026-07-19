@@ -92,10 +92,10 @@ final class StoreSelector {
 				'cvs_methods'    => array_keys( $emap_urls ),
 				'selected_store' => $selected_store,
 				'i18n'           => [
-					'select'        => __( '選擇取貨門市', 'mo-ectools' ),
-					'change'        => __( '更換門市', 'mo-ectools' ),
-					'none_selected' => __( '尚未選擇取貨門市', 'mo-ectools' ),
-					'store_id'      => __( '門市代號', 'mo-ectools' ),
+					'select'        => __( '選擇取貨門市', 'moksa-for-woocommerce' ),
+					'change'        => __( '更換門市', 'moksa-for-woocommerce' ),
+					'none_selected' => __( '尚未選擇取貨門市', 'moksa-for-woocommerce' ),
+					'store_id'      => __( '門市代號', 'moksa-for-woocommerce' ),
 				],
 			]
 		);

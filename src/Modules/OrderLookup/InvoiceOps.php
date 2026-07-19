@@ -39,11 +39,11 @@ final class InvoiceOps {
 	 */
 	private static function providers(): array {
 		return array(
-			'ecpay'    => array( EcpayIssue::class, EcpayInvalid::class, Keys::ECPAY_INVOICE_NUMBER, __( '綠界', 'mo-ectools' ), EcpayAllowance::class ),
-			'ezpay'    => array( EzpayIssue::class, EzpayInvalid::class, Keys::EZPAY_INVOICE_NUMBER, __( 'ezPay 簡單付', 'mo-ectools' ), EzpayAllowance::class ),
-			'smilepay' => array( SmilepayIssue::class, SmilepayInvalid::class, Keys::SMILEPAY_INVOICE_NUMBER, __( '速買配', 'mo-ectools' ), null ),
-			'paynow'   => array( PaynowIssue::class, PaynowInvalid::class, Keys::PAYNOW_INVOICE_NUMBER, __( 'PayNow', 'mo-ectools' ), null ),
-			'amego'    => array( AmegoIssue::class, AmegoInvalid::class, Keys::AMEGO_INVOICE_NUMBER, __( 'Amego', 'mo-ectools' ), AmegoAllowance::class ),
+			'ecpay'    => array( EcpayIssue::class, EcpayInvalid::class, Keys::ECPAY_INVOICE_NUMBER, __( '綠界', 'moksa-for-woocommerce' ), EcpayAllowance::class ),
+			'ezpay'    => array( EzpayIssue::class, EzpayInvalid::class, Keys::EZPAY_INVOICE_NUMBER, __( 'ezPay 簡單付', 'moksa-for-woocommerce' ), EzpayAllowance::class ),
+			'smilepay' => array( SmilepayIssue::class, SmilepayInvalid::class, Keys::SMILEPAY_INVOICE_NUMBER, __( '速買配', 'moksa-for-woocommerce' ), null ),
+			'paynow'   => array( PaynowIssue::class, PaynowInvalid::class, Keys::PAYNOW_INVOICE_NUMBER, __( 'PayNow', 'moksa-for-woocommerce' ), null ),
+			'amego'    => array( AmegoIssue::class, AmegoInvalid::class, Keys::AMEGO_INVOICE_NUMBER, __( 'Amego', 'moksa-for-woocommerce' ), AmegoAllowance::class ),
 		);
 	}
 
@@ -80,10 +80,10 @@ final class InvoiceOps {
 
 	private static function type_label( \WC_Order $order ): string {
 		return match ( (string) $order->get_meta( Keys::INVOICE_TYPE ) ) {
-			'b2b'        => __( '公司(統編)', 'mo-ectools' ),
-			'b2c_donate' => __( '捐贈', 'mo-ectools' ),
-			'paper'      => __( '紙本', 'mo-ectools' ),
-			default      => __( '個人(載具)', 'mo-ectools' ),
+			'b2b'        => __( '公司(統編)', 'moksa-for-woocommerce' ),
+			'b2c_donate' => __( '捐贈', 'moksa-for-woocommerce' ),
+			'paper'      => __( '紙本', 'moksa-for-woocommerce' ),
+			default      => __( '個人(載具)', 'moksa-for-woocommerce' ),
 		};
 	}
 
@@ -93,22 +93,22 @@ final class InvoiceOps {
 	 */
 	public static function issue_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 		$provider = self::resolve_provider( $order );
 		if ( '' === $provider ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice_module', __( '沒有啟用任何電子發票模組。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice_module', __( '沒有啟用任何電子發票模組。', 'moksa-for-woocommerce' ) );
 		}
 		$map      = self::providers();
 		$existing = (string) $order->get_meta( $map[ $provider ][2] );
 
 		$summary = sprintf(
 			/* translators: 1: order number, 2: provider name, 3: invoice type */
-			__( '為訂單 #%1$s 開立電子發票(發票商:%2$s,類型:%3$s)。', 'mo-ectools' ),
+			__( '為訂單 #%1$s 開立電子發票(發票商:%2$s,類型:%3$s)。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			$map[ $provider ][3],
 			self::type_label( $order )
@@ -116,7 +116,7 @@ final class InvoiceOps {
 		if ( '' !== $existing ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: existing invoice number */
-				__( '(注意:此訂單已有發票號 %s,若已作廢才會重開。)', 'mo-ectools' ),
+				__( '(注意:此訂單已有發票號 %s,若已作廢才會重開。)', 'moksa-for-woocommerce' ),
 				$existing
 			);
 		}
@@ -135,24 +135,24 @@ final class InvoiceOps {
 	 */
 	public static function issue_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		$provider = (string) ( $params['provider'] ?? '' );
 		$map      = self::providers();
 		if ( ! $order || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或發票商。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或發票商。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = call_user_func( array( $map[ $provider ][0], 'run' ), $order );
 		if ( empty( $result['ok'] ) ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_ai_issue_failed', sprintf( __( '開立失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
+			return new \WP_Error( 'moksafowo_ai_issue_failed', sprintf( __( '開立失敗:%s', 'moksa-for-woocommerce' ), (string) ( $result['message'] ?? '' ) ) );
 		}
 		$inv = (string) ( $result['invoice_no'] ?? $order->get_meta( $map[ $provider ][2] ) );
 		return sprintf(
 			/* translators: 1: order number, 2: invoice number, 3: provider */
-			__( '✅ 已為訂單 #%1$s 開立電子發票:%2$s(發票商:%3$s)。', 'mo-ectools' ),
+			__( '✅ 已為訂單 #%1$s 開立電子發票:%2$s(發票商:%3$s)。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			$inv,
 			$map[ $provider ][3]
@@ -165,25 +165,25 @@ final class InvoiceOps {
 	 */
 	public static function void_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 		$reason = is_array( $args ) && isset( $args['reason'] ) ? trim( (string) $args['reason'] ) : '';
 		if ( '' === $reason ) {
-			return new \WP_Error( 'moksafowo_ai_no_reason', __( '請提供作廢原因。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_reason', __( '請提供作廢原因。', 'moksa-for-woocommerce' ) );
 		}
 
 		$map      = self::providers();
 		$provider = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
 		if ( '' === $provider || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有發票記錄可作廢。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有發票記錄可作廢。', 'moksa-for-woocommerce' ) );
 		}
 		$inv = (string) $order->get_meta( $map[ $provider ][2] );
 		if ( '' === $inv ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有可作廢的發票。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有可作廢的發票。', 'moksa-for-woocommerce' ) );
 		}
 
 		return array(
@@ -194,7 +194,7 @@ final class InvoiceOps {
 			'reason'   => $reason,
 			'summary'  => sprintf(
 				/* translators: 1: order number, 2: invoice number, 3: provider, 4: reason */
-				__( '作廢訂單 #%1$s 的電子發票 %2$s(發票商:%3$s),原因:%4$s。', 'mo-ectools' ),
+				__( '作廢訂單 #%1$s 的電子發票 %2$s(發票商:%3$s),原因:%4$s。', 'moksa-for-woocommerce' ),
 				$order->get_order_number(),
 				$inv,
 				$map[ $provider ][3],
@@ -209,24 +209,24 @@ final class InvoiceOps {
 	 */
 	public static function void_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		$provider = (string) ( $params['provider'] ?? '' );
 		$reason   = (string) ( $params['reason'] ?? '' );
 		$map      = self::providers();
 		if ( ! $order || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或發票商。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單或發票商。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = call_user_func( array( $map[ $provider ][1], 'run' ), $order, $reason );
 		if ( empty( $result['ok'] ) ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_ai_void_failed', sprintf( __( '作廢失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
+			return new \WP_Error( 'moksafowo_ai_void_failed', sprintf( __( '作廢失敗:%s', 'moksa-for-woocommerce' ), (string) ( $result['message'] ?? '' ) ) );
 		}
 		return sprintf(
 			/* translators: 1: order number, 2: invoice number */
-			__( '✅ 已作廢訂單 #%1$s 的電子發票 %2$s。', 'mo-ectools' ),
+			__( '✅ 已作廢訂單 #%1$s 的電子發票 %2$s。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			(string) ( $params['invoice'] ?? '' )
 		);
@@ -238,29 +238,29 @@ final class InvoiceOps {
 	 */
 	public static function allowance_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
 		}
 		$amount = is_array( $args ) && isset( $args['amount'] ) ? absint( preg_replace( '/[^0-9]/', '', (string) $args['amount'] ) ) : 0;
 		if ( $amount <= 0 ) {
-			return new \WP_Error( 'moksafowo_ai_bad_amount', __( '請提供大於 0 的折讓金額。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_amount', __( '請提供大於 0 的折讓金額。', 'moksa-for-woocommerce' ) );
 		}
 
 		$map      = self::providers();
 		$provider = (string) $order->get_meta( Keys::INVOICE_PROVIDER );
 		if ( '' === $provider || ! isset( $map[ $provider ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有發票記錄。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有發票記錄。', 'moksa-for-woocommerce' ) );
 		}
 		if ( null === $map[ $provider ][4] ) {
 			/* translators: %s: provider name */
-			return new \WP_Error( 'moksafowo_ai_no_allowance', sprintf( __( '%s 不支援折讓單。', 'mo-ectools' ), $map[ $provider ][3] ) );
+			return new \WP_Error( 'moksafowo_ai_no_allowance', sprintf( __( '%s 不支援折讓單。', 'moksa-for-woocommerce' ), $map[ $provider ][3] ) );
 		}
 		$inv = (string) $order->get_meta( $map[ $provider ][2] );
 		if ( '' === $inv ) {
-			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有已開立的發票可折讓。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_no_invoice', __( '此訂單沒有已開立的發票可折讓。', 'moksa-for-woocommerce' ) );
 		}
 		$total = (int) round( (float) $order->get_total() );
 		if ( $amount > $total ) {
@@ -268,7 +268,7 @@ final class InvoiceOps {
 				'moksafowo_ai_amount_over',
 				sprintf(
 					/* translators: 1: amount, 2: order total */
-					__( '折讓金額 %1$d 超過訂單金額 %2$d。', 'mo-ectools' ),
+					__( '折讓金額 %1$d 超過訂單金額 %2$d。', 'moksa-for-woocommerce' ),
 					$amount,
 					$total
 				)
@@ -283,7 +283,7 @@ final class InvoiceOps {
 			'amount'   => $amount,
 			'summary'  => sprintf(
 				/* translators: 1: order number, 2: invoice number, 3: amount, 4: provider */
-				__( '為訂單 #%1$s 的發票 %2$s 開立折讓單,金額 NT$%3$d(發票商:%4$s)。', 'mo-ectools' ),
+				__( '為訂單 #%1$s 的發票 %2$s 開立折讓單,金額 NT$%3$d(發票商:%4$s)。', 'moksa-for-woocommerce' ),
 				$order->get_order_number(),
 				$inv,
 				$amount,
@@ -298,24 +298,24 @@ final class InvoiceOps {
 	 */
 	public static function allowance_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		$provider = (string) ( $params['provider'] ?? '' );
 		$amount   = (int) ( $params['amount'] ?? 0 );
 		$map      = self::providers();
 		if ( ! $order || ! isset( $map[ $provider ] ) || null === $map[ $provider ][4] || $amount <= 0 ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法開立折讓單。', 'mo-ectools' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法開立折讓單。', 'moksa-for-woocommerce' ) );
 		}
 
 		$result = call_user_func( array( $map[ $provider ][4], 'run' ), $order, $amount );
 		if ( empty( $result['ok'] ) ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_ai_allowance_failed', sprintf( __( '折讓失敗:%s', 'mo-ectools' ), (string) ( $result['message'] ?? '' ) ) );
+			return new \WP_Error( 'moksafowo_ai_allowance_failed', sprintf( __( '折讓失敗:%s', 'moksa-for-woocommerce' ), (string) ( $result['message'] ?? '' ) ) );
 		}
 		return sprintf(
 			/* translators: 1: order number, 2: amount */
-			__( '✅ 已為訂單 #%1$s 開立 NT$%2$d 折讓單。', 'mo-ectools' ),
+			__( '✅ 已為訂單 #%1$s 開立 NT$%2$d 折讓單。', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			$amount
 		);

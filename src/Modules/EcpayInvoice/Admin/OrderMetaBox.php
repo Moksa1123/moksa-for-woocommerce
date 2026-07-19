@@ -62,60 +62,60 @@ final class OrderMetaBox {
 		echo '<div class="moksafowo-ecpay-invoice-meta" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">';
 
 		if ( '' !== $inv ) {
-			echo '<p><strong>' . esc_html__( '發票號碼：', 'mo-ectools' ) . '</strong>' . esc_html( $inv ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票號碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $inv ) . '</p>';
 			if ( '' !== $issued_at ) {
-				echo '<p><strong>' . esc_html__( '開立時間：', 'mo-ectools' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
+				echo '<p><strong>' . esc_html__( '開立時間：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
 			}
-			echo '<p><strong>' . esc_html__( '隨機碼：', 'mo-ectools' ) . '</strong>' . esc_html( $rand ) . '</p>';
-			echo '<p><strong>' . esc_html__( '開立方式：', 'mo-ectools' ) . '</strong>' . esc_html__( '立即開立', 'mo-ectools' ) . '</p>';
+			echo '<p><strong>' . esc_html__( '隨機碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $rand ) . '</p>';
+			echo '<p><strong>' . esc_html__( '開立方式：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( '立即開立', 'moksa-for-woocommerce' ) . '</p>';
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
-				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html( self::carrier_label( $carrier_t ) ) . '</p>';
+				echo '<p><strong>' . esc_html__( '開立類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::carrier_label( $carrier_t ) ) . '</p>';
 			} elseif ( 'b2b' === $type ) {
-				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html__( '公司統編', 'mo-ectools' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '開立類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( '公司統編', 'moksa-for-woocommerce' ) . '</p>';
 			} elseif ( 'b2c_donate' === $type ) {
-				echo '<p><strong>' . esc_html__( '開立類型：', 'mo-ectools' ) . '</strong>' . esc_html__( '捐贈', 'mo-ectools' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '開立類型：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( '捐贈', 'moksa-for-woocommerce' ) . '</p>';
 				$love_code = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
 				if ( '' !== $love_code ) {
 					$org_name = InvoiceChannels::donate_org_name( 'moksafowo_ecpay_invoice', $love_code );
-					echo '<p><strong>' . esc_html__( '愛心碼：', 'mo-ectools' ) . '</strong>' . esc_html( $love_code );
+					echo '<p><strong>' . esc_html__( '愛心碼：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $love_code );
 					if ( '' !== $org_name ) {
 						echo ' (' . esc_html( $org_name ) . ')';
 					}
 					echo '</p>';
 				}
 			}
-			echo '<p><strong>' . esc_html__( '發票對象：', 'mo-ectools' ) . '</strong>' . esc_html( self::issue_label( $type ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( '發票對象：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::issue_label( $type ) ) . '</p>';
 			if ( '' !== $ubn ) {
-				echo '<p><strong>' . esc_html__( '統一編號：', 'mo-ectools' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '統一編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $ubn ) . ( '' !== $buyer_name ? ' (' . esc_html( $buyer_name ) . ')' : '' ) . '</p>';
 			}
 			if ( '' !== $carrier_n ) {
-				echo '<p><strong>' . esc_html__( '載具編號：', 'mo-ectools' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
+				echo '<p><strong>' . esc_html__( '載具編號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $carrier_n ) . '</p>';
 			}
 			if ( '' !== $invalid_at ) {
-				echo '<p style="color:#c00;"><strong>' . esc_html__( '已作廢：', 'mo-ectools' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
+				echo '<p style="color:#c00;"><strong>' . esc_html__( '已作廢：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $invalid_at ) . '</p>';
 				echo '<hr style="margin:.6em 0;border:0;border-top:1px solid #dcdcde;">';
-				echo '<p style="margin:0 0 .4em;font-weight:600;">' . esc_html__( '重新開立發票', 'mo-ectools' ) . '</p>';
+				echo '<p style="margin:0 0 .4em;font-weight:600;">' . esc_html__( '重新開立發票', 'moksa-for-woocommerce' ) . '</p>';
 				self::render_issue_controls( $order );
 			} else {
 				echo '<p style="margin-top:.6em;">';
-				echo '<button type="button" class="button moksafowo-ecpay-invoice-invalid">' . esc_html__( '作廢發票', 'mo-ectools' ) . '</button> ';
-				echo '<button type="button" class="button moksafowo-ecpay-invoice-allowance">' . esc_html__( '開立折讓單', 'mo-ectools' ) . '</button>';
+				echo '<button type="button" class="button moksafowo-ecpay-invoice-invalid">' . esc_html__( '作廢發票', 'moksa-for-woocommerce' ) . '</button> ';
+				echo '<button type="button" class="button moksafowo-ecpay-invoice-allowance">' . esc_html__( '開立折讓單', 'moksa-for-woocommerce' ) . '</button>';
 				echo '</p>';
 				echo '<div class="moksafowo-inv-invalid-form" style="display:none;margin-top:.5em;">';
-				echo '<input type="text" class="moksafowo-inv-invalid-reason" maxlength="20" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( '作廢原因（最多 20 字）', 'mo-ectools' ) . '">';
-				echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-invalid-confirm">' . esc_html__( '確認作廢', 'mo-ectools' ) . '</button> ';
-				echo '<button type="button" class="button moksafowo-inv-invalid-cancel">' . esc_html__( '取消', 'mo-ectools' ) . '</button>';
+				echo '<input type="text" class="moksafowo-inv-invalid-reason" maxlength="20" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( '作廢原因（最多 20 字）', 'moksa-for-woocommerce' ) . '">';
+				echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-invalid-confirm">' . esc_html__( '確認作廢', 'moksa-for-woocommerce' ) . '</button> ';
+				echo '<button type="button" class="button moksafowo-inv-invalid-cancel">' . esc_html__( '取消', 'moksa-for-woocommerce' ) . '</button>';
 				echo '</div>';
 				// 折讓金額 — 內聯輸入（取代 JS prompt），按「開立折讓單」展開
 				echo '<div class="moksafowo-inv-allowance-form" style="display:none;margin-top:.5em;">';
-				echo '<input type="number" class="moksafowo-inv-allowance-amount" min="1" step="1" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( '折讓金額（整數）', 'mo-ectools' ) . '">';
-				echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-allowance-confirm">' . esc_html__( '確認折讓', 'mo-ectools' ) . '</button> ';
-				echo '<button type="button" class="button moksafowo-inv-allowance-cancel">' . esc_html__( '取消', 'mo-ectools' ) . '</button>';
+				echo '<input type="number" class="moksafowo-inv-allowance-amount" min="1" step="1" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( '折讓金額（整數）', 'moksa-for-woocommerce' ) . '">';
+				echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-allowance-confirm">' . esc_html__( '確認折讓', 'moksa-for-woocommerce' ) . '</button> ';
+				echo '<button type="button" class="button moksafowo-inv-allowance-cancel">' . esc_html__( '取消', 'moksa-for-woocommerce' ) . '</button>';
 				echo '</div>';
 			}
 			if ( '' !== $allowance ) {
 				$amt = (string) $order->get_meta( Keys::ECPAY_INVOICE_ALLOWANCE_AMT );
-				echo '<p><strong>' . esc_html__( '折讓單號：', 'mo-ectools' ) . '</strong>' . esc_html( $allowance ) . ( '' !== $amt ? ' (' . esc_html__( '金額：', 'mo-ectools' ) . esc_html( $amt ) . ')' : '' ) . '</p>';
+				echo '<p><strong>' . esc_html__( '折讓單號：', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $allowance ) . ( '' !== $amt ? ' (' . esc_html__( '金額：', 'moksa-for-woocommerce' ) . esc_html( $amt ) . ')' : '' ) . '</p>';
 			}
 			echo '<p class="moksafowo-inv-msg" style="margin:.4em 0 0;"></p>';
 		} else {
@@ -129,7 +129,7 @@ final class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'invoice',
-			'title' => __( '發票資訊', 'mo-ectools' ),
+			'title' => __( '發票資訊', 'moksa-for-woocommerce' ),
 			'html'  => (string) ob_get_clean(),
 		];
 		return $cards;
@@ -138,10 +138,10 @@ final class OrderMetaBox {
 	/** 手動開立 / 重新開立的可編輯表單 + 更新 / 開立按鈕（編輯態與作廢後重開共用）。 */
 	private static function render_issue_controls( \WC_Order $order ): void {
 		AdminIssueForm::render( $order, 'moksafowo_ecpay_invoice' );
-		echo '<p class="moksafowo-inv-dirty-hint" style="display:none;margin:.5em 0 0;color:#b26900;">' . esc_html__( '欄位已修改，請先按「更新」儲存並確認後再開立。', 'mo-ectools' ) . '</p>';
+		echo '<p class="moksafowo-inv-dirty-hint" style="display:none;margin:.5em 0 0;color:#b26900;">' . esc_html__( '欄位已修改，請先按「更新」儲存並確認後再開立。', 'moksa-for-woocommerce' ) . '</p>';
 		echo '<p style="margin-top:.8em;">';
-		echo '<button type="button" class="button moksafowo-ecpay-invoice-update">' . esc_html__( '更新', 'mo-ectools' ) . '</button> ';
-		echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-issue" disabled>' . esc_html__( '開立發票', 'mo-ectools' ) . '</button>';
+		echo '<button type="button" class="button moksafowo-ecpay-invoice-update">' . esc_html__( '更新', 'moksa-for-woocommerce' ) . '</button> ';
+		echo '<button type="button" class="button button-primary moksafowo-ecpay-invoice-issue" disabled>' . esc_html__( '開立發票', 'moksa-for-woocommerce' ) . '</button>';
 		echo '</p>';
 	}
 
@@ -149,11 +149,11 @@ final class OrderMetaBox {
 		switch ( $type ) {
 			case 'b2c_carrier':
 			case 'b2c_paper':
-				return __( '個人', 'mo-ectools' );
+				return __( '個人', 'moksa-for-woocommerce' );
 			case 'b2b':
-				return __( '公司', 'mo-ectools' );
+				return __( '公司', 'moksa-for-woocommerce' );
 			case 'b2c_donate':
-				return __( '捐贈', 'mo-ectools' );
+				return __( '捐贈', 'moksa-for-woocommerce' );
 		}
 		return $type;
 	}
@@ -178,26 +178,26 @@ final class OrderMetaBox {
 			[
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'i18n'     => [
-					'updating'              => __( '更新中…', 'mo-ectools' ),
-					'updated'               => __( '已更新，可開立發票。', 'mo-ectools' ),
-					'update_fail'           => __( '更新失敗：', 'mo-ectools' ),
-					'issuing'               => __( '開立中…', 'mo-ectools' ),
-					'issue_ok'              => __( '發票已開立。', 'mo-ectools' ),
-					'issue_fail'            => __( '開立失敗：', 'mo-ectools' ),
-					'need_donate'           => __( '請選擇捐贈單位（或輸入愛心碼）。', 'mo-ectools' ),
-					'need_ubn'              => __( '請輸入統一編號。', 'mo-ectools' ),
-					'need_cnum'             => __( '請輸入載具編號。', 'mo-ectools' ),
-					'cnum_mobile'           => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'mo-ectools' ),
-					'cnum_cert'             => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'mo-ectools' ),
-					'invalidating'          => __( '作廢中…', 'mo-ectools' ),
-					'invalid_need_reason'   => __( '請輸入作廢原因。', 'mo-ectools' ),
-					'invalid_ok'            => __( '發票已作廢。', 'mo-ectools' ),
-					'invalid_fail'          => __( '作廢失敗：', 'mo-ectools' ),
-					'allowancing'           => __( '折讓中…', 'mo-ectools' ),
-					'allowance_need_amount' => __( '請輸入折讓金額。', 'mo-ectools' ),
-					'allowance_ok'          => __( '折讓單已開立。', 'mo-ectools' ),
-					'allowance_fail'        => __( '折讓失敗：', 'mo-ectools' ),
-					'unknown_error'         => __( '未知錯誤，請稍後再試或查看記錄。', 'mo-ectools' ),
+					'updating'              => __( '更新中…', 'moksa-for-woocommerce' ),
+					'updated'               => __( '已更新，可開立發票。', 'moksa-for-woocommerce' ),
+					'update_fail'           => __( '更新失敗：', 'moksa-for-woocommerce' ),
+					'issuing'               => __( '開立中…', 'moksa-for-woocommerce' ),
+					'issue_ok'              => __( '發票已開立。', 'moksa-for-woocommerce' ),
+					'issue_fail'            => __( '開立失敗：', 'moksa-for-woocommerce' ),
+					'need_donate'           => __( '請選擇捐贈單位（或輸入愛心碼）。', 'moksa-for-woocommerce' ),
+					'need_ubn'              => __( '請輸入統一編號。', 'moksa-for-woocommerce' ),
+					'need_cnum'             => __( '請輸入載具編號。', 'moksa-for-woocommerce' ),
+					'cnum_mobile'           => __( '手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）', 'moksa-for-woocommerce' ),
+					'cnum_cert'             => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'moksa-for-woocommerce' ),
+					'invalidating'          => __( '作廢中…', 'moksa-for-woocommerce' ),
+					'invalid_need_reason'   => __( '請輸入作廢原因。', 'moksa-for-woocommerce' ),
+					'invalid_ok'            => __( '發票已作廢。', 'moksa-for-woocommerce' ),
+					'invalid_fail'          => __( '作廢失敗：', 'moksa-for-woocommerce' ),
+					'allowancing'           => __( '折讓中…', 'moksa-for-woocommerce' ),
+					'allowance_need_amount' => __( '請輸入折讓金額。', 'moksa-for-woocommerce' ),
+					'allowance_ok'          => __( '折讓單已開立。', 'moksa-for-woocommerce' ),
+					'allowance_fail'        => __( '折讓失敗：', 'moksa-for-woocommerce' ),
+					'unknown_error'         => __( '未知錯誤，請稍後再試或查看記錄。', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -208,30 +208,30 @@ final class OrderMetaBox {
 	public static function ajax_save(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		$err = AdminIssueForm::validate();
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
 		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice' );
-		wp_send_json_success( [ 'message' => __( '已更新。', 'mo-ectools' ) ] );
+		wp_send_json_success( [ 'message' => __( '已更新。', 'moksa-for-woocommerce' ) ] );
 	}
 
 	public static function ajax_issue(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$err = AdminIssueForm::validate();
@@ -248,13 +248,13 @@ final class OrderMetaBox {
 	public static function ajax_invalid(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$reason   = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$result = Invalid::run( $order, $reason );
@@ -264,13 +264,13 @@ final class OrderMetaBox {
 	public static function ajax_allowance(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$amount   = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'mo-ectools' ) ], 404 );
+			wp_send_json_error( [ 'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$result = Allowance::run( $order, $amount );
@@ -279,19 +279,19 @@ final class OrderMetaBox {
 
 	private static function type_label( string $type ): string {
 		return match ( $type ) {
-			'b2b'         => __( '公司（統一編號）', 'mo-ectools' ),
-			'b2c_donate'  => __( '捐贈', 'mo-ectools' ),
-			'b2c_carrier' => __( '個人（載具）', 'mo-ectools' ),
+			'b2b'         => __( '公司（統一編號）', 'moksa-for-woocommerce' ),
+			'b2c_donate'  => __( '捐贈', 'moksa-for-woocommerce' ),
+			'b2c_carrier' => __( '個人（載具）', 'moksa-for-woocommerce' ),
 			default       => $type,
 		};
 	}
 
 	private static function carrier_label( string $c ): string {
 		return match ( $c ) {
-			'mobile' => __( '手機條碼', 'mo-ectools' ),
-			'cert'   => __( '自然人憑證', 'mo-ectools' ),
-			'paper'  => __( '紙本發票', 'mo-ectools' ),
-			'member' => __( '會員載具', 'mo-ectools' ),
+			'mobile' => __( '手機條碼', 'moksa-for-woocommerce' ),
+			'cert'   => __( '自然人憑證', 'moksa-for-woocommerce' ),
+			'paper'  => __( '紙本發票', 'moksa-for-woocommerce' ),
+			'member' => __( '會員載具', 'moksa-for-woocommerce' ),
 			default  => $c,
 		};
 	}

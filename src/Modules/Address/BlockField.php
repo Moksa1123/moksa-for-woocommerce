@@ -123,7 +123,7 @@ final class BlockField {
 		}
 		$district = self::posted_district( is_array( $data ) ? $data : [] );
 		if ( '' === $district ) {
-			$errors->add( 'moksafowo_district_required', __( '宅配訂單請選擇鄉鎮市區。', 'mo-ectools' ) );
+			$errors->add( 'moksafowo_district_required', __( '宅配訂單請選擇鄉鎮市區。', 'moksa-for-woocommerce' ) );
 		}
 	}
 
@@ -139,7 +139,7 @@ final class BlockField {
 		if ( '' === $order->get_shipping_city() && '' === $order->get_billing_city() ) {
 			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
 				'moksafowo_district_required',
-				esc_html__( '宅配訂單請選擇鄉鎮市區。', 'mo-ectools' ),
+				esc_html__( '宅配訂單請選擇鄉鎮市區。', 'moksa-for-woocommerce' ),
 				400
 			);
 		}
@@ -218,13 +218,13 @@ final class BlockField {
 		woocommerce_register_additional_checkout_field(
 			[
 				'id'          => self::FIELD_ID,
-				'label'       => __( '鄉鎮市區', 'mo-ectools' ),
+				'label'       => __( '鄉鎮市區', 'moksa-for-woocommerce' ),
 				'location'    => 'address',
 				'type'        => 'select',
 				// 不全域 required — CVS 取貨送門市不需鄉鎮市區；只有宅配（HOME）才要，
 				// 由 validate_district_for_home() 條件式驗證。
 				'required'    => false,
-				'placeholder' => __( '請選擇…', 'mo-ectools' ),
+				'placeholder' => __( '請選擇…', 'moksa-for-woocommerce' ),
 				'options'     => $options,
 			// additional checkout fields 沒有 priority option，順序與寬度走 CSS order property。
 			]
@@ -300,7 +300,7 @@ final class BlockField {
 				'field_id'    => self::FIELD_ID,
 				'by_state'    => $state_to_cities,
 				'postcodes'   => $postcode_map,
-				'placeholder' => __( '請選擇…', 'mo-ectools' ),
+				'placeholder' => __( '請選擇…', 'moksa-for-woocommerce' ),
 			]
 		);
 	}

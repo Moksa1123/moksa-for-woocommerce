@@ -62,7 +62,7 @@ final class PaymentRequest {
 			<?php foreach ( $params as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( (string) $k ); ?>" value="<?php echo esc_attr( (string) $v ); ?>">
 			<?php endforeach; ?>
-			<button type="submit" id="moksafowo-paynow-submit" class="button alt"><?php esc_html_e( '前往 PayNow 付款頁', 'mo-ectools' ); ?></button>
+			<button type="submit" id="moksafowo-paynow-submit" class="button alt"><?php esc_html_e( '前往 PayNow 付款頁', 'moksa-for-woocommerce' ); ?></button>
 		</form>
 		<?php
 		return (string) ob_get_clean();
@@ -72,7 +72,7 @@ final class PaymentRequest {
 		$clean = preg_replace( '/[0-9]/', '', $name ) ?? $name;
 		$clean = trim( $clean );
 		if ( '' === $clean ) {
-			$clean = __( '顧客', 'mo-ectools' );
+			$clean = __( '顧客', 'moksa-for-woocommerce' );
 		}
 		return mb_substr( $clean, 0, 30 );
 	}
@@ -81,7 +81,7 @@ final class PaymentRequest {
 		$info = trim( $info );
 		if ( mb_strlen( $info ) < 5 ) {
 			/* translators: %s: site name */
-			$info = sprintf( __( '%s 線上訂單', 'mo-ectools' ), get_bloginfo( 'name' ) );
+			$info = sprintf( __( '%s 線上訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) );
 		}
 		return mb_substr( $info, 0, 200 );
 	}

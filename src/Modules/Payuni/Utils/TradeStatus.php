@@ -21,26 +21,26 @@ class TradeStatus {
 		switch ( $status_code ) {
 			case self::CREDIT_VALID_OR_GET_NUMBER_SUCCESS:
 				if ( $payment_method === Atm::GATEWAY_ID || $payment_method === Cvs::GATEWAY_ID ) {
-					return _x( 'Payment Number Taken', 'Trade Status', 'mo-ectools' );
+					return _x( 'Payment Number Taken', 'Trade Status', 'moksa-for-woocommerce' );
 				} elseif ( $payment_method === Aftee::GATEWAY_ID ) {
-					return _x( 'Credit Valid', 'Trade Status', 'mo-ectools' );
+					return _x( 'Credit Valid', 'Trade Status', 'moksa-for-woocommerce' );
 				} else {
-					return _x( 'Credit Valid or Get Number Success', 'Trade Status', 'mo-ectools' );
+					return _x( 'Credit Valid or Get Number Success', 'Trade Status', 'moksa-for-woocommerce' );
 				}
 			case self::PAID:
-				return _x( 'Paid', 'Trade Status', 'mo-ectools' );
+				return _x( 'Paid', 'Trade Status', 'moksa-for-woocommerce' );
 			case self::FAIL:
-				return _x( 'Payment Fail', 'Trade Status', 'mo-ectools' );
+				return _x( 'Payment Fail', 'Trade Status', 'moksa-for-woocommerce' );
 			case self::CANCEL:
-				return _x( 'Payment Cancel', 'Trade Status', 'mo-ectools' );
+				return _x( 'Payment Cancel', 'Trade Status', 'moksa-for-woocommerce' );
 			case self::EXPIRED:
-				return _x( 'Transaction Expired', 'Trade Status', 'mo-ectools' );
+				return _x( 'Transaction Expired', 'Trade Status', 'moksa-for-woocommerce' );
 			case self::TBC:
-				return _x( 'To be Confirmed', 'Trade Status', 'mo-ectools' );
+				return _x( 'To be Confirmed', 'Trade Status', 'moksa-for-woocommerce' );
 			case self::UNPAID:
-				return _x( 'Unpaid', 'Trade Status', 'mo-ectools' );
+				return _x( 'Unpaid', 'Trade Status', 'moksa-for-woocommerce' );
 			default:
-				return _x( 'Unknown Trade Status', 'Trade Status', 'mo-ectools' );
+				return _x( 'Unknown Trade Status', 'Trade Status', 'moksa-for-woocommerce' );
 		}
 	}
 }

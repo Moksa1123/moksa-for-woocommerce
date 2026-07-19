@@ -30,12 +30,12 @@ final class OrderMetaBox {
 	public static function ajax_create_shipment(): void {
 		check_ajax_referer( self::NONCE_ACTION );
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_send_json_error( [ 'message' => __( '權限不足。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ] );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'mo-ectools' ) ] );
+			wp_send_json_error( [ 'message' => __( '訂單不存在。', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$existing = CreateOrder::get_records( $order );
@@ -45,7 +45,7 @@ final class OrderMetaBox {
 				wp_send_json_error(
 					[
 						'code'    => 'existing',
-						'message' => __( '此訂單已有物流單記錄。系統只會為「尚未建立的溫層」補建，已建立的不會重複下單。若要整批重建，請先刪除既有記錄。是否繼續？', 'mo-ectools' ),
+						'message' => __( '此訂單已有物流單記錄。系統只會為「尚未建立的溫層」補建，已建立的不會重複下單。若要整批重建，請先刪除既有記錄。是否繼續？', 'moksa-for-woocommerce' ),
 					]
 				);
 			}
@@ -57,14 +57,14 @@ final class OrderMetaBox {
 				[
 					'message' => sprintf(
 						/* translators: 1: smseid 2: paymentno or tracknum */
-						__( '速買配物流單建立成功（smseid=%1$s 編號=%2$s）', 'mo-ectools' ),
+						__( '速買配物流單建立成功（smseid=%1$s 編號=%2$s）', 'moksa-for-woocommerce' ),
 						$result['smseid'] ?? '-',
 						$result['payment_no'] ?? $result['track_num'] ?? '-'
 					),
 				]
 			);
 		}
-		wp_send_json_error( [ 'message' => $result['message'] ?? __( '未知錯誤', 'mo-ectools' ) ] );
+		wp_send_json_error( [ 'message' => $result['message'] ?? __( '未知錯誤', 'moksa-for-woocommerce' ) ] );
 	}
 
 	public static function add_card( array $cards, \WC_Order $order ): array {
@@ -119,10 +119,10 @@ final class OrderMetaBox {
 							<?php endif; ?>
 						</div>
 						<?php if ( '' !== $pay_no ) : ?>
-							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay_no ); ?></span></p>
+							<p style="margin:.2em 0;"><strong><?php esc_html_e( '寄貨編號：', 'moksa-for-woocommerce' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $pay_no ); ?></span></p>
 						<?php endif; ?>
 						<?php if ( '' !== $track_num ) : ?>
-							<p style="margin:.2em 0;"><strong><?php esc_html_e( '託運單號：', 'mo-ectools' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $track_num ); ?></span></p>
+							<p style="margin:.2em 0;"><strong><?php esc_html_e( '託運單號：', 'moksa-for-woocommerce' ); ?></strong><span style="font-family:monospace;word-break:break-all;"><?php echo esc_html( $track_num ); ?></span></p>
 						<?php endif; ?>
 						<?php if ( '' !== $created_at ) : ?>
 							<p style="margin:.2em 0;color:#64748b;font-size:11px;"><?php echo esc_html( $created_at ); ?></p>
@@ -135,7 +135,7 @@ final class OrderMetaBox {
 			<div class="moksafowo-smilepay-shipping-actions">
 				<button type="button"
 					class="button button-primary moksafowo-smilepay-shipping-create">
-					<?php echo esc_html( empty( $records ) ? __( '建立物流單', 'mo-ectools' ) : __( '重新建立物流單', 'mo-ectools' ) ); ?>
+					<?php echo esc_html( empty( $records ) ? __( '建立物流單', 'moksa-for-woocommerce' ) : __( '重新建立物流單', 'moksa-for-woocommerce' ) ); ?>
 				</button>
 			</div>
 		</div>
@@ -144,7 +144,7 @@ final class OrderMetaBox {
 
 		$cards[] = [
 			'slot'  => 'shipping',
-			'title' => __( '物流資訊', 'mo-ectools' ),
+			'title' => __( '物流資訊', 'moksa-for-woocommerce' ),
 			'html'  => $html,
 		];
 		return $cards;

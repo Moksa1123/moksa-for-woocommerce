@@ -17,11 +17,11 @@ final class CreditInstallment3 extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 信用卡分期 3 期', 'mo-ectools' );
+		return __( '綠界 信用卡分期 3 期', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '信用卡分 3 期付款，跳轉至綠界支付頁完成付款。', 'mo-ectools' );
+		return __( '信用卡分 3 期付款，跳轉至綠界支付頁完成付款。', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_aio_params( \WC_Order $order ): array {

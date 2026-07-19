@@ -18,23 +18,23 @@ class PayType {
 	public static function get_name( $pay_type ) {
 		switch ( $pay_type ) {
 			case self::CREDIT_CARD:
-				return __( 'Credit Card', 'mo-ectools' );
+				return __( 'Credit Card', 'moksa-for-woocommerce' );
 			case self::ATM:
-				return __( 'ATM', 'mo-ectools' );
+				return __( 'ATM', 'moksa-for-woocommerce' );
 			case self::CVS_CODE:
-				return __( '超商代碼', 'mo-ectools' );
+				return __( '超商代碼', 'moksa-for-woocommerce' );
 			case self::C2C:
-				return __( 'C2C', 'mo-ectools' );
+				return __( 'C2C', 'moksa-for-woocommerce' );
 			case self::ICASH:
-				return __( 'ICash', 'mo-ectools' );
+				return __( 'ICash', 'moksa-for-woocommerce' );
 			case self::AFTEE:
-				return __( 'AFTEE', 'mo-ectools' );
+				return __( 'AFTEE', 'moksa-for-woocommerce' );
 			case self::LINEPAY:
-				return __( 'LINE Pay', 'mo-ectools' );
+				return __( 'LINE Pay', 'moksa-for-woocommerce' );
 			case self::DELIVERY:
-				return __( 'Delivery', 'mo-ectools' );
+				return __( 'Delivery', 'moksa-for-woocommerce' );
 			default:
-				return __( 'Unknown Payment Type', 'mo-ectools' );
+				return __( 'Unknown Payment Type', 'moksa-for-woocommerce' );
 		}
 	}
 }

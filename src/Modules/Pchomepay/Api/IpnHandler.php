@@ -11,9 +11,10 @@ defined( 'ABSPATH' ) || exit;
 final class IpnHandler {
 
 	public static function handle(): void {
-		// 1. IP 白名單 — 第一道防線。
-		$ip = self::client_ip();
-		if ( Helper::NOTIFY_IP !== $ip ) {
+		// 1. IP 白名單 — 第一道防線（第二道是下方向支付連 API 的權威狀態二次確認）。
+		$ip      = self::client_ip();
+		$allowed = (array) apply_filters( 'moksafowo_pchomepay_notify_ips', [ Helper::NOTIFY_IP ] );
+		if ( ! in_array( $ip, $allowed, true ) ) {
 			Helper::log( 'webhook rejected — IP not allowed', [ 'ip' => $ip ] );
 			status_header( 403 );
 			echo 'forbidden';
@@ -72,6 +73,48 @@ final class IpnHandler {
 			exit;
 		}
 
+		// 支付連 webhook 無簽章欄位 — IP 白名單之外，付款狀態一律回頭向支付連
+		// API 查權威狀態（GET /v1/payment/{id}）二次確認，不信 notify payload。
+		// 查詢失敗回 503 讓支付連重送（fail-closed）。
+		$query = Helper::api_get_payment( $pchome_order_id );
+		if ( empty( $query['ok'] ) ) {
+			Helper::log( 'webhook reconfirm query failed — deferred', [ 'order_id' => $pchome_order_id ] );
+			status_header( 503 );
+			echo 'reconfirm failed, retry later';
+			exit;
+		}
+		$authoritative = map_deep( (array) $query['data'], static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+		$api_status    = (string) ( $authoritative['status'] ?? '' );
+
+		// order_confirm 是唯一會 payment_complete 的通知：API 權威狀態必須是 S（交易完成），
+		// 且金額（若 API 有回）必須與訂單一致。
+		if ( 'order_confirm' === $notify_type ) {
+			$api_amount = (string) ( $authoritative['trade_amount'] ?? $authoritative['amount'] ?? '' );
+			if ( 'S' !== $api_status || ( '' !== $api_amount && (int) $api_amount !== (int) round( (float) $order->get_total() ) ) ) {
+				Helper::log(
+					'webhook order_confirm rejected — API status/amount mismatch',
+					[
+						'order_id'   => $pchome_order_id,
+						'api_status' => $api_status,
+						'api_amount' => $api_amount,
+					]
+				);
+				status_header( 409 );
+				echo 'status mismatch';
+				exit;
+			}
+		}
+		// 逾時 / 失敗通知不得打在 API 已確認完成付款的訂單上（防偽造取消已付款單）。
+		if ( in_array( $notify_type, [ 'order_expired', 'order_failed' ], true ) && 'S' === $api_status ) {
+			Helper::log( 'webhook expire/fail rejected — API says paid', [ 'order_id' => $pchome_order_id ] );
+			status_header( 409 );
+			echo 'status mismatch';
+			exit;
+		}
+
+		// meta 以 API 權威回應優先，notify payload 只補 API 未回的欄位。
+		$message = array_merge( $message, array_filter( $authoritative, static fn( $v ) => null !== $v && '' !== $v ) );
+
 		self::write_common_meta( $order, $message );
 		self::apply_notify( $order, $notify_type, $message );
 		$order->save();
@@ -94,7 +137,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: pay type, 2: amount */
-						__( '支付連付款完成 — %1$s（金額 NT$%2$s）', 'mo-ectools' ),
+						__( '支付連付款完成 — %1$s（金額 NT$%2$s）', 'moksa-for-woocommerce' ),
 						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
 						(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
 					)
@@ -107,14 +150,14 @@ final class IpnHandler {
 					'on-hold',
 					sprintf(
 					/* translators: %s: pay type */
-						__( '支付連已產生 %s 付款資訊，等待顧客付款。', 'mo-ectools' ),
+						__( '支付連已產生 %s 付款資訊，等待顧客付款。', 'moksa-for-woocommerce' ),
 						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) )
 					)
 				);
 				break;
 
 			case 'order_expired':
-				$order->update_status( 'cancelled', __( '支付連訂單逾時未付款。', 'mo-ectools' ) );
+				$order->update_status( 'cancelled', __( '支付連訂單逾時未付款。', 'moksa-for-woocommerce' ) );
 				break;
 
 			case 'order_failed':
@@ -122,7 +165,7 @@ final class IpnHandler {
 					'failed',
 					sprintf(
 					/* translators: %s: status code */
-						__( '支付連付款失敗（狀態碼 %s）。', 'mo-ectools' ),
+						__( '支付連付款失敗（狀態碼 %s）。', 'moksa-for-woocommerce' ),
 						(string) ( $message['status_code'] ?? '' )
 					)
 				);
@@ -132,7 +175,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: refund id, 2: amount */
-						__( '支付連退款成功 — 退款編號 %1$s（NT$%2$s）', 'mo-ectools' ),
+						__( '支付連退款成功 — 退款編號 %1$s（NT$%2$s）', 'moksa-for-woocommerce' ),
 						(string) ( $message['refund_id'] ?? '' ),
 						(string) ( $message['trade_amount'] ?? $message['refund_amount'] ?? '' )
 					)
@@ -146,7 +189,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: %s: logistic stage */
-						__( '支付連物流狀態更新：%s', 'mo-ectools' ),
+						__( '支付連物流狀態更新：%s', 'moksa-for-woocommerce' ),
 						self::logistic_label( $notify_type )
 					)
 				);
@@ -156,7 +199,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: %s: notify type */
-						__( '支付連通知：%s', 'mo-ectools' ),
+						__( '支付連通知：%s', 'moksa-for-woocommerce' ),
 						$notify_type
 					)
 				);

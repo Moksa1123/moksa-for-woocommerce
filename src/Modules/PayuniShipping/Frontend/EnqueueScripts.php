@@ -53,8 +53,8 @@ final class EnqueueScripts {
 				'ajax_url'     => admin_url( 'admin-ajax.php' ),
 				'security'     => wp_create_nonce( 'moksafowo-payuni-shipping-order' ),
 				'translations' => [
-					'shipping_status_update_failed' => __( '物流狀態更新失敗。', 'mo-ectools' ),
-					'cancel_shipping_failed'        => __( '取消物流單失敗。', 'mo-ectools' ),
+					'shipping_status_update_failed' => __( '物流狀態更新失敗。', 'moksa-for-woocommerce' ),
+					'cancel_shipping_failed'        => __( '取消物流單失敗。', 'moksa-for-woocommerce' ),
 				],
 			]
 		);

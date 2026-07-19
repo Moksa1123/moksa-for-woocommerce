@@ -22,8 +22,8 @@ class HDRefrigerated extends ShippingBase {
 
 		$this->instance_id        = absint( $instance_id );
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 黑貓宅配（冷藏）', 'mo-ectools' );
-		$this->method_description = __( 'PAYUNi — 黑貓宅配（冷藏）', 'mo-ectools' );
+		$this->method_title       = __( 'PAYUNi — 黑貓宅配（冷藏）', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi — 黑貓宅配（冷藏）', 'moksa-for-woocommerce' );
 
 		$this->goods_type = 3;// 1=常溫，2=冷凍，3=冷藏
 		$this->lgs_type   = 'HOME';

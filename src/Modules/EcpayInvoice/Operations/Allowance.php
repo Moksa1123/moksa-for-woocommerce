@@ -16,13 +16,13 @@ final class Allowance {
 		if ( '' === $inv ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有發票，無法折讓。', 'mo-ectools' ),
+				'message' => __( '此訂單沒有發票，無法折讓。', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $amount <= 0 ) {
 			return [
 				'ok'      => false,
-				'message' => __( '折讓金額需大於 0。', 'mo-ectools' ),
+				'message' => __( '折讓金額需大於 0。', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -58,7 +58,7 @@ final class Allowance {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error message */
-					__( '綠界折讓失敗：%s', 'mo-ectools' ),
+					__( '綠界折讓失敗：%s', 'moksa-for-woocommerce' ),
 					$result['message']
 				)
 			);
@@ -75,7 +75,7 @@ final class Allowance {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: allowance no, 2: amount */
-				__( '綠界折讓單 %1$s 開立成功（金額 %2$d）', 'mo-ectools' ),
+				__( '綠界折讓單 %1$s 開立成功（金額 %2$d）', 'moksa-for-woocommerce' ),
 				$allowance_no,
 				$amount
 			)
