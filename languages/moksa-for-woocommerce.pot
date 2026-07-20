@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce 1.4.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mo-ectools\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,32 +15,32 @@ msgstr ""
 "X-Domain: moksa-for-woocommerce\n"
 
 #. Plugin Name of the plugin
-#: mo-ectools.php
+#: moksa-for-woocommerce.php
 #: src/Modules/OrderLookup/Ability.php:29
 msgid "Moksa for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: mo-ectools.php
+#: moksa-for-woocommerce.php
 msgid "https://github.com/Moksa1123/moksa-for-woocommerce"
 msgstr ""
 
 #. Description of the plugin
-#: mo-ectools.php
+#: moksa-for-woocommerce.php
 msgid "Taiwan payment, shipping and e-invoice toolkit for WooCommerce. Enable the provider modules you need (ECPay, NewebPay, PAYUNi, SmilePay, LINE Pay, PayNow, PChomePay, TapPay, Shopline Payments, ezPay, AMEGO). HPOS-ready, Block Checkout-ready."
 msgstr ""
 
 #. Author of the plugin
-#: mo-ectools.php
+#: moksa-for-woocommerce.php
 msgid "MoksaWeb"
 msgstr ""
 
 #. Author URI of the plugin
-#: mo-ectools.php
+#: moksa-for-woocommerce.php
 msgid "https://moksaweb.com/"
 msgstr ""
 
-#: mo-ectools.php:48
+#: moksa-for-woocommerce.php:48
 msgid "MO ECtools: composer autoload missing. Run `composer install` in the plugin directory."
 msgstr ""
 
