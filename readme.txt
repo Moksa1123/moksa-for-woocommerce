@@ -86,7 +86,7 @@ When an administrator actively uses the in-admin Moksa AI assistant, the typed q
 
 = MCP server (optional, off by default) =
 
-This plugin can optionally expose a standards-compliant, stateless MCP (Model Context Protocol) endpoint on **your own site** at `/wp-json/mo-ectools/v1/mcp`, so a standard MCP client you control (for example mcp-remote or Claude) can look up orders and reports through the WordPress REST API. This is **not a Moksa service and is not a phone-home**: nothing is sent to Moksa, the endpoint only runs on your server and only exposes the plugin's own WordPress Abilities. It is **off by default** and must be turned on under WooCommerce → Moksa AI → Settings. Access requires authentication with a WordPress Application Password for a user that has the "edit orders" capability (use a dedicated, limited account). By default only read-only tools are exposed; order-changing tools stay hidden unless you also enable the separate "allow external AI to make changes" option, and every request is permission-checked on your server.
+This plugin can optionally expose a standards-compliant, stateless MCP (Model Context Protocol) endpoint on **your own site** at `/wp-json/moksa-for-woocommerce/v1/mcp`, so a standard MCP client you control (for example mcp-remote or Claude) can look up orders and reports through the WordPress REST API. This is **not a Moksa service and is not a phone-home**: nothing is sent to Moksa, the endpoint only runs on your server and only exposes the plugin's own WordPress Abilities. It is **off by default** and must be turned on under WooCommerce → Moksa AI → Settings. Access requires authentication with a WordPress Application Password for a user that has the "edit orders" capability (use a dedicated, limited account). By default only read-only tools are exposed; order-changing tools stay hidden unless you also enable the separate "allow external AI to make changes" option, and every request is permission-checked on your server.
 
 == Installation ==
 
@@ -122,7 +122,7 @@ It is an optional in-admin chat assistant for managing orders, e-invoices, shipp
 
 = Can external AI tools connect to my store over MCP? =
 
-Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI → Settings → "Enable external MCP server"**. The plugin then serves a standards-compliant, stateless MCP (Model Context Protocol) endpoint at `/wp-json/mo-ectools/v1/mcp` that any standard MCP client (for example mcp-remote or Claude) can connect to directly — no bridge required.
+Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI → Settings → "Enable external MCP server"**. The plugin then serves a standards-compliant, stateless MCP (Model Context Protocol) endpoint at `/wp-json/moksa-for-woocommerce/v1/mcp` that any standard MCP client (for example mcp-remote or Claude) can connect to directly — no bridge required.
 
 Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed; order-changing tools stay hidden unless you also enable the "allow external AI to make changes" option, and destructive actions still require in-store confirmation. Every request is permission-checked on the server.
 

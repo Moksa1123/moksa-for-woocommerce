@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Rest {
 
-	const NS = 'mo-ectools/v1';
+	const NS = 'moksa-for-woocommerce/v1';
 
 	public static function register(): void {
 		register_rest_route(

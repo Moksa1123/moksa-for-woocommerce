@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Rest {
 
-	const REST_NAMESPACE = 'mo-ectools/v1';
+	const REST_NAMESPACE = 'moksa-for-woocommerce/v1';
 	const CONFIRM_PREFIX = 'moksafowo_ai_confirm_';
 
 	public static function register(): void {

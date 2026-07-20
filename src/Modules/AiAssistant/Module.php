@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * 站內 AI 助手 — 用 WP 7.0 內建 AI Client(wp_ai_client_prompt + using_abilities)
- * 把 mo-ectools 的 abilities 當工具,讓商家用自然語言查訂單 / 物流 / 發票。
+ * 把 moksa-for-woocommerce 的 abilities 當工具,讓商家用自然語言查訂單 / 物流 / 發票。
  *
  * LLM 呼叫、金鑰(Connectors API)、tool-loop、白名單、permission 全是核心包辦,
  * 我們只提供「面板 UI + 系統提示 + 要暴露哪些 ability」。需 WP 7.0。

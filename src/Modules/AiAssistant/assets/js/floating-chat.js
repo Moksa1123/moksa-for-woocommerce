@@ -1,5 +1,5 @@
 /**
- * Moksa AI 浮動對話窗 — 後台右下角 AI 助手。訊息經 REST(mo-ectools/v1/ai-chat)走 agentic 迴圈。
+ * Moksa AI 浮動對話窗 — 後台右下角 AI 助手。訊息經 REST(moksa-for-woocommerce/v1/ai-chat)走 agentic 迴圈。
  * 破壞性動作 → REST 回 confirm,跳「確認執行 / 取消」按鈕,按確認才 POST /ai-confirm 真正執行。
  * 配色:白底 + 黑金(深炭黑 #1d2327 + 金 #c9a227),圖示用 WP dashicons-cart(電商感)。
  * 樣式全用 #moksafowo-ai-panel / #moksafowo-ai-fab 前綴壓過 WP admin 預設。
@@ -301,7 +301,7 @@
 			yes.disabled = true;
 			no.disabled = true;
 			yes.textContent = '執行中…';
-			apiFetch( { path: '/mo-ectools/v1/ai-confirm', method: 'POST', data: { token: confirm.token } } )
+			apiFetch( { path: '/moksa-for-woocommerce/v1/ai-confirm', method: 'POST', data: { token: confirm.token } } )
 				.then( function ( r ) {
 					box.remove();
 					add_msg( r && r.reply ? r.reply : ( r && r.error ? '⚠ ' + r.error : ( cfg.emptyReply || '（無回覆）' ) ), 'bot' );
@@ -337,7 +337,7 @@
 			return { role: m.w === 'user' ? 'user' : 'assistant', text: m.t };
 		} );
 
-		apiFetch( { path: '/mo-ectools/v1/ai-chat', method: 'POST', data: { message: text, history: prior } } )
+		apiFetch( { path: '/moksa-for-woocommerce/v1/ai-chat', method: 'POST', data: { message: text, history: prior } } )
 			.then( function ( r ) {
 				typing.remove();
 				if ( r && r.confirm && r.confirm.token ) {

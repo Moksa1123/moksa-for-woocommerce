@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class SettingsTab {
 
-	public const TAB_ID = 'mo-ectools';
+	public const TAB_ID = 'moksa-for-woocommerce';
 
 	public static function register(): void {
 		add_filter( 'woocommerce_get_settings_pages', [ self::class, 'add_page' ] );

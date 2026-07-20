@@ -79,7 +79,7 @@ final class Backfill {
 
 	private static function schedule( int $page ): void {
 		if ( function_exists( 'as_schedule_single_action' ) ) {
-			as_schedule_single_action( time(), self::HOOK, [ $page ], 'mo-ectools' );
+			as_schedule_single_action( time(), self::HOOK, [ $page ], 'moksa-for-woocommerce' );
 		} else {
 			// 無 Action Scheduler（理論上 WC 一定有）—— 同步跑這批，避免完全不動。
 			self::run_batch( $page );

@@ -7,24 +7,24 @@ namespace Moksafowo\Modules\OrderLookup;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * WordPress Abilities API — mo-ectools/find-order-by-number。
+ * WordPress Abilities API — moksa-for-woocommerce/find-order-by-number。
  *
  * 唯讀 ability：用發票 / 物流 / 金流號碼查訂單。供 WP 命令面板、REST、
  * 以及（商家開啟 WC MCP 後）AI 共用。需 WP 6.9+ 核心 Abilities API。
  */
 final class Ability {
 
-	const ABILITY = 'mo-ectools/find-order-by-number';
+	const ABILITY = 'moksa-for-woocommerce/find-order-by-number';
 
 	public static function register_category(): void {
 		if ( ! function_exists( 'wp_register_ability_category' ) ) {
 			return;
 		}
-		if ( function_exists( 'wp_has_ability_category' ) && wp_has_ability_category( 'mo-ectools' ) ) {
+		if ( function_exists( 'wp_has_ability_category' ) && wp_has_ability_category( 'moksa-for-woocommerce' ) ) {
 			return;
 		}
 		wp_register_ability_category(
-			'mo-ectools',
+			'moksa-for-woocommerce',
 			[
 				'label'       => __( 'Moksa for WooCommerce', 'moksa-for-woocommerce' ),
 				'description' => __( '台灣金流 / 物流 / 電子發票能力', 'moksa-for-woocommerce' ),
@@ -41,7 +41,7 @@ final class Ability {
 			[
 				'label'               => __( '依號碼查訂單', 'moksa-for-woocommerce' ),
 				'description'         => __( '用電子發票號碼 / 物流單號 / 金流交易序號查詢符合的 WooCommerce 訂單，回傳訂單編號、買家、狀態與後台連結。直接給訂單編號（如 2855）即可查該訂單狀態。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -94,11 +94,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/get-order-details',
+			'moksa-for-woocommerce/get-order-details',
 			[
 				'label'               => __( '查訂單明細', 'moksa-for-woocommerce' ),
 				'description'         => __( '取單筆訂單的完整明細：狀態、買家、品項、金額、付款方式、配送方式、取貨門市，以及電子發票號碼（含是否已開立）、物流單號、金流交易序號。用來回答「這筆發票開了嗎 / 物流單號多少 / 取哪間門市」。可給訂單編號或任一號碼。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -144,11 +144,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/query-orders',
+			'moksa-for-woocommerce/query-orders',
 			[
 				'label'               => __( '查訂單數量 / 狀態', 'moksa-for-woocommerce' ),
 				'description'         => __( '查訂單「數量 / 統計」:回各狀態筆數分布,或某狀態的訂單筆數。常見狀態 slug:processing(處理中 / 待出貨)、pending(待付款)、on-hold(保留中)、completed(已完成)、cancelled(已取消)、refunded(已退款)。status 用 all(或省略)回各狀態分布。要實際訂單清單請改用 list-orders;查某顧客的訂單用 find-customer-orders。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -188,11 +188,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/update-order-status',
+			'moksa-for-woocommerce/update-order-status',
 			[
 				'label'               => __( '更改訂單狀態', 'moksa-for-woocommerce' ),
 				'description'         => __( '把指定訂單改成新的狀態(如 processing 處理中、completed 已完成、cancelled 已取消)。這是破壞性操作 —— 呼叫此工具只會「提出」變更,系統會要求使用者按「確認執行」後才真正變更,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -250,11 +250,11 @@ final class Ability {
 
 	private static function register_batch_ship_and_reports(): void {
 		wp_register_ability(
-			'mo-ectools/batch-create-shipment',
+			'moksa-for-woocommerce/batch-create-shipment',
 			[
 				'label'               => __( '批次建立託運單', 'moksa-for-woocommerce' ),
 				'description'         => __( '一次為「多筆」訂單建立託運單並取得物流單號(依各訂單運送方式自動判斷物流商)。破壞性、不可逆 —— 呼叫只會「提出」,使用者按「確認執行」後才建單,你不需要自己再追問。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -291,11 +291,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/find-customer-orders',
+			'moksa-for-woocommerce/find-customer-orders',
 			[
 				'label'               => __( '查顧客訂單', 'moksa-for-woocommerce' ),
 				'description'         => __( '用顧客的 email、電話或姓名查他的所有訂單(回傳訂單清單與已付款累計)。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -331,11 +331,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/sales-summary',
+			'moksa-for-woocommerce/sales-summary',
 			[
 				'label'               => __( '營收訂單統計', 'moksa-for-woocommerce' ),
 				'description'         => __( '某期間的訂單數、已付款營收、各狀態分布、平均客單價。period 選填(預設本月 this_month):today / yesterday / this_month / last_month / this_year / custom(custom 時再給 date_from、date_to,格式 YYYY-MM-DD)。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -386,11 +386,11 @@ final class Ability {
 
 	private static function register_shipping_zones(): void {
 		wp_register_ability(
-			'mo-ectools/list-shipping-zones',
+			'moksa-for-woocommerce/list-shipping-zones',
 			[
 				'label'               => __( '列出運送區域與方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '列出 WooCommerce 運送區域內所有運送方式(7-11 取貨 / 黑貓常溫冷凍 等)與啟用狀態。切換前先用這個確認方式名稱。免參數。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -427,11 +427,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/toggle-shipping-method',
+			'moksa-for-woocommerce/toggle-shipping-method',
 			[
 				'label'               => __( '啟用/停用運送方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '啟用或停用 WooCommerce 運送區域內的某個運送方式(如「速買配 黑貓常溫」「綠界 7-11 取貨」)。method 直接給方式名稱即可。這是破壞性操作(影響前台結帳可選的運送方式)—— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -473,11 +473,11 @@ final class Ability {
 
 	private static function register_status_and_settings(): void {
 		wp_register_ability(
-			'mo-ectools/get-payment-status',
+			'moksa-for-woocommerce/get-payment-status',
 			[
 				'label'               => __( '查付款狀態', 'moksa-for-woocommerce' ),
 				'description'         => __( '查某訂單的付款狀態:付款方式、是否已付款、交易序號、卡末四、ATM 虛擬帳號、超商繳費代碼。藍新金流訂單會額外向藍新做即時查詢(B02)。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -517,11 +517,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/get-plugin-settings',
+			'moksa-for-woocommerce/get-plugin-settings',
 			[
 				'label'               => __( '彙整外掛設定', 'moksa-for-woocommerce' ),
 				'description'         => __( '彙整目前非敏感設定:哪些金流/物流/發票管道啟用、各模組測試或正式模式、發票開立時機、訂單查號可搜尋欄位、AI 助手是否啟用。不含任何憑證。免參數。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -560,11 +560,11 @@ final class Ability {
 
 	private static function register_email_and_tracking(): void {
 		wp_register_ability(
-			'mo-ectools/resend-payment-email',
+			'moksa-for-woocommerce/resend-payment-email',
 			[
 				'label'               => __( '重寄付款資訊信', 'moksa-for-woocommerce' ),
 				'description'         => __( '重寄付款資訊信(ATM 虛擬帳號 / 超商繳費代碼等)給訂單的顧客。只有有這類付款資訊的訂單可寄(信用卡訂單沒有)。這是破壞性操作(會寄信給顧客)—— 呼叫只會「提出」,使用者按「確認執行」後才寄出,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -600,11 +600,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/get-tracking-link',
+			'moksa-for-woocommerce/get-tracking-link',
 			[
 				'label'               => __( '取貨態追蹤連結', 'moksa-for-woocommerce' ),
 				'description'         => __( '取某訂單的物流貨態追蹤連結(各家物流的公開查詢頁 + 物流單號)。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -642,11 +642,11 @@ final class Ability {
 
 	private static function register_invoice_channels(): void {
 		wp_register_ability(
-			'mo-ectools/list-invoice-channels',
+			'moksa-for-woocommerce/list-invoice-channels',
 			[
 				'label'               => __( '列出發票開立方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '列出某家電子發票(綠界/ezPay/速買配/PayNow/Amego)支援的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)與啟用狀態。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -682,11 +682,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/toggle-invoice-channel',
+			'moksa-for-woocommerce/toggle-invoice-channel',
 			[
 				'label'               => __( '啟用/停用發票開立方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '啟用或停用某家電子發票的一或多種開立方式(會員載具、手機條碼、自然人憑證、紙本、捐贈、統編)。channels 直接給名稱即可。這是破壞性操作 —— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -733,11 +733,11 @@ final class Ability {
 
 	private static function register_payment_methods(): void {
 		wp_register_ability(
-			'mo-ectools/list-payment-methods',
+			'moksa-for-woocommerce/list-payment-methods',
 			[
 				'label'               => __( '列出金流付款方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '列出某個金流(綠界/藍新/PAYUNi/速買配/PayNow/PChomePay)所有「個別付款方式」與啟用狀態。切換前先用這個確認有哪些方式。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -773,11 +773,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/toggle-payment-method',
+			'moksa-for-woocommerce/toggle-payment-method',
 			[
 				'label'               => __( '啟用/停用金流付款方式', 'moksa-for-woocommerce' ),
 				'description'         => __( '啟用或停用某個金流裡的一或多個「個別付款方式」(如綠界的信用卡一次付清、Apple Pay、ATM)。methods 直接給方式名稱即可。這是破壞性操作 —— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -824,11 +824,11 @@ final class Ability {
 
 	private static function register_allowance_and_list(): void {
 		wp_register_ability(
-			'mo-ectools/issue-allowance',
+			'moksa-for-woocommerce/issue-allowance',
 			[
 				'label'               => __( '開立發票折讓單', 'moksa-for-woocommerce' ),
 				'description'         => __( '為訂單已開立的電子發票開立折讓單(部分退款用),需指定折讓金額。僅綠界/ezPay/Amego 支援。破壞性、不可逆 —— 呼叫只會「提出」,使用者按「確認執行」後才開立,你不需要自己再追問。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -868,11 +868,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/list-orders',
+			'moksa-for-woocommerce/list-orders',
 			[
 				'label'               => __( '進階訂單列表', 'moksa-for-woocommerce' ),
 				'description'         => __( '回傳「實際訂單清單」:依狀態、日期區間(date_from / date_to,YYYY-MM-DD)、金流方式篩選,回精簡清單(預設 20 筆、上限 50)。只要各狀態的筆數 / 數量請改用 query-orders。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -929,11 +929,11 @@ final class Ability {
 
 	private static function register_channel_and_donation(): void {
 		wp_register_ability(
-			'mo-ectools/list-channels',
+			'moksa-for-woocommerce/list-channels',
 			[
 				'label'               => __( '列出金流/物流/發票管道', 'moksa-for-woocommerce' ),
 				'description'         => __( '列出金流、物流、電子發票管道與其啟用狀態(含 slug)。category 用 all 取全部,或 payment / shipping / invoice 篩選。唯讀。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -971,11 +971,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/toggle-channel',
+			'moksa-for-woocommerce/toggle-channel',
 			[
 				'label'               => __( '啟用/停用管道', 'moksa-for-woocommerce' ),
 				'description'         => __( '啟用或停用某個金流/物流/電子發票管道。channel 可直接給管道名稱(如「速買配物流」)或 slug,不必先查清單。這是破壞性操作(停用會影響結帳可用方式、啟用未設定憑證的管道會在前台出錯)—— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問。不處理憑證與測試/正式切換。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1015,11 +1015,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/add-donation-org',
+			'moksa-for-woocommerce/add-donation-org',
 			[
 				'label'               => __( '新增發票捐贈單位', 'moksa-for-woocommerce' ),
 				'description'         => __( '新增一個電子發票捐贈單位(社福團體名稱 + 愛心碼)到啟用中發票模組的捐贈名單,之後結帳的捐贈選單就能選。愛心碼為 3-7 碼數字。呼叫只會「提出」,使用者按「確認執行」後才寫入,你不需要自己再追問。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1061,11 +1061,11 @@ final class Ability {
 
 	private static function register_create_shipment(): void {
 		wp_register_ability(
-			'mo-ectools/create-shipment',
+			'moksa-for-woocommerce/create-shipment',
 			[
 				'label'               => __( '建立託運單', 'moksa-for-woocommerce' ),
 				'description'         => __( '為訂單向物流商建立託運單並取得物流單號(依訂單的運送方式自動判斷物流商)。這是破壞性、不可逆的操作(會向物流商真實下單)—— 呼叫此工具只會「提出」,使用者按「確認執行」後才真正建單,你不需要自己再追問確認。建單後才能列印物流單。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1103,11 +1103,11 @@ final class Ability {
 
 	private static function register_add_note(): void {
 		wp_register_ability(
-			'mo-ectools/add-order-note',
+			'moksa-for-woocommerce/add-order-note',
 			[
 				'label'               => __( '新增訂單備註', 'moksa-for-woocommerce' ),
 				'description'         => __( '為指定訂單加一則內部備註(記事用,不寄給客戶)。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1187,11 +1187,11 @@ final class Ability {
 
 	private static function register_print_label(): void {
 		wp_register_ability(
-			'mo-ectools/print-shipping-label',
+			'moksa-for-woocommerce/print-shipping-label',
 			[
 				'label'               => __( '列印物流單', 'moksa-for-woocommerce' ),
 				'description'         => __( '為一筆或多筆訂單列印物流標籤(託運單)。自動依各訂單的物流商分組。呼叫此工具只會「提出」,使用者按「確認執行」後會開啟列印頁。訂單需已建立託運單才有標籤可印。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1234,11 +1234,11 @@ final class Ability {
 
 	private static function register_invoice_ops(): void {
 		wp_register_ability(
-			'mo-ectools/issue-invoice',
+			'moksa-for-woocommerce/issue-invoice',
 			[
 				'label'               => __( '開立電子發票', 'moksa-for-woocommerce' ),
 				'description'         => __( '為指定訂單開立電子發票(自動依訂單設定的發票商與發票類型)。這是破壞性、不可逆的稅務操作 —— 呼叫此工具只會「提出」,系統會要求使用者按「確認執行」後才真正開立,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1274,11 +1274,11 @@ final class Ability {
 		);
 
 		wp_register_ability(
-			'mo-ectools/void-invoice',
+			'moksa-for-woocommerce/void-invoice',
 			[
 				'label'               => __( '作廢電子發票', 'moksa-for-woocommerce' ),
 				'description'         => __( '作廢指定訂單已開立的電子發票,需提供作廢原因。這是破壞性、不可逆的稅務操作 —— 呼叫此工具只會「提出」,系統會要求使用者按「確認執行」後才真正作廢,你不需要自己再追問確認。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1320,11 +1320,11 @@ final class Ability {
 
 	private static function register_batch_status(): void {
 		wp_register_ability(
-			'mo-ectools/batch-update-order-status',
+			'moksa-for-woocommerce/batch-update-order-status',
 			[
 				'label'               => __( '批次更改訂單狀態', 'moksa-for-woocommerce' ),
 				'description'         => __( '把「多筆」訂單一次改成同一個新狀態(如 processing 處理中、completed 已完成、cancelled 已取消)。這是破壞性操作 —— 呼叫此工具只會「提出」變更,系統會要求使用者按「確認執行」後才真正變更,你不需要自己再追問確認。只要使用者一次提到兩筆以上訂單就用這個。', 'moksa-for-woocommerce' ),
-				'category'            => 'mo-ectools',
+				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
 					'properties'           => [
@@ -1397,7 +1397,7 @@ final class Ability {
 	}
 
 	/**
-	 * 註冊時 gate MCP 暴露：設定關閉時，把破壞性 mo-ectools 能力的 meta.mcp.public 設為
+	 * 註冊時 gate MCP 暴露：設定關閉時，把破壞性 moksa-for-woocommerce 能力的 meta.mcp.public 設為
 	 * false（WordPress 核心 MCP Adapter 據此不暴露），並記錄供 deprecated WC endpoint 同步排除。
 	 * 破壞性能力即使暴露也只會「提議」（execute_callback 一律是 propose-only 的 *prepare），
 	 * 真正變更在非-ability 的 *apply（僅站內確認 REST 可達）。此 gate 為防禦縱深。
@@ -1407,7 +1407,7 @@ final class Ability {
 	 * @return mixed
 	 */
 	public static function gate_mcp_exposure( $args, $name ) {
-		if ( ! is_string( $name ) || 0 !== strpos( $name, 'mo-ectools/' ) || ! is_array( $args ) ) {
+		if ( ! is_string( $name ) || 0 !== strpos( $name, 'moksa-for-woocommerce/' ) || ! is_array( $args ) ) {
 			return $args;
 		}
 		$destructive = ! empty( $args['meta']['annotations']['destructive'] );
@@ -1427,7 +1427,7 @@ final class Ability {
 	 * @return mixed
 	 */
 	public static function include_in_mcp( $include, $ability_id ) {
-		if ( is_string( $ability_id ) && 0 === strpos( $ability_id, 'mo-ectools/' ) ) {
+		if ( is_string( $ability_id ) && 0 === strpos( $ability_id, 'moksa-for-woocommerce/' ) ) {
 			return empty( self::$mcp_hidden[ $ability_id ] );
 		}
 		return $include;

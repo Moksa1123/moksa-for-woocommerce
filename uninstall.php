@@ -142,5 +142,5 @@ $wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'moksaf
 
 // Clear scheduled actions.
 if ( function_exists( 'as_unschedule_all_actions' ) ) {
-	as_unschedule_all_actions( '', array(), 'mo-ectools' );
+	as_unschedule_all_actions( '', array(), 'moksa-for-woocommerce' );
 }

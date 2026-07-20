@@ -9,7 +9,7 @@ use Moksafowo\Order\Meta\Keys;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 單筆訂單明細 —— 通用 WC 欄位 + mo-ectools 台灣特有號碼（發票 / 物流 / 金流 / 取貨門市），
+ * 單筆訂單明細 —— 通用 WC 欄位 + moksa-for-woocommerce 台灣特有號碼（發票 / 物流 / 金流 / 取貨門市），
  * 整理成 AI / REST 好讀的結構。給「這筆發票開了嗎？物流單號多少？取哪間門市？」這類問題用。
  */
 final class OrderDetails {

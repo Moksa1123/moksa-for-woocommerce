@@ -33,34 +33,34 @@ final class Config {
 	 */
 	public static function abilities(): array {
 		$abilities = array(
-			'mo-ectools/find-order-by-number',
-			'mo-ectools/get-order-details',
-			'mo-ectools/query-orders',
-			'mo-ectools/update-order-status',
-			'mo-ectools/batch-update-order-status',
-			'mo-ectools/issue-invoice',
-			'mo-ectools/void-invoice',
-			'mo-ectools/print-shipping-label',
-			'mo-ectools/create-shipment',
-			'mo-ectools/add-order-note',
-			'mo-ectools/list-channels',
-			'mo-ectools/toggle-channel',
-			'mo-ectools/add-donation-org',
-			'mo-ectools/issue-allowance',
-			'mo-ectools/list-orders',
-			'mo-ectools/list-payment-methods',
-			'mo-ectools/toggle-payment-method',
-			'mo-ectools/list-invoice-channels',
-			'mo-ectools/toggle-invoice-channel',
-			'mo-ectools/resend-payment-email',
-			'mo-ectools/get-tracking-link',
-			'mo-ectools/get-payment-status',
-			'mo-ectools/get-plugin-settings',
-			'mo-ectools/list-shipping-zones',
-			'mo-ectools/toggle-shipping-method',
-			'mo-ectools/batch-create-shipment',
-			'mo-ectools/find-customer-orders',
-			'mo-ectools/sales-summary',
+			'moksa-for-woocommerce/find-order-by-number',
+			'moksa-for-woocommerce/get-order-details',
+			'moksa-for-woocommerce/query-orders',
+			'moksa-for-woocommerce/update-order-status',
+			'moksa-for-woocommerce/batch-update-order-status',
+			'moksa-for-woocommerce/issue-invoice',
+			'moksa-for-woocommerce/void-invoice',
+			'moksa-for-woocommerce/print-shipping-label',
+			'moksa-for-woocommerce/create-shipment',
+			'moksa-for-woocommerce/add-order-note',
+			'moksa-for-woocommerce/list-channels',
+			'moksa-for-woocommerce/toggle-channel',
+			'moksa-for-woocommerce/add-donation-org',
+			'moksa-for-woocommerce/issue-allowance',
+			'moksa-for-woocommerce/list-orders',
+			'moksa-for-woocommerce/list-payment-methods',
+			'moksa-for-woocommerce/toggle-payment-method',
+			'moksa-for-woocommerce/list-invoice-channels',
+			'moksa-for-woocommerce/toggle-invoice-channel',
+			'moksa-for-woocommerce/resend-payment-email',
+			'moksa-for-woocommerce/get-tracking-link',
+			'moksa-for-woocommerce/get-payment-status',
+			'moksa-for-woocommerce/get-plugin-settings',
+			'moksa-for-woocommerce/list-shipping-zones',
+			'moksa-for-woocommerce/toggle-shipping-method',
+			'moksa-for-woocommerce/batch-create-shipment',
+			'moksa-for-woocommerce/find-customer-orders',
+			'moksa-for-woocommerce/sales-summary',
 		);
 		return (array) apply_filters( 'moksafowo_ai_assistant_abilities', $abilities );
 	}
@@ -73,59 +73,59 @@ final class Config {
 	 */
 	public static function destructive_handlers(): array {
 		$handlers = array(
-			'mo-ectools/update-order-status'       => array(
+			'moksa-for-woocommerce/update-order-status'    => array(
 				'prepare' => array( UpdateOrderStatus::class, 'prepare' ),
 				'apply'   => array( UpdateOrderStatus::class, 'apply' ),
 			),
-			'mo-ectools/batch-update-order-status' => array(
+			'moksa-for-woocommerce/batch-update-order-status' => array(
 				'prepare' => array( BatchUpdateOrderStatus::class, 'prepare' ),
 				'apply'   => array( BatchUpdateOrderStatus::class, 'apply' ),
 			),
-			'mo-ectools/issue-invoice'             => array(
+			'moksa-for-woocommerce/issue-invoice'          => array(
 				'prepare' => array( InvoiceOps::class, 'issue_prepare' ),
 				'apply'   => array( InvoiceOps::class, 'issue_apply' ),
 			),
-			'mo-ectools/void-invoice'              => array(
+			'moksa-for-woocommerce/void-invoice'           => array(
 				'prepare' => array( InvoiceOps::class, 'void_prepare' ),
 				'apply'   => array( InvoiceOps::class, 'void_apply' ),
 			),
-			'mo-ectools/print-shipping-label'      => array(
+			'moksa-for-woocommerce/print-shipping-label'   => array(
 				'prepare' => array( PrintShippingLabel::class, 'prepare' ),
 				'apply'   => array( PrintShippingLabel::class, 'apply' ),
 			),
-			'mo-ectools/create-shipment'           => array(
+			'moksa-for-woocommerce/create-shipment'        => array(
 				'prepare' => array( ShipmentOps::class, 'prepare' ),
 				'apply'   => array( ShipmentOps::class, 'apply' ),
 			),
-			'mo-ectools/batch-create-shipment'     => array(
+			'moksa-for-woocommerce/batch-create-shipment'  => array(
 				'prepare' => array( ShipmentOps::class, 'batch_prepare' ),
 				'apply'   => array( ShipmentOps::class, 'batch_apply' ),
 			),
-			'mo-ectools/toggle-channel'            => array(
+			'moksa-for-woocommerce/toggle-channel'         => array(
 				'prepare' => array( ChannelOps::class, 'toggle_prepare' ),
 				'apply'   => array( ChannelOps::class, 'toggle_apply' ),
 			),
-			'mo-ectools/add-donation-org'          => array(
+			'moksa-for-woocommerce/add-donation-org'       => array(
 				'prepare' => array( DonationOrgOps::class, 'prepare' ),
 				'apply'   => array( DonationOrgOps::class, 'apply' ),
 			),
-			'mo-ectools/issue-allowance'           => array(
+			'moksa-for-woocommerce/issue-allowance'        => array(
 				'prepare' => array( InvoiceOps::class, 'allowance_prepare' ),
 				'apply'   => array( InvoiceOps::class, 'allowance_apply' ),
 			),
-			'mo-ectools/toggle-payment-method'     => array(
+			'moksa-for-woocommerce/toggle-payment-method'  => array(
 				'prepare' => array( PaymentMethodOps::class, 'toggle_prepare' ),
 				'apply'   => array( PaymentMethodOps::class, 'toggle_apply' ),
 			),
-			'mo-ectools/toggle-invoice-channel'    => array(
+			'moksa-for-woocommerce/toggle-invoice-channel' => array(
 				'prepare' => array( InvoiceChannelOps::class, 'toggle_prepare' ),
 				'apply'   => array( InvoiceChannelOps::class, 'toggle_apply' ),
 			),
-			'mo-ectools/resend-payment-email'      => array(
+			'moksa-for-woocommerce/resend-payment-email'   => array(
 				'prepare' => array( ResendPaymentEmail::class, 'prepare' ),
 				'apply'   => array( ResendPaymentEmail::class, 'apply' ),
 			),
-			'mo-ectools/toggle-shipping-method'    => array(
+			'moksa-for-woocommerce/toggle-shipping-method' => array(
 				'prepare' => array( ShippingZoneOps::class, 'toggle_prepare' ),
 				'apply'   => array( ShippingZoneOps::class, 'toggle_apply' ),
 			),

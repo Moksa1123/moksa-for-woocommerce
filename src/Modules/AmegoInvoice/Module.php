@@ -95,12 +95,12 @@ final class Module extends AbstractModule {
 			return;
 		}
 		// Dedupe：payment_complete + status_processing 都會觸發本 hook。
-		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( self::ASYNC_ISSUE_HOOK, [ $order_id ], 'mo-ectools' ) ) {
+		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( self::ASYNC_ISSUE_HOOK, [ $order_id ], 'moksa-for-woocommerce' ) ) {
 			return;
 		}
 
 		if ( function_exists( 'as_schedule_single_action' ) ) {
-			as_schedule_single_action( time(), self::ASYNC_ISSUE_HOOK, [ $order_id ], 'mo-ectools' );
+			as_schedule_single_action( time(), self::ASYNC_ISSUE_HOOK, [ $order_id ], 'moksa-for-woocommerce' );
 		} else {
 			wp_schedule_single_event( time(), self::ASYNC_ISSUE_HOOK, [ $order_id ] );
 		}

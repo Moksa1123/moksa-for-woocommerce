@@ -248,7 +248,7 @@ final class FieldManager {
 		if ( ! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
-		if ( ! isset( $_GET['tab'] ) || 'mo-ectools' !== $_GET['tab'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['tab'] ) || 'moksa-for-woocommerce' !== $_GET['tab'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 		if ( ! isset( $_GET['section'] ) || 'advanced' !== $_GET['section'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended

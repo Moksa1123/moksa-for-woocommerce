@@ -86,7 +86,7 @@ final class Module extends AbstractModule {
 		if ( '' !== $provider && 'ecpay' !== $provider ) {
 			return;
 		}
-		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' ) ) {
+		if ( function_exists( 'as_next_scheduled_action' ) && as_next_scheduled_action( 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'moksa-for-woocommerce' ) ) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ final class Module extends AbstractModule {
 
 		$run_at = time() + ( $delay_days * DAY_IN_SECONDS );
 		if ( function_exists( 'as_schedule_single_action' ) ) {
-			as_schedule_single_action( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'mo-ectools' );
+			as_schedule_single_action( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'moksa-for-woocommerce' );
 		} else {
 			wp_schedule_single_event( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ] );
 		}

@@ -7,7 +7,7 @@ namespace Moksafowo\Modules\OrderLookup;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 訂單數量 / 狀態查詢核心。給 ability `mo-ectools/query-orders` 用。
+ * 訂單數量 / 狀態查詢核心。給 ability `moksa-for-woocommerce/query-orders` 用。
  *
  * 不給 status → 回各狀態的筆數分布;給 status → 額外回該狀態最近 10 筆樣本。
  */

@@ -2,7 +2,7 @@
  * 訂單查號 — WP 命令面板（Ctrl+K）整合。
  *
  * 註冊一個 command loader：使用者在命令面板打發票號 / 物流單號 / 金流交易序號,
- * 即時呼叫 mo-ectools/v1/order-lookup,把符合的訂單列成可點指令 → 點了跳訂單編輯頁。
+ * 即時呼叫 moksa-for-woocommerce/v1/order-lookup,把符合的訂單列成可點指令 → 點了跳訂單編輯頁。
  */
 ( function ( wp ) {
 	if ( ! wp || ! wp.data || ! wp.element || ! wp.apiFetch ) {
@@ -44,7 +44,7 @@
 				var timer = setTimeout( function () {
 					apiFetch( {
 						path:
-							'/mo-ectools/v1/order-lookup?number=' +
+							'/moksa-for-woocommerce/v1/order-lookup?number=' +
 							encodeURIComponent( term ),
 					} )
 						.then( function ( results ) {
@@ -54,7 +54,7 @@
 							setCommands(
 								( results || [] ).map( function ( order ) {
 									return {
-										name: 'mo-ectools/order-' + order.id,
+										name: 'moksa-for-woocommerce/order-' + order.id,
 										label: order.label,
 										icon: ORDER_ICON,
 										// 命令面板(cmdk)會用搜尋字串再過濾一次,
@@ -93,7 +93,7 @@
 	}
 
 	wp.data.dispatch( 'core/commands' ).registerCommandLoader( {
-		name: 'mo-ectools/order-lookup',
+		name: 'moksa-for-woocommerce/order-lookup',
 		hook: useOrderLookupCommands,
 	} );
 } )( window.wp );

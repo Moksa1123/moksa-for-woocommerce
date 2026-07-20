@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Server {
 
-	const NS       = 'mo-ectools/v1';
+	const NS       = 'moksa-for-woocommerce/v1';
 	const ROUTE    = '/mcp';
 	const PROTOCOL = '2025-06-18';
 
@@ -116,7 +116,7 @@ final class Server {
 						'protocolVersion' => self::PROTOCOL,
 						'capabilities'    => array( 'tools' => array( 'listChanged' => false ) ),
 						'serverInfo'      => array(
-							'name'    => 'mo-ectools',
+							'name'    => 'moksa-for-woocommerce',
 							'title'   => 'Moksa 電商工具',
 							'version' => MOKSAFOWO_VERSION,
 						),
@@ -157,7 +157,7 @@ final class Server {
 				continue;
 			}
 			$name = (string) $ability->get_name();
-			if ( 0 !== strpos( $name, 'mo-ectools/' ) ) {
+			if ( 0 !== strpos( $name, 'moksa-for-woocommerce/' ) ) {
 				continue;
 			}
 			$meta = (array) $ability->get_meta();
@@ -302,10 +302,10 @@ final class Server {
 	}
 
 	private static function ability_name( string $tool ): string {
-		if ( 0 !== strpos( $tool, 'mo-ectools-' ) ) {
+		if ( 0 !== strpos( $tool, 'moksa-for-woocommerce-' ) ) {
 			return '';
 		}
-		return 'mo-ectools/' . substr( $tool, strlen( 'mo-ectools-' ) );
+		return 'moksa-for-woocommerce/' . substr( $tool, strlen( 'moksa-for-woocommerce-' ) );
 	}
 
 	/**

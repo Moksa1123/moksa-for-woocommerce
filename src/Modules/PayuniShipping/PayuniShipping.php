@@ -577,7 +577,7 @@ class PayuniShipping {
 
 		$redacted = \Moksafowo\Logging\Redactor::redact_string( $msg_str );
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- belt-and-suspenders fallback when WC log dir not writable; plugin Logger does not propagate redacted result back.
-		error_log( '[mo-ectools-payuni-shipping][' . $method . '] ' . $redacted );
+		error_log( '[moksa-for-woocommerce-payuni-shipping][' . $method . '] ' . $redacted );
 	}
 
 

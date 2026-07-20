@@ -55,7 +55,7 @@ class ShippingRequest {
 			return;
 		}
 		if ( function_exists( 'as_schedule_single_action' ) ) {
-			as_schedule_single_action( time(), self::ASYNC_CREATE_HOOK, [ $id ], 'mo-ectools' );
+			as_schedule_single_action( time(), self::ASYNC_CREATE_HOOK, [ $id ], 'moksa-for-woocommerce' );
 		} else {
 			wp_schedule_single_event( time(), self::ASYNC_CREATE_HOOK, [ $id ] );
 		}

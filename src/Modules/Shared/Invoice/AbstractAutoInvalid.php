@@ -31,10 +31,10 @@ abstract class AbstractAutoInvalid {
 			return;
 		}
 		$hook = static::hook_name();
-		if ( function_exists( 'as_has_scheduled_action' ) && as_has_scheduled_action( $hook, [ $order_id ], 'mo-ectools' ) ) {
+		if ( function_exists( 'as_has_scheduled_action' ) && as_has_scheduled_action( $hook, [ $order_id ], 'moksa-for-woocommerce' ) ) {
 			return;
 		}
-		as_schedule_single_action( time() + static::BUFFER_SECONDS, $hook, [ $order_id ], 'mo-ectools' );
+		as_schedule_single_action( time() + static::BUFFER_SECONDS, $hook, [ $order_id ], 'moksa-for-woocommerce' );
 	}
 
 	public static function run( int $order_id ): void {
@@ -67,7 +67,7 @@ abstract class AbstractAutoInvalid {
 		if ( '' !== $scheduled_at && '' !== static::deferred_issue_hook_name() ) {
 			$cancelled = false;
 			if ( function_exists( 'as_unschedule_action' ) ) {
-				$cancelled = (bool) as_unschedule_action( static::deferred_issue_hook_name(), [ $order_id ], 'mo-ectools' );
+				$cancelled = (bool) as_unschedule_action( static::deferred_issue_hook_name(), [ $order_id ], 'moksa-for-woocommerce' );
 			}
 			if ( '' !== static::scheduled_meta_key() ) {
 				$order->delete_meta_data( static::scheduled_meta_key() );

@@ -57,7 +57,7 @@ final class Logger {
 
 		if ( ! self::wc_logs_writable() ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- fallback path when WC logger directory not writable; intentional last-resort to PHP error log.
-			error_log( '[mo-ectools-' . $source . '][' . $level . '] ' . $message );
+			error_log( '[moksa-for-woocommerce-' . $source . '][' . $level . '] ' . $message );
 			return;
 		}
 

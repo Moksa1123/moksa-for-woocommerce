@@ -7,7 +7,7 @@ namespace Moksafowo\Modules\AiAssistant;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * WP 7.0 AI Client agentic 迴圈 —— 把 mo-ectools abilities 當工具,跑「生成 → 執行 ability
+ * WP 7.0 AI Client agentic 迴圈 —— 把 moksa-for-woocommerce abilities 當工具,跑「生成 → 執行 ability
  * → 餵回 → 再生成」直到文字答覆。破壞性 ability 會被攔下,改回傳「需確認」讓人工按鈕確認。
  *
  * 安全:① abilities 白名單(模型只能呼叫傳入的)② 每個 ability permission_callback(核心強制)
