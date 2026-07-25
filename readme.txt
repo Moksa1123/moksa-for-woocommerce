@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.8
+Stable tag: 1.4.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -41,34 +41,34 @@ When a module is set to test/sandbox mode, requests go to the provider's corresp
 
 These run when a customer selects the gateway at checkout (to create the payment) and when you query, capture, refund or void the payment from the order screen.
 
-* **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
-* **NewebPay (藍新金流)** — credit card, ATM, CVS, barcode, wallets. Endpoints: core.newebpay.com. Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
-* **PAYUNi (統一金流)** — credit card, ATM, CVS, wallets. Endpoints: api.payuni.com.tw. Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
-* **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname — smse.com.tw and smilepay.net are both operated by the same company, 訊航科技 Shinhang Technology; its policies are published on the smilepay.net brand site). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
-* **PayNow (立吉富)** — credit card, ATM, CVS, installments. Endpoints: www.paynow.com.tw. Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
-* **PChomePay (支付連)** — credit card, ATM, CVS, barcode. Endpoints: api.pchomepay.com.tw. Terms: https://www.pchomepay.com.tw/other/service_treaty — Privacy: https://web.pchomepay.com.tw/introduction/privacy
-* **LINE Pay** — LINE Pay wallet. Endpoints: api-pay.line.me. Terms: https://terms2.line.me/linepay_TW_TermsofUse?lang=zh-Hant — Privacy: https://terms2.line.me/linepay_TW_PP
-* **TapPay** — credit card via the TapPay Fields SDK loaded in the browser (js.tappaysdk.com). Card data is tokenised client-side; only the token reaches your server. Endpoints: prod.tappaysdk.com. Terms & Privacy: https://www.tappaysdk.com/taiwan-en/privacy-term
-* **Shopline Payments** — credit card, wallets. Endpoints: api.shoplinepayments.com. Terms: https://book.shoplineapp.com/pages/shopline-payments-terms-and-conditions — Privacy: https://www.shopline.com/shopline-payments-privacy
+* **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw (test mode: payment-stage.ecpay.com.tw, ecpayment-stage.ecpay.com.tw). Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
+* **NewebPay (藍新金流)** — credit card, ATM, CVS, barcode, wallets. Endpoints: core.newebpay.com (test mode: ccore.newebpay.com). Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
+* **PAYUNi (統一金流)** — credit card, ATM, CVS, wallets. Endpoints: api.payuni.com.tw (test mode: sandbox-api.payuni.com.tw). Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
+* **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname — smse.com.tw and smilepay.net are both operated by the same company, 訊航科技 Shinhang Technology; its policies are published on the smilepay.net brand site; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (SmilePay publishes a single combined service & personal-data-protection document, so both links point at that document)
+* **PayNow (立吉富)** — credit card, ATM, CVS, installments. Endpoints: www.paynow.com.tw (test mode: test.paynow.com.tw). Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
+* **PChomePay (支付連)** — credit card, ATM, CVS, barcode. Endpoints: api.pchomepay.com.tw (test mode: sandbox-api.pchomepay.com.tw). Terms: https://www.pchomepay.com.tw/other/service_treaty — Privacy: https://web.pchomepay.com.tw/introduction/privacy
+* **LINE Pay** — LINE Pay wallet. Endpoints: api-pay.line.me (test mode: sandbox-api-pay.line.me). Terms: https://terms2.line.me/linepay_TW_TermsofUse?lang=zh-Hant — Privacy: https://terms2.line.me/linepay_TW_PP
+* **TapPay** — credit card via the TapPay Fields SDK loaded in the browser (js.tappaysdk.com). Card data is tokenised client-side; only the token reaches your server. Endpoints: prod.tappaysdk.com, js.tappaysdk.com (test mode: sandbox.tappaysdk.com). Terms: https://www.tappaysdk.com/taiwan-en/privacy-term — Privacy: https://www.tappaysdk.com/taiwan-en/privacy-term (TapPay publishes a single combined terms & privacy document, so both links point at that document)
+* **Shopline Payments** — credit card, wallets. Endpoints: api.shoplinepayments.com (test mode: api-sandbox.shoplinepayments.com). Terms: https://book.shoplineapp.com/pages/shopline-payments-terms-and-conditions — Privacy: https://www.shopline.com/shopline-payments-privacy
 
 = Shipping / logistics =
 
 These run when a customer opens the convenience-store map at checkout (the store-selection map is hosted by the provider), when a shipment is created after an order is placed, and when you print a label or query shipment status.
 
-* **ECPay Logistics (綠界物流)** — 7-11 / FamilyMart / Hi-Life / OK / home delivery. Endpoints: logistics.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
-* **NewebPay Logistics (藍新物流)** — CVS / home delivery. Endpoints: core.newebpay.com. Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
-* **PAYUNi Logistics (統一物流)** — 7-11 / home delivery (incl. cold chain). Endpoints: api.payuni.com.tw. Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
-* **SmilePay Logistics (速買配物流)** — 7-11 / FamilyMart / home delivery. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
+* **ECPay Logistics (綠界物流)** — 7-11 / FamilyMart / Hi-Life / OK / home delivery. Endpoints: logistics.ecpay.com.tw (test mode: logistics-stage.ecpay.com.tw). Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
+* **NewebPay Logistics (藍新物流)** — CVS / home delivery. Endpoints: core.newebpay.com (test mode: ccore.newebpay.com). Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
+* **PAYUNi Logistics (統一物流)** — 7-11 / home delivery (incl. cold chain). Endpoints: api.payuni.com.tw (test mode: sandbox-api.payuni.com.tw). Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
+* **SmilePay Logistics (速買配物流)** — 7-11 / FamilyMart / home delivery. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (single combined service & personal-data-protection document)
 
 = E-invoice (Taiwan electronic invoicing) =
 
 These run when an invoice is issued for an order (immediately on payment, on completion, or manually, per your setting) and when you void / issue an allowance / query an invoice. Data includes the order amount, item descriptions and the buyer's carrier number, donation code or company tax ID entered at checkout.
 
-* **ECPay e-Invoice (綠界電子發票)** — Endpoints: einvoice.ecpay.com.tw. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
-* **ezPay e-Invoice (ezPay 電子發票)** — Endpoints: inv.ezpay.com.tw. Terms & Privacy (single combined membership & data-protection terms page): https://www.ezpay.com.tw/info/Site_description/service_page/member
-* **SmilePay e-Invoice (速買配電子發票)** — Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net). Terms & Privacy (single combined service & personal-data-protection policy): https://www.smilepay.net/em/servicepolicy.asp
-* **PayNow e-Invoice (立吉富電子發票)** — Endpoints: invoice.paynow.com.tw. Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
-* **AMEGO e-Invoice (光貿電子發票)** — Endpoints: invoice-api.amego.tw. Terms: https://invoice.amego.tw/ — Privacy: https://invoice.amego.tw/privacy
+* **ECPay e-Invoice (綠界電子發票)** — Endpoints: einvoice.ecpay.com.tw (test mode: einvoice-stage.ecpay.com.tw). Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
+* **ezPay e-Invoice (ezPay 電子發票)** — Endpoints: inv.ezpay.com.tw (test mode: cinv.ezpay.com.tw). Terms: https://www.ezpay.com.tw/info/Site_description/service_page/member — Privacy: https://www.ezpay.com.tw/info/Site_description/service_page/member (ezPay publishes a single combined membership & data-protection terms page, so both links point at that page)
+* **SmilePay e-Invoice (速買配電子發票)** — Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (single combined service & personal-data-protection document)
+* **PayNow e-Invoice (立吉富電子發票)** — Endpoints: invoice.paynow.com.tw (test mode: testinvoice.paynow.com.tw). Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
+* **AMEGO e-Invoice (光貿電子發票)** — Endpoints: invoice-api.amego.tw. Terms: https://invoice.amego.tw/term — Privacy: https://invoice.amego.tw/privacy
 
 = Carrier tracking links (hyperlinks only — the plugin itself never contacts these hosts) =
 
@@ -77,7 +77,7 @@ When a shipment has a tracking number, the order screen renders a plain hyperlin
 * **T-Cat 黑貓宅配** (t-cat.com.tw, incl. the tracking link shown for PAYUNi home-delivery shipments) — Privacy: https://www.t-cat.com.tw/member/privacy.aspx
 * **7-ELEVEN** (eservice.7-11.com.tw) — Privacy: https://www.7-11.com.tw/privacy.asp
 * **7-ELEVEN pickup status via PAYUNi logistics** (tracking.shopmore.com.tw, operated by the Uni-President group for PAYUNi shipments) — service info: https://help.shopmore.com.tw/ ; the PAYUNi logistics policies above apply to the shipment itself
-* **FamilyMart 全家** (fmec.famiport.com.tw), **Hi-Life 萊爾富** (hilife.com.tw), **OK Mart** (ecservice.okmart.com.tw) — public tracking pages of each chain; their site policies are linked from those pages
+* **FamilyMart 全家** (fmec.famiport.com.tw), **Hi-Life 萊爾富** (www.hilife.com.tw), **OK Mart** (ecservice.okmart.com.tw) — public tracking pages of each chain; their site policies are linked from those pages
 * **Chunghwa Post 中華郵政** (postserv.post.gov.tw) — Privacy: https://www.post.gov.tw/post/internet/Group/index.jsp?ID=156739569921
 
 = Moksa AI assistant (optional, admin-only) =
@@ -135,6 +135,13 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Invoice metabox with Issue / Void actions.
 
 == Changelog ==
+
+= 1.4.9 - 2026-07-26 =
+* Security: two SmilePay logistics endpoints (T-cat tracking-number retrieval and C2B label data) were still declared with plain http://; both now use https:// (verified reachable), so every request the plugin makes is TLS-encrypted as the readme states.
+* Security: the module on/off save handler and the order-status colour save handler verified neither a nonce nor a capability inside the method, relying on the WooCommerce settings page upstream. Both now verify the WooCommerce settings nonce and the manage_woocommerce capability inline, in the same form WooCommerce core uses.
+* Security: the quick-edit and bulk-edit handlers for the product temperature-zone field verified a nonce name that WooCommerce never issues for those forms, so the check always failed and the field silently stopped saving from quick/bulk edit. They now verify the same woocommerce_quick_edit_nonce that WooCommerce core verifies, restoring the feature.
+* Security: the classic-checkout store validation and the PAYUNi store-restore handler now verify their nonces first, in straight-line form, before touching any request field.
+* readme: every provider entry now lists its test/sandbox hostname inline and carries an explicit Terms link and an explicit Privacy link (providers publishing a single combined document have both links pointing at it, with a note); the AMEGO terms link points at the actual terms page; added the previously undocumented ecpayment-stage.ecpay.com.tw test hostname.
 
 = 1.4.8 - 2026-07-19 =
 * i18n: the text domain is now `moksa-for-woocommerce`, matching the assigned plugin slug (all 4,000+ gettext calls, the plugin header, the block-checkout scripts and the bundled zh_TW translation files were updated; the main plugin file was renamed accordingly).

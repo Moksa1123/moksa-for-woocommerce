@@ -161,7 +161,14 @@ JS;
 	}
 
 	public static function save_color_grid(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC settings nonce 已由 WC_Admin_Settings::save() 驗
+		// 與 WC core 的 WC_Admin_Settings::save() 驗同一顆 settings nonce，同一種寫法。
+		if ( ! isset( $_POST['_wpnonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['_wpnonce'] ) ), 'woocommerce-settings' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
 		foreach ( array_keys( self::color_status_labels() ) as $slug ) {
 			$key = 'moksafowo_status_color_' . str_replace( '-', '_', $slug );
 			foreach ( [ '_bg', '_fg' ] as $suffix ) {
@@ -175,7 +182,6 @@ JS;
 				}
 			}
 		}
-		// phpcs:enable
 	}
 
 	public static function is_status_enabled( string $slug ): bool {

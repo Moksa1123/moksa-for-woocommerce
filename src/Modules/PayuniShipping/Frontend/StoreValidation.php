@@ -50,7 +50,11 @@ final class StoreValidation {
 	}
 
 	public static function classic_fields_validation(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		// 與 WC core 的 process_checkout() 驗同一顆 nonce，同一種寫法（woocommerce_checkout_process 必帶）。
+		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
+			return;
+		}
 		$shipping_methods = isset( $_POST['shipping_method'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['shipping_method'] ) ) : [];
 
 		$need_cvs = false;
@@ -104,6 +108,5 @@ final class StoreValidation {
 		} else {
 			add_filter( 'woocommerce_checkout_fields', [ $instance, 'remove_shipping_phone_required' ], 9999 );
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 }

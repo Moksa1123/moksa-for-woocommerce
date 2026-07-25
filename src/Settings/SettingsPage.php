@@ -652,9 +652,16 @@ final class SettingsPage extends \WC_Settings_Page {
 	}
 
 	private function save_general_section(): void {
+		// 與 WC core 的 WC_Admin_Settings::save() 驗同一顆 settings nonce，同一種寫法。
+		if ( ! isset( $_POST['_wpnonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['_wpnonce'] ) ), 'woocommerce-settings' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
 		$registry = Plugin::instance()->modules();
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC's settings page handles its own nonce upstream.
-		$posted = wp_unslash( $_POST );
+		$posted   = wp_unslash( $_POST );
 		foreach ( $registry->all() as $key => $class ) {
 			$option = sprintf( 'moksafowo_%s_enabled', $key );
 			$value  = isset( $posted[ $option ] ) && 'yes' === $posted[ $option ] ? 'yes' : 'no';

@@ -766,24 +766,23 @@ JS
 	}
 
 	private static function restore_store_data_from_post() {
-		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'], $_POST['moksafowo_payuni_selected_store_name'], $_POST['moksafowo_payuni_selected_store_address'] ) ) {
+		// 先驗 nonce，其他任何事都在其後。三條合法進入路徑各驗各的 nonce，逐一判定，都沒過就拒。
+		$verified = false;
+		if ( isset( $_POST['moksafowo_payuni_store_nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_payuni_store_nonce'] ) ), 'moksafowo_payuni_restore_store' ) ) {
+			$verified = true; // 自家選店 interstitial。
+		} elseif ( isset( $_POST['woocommerce-process-checkout-nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
+			$verified = true; // WC 原生結帳送單 — WC core process_checkout() 同一顆。
+		} elseif ( isset( $_POST['security'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['security'] ) ), 'update-order-review' ) ) {
+			$verified = true; // WC AJAX 更新訂單摘要 — WC core update_order_review() 同一顆。
+		}
+		if ( ! $verified ) {
 			return false;
 		}
 
-		// Verify the interstitial nonce or a WooCommerce native checkout nonce inline, before reading any field.
-		$verified = false;
-		foreach ( array(
-			'moksafowo_payuni_store_nonce'       => 'moksafowo_payuni_restore_store',
-			'woocommerce-process-checkout-nonce' => 'woocommerce-process_checkout',
-			'security'                           => 'update-order-review',
-		) as $field => $action ) {
-			if ( isset( $_POST[ $field ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ $field ] ) ), $action ) ) {
-				$verified = true;
-				break;
-			}
-		}
-		if ( ! $verified ) {
-			PayuniShipping::log( 'restore_store_data_from_post: nonce missing/invalid — ignored' );
+		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'], $_POST['moksafowo_payuni_selected_store_name'], $_POST['moksafowo_payuni_selected_store_address'] ) ) {
 			return false;
 		}
 

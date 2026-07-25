@@ -198,9 +198,9 @@ final class ProductTempField {
 	}
 
 	public static function save_wc_quick_edit( \WC_Product $product ): void {
-		// 原地重驗 WC quick-edit 的 nonce 與權限（fail-closed），不倚賴上游已驗的假設。
-		$nonce = isset( $_REQUEST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['security'] ) ) : '';
-		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce-product-inline-edit' ) ) {
+		// 與 WC core 的 bulk_and_quick_edit_save_post() 驗同一顆 nonce，同一種寫法。
+		if ( ! isset( $_REQUEST['woocommerce_quick_edit_nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_REQUEST['woocommerce_quick_edit_nonce'] ) ), 'woocommerce_quick_edit_nonce' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
@@ -211,9 +211,9 @@ final class ProductTempField {
 	}
 
 	public static function save_wc_bulk_edit( \WC_Product $product ): void {
-		// 原地重驗 WC bulk-edit 的 nonce 與權限（fail-closed），不倚賴上游已驗的假設。
-		$nonce = isset( $_REQUEST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_REQUEST['security'] ) ) : '';
-		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce-product-inline-edit' ) ) {
+		// 與 WC core 的 bulk_and_quick_edit_save_post() 驗同一顆 nonce，同一種寫法。
+		if ( ! isset( $_REQUEST['woocommerce_quick_edit_nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_REQUEST['woocommerce_quick_edit_nonce'] ) ), 'woocommerce_quick_edit_nonce' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
@@ -377,9 +377,9 @@ final class ProductTempField {
 	}
 
 	public static function save_simple_field( \WC_Product $product ): void {
-		// 原地重驗產品儲存的 nonce 與權限（fail-closed）。
-		$nonce = isset( $_POST['woocommerce_meta_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ) : '';
-		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce_save_data' ) ) {
+		// 與 WC core 的 WC_Admin_Meta_Boxes::save_meta_boxes() 驗同一顆 nonce，同一種寫法。
+		if ( ! isset( $_POST['woocommerce_meta_nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ), 'woocommerce_save_data' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
@@ -411,10 +411,16 @@ final class ProductTempField {
 	}
 
 	public static function save_variation_field( int $variation_id, int $loop ): void {
-		// 原地重驗 nonce（variations AJAX 走 security=save-variations；產品編輯頁走 woocommerce_meta_nonce）+ 權限，fail-closed。
-		$ajax_nonce = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['security'] ) ) : '';
-		$meta_nonce = isset( $_POST['woocommerce_meta_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ) : '';
-		if ( ! wp_verify_nonce( $ajax_nonce, 'save-variations' ) && ! wp_verify_nonce( $meta_nonce, 'woocommerce_save_data' ) ) {
+		// 兩條合法進入路徑各驗各的 nonce（與 WC core 相同的顆），逐一判定，都沒過就拒。
+		$verified = false;
+		if ( isset( $_POST['security'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['security'] ) ), 'save-variations' ) ) {
+			$verified = true; // variations AJAX — WC core WC_AJAX::save_variations() 同一顆。
+		} elseif ( isset( $_POST['woocommerce_meta_nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['woocommerce_meta_nonce'] ) ), 'woocommerce_save_data' ) ) {
+			$verified = true; // 產品編輯頁整頁儲存 — WC core save_meta_boxes() 同一顆。
+		}
+		if ( ! $verified ) {
 			return;
 		}
 		if ( ! current_user_can( 'edit_product', $variation_id ) ) {
