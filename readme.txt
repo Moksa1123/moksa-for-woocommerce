@@ -128,11 +128,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Screenshots ==
 
-1. Modules overview — toggle payment / shipping / invoice integrations from a single settings page.
-2. Block-based Checkout with native payment method rendering.
-3. Order list with extra columns for shipping status and invoice number (HPOS-aware).
-4. Order edit screen showing per-provider info cards.
-5. Invoice metabox with Issue / Void actions.
+1. Modules overview — enable only the payment, shipping and e-invoice integrations you need, all from one settings page.
+2. Block-based Checkout rendering Taiwanese payment methods natively, alongside the order summary.
+3. Order list with the plugin's own order statuses plus shipping-method and tracking-number columns (HPOS-native).
+4. Order edit screen with per-provider payment, shipping and e-invoice cards.
+5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
 
