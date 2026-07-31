@@ -48,6 +48,8 @@ phpunit.xml
 /.editorconfig
 /scripts/
 
+/.pressship-svn/
+
 # Distribution
 /dist/
 /*.zip
@@ -55,4 +57,3 @@ phpunit.xml
 # E2E screenshots (work artifacts, organized in screenshots/)
 /screenshots/
 /.playwright-mcp/
-.wp-org-assets/
