@@ -16,10 +16,10 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 
 <p><?php
 /* translators: %s: customer first name */
-printf( esc_html__( '%s 您好，', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) );
+printf( esc_html__( 'Hi %s,', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) );
 ?></p>
 
-<p><?php esc_html_e( '您的訂單已出貨，物流商正在處理運送中。可至會員中心查看出貨單編號與物流狀態。', 'moksa-for-woocommerce' ); ?></p>
+<p><?php esc_html_e( 'Your order has shipped and is on its way. You can view the tracking number and shipping status in your account.', 'moksa-for-woocommerce' ); ?></p>
 
 <?php
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );

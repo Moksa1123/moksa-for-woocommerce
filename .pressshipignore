@@ -1,0 +1,34 @@
+# 開發用檔案 — 不進 wp.org 發佈包（verify / pack / release 都吃這份）
+
+# 開發腳本與設定
+scripts/
+phpcs.xml
+phpunit.xml.dist
+tests/
+package.json
+package-lock.json
+webpack.config.js
+.editorconfig
+
+# 開發文件（wp.org 只認 readme.txt）
+CLAUDE.md
+MEMORY.md
+CHANGELOG.md
+CREDITS.md
+
+# 區塊 JS 原始碼（發佈的是 assets/blocks/build/ 的產物）
+assets/blocks/src/
+
+# wp.org 圖片素材走 SVN 的 assets/ 目錄，不進外掛包
+.wordpress-org/
+
+# 工作產物
+screenshots/
+.playwright-mcp/
+.phpunit.cache/
+.phpcs-cache
+dist/
+node_modules/
+.pressship-svn/
+*.zip
+*.log

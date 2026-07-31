@@ -67,8 +67,8 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 
 	protected static function extra_card_meta( \WC_Order $order ): array {
 		return [
-			__( '隨機碼', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::AMEGO_INVOICE_RANDOM_NUM ),
-			__( '條碼', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::AMEGO_INVOICE_BARCODE ),
+			__( 'Random code', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::AMEGO_INVOICE_RANDOM_NUM ),
+			__( 'Barcode', 'moksa-for-woocommerce' )     => (string) $order->get_meta( Keys::AMEGO_INVOICE_BARCODE ),
 		];
 	}
 }

@@ -69,7 +69,7 @@ final class Hub {
 		if ( isset( $_POST['moksafowo_ai_hub_save'] ) ) {
 			check_admin_referer( 'moksafowo_ai_hub_save' );
 			\WC_Admin_Settings::save_fields( self::fields() );
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '設定已儲存。', 'moksa-for-woocommerce' ) . '</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'moksa-for-woocommerce' ) . '</p></div>';
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 唯讀的 tab 切換,無狀態變更。
@@ -83,13 +83,13 @@ final class Hub {
 			'<a href="%s" class="nav-tab %s">%s</a>',
 			esc_url( $base . '&tab=settings' ),
 			'inbox' === $tab ? '' : 'nav-tab-active',
-			esc_html__( '設定', 'moksa-for-woocommerce' )
+			esc_html__( 'Settings', 'moksa-for-woocommerce' )
 		);
 		printf(
 			'<a href="%s" class="nav-tab %s">%s%s</a>',
 			esc_url( $base . '&tab=inbox' ),
 			'inbox' === $tab ? 'nav-tab-active' : '',
-			esc_html__( '客服訊息', 'moksa-for-woocommerce' ),
+			esc_html__( 'Support messages', 'moksa-for-woocommerce' ),
 			$unread > 0 ? ' <span class="awaiting-mod">' . esc_html( (string) $unread ) . '</span>' : ''
 		);
 		echo '</h2>';
@@ -105,20 +105,20 @@ final class Hub {
 	private static function render_settings(): void {
 		$has_client = function_exists( 'wp_ai_client_prompt' );
 		$badge      = $has_client
-			? '<span class="moksafowo-ai-ok">' . esc_html__( '✅ 已偵測到 WordPress 7.0 AI Client', 'moksa-for-woocommerce' ) . '</span>'
-			: '<span class="moksafowo-ai-warn">' . esc_html__( '⚠️ 未偵測到 WordPress 7.0 AI Client', 'moksa-for-woocommerce' ) . '</span>';
+			? '<span class="moksafowo-ai-ok">' . esc_html__( '✅ The WordPress 7.0 AI Client was found', 'moksa-for-woocommerce' ) . '</span>'
+			: '<span class="moksafowo-ai-warn">' . esc_html__( '⚠️ The WordPress 7.0 AI Client was not found', 'moksa-for-woocommerce' ) . '</span>';
 
 		echo '<div class="moksafowo-ai-card">';
-		echo '<p class="moksafowo-ai-card-t">' . esc_html__( '關於 Moksa AI', 'moksa-for-woocommerce' ) . ' — ' . wp_kses_post( $badge ) . '</p>';
+		echo '<p class="moksafowo-ai-card-t">' . esc_html__( 'About Moksa AI', 'moksa-for-woocommerce' ) . ' — ' . wp_kses_post( $badge ) . '</p>';
 		echo '<p class="moksafowo-ai-card-d">' . wp_kses_post(
-			__( '後台 AI 助手與前台 AI 自動回覆需要 <strong>WordPress 7.0</strong> 內建的 AI Client:請先升級到 7.0,並到「設定 → Connectors」設定 OpenAI / Anthropic / Google 任一把金鑰(用量計費走你自己的金鑰)。前台客服的「自助查單 / 留言」不需金鑰即可使用。', 'moksa-for-woocommerce' )
+			__( 'The admin AI assistant and the automatic replies on the storefront both need the AI Client built into <strong>WordPress 7.0</strong>. Upgrade to 7.0, then add an OpenAI, Anthropic or Google key under Settings → Connectors. Usage is billed to your own key. Order lookup and messaging on the storefront work without a key.', 'moksa-for-woocommerce' )
 		) . '</p>';
 		echo '</div>';
 
 		echo '<div class="moksafowo-ai-settings"><form method="post" action="">';
 		\WC_Admin_Settings::output_fields( self::fields() );
 		wp_nonce_field( 'moksafowo_ai_hub_save' );
-		echo '<p class="submit"><button type="submit" class="button button-primary" name="moksafowo_ai_hub_save" value="1">' . esc_html__( '儲存設定', 'moksa-for-woocommerce' ) . '</button></p>';
+		echo '<p class="submit"><button type="submit" class="button button-primary" name="moksafowo_ai_hub_save" value="1">' . esc_html__( 'Save settings', 'moksa-for-woocommerce' ) . '</button></p>';
 		echo '</form></div>';
 
 		self::render_mcp_help();
@@ -129,15 +129,15 @@ final class Hub {
 			return;
 		}
 		echo '<div class="moksafowo-ai-card">';
-		echo '<p class="moksafowo-ai-card-t">' . esc_html__( '如何用 MCP 連線', 'moksa-for-woocommerce' ) . '</p>';
-		echo '<p class="moksafowo-ai-card-d">' . esc_html__( '外部 AI 工具(mcp-remote / Claude 等標準 MCP 客戶端)可直接連到以下端點,不需橋接器(本端點為 stateless,免 session）:', 'moksa-for-woocommerce' ) . '</p>';
+		echo '<p class="moksafowo-ai-card-t">' . esc_html__( 'Connecting over MCP', 'moksa-for-woocommerce' ) . '</p>';
+		echo '<p class="moksafowo-ai-card-d">' . esc_html__( 'External AI tools such as mcp-remote, Claude and other standard MCP clients can connect straight to the endpoint below. No bridge is needed, and the endpoint is stateless so there is no session to manage:', 'moksa-for-woocommerce' ) . '</p>';
 		echo '<p><code>' . esc_html( \Moksafowo\Mcp\Server::endpoint_url() ) . '</code></p>';
 		echo '<ol class="moksafowo-ai-card-d" style="margin:6px 0 0 18px;line-height:1.9;">';
-		echo '<li>' . wp_kses_post( __( '用一個有「編輯訂單」權限的帳號(建議<strong>專用受限帳號,不要用管理員</strong>),到「使用者 → 個人資料 → 應用程式密碼」建立一組密碼。', 'moksa-for-woocommerce' ) ) . '</li>';
-		echo '<li>' . wp_kses_post( __( '把「帳號:應用程式密碼(去掉空格)」做 Base64,當成 <code>Authorization: Basic &lt;base64&gt;</code> 標頭。', 'moksa-for-woocommerce' ) ) . '</li>';
-		echo '<li>' . esc_html__( '在 MCP 客戶端填入上面端點 + 該認證標頭,即可列出工具。', 'moksa-for-woocommerce' ) . '</li>';
+		echo '<li>' . wp_kses_post( __( 'Use an account that can edit orders — ideally a <strong>dedicated, limited account rather than an administrator</strong> — and create a password under Users → Profile → Application Passwords.', 'moksa-for-woocommerce' ) ) . '</li>';
+		echo '<li>' . wp_kses_post( __( 'Base64-encode “username:application password” with the spaces removed, and send it as an <code>Authorization: Basic &lt;base64&gt;</code> header.', 'moksa-for-woocommerce' ) ) . '</li>';
+		echo '<li>' . esc_html__( 'Enter that endpoint and header in the MCP client and the tools will be listed.', 'moksa-for-woocommerce' ) . '</li>';
 		echo '</ol>';
-		echo '<p class="moksafowo-ai-card-d" style="margin-top:8px;">' . wp_kses_post( __( '預設只開放<strong>唯讀</strong>工具(查訂單 / 報表 / 設定彙整);要讓外部 AI 能改訂單 / 開發票,需另外開啟上方「允許外部 AI 執行變更動作」,且變更仍需在後台確認。', 'moksa-for-woocommerce' ) ) . '</p>';
+		echo '<p class="moksafowo-ai-card-d" style="margin-top:8px;">' . wp_kses_post( __( 'Only <strong>read-only</strong> tools are exposed by default: order lookups, reports and a settings summary. To let an external AI change orders or issue invoices, turn on “Allow external AI to make changes” above — and every change still has to be confirmed in the admin.', 'moksa-for-woocommerce' ) ) . '</p>';
 		echo '</div>';
 	}
 
@@ -147,17 +147,17 @@ final class Hub {
 	private static function fields(): array {
 		return array(
 			array(
-				'title' => __( '啟用 Moksa AI', 'moksa-for-woocommerce' ),
+				'title' => __( 'Enable Moksa AI', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '總開關。關閉時前台與後台 AI 都不啟用;開啟後再用下方分別控制前台 / 後台。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'The master switch. With it off, neither the storefront nor the admin AI runs. With it on, use the settings below to control each side separately.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ai_hub_master',
 			),
 			array(
-				'title'   => __( '啟用 AI 功能', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable AI features', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ai_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '智慧客服總開關(前台顧客自助 + 後台 AI 助手)。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'The master switch for customer support, covering both storefront self-service and the admin AI assistant.', 'moksa-for-woocommerce' ),
 			),
 			array(
 				'type' => 'sectionend',
@@ -165,52 +165,52 @@ final class Hub {
 			),
 
 			array(
-				'title' => __( '後台 AI 助手', 'moksa-for-woocommerce' ),
+				'title' => __( 'Admin AI assistant', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '後台右下角的浮動對話窗,用一句話查訂單 / 數量 / 狀態(需 WordPress 7.0)。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'A floating chat window in the bottom-right of the admin, where one sentence gets you an order, a count or a status. Requires WordPress 7.0.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ai_hub_back',
 			),
 			array(
-				'title'   => __( '啟用後台 AI 助手', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable the admin AI assistant', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ai_assistant_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '在後台顯示 Moksa AI 浮動對話窗。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Show the Moksa AI chat window in the admin.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'   => __( '問候語', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Greeting', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ai_greeting',
 				'type'    => 'textarea',
 				'css'     => 'min-height:60px;width:100%;max-width:520px;',
-				'default' => __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'moksa-for-woocommerce' ),
-				'desc'    => __( '開啟對話窗時的第一句招呼。', 'moksa-for-woocommerce' ),
+				'default' => __( 'Hi, I\'m Moksa AI. Ask me things like how many orders are awaiting shipment, or look up an invoice or tracking number.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'The first thing shown when the chat window opens.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'    => __( '範例問題', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Example questions', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_ai_examples',
 				'type'     => 'text',
 				'css'      => 'width:100%;max-width:520px;',
-				'default'  => __( '待出貨有幾筆?,各狀態訂單數量', 'moksa-for-woocommerce' ),
-				'desc'     => __( '對話窗下方的快捷提問,以逗號分隔。', 'moksa-for-woocommerce' ),
+				'default'  => __( 'How many orders are awaiting shipment?,Order counts by status', 'moksa-for-woocommerce' ),
+				'desc'     => __( 'Shortcut questions shown under the chat window, separated by commas.', 'moksa-for-woocommerce' ),
 				'desc_tip' => true,
 			),
 			array(
-				'title'   => __( '啟用對外 MCP 伺服器', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable the MCP server', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ai_mcp_server_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
 				'desc'    => sprintf(
 					/* translators: %s: MCP 端點網址 */
-					__( '開啟後,外部 AI 工具可透過 MCP 連到本站查訂單 / 報表(需用 WordPress 應用程式密碼登入,權限同「編輯訂單」)。端點:%s', 'moksa-for-woocommerce' ),
+					__( 'Lets external AI tools connect over MCP to look up orders and reports. They sign in with a WordPress application password and get the same permissions as editing orders. Endpoint: %s', 'moksa-for-woocommerce' ),
 					'<code>' . esc_url( \Moksafowo\Mcp\Server::endpoint_url() ) . '</code>'
 				),
 			),
 			array(
-				'title'   => __( '允許外部 AI 執行變更動作（MCP）', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Allow external AI to make changes (MCP)', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ai_mcp_expose_destructive',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '預設只開放外部 AI 查詢(唯讀)。開啟後才允許改訂單狀態 / 開立發票等動作,且一律需要你在後台確認才會執行。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'External AI can only read by default. Turn this on to allow actions such as changing an order status or issuing an invoice — and each one still has to be confirmed in the admin before it runs.', 'moksa-for-woocommerce' ),
 			),
 			array(
 				'type' => 'sectionend',
@@ -218,79 +218,79 @@ final class Hub {
 			),
 
 			array(
-				'title' => __( '前台客服(顧客自助)', 'moksa-for-woocommerce' ),
+				'title' => __( 'Storefront support (customer self-service)', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '前台浮動窗,讓顧客用「訂單編號 + 帳單電話末三碼」自助查單 / 留言。規則式,不需 AI 金鑰。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'A floating window on the storefront where customers look up their order with an order number and the last three digits of their billing phone, and leave a message. It follows fixed rules and needs no AI key.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ai_hub_front',
 			),
 			array(
-				'title'   => __( '啟用前台客服窗', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable the storefront support window', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_customer_service_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '在前台顯示浮動「訂單查詢」窗。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Show the floating order lookup window on the storefront.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'   => __( '視窗標題', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Window title', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_customer_service_title',
 				'type'    => 'text',
-				'default' => __( '訂單查詢', 'moksa-for-woocommerce' ),
+				'default' => __( 'Order lookup', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'             => __( '驗證嘗試上限', 'moksa-for-woocommerce' ),
+				'title'             => __( 'Maximum verification attempts', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_customer_service_max_attempts',
 				'type'              => 'number',
 				'default'           => '5',
-				'desc'              => __( '同一訂單+IP 連續錯誤達此次數即暫時鎖定(防末三碼暴力猜測)。', 'moksa-for-woocommerce' ),
+				'desc'              => __( 'After this many failures from the same order and IP address, lookups are locked for a while, so the last three digits cannot be guessed by brute force.', 'moksa-for-woocommerce' ),
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			array(
-				'title'             => __( '鎖定時間（分鐘）', 'moksa-for-woocommerce' ),
+				'title'             => __( 'Lockout time (minutes)', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_customer_service_lockout_minutes',
 				'type'              => 'number',
 				'default'           => '60',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			array(
-				'title'   => __( '顯示頁面', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Where to show it', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_customer_service_display_mode',
 				'type'    => 'select',
 				'default' => 'all',
 				'options' => array(
-					'all'     => __( '全部頁面', 'moksa-for-woocommerce' ),
-					'include' => __( '僅指定頁面', 'moksa-for-woocommerce' ),
+					'all'     => __( 'Every page', 'moksa-for-woocommerce' ),
+					'include' => __( 'Only the listed pages', 'moksa-for-woocommerce' ),
 					// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- select 選項鍵,非 get_posts 查詢參數。
-					'exclude' => __( '排除指定頁面', 'moksa-for-woocommerce' ),
+					'exclude' => __( 'Every page except the listed ones', 'moksa-for-woocommerce' ),
 				),
 			),
 			array(
-				'title'       => __( '頁面 ID 清單', 'moksa-for-woocommerce' ),
+				'title'       => __( 'Page IDs', 'moksa-for-woocommerce' ),
 				'id'          => 'moksafowo_customer_service_pages',
 				'type'        => 'text',
 				'placeholder' => '12, 34, 56',
-				'desc'        => __( '以逗號分隔的頁面 / 文章 ID,配合上方「僅指定 / 排除指定」使用。', 'moksa-for-woocommerce' ),
+				'desc'        => __( 'Page or post IDs separated by commas, used with the setting above.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'   => __( '啟用前台 AI 自動回覆', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable automatic AI replies on the storefront', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_cs_ai_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '顧客留言時由 AI 依該訂單資訊與下方常見問答即時回覆,答不出來會自動轉給真人。需 WordPress 7.0;未啟用時為一般留言。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'When a customer leaves a message, the AI answers straight away using that order and the FAQ below, and hands over to a person whenever it cannot. Requires WordPress 7.0. With this off, messages are simply passed on.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'   => __( '常見問答（FAQ）', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Frequently asked questions', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_cs_faq',
 				'type'    => 'textarea',
 				'css'     => 'min-height:120px;width:100%;max-width:560px;',
 				'default' => '',
-				'desc'    => __( 'AI 回答顧客的依據,例如出貨時間、退換貨與運費規則。一行一則。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'What the AI draws on when answering customers — dispatch times, returns and shipping rules, for example. One per line.', 'moksa-for-woocommerce' ),
 			),
 			array(
-				'title'             => __( 'AI 回覆每小時上限', 'moksa-for-woocommerce' ),
+				'title'             => __( 'AI replies per hour', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_cs_ai_rate',
 				'type'              => 'number',
 				'default'           => '20',
-				'desc'              => __( '控制用量與費用;超過後改為一般留言。', 'moksa-for-woocommerce' ),
+				'desc'              => __( 'Keeps usage and cost in check. Once the limit is reached, messages are simply passed on.', 'moksa-for-woocommerce' ),
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			array(

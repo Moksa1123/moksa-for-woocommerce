@@ -25,7 +25,7 @@ final class UpdateOrderStatus {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 
 		$ref    = is_array( $args ) && isset( $args['order'] ) ? (string) $args['order'] : '';
@@ -35,14 +35,14 @@ final class UpdateOrderStatus {
 		$order = $id ? wc_get_order( $id ) : false;
 		if ( ! $order ) {
 			/* translators: %s: order reference the user gave */
-			return new \WP_Error( 'moksafowo_ai_no_order', sprintf( __( '找不到訂單:%s。', 'moksa-for-woocommerce' ), $ref ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', sprintf( __( 'Order not found: %s.', 'moksa-for-woocommerce' ), $ref ) );
 		}
 
 		$statuses = wc_get_order_statuses();
 		$to_key   = 'wc-' . $status;
 		if ( ! isset( $statuses[ $to_key ] ) ) {
 			/* translators: %s: status slug the user gave */
-			return new \WP_Error( 'moksafowo_ai_bad_status', sprintf( __( '無效的訂單狀態:%s。', 'moksa-for-woocommerce' ), $status ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', sprintf( __( 'Invalid order status: %s.', 'moksa-for-woocommerce' ), $status ) );
 		}
 
 		$from_label = wc_get_order_status_name( $order->get_status() );
@@ -55,7 +55,7 @@ final class UpdateOrderStatus {
 			'to_label'   => $to_label,
 			'from_label' => $from_label,
 			/* translators: 1: order number, 2: current status, 3: target status */
-			'summary'    => sprintf( __( '將訂單 #%1$s 的狀態從「%2$s」改為「%3$s」。', 'moksa-for-woocommerce' ), $order->get_order_number(), $from_label, $to_label ),
+			'summary'    => sprintf( __( 'Change order #%1$s from “%2$s” to “%3$s”.', 'moksa-for-woocommerce' ), $order->get_order_number(), $from_label, $to_label ),
 		);
 	}
 
@@ -67,21 +67,21 @@ final class UpdateOrderStatus {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 
 		$order = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( 'The order could not be found.', 'moksa-for-woocommerce' ) );
 		}
 
 		$to       = (string) ( $params['to_slug'] ?? '' );
 		$statuses = wc_get_order_statuses();
 		if ( ! isset( $statuses[ 'wc-' . $to ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_status', __( '無效的訂單狀態。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_status', __( 'Invalid order status.', 'moksa-for-woocommerce' ) );
 		}
 
-		$order->update_status( $to, __( '經 Moksa AI 確認執行。', 'moksa-for-woocommerce' ) );
+		$order->update_status( $to, __( 'Applied after confirmation in Moksa AI.', 'moksa-for-woocommerce' ) );
 
 		$fresh     = wc_get_order( $order->get_id() );
 		$now       = $fresh ? $fresh->get_status() : '';
@@ -89,10 +89,10 @@ final class UpdateOrderStatus {
 
 		if ( $now === $to ) {
 			/* translators: 1: order number, 2: status label */
-			return sprintf( __( '✅ 已將訂單 #%1$s 改為「%2$s」,並回查訂單核對 —— 目前狀態確實為「%2$s」。', 'moksa-for-woocommerce' ), $order->get_order_number(), $now_label );
+			return sprintf( __( '✅ Order #%1$s was changed to “%2$s”, and a follow-up check confirms its status really is “%2$s”.', 'moksa-for-woocommerce' ), $order->get_order_number(), $now_label );
 		}
 
 		/* translators: 1: order number, 2: actual status, 3: expected status */
-		return sprintf( __( '⚠️ 變更已送出,但回查訂單 #%1$s 目前狀態為「%2$s」(預期「%3$s」),請至訂單頁再次確認。', 'moksa-for-woocommerce' ), $order->get_order_number(), $now_label, $statuses[ 'wc-' . $to ] );
+		return sprintf( __( '⚠️ The change was submitted, but order #%1$s now shows the status “%2$s” instead of the expected “%3$s”. Please check again on the order page.', 'moksa-for-woocommerce' ), $order->get_order_number(), $now_label, $statuses[ 'wc-' . $to ] );
 	}
 }

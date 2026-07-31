@@ -17,8 +17,8 @@ final class HDUnified extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 黑貓宅配（多溫層）', 'moksa-for-woocommerce' );
-		$this->method_description = __( 'PAYUNi 黑貓宅急便，支援常溫 / 冷藏 / 冷凍多溫層配送。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi — T-Cat home delivery (mixed temperature zones)', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi T-Cat delivery, covering ambient, chilled and frozen goods in one order.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -27,7 +27,7 @@ final class HDUnified extends AbstractHomeShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '黑貓宅配', 'moksa-for-woocommerce' );
+		return __( 'T-Cat home delivery', 'moksa-for-woocommerce' );
 	}
 
 	public function logistics_sub_type(): string {
@@ -56,9 +56,9 @@ final class HDUnified extends AbstractHomeShippingMethod {
 
 	public function supported_temperatures(): array {
 		return [
-			ProductTemp::NORMAL       => __( '常溫', 'moksa-for-woocommerce' ),
-			ProductTemp::REFRIGERATED => __( '冷藏', 'moksa-for-woocommerce' ),
-			ProductTemp::FROZEN       => __( '冷凍', 'moksa-for-woocommerce' ),
+			ProductTemp::NORMAL       => __( 'Ambient', 'moksa-for-woocommerce' ),
+			ProductTemp::REFRIGERATED => __( 'Chilled', 'moksa-for-woocommerce' ),
+			ProductTemp::FROZEN       => __( 'Frozen', 'moksa-for-woocommerce' ),
 		];
 	}
 

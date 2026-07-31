@@ -15,7 +15,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'PAYUNi 物流 — 7-11 B2C/C2C 常溫/冷凍 + 黑貓常溫/冷凍/冷藏（共 7 種）', 'moksa-for-woocommerce' );
+		return __( 'PAYUNi shipping — 7-ELEVEN B2C and C2C ambient and frozen, plus T-Cat ambient, chilled and frozen (7 methods)', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -23,22 +23,22 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'PAYUNi 物流', 'moksa-for-woocommerce' );
+		return __( 'PAYUNi shipping', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '7-11 超商取貨 + 黑貓宅配（常溫 / 冷藏 / 冷凍）', 'moksa-for-woocommerce' );
+		return __( '7-ELEVEN store pickup and T-Cat home delivery (ambient, chilled and frozen)', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '7-11 大宗常溫', 'moksa-for-woocommerce' ),
-			__( '7-11 大宗冷凍', 'moksa-for-woocommerce' ),
-			__( '7-11 店到店常溫', 'moksa-for-woocommerce' ),
-			__( '7-11 店到店冷凍', 'moksa-for-woocommerce' ),
-			__( '黑貓常溫', 'moksa-for-woocommerce' ),
-			__( '黑貓冷藏', 'moksa-for-woocommerce' ),
-			__( '黑貓冷凍', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN bulk ambient', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN bulk frozen', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN store-to-store ambient', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN store-to-store frozen', 'moksa-for-woocommerce' ),
+			__( 'T-Cat ambient', 'moksa-for-woocommerce' ),
+			__( 'T-Cat chilled', 'moksa-for-woocommerce' ),
+			__( 'T-Cat frozen', 'moksa-for-woocommerce' ),
 		];
 	}
 

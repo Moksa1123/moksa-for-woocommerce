@@ -11,8 +11,8 @@ final class CvsOkmart extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_ecpay_shipping_cvs_okmart';
-		$this->method_title       = __( '綠界 — OK 取貨', 'moksa-for-woocommerce' );
-		$this->method_description = __( '綠界 OK 取貨。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'ECPay — OK Mart pickup', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'ECPay OK Mart pickup.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 

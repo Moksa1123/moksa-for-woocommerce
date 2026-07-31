@@ -19,11 +19,11 @@ final class Cvs extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow 超商條碼繳費', 'moksa-for-woocommerce' );
+		return __( 'PayNow convenience store barcode', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得超商條碼後，至 7-11 / 全家 / 萊爾富 / OK 出示繳費。', 'moksa-for-woocommerce' );
+		return __( 'Show the barcode at 7-ELEVEN, FamilyMart, Hi-Life or OK Mart to pay.', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

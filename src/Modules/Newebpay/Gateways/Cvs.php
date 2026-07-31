@@ -17,11 +17,11 @@ final class Cvs extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 超商代碼繳費', 'moksa-for-woocommerce' );
+		return __( 'NewebPay convenience store code', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。最低 30 元 / 最高 20,000 元（藍新限制）。', 'moksa-for-woocommerce' );
+		return __( 'Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store. NewebPay allows amounts from NT$30 to NT$20,000.', 'moksa-for-woocommerce' );
 	}
 
 	protected function min_amount(): int {

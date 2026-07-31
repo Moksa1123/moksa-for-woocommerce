@@ -17,10 +17,10 @@ final class EsunWallet extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 玉山 Wallet', 'moksa-for-woocommerce' );
+		return __( 'NewebPay E.SUN Wallet', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '玉山銀行行動支付（Wallet 綁定金融卡 / 信用卡），跳轉至藍新支付頁完成。', 'moksa-for-woocommerce' );
+		return __( 'E.SUN Bank mobile payments, with a debit or credit card linked to the wallet. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
 }

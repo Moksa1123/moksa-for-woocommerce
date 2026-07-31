@@ -15,20 +15,20 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'TapPay 拍付 — 信用卡直連（TapPay Fields iframe，支援 3D 驗證）', 'moksa-for-woocommerce' );
+		return __( 'TapPay — card payments taken on your own site, with 3-D Secure', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'TapPay 拍付', 'moksa-for-woocommerce' );
+		return __( 'TapPay', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡直接在本站安全付款', 'moksa-for-woocommerce' );
+		return __( 'Secure card payments without leaving your site', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -90,8 +90,8 @@ final class Module extends AbstractGatewayModule {
 				'appKey'    => Helper::app_key(),
 				'env'       => Helper::sdk_env(),
 				'i18n'      => [
-					'incomplete' => __( '請完整填寫信用卡資訊。', 'moksa-for-woocommerce' ),
-					'primeError' => __( '無法取得付款憑證，請確認卡號是否正確。', 'moksa-for-woocommerce' ),
+					'incomplete' => __( 'Please fill in all the card details.', 'moksa-for-woocommerce' ),
+					'primeError' => __( 'No payment token was returned. Please check the card number.', 'moksa-for-woocommerce' ),
 				],
 			]
 		);

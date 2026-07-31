@@ -17,7 +17,7 @@ final class Issue {
 		if ( '' !== $existing ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單已開立發票，不可重複。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order already has an invoice, so another cannot be issued.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -25,7 +25,7 @@ final class Issue {
 		if ( '' === $type ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒設定發票類型。', 'moksa-for-woocommerce' ),
+				'message' => __( 'No invoice type is set on this order.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -33,21 +33,21 @@ final class Issue {
 
 		if ( 0 === (int) $args['AllAmount'] ) {
 			$order->update_meta_data( Keys::SMILEPAY_INVOICE_NUMBER, 'zero' );
-			$order->add_order_note( __( '訂單金額為 0，不開立 SmilePay 發票。', 'moksa-for-woocommerce' ) );
+			$order->add_order_note( __( 'The order total is 0, so no SmilePay invoice was issued.', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'             => true,
-				'message'        => __( '訂單金額為 0，未開立。', 'moksa-for-woocommerce' ),
+				'message'        => __( 'The order total is 0, so nothing was issued.', 'moksa-for-woocommerce' ),
 				'invoice_number' => 'zero',
 			];
 		}
 		if ( (int) $args['AllAmount'] < 0 ) {
 			$order->update_meta_data( Keys::SMILEPAY_INVOICE_NUMBER, 'negative' );
-			$order->add_order_note( __( '訂單金額為負，無法開立 SmilePay 發票。', 'moksa-for-woocommerce' ) );
+			$order->add_order_note( __( 'The order total is negative, so a SmilePay invoice cannot be issued.', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'             => false,
-				'message'        => __( '訂單金額為負，無法開立。', 'moksa-for-woocommerce' ),
+				'message'        => __( 'The order total is negative, so nothing can be issued.', 'moksa-for-woocommerce' ),
 				'invoice_number' => 'negative',
 			];
 		}
@@ -72,7 +72,7 @@ final class Issue {
 		if ( ! $result['ok'] ) {
 			$msg = sprintf(
 				/* translators: 1: error message, 2: status code */
-				__( 'SmilePay 發票開立失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
+				__( 'The SmilePay invoice could not be issued: %1$s (%2$s)', 'moksa-for-woocommerce' ),
 				$result['message'] ?? '',
 				$result['status'] ?? ''
 			);
@@ -91,7 +91,7 @@ final class Issue {
 		$inv_time   = (string) ( $data['InvoiceTime'] ?? '' );
 
 		if ( '' === $invoice_no ) {
-			$order->add_order_note( __( 'SmilePay 回應 Status=0 但沒帶 InvoiceNumber，請檢查 SmilePay 後台。', 'moksa-for-woocommerce' ) );
+			$order->add_order_note( __( 'SmilePay reported success but returned no invoice number. Please check the SmilePay dashboard.', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -127,7 +127,7 @@ final class Issue {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: random number, 3: create time */
-				__( 'SmilePay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）', 'moksa-for-woocommerce' ),
+				__( 'SmilePay invoice issued — number %1$s, random code %2$s (%3$s)', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$random,
 				$issue_at
@@ -237,13 +237,13 @@ final class Issue {
 		$shipping_fee    = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
 		$total_refunded -= (float) $order->get_total_shipping_refunded();
 		if ( 0.0 !== $shipping_fee ) {
-			$args['Description'][] = __( '運費', 'moksa-for-woocommerce' );
+			$args['Description'][] = __( 'Shipping', 'moksa-for-woocommerce' );
 			$args['Quantity'][]    = '1';
 			$args['Amount'][]      = $shipping_fee;
 		}
 
 		if ( 0.0 !== $total_refunded ) {
-			$args['Description'][] = __( '退款', 'moksa-for-woocommerce' );
+			$args['Description'][] = __( 'Refund', 'moksa-for-woocommerce' );
 			$args['Quantity'][]    = '1';
 			$args['Amount'][]      = -$total_refunded;
 		}
@@ -256,7 +256,7 @@ final class Issue {
 			$args['UnitPrice'][ $i ] = (string) $price;
 			$args['Amount'][ $i ]    = (string) (int) round( $count * $price, 0 );
 			$args['Quantity'][ $i ]  = (string) $count;
-			$args['Unit'][ $i ]      = __( '件', 'moksa-for-woocommerce' );
+			$args['Unit'][ $i ]      = '件'; // 送給財政部的品項單位，不隨網站語系變動。
 		}
 
 		$args['MainRemark']         = mb_substr( $args['MainRemark'], 0, 100 );

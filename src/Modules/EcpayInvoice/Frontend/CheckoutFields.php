@@ -16,7 +16,7 @@ final class CheckoutFields {
 			new InvoiceFieldConfig(
 				provider_slug: 'ecpay',
 				option_prefix: 'moksafowo_ecpay_invoice',
-				member_label: __( '會員載具', 'moksa-for-woocommerce' ),
+				member_label: __( 'Member carrier', 'moksa-for-woocommerce' ),
 				carrier_api_validator: [ self::class, 'validate_carrier_via_api' ],
 			)
 		);

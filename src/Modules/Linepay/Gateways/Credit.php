@@ -23,7 +23,7 @@ class Credit extends WC_Payment_Gateway {
 		$this->description        = $this->get_option( 'description' );
 		$this->has_fields         = false;
 		$this->method_title       = __( 'LINE Pay', 'moksa-for-woocommerce' );
-		$this->method_description = __( '使用 LINE Pay 行動支付完成結帳。', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Check out with LINE Pay.', 'moksa-for-woocommerce' );
 
 		$this->payment_type = 'NORMAL';
 
@@ -102,11 +102,11 @@ class Credit extends WC_Payment_Gateway {
 			}
 
 			if ( 'on-hold' === $order->get_status() ) {
-				$text = esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'moksa-for-woocommerce' );
+				$text = esc_html__( 'We have received your order, but the payment is still unconfirmed. Please get in touch with us.', 'moksa-for-woocommerce' );
 			}
 
 			if ( 'pending' === $order->get_status() ) {
-				$text = esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'moksa-for-woocommerce' );
+				$text = esc_html__( 'We have received your order, but it has not been paid. Please try paying again.', 'moksa-for-woocommerce' );
 			}
 		}
 
@@ -120,11 +120,11 @@ class Credit extends WC_Payment_Gateway {
 		}
 
 		if ( 'on-hold' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但付款狀態仍待確認，請聯繫客服。', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but the payment is still unconfirmed. Please get in touch with us.', 'moksa-for-woocommerce' ) . '</p>';
 		}
 
 		if ( 'pending' === $order->get_status() ) {
-			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( '已收到您的訂單，但尚未付款，請重新付款。', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p class="moksafowo-linepay-status-note">' . esc_html__( 'We have received your order, but it has not been paid. Please try paying again.', 'moksa-for-woocommerce' ) . '</p>';
 		}
 	}
 }

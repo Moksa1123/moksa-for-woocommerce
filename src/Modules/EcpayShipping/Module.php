@@ -14,7 +14,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '綠界物流 — 7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 中華郵政 宅配', 'moksa-for-woocommerce' );
+		return __( 'ECPay shipping — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and Chunghwa Post home delivery', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -22,21 +22,21 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '綠界物流', 'moksa-for-woocommerce' );
+		return __( 'ECPay shipping', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配', 'moksa-for-woocommerce' );
+		return __( '7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and post office delivery', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '7-11 取貨', 'moksa-for-woocommerce' ),
-			__( '全家取貨', 'moksa-for-woocommerce' ),
-			__( '萊爾富取貨', 'moksa-for-woocommerce' ),
-			__( 'OK 取貨', 'moksa-for-woocommerce' ),
-			__( '黑貓宅配', 'moksa-for-woocommerce' ),
-			__( '中華郵政', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN pickup', 'moksa-for-woocommerce' ),
+			__( 'FamilyMart pickup', 'moksa-for-woocommerce' ),
+			__( 'Hi-Life pickup', 'moksa-for-woocommerce' ),
+			__( 'OK Mart pickup', 'moksa-for-woocommerce' ),
+			__( 'T-Cat home delivery', 'moksa-for-woocommerce' ),
+			__( 'Chunghwa Post', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -64,13 +64,13 @@ final class Module extends AbstractModule {
 
 	public static function register_batch_print( array $providers ): array {
 		$titles = [
-			'moksafowo_ecpay_shipping_cvs_711'            => __( '綠界 7-11 取貨', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( '綠界 7-11 B2C 冷凍', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_family'         => __( '綠界 全家取貨', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_hilife'         => __( '綠界 萊爾富取貨', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_okmart'         => __( '綠界 OK 取貨', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_home_tcat'          => __( '綠界 黑貓宅配', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_home_post'          => __( '綠界 中華郵政', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_711'            => __( 'ECPay 7-ELEVEN pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( 'ECPay 7-ELEVEN B2C frozen', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_family'         => __( 'ECPay FamilyMart pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_hilife'         => __( 'ECPay Hi-Life pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_okmart'         => __( 'ECPay OK Mart pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_tcat'          => __( 'ECPay T-Cat home delivery', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_post'          => __( 'ECPay Chunghwa Post', 'moksa-for-woocommerce' ),
 		];
 		$cvs    = [];
 		$home   = [];
@@ -107,7 +107,7 @@ final class Module extends AbstractModule {
 		};
 		if ( ! empty( $cvs ) ) {
 			$providers['ecpay-cvs'] = [
-				'label'           => __( '綠界 超商標籤', 'moksa-for-woocommerce' ),
+				'label'           => __( 'ECPay convenience store labels', 'moksa-for-woocommerce' ),
 				'category'        => 'cvs',
 				'method_ids'      => $cvs,
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
@@ -119,7 +119,7 @@ final class Module extends AbstractModule {
 		}
 		if ( ! empty( $home ) ) {
 			$providers['ecpay-home'] = [
-				'label'           => __( '綠界 宅配標籤', 'moksa-for-woocommerce' ),
+				'label'           => __( 'ECPay home delivery labels', 'moksa-for-woocommerce' ),
 				'category'        => 'home',
 				'method_ids'      => $home,
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],

@@ -17,10 +17,10 @@ final class Weixin extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 微信支付', 'moksa-for-woocommerce' );
+		return __( 'ECPay WeChat Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用微信錢包付款。', 'moksa-for-woocommerce' );
+		return __( 'Pay with the WeChat wallet.', 'moksa-for-woocommerce' );
 	}
 }

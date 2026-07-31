@@ -14,28 +14,28 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'PayNow 立即富 — 信用卡 / 分期 / WebATM / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'moksa-for-woocommerce' );
+		return __( 'PayNow — credit card, instalments, WebATM, ATM, convenience store barcode, ibon, FamiPort, iCash and UnionPay', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'PayNow 立即富', 'moksa-for-woocommerce' );
+		return __( 'PayNow', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / ATM / 超商條碼 / ibon / FamiPort / iCash / 銀聯', 'moksa-for-woocommerce' );
+		return __( 'Credit card, ATM, convenience store barcode, ibon, FamiPort, iCash and UnionPay', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'Credit card instalments', 'moksa-for-woocommerce' ),
 			__( 'WebATM', 'moksa-for-woocommerce' ),
-			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
-			__( '超商條碼繳費', 'moksa-for-woocommerce' ),
-			__( 'ibon 代碼繳費', 'moksa-for-woocommerce' ),
-			__( 'FamiPort 代碼繳費', 'moksa-for-woocommerce' ),
-			__( 'iCash 錢包', 'moksa-for-woocommerce' ),
-			__( '銀聯卡', 'moksa-for-woocommerce' ),
+			__( 'ATM virtual account', 'moksa-for-woocommerce' ),
+			__( 'Convenience store barcode payment', 'moksa-for-woocommerce' ),
+			__( 'ibon code', 'moksa-for-woocommerce' ),
+			__( 'FamiPort code', 'moksa-for-woocommerce' ),
+			__( 'iCash wallet', 'moksa-for-woocommerce' ),
+			__( 'UnionPay', 'moksa-for-woocommerce' ),
 		];
 	}
 

@@ -24,12 +24,12 @@ final class PrintShippingLabel {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要訂單編輯權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires permission to edit orders.', 'moksa-for-woocommerce' ) );
 		}
 
 		$refs = self::normalize_refs( is_array( $args ) ? ( $args['orders'] ?? '' ) : '' );
 		if ( empty( $refs ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '沒有指定要列印的訂單。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( 'No orders were given to print.', 'moksa-for-woocommerce' ) );
 		}
 
 		$ids     = array();
@@ -47,13 +47,13 @@ final class PrintShippingLabel {
 		}
 
 		if ( empty( $ids ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_orders', __( '找不到任何有效的訂單。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_orders', __( 'No valid orders were found.', 'moksa-for-woocommerce' ) );
 		}
 
 		$paper   = ( is_array( $args ) && isset( $args['paper'] ) && in_array( (string) $args['paper'], array( '2', 'a6', 'A6' ), true ) ) ? '2' : '1';
 		$summary = sprintf(
 			/* translators: 1: order count, 2: order numbers, 3: paper size */
-			__( '列印 %1$d 筆訂單的物流標籤(%2$s),紙張 %3$s。', 'moksa-for-woocommerce' ),
+			__( 'Print shipping labels for %1$d orders (%2$s) on %3$s paper.', 'moksa-for-woocommerce' ),
 			count( $ids ),
 			implode( ' ', $numbers ),
 			'2' === $paper ? 'A6' : 'A4'
@@ -61,7 +61,7 @@ final class PrintShippingLabel {
 		if ( ! empty( $invalid ) ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: invalid refs */
-				__( '(找不到並略過:%s)', 'moksa-for-woocommerce' ),
+				__( '(not found and skipped: %s)', 'moksa-for-woocommerce' ),
 				implode( '、', $invalid )
 			);
 		}
@@ -79,25 +79,25 @@ final class PrintShippingLabel {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要訂單編輯權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires permission to edit orders.', 'moksa-for-woocommerce' ) );
 		}
 		$ids   = is_array( $params['order_ids'] ?? null ) ? array_map( 'absint', $params['order_ids'] ) : array();
 		$paper = (string) ( $params['paper'] ?? '1' );
 
 		$result = BatchPrintAdminUI::build_print_url( $ids, $paper );
 		if ( empty( $result['ok'] ) ) {
-			return new \WP_Error( 'moksafowo_ai_print_failed', (string) ( $result['message'] ?? __( '無法產生列印標籤。', 'moksa-for-woocommerce' ) ) );
+			return new \WP_Error( 'moksafowo_ai_print_failed', (string) ( $result['message'] ?? __( 'The labels could not be generated.', 'moksa-for-woocommerce' ) ) );
 		}
 
 		$message = sprintf(
 			/* translators: %d: number of labels */
-			__( '✅ 已準備 %d 份物流標籤,正在開啟列印頁。', 'moksa-for-woocommerce' ),
+			__( '✅ %d shipping labels are ready and the print page is opening.', 'moksa-for-woocommerce' ),
 			(int) $result['count']
 		);
 		if ( ! empty( $result['skipped'] ) ) {
 			$message .= ' ' . sprintf(
 				/* translators: %d: skipped count */
-				__( '(略過 %d 筆無標籤)', 'moksa-for-woocommerce' ),
+				__( '(%d orders skipped because they have no label)', 'moksa-for-woocommerce' ),
 				(int) $result['skipped']
 			);
 		}

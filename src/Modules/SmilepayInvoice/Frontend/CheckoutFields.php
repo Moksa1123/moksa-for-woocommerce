@@ -15,7 +15,7 @@ final class CheckoutFields {
 			new InvoiceFieldConfig(
 				provider_slug: 'smilepay',
 				option_prefix: 'moksafowo_smilepay_invoice',
-				member_label: __( 'SmilePay 會員載具', 'moksa-for-woocommerce' ),
+				member_label: __( 'SmilePay member carrier', 'moksa-for-woocommerce' ),
 			)
 		);
 	}

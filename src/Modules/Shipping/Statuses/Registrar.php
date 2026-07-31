@@ -50,14 +50,14 @@ final class Registrar {
 
 	public static function color_status_labels(): array {
 		return [
-			'processing'         => __( '處理中', 'moksa-for-woocommerce' ),
-			'moksa-shipped'      => __( '已出貨', 'moksa-for-woocommerce' ),
-			'moksa-cvs-arrived'  => __( '已到店待取', 'moksa-for-woocommerce' ),
-			'moksa-store-closed' => __( '門市關轉', 'moksa-for-woocommerce' ),
-			'completed'          => __( '完成', 'moksa-for-woocommerce' ),
-			'cancelled'          => __( '已取消 / 失敗', 'moksa-for-woocommerce' ),
-			'refunded'           => __( '退款', 'moksa-for-woocommerce' ),
-			'on-hold'            => __( '保留 / 待付款', 'moksa-for-woocommerce' ),
+			'processing'         => __( 'Processing', 'moksa-for-woocommerce' ),
+			'moksa-shipped'      => __( 'Shipped', 'moksa-for-woocommerce' ),
+			'moksa-cvs-arrived'  => __( 'Arrived at the store, waiting for pickup', 'moksa-for-woocommerce' ),
+			'moksa-store-closed' => __( 'Store closed', 'moksa-for-woocommerce' ),
+			'completed'          => __( 'Completed', 'moksa-for-woocommerce' ),
+			'cancelled'          => __( 'Cancelled / failed', 'moksa-for-woocommerce' ),
+			'refunded'           => __( 'Refund', 'moksa-for-woocommerce' ),
+			'on-hold'            => __( 'On hold / pending payment', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -134,10 +134,10 @@ JS;
 		?>
 		<table class="moksafowo-status-color-grid">
 			<thead><tr>
-				<th><?php esc_html_e( '訂單狀態', 'moksa-for-woocommerce' ); ?></th>
-				<th><?php esc_html_e( '背景', 'moksa-for-woocommerce' ); ?></th>
-				<th><?php esc_html_e( '文字', 'moksa-for-woocommerce' ); ?></th>
-				<th><?php esc_html_e( '預覽', 'moksa-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Order status', 'moksa-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Background', 'moksa-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Text', 'moksa-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Preview', 'moksa-for-woocommerce' ); ?></th>
 			</tr></thead>
 			<tbody>
 				<?php
@@ -194,11 +194,11 @@ JS;
 	private static function status_label( string $slug ): string {
 		switch ( $slug ) {
 			case 'moksa-shipped':
-				return __( '已出貨', 'moksa-for-woocommerce' );
+				return __( 'Shipped', 'moksa-for-woocommerce' );
 			case 'moksa-cvs-arrived':
-				return __( '已到店待取', 'moksa-for-woocommerce' );
+				return __( 'Arrived at store', 'moksa-for-woocommerce' );
 			case 'moksa-store-closed':
-				return __( '門市關轉', 'moksa-for-woocommerce' );
+				return __( 'Store closed', 'moksa-for-woocommerce' );
 		}
 		return $slug;
 	}
@@ -212,14 +212,14 @@ JS;
 		switch ( $slug ) {
 			case 'moksa-cvs-arrived':
 				/* translators: %s: number of orders in this status */
-				return _n_noop( '已到店待取 <span class="count">(%s)</span>', '已到店待取 <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
+				return _n_noop( 'Arrived at store <span class="count">(%s)</span>', 'Arrived at store <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
 			case 'moksa-store-closed':
 				/* translators: %s: number of orders in this status */
-				return _n_noop( '門市關轉 <span class="count">(%s)</span>', '門市關轉 <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
+				return _n_noop( 'Store closed <span class="count">(%s)</span>', 'Store closed <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
 			case 'moksa-shipped':
 			default:
 				/* translators: %s: number of orders in this status */
-				return _n_noop( '已出貨 <span class="count">(%s)</span>', '已出貨 <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
+				return _n_noop( 'Shipped <span class="count">(%s)</span>', 'Shipped <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
 		}
 	}
 
@@ -306,7 +306,7 @@ JS;
 			}
 			$actions[ 'mark_' . $slug ] = sprintf(
 				/* translators: %s: order status label */
-				__( '變更狀態為：%s', 'moksa-for-woocommerce' ),
+				__( 'Change status to: %s', 'moksa-for-woocommerce' ),
 				self::status_label( $slug )
 			);
 		}

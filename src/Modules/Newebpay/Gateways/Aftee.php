@@ -17,11 +17,11 @@ final class Aftee extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 AFTEE 無卡分期', 'moksa-for-woocommerce' );
+		return __( 'NewebPay AFTEE buy now, pay later', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( 'AFTEE 先享後付無卡分期，最多 3 期，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
+		return __( 'Buy now and pay later with AFTEE over up to 3 instalments, without a credit card. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
 
 	protected function min_amount(): int {

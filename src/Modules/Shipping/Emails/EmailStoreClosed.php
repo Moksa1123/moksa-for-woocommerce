@@ -9,8 +9,8 @@ defined( 'ABSPATH' ) || exit;
 final class EmailStoreClosed extends AbstractShippingEmail {
 
 	public function __construct() {
-		$this->title       = __( '物流：門市關轉通知', 'moksa-for-woocommerce' );
-		$this->description = __( '取件 / 退貨門市暫歇，催顧客重選門市的緊急通知。', 'moksa-for-woocommerce' );
+		$this->title       = __( 'Shipping: store closed', 'moksa-for-woocommerce' );
+		$this->description = __( 'An urgent notice asking the customer to choose another store when the pickup or return store is temporarily closed.', 'moksa-for-woocommerce' );
 		parent::__construct();
 	}
 
@@ -19,10 +19,10 @@ final class EmailStoreClosed extends AbstractShippingEmail {
 	}
 
 	public function get_default_subject(): string {
-		return __( '【重要】請重新選擇取件門市（訂單 #{order_number}）', 'moksa-for-woocommerce' );
+		return __( '[Important] Please choose another pickup store (order #{order_number})', 'moksa-for-woocommerce' );
 	}
 
 	public function get_default_heading(): string {
-		return __( '門市關轉，請重新選擇取件門市', 'moksa-for-woocommerce' );
+		return __( 'Store closed — please choose another pickup store', 'moksa-for-woocommerce' );
 	}
 }

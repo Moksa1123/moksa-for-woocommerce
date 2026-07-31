@@ -16,7 +16,7 @@ final class Invalid {
 		if ( '' === $invoice_no ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單沒有可作廢的 SmilePay 發票。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order has no SmilePay invoice to void.', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( in_array( $invoice_no, [ 'zero', 'negative' ], true ) ) {
@@ -24,18 +24,18 @@ final class Invalid {
 			$order->save();
 			return [
 				'ok'      => true,
-				'message' => __( '清除「未開立」標記。', 'moksa-for-woocommerce' ),
+				'message' => __( 'Cleared the not-issued marker.', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( $order->get_meta( Keys::SMILEPAY_INVOICE_INVALID_AT ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( 'SmilePay 發票已作廢。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The SmilePay invoice was voided.', 'moksa-for-woocommerce' ),
 			];
 		}
 		$reason = trim( $reason );
 		if ( '' === $reason ) {
-			$reason = __( '訂單取消', 'moksa-for-woocommerce' );
+			$reason = __( 'Order cancelled', 'moksa-for-woocommerce' );
 		}
 
 		$inv_date = (string) $order->get_meta( Keys::SMILEPAY_INVOICE_DATE );
@@ -64,7 +64,7 @@ final class Invalid {
 		if ( ! $result['ok'] ) {
 			$msg = sprintf(
 				/* translators: 1: error message, 2: status code */
-				__( 'SmilePay 發票作廢失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
+				__( 'The SmilePay invoice could not be voided: %1$s (%2$s)', 'moksa-for-woocommerce' ),
 				$result['message'] ?? '',
 				$result['status'] ?? ''
 			);
@@ -81,7 +81,7 @@ final class Invalid {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: reason */
-				__( 'SmilePay 發票 %1$s 已作廢 — 原因：%2$s', 'moksa-for-woocommerce' ),
+				__( 'SmilePay invoice %1$s was voided — reason: %2$s', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$reason
 			)

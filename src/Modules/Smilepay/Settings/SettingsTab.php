@@ -10,38 +10,38 @@ final class SettingsTab {
 	public function get_settings(): array {
 		return [
 			[
-				'title' => __( '商家憑證', 'moksa-for-woocommerce' ),
+				'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '從 SmilePay 後台「會員專區 → 系統識別資料」取得 Dcvc / Rvg2c / Verify_key / 商家驗證參數 (Mid)。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Find Dcvc, Rvg2c, Verify_key and the merchant verification parameter (Mid) in the SmilePay dashboard under Member area → System identification data.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_section',
 			],
 			[
-				'title'   => __( '啟用測試模式', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_smilepay_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後改用 SmilePay 公開測試商家（Dcvc=107）進行交易，不會真扣款。上線後請取消勾選。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'When ticked, transactions run through the SmilePay public test merchant (Dcvc=107) and no money changes hands. Untick it once you go live.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title' => __( 'Dcvc — 商家代號', 'moksa-for-woocommerce' ),
+				'title' => __( 'Dcvc — merchant code', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_dcvc',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( 'Rvg2c — 商家參數碼', 'moksa-for-woocommerce' ),
+				'title' => __( 'Rvg2c — merchant parameter code', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_rvg2c',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( 'Verify_key — 商家檢查碼', 'moksa-for-woocommerce' ),
+				'title' => __( 'Verify_key — merchant check code', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_verify_key',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( 'Mid — 商家驗證參數', 'moksa-for-woocommerce' ),
+				'title' => __( 'Mid — merchant verification parameter', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_mid',
 				'type'  => 'text',
-				'desc'  => __( '用於驗證 SmilePay 付款回傳結果的來源真偽。請填入與 SmilePay 後台一致的值；留空將導致所有付款回傳一律被拒絕（訂單無法自動確認收款）。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Used to confirm that payment notifications really came from SmilePay. Enter the same value as in the SmilePay dashboard. If it is blank every notification is rejected, so orders will never be marked as paid automatically.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -49,23 +49,23 @@ final class SettingsTab {
 			],
 
 			[
-				'title' => __( '付款設定', 'moksa-for-woocommerce' ),
+				'title' => __( 'Payment settings', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
 				'id'    => 'moksafowo_smilepay_misc_section',
 			],
 			[
-				'title'    => __( '信用卡分期期數', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Credit card instalment plans', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_smilepay_installment',
 				'type'     => 'text',
 				'default'  => '3',
-				'desc_tip' => __( '逗號分隔（例 3,6,12）。信用卡分期會使用第一個有效期數。', 'moksa-for-woocommerce' ),
+				'desc_tip' => __( 'Separate with commas, for example 3,6,12. Card instalments use the first valid plan in the list.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title'             => __( 'ATM 繳款期限（天）', 'moksa-for-woocommerce' ),
+				'title'             => __( 'ATM payment window (days)', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_smilepay_atm_deadline_days',
 				'type'              => 'number',
 				'default'           => 7,
-				'desc_tip'          => __( '顧客取得虛擬帳號後幾天內須完成付款（1-720）。', 'moksa-for-woocommerce' ),
+				'desc_tip'          => __( 'How many days the customer has to pay after receiving the virtual account number (1 to 720).', 'moksa-for-woocommerce' ),
 				'custom_attributes' => [
 					'min'  => 1,
 					'max'  => 720,
@@ -73,11 +73,11 @@ final class SettingsTab {
 				],
 			],
 			[
-				'title'             => __( '超商條碼繳款期限（天）', 'moksa-for-woocommerce' ),
+				'title'             => __( 'Convenience store barcode window (days)', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_smilepay_barcode_deadline_days',
 				'type'              => 'number',
 				'default'           => 7,
-				'desc_tip'          => __( '顧客取得繳費條碼後幾天內須完成付款（1-50）。', 'moksa-for-woocommerce' ),
+				'desc_tip'          => __( 'How many days the customer has to pay after receiving the barcode (1 to 50).', 'moksa-for-woocommerce' ),
 				'custom_attributes' => [
 					'min'  => 1,
 					'max'  => 50,
@@ -85,11 +85,11 @@ final class SettingsTab {
 				],
 			],
 			[
-				'title'             => __( 'ibon 繳款期限（天）', 'moksa-for-woocommerce' ),
+				'title'             => __( 'ibon payment window (days)', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_smilepay_ibon_deadline_days',
 				'type'              => 'number',
 				'default'           => 6,
-				'desc_tip'          => __( '顧客取得繳費代碼後幾天內須完成付款（1-6）。', 'moksa-for-woocommerce' ),
+				'desc_tip'          => __( 'How many days the customer has to pay after receiving the payment code (1 to 6).', 'moksa-for-woocommerce' ),
 				'custom_attributes' => [
 					'min'  => 1,
 					'max'  => 6,
@@ -97,11 +97,11 @@ final class SettingsTab {
 				],
 			],
 			[
-				'title'             => __( 'FamiPort 繳款期限（天）', 'moksa-for-woocommerce' ),
+				'title'             => __( 'FamiPort payment window (days)', 'moksa-for-woocommerce' ),
 				'id'                => 'moksafowo_smilepay_famiport_deadline_days',
 				'type'              => 'number',
 				'default'           => 6,
-				'desc_tip'          => __( '顧客取得繳費代碼後幾天內須完成付款（1-6）。', 'moksa-for-woocommerce' ),
+				'desc_tip'          => __( 'How many days the customer has to pay after receiving the payment code (1 to 6).', 'moksa-for-woocommerce' ),
 				'custom_attributes' => [
 					'min'  => 1,
 					'max'  => 6,
@@ -109,11 +109,11 @@ final class SettingsTab {
 				],
 			],
 			[
-				'title'   => __( '偵錯日誌', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Debug log', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_smilepay_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Turn this on when investigating a problem order. The log lives under WooCommerce → Status → Logs.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -121,27 +121,27 @@ final class SettingsTab {
 			],
 
 			[
-				'title' => __( '啟用的付款方式', 'moksa-for-woocommerce' ),
+				'title' => __( 'Enabled payment methods', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '勾選要在結帳頁顯示的 SmilePay 付款方式。各付款方式的名稱 / 描述另在「WooCommerce → 付款方式」分頁設定。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Tick the SmilePay payment methods to show at checkout. Their titles and descriptions are set on the WooCommerce → Payments tab.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_methods_section',
 			],
 			[
-				'title'   => __( '付款方式', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Payment method', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_smilepay_enabled_methods',
 				'type'    => 'multiselect',
 				'class'   => 'wc-enhanced-select',
 				'css'     => 'width: 400px;',
 				'options' => [
-					'moksafowo_smilepay_credit'   => __( '信用卡', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_credit_installment' => __( '信用卡分期', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_atm'      => __( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_barcode'  => __( '四大超商條碼', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_ibon'     => __( 'ibon 代碼繳費', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_famiport' => __( 'FamiPort 代碼繳費', 'moksa-for-woocommerce' ),
-					'moksafowo_smilepay_unionpay' => __( '銀聯線上刷卡', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_credit'   => __( 'Credit card', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_credit_installment' => __( 'Credit card instalments', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_atm'      => __( 'ATM virtual account', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_barcode'  => __( 'Convenience store barcode', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_ibon'     => __( 'ibon code', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_famiport' => __( 'FamiPort code', 'moksa-for-woocommerce' ),
+					'moksafowo_smilepay_unionpay' => __( 'UnionPay', 'moksa-for-woocommerce' ),
 				],
-				'desc'    => __( '勾選的付款方式才會出現在結帳頁，未勾選不會出現。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Only the ticked payment methods appear at checkout.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

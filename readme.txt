@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.4.9
+Stable tag: 1.5.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,13 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.5.0 - 2026-08-01 =
+* i18n: every translatable string is now written in English in the source, and Traditional Chinese ships as a real translation. Previously the source strings were Chinese, which meant the plugin could never be translated into any other language and WordPress.org reported it as having no Traditional Chinese localisation at all. 2,442 strings are covered, so Chinese stores see exactly the same wording as before.
+* i18n: Taiwanese cities and districts now use a translator context (`_x`), so the districts that share a name across cities — Zhongzheng in both Taipei and Keelung, for example — are no longer collapsed into one entry that translators cannot tell apart.
+* Fix: invoice line-item units sent to the e-invoice services were wrapped in a translation call, so on a non-Chinese site they would have been submitted in the site language instead of the value the tax authority expects. They are now sent as fixed data.
+* Fix: the order-status labels shown as post-status counts in the admin order list are now translatable in their own right rather than reusing an unrelated shipment-tracking string.
+* Dev: the translation catalogue is generated from a single English-to-Chinese map and the build fails if any string is missing a translation, so a new string can no longer ship untranslated.
 
 = 1.4.9 - 2026-07-26 =
 * Security: two SmilePay logistics endpoints (T-cat tracking-number retrieval and C2B label data) were still declared with plain http://; both now use https:// (verified reachable), so every request the plugin makes is TLS-encrypted as the readme states.

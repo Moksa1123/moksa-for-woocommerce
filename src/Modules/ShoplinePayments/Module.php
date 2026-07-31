@@ -14,7 +14,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'Shopline Payments — 信用卡 / Apple Pay / Google Pay / LINE Pay / 街口（託管結帳）', 'moksa-for-woocommerce' );
+		return __( 'Shopline Payments — credit card, Apple Pay, Google Pay, LINE Pay and JKOPAY, on a hosted checkout', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
@@ -22,16 +22,16 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 行動支付（轉跳付款頁）', 'moksa-for-woocommerce' );
+		return __( 'Credit card and mobile payments, on a redirected payment page', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
 			__( 'Apple Pay', 'moksa-for-woocommerce' ),
 			__( 'Google Pay', 'moksa-for-woocommerce' ),
 			__( 'LINE Pay', 'moksa-for-woocommerce' ),
-			__( '街口支付', 'moksa-for-woocommerce' ),
+			__( 'JKOPAY', 'moksa-for-woocommerce' ),
 		];
 	}
 

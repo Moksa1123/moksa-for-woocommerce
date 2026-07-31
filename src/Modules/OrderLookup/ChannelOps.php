@@ -24,15 +24,15 @@ final class ChannelOps {
 	private static function channels(): array {
 		return array(
 			'ecpay'             => array(
-				'label'    => __( '綠界金流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'ECPay payments', 'moksa-for-woocommerce' ),
 				'category' => 'payment',
 			),
 			'newebpay'          => array(
-				'label'    => __( '藍新金流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'NewebPay payments', 'moksa-for-woocommerce' ),
 				'category' => 'payment',
 			),
 			'smilepay'          => array(
-				'label'    => __( '速買配金流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'SmilePay payments', 'moksa-for-woocommerce' ),
 				'category' => 'payment',
 			),
 			'linepay'           => array(
@@ -40,11 +40,11 @@ final class ChannelOps {
 				'category' => 'payment',
 			),
 			'payuni'            => array(
-				'label'    => __( '統一金流 PAYUNi', 'moksa-for-woocommerce' ),
+				'label'    => __( 'PAYUNi', 'moksa-for-woocommerce' ),
 				'category' => 'payment',
 			),
 			'paynow'            => array(
-				'label'    => __( 'PayNow 立吉富', 'moksa-for-woocommerce' ),
+				'label'    => __( 'PayNow', 'moksa-for-woocommerce' ),
 				'category' => 'payment',
 			),
 			'pchomepay'         => array(
@@ -60,39 +60,39 @@ final class ChannelOps {
 				'category' => 'payment',
 			),
 			'ecpay_shipping'    => array(
-				'label'    => __( '綠界物流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'ECPay shipping', 'moksa-for-woocommerce' ),
 				'category' => 'shipping',
 			),
 			'newebpay_shipping' => array(
-				'label'    => __( '藍新物流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'NewebPay shipping', 'moksa-for-woocommerce' ),
 				'category' => 'shipping',
 			),
 			'payuni_shipping'   => array(
-				'label'    => __( 'PAYUNi 物流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'PAYUNi shipping', 'moksa-for-woocommerce' ),
 				'category' => 'shipping',
 			),
 			'smilepay_shipping' => array(
-				'label'    => __( '速買配物流', 'moksa-for-woocommerce' ),
+				'label'    => __( 'SmilePay shipping', 'moksa-for-woocommerce' ),
 				'category' => 'shipping',
 			),
 			'ecpay_invoice'     => array(
-				'label'    => __( '綠界電子發票', 'moksa-for-woocommerce' ),
+				'label'    => __( 'ECPay e-invoice', 'moksa-for-woocommerce' ),
 				'category' => 'invoice',
 			),
 			'ezpay_invoice'     => array(
-				'label'    => __( 'ezPay 電子發票', 'moksa-for-woocommerce' ),
+				'label'    => __( 'ezPay e-invoice', 'moksa-for-woocommerce' ),
 				'category' => 'invoice',
 			),
 			'paynow_invoice'    => array(
-				'label'    => __( 'PayNow 電子發票', 'moksa-for-woocommerce' ),
+				'label'    => __( 'PayNow e-invoice', 'moksa-for-woocommerce' ),
 				'category' => 'invoice',
 			),
 			'amego_invoice'     => array(
-				'label'    => __( 'Amego 電子發票', 'moksa-for-woocommerce' ),
+				'label'    => __( 'Amego e-invoice', 'moksa-for-woocommerce' ),
 				'category' => 'invoice',
 			),
 			'smilepay_invoice'  => array(
-				'label'    => __( '速買配電子發票', 'moksa-for-woocommerce' ),
+				'label'    => __( 'SmilePay e-invoice', 'moksa-for-woocommerce' ),
 				'category' => 'invoice',
 			),
 		);
@@ -163,13 +163,13 @@ final class ChannelOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$raw      = is_array( $args ) && isset( $args['channel'] ) ? (string) $args['channel'] : '';
 		$slug     = self::resolve_slug( $raw );
 		$channels = self::channels();
 		if ( ! isset( $channels[ $slug ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_channel', __( '找不到此管道。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_channel', __( 'That channel could not be found.', 'moksa-for-woocommerce' ) );
 		}
 		$enable  = self::truthy( is_array( $args ) ? ( $args['enable'] ?? null ) : null );
 		$current = self::is_on( $slug );
@@ -178,9 +178,9 @@ final class ChannelOps {
 				'moksafowo_ai_noop',
 				sprintf(
 					/* translators: 1: channel label, 2: state */
-					__( '「%1$s」目前已是%2$s,無需變更。', 'moksa-for-woocommerce' ),
+					__( '“%1$s” is already %2$s, so nothing was changed.', 'moksa-for-woocommerce' ),
 					$channels[ $slug ]['label'],
-					$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' )
+					$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
 				)
 			);
 		}
@@ -190,8 +190,8 @@ final class ChannelOps {
 			'enable'  => $enable,
 			'summary' => sprintf(
 				/* translators: 1: action, 2: channel label */
-				__( '%1$s「%2$s」管道。', 'moksa-for-woocommerce' ),
-				$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
+				__( '%1$s the “%2$s” channel.', 'moksa-for-woocommerce' ),
+				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
 				$channels[ $slug ]['label']
 			),
 		);
@@ -203,21 +203,21 @@ final class ChannelOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$slug     = (string) ( $params['slug'] ?? '' );
 		$channels = self::channels();
 		if ( ! isset( $channels[ $slug ] ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_channel', __( '找不到此管道。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_channel', __( 'That channel could not be found.', 'moksa-for-woocommerce' ) );
 		}
 		$enable = ! empty( $params['enable'] );
 		update_option( 'moksafowo_' . $slug . '_enabled', $enable ? 'yes' : 'no' );
 
 		return sprintf(
 			/* translators: 1: channel label, 2: state */
-			__( '✅ 已%2$s「%1$s」。設定即時生效;部分前台變更可能需清快取。', 'moksa-for-woocommerce' ),
+			__( '✅ “%1$s” is now %2$s. The setting applies immediately, though some storefront changes may need the cache cleared.', 'moksa-for-woocommerce' ),
 			$channels[ $slug ]['label'],
-			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' )
+			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
 		);
 	}
 

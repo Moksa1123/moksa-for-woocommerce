@@ -72,12 +72,12 @@ final class StoreSelector {
 				'token_query' => self::TOKEN_QUERY,
 				'carriers'    => self::enabled_carriers(),
 				'i18n'        => [
-					'select'        => __( '選擇取貨門市', 'moksa-for-woocommerce' ),
-					'change'        => __( '更換門市', 'moksa-for-woocommerce' ),
-					'pick_carrier'  => __( '請選擇取貨超商：', 'moksa-for-woocommerce' ),
-					'none_selected' => __( '尚未選擇取貨門市', 'moksa-for-woocommerce' ),
-					'store_id'      => __( '門市代號', 'moksa-for-woocommerce' ),
-					'error'         => __( '無法開啟藍新選店畫面，請稍後再試。', 'moksa-for-woocommerce' ),
+					'select'        => __( 'Choose a pickup store', 'moksa-for-woocommerce' ),
+					'change'        => __( 'Change store', 'moksa-for-woocommerce' ),
+					'pick_carrier'  => __( 'Choose a convenience store:', 'moksa-for-woocommerce' ),
+					'none_selected' => __( 'No pickup store chosen yet', 'moksa-for-woocommerce' ),
+					'store_id'      => __( 'Store number', 'moksa-for-woocommerce' ),
+					'error'         => __( 'The NewebPay store picker could not be opened. Please try again later.', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -93,8 +93,8 @@ final class StoreSelector {
 	private static function enabled_carriers(): array {
 		$labels = [
 			'1' => __( '7-ELEVEN', 'moksa-for-woocommerce' ),
-			'2' => __( '全家', 'moksa-for-woocommerce' ),
-			'3' => __( '萊爾富', 'moksa-for-woocommerce' ),
+			'2' => __( 'FamilyMart', 'moksa-for-woocommerce' ),
+			'3' => __( 'Hi-Life', 'moksa-for-woocommerce' ),
 			'4' => __( 'OK mart', 'moksa-for-woocommerce' ),
 		];
 		// B2C 只支援 7-ELEVEN。
@@ -145,7 +145,7 @@ final class StoreSelector {
 			$method_id = strstr( $method_id, ':', true );
 		}
 		if ( ! isset( Module::method_map()[ $method_id ] ) ) {
-			wp_send_json_error( [ 'message' => __( '不是藍新物流方式。', 'moksa-for-woocommerce' ) ] );
+			wp_send_json_error( [ 'message' => __( 'This is not a NewebPay shipping method.', 'moksa-for-woocommerce' ) ] );
 		}
 
 		// state token 存 transient anti-tamper

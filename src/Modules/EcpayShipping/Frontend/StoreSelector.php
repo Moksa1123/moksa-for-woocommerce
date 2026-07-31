@@ -80,11 +80,11 @@ final class StoreSelector {
 				),
 				'token_query' => self::TOKEN_QUERY,
 				'i18n'        => [
-					'select'        => __( '選擇取貨門市', 'moksa-for-woocommerce' ),
-					'change'        => __( '更換門市', 'moksa-for-woocommerce' ),
-					'none_selected' => __( '尚未選擇門市', 'moksa-for-woocommerce' ),
-					'store_id'      => __( '門市代號', 'moksa-for-woocommerce' ),
-					'error'         => __( '無法開啟綠界選店畫面，請稍後再試。', 'moksa-for-woocommerce' ),
+					'select'        => __( 'Choose a pickup store', 'moksa-for-woocommerce' ),
+					'change'        => __( 'Change store', 'moksa-for-woocommerce' ),
+					'none_selected' => __( 'No store chosen yet', 'moksa-for-woocommerce' ),
+					'store_id'      => __( 'Store number', 'moksa-for-woocommerce' ),
+					'error'         => __( 'The ECPay store picker could not be opened. Please try again later.', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -113,12 +113,12 @@ final class StoreSelector {
 
 		$map = Module::method_map();
 		if ( ! isset( $map[ $method_id ] ) ) {
-			wp_send_json_error( [ 'message' => __( '不是綠界物流方式。', 'moksa-for-woocommerce' ) ] );
+			wp_send_json_error( [ 'message' => __( 'This is not an ECPay shipping method.', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$class = $map[ $method_id ];
 		if ( ! is_subclass_of( $class, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
-			wp_send_json_error( [ 'message' => __( '此物流方式不需選店。', 'moksa-for-woocommerce' ) ] );
+			wp_send_json_error( [ 'message' => __( 'This shipping method does not need a store.', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$method = new $class();

@@ -12,61 +12,61 @@ final class SettingsTab {
 
 		return [
 			[
-				'title' => __( '商家憑證', 'moksa-for-woocommerce' ),
+				'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( '向 Shopline Payments 申請取得 merchantId / apiKey / signKey。沒有公開測試帳號，測試憑證需另行向 Shopline Payments 申請。apiKey 請妥善保管。', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Apply to Shopline Payments for a merchantId, apiKey and signKey. There is no public test account, so test credentials have to be requested separately. Keep the apiKey safe.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_section',
 			],
 			[
-				'title'   => __( '啟用測試模式', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_shopline_payments_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '勾選後所有交易走測試環境不會真扣款。測試與正式憑證相互獨立。上線後請取消勾選。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'While this is ticked every transaction runs against the test environment and no money changes hands. Test and live credentials are separate. Untick it once you go live.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title' => __( '測試 merchantId', 'moksa-for-woocommerce' ),
+				'title' => __( 'Test merchantId', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_sandbox_merchant_id',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( '測試 apiKey', 'moksa-for-woocommerce' ),
+				'title' => __( 'Test apiKey', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_sandbox_api_key',
 				'type'  => 'text',
 			],
 			[
-				'title'    => __( '測試 signKey', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Test signKey', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shopline_payments_sandbox_sign_key',
 				'type'     => 'text',
-				'desc_tip' => __( '用於驗證付款通知的合法性。', 'moksa-for-woocommerce' ),
+				'desc_tip' => __( 'Used to confirm that payment notifications are genuine.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title'    => __( '測試 platformId', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Test platformId', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shopline_payments_sandbox_platform_id',
 				'type'     => 'text',
-				'desc_tip' => __( '僅平台整合商需要，一般商家留空。', 'moksa-for-woocommerce' ),
+				'desc_tip' => __( 'Only platform integrators need this. Leave it blank otherwise.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title' => __( '正式 merchantId', 'moksa-for-woocommerce' ),
+				'title' => __( 'Live merchantId', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_merchant_id',
 				'type'  => 'text',
 			],
 			[
-				'title' => __( '正式 apiKey', 'moksa-for-woocommerce' ),
+				'title' => __( 'Live apiKey', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_api_key',
 				'type'  => 'text',
 			],
 			[
-				'title'    => __( '正式 signKey', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Live signKey', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shopline_payments_sign_key',
 				'type'     => 'text',
-				'desc_tip' => __( '用於驗證付款通知的合法性。', 'moksa-for-woocommerce' ),
+				'desc_tip' => __( 'Used to confirm that payment notifications are genuine.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title'    => __( '正式 platformId', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Live platformId', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shopline_payments_platform_id',
 				'type'     => 'text',
-				'desc_tip' => __( '僅平台整合商需要，一般商家留空。', 'moksa-for-woocommerce' ),
+				'desc_tip' => __( 'Only platform integrators need this. Leave it blank otherwise.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -74,12 +74,12 @@ final class SettingsTab {
 			],
 
 			[
-				'title' => __( '付款通知設定', 'moksa-for-woocommerce' ),
+				'title' => __( 'Payment notifications', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
 				/* translators: %s: callback URL */
 				'desc'  => sprintf(
 					/* translators: %s: notification URL */
-					__( 'Shopline Payments 需手動開通付款通知，請將下列網址提供給 Shopline Payments 設定（測試與正式環境須分別提交）：<br><code>%s</code><br>未設定時，付款結果不會自動更新訂單狀態。', 'moksa-for-woocommerce' ),
+					__( 'Shopline Payments has to enable payment notifications by hand. Send them the address below, once for the test environment and once for the live one:<br><code>%s</code><br>Until that is done, orders will not update automatically when a payment completes.', 'moksa-for-woocommerce' ),
 					esc_url( $callback_url )
 				),
 				'id'    => 'moksafowo_shopline_payments_webhook_section',
@@ -90,32 +90,32 @@ final class SettingsTab {
 			],
 
 			[
-				'title' => __( '付款設定', 'moksa-for-woocommerce' ),
+				'title' => __( 'Payment settings', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
 				'id'    => 'moksafowo_shopline_payments_misc_section',
 			],
 			[
-				'title'   => __( '允許的付款方式', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Allowed payment methods', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_shopline_payments_payment_methods',
 				'type'    => 'multiselect',
 				'class'   => 'wc-enhanced-select',
 				'css'     => 'width: 400px;',
 				'options' => [
-					'CreditCard'     => __( '信用卡', 'moksa-for-woocommerce' ),
-					'VirtualAccount' => __( '虛擬帳號（ATM）', 'moksa-for-woocommerce' ),
+					'CreditCard'     => __( 'Credit card', 'moksa-for-woocommerce' ),
+					'VirtualAccount' => __( 'Virtual account (ATM)', 'moksa-for-woocommerce' ),
 					'ApplePay'       => __( 'Apple Pay', 'moksa-for-woocommerce' ),
 					'LinePay'        => __( 'LINE Pay', 'moksa-for-woocommerce' ),
-					'JKOPay'         => __( '街口支付', 'moksa-for-woocommerce' ),
-					'ChaileaseBNPL'  => __( '中租零卡分期', 'moksa-for-woocommerce' ),
+					'JKOPay'         => __( 'JKOPAY', 'moksa-for-woocommerce' ),
+					'ChaileaseBNPL'  => __( 'Zingala instalments', 'moksa-for-woocommerce' ),
 				],
-				'desc'    => __( '轉跳到付款頁後限定可用的付款方式。留空 = 不限制。實際項目以 Shopline Payments 開通的為準。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Limits which methods are offered on the payment page. Leave blank for no limit. What actually appears depends on what Shopline Payments has activated for you.', 'moksa-for-woocommerce' ),
 			],
 			[
-				'title'   => __( '偵錯日誌', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Debug log', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_shopline_payments_debug_log_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Turn this on when investigating a problem order. The log lives under WooCommerce → Status → Logs.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

@@ -16,7 +16,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'PAYUNi 統一金流 — 13 種付款（信用卡/ATM/超商代碼/愛金卡/街口/Aftee/銀聯/紅利/Apple/Google/Samsung Pay/LINE Pay/分期）+ 電子發票，可切換多入口/單一入口呈現', 'moksa-for-woocommerce' );
+		return __( 'PAYUNi — 13 payment methods (credit card, ATM, convenience store code, iCash Pay, JKOPAY, AFTEE, UnionPay, reward points, Apple Pay, Google Pay, Samsung Pay, LINE Pay and instalments) plus e-invoicing, shown either as separate methods or a single entry point', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -24,28 +24,28 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'PAYUNi 統一金流', 'moksa-for-woocommerce' );
+		return __( 'PAYUNi', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '13 種付款工具 + 電子發票', 'moksa-for-woocommerce' );
+		return __( '13 payment methods plus e-invoicing', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( 'ATM 轉帳', 'moksa-for-woocommerce' ),
-			__( '超商代碼', 'moksa-for-woocommerce' ),
-			__( '愛金卡', 'moksa-for-woocommerce' ),
-			__( '街口支付', 'moksa-for-woocommerce' ),
-			__( 'Aftee 後付', 'moksa-for-woocommerce' ),
-			__( '銀聯卡', 'moksa-for-woocommerce' ),
-			__( '信用卡紅利', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'ATM transfer', 'moksa-for-woocommerce' ),
+			__( 'Convenience store code', 'moksa-for-woocommerce' ),
+			__( 'iCash Pay', 'moksa-for-woocommerce' ),
+			__( 'JKOPAY', 'moksa-for-woocommerce' ),
+			__( 'AFTEE pay later', 'moksa-for-woocommerce' ),
+			__( 'UnionPay', 'moksa-for-woocommerce' ),
+			__( 'Credit card reward points', 'moksa-for-woocommerce' ),
 			__( 'Apple Pay', 'moksa-for-woocommerce' ),
 			__( 'Google Pay', 'moksa-for-woocommerce' ),
 			__( 'Samsung Pay', 'moksa-for-woocommerce' ),
 			__( 'LINE Pay', 'moksa-for-woocommerce' ),
-			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'Credit card instalments', 'moksa-for-woocommerce' ),
 		];
 	}
 

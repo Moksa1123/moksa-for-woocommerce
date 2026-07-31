@@ -12,141 +12,141 @@ final class StatusMapper {
 		$lookup = [
 			// Forward shipping (取貨流程)
 			'0_1' => [
-				'label'     => __( '建單成功', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Shipment created', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'shipping',
 			],
 			'0_2' => [
-				'label'     => __( '已建立託運單', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Shipment created', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'shipping',
 			],
 			'0_3' => [
-				'label'     => __( '到店待出貨', 'moksa-for-woocommerce' ),
+				'label'     => __( 'At the store, waiting to be dispatched', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'shipping',
 			],
 			'1'   => [
-				'label'     => __( '已交寄物流', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Handed to the carrier', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-shipped',
 				'type'      => 'shipping',
 			],
 			'2'   => [
-				'label'     => __( '配送中', 'moksa-for-woocommerce' ),
+				'label'     => __( 'In transit', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-shipped',
 				'type'      => 'shipping',
 			],
 			'3'   => [
-				'label'     => __( '已到店待取', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Arrived at the store, waiting for pickup', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-cvs-arrived',
 				'type'      => 'shipping',
 			],
 			'4'   => [
-				'label'     => __( '顧客已取貨', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Collected by the customer', 'moksa-for-woocommerce' ),
 				'wc_status' => 'completed',
 				'type'      => 'shipping',
 			],
 			'11'  => [
-				'label'     => __( '配送異常', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Delivery problem', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'error',
 			],
 			'5'   => [
-				'label'     => __( '已取消', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Cancelled', 'moksa-for-woocommerce' ),
 				'wc_status' => 'cancelled',
 				'type'      => 'error',
 			],
 			'6'   => [
-				'label'     => __( '逾期未取', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Not collected in time', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-store-closed',
 				'type'      => 'error',
 			],
 			// Negative codes (錯誤 / 退貨)
 			'-1'  => [
-				'label'     => __( '建單失敗', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Could not create the shipment', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'error',
 			],
 			'-6'  => [
-				'label'     => __( '退貨 — 物流退單', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — rejected by the carrier', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-9'  => [
-				'label'     => __( '退貨 — 商品破損', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — damaged goods', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-2'  => [
-				'label'     => __( '退貨 — 顧客拒收', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — refused by the customer', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-3'  => [
-				'label'     => __( '退貨 — 貨況異常', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — parcel problem', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-4'  => [
-				'label'     => __( '退貨 — 顧客逾期未取', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — not collected in time', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-5'  => [
-				'label'     => __( '退貨 — 顧客取消訂單', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return — order cancelled by the customer', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'-7'  => [
-				'label'     => __( '退貨配送中', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return in transit', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'-10' => [
-				'label'     => __( '退貨已到商家', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return received by the store', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'-11' => [
-				'label'     => __( '退貨完成', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return completed', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			// 退貨流程（Forward 進行中的退貨）
 			'10'  => [
-				'label'     => __( '退貨建單成功', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return shipment created', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'12'  => [
-				'label'     => __( '退貨配送中', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return in transit', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'13'  => [
-				'label'     => __( '退貨已到店', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return arrived at the store', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'14'  => [
-				'label'     => __( '退貨已寄回', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return sent back', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'15'  => [
-				'label'     => __( '退貨完成', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return completed', 'moksa-for-woocommerce' ),
 				'wc_status' => 'refunded',
 				'type'      => 'returning',
 			],
 			'16'  => [
-				'label'     => __( '退貨異常 / 已取消', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return problem or cancelled', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'error',
 			],
 		];
 		return $lookup[ $retld ] ?? [
 			/* translators: %s: NewebPay Retld status code */
-			'label'     => sprintf( __( '未知狀態（Retld %s）', 'moksa-for-woocommerce' ), $retld ),
+			'label'     => sprintf( __( 'Unknown status (Retld %s)', 'moksa-for-woocommerce' ), $retld ),
 			'wc_status' => '',
 			'type'      => 'unknown',
 		];

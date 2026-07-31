@@ -18,7 +18,7 @@ class LinePay extends GatewayBase {
 
 		$this->id                 = self::GATEWAY_ID;
 		$this->method_title       = __( 'PAYUNi LINE Pay', 'moksa-for-woocommerce' );
-		$this->method_description = __( '使用 LINE Pay 付款，跳轉至 PAYUNi 付款頁完成。', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Pay with LINE Pay. The customer is redirected to the PAYUNi payment page.', 'moksa-for-woocommerce' );
 		$this->supports           = array(
 			'products',
 		);
@@ -56,7 +56,7 @@ class LinePay extends GatewayBase {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::LINE_PAY_NO => _x( '付款序號', 'LINE Pay', 'moksa-for-woocommerce' ),
+			OrderMeta::LINE_PAY_NO => _x( 'Payment number', 'LINE Pay', 'moksa-for-woocommerce' ),
 		);
 
 		return $order_metas;

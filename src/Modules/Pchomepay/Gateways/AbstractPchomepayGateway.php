@@ -30,7 +30,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			throw new \Exception( esc_html__( '找不到訂單', 'moksa-for-woocommerce' ) );
+			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
 		}
 
 		// 訂單若已送過（曾失敗重試），order_id 加 T{time} 後綴避免重複。
@@ -70,7 +70,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 			wc_add_notice(
 				sprintf(
 					/* translators: %s: error message */
-					__( '無法建立支付連付款：%s', 'moksa-for-woocommerce' ),
+					__( 'The PChomePay payment could not be created: %s', 'moksa-for-woocommerce' ),
 					$resp['message']
 				),
 				'error'
@@ -84,7 +84,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		$order->update_meta_data( Keys::PCHOMEPAY_ORDER_ID, $pchome_order_id );
 		$order->update_meta_data( Keys::PCHOMEPAY_PAYMENT_URL, $resp['payment_url'] );
 		$order->update_meta_data( Keys::PCHOMEPAY_PAY_TYPE, implode( ',', $this->pay_types() ) );
-		$order->update_status( 'pending', __( '等待顧客於支付連完成付款。', 'moksa-for-woocommerce' ) );
+		$order->update_status( 'pending', __( 'Waiting for the customer to pay at PChomePay.', 'moksa-for-woocommerce' ) );
 		$order->save();
 
 		return [
@@ -96,16 +96,16 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'moksafowo_pchomepay_invalid_order', __( '訂單不存在。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_invalid_order', __( 'The order does not exist.', 'moksa-for-woocommerce' ) );
 		}
 		$pchome_order_id = (string) $order->get_meta( Keys::PCHOMEPAY_ORDER_ID );
 		if ( '' === $pchome_order_id ) {
-			return new \WP_Error( 'moksafowo_pchomepay_missing_order_id', __( '訂單缺少支付連交易編號。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_missing_order_id', __( 'The order has no PChomePay transaction ID.', 'moksa-for-woocommerce' ) );
 		}
 
 		$amt = (int) ceil( (float) $amount );
 		if ( $amt <= 0 ) {
-			return new \WP_Error( 'moksafowo_pchomepay_invalid_amount', __( '退款金額必須大於 0。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_pchomepay_invalid_amount', __( 'The refund amount must be greater than 0.', 'moksa-for-woocommerce' ) );
 		}
 
 		// 全額退限制：超商取貨 / 代碼繳費 / 信用卡分期。
@@ -118,7 +118,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 					'moksafowo_pchomepay_full_refund_only',
 					sprintf(
 						/* translators: %s: pay type */
-						__( '此付款方式（%s）僅能全額退款。', 'moksa-for-woocommerce' ),
+						__( 'This payment method (%s) only supports full refunds.', 'moksa-for-woocommerce' ),
 						$pay_type
 					)
 				);
@@ -132,7 +132,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 				'moksafowo_pchomepay_refund_fail',
 				sprintf(
 					/* translators: %s: error message */
-					__( '支付連退款失敗：%s', 'moksa-for-woocommerce' ),
+					__( 'The PChomePay refund failed: %s', 'moksa-for-woocommerce' ),
 					$result['message']
 				)
 			);
@@ -141,10 +141,10 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: amount, 2: refund id, 3: reason */
-				__( '支付連退款已送出（NT$%1$s，退款編號 %2$s）— %3$s', 'moksa-for-woocommerce' ),
+				__( 'The PChomePay refund of NT$%1$s was submitted (refund number %2$s) — %3$s', 'moksa-for-woocommerce' ),
 				$amt,
 				$refund_id,
-				$reason ?: __( '無原因', 'moksa-for-woocommerce' )
+				$reason ?: __( 'No reason given', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -164,7 +164,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		if ( empty( $items ) ) {
 			$items[] = [
 				/* translators: %s: site name */
-				'name' => sprintf( __( '%s 訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ),
+				'name' => sprintf( __( '%s order', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ),
 				'url'  => home_url(),
 			];
 		}

@@ -43,22 +43,22 @@ abstract class AbstractMowcGateway extends \WC_Payment_Gateway {
 	protected function build_form_fields(): array {
 		return [
 			'enabled'     => [
-				'title'   => __( '啟用此付款方式', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable this payment method', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'default' => 'no',
 			],
 			'title'       => [
-				'title'       => __( '前台顯示名稱', 'moksa-for-woocommerce' ),
+				'title'       => __( 'Title', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => $this->method_title,
-				'description' => __( '結帳頁顯示給顧客看的名稱。', 'moksa-for-woocommerce' ),
+				'description' => __( 'The name customers see at checkout.', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 			'description' => [
-				'title'       => __( '前台顯示描述', 'moksa-for-woocommerce' ),
+				'title'       => __( 'Description', 'moksa-for-woocommerce' ),
 				'type'        => 'textarea',
 				'default'     => '',
-				'description' => __( '結帳頁付款方式描述。', 'moksa-for-woocommerce' ),
+				'description' => __( 'The payment method description shown at checkout.', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
 		];

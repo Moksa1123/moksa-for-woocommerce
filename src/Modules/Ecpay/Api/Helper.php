@@ -68,7 +68,7 @@ final class Helper extends AbstractCredentialHelper {
 	public static function query_credit_trade( \WC_Order $order ) {
 		$mtn = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
 		if ( '' === $mtn ) {
-			return new \WP_Error( 'moksafowo_ecpay_query_no_mtn', __( '找不到綠界 MerchantTradeNo。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_no_mtn', __( 'The ECPay merchant trade number could not be found.', 'moksa-for-woocommerce' ) );
 		}
 
 		$inner = wp_json_encode(
@@ -81,7 +81,7 @@ final class Helper extends AbstractCredentialHelper {
 		$enc_url  = self::v2_urlencode( (string) $inner );
 		$enc_data = openssl_encrypt( $enc_url, 'aes-128-cbc', self::hash_key(), 0, self::hash_iv() );
 		if ( false === $enc_data ) {
-			return new \WP_Error( 'moksafowo_ecpay_query_encrypt', __( 'AES 加密失敗。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_encrypt', __( 'AES encryption failed.', 'moksa-for-woocommerce' ) );
 		}
 
 		$body = [
@@ -116,12 +116,12 @@ final class Helper extends AbstractCredentialHelper {
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
 			/* translators: %d: HTTP response code */
-			return new \WP_Error( 'moksafowo_ecpay_query_http', sprintf( __( '綠界回傳 HTTP %d', 'moksa-for-woocommerce' ), $code ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_http', sprintf( __( 'ECPay returned HTTP %d', 'moksa-for-woocommerce' ), $code ) );
 		}
 
 		$json = json_decode( (string) wp_remote_retrieve_body( $response ), true );
 		if ( ! is_array( $json ) ) {
-			return new \WP_Error( 'moksafowo_ecpay_query_parse', __( '綠界回傳格式無法解析。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_parse', __( 'The response from ECPay could not be parsed.', 'moksa-for-woocommerce' ) );
 		}
 
 		$trans_code = (int) ( $json['TransCode'] ?? 0 );
@@ -129,19 +129,19 @@ final class Helper extends AbstractCredentialHelper {
 			return new \WP_Error(
 				'moksafowo_ecpay_query_failed',
 				/* translators: %s: ECPay TransMsg */
-				sprintf( __( '綠界查詢失敗：%s', 'moksa-for-woocommerce' ), $json['TransMsg'] ?? '' )
+				sprintf( __( 'The ECPay lookup failed: %s', 'moksa-for-woocommerce' ), $json['TransMsg'] ?? '' )
 			);
 		}
 
 		$plain_url = openssl_decrypt( (string) ( $json['Data'] ?? '' ), 'aes-128-cbc', self::hash_key(), 0, self::hash_iv() );
 		if ( false === $plain_url ) {
-			return new \WP_Error( 'moksafowo_ecpay_query_decrypt', __( 'AES 解密失敗。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_decrypt', __( 'AES decryption failed.', 'moksa-for-woocommerce' ) );
 		}
 
 		$plain  = urldecode( $plain_url );
 		$result = json_decode( $plain, true );
 		if ( ! is_array( $result ) ) {
-			return new \WP_Error( 'moksafowo_ecpay_query_inner_parse', __( '綠界 Data 解碼失敗。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_query_inner_parse', __( 'The ECPay data could not be decoded.', 'moksa-for-woocommerce' ) );
 		}
 
 		self::log(
@@ -175,7 +175,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' === $trade_no || '' === $merchant_trade_no ) {
 			return new \WP_Error(
 				'moksafowo_ecpay_credit_action_missing_meta',
-				__( '找不到綠界交易編號，無法退款。請至綠界後台手動處理。', 'moksa-for-woocommerce' )
+				__( 'No ECPay transaction ID was found, so the refund cannot be made here. Please refund it in the ECPay dashboard.', 'moksa-for-woocommerce' )
 			);
 		}
 
@@ -217,14 +217,14 @@ final class Helper extends AbstractCredentialHelper {
 			return new \WP_Error(
 				'moksafowo_ecpay_credit_action_http',
 				/* translators: %d: HTTP status code */
-				sprintf( __( '綠界回傳 HTTP %d，請稍後再試。', 'moksa-for-woocommerce' ), $code )
+				sprintf( __( 'ECPay returned HTTP %d. Please try again later.', 'moksa-for-woocommerce' ), $code )
 			);
 		}
 
 		$body = (string) wp_remote_retrieve_body( $response );
 		parse_str( $body, $result );
 		if ( ! is_array( $result ) ) {
-			return new \WP_Error( 'moksafowo_ecpay_credit_action_parse', __( '綠界回傳格式無法解析。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ecpay_credit_action_parse', __( 'The response from ECPay could not be parsed.', 'moksa-for-woocommerce' ) );
 		}
 
 		self::log(

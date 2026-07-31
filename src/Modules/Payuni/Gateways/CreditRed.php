@@ -11,8 +11,8 @@ class CreditRed extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 信用卡紅利折抵', 'moksa-for-woocommerce' );
-		$this->method_description = __( '信用卡紅利點數折抵付款，跳轉至 PAYUNi 付款頁完成。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi credit card reward points', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Pay with credit card reward points. The customer is redirected to the PAYUNi payment page.', 'moksa-for-woocommerce' );
 		$this->supports           = array( 'products', 'refunds' );
 
 		$this->init_form_fields();
@@ -29,18 +29,18 @@ class CreditRed extends GatewayBase {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'     => array(
-				'title'   => __( '啟用', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Enable', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( '啟用 PAYUNi 信用卡紅利折抵', 'moksa-for-woocommerce' ),
+				'label'   => __( 'Enable PAYUNi credit card reward points', 'moksa-for-woocommerce' ),
 				'default' => 'no',
 			),
 			'title'       => array(
-				'title'   => __( '結帳顯示名稱', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Title', 'moksa-for-woocommerce' ),
 				'type'    => 'text',
-				'default' => __( '信用卡紅利折抵', 'moksa-for-woocommerce' ),
+				'default' => __( 'Credit card reward points', 'moksa-for-woocommerce' ),
 			),
 			'description' => array(
-				'title'   => __( '結帳顯示說明', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Description', 'moksa-for-woocommerce' ),
 				'type'    => 'textarea',
 				'default' => '',
 			),

@@ -18,7 +18,7 @@ final class Issue {
 		if ( '' !== $existing && '' === $voided ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單已開立發票。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order already has an invoice.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -94,7 +94,7 @@ final class Issue {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: error message */
-					__( '綠界發票開立失敗：%s', 'moksa-for-woocommerce' ),
+					__( 'The ECPay invoice could not be issued: %s', 'moksa-for-woocommerce' ),
 					$result['message']
 				)
 			);
@@ -116,7 +116,7 @@ final class Issue {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: random */
-				__( '綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'moksa-for-woocommerce' ),
+				__( 'ECPay invoice issued — number %1$s, random code %2$s', 'moksa-for-woocommerce' ),
 				$inv,
 				$rand
 			)
@@ -180,7 +180,7 @@ final class Issue {
 			$diff    = $total - $line_sum;
 			$items[] = [
 				'ItemSeq'     => $index++,
-				'ItemName'    => __( '其他', 'moksa-for-woocommerce' ),
+				'ItemName'    => __( 'Other', 'moksa-for-woocommerce' ),
 				'ItemCount'   => 1,
 				'ItemWord'    => '式',
 				'ItemPrice'   => $diff,

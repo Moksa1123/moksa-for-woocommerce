@@ -21,10 +21,10 @@ final class PaymentMethodOps {
 
 	private static function providers(): array {
 		return array(
-			'ecpay'             => __( '綠界金流', 'moksa-for-woocommerce' ),
-			'newebpay'          => __( '藍新金流', 'moksa-for-woocommerce' ),
+			'ecpay'             => __( 'ECPay payments', 'moksa-for-woocommerce' ),
+			'newebpay'          => __( 'NewebPay payments', 'moksa-for-woocommerce' ),
 			'payuni'            => __( 'PAYUNi', 'moksa-for-woocommerce' ),
-			'smilepay'          => __( '速買配金流', 'moksa-for-woocommerce' ),
+			'smilepay'          => __( 'SmilePay payments', 'moksa-for-woocommerce' ),
 			'paynow'            => __( 'PayNow', 'moksa-for-woocommerce' ),
 			'pchomepay'         => __( 'PChomePay', 'moksa-for-woocommerce' ),
 			'shopline_payments' => __( 'Shopline Payments', 'moksa-for-woocommerce' ),
@@ -107,7 +107,7 @@ final class PaymentMethodOps {
 		return array(
 			'tappay'  => array(
 				'label'  => __( 'TapPay', 'moksa-for-woocommerce' ),
-				'method' => __( '信用卡', 'moksa-for-woocommerce' ),
+				'method' => __( 'Credit card', 'moksa-for-woocommerce' ),
 			),
 			'linepay' => array(
 				'label'  => __( 'LINE Pay', 'moksa-for-woocommerce' ),
@@ -242,12 +242,12 @@ final class PaymentMethodOps {
 						),
 					),
 					/* translators: 1: gateway, 2: the only method */
-					'note'         => sprintf( __( '%1$s 在本外掛只有「%2$s」一種付款方式,沒有其他可細分開關的方式。', 'moksa-for-woocommerce' ), $single['label'], $single['method'] ),
+					'note'         => sprintf( __( 'In this plugin %1$s offers only one payment method, “%2$s”, so there is nothing else to switch individually.', 'moksa-for-woocommerce' ), $single['label'], $single['method'] ),
 				);
 			}
 			return array(
 				'methods' => array(),
-				'message' => __( '找不到此金流。', 'moksa-for-woocommerce' ),
+				'message' => __( 'That payment service could not be found.', 'moksa-for-woocommerce' ),
 			);
 		}
 		$map     = self::method_map( $provider );
@@ -273,7 +273,7 @@ final class PaymentMethodOps {
 	 */
 	public static function toggle_prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$raw      = is_array( $args ) && isset( $args['provider'] ) ? (string) $args['provider'] : '';
 		$provider = self::resolve_provider( $raw );
@@ -281,19 +281,19 @@ final class PaymentMethodOps {
 			$single = self::resolve_single( $raw );
 			if ( null !== $single ) {
 				/* translators: 1: gateway, 2: the only method */
-				return new \WP_Error( 'moksafowo_ai_single_method', sprintf( __( '%1$s 在本外掛只有「%2$s」一種付款方式,沒有可細分開關的方式(整體啟用 / 停用請用管道開關)。', 'moksa-for-woocommerce' ), $single['label'], $single['method'] ) );
+				return new \WP_Error( 'moksafowo_ai_single_method', sprintf( __( 'In this plugin %1$s offers only one payment method, “%2$s”, so there is nothing to switch individually. To turn it on or off entirely, use the channel switch.', 'moksa-for-woocommerce' ), $single['label'], $single['method'] ) );
 			}
 			/* translators: %s: supported gateway list */
-			return new \WP_Error( 'moksafowo_ai_bad_provider', sprintf( __( '找不到此金流(支援細分方式:%s)。', 'moksa-for-woocommerce' ), self::supported_list() ) );
+			return new \WP_Error( 'moksafowo_ai_bad_provider', sprintf( __( 'That payment service could not be found. The ones with individual methods are: %s.', 'moksa-for-woocommerce' ), self::supported_list() ) );
 		}
 		$map = self::method_map( $provider );
 		if ( empty( $map ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_methods', __( '此金流不支援個別付款方式設定。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_methods', __( 'This payment service does not support settings for individual payment methods.', 'moksa-for-woocommerce' ) );
 		}
 
 		[ $matched, $unmatched ] = self::resolve_methods( self::names_arg( is_array( $args ) ? ( $args['methods'] ?? array() ) : array() ), $map );
 		if ( empty( $matched ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_match', __( '找不到對應的付款方式,請確認名稱。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_match', __( 'No matching payment method was found. Please check the name.', 'moksa-for-woocommerce' ) );
 		}
 		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
 
@@ -301,20 +301,20 @@ final class PaymentMethodOps {
 		$labels  = implode( '、', array_values( $matched ) );
 		$summary = sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: method labels */
-			__( '%1$s %2$s 的付款方式:%3$s。', 'moksa-for-woocommerce' ),
-			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
+			__( '%1$s the %2$s payment methods: %3$s.', 'moksa-for-woocommerce' ),
+			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
 			$plabel,
 			$labels
 		);
 		if ( ! empty( $unmatched ) ) {
 			$summary .= ' ' . sprintf(
 				/* translators: %s: unmatched names */
-				__( '(無法對應並略過:%s)', 'moksa-for-woocommerce' ),
+				__( '(no match and skipped: %s)', 'moksa-for-woocommerce' ),
 				implode( '、', $unmatched )
 			);
 		}
 		if ( 'single' === get_option( 'moksafowo_' . $provider . '_display_mode', 'multi' ) ) {
-			$summary .= ' ' . __( '⚠️ 此金流目前是「合併顯示」模式,個別方式開關不會生效;要分開顯示才有作用。', 'moksa-for-woocommerce' );
+			$summary .= ' ' . __( '⚠️ This payment service is currently shown as a single combined method, so switching individual methods has no effect. Switch it to list the methods separately first.', 'moksa-for-woocommerce' );
 		}
 
 		return array(
@@ -331,14 +331,14 @@ final class PaymentMethodOps {
 	 */
 	public static function toggle_apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$provider = (string) ( $params['provider'] ?? '' );
 		$ids      = is_array( $params['ids'] ?? null ) ? array_map( 'strval', $params['ids'] ) : array();
 		$enable   = ! empty( $params['enable'] );
 		$map      = self::method_map( $provider );
 		if ( '' === $provider || empty( $map ) || empty( $ids ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( '資料不完整,無法變更。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_bad_input', __( 'The details are incomplete, so nothing was changed.', 'moksa-for-woocommerce' ) );
 		}
 
 		$current = self::enabled_ids( $provider );
@@ -355,8 +355,8 @@ final class PaymentMethodOps {
 		}
 		return sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: method labels */
-			__( '✅ 已%1$s %2$s 的付款方式:%3$s。', 'moksa-for-woocommerce' ),
-			$enable ? __( '啟用', 'moksa-for-woocommerce' ) : __( '停用', 'moksa-for-woocommerce' ),
+			__( '✅ The %2$s payment methods are now %1$s: %3$s.', 'moksa-for-woocommerce' ),
+			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
 			self::providers()[ $provider ] ?? $provider,
 			implode( '、', $labels )
 		);

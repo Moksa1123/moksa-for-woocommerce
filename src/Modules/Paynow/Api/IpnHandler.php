@@ -250,7 +250,7 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: payment type */
-					__( 'PayNow 付款完成 — %s', 'moksa-for-woocommerce' ),
+					__( 'PayNow payment completed — %s', 'moksa-for-woocommerce' ),
 					$label
 				)
 			);
@@ -264,7 +264,7 @@ final class IpnHandler {
 				'on-hold',
 				sprintf(
 				/* translators: %s: payment type */
-					__( 'PayNow 已產生 %s 付款資訊，等待顧客付款。', 'moksa-for-woocommerce' ),
+					__( 'PayNow issued the %s payment details and is waiting for the customer to pay.', 'moksa-for-woocommerce' ),
 					$label
 				)
 			);
@@ -275,9 +275,9 @@ final class IpnHandler {
 			'failed',
 			sprintf(
 			/* translators: 1: payment type, 2: error */
-				__( 'PayNow %1$s 付款失敗：%2$s', 'moksa-for-woocommerce' ),
+				__( 'The PayNow %1$s payment failed: %2$s', 'moksa-for-woocommerce' ),
 				$label,
-				'' !== $err ? $err : __( '未提供原因', 'moksa-for-woocommerce' )
+				'' !== $err ? $err : __( 'No reason given', 'moksa-for-woocommerce' )
 			)
 		);
 	}

@@ -34,7 +34,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 	public function __construct() {
 
 		$this->has_fields        = false;
-		$this->order_button_text = __( '前往 PAYUNi 付款', 'moksa-for-woocommerce' );
+		$this->order_button_text = __( 'Pay with PAYUNi', 'moksa-for-woocommerce' );
 		$this->supports          = array(
 			'products',
 		);
@@ -57,11 +57,11 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 
 		if ( $order->get_payment_method() === $this->id ) {
 
-			echo '<h2>' . esc_html__( 'PAYUNi 付款明細', 'moksa-for-woocommerce' ) . '</h2>';
+			echo '<h2>' . esc_html__( 'PAYUNi payment details', 'moksa-for-woocommerce' ) . '</h2>';
 
 			$trade_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::UNI_NO );
 			if ( empty( $order->get_meta( $trade_no_key ) ) ) {
-				echo '<div class="moksafowo_payuni_payment_notify_not_received">' . esc_html__( '付款明細尚未顯示，請稍候後重新整理頁面。', 'moksa-for-woocommerce' ) . '</div>';
+				echo '<div class="moksafowo_payuni_payment_notify_not_received">' . esc_html__( 'The payment details are not available yet. Please refresh the page in a moment.', 'moksa-for-woocommerce' ) . '</div>';
 			}
 
 			echo '<table class="shop_table payuni_payment_details"><tbody>';
@@ -92,49 +92,49 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 			echo '</tbody></table>';
 
 			if ( PayuniPayment::$einvoice_enabled ) {
-				echo '<h2>' . esc_html__( '電子發票明細', 'moksa-for-woocommerce' ) . '</h2>';
+				echo '<h2>' . esc_html__( 'E-invoice details', 'moksa-for-woocommerce' ) . '</h2>';
 				echo '<table class="shop_table payuni_payment_details"><tbody>';
-				echo '<tr><td><strong>' . esc_html__( '發票號碼', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';
-				echo '<tr><td><strong>' . esc_html__( '發票金額', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
-				echo '<tr><td><strong>' . esc_html__( '開立時間', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Invoice number', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Invoice amount', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Issued at', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
 
 				$einvoice_type = $order->get_meta( OrderMeta::EINVOICE_TYPE );
 				if ( $einvoice_type === 'C0401' ) {
-					$einvoice_type_desc = _x( '開立', 'Issue Type', 'moksa-for-woocommerce' );
+					$einvoice_type_desc = _x( 'Issue', 'Issue Type', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_type === 'C0501' ) {
-					$einvoice_type_desc = _x( '作廢', 'Issue Type', 'moksa-for-woocommerce' );
+					$einvoice_type_desc = _x( 'Void', 'Issue Type', 'moksa-for-woocommerce' );
 				} else {
-					$einvoice_type_desc = _x( '未知類型', 'Issue Type', 'moksa-for-woocommerce' );
+					$einvoice_type_desc = _x( 'Unknown type', 'Issue Type', 'moksa-for-woocommerce' );
 				}
-				echo '<tr><td><strong>' . esc_html__( '發票類型', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Invoice type', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
 
 				$einvoice_info = $order->get_meta( OrderMeta::EINVOICE_INFO );
 				if ( $einvoice_info === '3J0002' ) {
-					$einvoice_info_desc = __( '手機載具', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Mobile carrier', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_info === 'CQ0001' ) {
-					$einvoice_info_desc = __( '自然人憑證', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Citizen Digital Certificate', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_info === 'amego' ) {
-					$einvoice_info_desc = __( 'Amego 會員', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Amego member', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_info === 'Donate' ) {
-					$einvoice_info_desc = __( '愛心捐贈', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Donation', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_info === 'Company' ) {
-					$einvoice_info_desc = __( '公司戶', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Business', 'moksa-for-woocommerce' );
 				} else {
-					$einvoice_info_desc = __( '未知載具', 'moksa-for-woocommerce' );
+					$einvoice_info_desc = __( 'Unknown carrier', 'moksa-for-woocommerce' );
 				}
-				echo '<tr><td><strong>' . esc_html__( '載具資訊', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Carrier details', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
 
 				$einvoice_status = $order->get_meta( OrderMeta::EINVOICE_STATUS );
 				if ( $einvoice_status === '1' ) {
-					$einvoice_status_desc = __( '已開立', 'moksa-for-woocommerce' );
+					$einvoice_status_desc = __( 'Issued', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_status === '2' ) {
-					$einvoice_status_desc = __( '開立失敗', 'moksa-for-woocommerce' );
+					$einvoice_status_desc = __( 'Issuing failed', 'moksa-for-woocommerce' );
 				} elseif ( $einvoice_status === '5' ) {
-					$einvoice_status_desc = __( '已作廢', 'moksa-for-woocommerce' );
+					$einvoice_status_desc = __( 'Voided', 'moksa-for-woocommerce' );
 				} else {
-					$einvoice_status_desc = __( '未知狀態', 'moksa-for-woocommerce' );
+					$einvoice_status_desc = __( 'Unknown status', 'moksa-for-woocommerce' );
 				}
-				echo '<tr><td><strong>' . esc_html__( '開立狀態', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Issuing status', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
 				echo '</tbody></table>';
 			}// end einvoice enabled
 		}
@@ -144,7 +144,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		echo '<h3>' . esc_html( $this->get_method_title() ) . '</h3>';
 		echo '<p>' . sprintf(
 		/* translators: 1: Payment method title 2: PAYUNi URL */
-			esc_html__( '%1$s 金流服務由 %2$s 提供', 'moksa-for-woocommerce' ),
+			esc_html__( '%1$s payments are provided by %2$s', 'moksa-for-woocommerce' ),
 			esc_html( $this->get_method_title() ),
 			sprintf(
 				'<a href="%s">%s</a>',
@@ -187,7 +187,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 
 			if ( 'pending' === $order->get_status() || TradeStatus::PAID !== $trade_status ) {
 				if ( empty( $this->incomplete_payment_message ) ) {
-					$text = '<span class="moksafowo-payuni-incomplete-payment-message">' . esc_html__( '已收到您的訂單，但付款尚未完成。', 'moksa-for-woocommerce' ) . '</span>';
+					$text = '<span class="moksafowo-payuni-incomplete-payment-message">' . esc_html__( 'We have received your order, but the payment is not complete yet.', 'moksa-for-woocommerce' ) . '</span>';
 				} else {
 					$text = '<span class="moksafowo-payuni-incomplete-payment-message">' . $this->incomplete_payment_message . '</span>';
 				}

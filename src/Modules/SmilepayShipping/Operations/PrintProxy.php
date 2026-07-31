@@ -84,7 +84,7 @@ final class PrintProxy {
 		);
 		$actions['moksafowo_smilepay_print'] = [
 			'url'    => $url,
-			'name'   => __( '列印速買配標籤', 'moksa-for-woocommerce' ),
+			'name'   => __( 'Print SmilePay labels', 'moksa-for-woocommerce' ),
 			'action' => 'moksafowo-smilepay-print',
 		];
 		return $actions;
@@ -124,14 +124,14 @@ CSS;
 
 	public static function handle_quick(): void {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), '', 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'moksa-for-woocommerce' ), '', 403 );
 		}
 		$order_id = isset( $_GET['order_id'] ) ? absint( wp_unslash( $_GET['order_id'] ) ) : 0;
 		check_admin_referer( self::NONCE_ACTION_QUICK . '_' . $order_id );
 
 		$order = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
-			wp_die( esc_html__( '找不到訂單。', 'moksa-for-woocommerce' ), '', 404 );
+			wp_die( esc_html__( 'The order could not be found.', 'moksa-for-woocommerce' ), '', 404 );
 		}
 
 		$smseids = [];
@@ -149,7 +149,7 @@ CSS;
 		}
 		$smseids = array_values( array_unique( $smseids ) );
 		if ( empty( $smseids ) ) {
-			wp_die( esc_html__( '此訂單尚未建立物流單。', 'moksa-for-woocommerce' ), '', 400 );
+			wp_die( esc_html__( 'This order has no shipment yet.', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		$relay_url = self::relay_url();
@@ -157,8 +157,8 @@ CSS;
 		$paragraphs = [];
 		if ( count( $smseids ) > 1 ) {
 			/* translators: %d: number of packages and print windows that will open */
-			$paragraphs[] = sprintf( __( '此訂單拆 %d 包，會分別開啟列印視窗。', 'moksa-for-woocommerce' ), count( $smseids ) );
-			$paragraphs[] = __( '若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印速買配標籤」。', 'moksa-for-woocommerce' );
+			$paragraphs[] = sprintf( __( 'This order is split into %d parcels, so a print window opens for each of them.', 'moksa-for-woocommerce' ), count( $smseids ) );
+			$paragraphs[] = __( 'If the browser blocks the pop-ups, allow them and click Print SmilePay labels again.', 'moksa-for-woocommerce' );
 		}
 
 		$forms_html = '';
@@ -178,9 +178,9 @@ CSS;
 		}
 
 		Interstitial::render(
-			__( '列印速買配標籤', 'moksa-for-woocommerce' ),
+			__( 'Print SmilePay labels', 'moksa-for-woocommerce' ),
 			/* translators: %d: number of shipping labels being printed */
-			sprintf( __( '正在列印 %d 張速買配物流標籤…', 'moksa-for-woocommerce' ), count( $smseids ) ),
+			sprintf( __( 'Printing %d SmilePay shipping labels…', 'moksa-for-woocommerce' ), count( $smseids ) ),
 			$paragraphs,
 			$forms_html,
 			'var forms=document.querySelectorAll("form[id^=f]");forms.forEach(function(f,i){setTimeout(function(){f.submit();},i*800);});'
@@ -190,13 +190,13 @@ CSS;
 
 	public static function handle(): void {
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( '權限不足。', 'moksa-for-woocommerce' ), '', 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'moksa-for-woocommerce' ), '', 403 );
 		}
 		check_admin_referer( self::NONCE_ACTION );
 
 		$key = isset( $_POST['endpoint_key'] ) ? sanitize_key( wp_unslash( $_POST['endpoint_key'] ) ) : '';
 		if ( ! isset( self::ENDPOINTS[ $key ] ) ) {
-			wp_die( esc_html__( '不支援的列印通道。', 'moksa-for-woocommerce' ), '', 400 );
+			wp_die( esc_html__( 'Unsupported print channel.', 'moksa-for-woocommerce' ), '', 400 );
 		}
 		$endpoint = self::ENDPOINTS[ $key ];
 
@@ -226,7 +226,7 @@ CSS;
 		}
 
 		if ( empty( $body['Smseid'] ) && empty( $body['smseid'] ) ) {
-			wp_die( esc_html__( '缺少物流單號。', 'moksa-for-woocommerce' ), '', 400 );
+			wp_die( esc_html__( 'The tracking number is missing.', 'moksa-for-woocommerce' ), '', 400 );
 		}
 
 		$response = wp_remote_post(

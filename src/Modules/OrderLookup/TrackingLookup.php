@@ -64,7 +64,7 @@ final class TrackingLookup {
 		if ( ! $order || 'shop_order' !== $order->get_type() ) {
 			return array(
 				'links'   => array(),
-				'message' => __( '找不到訂單。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ),
 			);
 		}
 		return array(

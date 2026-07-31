@@ -55,7 +55,7 @@ NEWEBPAY_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( '藍新金流付款', 'moksa-for-woocommerce' )
+			settings.title || __( 'NewebPay', 'moksa-for-woocommerce' )
 		),
 		content: <Content />,
 		edit: <Content />,

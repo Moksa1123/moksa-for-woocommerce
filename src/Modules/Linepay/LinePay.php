@@ -70,14 +70,14 @@ final class LinePay {
 		check_ajax_referer( 'moksafowo-linepay-confirm', 'security' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ), 403 );
 		}
 
 		$order_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( '找不到此訂單。', 'moksa-for-woocommerce' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That order could not be found.', 'moksa-for-woocommerce' ) ), 404 );
 		}
 
 		$gateway = new Credit();
@@ -85,17 +85,17 @@ final class LinePay {
 
 		try {
 			if ( $request->confirm( $order->get_id(), false ) ) {
-				$order->add_order_note( __( 'LINE Pay 確認付款成功', 'moksa-for-woocommerce' ) );
+				$order->add_order_note( __( 'LINE Pay confirmed the payment', 'moksa-for-woocommerce' ) );
 				wp_send_json(
 					array(
 						'success' => true,
-						'message' => __( '確認付款成功。', 'moksa-for-woocommerce' ),
+						'message' => __( 'The payment was confirmed.', 'moksa-for-woocommerce' ),
 					)
 				);
 			}
 		} catch ( Exception $e ) {
 
-			$order->add_order_note( __( 'LINE Pay 確認付款失敗：', 'moksa-for-woocommerce' ) . $e->getMessage() );
+			$order->add_order_note( __( 'LINE Pay could not confirm the payment:', 'moksa-for-woocommerce' ) . $e->getMessage() );
 			wp_send_json(
 				array(
 					'success' => false,
@@ -135,8 +135,8 @@ final class LinePay {
 			array(
 				'ajax_url'      => admin_url( 'admin-ajax.php' ),
 				'confirm_nonce' => wp_create_nonce( 'moksafowo-linepay-confirm' ),
-				'confirm_msg'   => __( '確定要對這筆 LINE Pay 訂單請款？此動作不可復原。', 'moksa-for-woocommerce' ),
-				'error_msg'     => __( '連線錯誤，請稍後再試。', 'moksa-for-woocommerce' ),
+				'confirm_msg'   => __( 'Capture the payment on this LINE Pay order? This cannot be undone.', 'moksa-for-woocommerce' ),
+				'error_msg'     => __( 'Connection error. Please try again later.', 'moksa-for-woocommerce' ),
 			)
 		);
 	}

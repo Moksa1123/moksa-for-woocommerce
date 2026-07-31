@@ -23,11 +23,11 @@ final class Ibon extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow ibon 代碼繳費', 'moksa-for-woocommerce' );
+		return __( 'PayNow ibon code', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得繳費代碼後，至 7-11 ibon 機台列印繳費單付款。', 'moksa-for-woocommerce' );
+		return __( 'Print a payment slip from a 7-ELEVEN ibon machine and pay with the code.', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

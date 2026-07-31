@@ -131,7 +131,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' === $token ) {
 			return [
 				'ok'      => false,
-				'message' => __( '無法取得支付連 token，請確認 APP ID / Secret。', 'moksa-for-woocommerce' ),
+				'message' => __( 'A PChomePay token could not be obtained. Please check the app ID and secret.', 'moksa-for-woocommerce' ),
 				'code'    => 'NO_TOKEN',
 				'data'    => [],
 			];
@@ -177,7 +177,7 @@ final class Helper extends AbstractCredentialHelper {
 			);
 			return [
 				'ok'      => false,
-				'message' => (string) ( $decoded['message'] ?? __( '支付連 API 失敗', 'moksa-for-woocommerce' ) ),
+				'message' => (string) ( $decoded['message'] ?? __( 'The PChomePay API call failed', 'moksa-for-woocommerce' ) ),
 				'code'    => $code,
 				'data'    => $decoded,
 			];

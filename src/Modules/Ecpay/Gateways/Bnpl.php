@@ -17,11 +17,11 @@ final class Bnpl extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 無卡分期（裕富 / 中租）', 'moksa-for-woocommerce' );
+		return __( 'ECPay buy now, pay later (Yufu Digital / Zingala)', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '免信用卡分期付款。可由顧客在綠界付款頁選「裕富數位」或「中租銀角零卡」其中一家，年滿 20 歲且免聯徵即可申請。', 'moksa-for-woocommerce' );
+		return __( 'Pay in instalments without a credit card. On the ECPay payment page the customer chooses either Yufu Digital or Zingala. Applicants must be at least 20 years old, and no credit check is required.', 'moksa-for-woocommerce' );
 	}
 
 	protected function supports_credit_action(): bool {

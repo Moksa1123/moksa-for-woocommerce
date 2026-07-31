@@ -203,7 +203,7 @@ class PayuniPayment {
 			array(
 				'ajax_url'    => admin_url( 'admin-ajax.php' ),
 				'query_nonce' => wp_create_nonce( 'moksafowo-payuni-query' ),
-				'error_msg'   => __( '連線錯誤，請稍後再試。', 'moksa-for-woocommerce' ),
+				'error_msg'   => __( 'Connection error. Please try again later.', 'moksa-for-woocommerce' ),
 			)
 		);
 	}
@@ -212,17 +212,17 @@ class PayuniPayment {
 	public function moksafowo_payuni_ajax_query_payment() {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- AJAX handler; wp_verify_nonce() called at method entry; nonce token raw read is intentional.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( '權限不足。', 'moksa-for-woocommerce' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ), 403 );
 		}
 		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'moksafowo-payuni-query' ) ) {
-			wp_send_json_error( array( 'message' => __( '安全驗證失敗，請重新整理後再試。', 'moksa-for-woocommerce' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'The security check failed. Please refresh the page and try again.', 'moksa-for-woocommerce' ) ), 403 );
 		}
 
 		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
 		if ( ! $order ) {
-			wp_send_json_error( array( 'message' => __( '找不到此訂單。', 'moksa-for-woocommerce' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That order could not be found.', 'moksa-for-woocommerce' ) ), 404 );
 		}
 
 		$reserved_transaction_id = $order->get_transaction_id();
@@ -232,19 +232,19 @@ class PayuniPayment {
 			if ( $request->query( $order->get_id() ) !== false ) {
 				$return = array(
 					'success' => true,
-					'message' => __( 'PAYUNi 訂單查詢成功。', 'moksa-for-woocommerce' ),
+					'message' => __( 'The PAYUNi order lookup succeeded.', 'moksa-for-woocommerce' ),
 				);
 				wp_send_json( $return );
 			} else {
 				$return = array(
 					'success' => false,
-					'message' => __( 'PAYUNi 訂單查詢失敗，詳情請見訂單備註。', 'moksa-for-woocommerce' ),
+					'message' => __( 'The PAYUNi order lookup failed. See the order notes for details.', 'moksa-for-woocommerce' ),
 				);
 				wp_send_json( $return );
 			}
 		} catch ( \Exception $e ) {
 
-			$order->add_order_note( __( 'PAYUNi 訂單查詢失敗：', 'moksa-for-woocommerce' ) . $e->getMessage() );
+			$order->add_order_note( __( 'The PAYUNi order lookup failed:', 'moksa-for-woocommerce' ) . $e->getMessage() );
 			$return = array(
 				'success' => false,
 				'message' => $e->getMessage(),

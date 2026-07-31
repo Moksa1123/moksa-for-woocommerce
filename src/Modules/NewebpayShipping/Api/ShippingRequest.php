@@ -142,7 +142,7 @@ final class ShippingRequest {
 		if ( ! is_array( $decoded ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '藍新物流回傳格式錯誤', 'moksa-for-woocommerce' ),
+				'message' => __( 'NewebPay shipping returned an unexpected format', 'moksa-for-woocommerce' ),
 			];
 		}
 		Helper::log(

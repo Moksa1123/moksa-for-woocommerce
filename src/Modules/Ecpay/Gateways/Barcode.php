@@ -17,11 +17,11 @@ final class Barcode extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 超商條碼', 'moksa-for-woocommerce' );
+		return __( 'ECPay convenience store barcode', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得條碼後 7 天內，至 7-11 / 全家 / 萊爾富 / OK 超商列印繳費。', 'moksa-for-woocommerce' );
+		return __( 'Print the barcode and pay at 7-ELEVEN, FamilyMart, Hi-Life or OK Mart within 7 days.', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_aio_params( \WC_Order $order ): array {

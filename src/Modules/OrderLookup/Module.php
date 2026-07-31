@@ -25,7 +25,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( '訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號', 'moksa-for-woocommerce' );
+		return __( 'Order number lookup — invoice, tracking and payment transaction numbers', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -33,11 +33,11 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( '訂單查號搜尋', 'moksa-for-woocommerce' );
+		return __( 'Order number lookup', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '用發票號 / 物流單號 / 金流交易序號找訂單（訂單列表 + Ctrl+K）', 'moksa-for-woocommerce' );
+		return __( 'Find orders by invoice number, tracking number or payment transaction ID, from the order list and Ctrl+K', 'moksa-for-woocommerce' );
 	}
 
 	public function boot(): void {
@@ -115,7 +115,7 @@ final class Module extends AbstractModule {
 			return;
 		}
 		echo '<div class="notice notice-success is-dismissible"><p>'
-			. esc_html__( '訂單查號索引重建已在背景開始。', 'moksa-for-woocommerce' )
+			. esc_html__( 'Rebuilding the order number index has started in the background.', 'moksa-for-woocommerce' )
 			. '</p></div>';
 	}
 

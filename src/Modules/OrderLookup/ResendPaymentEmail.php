@@ -33,18 +33,18 @@ final class ResendPaymentEmail {
 	 */
 	public static function prepare( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( 'The order could not be found.', 'moksa-for-woocommerce' ) );
 		}
 		if ( empty( PaymentInfoBox::rows( $order ) ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊(例如信用卡訂單沒有 ATM / 超商繳費資訊)。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( 'This order has no payment details to resend. Card orders, for example, have no ATM or convenience store payment details.', 'moksa-for-woocommerce' ) );
 		}
 		$email = (string) $order->get_billing_email();
 		if ( '' === $email ) {
-			return new \WP_Error( 'moksafowo_ai_no_email', __( '此訂單沒有顧客 Email。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_email', __( 'This order has no customer email address.', 'moksa-for-woocommerce' ) );
 		}
 
 		return array(
@@ -53,7 +53,7 @@ final class ResendPaymentEmail {
 			'email'    => $email,
 			'summary'  => sprintf(
 				/* translators: 1: order number, 2: customer email */
-				__( '重寄付款資訊信(ATM / 超商繳費資訊)給訂單 #%1$s 的顧客 %2$s。', 'moksa-for-woocommerce' ),
+				__( 'Resend the payment details email, with the ATM and convenience store payment details, to %2$s for order #%1$s.', 'moksa-for-woocommerce' ),
 				$order->get_order_number(),
 				$email
 			),
@@ -66,24 +66,24 @@ final class ResendPaymentEmail {
 	 */
 	public static function apply( array $params ) {
 		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( '此操作需要「管理 WooCommerce」權限。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
 		if ( ! $order ) {
-			return new \WP_Error( 'moksafowo_ai_no_order', __( '找不到訂單。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_order', __( 'The order could not be found.', 'moksa-for-woocommerce' ) );
 		}
 		if ( empty( PaymentInfoBox::rows( $order ) ) ) {
-			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( '此訂單沒有可重寄的付款資訊。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( 'This order has no payment details to resend.', 'moksa-for-woocommerce' ) );
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo 為本外掛前綴。
 		do_action( 'moksafowo_payment_info_email', $order->get_id() );
-		$order->add_order_note( __( '經 Moksa AI 確認重寄付款資訊信。', 'moksa-for-woocommerce' ) );
+		$order->add_order_note( __( 'Payment details email resent after confirmation in Moksa AI.', 'moksa-for-woocommerce' ) );
 		$order->save();
 
 		return sprintf(
 			/* translators: 1: order number, 2: customer email */
-			__( '✅ 已重寄訂單 #%1$s 的付款資訊信給 %2$s。', 'moksa-for-woocommerce' ),
+			__( '✅ The payment details email for order #%1$s was resent to %2$s.', 'moksa-for-woocommerce' ),
 			$order->get_order_number(),
 			(string) ( $params['email'] ?? $order->get_billing_email() )
 		);

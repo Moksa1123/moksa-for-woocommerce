@@ -146,7 +146,7 @@ final class TwAddress {
 		$html .= '<span class="woocommerce-input-wrapper">';
 		if ( is_array( $country_cities ) ) {
 			$html .= '<select name="' . esc_attr( $key ) . '" id="' . esc_attr( $args['id'] ) . '" class="city_select ' . esc_attr( implode( ' ', $args['input_class'] ) ) . '" ' . implode( ' ', $custom_attrs ) . ' placeholder="' . esc_attr( $args['placeholder'] ) . '">';
-			$html .= '<option value="">' . esc_html__( '請選擇…', 'moksa-for-woocommerce' ) . '</option>';
+			$html .= '<option value="">' . esc_html__( 'Select…', 'moksa-for-woocommerce' ) . '</option>';
 
 			$dropdown = [];
 			if ( $current_sc && isset( $country_cities[ $current_sc ] ) ) {
@@ -186,7 +186,7 @@ final class TwAddress {
 		$shared_data = [
 			'cities' => self::get_cities(),
 			'i18n'   => [
-				'select_placeholder' => __( '請選擇…', 'moksa-for-woocommerce' ),
+				'select_placeholder' => __( 'Select…', 'moksa-for-woocommerce' ),
 			],
 		];
 

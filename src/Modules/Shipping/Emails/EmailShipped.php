@@ -9,8 +9,8 @@ defined( 'ABSPATH' ) || exit;
 final class EmailShipped extends AbstractShippingEmail {
 
 	public function __construct() {
-		$this->title       = __( '物流：已出貨通知', 'moksa-for-woocommerce' );
-		$this->description = __( '訂單狀態切到「已出貨」時寄給顧客。', 'moksa-for-woocommerce' );
+		$this->title       = __( 'Shipping: order shipped', 'moksa-for-woocommerce' );
+		$this->description = __( 'Sent to the customer when the order status changes to Shipped.', 'moksa-for-woocommerce' );
 		parent::__construct();
 	}
 
@@ -19,10 +19,10 @@ final class EmailShipped extends AbstractShippingEmail {
 	}
 
 	public function get_default_subject(): string {
-		return __( '您在 {site_title} 的訂單 #{order_number} 已出貨', 'moksa-for-woocommerce' );
+		return __( 'Your {site_title} order #{order_number} has shipped', 'moksa-for-woocommerce' );
 	}
 
 	public function get_default_heading(): string {
-		return __( '訂單已出貨', 'moksa-for-woocommerce' );
+		return __( 'Order shipped', 'moksa-for-woocommerce' );
 	}
 }

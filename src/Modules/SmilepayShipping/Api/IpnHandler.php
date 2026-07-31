@@ -77,7 +77,7 @@ final class IpnHandler {
 				$wc_status,
 				sprintf(
 				/* translators: %s: SmilePay status label */
-					__( '速買配物流狀態：%s', 'moksa-for-woocommerce' ),
+					__( 'SmilePay shipping status: %s', 'moksa-for-woocommerce' ),
 					$label
 				)
 			);
@@ -85,7 +85,7 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: SmilePay status label */
-					__( '速買配物流狀態：%s', 'moksa-for-woocommerce' ),
+					__( 'SmilePay shipping status: %s', 'moksa-for-woocommerce' ),
 					$label
 				)
 			);
@@ -108,22 +108,22 @@ final class IpnHandler {
 	private static function map_status( int $code ): array {
 		switch ( $code ) {
 			case 1:
-				return [ __( '已出貨', 'moksa-for-woocommerce' ), 'moksa-shipped' ];
+				return [ __( 'Shipped', 'moksa-for-woocommerce' ), 'moksa-shipped' ];
 			case 2:
-				return [ __( '已達門市', 'moksa-for-woocommerce' ), 'moksa-cvs-arrived' ];
+				return [ __( 'Arrived at the store', 'moksa-for-woocommerce' ), 'moksa-cvs-arrived' ];
 			case 3:
-				return [ __( '消費者已取貨', 'moksa-for-woocommerce' ), 'completed' ];
+				return [ __( 'Collected by the customer', 'moksa-for-woocommerce' ), 'completed' ];
 			case 4:
-				return [ __( '消費者退貨', 'moksa-for-woocommerce' ), 'cancelled' ];
+				return [ __( 'Returned by the customer', 'moksa-for-woocommerce' ), 'cancelled' ];
 			case 5:
-				return [ __( '已到退貨門市', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Arrived at the return store', 'moksa-for-woocommerce' ), '' ];
 			case 6:
-				return [ __( '退貨已取貨', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Return collected', 'moksa-for-woocommerce' ), '' ];
 			case 7:
-				return [ __( '退貨已至物流中心', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Return arrived at the distribution center', 'moksa-for-woocommerce' ), '' ];
 			default:
 				/* translators: %d: SmilePay status code */
-				return [ sprintf( __( '狀態代號 %d', 'moksa-for-woocommerce' ), $code ), '' ];
+				return [ sprintf( __( 'Status code %d', 'moksa-for-woocommerce' ), $code ), '' ];
 		}
 	}
 }

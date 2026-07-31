@@ -27,11 +27,11 @@ final class Barcode extends AbstractPchomepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '支付連 超商代碼繳費', 'moksa-for-woocommerce' );
+		return __( 'PChomePay convenience store code', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '取得繳費代碼後，至超商（ibon / FamiPort）完成付款。', 'moksa-for-woocommerce' );
+		return __( 'Pay with the code at a convenience store, using an ibon or FamiPort machine.', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {

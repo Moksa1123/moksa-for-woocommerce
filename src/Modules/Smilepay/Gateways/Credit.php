@@ -27,10 +27,10 @@ final class Credit extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay 信用卡', 'moksa-for-woocommerce' );
+		return __( 'SmilePay credit card', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 SmilePay 完成線上刷卡。', 'moksa-for-woocommerce' );
+		return __( 'The customer is redirected to SmilePay to pay by card.', 'moksa-for-woocommerce' );
 	}
 }

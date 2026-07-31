@@ -15,31 +15,31 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( '綠界金流 — 信用卡 / ATM / 超商代碼 / 超商條碼 / 網路 ATM', 'moksa-for-woocommerce' );
+		return __( 'ECPay payments — credit card, ATM, convenience store code, barcode and WebATM', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( '綠界金流', 'moksa-for-woocommerce' );
+		return __( 'ECPay payments', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / ATM / 超商 / 條碼 / 網路 ATM', 'moksa-for-woocommerce' );
+		return __( 'Credit card, ATM, convenience store, barcode and WebATM', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( '信用卡分期', 'moksa-for-woocommerce' ),
-			__( 'ATM 轉帳', 'moksa-for-woocommerce' ),
-			__( '超商代碼', 'moksa-for-woocommerce' ),
-			__( '超商條碼', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'Credit card instalments', 'moksa-for-woocommerce' ),
+			__( 'ATM transfer', 'moksa-for-woocommerce' ),
+			__( 'Convenience store code', 'moksa-for-woocommerce' ),
+			__( 'Convenience store barcode', 'moksa-for-woocommerce' ),
 			__( 'WebATM', 'moksa-for-woocommerce' ),
 			__( 'Apple Pay', 'moksa-for-woocommerce' ),
 			__( 'TWQR', 'moksa-for-woocommerce' ),
-			__( '無卡分期（裕富 / 中租）', 'moksa-for-woocommerce' ),
-			__( '微信支付', 'moksa-for-woocommerce' ),
-			__( '街口支付', 'moksa-for-woocommerce' ),
-			__( '一卡通', 'moksa-for-woocommerce' ),
+			__( 'Buy now, pay later (Yufu Digital / Zingala)', 'moksa-for-woocommerce' ),
+			__( 'WeChat Pay', 'moksa-for-woocommerce' ),
+			__( 'JKOPAY', 'moksa-for-woocommerce' ),
+			__( 'iPASS', 'moksa-for-woocommerce' ),
 		];
 	}
 

@@ -17,7 +17,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'LINE Pay 台灣 — 信用卡付款', 'moksa-for-woocommerce' );
+		return __( 'LINE Pay Taiwan — card payments', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -25,15 +25,15 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'LINE Pay 台灣', 'moksa-for-woocommerce' );
+		return __( 'LINE Pay Taiwan', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡付款', 'moksa-for-woocommerce' );
+		return __( 'Card payments', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
-		return [ __( '信用卡', 'moksa-for-woocommerce' ) ];
+		return [ __( 'Credit card', 'moksa-for-woocommerce' ) ];
 	}
 
 	public function settings_section(): string {

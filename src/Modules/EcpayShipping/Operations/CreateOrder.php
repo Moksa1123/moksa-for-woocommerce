@@ -21,7 +21,7 @@ final class CreateOrder {
 		if ( '' === $method_id ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單不是綠界物流。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order does not use ECPay shipping.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -33,7 +33,7 @@ final class CreateOrder {
 		if ( ! $is_cvs && ! $is_home ) {
 			return [
 				'ok'      => false,
-				'message' => __( '不支援的物流型別。', 'moksa-for-woocommerce' ),
+				'message' => __( 'Unsupported shipping type.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -48,7 +48,7 @@ final class CreateOrder {
 		if ( empty( $packages ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒有商品可建立物流單。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The order has no items to create a shipment from.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -57,7 +57,7 @@ final class CreateOrder {
 			if ( '' === $store_id ) {
 				return [
 					'ok'      => false,
-					'message' => __( '尚未選擇取貨門市。', 'moksa-for-woocommerce' ),
+					'message' => __( 'No pickup store has been chosen yet.', 'moksa-for-woocommerce' ),
 				];
 			}
 		}
@@ -91,7 +91,7 @@ final class CreateOrder {
 			if ( ! Helper::has_credentials_for( $group ) ) {
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: c2c|b2c */
-					__( '溫層 %1$s（%2$s 商號）尚未設定憑證。', 'moksa-for-woocommerce' ),
+					__( 'The %1$s zone (%2$s merchant account) has no credentials set.', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					strtoupper( $group )
 				);
@@ -130,7 +130,7 @@ final class CreateOrder {
 				);
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: error message */
-					__( '溫層 %1$s 建立失敗：%2$s', 'moksa-for-woocommerce' ),
+					__( 'The %1$s shipment could not be created: %2$s', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$response->get_error_message()
 				);
@@ -150,7 +150,7 @@ final class CreateOrder {
 				[ $code, $msg ] = array_pad( explode( '|', $body, 2 ), 2, '' );
 				$errors[]       = sprintf(
 					/* translators: 1: temp label, 2: msg, 3: code */
-					__( '溫層 %1$s 建立失敗：%2$s（狀態代碼 %3$s）', 'moksa-for-woocommerce' ),
+					__( 'The %1$s shipment could not be created: %2$s (status code %3$s)', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$msg,
 					$code
@@ -168,7 +168,7 @@ final class CreateOrder {
 			if ( '300' !== $rtn_code && '2001' !== $rtn_code ) {
 				$errors[] = sprintf(
 					/* translators: 1: temp label, 2: msg, 3: code */
-					__( '溫層 %1$s 建立失敗：%2$s（狀態代碼 %3$s）', 'moksa-for-woocommerce' ),
+					__( 'The %1$s shipment could not be created: %2$s (status code %3$s)', 'moksa-for-woocommerce' ),
 					ProductTemp::label( $temp ),
 					$rtn_msg,
 					$rtn_code
@@ -197,15 +197,15 @@ final class CreateOrder {
 				'ok'      => false,
 				'message' => sprintf(
 					/* translators: %s: 溫層列表 */
-					__( '此訂單物流單已建立（%s），未重複下單。如需整批重建，請先刪除既有記錄後再建立。', 'moksa-for-woocommerce' ),
+					__( 'The shipments for this order already exist (%s), so nothing was booked again. To rebuild them all, delete the existing records first.', 'moksa-for-woocommerce' ),
 					implode( '、', $skipped )
 				),
 			];
 		}
 
 		if ( empty( $created ) ) {
-			$msg = $errors ? implode( ' / ', $errors ) : __( '建單失敗', 'moksa-for-woocommerce' );
-			$order->add_order_note( __( '綠界物流單全數建立失敗：', 'moksa-for-woocommerce' ) . $msg );
+			$msg = $errors ? implode( ' / ', $errors ) : __( 'Could not create the shipment', 'moksa-for-woocommerce' );
+			$order->add_order_note( __( 'None of the ECPay shipments could be created:', 'moksa-for-woocommerce' ) . $msg );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -248,7 +248,7 @@ final class CreateOrder {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: count, 2: list of records */
-					__( '綠界物流單建立成功（多溫層拆 %1$d 包）：%2$s', 'moksa-for-woocommerce' ),
+					__( 'ECPay shipments created, split into %1$d parcels by temperature zone: %2$s', 'moksa-for-woocommerce' ),
 					count( $created ),
 					"\n" . implode( "\n", $lines )
 				)
@@ -258,7 +258,7 @@ final class CreateOrder {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: logistics id, 2: rtn_msg */
-					__( '綠界物流單建立成功 — 物流編號 %1$s（%2$s）', 'moksa-for-woocommerce' ),
+					__( 'ECPay shipment created — shipping ID %1$s (%2$s)', 'moksa-for-woocommerce' ),
 					(string) $r['id'],
 					(string) $r['rtn_msg']
 				)
@@ -266,14 +266,14 @@ final class CreateOrder {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( '部分溫層建單失敗：', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( __( 'Some temperature zones could not be created:', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
 		}
 
 		if ( ! empty( $skipped ) ) {
 			$order->add_order_note(
 				sprintf(
 				/* translators: %s: 溫層列表 */
-					__( '已略過既有溫層避免重複下單：%s', 'moksa-for-woocommerce' ),
+					__( 'Zones that already had shipments were skipped to avoid booking twice: %s', 'moksa-for-woocommerce' ),
 					implode( '、', $skipped )
 				)
 			);
@@ -455,7 +455,7 @@ final class CreateOrder {
 		$order->add_order_note(
 			sprintf(
 			/* translators: %s: AllPayLogisticsID */
-				__( '已從網站刪除物流單記錄 #%s（綠界端不會收到通知，僅刪除本地紀錄）', 'moksa-for-woocommerce' ),
+				__( 'Shipment record #%s was deleted from this site only. ECPay is not notified.', 'moksa-for-woocommerce' ),
 				$logistics_id
 			)
 		);

@@ -32,12 +32,12 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::PAYNOW_ATM_BANK_CODE );
 			if ( '' !== $bank ) {
 				$rows[] = [
-					'label' => __( '銀行代碼', 'moksa-for-woocommerce' ),
+					'label' => __( 'Bank code', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
-				'label' => __( '虛擬帳號', 'moksa-for-woocommerce' ),
+				'label' => __( 'Virtual account', 'moksa-for-woocommerce' ),
 				'value' => $atm_no,
 			];
 			return self::append( $rows, (string) $order->get_meta( Keys::PAYNOW_ATM_DUE_DATE ) );
@@ -50,7 +50,7 @@ final class CustomerPaymentInfo {
 				if ( '' !== $bc ) {
 					$rows[] = [
 						/* translators: %d: barcode segment index */
-						'label' => sprintf( __( '條碼第 %d 段', 'moksa-for-woocommerce' ), $i + 1 ),
+						'label' => sprintf( __( 'Barcode segment %d', 'moksa-for-woocommerce' ), $i + 1 ),
 						'value' => $bc,
 					];
 				}
@@ -63,7 +63,7 @@ final class CustomerPaymentInfo {
 			return self::append(
 				[
 					[
-						'label' => __( '超商繳費代碼', 'moksa-for-woocommerce' ),
+						'label' => __( 'Convenience store payment code', 'moksa-for-woocommerce' ),
 						'value' => $code,
 					],
 				],
@@ -78,7 +78,7 @@ final class CustomerPaymentInfo {
 	private static function append( array $rows, string $due ): array {
 		if ( '' !== $due && ! empty( $rows ) ) {
 			$rows[] = [
-				'label' => __( '繳費期限', 'moksa-for-woocommerce' ),
+				'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 				'value' => $due,
 			];
 		}

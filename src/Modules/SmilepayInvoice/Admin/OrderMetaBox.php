@@ -50,7 +50,7 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 
 	protected static function extra_card_meta( \WC_Order $order ): array {
 		return [
-			__( '隨機碼', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SMILEPAY_INVOICE_RANDOM ),
+			__( 'Random code', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SMILEPAY_INVOICE_RANDOM ),
 		];
 	}
 }

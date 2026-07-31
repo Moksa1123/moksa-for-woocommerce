@@ -16,7 +16,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'ezPay 電子發票 — B2C / B2B / 手機條碼 / 自然人憑證 / 會員載具 / 捐贈', 'moksa-for-woocommerce' );
+		return __( 'ezPay e-invoice — B2C and B2B, mobile barcode, Citizen Digital Certificate, member carrier and donation', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -24,22 +24,22 @@ final class Module extends AbstractModule {
 	}
 
 	public function name(): string {
-		return __( 'ezPay 電子發票', 'moksa-for-woocommerce' );
+		return __( 'ezPay e-invoice', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( 'B2C / B2B / 載具 / 捐贈 — 藍新旗下', 'moksa-for-woocommerce' );
+		return __( 'B2C, B2B, carriers and donations — part of NewebPay', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( 'B2C 一般發票', 'moksa-for-woocommerce' ),
-			__( 'B2B 三聯式', 'moksa-for-woocommerce' ),
-			__( '手機條碼', 'moksa-for-woocommerce' ),
-			__( '自然人憑證', 'moksa-for-woocommerce' ),
-			__( 'ezPay 會員載具', 'moksa-for-woocommerce' ),
-			__( '愛心碼捐贈', 'moksa-for-woocommerce' ),
-			__( '作廢發票', 'moksa-for-woocommerce' ),
+			__( 'B2C standard invoice', 'moksa-for-woocommerce' ),
+			__( 'B2B triplicate invoice', 'moksa-for-woocommerce' ),
+			__( 'Mobile barcode', 'moksa-for-woocommerce' ),
+			__( 'Citizen Digital Certificate', 'moksa-for-woocommerce' ),
+			__( 'ezPay member carrier', 'moksa-for-woocommerce' ),
+			__( 'Donation by love code', 'moksa-for-woocommerce' ),
+			__( 'Void invoice', 'moksa-for-woocommerce' ),
 		];
 	}
 

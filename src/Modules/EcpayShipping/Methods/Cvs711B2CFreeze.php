@@ -12,8 +12,8 @@ final class Cvs711B2CFreeze extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_ecpay_shipping_cvs_711_b2c_freeze';
-		$this->method_title       = __( '綠界 — 7-11 B2C 冷凍店取', 'moksa-for-woocommerce' );
-		$this->method_description = __( '綠界 7-ELEVEN 冷凍超商取貨 — 適合冷凍食品電商，需向綠界申請大宗寄件服務。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'ECPay — 7-ELEVEN B2C frozen pickup', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'ECPay 7-ELEVEN frozen store pickup, suited to frozen food stores. You need to apply for bulk shipping with ECPay first.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -22,7 +22,7 @@ final class Cvs711B2CFreeze extends AbstractCvsShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '7-11 冷凍', 'moksa-for-woocommerce' );
+		return __( '7-ELEVEN frozen', 'moksa-for-woocommerce' );
 	}
 
 	public function logistics_sub_type(): string {
@@ -30,6 +30,6 @@ final class Cvs711B2CFreeze extends AbstractCvsShippingMethod {
 	}
 
 	public function supported_temperatures(): array {
-		return [ ProductTemp::FROZEN => __( '冷凍', 'moksa-for-woocommerce' ) ];
+		return [ ProductTemp::FROZEN => __( 'Frozen', 'moksa-for-woocommerce' ) ];
 	}
 }

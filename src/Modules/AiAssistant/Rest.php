@@ -133,10 +133,10 @@ final class Rest {
 		$data  = get_transient( $key );
 
 		if ( ! is_array( $data ) ) {
-			return rest_ensure_response( [ 'error' => __( '確認已失效或不存在,請重新操作。', 'moksa-for-woocommerce' ) ] );
+			return rest_ensure_response( [ 'error' => __( 'That confirmation has expired or no longer exists. Please start again.', 'moksa-for-woocommerce' ) ] );
 		}
 		if ( (int) ( $data['user'] ?? 0 ) !== get_current_user_id() ) {
-			return rest_ensure_response( [ 'error' => __( '權限不符,無法執行。', 'moksa-for-woocommerce' ) ] );
+			return rest_ensure_response( [ 'error' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ] );
 		}
 
 		delete_transient( $key );
@@ -144,7 +144,7 @@ final class Rest {
 		$ability  = (string) ( $data['ability'] ?? '' );
 		$handlers = Config::destructive_handlers();
 		if ( ! isset( $handlers[ $ability ]['apply'] ) || ! is_callable( $handlers[ $ability ]['apply'] ) ) {
-			return rest_ensure_response( [ 'error' => __( '不支援的操作。', 'moksa-for-woocommerce' ) ] );
+			return rest_ensure_response( [ 'error' => __( 'Unsupported action.', 'moksa-for-woocommerce' ) ] );
 		}
 
 		$result = call_user_func( $handlers[ $ability ]['apply'], (array) ( $data['params'] ?? [] ) );

@@ -46,7 +46,7 @@ PAYNOW_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( '立吉富付款', 'moksa-for-woocommerce' )
+			settings.title || __( 'PayNow', 'moksa-for-woocommerce' )
 		),
 		content: <Content />,
 		edit: <Content />,

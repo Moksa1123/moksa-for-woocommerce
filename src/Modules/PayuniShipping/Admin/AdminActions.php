@@ -36,8 +36,8 @@ final class AdminActions extends AbstractAdminActions {
 
 	public function get_bulk_action_labels(): array {
 		return [
-			'print_711'  => __( '批次列印超商取貨標籤', 'moksa-for-woocommerce' ),
-			'print_tcat' => __( '批次列印黑貓宅配標籤', 'moksa-for-woocommerce' ),
+			'print_711'  => __( 'Bulk print convenience store pickup labels', 'moksa-for-woocommerce' ),
+			'print_tcat' => __( 'Bulk print T-Cat home delivery labels', 'moksa-for-woocommerce' ),
 		];
 	}
 

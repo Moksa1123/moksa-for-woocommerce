@@ -24,7 +24,7 @@ const Label = ( { components } ) => {
 const Content = () =>
 	decodeEntities(
 		settings.description ||
-			__( '使用 LINE Pay 完成付款，將跳轉至 LINE Pay 付款頁。', 'moksa-for-woocommerce' )
+			__( 'Pay with LINE Pay. You will be redirected to the LINE Pay payment page.', 'moksa-for-woocommerce' )
 	);
 
 registerPaymentMethod( {

@@ -28,8 +28,8 @@ final class Unified extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 統一金流（單一入口）', 'moksa-for-woocommerce' );
-		$this->method_description = __( '結帳呈現模式為「單一入口」時啟用。顧客點選後跳轉至 PAYUNi 收銀台選擇具體付款方式。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi (single entry point)', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Used when the checkout display is set to a single entry point. The customer is taken to the PAYUNi checkout to pick a payment method there.', 'moksa-for-woocommerce' );
 		$this->supports           = array( 'products', 'refunds' );
 
 		$this->init_form_fields();
@@ -46,30 +46,30 @@ final class Unified extends GatewayBase {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'             => array(
-				'title'       => __( '啟用', 'moksa-for-woocommerce' ),
+				'title'       => __( 'Enable', 'moksa-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( '啟用 PAYUNi 統一金流（單一入口）', 'moksa-for-woocommerce' ),
-				'description' => __( '注意：啟用「單一入口」顯示模式時才會出現在結帳頁。', 'moksa-for-woocommerce' ),
+				'label'       => __( 'Enable PAYUNi (single entry point)', 'moksa-for-woocommerce' ),
+				'description' => __( 'Note: this only appears at checkout when the single entry point display is in use.', 'moksa-for-woocommerce' ),
 				'default'     => 'yes',
 			),
 			'title'               => array(
-				'title'   => __( '結帳顯示名稱', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Title', 'moksa-for-woocommerce' ),
 				'type'    => 'text',
-				'default' => __( '統一金流 PAYUNi', 'moksa-for-woocommerce' ),
+				'default' => __( 'PAYUNi', 'moksa-for-woocommerce' ),
 			),
 			'description'         => array(
-				'title'   => __( '結帳顯示說明', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Description', 'moksa-for-woocommerce' ),
 				'type'    => 'textarea',
-				'default' => __( '整合各式付款工具，按下「下單」後將跳轉至 PAYUNi 收銀台。', 'moksa-for-woocommerce' ),
+				'default' => __( 'Every payment method in one place. After placing the order the customer is taken to the PAYUNi checkout.', 'moksa-for-woocommerce' ),
 			),
 			'allow_installment'   => array(
-				'title'   => __( '允許分期付款', 'moksa-for-woocommerce' ),
+				'title'   => __( 'Allow instalments', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( '在 PAYUNi 收銀台顯示信用卡分期選項', 'moksa-for-woocommerce' ),
+				'label'   => __( 'Show credit card instalment options in the PAYUNi checkout', 'moksa-for-woocommerce' ),
 				'default' => 'no',
 			),
 			'installment_periods' => array(
-				'title'    => __( '可用分期數', 'moksa-for-woocommerce' ),
+				'title'    => __( 'Available instalment plans', 'moksa-for-woocommerce' ),
 				'type'     => 'multiselect',
 				'class'    => 'wc-enhanced-select',
 				'css'      => 'width: 400px;',
@@ -82,7 +82,7 @@ final class Unified extends GatewayBase {
 					24 => '24',
 					30 => '30',
 				),
-				'desc'     => __( '勾選「允許分期付款」時生效，勾選的期數將在 PAYUNi 付款頁供顧客選擇。', 'moksa-for-woocommerce' ),
+				'desc'     => __( 'Applies when Allow instalments is ticked. Customers can choose from the plans you tick here on the PAYUNi payment page.', 'moksa-for-woocommerce' ),
 				'desc_tip' => true,
 			),
 		);

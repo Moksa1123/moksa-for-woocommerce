@@ -17,10 +17,10 @@ final class GooglePay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 Google Pay', 'moksa-for-woocommerce' );
+		return __( 'NewebPay Google Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用 Google Pay 快速付款，需 Android 或 Chrome 瀏覽器，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
+		return __( 'Pay quickly with Google Pay, which needs Android or Chrome. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
 }

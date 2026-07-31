@@ -137,7 +137,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: pay type, 2: amount */
-						__( '支付連付款完成 — %1$s（金額 NT$%2$s）', 'moksa-for-woocommerce' ),
+						__( 'PChomePay payment completed — %1$s (NT$%2$s)', 'moksa-for-woocommerce' ),
 						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
 						(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
 					)
@@ -150,14 +150,14 @@ final class IpnHandler {
 					'on-hold',
 					sprintf(
 					/* translators: %s: pay type */
-						__( '支付連已產生 %s 付款資訊，等待顧客付款。', 'moksa-for-woocommerce' ),
+						__( 'PChomePay issued the %s payment details and is waiting for the customer to pay.', 'moksa-for-woocommerce' ),
 						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) )
 					)
 				);
 				break;
 
 			case 'order_expired':
-				$order->update_status( 'cancelled', __( '支付連訂單逾時未付款。', 'moksa-for-woocommerce' ) );
+				$order->update_status( 'cancelled', __( 'The PChomePay order expired without being paid.', 'moksa-for-woocommerce' ) );
 				break;
 
 			case 'order_failed':
@@ -165,7 +165,7 @@ final class IpnHandler {
 					'failed',
 					sprintf(
 					/* translators: %s: status code */
-						__( '支付連付款失敗（狀態碼 %s）。', 'moksa-for-woocommerce' ),
+						__( 'The PChomePay payment failed (status code %s).', 'moksa-for-woocommerce' ),
 						(string) ( $message['status_code'] ?? '' )
 					)
 				);
@@ -175,7 +175,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: refund id, 2: amount */
-						__( '支付連退款成功 — 退款編號 %1$s（NT$%2$s）', 'moksa-for-woocommerce' ),
+						__( 'PChomePay refunded NT$%2$s — refund number %1$s', 'moksa-for-woocommerce' ),
 						(string) ( $message['refund_id'] ?? '' ),
 						(string) ( $message['trade_amount'] ?? $message['refund_amount'] ?? '' )
 					)
@@ -189,7 +189,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: %s: logistic stage */
-						__( '支付連物流狀態更新：%s', 'moksa-for-woocommerce' ),
+						__( 'PChomePay shipping status update: %s', 'moksa-for-woocommerce' ),
 						self::logistic_label( $notify_type )
 					)
 				);
@@ -199,7 +199,7 @@ final class IpnHandler {
 				$order->add_order_note(
 					sprintf(
 					/* translators: %s: notify type */
-						__( '支付連通知：%s', 'moksa-for-woocommerce' ),
+						__( 'PChomePay notification: %s', 'moksa-for-woocommerce' ),
 						$notify_type
 					)
 				);

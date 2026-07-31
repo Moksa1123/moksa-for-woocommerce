@@ -22,7 +22,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'Moksa AI（Beta）— 用一句話查訂單 / 數量 / 狀態', 'moksa-for-woocommerce' );
+		return __( 'Moksa AI (beta) — one sentence gets you an order, a count or a status', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -34,7 +34,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function tagline(): string {
-		return __( '需 WordPress 7.0 並設定 AI 金鑰', 'moksa-for-woocommerce' );
+		return __( 'Requires WordPress 7.0 and an AI key', 'moksa-for-woocommerce' );
 	}
 
 	public function boot(): void {
@@ -67,8 +67,8 @@ final class Module extends AbstractModule {
 			$ver,
 			true
 		);
-		$greeting = (string) get_option( 'moksafowo_ai_greeting', __( '嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。', 'moksa-for-woocommerce' ) );
-		$ex_raw   = (string) get_option( 'moksafowo_ai_examples', __( '待出貨有幾筆?,各狀態訂單數量', 'moksa-for-woocommerce' ) );
+		$greeting = (string) get_option( 'moksafowo_ai_greeting', __( 'Hi, I\'m Moksa AI. Ask me things like how many orders are awaiting shipment, or look up an invoice or tracking number.', 'moksa-for-woocommerce' ) );
+		$ex_raw   = (string) get_option( 'moksafowo_ai_examples', __( 'How many orders are awaiting shipment?,Order counts by status', 'moksa-for-woocommerce' ) );
 		$examples = array_values( array_filter( array_map( 'trim', explode( ',', $ex_raw ) ) ) );
 
 		wp_localize_script(
@@ -78,13 +78,13 @@ final class Module extends AbstractModule {
 				'name'        => Config::NAME,
 				'userId'      => get_current_user_id(),
 				'greeting'    => $greeting,
-				'placeholder' => __( '例如:待出貨有幾筆?', 'moksa-for-woocommerce' ),
+				'placeholder' => __( 'For example: how many orders are awaiting shipment?', 'moksa-for-woocommerce' ),
 				'examples'    => $examples,
-				'sendLabel'   => __( '送出', 'moksa-for-woocommerce' ),
-				'thinking'    => __( '查詢中', 'moksa-for-woocommerce' ),
-				'clearLabel'  => __( '清除', 'moksa-for-woocommerce' ),
-				'errorPrefix' => __( '發生錯誤', 'moksa-for-woocommerce' ),
-				'emptyReply'  => __( '（無回覆）', 'moksa-for-woocommerce' ),
+				'sendLabel'   => __( 'Send', 'moksa-for-woocommerce' ),
+				'thinking'    => __( 'Looking that up', 'moksa-for-woocommerce' ),
+				'clearLabel'  => __( 'Clear', 'moksa-for-woocommerce' ),
+				'errorPrefix' => __( 'Something went wrong', 'moksa-for-woocommerce' ),
+				'emptyReply'  => __( '(no reply)', 'moksa-for-woocommerce' ),
 			]
 		);
 	}

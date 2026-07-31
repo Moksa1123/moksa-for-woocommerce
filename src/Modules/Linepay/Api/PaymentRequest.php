@@ -113,7 +113,7 @@ final class PaymentRequest {
 
 			LinePay::log( 'process payment request error:' . $e->getMessage(), 'error' );
 
-			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。', 'moksa-for-woocommerce' ) ) );
+			wc_add_wp_error_notices( new WP_Error( 'process_payment_request', __( '[LINE Pay] We received your order, but the payment did not go through. Please try paying again.', 'moksa-for-woocommerce' ) ) );
 
 			return array(
 				'result'   => 'success',
@@ -253,26 +253,26 @@ final class PaymentRequest {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_AUTHED );
 				$order->save();
 				$order->update_status( 'on-hold' );
-				$order->add_order_note( __( 'LINE Pay 付款已授權，等待確認', 'moksa-for-woocommerce' ) );
+				$order->add_order_note( __( 'The LINE Pay payment is authorized and awaiting confirmation', 'moksa-for-woocommerce' ) );
 
 			} elseif ( StatusCode::CANCELLED_EXPIRED === $check_code ) {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
-				$order->add_order_note( __( 'LINE Pay 付款已取消或過期', 'moksa-for-woocommerce' ) );
+				$order->add_order_note( __( 'The LINE Pay payment was cancelled or has expired', 'moksa-for-woocommerce' ) );
 
 			} elseif ( StatusCode::FAILED === $check_code ) {
 				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_FAILED );
 				$order->save();
 				$order->update_status( LinePay::$fail_order_status );
-				$order->add_order_note( __( 'LINE Pay 交易失敗', 'moksa-for-woocommerce' ) );
+				$order->add_order_note( __( 'The LINE Pay transaction failed', 'moksa-for-woocommerce' ) );
 
 			} else {
 				$order->update_status( 'on-hold' );
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: LINE Pay check status return code */
-						__( 'LINE Pay 確認付款失敗（狀態代碼 %s）', 'moksa-for-woocommerce' ),
+						__( 'LINE Pay could not confirm the payment (status code %s)', 'moksa-for-woocommerce' ),
 						$check_code
 					)
 				);
@@ -436,7 +436,7 @@ final class PaymentRequest {
 		$order->add_order_note(
 			sprintf(
 				/* translators: %s: LINE Pay refund transaction id returned by API */
-				__( 'LINE Pay 退款成功（退款編號 %s）', 'moksa-for-woocommerce' ),
+				__( 'LINE Pay refunded the payment (refund number %s)', 'moksa-for-woocommerce' ),
 				$resp->info->refundTransactionId
 			)
 		);

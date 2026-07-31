@@ -17,11 +17,11 @@ final class Credit extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 信用卡', 'moksa-for-woocommerce' );
+		return __( 'ECPay credit card', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用信用卡一次付清，跳轉至綠界支付頁完成付款。', 'moksa-for-woocommerce' );
+		return __( 'Pay in full by credit card. The customer is redirected to the ECPay payment page.', 'moksa-for-woocommerce' );
 	}
 
 	protected function supports_credit_action(): bool {

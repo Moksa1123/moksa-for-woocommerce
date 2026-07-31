@@ -11,8 +11,8 @@ final class TcatRefrige extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_smilepay_shipping_tcat_refrige';
-		$this->method_title       = __( '速買配 — 黑貓冷藏', 'moksa-for-woocommerce' );
-		$this->method_description = __( 'SmilePay 黑貓宅急便（冷藏）。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'SmilePay — T-Cat chilled', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'SmilePay T-Cat delivery (chilled).', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -21,7 +21,7 @@ final class TcatRefrige extends AbstractHomeShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '黑貓冷藏', 'moksa-for-woocommerce' );
+		return __( 'T-Cat chilled', 'moksa-for-woocommerce' );
 	}
 
 	public function logistics_sub_type(): string {
@@ -33,7 +33,7 @@ final class TcatRefrige extends AbstractHomeShippingMethod {
 	}
 
 	public function supported_temperatures(): array {
-		return [ '2' => __( '冷藏', 'moksa-for-woocommerce' ) ];
+		return [ '2' => __( 'Chilled', 'moksa-for-woocommerce' ) ];
 	}
 
 	public function supported_package_specs(): array {

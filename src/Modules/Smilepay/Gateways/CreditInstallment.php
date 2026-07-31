@@ -27,11 +27,11 @@ final class CreditInstallment extends AbstractSmilepayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'SmilePay 信用卡分期', 'moksa-for-woocommerce' );
+		return __( 'SmilePay credit card instalments', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 SmilePay 完成信用卡分期付款。', 'moksa-for-woocommerce' );
+		return __( 'The customer is redirected to SmilePay to pay by card in instalments.', 'moksa-for-woocommerce' );
 	}
 
 	protected function mtmk_extra_params( \WC_Order $order ): array {

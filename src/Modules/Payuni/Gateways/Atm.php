@@ -16,8 +16,8 @@ class Atm extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi ATM 虛擬帳號', 'moksa-for-woocommerce' );
-		$this->method_description = __( '取得虛擬帳號後，於期限內至 ATM 轉帳完成付款。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi ATM virtual account', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Transfer at an ATM before the deadline, using the virtual account number.', 'moksa-for-woocommerce' );
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -50,11 +50,11 @@ class Atm extends GatewayBase {
 	public static function get_payment_order_metas() {
 		$order_metas =
 		array(
-			OrderMeta::AMT_PAY_NO      => __( '虛擬帳號', 'moksa-for-woocommerce' ),
-			OrderMeta::AMT_BANK_TYPE   => __( '銀行代碼', 'moksa-for-woocommerce' ),
-			OrderMeta::AMT_EXPIRE_DATE => __( '繳費期限', 'moksa-for-woocommerce' ),
-			OrderMeta::AMT_PAY_TIME    => __( '付款時間', 'moksa-for-woocommerce' ),
-			OrderMeta::AMT_ACCOUNT_5NO => __( '帳號末五碼', 'moksa-for-woocommerce' ),
+			OrderMeta::AMT_PAY_NO      => __( 'Virtual account', 'moksa-for-woocommerce' ),
+			OrderMeta::AMT_BANK_TYPE   => __( 'Bank code', 'moksa-for-woocommerce' ),
+			OrderMeta::AMT_EXPIRE_DATE => __( 'Pay before', 'moksa-for-woocommerce' ),
+			OrderMeta::AMT_PAY_TIME    => __( 'Paid at', 'moksa-for-woocommerce' ),
+			OrderMeta::AMT_ACCOUNT_5NO => __( 'Last five account digits', 'moksa-for-woocommerce' ),
 		);
 
 		return $order_metas;

@@ -39,10 +39,10 @@ final class Unified extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新', 'moksa-for-woocommerce' );
+		return __( 'NewebPay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至藍新收銀台，由顧客選擇信用卡、分期、ATM、超商代碼、Apple Pay、LINE Pay 等付款方式。', 'moksa-for-woocommerce' );
+		return __( 'Redirect to the NewebPay checkout, where the customer picks a credit card, instalments, ATM transfer, a convenience store code, Apple Pay, LINE Pay or another method.', 'moksa-for-woocommerce' );
 	}
 }

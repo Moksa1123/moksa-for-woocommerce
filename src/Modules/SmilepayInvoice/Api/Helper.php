@@ -100,7 +100,7 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'status'  => 'HTTP_' . $code,
 				/* translators: %d: HTTP response code */
-				'message' => sprintf( __( 'SmilePay 回傳 HTTP %d', 'moksa-for-woocommerce' ), $code ),
+				'message' => sprintf( __( 'SmilePay returned HTTP %d', 'moksa-for-woocommerce' ), $code ),
 			];
 		}
 
@@ -111,7 +111,7 @@ final class Helper extends AbstractCredentialHelper {
 			return [
 				'ok'      => false,
 				'status'  => 'PARSE_FAIL',
-				'message' => __( 'SmilePay 回傳格式無法解析', 'moksa-for-woocommerce' ),
+				'message' => __( 'The response from SmilePay could not be parsed', 'moksa-for-woocommerce' ),
 				'data'    => [ 'raw' => $raw ],
 			];
 		}

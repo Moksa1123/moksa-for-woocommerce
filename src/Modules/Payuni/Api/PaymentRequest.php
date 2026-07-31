@@ -165,7 +165,7 @@ class PaymentRequest {
 			return new \WP_Error(
 				'process_refund_request',
 				/* translators: %s: order id */
-				sprintf( __( '退款前查詢訂單狀態失敗(訂單 #%s)。', 'moksa-for-woocommerce' ), $order_id ),
+				sprintf( __( 'The order status could not be checked before refunding (order #%s).', 'moksa-for-woocommerce' ), $order_id ),
 				array(
 					'order_id'      => $order_id,
 					'refund_amount' => $amount,
@@ -189,11 +189,11 @@ class PaymentRequest {
 				$url          = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/trade/close' : 'https://api.payuni.com.tw/api/trade/close';
 			} else {
 				/* translators: %s: PAYUNi settlement status */
-				$order->add_order_note( sprintf( __( '此訂單目前狀態無法退款（PAYUNi 結算狀態：%s）', 'moksa-for-woocommerce' ), $close_status ) );
+				$order->add_order_note( sprintf( __( 'This order cannot be refunded in its current state (PAYUNi settlement status: %s)', 'moksa-for-woocommerce' ), $close_status ) );
 				return new \WP_Error(
 					'process_refund_request',
 					/* translators: 1: trade status, 2: close status */
-					sprintf( __( '此訂單無法退款（交易狀態：%1$s／結算狀態：%2$s）', 'moksa-for-woocommerce' ), $trade_status, $close_status ),
+					sprintf( __( 'This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)', 'moksa-for-woocommerce' ), $trade_status, $close_status ),
 					array(
 						'order_id'      => $order_id,
 						'refund_amount' => $amount,
@@ -244,11 +244,11 @@ class PaymentRequest {
 		$decrypted = PayuniPayment::decrypt( $result['EncryptInfo'] );
 		if ( 'SUCCESS' === $result['Status'] ) {
 			/* translators: 1: refund amount, 2: PAYUNi message */
-			$order->add_order_note( sprintf( __( 'PAYUNi 退款成功（金額 %1$s）：%2$s', 'moksa-for-woocommerce' ), $amount, $decrypted['Message'] ) );
+			$order->add_order_note( sprintf( __( 'PAYUNi refunded %1$s: %2$s', 'moksa-for-woocommerce' ), $amount, $decrypted['Message'] ) );
 			return true;
 		} else {
 			/* translators: 1: PAYUNi error message, 2: status code */
-			$order->add_order_note( sprintf( __( 'PAYUNi 退款失敗：%1$s（狀態 %2$s）', 'moksa-for-woocommerce' ), $decrypted['Message'], $result['Status'] ) );
+			$order->add_order_note( sprintf( __( 'The PAYUNi refund failed: %1$s (status %2$s)', 'moksa-for-woocommerce' ), $decrypted['Message'], $result['Status'] ) );
 			throw new \Exception( 'PAYUNi refund failed. Status:' . esc_html( $result['Status'] ) );
 		}
 	}
@@ -308,7 +308,7 @@ class PaymentRequest {
 			if ( ! isset( $decrypted['Result'] ) || ! is_array( $decrypted['Result'] ) || empty( $decrypted['Result'] ) ) {
 				PayuniPayment::log( 'PAYUNi query returned SUCCESS but no Result data found.' );
 				if ( $add_note ) {
-					$order->add_order_note( __( 'PAYUNi 查詢回應成功，但查無訂單資料。', 'moksa-for-woocommerce' ) );
+					$order->add_order_note( __( 'PAYUNi responded successfully but returned no order data.', 'moksa-for-woocommerce' ) );
 				}
 				return false;
 			}
@@ -330,14 +330,14 @@ class PaymentRequest {
 			if ( $add_note ) {
 				$order = wc_get_order( $woo_order_id );
 				/* translators: %s: 查詢結果 */
-				$order->add_order_note( sprintf( __( 'PAYUNi 訂單查詢成功，結果：%s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				$order->add_order_note( sprintf( __( 'The PAYUNi order lookup succeeded: %s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
 			}
 			PayuniPayment::log( 'PAYUNi query success. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] . ', Trade Status:' . $query_result['TradeStatus'] );
 			return $query_result;
 		} else {
 			if ( $add_note ) {
 				/* translators: %s: 查詢結果 */
-				$order->add_order_note( sprintf( __( 'PAYUNi 訂單查詢失敗，結果：%s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				$order->add_order_note( sprintf( __( 'The PAYUNi order lookup failed: %s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
 			}
 			PayuniPayment::log( 'PAYUNi query failed. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] );
 			return false;

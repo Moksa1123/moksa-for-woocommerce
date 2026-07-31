@@ -133,21 +133,21 @@ final class InvoiceCheckoutFields {
 
 	private static function type_labels(): array {
 		return [
-			'b2c_carrier' => __( '個人', 'moksa-for-woocommerce' ),
-			'b2b'         => __( '公司', 'moksa-for-woocommerce' ),
-			'b2c_donate'  => __( '捐贈', 'moksa-for-woocommerce' ),
+			'b2c_carrier' => __( 'Individual', 'moksa-for-woocommerce' ),
+			'b2b'         => __( 'Company', 'moksa-for-woocommerce' ),
+			'b2c_donate'  => __( 'Donation', 'moksa-for-woocommerce' ),
 		];
 	}
 
 	private static function carrier_labels(): array {
 		$member = ( null !== self::$config && '' !== self::$config->member_label )
 			? self::$config->member_label
-			: __( '會員載具', 'moksa-for-woocommerce' );
+			: __( 'Member carrier', 'moksa-for-woocommerce' );
 		return [
 			'member' => $member,
-			'mobile' => __( '手機條碼', 'moksa-for-woocommerce' ),
-			'cert'   => __( '自然人憑證', 'moksa-for-woocommerce' ),
-			'paper'  => __( '紙本發票', 'moksa-for-woocommerce' ),
+			'mobile' => __( 'Mobile barcode', 'moksa-for-woocommerce' ),
+			'cert'   => __( 'Citizen Digital Certificate', 'moksa-for-woocommerce' ),
+			'paper'  => __( 'Paper invoice', 'moksa-for-woocommerce' ),
 		];
 	}
 
@@ -177,13 +177,13 @@ final class InvoiceCheckoutFields {
 		// clearfix wrapper — 統編 / 公司名稱 用 form-row-first / -last（float），沒 clearfix 會讓
 		// 後面的 ship-to-different H3 浮上來。.moksafowo-invoice-section 有對應 CSS（display:flow-root）。
 		echo '<div class="moksafowo-invoice-section" style="clear:both;overflow:hidden;display:block;">';
-		echo '<h3>' . esc_html__( '電子發票', 'moksa-for-woocommerce' ) . '</h3>';
+		echo '<h3>' . esc_html__( 'E-invoice', 'moksa-for-woocommerce' ) . '</h3>';
 
 		woocommerce_form_field(
 			'moksafowo_invoice_type',
 			[
 				'type'     => 'select',
-				'label'    => __( '發票類型', 'moksa-for-woocommerce' ),
+				'label'    => __( 'Invoice type', 'moksa-for-woocommerce' ),
 				'class'    => [ 'form-row-wide' ],
 				'options'  => $type_options,
 				'default'  => 'b2c_carrier',
@@ -196,7 +196,7 @@ final class InvoiceCheckoutFields {
 			'moksafowo_invoice_carrier_type',
 			[
 				'type'    => 'select',
-				'label'   => __( '載具類型', 'moksa-for-woocommerce' ),
+				'label'   => __( 'Carrier type', 'moksa-for-woocommerce' ),
 				'class'   => [ 'form-row-wide', 'moksafowo-invoice-b2c-only' ],
 				'options' => $carrier_options,
 				'default' => InvoiceChannels::default_carrier( $prefix ),
@@ -208,7 +208,7 @@ final class InvoiceCheckoutFields {
 			'moksafowo_invoice_carrier_num',
 			[
 				'type'  => 'text',
-				'label' => __( '載具編號', 'moksa-for-woocommerce' ),
+				'label' => __( 'Carrier number', 'moksa-for-woocommerce' ),
 				'class' => [ 'form-row-wide', 'moksafowo-invoice-carrier-num-row' ],
 			],
 			(string) WC()->checkout->get_value( 'moksafowo_invoice_carrier_num' )
@@ -219,7 +219,7 @@ final class InvoiceCheckoutFields {
 				'moksafowo_invoice_buyer_ubn',
 				[
 					'type'  => 'text',
-					'label' => __( '統一編號', 'moksa-for-woocommerce' ),
+					'label' => __( 'Tax ID', 'moksa-for-woocommerce' ),
 					'class' => [ 'form-row-first', 'moksafowo-invoice-b2b-only' ],
 				],
 				(string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_ubn' )
@@ -228,7 +228,7 @@ final class InvoiceCheckoutFields {
 				'moksafowo_invoice_buyer_name',
 				[
 					'type'  => 'text',
-					'label' => __( '公司名稱', 'moksa-for-woocommerce' ),
+					'label' => __( 'Company name', 'moksa-for-woocommerce' ),
 					'class' => [ 'form-row-last', 'moksafowo-invoice-b2b-only' ],
 				],
 				(string) WC()->checkout->get_value( 'moksafowo_invoice_buyer_name' )
@@ -242,7 +242,7 @@ final class InvoiceCheckoutFields {
 					'moksafowo_invoice_donate_org',
 					[
 						'type'    => 'select',
-						'label'   => __( '捐贈單位', 'moksa-for-woocommerce' ),
+						'label'   => __( 'Charities', 'moksa-for-woocommerce' ),
 						'class'   => [ 'form-row-wide', 'moksafowo-invoice-donate-only' ],
 						'options' => InvoiceChannels::donate_select_options( $prefix ),
 					],
@@ -252,7 +252,7 @@ final class InvoiceCheckoutFields {
 					'moksafowo_invoice_love_code',
 					[
 						'type'              => 'text',
-						'label'             => __( '捐贈碼', 'moksa-for-woocommerce' ),
+						'label'             => __( 'Donation code', 'moksa-for-woocommerce' ),
 						'class'             => [ 'form-row-wide', 'moksafowo-invoice-donate-only' ],
 						'custom_attributes' => [ 'readonly' => 'readonly' ],
 					],
@@ -264,9 +264,9 @@ final class InvoiceCheckoutFields {
 					'moksafowo_invoice_love_code',
 					[
 						'type'        => 'text',
-						'label'       => __( '捐贈碼', 'moksa-for-woocommerce' ),
+						'label'       => __( 'Donation code', 'moksa-for-woocommerce' ),
 						'class'       => [ 'form-row-wide', 'moksafowo-invoice-donate-only' ],
-						'placeholder' => __( '3-7 碼數字', 'moksa-for-woocommerce' ),
+						'placeholder' => __( '3 to 7 digits', 'moksa-for-woocommerce' ),
 					],
 					(string) WC()->checkout->get_value( 'moksafowo_invoice_love_code' )
 				);
@@ -281,7 +281,7 @@ final class InvoiceCheckoutFields {
 			return null;
 		}
 		if ( ! Ubn::is_valid( $value ) ) {
-			return new \WP_Error( 'moksafowo_invoice_ubn_format', __( '統一編號格式或檢查碼不正確。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_invoice_ubn_format', __( 'The tax ID format or check digit is not valid.', 'moksa-for-woocommerce' ) );
 		}
 		return null;
 	}
@@ -292,7 +292,7 @@ final class InvoiceCheckoutFields {
 			return null;
 		}
 		if ( ! preg_match( '/^([xX]\d{2,6}|\d{3,7})$/', $value ) ) {
-			return new \WP_Error( 'moksafowo_invoice_love_code_format', __( '愛心碼格式錯誤（3-7 碼數字）。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_invoice_love_code_format', __( 'Invalid love code (it must be 3 to 7 digits).', 'moksa-for-woocommerce' ) );
 		}
 		return null;
 	}
@@ -307,14 +307,14 @@ final class InvoiceCheckoutFields {
 		if ( 'b2b' === $type ) {
 			$ubn = self::field_value( $data, [ 'moksafowo_invoice_buyer_ubn', '_moksafowo/invoice-buyer-ubn', 'moksafowo/invoice-buyer-ubn' ] );
 			if ( ! Ubn::is_valid( $ubn ) ) {
-				$errors->add( 'moksafowo_invoice_ubn', __( '統一編號格式或檢查碼不正確。', 'moksa-for-woocommerce' ) );
+				$errors->add( 'moksafowo_invoice_ubn', __( 'The tax ID format or check digit is not valid.', 'moksa-for-woocommerce' ) );
 			}
 		}
 
 		if ( 'b2c_donate' === $type ) {
 			$code = self::field_value( $data, [ 'moksafowo_invoice_love_code', '_moksafowo/invoice-love-code', 'moksafowo/invoice-love-code' ] );
 			if ( ! preg_match( '/^([xX]\d{2,6}|\d{3,7})$/', $code ) ) {
-				$errors->add( 'moksafowo_invoice_love_code', __( '愛心碼格式錯誤（3-7 碼數字）。', 'moksa-for-woocommerce' ) );
+				$errors->add( 'moksafowo_invoice_love_code', __( 'Invalid love code (it must be 3 to 7 digits).', 'moksa-for-woocommerce' ) );
 			}
 		}
 
@@ -331,10 +331,10 @@ final class InvoiceCheckoutFields {
 				]
 			);
 			if ( 'mobile' === $carrier && ! preg_match( '#^/[0-9A-Z+\-.]{7}$#', $carrier_num ) ) {
-				$errors->add( 'moksafowo_invoice_carrier_mobile', __( '手機條碼格式錯誤（/ 開頭加 7 碼大寫英數）。', 'moksa-for-woocommerce' ) );
+				$errors->add( 'moksafowo_invoice_carrier_mobile', __( 'Invalid mobile barcode (it must start with / followed by 7 uppercase letters or digits).', 'moksa-for-woocommerce' ) );
 			}
 			if ( 'cert' === $carrier && ! preg_match( '/^[A-Z]{2}\d{14}$/', $carrier_num ) ) {
-				$errors->add( 'moksafowo_invoice_carrier_cert', __( '自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。', 'moksa-for-woocommerce' ) );
+				$errors->add( 'moksafowo_invoice_carrier_cert', __( 'Invalid Citizen Digital Certificate (it must be 2 uppercase letters followed by 14 digits).', 'moksa-for-woocommerce' ) );
 			}
 		}
 	}
@@ -425,7 +425,7 @@ final class InvoiceCheckoutFields {
 		woocommerce_register_additional_checkout_field(
 			[
 				'id'       => 'moksafowo/invoice-type',
-				'label'    => __( '發票類型', 'moksa-for-woocommerce' ),
+				'label'    => __( 'Invoice type', 'moksa-for-woocommerce' ),
 				'location' => 'order',
 				'type'     => 'select',
 				'options'  => $type_options,
@@ -435,7 +435,7 @@ final class InvoiceCheckoutFields {
 		woocommerce_register_additional_checkout_field(
 			[
 				'id'       => 'moksafowo/invoice-carrier-type',
-				'label'    => __( '載具類型', 'moksa-for-woocommerce' ),
+				'label'    => __( 'Carrier type', 'moksa-for-woocommerce' ),
 				'location' => 'order',
 				'type'     => 'select',
 				'options'  => $carrier_options,
@@ -449,7 +449,7 @@ final class InvoiceCheckoutFields {
 		woocommerce_register_additional_checkout_field(
 			[
 				'id'         => 'moksafowo/invoice-mobile-barcode',
-				'label'      => __( '手機條碼（/ 開頭 + 7 碼大寫英數）', 'moksa-for-woocommerce' ),
+				'label'      => __( 'Mobile barcode (/ followed by 7 uppercase letters or digits)', 'moksa-for-woocommerce' ),
 				'location'   => 'order',
 				'type'       => 'text',
 				'hidden'     => self::when_carrier_not( 'mobile' ),
@@ -457,14 +457,14 @@ final class InvoiceCheckoutFields {
 				'validation' => [
 					'type'         => 'string',
 					'pattern'      => '^(|/[0-9A-Z+\-.]{7})$',
-					'errorMessage' => __( '手機條碼格式錯誤（/ 開頭加 7 碼大寫英數）。', 'moksa-for-woocommerce' ),
+					'errorMessage' => __( 'Invalid mobile barcode (it must start with / followed by 7 uppercase letters or digits).', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
 		woocommerce_register_additional_checkout_field(
 			[
 				'id'         => 'moksafowo/invoice-cert-code',
-				'label'      => __( '自然人憑證（2 大寫字母 + 14 碼數字）', 'moksa-for-woocommerce' ),
+				'label'      => __( 'Citizen Digital Certificate (2 uppercase letters followed by 14 digits)', 'moksa-for-woocommerce' ),
 				'location'   => 'order',
 				'type'       => 'text',
 				'hidden'     => self::when_carrier_not( 'cert' ),
@@ -472,7 +472,7 @@ final class InvoiceCheckoutFields {
 				'validation' => [
 					'type'         => 'string',
 					'pattern'      => '^(|[A-Z]{2}\d{14})$',
-					'errorMessage' => __( '自然人憑證格式錯誤（2 大寫字母 + 14 碼數字）。', 'moksa-for-woocommerce' ),
+					'errorMessage' => __( 'Invalid Citizen Digital Certificate (it must be 2 uppercase letters followed by 14 digits).', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -480,7 +480,7 @@ final class InvoiceCheckoutFields {
 			woocommerce_register_additional_checkout_field(
 				[
 					'id'                => 'moksafowo/invoice-buyer-ubn',
-					'label'             => __( '統一編號', 'moksa-for-woocommerce' ),
+					'label'             => __( 'Tax ID', 'moksa-for-woocommerce' ),
 					'location'          => 'order',
 					'type'              => 'text',
 					'hidden'            => self::when_type_not( 'b2b' ),
@@ -491,7 +491,7 @@ final class InvoiceCheckoutFields {
 			woocommerce_register_additional_checkout_field(
 				[
 					'id'       => 'moksafowo/invoice-buyer-name',
-					'label'    => __( '公司名稱', 'moksa-for-woocommerce' ),
+					'label'    => __( 'Company name', 'moksa-for-woocommerce' ),
 					'location' => 'order',
 					'type'     => 'text',
 					'hidden'   => self::when_type_not( 'b2b' ),
@@ -505,7 +505,7 @@ final class InvoiceCheckoutFields {
 				woocommerce_register_additional_checkout_field(
 					[
 						'id'       => 'moksafowo/invoice-donate-org',
-						'label'    => __( '捐贈單位', 'moksa-for-woocommerce' ),
+						'label'    => __( 'Charities', 'moksa-for-woocommerce' ),
 						'location' => 'order',
 						'type'     => 'select',
 						'options'  => InvoiceChannels::donate_block_options( $prefix ),
@@ -517,7 +517,7 @@ final class InvoiceCheckoutFields {
 			woocommerce_register_additional_checkout_field(
 				[
 					'id'                => 'moksafowo/invoice-love-code',
-					'label'             => __( '捐贈碼', 'moksa-for-woocommerce' ),
+					'label'             => __( 'Donation code', 'moksa-for-woocommerce' ),
 					'location'          => 'order',
 					'type'              => 'text',
 					'hidden'            => self::when_type_not( 'b2c_donate' ),

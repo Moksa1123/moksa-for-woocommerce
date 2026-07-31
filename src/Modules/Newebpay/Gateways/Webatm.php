@@ -17,10 +17,10 @@ final class Webatm extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 WebATM 即時轉帳', 'moksa-for-woocommerce' );
+		return __( 'NewebPay WebATM instant transfer', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用網路 ATM 即時轉帳，需備網路銀行金融卡 + 讀卡機。', 'moksa-for-woocommerce' );
+		return __( 'Pay by instant transfer through WebATM, which needs a debit card and a card reader.', 'moksa-for-woocommerce' );
 	}
 }

@@ -17,7 +17,7 @@ final class Issue {
 		if ( '' !== $existing ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單已開立發票。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order already has an invoice.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -25,25 +25,25 @@ final class Issue {
 		if ( '' === $type ) {
 			return [
 				'ok'      => false,
-				'message' => __( '訂單沒設定發票類型。', 'moksa-for-woocommerce' ),
+				'message' => __( 'No invoice type is set on this order.', 'moksa-for-woocommerce' ),
 			];
 		}
 
 		if ( ! Helper::has_credentials() ) {
 			return [
 				'ok'      => false,
-				'message' => __( 'Amego 發票憑證未設定。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The Amego invoice credentials are not set.', 'moksa-for-woocommerce' ),
 			];
 		}
 
 		$total = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded(), 0 );
 		if ( $total <= 0 ) {
 			$order->update_meta_data( Keys::AMEGO_INVOICE_NUMBER, 'zero' );
-			$order->add_order_note( __( '訂單金額為 0 或負，不開立 Amego 發票。', 'moksa-for-woocommerce' ) );
+			$order->add_order_note( __( 'The order total is zero or negative, so no Amego invoice was issued.', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [
 				'ok'      => false,
-				'message' => __( '訂單金額為 0 或負。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The order total is zero or negative.', 'moksa-for-woocommerce' ),
 			];
 		}
 
@@ -65,7 +65,7 @@ final class Issue {
 		if ( ! $resp['ok'] ) {
 			$msg = sprintf(
 				/* translators: 1: error message, 2: code */
-				__( 'Amego 發票開立失敗：%1$s（code %2$d）', 'moksa-for-woocommerce' ),
+				__( 'The Amego invoice could not be issued: %1$s (code %2$d)', 'moksa-for-woocommerce' ),
 				$resp['message'],
 				$resp['code']
 			);
@@ -90,7 +90,7 @@ final class Issue {
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: raw API response text from Amego */
-					__( 'Amego 回應 code=0 但沒帶 invoice_number。原始：%s', 'moksa-for-woocommerce' ),
+					__( 'Amego returned code=0 but no invoice number. Raw response: %s', 'moksa-for-woocommerce' ),
 					$resp['raw']
 				)
 			);
@@ -115,7 +115,7 @@ final class Issue {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: invoice number, 2: random num */
-				__( 'Amego 發票已開立 — 號碼 %1$s 隨機碼 %2$s', 'moksa-for-woocommerce' ),
+				__( 'Amego invoice issued — number %1$s, random code %2$s', 'moksa-for-woocommerce' ),
 				$invoice_no,
 				$random
 			)
@@ -210,7 +210,7 @@ final class Issue {
 		$shipping = (int) round( (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded(), 0 );
 		if ( $shipping > 0 ) {
 			$items[]        = [
-				'Description' => __( '運費', 'moksa-for-woocommerce' ),
+				'Description' => __( 'Shipping', 'moksa-for-woocommerce' ),
 				'Quantity'    => '1',
 				'UnitPrice'   => (string) $shipping,
 				'Amount'      => (string) $shipping,
@@ -224,7 +224,7 @@ final class Issue {
 		if ( $total_taxable !== $total ) {
 			$diff    = $total - $total_taxable;
 			$items[] = [
-				'Description' => $diff >= 0 ? __( '稅費 / 折扣調整', 'moksa-for-woocommerce' ) : __( '折扣調整', 'moksa-for-woocommerce' ),
+				'Description' => $diff >= 0 ? __( 'Tax and discount adjustments', 'moksa-for-woocommerce' ) : __( 'Discount adjustment', 'moksa-for-woocommerce' ),
 				'Quantity'    => '1',
 				'UnitPrice'   => (string) $diff,
 				'Amount'      => (string) $diff,

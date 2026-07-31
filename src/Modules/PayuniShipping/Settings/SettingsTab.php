@@ -25,7 +25,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 		unset( $sections[''] );
 		if ( is_array( $sections ) && ! array_key_exists( 'shipping', $sections ) ) {
-			$sections['shipping'] = __( '物流設定', 'moksa-for-woocommerce' );
+			$sections['shipping'] = __( 'Shipping settings', 'moksa-for-woocommerce' );
 		}
 		return $sections;
 	}
@@ -34,7 +34,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 		if ( 'yes' !== get_option( 'moksafowo_payuni_enabled', 'no' ) ) {
 			$sections = array(
-				'shipping' => __( '物流設定', 'moksa-for-woocommerce' ),
+				'shipping' => __( 'Shipping settings', 'moksa-for-woocommerce' ),
 			);
 			return apply_filters( 'moksafowo_get_sections_' . $this->id, $sections );
 		}
@@ -46,37 +46,37 @@ class SettingsTab extends \WC_Settings_Page {
 			'moksafowo_payuni_shipping_settings',
 			array(
 				array(
-					'title' => __( '基本設定', 'moksa-for-woocommerce' ),
+					'title' => __( 'General settings', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
 					'id'    => 'shipping_general_setting',
 				),
 				array(
-					'title'   => __( 'Debug 日誌', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Debug log', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
 					'desc'    => sprintf(
 						/* translators: %s = view logs link */
-						__( '排查物流單異常時開啟。位置：WooCommerce → 狀態 → 日誌。 %s', 'moksa-for-woocommerce' ),
+						__( 'Turn this on when investigating a problem shipment. The log lives under WooCommerce → Status → Logs. %s', 'moksa-for-woocommerce' ),
 						$this->get_log_link()
 					),
 					'id'      => 'moksafowo_payuni_shipping_debug_log_enabled',
 				),
 				array(
-					'title'    => __( '超商選店畫面排版', 'moksa-for-woocommerce' ),
+					'title'    => __( 'Store picker layout', 'moksa-for-woocommerce' ),
 					'type'     => 'select',
-					'desc_tip' => __( '依結帳頁佈景主題挑選 — 單欄較窄主題建議用，雙欄較寬主題用。', 'moksa-for-woocommerce' ),
+					'desc_tip' => __( 'Pick to suit your theme — one column for narrow checkout layouts, two columns for wider ones.', 'moksa-for-woocommerce' ),
 					'options'  => array(
-						'single_column' => __( '單欄（標題在上、內容在下，建議）', 'moksa-for-woocommerce' ),
-						'two_column'    => __( '雙欄（標題在左、內容在右）', 'moksa-for-woocommerce' ),
+						'single_column' => __( 'One column, label above the value (recommended)', 'moksa-for-woocommerce' ),
+						'two_column'    => __( 'Two columns, label on the left and value on the right', 'moksa-for-woocommerce' ),
 					),
 					'default'  => 'single_column',
 					'id'       => 'moksafowo_payuni_shipping_cvs_selector_layout',
 				),
 				array(
-					'title'   => __( '超商取貨隱藏帳單地址欄位', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Hide the billing address fields for store pickup', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
-					'desc'    => __( '顧客選超商取貨時，自動隱藏結帳頁的縣市 / 鄉鎮 / 郵遞區號 / 地址欄位（門市資訊已替代）。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'When the customer chooses convenience store pickup, hide the city, district, postcode and address fields at checkout, since the store details replace them.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_shipping_hide_billing_address_fields',
 				),
 				array(
@@ -85,18 +85,18 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
-					'title' => __( '寄件人資料', 'moksa-for-woocommerce' ),
+					'title' => __( 'Sender details', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
-					'desc'  => __( '建立物流單時的寄件人資訊。', 'moksa-for-woocommerce' ),
+					'desc'  => __( 'The sender details used when a shipment is created.', 'moksa-for-woocommerce' ),
 					'id'    => 'moksafowo_payuni_shipping_store_settings',
 				),
 				array(
-					'title' => __( '姓名', 'moksa-for-woocommerce' ),
+					'title' => __( 'Name', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_shipping_sender_name',
 				),
 				array(
-					'title' => __( '電話', 'moksa-for-woocommerce' ),
+					'title' => __( 'Phone', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_shipping_sender_phone',
 				),
@@ -106,37 +106,37 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
-					'title' => __( '物流貨態自動更新訂單狀態', 'moksa-for-woocommerce' ),
+					'title' => __( 'Update the order status from tracking events', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
-					'desc'  => __( '物流進度更新時，自動把訂單轉到指定狀態。留空則不變更。', 'moksa-for-woocommerce' ),
+					'desc'  => __( 'Move the order to the chosen status whenever the shipment progresses. Leave blank to make no change.', 'moksa-for-woocommerce' ),
 					'id'    => 'moksafowo_payuni_shipping_shipping_settings',
 				),
 				array(
-					'title'   => __( '7-11 商家出貨：物流中心驗收', 'moksa-for-woocommerce' ),
+					'title'   => __( '7-ELEVEN merchant shipping: accepted at the distribution center', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_logistic_center',
 				),
 				array(
-					'title'   => __( '7-11 個人寄件：賣家門市寄件', 'moksa-for-woocommerce' ),
+					'title'   => __( '7-ELEVEN personal shipping: dropped off at the store by the seller', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_sender_cvs',
 				),
 				array(
-					'title'   => __( '配送中', 'moksa-for-woocommerce' ),
+					'title'   => __( 'In transit', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_delivering',
 				),
 				array(
-					'title'   => __( '到收件門市待取', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Arrived at the pickup store', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_at_receiver_cvs',
 				),
 				array(
-					'title'   => __( '已取貨', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Collected', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => self::moksafowo_payuni_get_order_status(),
 					'id'      => 'moksafowo_payuni_shipping_order_status_pickuped',
@@ -147,34 +147,34 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
-					'title' => __( '黑貓宅配', 'moksa-for-woocommerce' ),
+					'title' => __( 'T-Cat home delivery', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
 					'id'    => 'shipping_TCat_setting',
 				),
 				array(
-					'title'   => __( '配達時段', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Delivery window', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => array(
-						'01' => __( '13:00 前', 'moksa-for-woocommerce' ),
+						'01' => __( 'Before 1 pm', 'moksa-for-woocommerce' ),
 						'02' => __( '14:00 - 18:00', 'moksa-for-woocommerce' ),
-						'04' => __( '不指定', 'moksa-for-woocommerce' ),
+						'04' => __( 'No preference', 'moksa-for-woocommerce' ),
 					),
 					'default' => '04',
 					'id'      => 'moksafowo_payuni_shipping_tcat_delivery_time',
 				),
 				array(
-					'title'   => __( '預計出貨日（列印標籤後 N 天）', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Expected dispatch date, in days after the label is printed', 'moksa-for-woocommerce' ),
 					'type'    => 'number',
 					'default' => 1,
-					'desc'    => __( '預設 1 = 列印標籤後隔天出貨。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'The default of 1 means the parcel ships the day after the label is printed.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_shipping_tcat_estimate_shipping_date',
 				),
 				array(
-					'title'   => __( '超商標籤版型', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Convenience store label format', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => array(
-						'1' => __( 'A4 版型', 'moksa-for-woocommerce' ),
-						'2' => __( '直立式（僅 B2C 適用）', 'moksa-for-woocommerce' ),
+						'1' => __( 'A4', 'moksa-for-woocommerce' ),
+						'2' => __( 'Portrait (B2C only)', 'moksa-for-woocommerce' ),
 					),
 					'id'      => 'moksafowo_payuni_shipping_cvs_label_mode',
 				),
@@ -184,45 +184,45 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
-					'title' => __( '商家憑證', 'moksa-for-woocommerce' ),
+					'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
-					'desc'  => __( '從 PAYUNi 後台「會員專區 → 整合設定」複製過來。跟金流憑證共用同一組。', 'moksa-for-woocommerce' ),
+					'desc'  => __( 'Copy these from the PAYUNi dashboard under Member area → Integration settings. They are the same credentials the payment module uses.', 'moksa-for-woocommerce' ),
 					'id'    => 'moksafowo_payuni_shipping_api_settings',
 				),
 				array(
-					'title'   => __( '啟用測試模式', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'yes',
-					'desc'    => __( '上線前用，勾選後，所有物流單走測試環境不會真出貨。上線後請取消勾選。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. Untick it once you go live.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_shipping_testmode_enabled',
 				),
 				array(
-					'title' => __( '測試 MerchantID', 'moksa-for-woocommerce' ),
+					'title' => __( 'Test merchant ID', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_merchant_id_test',
 				),
 				array(
-					'title' => __( '測試 HashKey', 'moksa-for-woocommerce' ),
+					'title' => __( 'Test hash key', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_hashkey_test',
 				),
 				array(
-					'title' => __( '測試 HashIV', 'moksa-for-woocommerce' ),
+					'title' => __( 'Test hash IV', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_hashiv_test',
 				),
 				array(
-					'title' => __( '正式 MerchantID', 'moksa-for-woocommerce' ),
+					'title' => __( 'Live merchant ID', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_merchant_id',
 				),
 				array(
-					'title' => __( '正式 HashKey', 'moksa-for-woocommerce' ),
+					'title' => __( 'Live hash key', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_hashkey',
 				),
 				array(
-					'title' => __( '正式 HashIV', 'moksa-for-woocommerce' ),
+					'title' => __( 'Live hash IV', 'moksa-for-woocommerce' ),
 					'type'  => 'text',
 					'id'    => 'moksafowo_payuni_payment_hashiv',
 				),
@@ -238,7 +238,7 @@ class SettingsTab extends \WC_Settings_Page {
 
 	private static function moksafowo_payuni_get_order_status() {
 		$order_statuses = array(
-			'' => __( '不變更', 'moksa-for-woocommerce' ),
+			'' => __( 'No change', 'moksa-for-woocommerce' ),
 		);
 
 		foreach ( wc_get_order_statuses() as $slug => $name ) {
@@ -303,6 +303,6 @@ class SettingsTab extends \WC_Settings_Page {
 	}
 
 	protected function get_log_link() {
-		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( '查看日誌', 'moksa-for-woocommerce' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( 'View logs', 'moksa-for-woocommerce' ) . '</a>';
 	}
 }

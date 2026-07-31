@@ -17,11 +17,11 @@ final class ApplePay extends AbstractEcpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '綠界 Apple Pay', 'moksa-for-woocommerce' );
+		return __( 'ECPay Apple Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用 Apple Pay 快速結帳，需 Safari 或支援 Apple Pay 的裝置。', 'moksa-for-woocommerce' );
+		return __( 'Check out quickly with Apple Pay. Requires Safari or a device that supports Apple Pay.', 'moksa-for-woocommerce' );
 	}
 
 	protected function supports_credit_action(): bool {

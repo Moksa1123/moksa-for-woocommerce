@@ -44,7 +44,7 @@ SMILEPAY_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( '速買配付款', 'moksa-for-woocommerce' )
+			settings.title || __( 'SmilePay', 'moksa-for-woocommerce' )
 		),
 		content: <Content />,
 		edit: <Content />,

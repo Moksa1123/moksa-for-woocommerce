@@ -17,10 +17,10 @@ final class LinePay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 LINE Pay', 'moksa-for-woocommerce' );
+		return __( 'NewebPay LINE Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '使用 LINE Pay 付款，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
+		return __( 'Pay with LINE Pay. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
 }

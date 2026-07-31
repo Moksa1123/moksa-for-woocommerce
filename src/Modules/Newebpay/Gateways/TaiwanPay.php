@@ -17,10 +17,10 @@ final class TaiwanPay extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( '藍新 台灣 Pay', 'moksa-for-woocommerce' );
+		return __( 'NewebPay Taiwan Pay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '台灣 Pay QR Code 行動支付，跳轉至藍新付款頁完成。', 'moksa-for-woocommerce' );
+		return __( 'Scan to pay with Taiwan Pay. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
 }

@@ -105,7 +105,7 @@
 			if ( ! ensureSdk() ) {
 				setErrMsg(
 					( data.i18n && data.i18n.sdkError ) ||
-						'TapPay SDK 載入失敗，請重新整理頁面。'
+						'The TapPay SDK failed to load. Please refresh the page.'
 				);
 				return;
 			}
@@ -142,7 +142,7 @@
 			} catch ( e ) {
 				setErrMsg(
 					( data.i18n && data.i18n.sdkError ) ||
-						'TapPay 卡片欄位初始化失敗。'
+						'The TapPay card fields could not be initialised.'
 				);
 			}
 		}, [] );
@@ -162,7 +162,7 @@
 									message:
 										( data.i18n &&
 											data.i18n.sdkError ) ||
-										'TapPay SDK 尚未就緒。',
+										'The TapPay SDK is not ready yet.',
 								} );
 								return;
 							}

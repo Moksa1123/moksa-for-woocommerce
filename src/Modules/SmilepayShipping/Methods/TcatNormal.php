@@ -11,8 +11,8 @@ final class TcatNormal extends AbstractHomeShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_smilepay_shipping_tcat_normal';
-		$this->method_title       = __( '速買配 — 黑貓常溫', 'moksa-for-woocommerce' );
-		$this->method_description = __( 'SmilePay 黑貓宅急便（常溫）。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'SmilePay — T-Cat ambient', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'SmilePay T-Cat delivery (ambient).', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -21,7 +21,7 @@ final class TcatNormal extends AbstractHomeShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '黑貓常溫', 'moksa-for-woocommerce' );
+		return __( 'T-Cat ambient', 'moksa-for-woocommerce' );
 	}
 
 	public function logistics_sub_type(): string {
@@ -33,7 +33,7 @@ final class TcatNormal extends AbstractHomeShippingMethod {
 	}
 
 	public function supported_temperatures(): array {
-		return [ '1' => __( '常溫', 'moksa-for-woocommerce' ) ];
+		return [ '1' => __( 'Ambient', 'moksa-for-woocommerce' ) ];
 	}
 
 	public function supported_package_specs(): array {

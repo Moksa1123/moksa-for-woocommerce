@@ -9,8 +9,8 @@ defined( 'ABSPATH' ) || exit;
 final class EmailCvsArrived extends AbstractShippingEmail {
 
 	public function __construct() {
-		$this->title       = __( '物流：包裹到店通知', 'moksa-for-woocommerce' );
-		$this->description = __( '包裹送達超商門市時寄給顧客（含店名 + 代號 + 取件期限）。', 'moksa-for-woocommerce' );
+		$this->title       = __( 'Shipping: parcel arrived at store', 'moksa-for-woocommerce' );
+		$this->description = __( 'Sent to the customer when the parcel reaches the convenience store, including the store name, store number and collection deadline.', 'moksa-for-woocommerce' );
 		parent::__construct();
 	}
 
@@ -19,10 +19,10 @@ final class EmailCvsArrived extends AbstractShippingEmail {
 	}
 
 	public function get_default_subject(): string {
-		return __( '您的包裹已送達 {store_name}（訂單 #{order_number}）', 'moksa-for-woocommerce' );
+		return __( 'Your parcel has arrived at {store_name} (order #{order_number})', 'moksa-for-woocommerce' );
 	}
 
 	public function get_default_heading(): string {
-		return __( '包裹已到店待取', 'moksa-for-woocommerce' );
+		return __( 'Parcel ready for pickup', 'moksa-for-woocommerce' );
 	}
 }

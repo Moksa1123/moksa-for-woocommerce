@@ -229,7 +229,7 @@ final class WebhookHandler {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: payment method */
-						__( 'Shopline Payments 付款完成（%s）。', 'moksa-for-woocommerce' ),
+						__( 'The Shopline Payments payment completed (%s).', 'moksa-for-woocommerce' ),
 						(string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ?: $type
 					)
 				);
@@ -240,8 +240,8 @@ final class WebhookHandler {
 					'failed',
 					sprintf(
 						/* translators: %s: sub status */
-						__( 'Shopline Payments 付款失敗（%s）。', 'moksa-for-woocommerce' ),
-						(string) $order->get_meta( Keys::SLP_SUB_STATUS ) ?: __( '未提供原因', 'moksa-for-woocommerce' )
+						__( 'The Shopline Payments payment failed (%s).', 'moksa-for-woocommerce' ),
+						(string) $order->get_meta( Keys::SLP_SUB_STATUS ) ?: __( 'No reason given', 'moksa-for-woocommerce' )
 					)
 				);
 				break;
@@ -249,7 +249,7 @@ final class WebhookHandler {
 			case 'trade.expired':
 			case 'session.expired':
 				if ( ! $order->is_paid() ) {
-					$order->update_status( 'cancelled', __( 'Shopline Payments 交易逾時未完成。', 'moksa-for-woocommerce' ) );
+					$order->update_status( 'cancelled', __( 'The Shopline Payments transaction expired before it completed.', 'moksa-for-woocommerce' ) );
 				}
 				break;
 
@@ -257,21 +257,21 @@ final class WebhookHandler {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: refund order id */
-						__( 'Shopline Payments 退款成功（退款編號 %s）。', 'moksa-for-woocommerce' ),
-						(string) $order->get_meta( Keys::SLP_REFUND_ORDER_ID ) ?: __( '無編號', 'moksa-for-woocommerce' )
+						__( 'Shopline Payments refunded the payment (refund number %s).', 'moksa-for-woocommerce' ),
+						(string) $order->get_meta( Keys::SLP_REFUND_ORDER_ID ) ?: __( 'No number', 'moksa-for-woocommerce' )
 					)
 				);
 				break;
 
 			case 'trade.refund.failed':
-				$order->add_order_note( __( 'Shopline Payments 退款失敗 — 請至 SLP 後台確認。', 'moksa-for-woocommerce' ) );
+				$order->add_order_note( __( 'The Shopline Payments refund failed. Please check the Shopline Payments dashboard.', 'moksa-for-woocommerce' ) );
 				break;
 
 			case 'session.created':
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: event type */
-						__( 'Shopline Payments 通知：%s', 'moksa-for-woocommerce' ),
+						__( 'Shopline Payments notification: %s', 'moksa-for-woocommerce' ),
 						$type
 					)
 				);
@@ -281,7 +281,7 @@ final class WebhookHandler {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: event type */
-						__( 'Shopline Payments 通知：%s', 'moksa-for-woocommerce' ),
+						__( 'Shopline Payments notification: %s', 'moksa-for-woocommerce' ),
 						$type
 					)
 				);

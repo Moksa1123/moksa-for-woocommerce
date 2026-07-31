@@ -57,7 +57,7 @@ PAYUNI_IDS.forEach( ( id ) => {
 		name: settings.name,
 		label: <Label />,
 		ariaLabel: decodeEntities(
-			settings.title || __( 'PAYUNi 付款', 'moksa-for-woocommerce' )
+			settings.title || __( 'PAYUNi', 'moksa-for-woocommerce' )
 		),
 		content: <Content />,
 		edit: <Content />,

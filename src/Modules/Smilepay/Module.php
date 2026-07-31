@@ -14,26 +14,26 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'SmilePay 速買配 — 信用卡 / 分期 / ATM / 超商條碼 / ibon / FamiPort / 銀聯', 'moksa-for-woocommerce' );
+		return __( 'SmilePay — credit card, instalments, ATM, convenience store barcode, ibon, FamiPort and UnionPay', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'SmilePay 速買配', 'moksa-for-woocommerce' );
+		return __( 'SmilePay', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 信用卡分期 / ATM / 四大超商條碼 / ibon / FamiPort / 銀聯', 'moksa-for-woocommerce' );
+		return __( 'Credit card, instalments, ATM, convenience store barcode, ibon, FamiPort and UnionPay', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( '信用卡分期', 'moksa-for-woocommerce' ),
-			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
-			__( '四大超商條碼', 'moksa-for-woocommerce' ),
-			__( 'ibon 代碼繳費', 'moksa-for-woocommerce' ),
-			__( 'FamiPort 代碼繳費', 'moksa-for-woocommerce' ),
-			__( '銀聯線上刷卡', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'Credit card instalments', 'moksa-for-woocommerce' ),
+			__( 'ATM virtual account', 'moksa-for-woocommerce' ),
+			__( 'Convenience store barcode', 'moksa-for-woocommerce' ),
+			__( 'ibon code', 'moksa-for-woocommerce' ),
+			__( 'FamiPort code', 'moksa-for-woocommerce' ),
+			__( 'UnionPay', 'moksa-for-woocommerce' ),
 		];
 	}
 

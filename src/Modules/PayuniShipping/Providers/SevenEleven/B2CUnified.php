@@ -17,8 +17,8 @@ final class B2CUnified extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = self::ID;
-		$this->method_title       = __( 'PAYUNi — 7-11 大宗超商取貨（多溫層）', 'moksa-for-woocommerce' );
-		$this->method_description = __( 'PAYUNi 7-11 大宗超商取貨，支援常溫 / 冷凍。7-11 不提供冷藏配送，冷藏商品以常溫方式運送。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi — 7-ELEVEN bulk store pickup (mixed temperature zones)', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'PAYUNi 7-ELEVEN bulk store pickup, for ambient and frozen goods. 7-ELEVEN does not offer chilled delivery, so chilled products travel at ambient temperature.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -55,8 +55,8 @@ final class B2CUnified extends AbstractCvsShippingMethod {
 
 	public function supported_temperatures(): array {
 		return [
-			ProductTemp::NORMAL => __( '常溫', 'moksa-for-woocommerce' ),
-			ProductTemp::FROZEN => __( '冷凍', 'moksa-for-woocommerce' ),
+			ProductTemp::NORMAL => __( 'Ambient', 'moksa-for-woocommerce' ),
+			ProductTemp::FROZEN => __( 'Frozen', 'moksa-for-woocommerce' ),
 		];
 	}
 }

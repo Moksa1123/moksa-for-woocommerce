@@ -30,12 +30,12 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::PCHOMEPAY_BANK_CODE );
 			if ( '' !== $bank ) {
 				$rows[] = [
-					'label' => __( '銀行代碼', 'moksa-for-woocommerce' ),
+					'label' => __( 'Bank code', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
-				'label' => __( '虛擬帳號', 'moksa-for-woocommerce' ),
+				'label' => __( 'Virtual account', 'moksa-for-woocommerce' ),
 				'value' => $virtual_account,
 			];
 			return self::append_expire( $order, $rows );
@@ -46,7 +46,7 @@ final class CustomerPaymentInfo {
 				$order,
 				[
 					[
-						'label' => __( '超商繳費代碼', 'moksa-for-woocommerce' ),
+						'label' => __( 'Convenience store payment code', 'moksa-for-woocommerce' ),
 						'value' => $pincode,
 					],
 				]
@@ -60,7 +60,7 @@ final class CustomerPaymentInfo {
 				if ( '' !== $bc ) {
 					$rows[] = [
 						/* translators: %d: barcode segment index */
-						'label' => sprintf( __( '條碼第 %d 段', 'moksa-for-woocommerce' ), $i + 1 ),
+						'label' => sprintf( __( 'Barcode segment %d', 'moksa-for-woocommerce' ), $i + 1 ),
 						'value' => $bc,
 					];
 				}
@@ -82,7 +82,7 @@ final class CustomerPaymentInfo {
 			$exp = "{$m[1]}/{$m[2]}/{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}";
 		}
 		$rows[] = [
-			'label' => __( '繳費期限', 'moksa-for-woocommerce' ),
+			'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 			'value' => $exp,
 		];
 		return $rows;

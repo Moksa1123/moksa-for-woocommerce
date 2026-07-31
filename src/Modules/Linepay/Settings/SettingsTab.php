@@ -25,7 +25,7 @@ class SettingsTab extends WC_Settings_Page {
 	public function get_sections() {
 
 		$sections = array(
-			'' => __( '付款設定', 'moksa-for-woocommerce' ),
+			'' => __( 'Payment settings', 'moksa-for-woocommerce' ),
 		);
 
 		return apply_filters( 'moksafowo_get_sections_' . $this->id, $sections );
@@ -38,41 +38,41 @@ class SettingsTab extends WC_Settings_Page {
 			'moksafowo_linepay_payment_settings',
 			array(
 				array(
-					'title' => __( '一般', 'moksa-for-woocommerce' ),
+					'title' => __( 'General', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
 					'id'    => 'moksafowo_linepay_general_setting',
 				),
 				array(
-					'title'   => __( '偵錯日誌', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Debug log', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
 					'desc'    => sprintf(
 						/* translators: %s = view logs link */
-						__( '排查訂單異常時開啟。位置：WooCommerce → 狀態 → 日誌。 %s', 'moksa-for-woocommerce' ),
+						__( 'Turn this on when investigating a problem order. The log lives under WooCommerce → Status → Logs. %s', 'moksa-for-woocommerce' ),
 						$this->get_log_link()
 					),
 					'id'      => 'moksafowo_linepay_debug_log_enabled',
 				),
 				array(
-					'title'   => __( '結帳頁顯示 LINE Pay 圖示', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Show the LINE Pay logo at checkout', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
-					'desc'    => __( '顯示官方 LINE Pay logo 在結帳頁的付款方式選項旁。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'Show the official LINE Pay logo next to the payment method at checkout.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_linepay_display_logo_enabled',
 				),
 				array(
-					'title'   => __( '付款失敗時改成什麼狀態', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Status after a failed payment', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
 					'options' => wc_get_order_statuses(),
-					'desc'    => __( '顧客 LINE Pay 付款失敗時，訂單自動轉成這個狀態。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'The order moves to this status when a LINE Pay payment fails.', 'moksa-for-woocommerce' ),
 					'default' => 'wc-failed',
 					'id'      => 'moksafowo_linepay_payment_fail_order_status',
 				),
 				array(
-					'title'   => __( '詳細狀態加進訂單備註', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Add detailed status to order notes', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
-					'desc'    => __( '把每次 LINE Pay 回傳的詳細狀態寫進訂單備註（測試 / 排查時開啟，正式環境關閉避免備註過多）。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'Write every status LINE Pay returns into the order notes. Handy while testing, but worth turning off in production to keep the notes readable.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_linepay_detail_status_note_enabled',
 				),
 				array(
@@ -80,38 +80,38 @@ class SettingsTab extends WC_Settings_Page {
 					'id'   => 'moksafowo_linepay_general_setting',
 				),
 				array(
-					'title' => __( '商家憑證', 'moksa-for-woocommerce' ),
+					'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
-					'desc'  => __( '從 LINE Pay 商家後台「管理者中心 → 連結金鑰管理」複製過來。', 'moksa-for-woocommerce' ),
+					'desc'  => __( 'Copy these from the LINE Pay merchant dashboard under Admin center → Link key management.', 'moksa-for-woocommerce' ),
 					'id'    => 'moksafowo_linepay_api_settings',
 				),
 				array(
-					'title'   => __( '啟用測試模式', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
 					'default' => 'no',
-					'desc'    => __( '勾選後，所有交易走 LINE Pay 測試環境不會真扣款。上線後請取消勾選。', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'While this is ticked every transaction runs against the LINE Pay test environment and no money changes hands. Untick it once you go live.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_linepay_sandboxmode_enabled',
 				),
 				array(
-					'title'   => __( '測試 Channel ID', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Test channel ID', 'moksa-for-woocommerce' ),
 					'type'    => 'text',
 					'default' => '',
 					'id'      => 'moksafowo_linepay_sandbox_channel_id',
 				),
 				array(
-					'title'   => __( '測試 Channel Secret', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Test channel secret', 'moksa-for-woocommerce' ),
 					'type'    => 'text',
 					'default' => '',
 					'id'      => 'moksafowo_linepay_sandbox_channel_secret',
 				),
 				array(
-					'title'   => __( '正式 Channel ID', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Live channel ID', 'moksa-for-woocommerce' ),
 					'type'    => 'text',
 					'default' => '',
 					'id'      => 'moksafowo_linepay_channel_id',
 				),
 				array(
-					'title'   => __( '正式 Channel Secret', 'moksa-for-woocommerce' ),
+					'title'   => __( 'Live channel secret', 'moksa-for-woocommerce' ),
 					'type'    => 'text',
 					'default' => '',
 					'id'      => 'moksafowo_linepay_channel_secret',
@@ -139,6 +139,6 @@ class SettingsTab extends WC_Settings_Page {
 	}
 
 	protected function get_log_link(): string {
-		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( '查看日誌', 'moksa-for-woocommerce' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ) . '">' . __( 'View logs', 'moksa-for-woocommerce' ) . '</a>';
 	}
 }

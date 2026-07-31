@@ -127,7 +127,7 @@ final class PaymentRequest {
 		if ( ! is_array( $decoded ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '藍新查詢回傳格式錯誤', 'moksa-for-woocommerce' ),
+				'message' => __( 'The NewebPay lookup returned an unexpected format', 'moksa-for-woocommerce' ),
 			];
 		}
 		Helper::log(

@@ -58,11 +58,11 @@ final class ProductTempField {
 		foreach ( $cols as $k => $v ) {
 			$new_cols[ $k ] = $v;
 			if ( $k === $insert_after ) {
-				$new_cols['moksafowo_product_temp'] = __( '溫層', 'moksa-for-woocommerce' );
+				$new_cols['moksafowo_product_temp'] = __( 'Temperature zone', 'moksa-for-woocommerce' );
 			}
 		}
 		if ( ! isset( $new_cols['moksafowo_product_temp'] ) ) {
-			$new_cols['moksafowo_product_temp'] = __( '溫層', 'moksa-for-woocommerce' );
+			$new_cols['moksafowo_product_temp'] = __( 'Temperature zone', 'moksa-for-woocommerce' );
 		}
 		return $new_cols;
 	}
@@ -91,7 +91,7 @@ final class ProductTempField {
 			$title = '';
 		} else {
 			$style = 'background:transparent;color:#8c8f94;border:1px dashed #c3c4c7;';
-			$title = esc_attr__( '未明確設定 — cart 階段預設為常溫', 'moksa-for-woocommerce' );
+			$title = esc_attr__( 'Not set — treated as ambient in the cart', 'moksa-for-woocommerce' );
 		}
 		printf(
 			'<span class="moksafowo-product-temp-pill%s" data-temp="%d" title="%s" style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;line-height:1.5;white-space:nowrap;%s">%s</span>',
@@ -110,7 +110,7 @@ final class ProductTempField {
 		}
 		$current = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
 		echo '<select name="moksafowo_product_temp_filter" id="moksafowo_product_temp_filter">';
-		echo '<option value="">' . esc_html__( '所有溫層', 'moksa-for-woocommerce' ) . '</option>';
+		echo '<option value="">' . esc_html__( 'All temperature zones', 'moksa-for-woocommerce' ) . '</option>';
 		foreach ( ProductTemp::options( false ) as $value => $label ) {
 			printf(
 				'<option value="%d"%s>%s</option>',
@@ -119,7 +119,7 @@ final class ProductTempField {
 				esc_html( $label )
 			);
 		}
-		echo '<option value="unset"' . selected( $current, 'unset', false ) . '>' . esc_html__( '未明確設定（預設常溫）', 'moksa-for-woocommerce' ) . '</option>';
+		echo '<option value="unset"' . selected( $current, 'unset', false ) . '>' . esc_html__( 'Not set (defaults to ambient)', 'moksa-for-woocommerce' ) . '</option>';
 		echo '</select>';
 	}
 
@@ -167,7 +167,7 @@ final class ProductTempField {
 	public static function render_wc_quick_edit_field(): void {
 		?>
 		<label class="alignleft moksafowo-product-temp-field-quick">
-			<span class="title"><?php esc_html_e( '物流溫層', 'moksa-for-woocommerce' ); ?></span>
+			<span class="title"><?php esc_html_e( 'Shipping temperature zone', 'moksa-for-woocommerce' ); ?></span>
 			<span class="input-text-wrap">
 				<select name="moksafowo_product_temp" class="moksafowo-product-temp-select">
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
@@ -183,10 +183,10 @@ final class ProductTempField {
 	public static function render_wc_bulk_edit_field(): void {
 		?>
 		<label class="alignleft moksafowo-product-temp-field-bulk">
-			<span class="title"><?php esc_html_e( '物流溫層', 'moksa-for-woocommerce' ); ?></span>
+			<span class="title"><?php esc_html_e( 'Shipping temperature zone', 'moksa-for-woocommerce' ); ?></span>
 			<span class="input-text-wrap">
 				<select name="moksafowo_product_temp_bulk">
-					<option value=""><?php esc_html_e( '— 不變更 —', 'moksa-for-woocommerce' ); ?></option>
+					<option value=""><?php esc_html_e( '— No change —', 'moksa-for-woocommerce' ); ?></option>
 					<?php foreach ( ProductTemp::options( false ) as $val => $label ) : ?>
 						<option value="<?php echo esc_attr( (string) (int) $val ); ?>"><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
@@ -267,7 +267,7 @@ final class ProductTempField {
 	/* ============== CSV import / export ============== */
 
 	public static function csv_add_column( array $columns ): array {
-		$columns['moksafowo_product_temp'] = __( '物流溫層', 'moksa-for-woocommerce' );
+		$columns['moksafowo_product_temp'] = __( 'Shipping temperature zone', 'moksa-for-woocommerce' );
 		return $columns;
 	}
 
@@ -284,7 +284,7 @@ final class ProductTempField {
 	}
 
 	public static function csv_import_mapping_options( array $options ): array {
-		$options['moksafowo_product_temp'] = __( '物流溫層', 'moksa-for-woocommerce' );
+		$options['moksafowo_product_temp'] = __( 'Shipping temperature zone', 'moksa-for-woocommerce' );
 		return $options;
 	}
 
@@ -367,8 +367,8 @@ final class ProductTempField {
 		woocommerce_wp_select(
 			[
 				'id'            => Keys::PRODUCT_TEMP,
-				'label'         => __( '物流溫層', 'moksa-for-woocommerce' ),
-				'description'   => __( '此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物流單時會獨立成單，供需要分艙運送的物流業者使用。', 'moksa-for-woocommerce' ),
+				'label'         => __( 'Shipping temperature zone', 'moksa-for-woocommerce' ),
+				'description'   => __( 'The temperature compartment this product ships in. Chilled and frozen products get their own shipment when labels are created, for carriers that require separate compartments.', 'moksa-for-woocommerce' ),
 				'desc_tip'      => true,
 				'wrapper_class' => 'moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( false ) ),
@@ -401,8 +401,8 @@ final class ProductTempField {
 				'id'            => 'moksafowo_product_temp_' . $loop,
 				'name'          => 'moksafowo_product_temp[' . $loop . ']',
 				'value'         => $current,
-				'label'         => __( '物流溫層', 'moksa-for-woocommerce' ),
-				'description'   => __( '空 / 繼承 = 跟父商品設定走。', 'moksa-for-woocommerce' ),
+				'label'         => __( 'Shipping temperature zone', 'moksa-for-woocommerce' ),
+				'description'   => __( 'Empty or Inherit means the parent product setting is used.', 'moksa-for-woocommerce' ),
 				'desc_tip'      => true,
 				'wrapper_class' => 'form-row form-row-full moksafowo-product-temp-field',
 				'options'       => self::stringify_options( ProductTemp::options( true ) ),

@@ -99,7 +99,7 @@ class ShippingRequest {
 		}
 
 		if ( empty( $order->get_meta( OrderMeta::ShipType ) ) ) {
-			$order->add_order_note( __( 'PAYUNi 物流類型未設定', 'moksa-for-woocommerce' ) );
+			$order->add_order_note( __( 'The PAYUNi shipping type is not set', 'moksa-for-woocommerce' ) );
 			return;
 		}
 
@@ -125,7 +125,7 @@ class ShippingRequest {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: PAYUNi status code, 2: error message */
-						__( 'PAYUNi 建立物流單失敗：%1$s（%2$s）', 'moksa-for-woocommerce' ),
+						__( 'PAYUNi could not create the shipment: %1$s (%2$s)', 'moksa-for-woocommerce' ),
 						(string) ( $resp_info['Status'] ?? '' ),
 						(string) ( $resp_info['Message'] ?? '' )
 					)
@@ -149,11 +149,11 @@ class ShippingRequest {
 			$order->save();
 
 			/* translators: %s: PAYUNi ship trade number */
-			$order->add_order_note( sprintf( __( 'PAYUNi 物流單建立成功（物流單號 %s）', 'moksa-for-woocommerce' ), $resp_info['ShipTradeNo'] ) );
+			$order->add_order_note( sprintf( __( 'PAYUNi shipment created, tracking number %s', 'moksa-for-woocommerce' ), $resp_info['ShipTradeNo'] ) );
 
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		} catch ( \Exception $e ) {
-			PayuniShipping::log( __( 'PAYUNi 建立物流單失敗：', 'moksa-for-woocommerce' ) . ' ' . $e->getMessage(), 'error' );
+			PayuniShipping::log( __( 'PAYUNi could not create the shipment:', 'moksa-for-woocommerce' ) . ' ' . $e->getMessage(), 'error' );
 		}
 	}
 
@@ -202,7 +202,7 @@ class ShippingRequest {
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: status, 2: lgs status code, 3: description */
-				__( 'PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s', 'moksa-for-woocommerce' ),
+				__( 'PAYUNi tracking result: %1$s — %2$s %3$s', 'moksa-for-woocommerce' ),
 				(string) ( $resp_info['Status'] ?? '' ),
 				(string) ( $resp_info['LgsStatus'] ?? $resp_info['LgsType'] ?? '' ),
 				(string) ( $resp_info['Message'] ?? '' )
@@ -284,7 +284,7 @@ class ShippingRequest {
 		);
 		$spec_label  = isset( $spec_labels[ $package_spec ] ) ? $spec_labels[ $package_spec ] : $package_spec;
 		/* translators: %s: package spec label (e.g. 60cm / 90cm) */
-		$order->add_order_note( sprintf( __( '包裹規格已更新為：%s', 'moksa-for-woocommerce' ), $spec_label ) );
+		$order->add_order_note( sprintf( __( 'The parcel size is now %s', 'moksa-for-woocommerce' ), $spec_label ) );
 
 		$return = array(
 			'success' => true,
@@ -388,7 +388,7 @@ class ShippingRequest {
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php esc_html_e( '正在送出列印請求…', 'moksa-for-woocommerce' ); ?></title>
+		<title><?php esc_html_e( 'Sending the print request…', 'moksa-for-woocommerce' ); ?></title>
 	</head>
 	<body>
 		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
@@ -396,7 +396,7 @@ class ShippingRequest {
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
 			<noscript>
-				<button type="submit"><?php esc_html_e( '送出', 'moksa-for-woocommerce' ); ?></button>
+				<button type="submit"><?php esc_html_e( 'Send', 'moksa-for-woocommerce' ); ?></button>
 			</noscript>
 		</form>
 			<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
@@ -443,7 +443,7 @@ class ShippingRequest {
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php esc_html_e( '正在送出列印請求…', 'moksa-for-woocommerce' ); ?></title>
+		<title><?php esc_html_e( 'Sending the print request…', 'moksa-for-woocommerce' ); ?></title>
 	</head>
 	<body>
 		<form id="moksafowo-payuni-print-label-form" action="<?php echo esc_url( $api_url ); ?>" method="post">
@@ -451,7 +451,7 @@ class ShippingRequest {
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 			<?php endforeach; ?>
 			<noscript>
-				<button type="submit"><?php esc_html_e( '送出', 'moksa-for-woocommerce' ); ?></button>
+				<button type="submit"><?php esc_html_e( 'Send', 'moksa-for-woocommerce' ); ?></button>
 			</noscript>
 		</form>
 			<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-payuni-print-label-form").submit();' ); ?>
@@ -525,8 +525,8 @@ class ShippingRequest {
 		$forms_html .= '</form>';
 
 		Interstitial::render(
-			__( '下載物流標籤', 'moksa-for-woocommerce' ),
-			__( '正在下載 PAYUNi 物流標籤…', 'moksa-for-woocommerce' ),
+			__( 'Download shipping label', 'moksa-for-woocommerce' ),
+			__( 'Downloading the PAYUNi shipping label…', 'moksa-for-woocommerce' ),
 			[],
 			$forms_html,
 			'document.getElementById("moksafowo-payuni-print-label-form").submit();'
@@ -561,7 +561,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'PAYUNi 建立物流單失敗：', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( __( 'PAYUNi could not create the shipment:', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
 			PayuniShipping::log( 'Create PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}
@@ -596,7 +596,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'PAYUNi 物流單查詢失敗：', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( __( 'The PAYUNi shipment lookup failed:', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
 			PayuniShipping::log( 'Query PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}

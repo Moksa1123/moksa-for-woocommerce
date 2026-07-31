@@ -11,8 +11,8 @@ final class Cvs extends AbstractCvsShippingMethod {
 
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_newebpay_shipping_cvs';
-		$this->method_title       = __( '藍新 — 超商取貨', 'moksa-for-woocommerce' );
-		$this->method_description = __( '藍新超商取貨。建議搭配藍新超商代碼付款，可於同一流程選擇取貨門市。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'NewebPay — convenience store pickup', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'NewebPay convenience store pickup. It pairs well with the NewebPay convenience store code, which lets the customer pick the store in the same flow.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -21,6 +21,6 @@ final class Cvs extends AbstractCvsShippingMethod {
 	}
 
 	public function carrier_label(): string {
-		return __( '藍新 超商', 'moksa-for-woocommerce' );
+		return __( 'NewebPay convenience store', 'moksa-for-woocommerce' );
 	}
 }

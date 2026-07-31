@@ -14,36 +14,36 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( '藍新金流 — 信用卡 / 信用卡分期 / ATM / WebATM / 超商代碼 / 超商條碼', 'moksa-for-woocommerce' );
+		return __( 'NewebPay payments — credit card, credit card instalments, ATM, WebATM, convenience store code and barcode', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( '藍新金流', 'moksa-for-woocommerce' );
+		return __( 'NewebPay payments', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / ATM / 超商 / 行動支付 / 分期後付', 'moksa-for-woocommerce' );
+		return __( 'Credit card, ATM, convenience store, mobile payments, instalments and pay later', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( '信用卡分期', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'Credit card instalments', 'moksa-for-woocommerce' ),
 			__( 'ATM', 'moksa-for-woocommerce' ),
 			__( 'WebATM', 'moksa-for-woocommerce' ),
-			__( '超商代碼', 'moksa-for-woocommerce' ),
-			__( '超商條碼', 'moksa-for-woocommerce' ),
+			__( 'Convenience store code', 'moksa-for-woocommerce' ),
+			__( 'Convenience store barcode', 'moksa-for-woocommerce' ),
 			__( 'Apple Pay', 'moksa-for-woocommerce' ),
 			__( 'Google Pay', 'moksa-for-woocommerce' ),
 			__( 'Samsung Pay', 'moksa-for-woocommerce' ),
 			__( 'LINE Pay', 'moksa-for-woocommerce' ),
-			__( '玉山 Wallet', 'moksa-for-woocommerce' ),
-			__( '台灣 Pay', 'moksa-for-woocommerce' ),
+			__( 'E.SUN Wallet', 'moksa-for-woocommerce' ),
+			__( 'Taiwan Pay', 'moksa-for-woocommerce' ),
 			__( 'TWQR', 'moksa-for-woocommerce' ),
-			__( '支付寶', 'moksa-for-woocommerce' ),
-			__( '微信支付', 'moksa-for-woocommerce' ),
-			__( 'AFTEE 無卡分期', 'moksa-for-woocommerce' ),
-			__( '銀聯卡', 'moksa-for-woocommerce' ),
+			__( 'Alipay', 'moksa-for-woocommerce' ),
+			__( 'WeChat Pay', 'moksa-for-woocommerce' ),
+			__( 'AFTEE buy now, pay later', 'moksa-for-woocommerce' ),
+			__( 'UnionPay', 'moksa-for-woocommerce' ),
 		];
 	}
 

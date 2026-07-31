@@ -12,26 +12,26 @@ use PHPUnit\Framework\TestCase;
 final class PaymentTypeCatalogsTest extends TestCase {
 
 	public function test_ecpay_known_label(): void {
-		self::assertSame( '信用卡 — 一次付清', EcpayCatalog::label( 'Credit_CreditCard' ) );
-		self::assertSame( '超商代碼繳費', EcpayCatalog::label( 'CVS_CVS' ) );
+		self::assertSame( 'Credit card — pay in full', EcpayCatalog::label( 'Credit_CreditCard' ) );
+		self::assertSame( 'Convenience store code payment', EcpayCatalog::label( 'CVS_CVS' ) );
 	}
 
 	public function test_ecpay_prefix_fallback(): void {
 		// 未列舉的銀行落到大類別前綴
-		self::assertSame( 'ATM 虛擬帳號', EcpayCatalog::label( 'ATM_UNKNOWN_BANK' ) );
-		self::assertSame( '網路 ATM', EcpayCatalog::label( 'WebATM_UNKNOWN' ) );
-		self::assertSame( '無卡分期', EcpayCatalog::label( 'BNPL_NEW_PARTNER' ) );
+		self::assertSame( 'ATM virtual account', EcpayCatalog::label( 'ATM_UNKNOWN_BANK' ) );
+		self::assertSame( 'WebATM', EcpayCatalog::label( 'WebATM_UNKNOWN' ) );
+		self::assertSame( 'Buy now, pay later', EcpayCatalog::label( 'BNPL_NEW_PARTNER' ) );
 	}
 
 	public function test_ecpay_empty_returns_default(): void {
-		self::assertSame( '綠界', EcpayCatalog::label( '' ) );
+		self::assertSame( 'ECPay', EcpayCatalog::label( '' ) );
 		self::assertSame( 'custom', EcpayCatalog::label( '', 'custom' ) );
 	}
 
 	public function test_newebpay_known_label(): void {
-		self::assertSame( '信用卡', NewebpayCatalog::label( 'CREDIT' ) );
+		self::assertSame( 'Credit card', NewebpayCatalog::label( 'CREDIT' ) );
 		self::assertSame( 'LINE Pay', NewebpayCatalog::label( 'LINEPAY' ) );
-		self::assertSame( 'AFTEE 無卡分期', NewebpayCatalog::label( 'AFTEE' ) );
+		self::assertSame( 'AFTEE buy now, pay later', NewebpayCatalog::label( 'AFTEE' ) );
 	}
 
 	public function test_newebpay_unknown_with_fallback(): void {
@@ -40,20 +40,20 @@ final class PaymentTypeCatalogsTest extends TestCase {
 	}
 
 	public function test_paynow_known_codes(): void {
-		self::assertSame( '信用卡', PaynowCatalog::label( '01' ) );
-		self::assertSame( 'ATM 虛擬帳號', PaynowCatalog::label( '03' ) );
-		self::assertSame( '銀聯卡', PaynowCatalog::label( '09' ) );
-		self::assertSame( '信用卡分期', PaynowCatalog::label( '11' ) );
+		self::assertSame( 'Credit card', PaynowCatalog::label( '01' ) );
+		self::assertSame( 'ATM virtual account', PaynowCatalog::label( '03' ) );
+		self::assertSame( 'UnionPay', PaynowCatalog::label( '09' ) );
+		self::assertSame( 'Credit card instalments', PaynowCatalog::label( '11' ) );
 	}
 
 	public function test_pchomepay_known(): void {
-		self::assertSame( '信用卡', PchomepayCatalog::label( 'CARD' ) );
-		self::assertSame( '拍錢包', PchomepayCatalog::label( 'PI' ) );
-		self::assertSame( '7-11 取貨付款', PchomepayCatalog::label( 'IPL7' ) );
+		self::assertSame( 'Credit card', PchomepayCatalog::label( 'CARD' ) );
+		self::assertSame( 'Pi Wallet', PchomepayCatalog::label( 'PI' ) );
+		self::assertSame( '7-ELEVEN pickup and pay', PchomepayCatalog::label( 'IPL7' ) );
 	}
 
 	public function test_pchomepay_logistic(): void {
-		self::assertSame( '商品已至寄件門店', PchomepayCatalog::logistic_label( 'seller_dispatched' ) );
-		self::assertSame( '商品已至取件門店', PchomepayCatalog::logistic_label( 'pickup_shipped' ) );
+		self::assertSame( 'Arrived at the drop-off store', PchomepayCatalog::logistic_label( 'seller_dispatched' ) );
+		self::assertSame( 'Arrived at the pickup store', PchomepayCatalog::logistic_label( 'pickup_shipped' ) );
 	}
 }

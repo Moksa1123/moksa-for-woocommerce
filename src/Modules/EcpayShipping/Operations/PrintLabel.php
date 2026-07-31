@@ -16,7 +16,7 @@ final class PrintLabel {
 		if ( empty( $records ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '此訂單尚未建立物流單，無法列印。', 'moksa-for-woocommerce' ),
+				'message' => __( 'This order has no shipment yet, so there is nothing to print.', 'moksa-for-woocommerce' ),
 			];
 		}
 		$latest = end( $records );
@@ -29,13 +29,13 @@ final class PrintLabel {
 		if ( empty( $logistics_ids ) ) {
 			return [
 				'ok'      => false,
-				'message' => __( '沒有可列印的物流單。', 'moksa-for-woocommerce' ),
+				'message' => __( 'There are no shipments to print.', 'moksa-for-woocommerce' ),
 			];
 		}
 		if ( '' === $subtype ) {
 			return [
 				'ok'      => false,
-				'message' => __( '物流型別缺漏。', 'moksa-for-woocommerce' ),
+				'message' => __( 'The shipping type is missing.', 'moksa-for-woocommerce' ),
 			];
 		}
 

@@ -19,10 +19,10 @@ final class Unionpay extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_title(): string {
-		return __( 'PayNow 銀聯卡', 'moksa-for-woocommerce' );
+		return __( 'PayNow UnionPay', 'moksa-for-woocommerce' );
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 PayNow 付款頁，使用銀聯卡完成付款。', 'moksa-for-woocommerce' );
+		return __( 'The customer is redirected to PayNow to pay with a UnionPay card.', 'moksa-for-woocommerce' );
 	}
 }

@@ -22,7 +22,7 @@ class PayType {
 			case self::ATM:
 				return __( 'ATM', 'moksa-for-woocommerce' );
 			case self::CVS_CODE:
-				return __( '超商代碼', 'moksa-for-woocommerce' );
+				return __( 'Convenience store code', 'moksa-for-woocommerce' );
 			case self::C2C:
 				return __( 'C2C', 'moksa-for-woocommerce' );
 			case self::ICASH:

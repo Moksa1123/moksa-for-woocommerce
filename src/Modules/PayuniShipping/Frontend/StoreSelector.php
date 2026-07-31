@@ -177,14 +177,14 @@ class StoreSelector {
 					'search_nonce'      => wp_create_nonce( 'moksafowo_payuni_store_search' ),
 					'cvs_method_prefix' => 'moksafowo_payuni_shipping_711',
 					'i18n'              => array(
-						'select'         => __( '選擇門市', 'moksa-for-woocommerce' ),
-						'change'         => __( '更換門市', 'moksa-for-woocommerce' ),
-						'none'           => __( '尚未選擇取貨門市', 'moksa-for-woocommerce' ),
-						'openMap'        => __( '開啟超商地圖', 'moksa-for-woocommerce' ),
-						'loading'        => __( '載入中…', 'moksa-for-woocommerce' ),
-						'error'          => __( '載入失敗，請稍後再試', 'moksa-for-woocommerce' ),
-						'label'          => __( '已選門市', 'moksa-for-woocommerce' ),
-						'store_id_label' => __( '門市代號:', 'moksa-for-woocommerce' ),
+						'select'         => __( 'Choose a store', 'moksa-for-woocommerce' ),
+						'change'         => __( 'Change store', 'moksa-for-woocommerce' ),
+						'none'           => __( 'No pickup store chosen yet', 'moksa-for-woocommerce' ),
+						'openMap'        => __( 'Open the store map', 'moksa-for-woocommerce' ),
+						'loading'        => __( 'Loading…', 'moksa-for-woocommerce' ),
+						'error'          => __( 'Loading failed. Please try again later', 'moksa-for-woocommerce' ),
+						'label'          => __( 'Store chosen', 'moksa-for-woocommerce' ),
+						'store_id_label' => __( 'Store number:', 'moksa-for-woocommerce' ),
 					),
 				)
 			);
@@ -215,12 +215,12 @@ JS
 				'stored_store_data'           => $stored_store_data,
 				'hide_billing_address_fields' => get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) === 'yes',
 				'labels'                      => array(
-					'select_store'      => __( '選擇門市', 'moksa-for-woocommerce' ),
-					'change_store'      => __( '更換門市', 'moksa-for-woocommerce' ),
-					'no_store_selected' => __( '尚未選擇門市', 'moksa-for-woocommerce' ),
-					'open_map'          => __( '選擇門市', 'moksa-for-woocommerce' ),
-					'loading'           => __( '跳轉中...', 'moksa-for-woocommerce' ),
-					'error'             => __( '載入失敗，請稍後再試', 'moksa-for-woocommerce' ),
+					'select_store'      => __( 'Choose a store', 'moksa-for-woocommerce' ),
+					'change_store'      => __( 'Change store', 'moksa-for-woocommerce' ),
+					'no_store_selected' => __( 'No store chosen yet', 'moksa-for-woocommerce' ),
+					'open_map'          => __( 'Choose a store', 'moksa-for-woocommerce' ),
+					'loading'           => __( 'Redirecting…', 'moksa-for-woocommerce' ),
+					'error'             => __( 'Loading failed. Please try again later', 'moksa-for-woocommerce' ),
 				),
 			)
 		);
@@ -235,16 +235,16 @@ JS
 
 		// payload 綁定 session 已選運送方式，防 nonce 持有者偽造任意 method_id
 		if ( ! function_exists( 'WC' ) || ! WC()->session || ! WC()->cart || WC()->cart->is_empty() ) {
-			wp_send_json_error( array( 'message' => __( '購物車為空或會話過期。', 'moksa-for-woocommerce' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'The cart is empty or the session has expired.', 'moksa-for-woocommerce' ) ), 400 );
 		}
 		$chosen = (array) WC()->session->get( 'chosen_shipping_methods', array() );
 		if ( ! in_array( $shipping_method, $chosen, true ) ) {
 			PayuniShipping::log( 'StoreMap signing-oracle blocked: requested ' . $shipping_method . ' but chosen=' . wp_json_encode( $chosen ) );
-			wp_send_json_error( array( 'message' => __( '選取的運送方式與購物車不符。', 'moksa-for-woocommerce' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'The chosen shipping method does not match the cart.', 'moksa-for-woocommerce' ) ), 403 );
 		}
 
 		if ( empty( $method_id ) || strpos( $method_id, 'moksafowo_payuni_shipping_711' ) === false ) {
-			wp_send_json_error( array( 'message' => __( '請選擇超商取貨運送方式', 'moksa-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please choose a convenience store pickup method', 'moksa-for-woocommerce' ) ) );
 		}
 
 		// 一次性 token：callback 憑此區分合法發起與隨機 ?moksafowo_token= 注入；30min TTL
@@ -359,14 +359,14 @@ JS
 			. '</form>';
 
 		Interstitial::render(
-			__( '正在返回結帳頁面...', 'moksa-for-woocommerce' ),
-			__( '門市選擇完成', 'moksa-for-woocommerce' ),
+			__( 'Returning to checkout…', 'moksa-for-woocommerce' ),
+			__( 'Store selected', 'moksa-for-woocommerce' ),
 			[
 				/* translators: %s: store name */
-				sprintf( __( '選擇的門市：%s', 'moksa-for-woocommerce' ), '<strong>' . esc_html( $store_data['name'] ) . '</strong>' ),
+				sprintf( __( 'Store chosen: %s', 'moksa-for-woocommerce' ), '<strong>' . esc_html( $store_data['name'] ) . '</strong>' ),
 				/* translators: %s: store address */
-				sprintf( __( '門市地址：%s', 'moksa-for-woocommerce' ), esc_html( $store_data['address'] ) ),
-				__( '正在返回結帳頁面...', 'moksa-for-woocommerce' ),
+				sprintf( __( 'Store address: %s', 'moksa-for-woocommerce' ), esc_html( $store_data['address'] ) ),
+				__( 'Returning to checkout…', 'moksa-for-woocommerce' ),
 			],
 			$forms_html,
 			'setTimeout(function(){document.getElementById("moksafowo-payuni-store-redirect").submit();},1500);'
@@ -713,7 +713,7 @@ JS
 		<tr class="moksafowo-payuni-store-selector-row moksafowo-payuni-layout-<?php echo esc_attr( PayuniShipping::$cvs_selector_layout ); ?>">
 			<?php if ( PayuniShipping::$cvs_selector_layout === 'two_column' ) : ?>
 				<th class="moksafowo-payuni-store-selector-label">
-					<?php esc_html_e( '超商門市', 'moksa-for-woocommerce' ); ?>
+					<?php esc_html_e( 'Convenience store', 'moksa-for-woocommerce' ); ?>
 				</th>
 				<td class="moksafowo-payuni-store-selector-content">
 					<div class="moksafowo-payuni-store-selector">
@@ -722,7 +722,7 @@ JS
 				</td>
 			<?php else : ?>
 				<td colspan="2">
-					<div class="moksafowo-payuni-select-store-heading"><?php esc_html_e( '超商門市', 'moksa-for-woocommerce' ); ?></div>
+					<div class="moksafowo-payuni-select-store-heading"><?php esc_html_e( 'Convenience store', 'moksa-for-woocommerce' ); ?></div>
 					<div class="moksafowo-payuni-store-selector">
 						<?php self::render_store_selector_content( $stored_store_data ); ?>
 					</div>
@@ -748,18 +748,18 @@ JS
 					<div class="store-address"><?php echo esc_html( $stored_store_data['address'] ?? '' ); ?></div>
 					<div class="store-meta">
 						<?php /* translators: %s: convenience store ID */ ?>
-						<span class="store-id"><?php echo esc_html( sprintf( __( '門市代號: %s', 'moksa-for-woocommerce' ), $stored_store_data['id'] ?? '' ) ); ?></span>
+						<span class="store-id"><?php echo esc_html( sprintf( __( 'Store number: %s', 'moksa-for-woocommerce' ), $stored_store_data['id'] ?? '' ) ); ?></span>
 						<?php if ( isset( $stored_store_data['outside'] ) && ( $stored_store_data['outside'] === '1' || $stored_store_data['outside'] === 1 ) ) : ?>
-							<span class="store-outside">⚠ <?php esc_html_e( '離島地區', 'moksa-for-woocommerce' ); ?></span>
+							<span class="store-outside">⚠ <?php esc_html_e( 'Outlying islands', 'moksa-for-woocommerce' ); ?></span>
 						<?php endif; ?>
 					</div>
 				</div>
-				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( '更換門市', 'moksa-for-woocommerce' ); ?></button>
+				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( 'Change store', 'moksa-for-woocommerce' ); ?></button>
 			</div>
 		<?php else : ?>
 			<div class="moksafowo-payuni-no-store">
-				<p style="margin-bottom: 10px; color: #856404;"><?php esc_html_e( '尚未選擇取貨門市', 'moksa-for-woocommerce' ); ?></p>
-				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( '選擇門市', 'moksa-for-woocommerce' ); ?></button>
+				<p style="margin-bottom: 10px; color: #856404;"><?php esc_html_e( 'No pickup store chosen yet', 'moksa-for-woocommerce' ); ?></p>
+				<button type="button" class="moksafowo-payuni-store-map-btn button"><?php esc_html_e( 'Choose a store', 'moksa-for-woocommerce' ); ?></button>
 			</div>
 			<?php
 		endif;

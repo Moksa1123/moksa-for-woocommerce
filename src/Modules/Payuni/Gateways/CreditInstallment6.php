@@ -14,8 +14,8 @@ class CreditInstallment6 extends GatewayBase {
 		parent::__construct();
 
 		$this->id                 = self::GATEWAY_ID;
-		$this->method_title       = __( 'PAYUNi 信用卡分期 6 期', 'moksa-for-woocommerce' );
-		$this->method_description = __( '信用卡分 6 期付款，跳轉至 PAYUNi 付款頁完成。', 'moksa-for-woocommerce' );
+		$this->method_title       = __( 'PAYUNi credit card, 6 instalments', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'Pay by credit card over 6 instalments. The customer is redirected to the PAYUNi payment page.', 'moksa-for-woocommerce' );
 
 		$this->init_installment( 6, $this->min_amount );
 

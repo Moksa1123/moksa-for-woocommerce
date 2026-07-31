@@ -22,17 +22,17 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
-			return new \WP_Error( 'moksafowo_newebpay_invalid_order', __( '訂單不存在。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_newebpay_invalid_order', __( 'The order does not exist.', 'moksa-for-woocommerce' ) );
 		}
 		$payment_type = (string) $order->get_meta( Keys::NEWEBPAY_PAYMENT_TYPE );
 		$mtn          = (string) $order->get_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
-			return new \WP_Error( 'moksafowo_newebpay_missing_mtn', __( '訂單缺少藍新交易編號。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_newebpay_missing_mtn', __( 'The order has no NewebPay transaction ID.', 'moksa-for-woocommerce' ) );
 		}
 
 		$amt_int = (int) ceil( (float) $amount );
 		if ( $amt_int <= 0 ) {
-			return new \WP_Error( 'moksafowo_newebpay_invalid_amount', __( '退款金額必須大於 0。', 'moksa-for-woocommerce' ) );
+			return new \WP_Error( 'moksafowo_newebpay_invalid_amount', __( 'The refund amount must be greater than 0.', 'moksa-for-woocommerce' ) );
 		}
 
 		// 路由：依 PaymentType 走對應 API
@@ -51,7 +51,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 				'moksafowo_newebpay_offline',
 				sprintf(
 				/* translators: %s: payment type */
-					__( '此付款方式（%s）為線下付款 / 超商，請至藍新後台處理退款。', 'moksa-for-woocommerce' ),
+					__( 'This payment method (%s) is offline or paid in store. Please refund it in the NewebPay dashboard.', 'moksa-for-woocommerce' ),
 					$payment_type
 				)
 			);
@@ -84,15 +84,15 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( '藍新退款失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( 'The NewebPay refund failed: %s', 'moksa-for-woocommerce' ), $result['message'] ) );
 		}
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: action, 2: amount, 3: reason */
-				__( '藍新%1$s成功（NT$%2$s）— %3$s', 'moksa-for-woocommerce' ),
-				$is_authorized_only ? __( '取消授權', 'moksa-for-woocommerce' ) : __( '退款', 'moksa-for-woocommerce' ),
+				__( 'NewebPay %1$s succeeded (NT$%2$s) — %3$s', 'moksa-for-woocommerce' ),
+				$is_authorized_only ? __( 'Cancel authorization', 'moksa-for-woocommerce' ) : __( 'Refund', 'moksa-for-woocommerce' ),
 				$amt,
-				$reason ?: __( '無原因', 'moksa-for-woocommerce' )
+				$reason ?: __( 'No reason given', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -109,15 +109,15 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_newebpay_wallet_refund_fail', sprintf( __( '藍新錢包退款失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_wallet_refund_fail', sprintf( __( 'The NewebPay wallet refund failed: %s', 'moksa-for-woocommerce' ), $result['message'] ) );
 		}
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: payment type, 2: amount, 3: reason */
-				__( '藍新%1$s 退款成功（NT$%2$s）— %3$s', 'moksa-for-woocommerce' ),
+				__( 'NewebPay %1$s refunded NT$%2$s — %3$s', 'moksa-for-woocommerce' ),
 				self::wallet_label( $payment_type ),
 				$amt,
-				$reason ?: __( '無原因', 'moksa-for-woocommerce' )
+				$reason ?: __( 'No reason given', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -130,19 +130,19 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 				'MerchantOrderNo' => $mtn,
 				'Amt'             => $amt,
 				'PaymentType'     => 'AFTEE',
-				'Reason'          => $reason ?: __( '一般退貨', 'moksa-for-woocommerce' ),
+				'Reason'          => $reason ?: __( 'Standard return', 'moksa-for-woocommerce' ),
 			]
 		);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
-			return new \WP_Error( 'moksafowo_newebpay_bnpl_refund_fail', sprintf( __( 'AFTEE 退款失敗：%s', 'moksa-for-woocommerce' ), $result['message'] ) );
+			return new \WP_Error( 'moksafowo_newebpay_bnpl_refund_fail', sprintf( __( 'The AFTEE refund failed: %s', 'moksa-for-woocommerce' ), $result['message'] ) );
 		}
 		$order->add_order_note(
 			sprintf(
 			/* translators: 1: amount, 2: reason */
-				__( 'AFTEE 退款成功（NT$%1$s）— %2$s', 'moksa-for-woocommerce' ),
+				__( 'AFTEE refunded NT$%1$s — %2$s', 'moksa-for-woocommerce' ),
 				$amt,
-				$reason ?: __( '無原因', 'moksa-for-woocommerce' )
+				$reason ?: __( 'No reason given', 'moksa-for-woocommerce' )
 			)
 		);
 		$order->save();
@@ -152,11 +152,11 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	private static function wallet_label( string $type ): string {
 		return [
 			'LINEPAY'    => __( 'LINE Pay', 'moksa-for-woocommerce' ),
-			'ESUNWALLET' => __( '玉山 Wallet', 'moksa-for-woocommerce' ),
-			'TAIWANPAY'  => __( '台灣 Pay', 'moksa-for-woocommerce' ),
+			'ESUNWALLET' => __( 'E.SUN Wallet', 'moksa-for-woocommerce' ),
+			'TAIWANPAY'  => __( 'Taiwan Pay', 'moksa-for-woocommerce' ),
 			'TWQR'       => 'TWQR',
-			'EZPALIPAY'  => __( '支付寶', 'moksa-for-woocommerce' ),
-			'EZPWECHAT'  => __( '微信支付', 'moksa-for-woocommerce' ),
+			'EZPALIPAY'  => __( 'Alipay', 'moksa-for-woocommerce' ),
+			'EZPWECHAT'  => __( 'WeChat Pay', 'moksa-for-woocommerce' ),
 		][ $type ] ?? $type;
 	}
 
@@ -184,7 +184,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		$shipping_total = (int) round( (float) $order->get_shipping_total() );
 		if ( $shipping_total > 0 ) {
 			$items[]        = [
-				'ItemName'    => __( '運費', 'moksa-for-woocommerce' ),
+				'ItemName'    => __( 'Shipping', 'moksa-for-woocommerce' ),
 				'ItemAmt'     => $shipping_total,
 				'ItemType'    => 1,
 				'ItemOrderNo' => $order->get_id() . '-shipping',
@@ -195,7 +195,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		$expected = (int) ceil( (float) $order->get_total() );
 		if ( $running_total !== $expected ) {
 			$items[] = [
-				'ItemName'    => __( '稅費 / 折扣調整', 'moksa-for-woocommerce' ),
+				'ItemName'    => __( 'Tax and discount adjustments', 'moksa-for-woocommerce' ),
 				'ItemAmt'     => $expected - $running_total,
 				'ItemType'    => 1,
 				'ItemOrderNo' => $order->get_id() . '-adj',
@@ -208,7 +208,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	public function process_payment( $order_id ): array {
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			throw new \Exception( esc_html__( '找不到訂單', 'moksa-for-woocommerce' ) );
+			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
 		}
 
 		$mtn = Helper::generate_merchant_order_no( (int) $order_id );
@@ -299,7 +299,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			<?php foreach ( $form_data as $k => $v ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( (string) $v ); ?>">
 			<?php endforeach; ?>
-			<button type="submit" id="moksafowo-newebpay-submit" class="button alt"><?php esc_html_e( '前往藍新付款頁', 'moksa-for-woocommerce' ); ?></button>
+			<button type="submit" id="moksafowo-newebpay-submit" class="button alt"><?php esc_html_e( 'Pay with NewebPay', 'moksa-for-woocommerce' ); ?></button>
 		</form>
 		<?php wp_print_inline_script_tag( 'document.getElementById("moksafowo-newebpay-form").submit();' ); ?>
 		<?php
@@ -314,6 +314,6 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			return (string) $item->get_name();
 		}
 		/* translators: %s: site name */
-		return sprintf( __( '%s 訂單', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ) . ' #' . $order->get_order_number();
+		return sprintf( __( '%s order', 'moksa-for-woocommerce' ), get_bloginfo( 'name' ) ) . ' #' . $order->get_order_number();
 	}
 }

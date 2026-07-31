@@ -27,6 +27,6 @@ final class Webatm extends AbstractPaynowGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( '跳轉至 PayNow 付款頁，使用 WebATM 即時轉帳付款（非約定帳戶單日上限 NT$3 萬）。', 'moksa-for-woocommerce' );
+		return __( 'The customer is redirected to PayNow to pay by instant WebATM transfer. Unregistered accounts are capped at NT$30,000 a day.', 'moksa-for-woocommerce' );
 	}
 }

@@ -14,26 +14,26 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	public function label(): string {
-		return __( 'PChomePay 支付連 — 信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨', 'moksa-for-woocommerce' );
+		return __( 'PChomePay — credit card, Pi Wallet, ATM, convenience store code and store pickup', 'moksa-for-woocommerce' );
 	}
 
 	public function name(): string {
-		return __( 'PChomePay 支付連', 'moksa-for-woocommerce' );
+		return __( 'PChomePay', 'moksa-for-woocommerce' );
 	}
 
 	public function tagline(): string {
-		return __( '信用卡 / 拍錢包 / ATM / 超商代碼 / 超商取貨付款', 'moksa-for-woocommerce' );
+		return __( 'Credit card, Pi Wallet, ATM, convenience store code and pickup with payment', 'moksa-for-woocommerce' );
 	}
 
 	public function methods(): array {
 		return [
-			__( '信用卡', 'moksa-for-woocommerce' ),
-			__( '拍錢包', 'moksa-for-woocommerce' ),
-			__( 'ATM 虛擬帳號', 'moksa-for-woocommerce' ),
-			__( '超商代碼繳費', 'moksa-for-woocommerce' ),
-			__( '7-11 取貨付款', 'moksa-for-woocommerce' ),
-			__( '全家取貨付款', 'moksa-for-woocommerce' ),
-			__( '萊爾富取貨付款', 'moksa-for-woocommerce' ),
+			__( 'Credit card', 'moksa-for-woocommerce' ),
+			__( 'Pi Wallet', 'moksa-for-woocommerce' ),
+			__( 'ATM virtual account', 'moksa-for-woocommerce' ),
+			__( 'Convenience store code payment', 'moksa-for-woocommerce' ),
+			__( '7-ELEVEN pickup and pay', 'moksa-for-woocommerce' ),
+			__( 'FamilyMart pickup and pay', 'moksa-for-woocommerce' ),
+			__( 'Hi-Life pickup and pay', 'moksa-for-woocommerce' ),
 		];
 	}
 

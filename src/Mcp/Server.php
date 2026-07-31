@@ -252,7 +252,7 @@ final class Server {
 
 		$perm = $ability->check_permissions( $args );
 		if ( is_wp_error( $perm ) || false === $perm ) {
-			return self::tool_error( $id, __( '權限不足。', 'moksa-for-woocommerce' ) );
+			return self::tool_error( $id, __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) );
 		}
 
 		try {
@@ -260,7 +260,7 @@ final class Server {
 		} catch ( \Throwable $e ) {
 			$message = ( defined( 'WP_DEBUG' ) && WP_DEBUG )
 				? $e->getMessage()
-				: __( '工具執行失敗,請稍後再試。', 'moksa-for-woocommerce' );
+				: __( 'The tool failed to run. Please try again later.', 'moksa-for-woocommerce' );
 			return self::tool_error( $id, $message );
 		}
 		if ( is_wp_error( $result ) ) {
