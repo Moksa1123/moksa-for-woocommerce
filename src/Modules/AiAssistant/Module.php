@@ -38,9 +38,8 @@ final class Module extends AbstractModule {
 	}
 
 	public function boot(): void {
-		if ( 'yes' !== get_option( 'moksafowo_ai_enabled', 'no' ) ) {
-			return;
-		}
+		// 模組卡片（moksafowo_ai_assistant_enabled）是唯一的開關 —— ModuleRegistry 已經
+		// 檢查過才會走到這裡，不再疊第二層總開關。
 		if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
 			return;
 		}

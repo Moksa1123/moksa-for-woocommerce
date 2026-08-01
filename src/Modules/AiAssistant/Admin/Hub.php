@@ -12,7 +12,8 @@ use Moksafowo\Modules\CustomerService\Threads;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 「Moksa AI」後台 hub —— 常駐子選單(不受模組開關 gate,否則關了就進不去)。
+ * 「Moksa AI」後台 hub —— 只在 ai_assistant 或 customer_service 模組啟用時才掛選單
+ * （由 Plugin::ai_hub_visible() 判斷）。開關統一在「Moksa 電商工具 → 工具」的模組卡片。
  *
  * 兩個 tab:
  * - 設定：WP 7.0 依賴宣告 + 前/後台 AI 開關 + 後台 AI 助手設定 + 前台客服設定。
@@ -36,11 +37,31 @@ final class Hub {
 		if ( null === $screen || 'woocommerce_page_' . self::PAGE !== $screen->id ) {
 			return;
 		}
+		// 跟「Moksa 電商工具」各分頁共用同一組視覺（section 包成可收合卡片），
+		// 免得同一個外掛裡兩種後台長相。
+		foreach ( array( 'settings-polish.css', 'settings-shell.css' ) as $file ) {
+			$rel = 'assets/admin/' . $file;
+			wp_enqueue_style(
+				'moksafowo-' . str_replace( '.css', '', $file ),
+				MOKSAFOWO_PLUGIN_URL . $rel,
+				array(),
+				file_exists( MOKSAFOWO_PLUGIN_DIR . $rel ) ? (string) filemtime( MOKSAFOWO_PLUGIN_DIR . $rel ) : MOKSAFOWO_VERSION
+			);
+		}
+		$js = 'assets/admin/settings-polish.js';
+		wp_enqueue_script(
+			'moksafowo-settings-polish',
+			MOKSAFOWO_PLUGIN_URL . $js,
+			array(),
+			file_exists( MOKSAFOWO_PLUGIN_DIR . $js ) ? (string) filemtime( MOKSAFOWO_PLUGIN_DIR . $js ) : MOKSAFOWO_VERSION,
+			true
+		);
+
 		$rel = 'assets/admin/css/moksafowo-ai-hub.css';
 		wp_enqueue_style(
 			'moksafowo-ai-hub',
 			MOKSAFOWO_PLUGIN_URL . $rel,
-			array(),
+			array( 'moksafowo-settings-polish' ),
 			file_exists( MOKSAFOWO_PLUGIN_DIR . $rel ) ? (string) filemtime( MOKSAFOWO_PLUGIN_DIR . $rel ) : MOKSAFOWO_VERSION
 		);
 	}
@@ -105,8 +126,8 @@ final class Hub {
 	private static function render_settings(): void {
 		$has_client = function_exists( 'wp_ai_client_prompt' );
 		$badge      = $has_client
-			? '<span class="moksafowo-ai-ok">' . esc_html__( '✅ The WordPress 7.0 AI Client was found', 'moksa-for-woocommerce' ) . '</span>'
-			: '<span class="moksafowo-ai-warn">' . esc_html__( '⚠️ The WordPress 7.0 AI Client was not found', 'moksa-for-woocommerce' ) . '</span>';
+			? '<span class="moksafowo-ai-ok">' . esc_html__( 'The WordPress 7.0 AI Client was found', 'moksa-for-woocommerce' ) . '</span>'
+			: '<span class="moksafowo-ai-warn">' . esc_html__( 'The WordPress 7.0 AI Client was not found', 'moksa-for-woocommerce' ) . '</span>';
 
 		echo '<div class="moksafowo-ai-card">';
 		echo '<p class="moksafowo-ai-card-t">' . esc_html__( 'About Moksa AI', 'moksa-for-woocommerce' ) . ' — ' . wp_kses_post( $badge ) . '</p>';
@@ -115,7 +136,9 @@ final class Hub {
 		) . '</p>';
 		echo '</div>';
 
-		echo '<div class="moksafowo-ai-settings"><form method="post" action="">';
+		// id="mainform" —— settings-polish.js 用這個選擇器把 h2 + form-table 打包成卡片，
+		// 讓這頁跟「Moksa 電商工具」的各 provider 分頁長得一樣。
+		echo '<div class="moksafowo-ai-settings"><form id="mainform" method="post" action="">';
 		\WC_Admin_Settings::output_fields( self::fields() );
 		wp_nonce_field( 'moksafowo_ai_hub_save' );
 		echo '<p class="submit"><button type="submit" class="button button-primary" name="moksafowo_ai_hub_save" value="1">' . esc_html__( 'Save settings', 'moksa-for-woocommerce' ) . '</button></p>';
@@ -146,24 +169,6 @@ final class Hub {
 	 */
 	private static function fields(): array {
 		return array(
-			array(
-				'title' => __( 'Enable Moksa AI', 'moksa-for-woocommerce' ),
-				'type'  => 'title',
-				'desc'  => __( 'The master switch. With it off, neither the storefront nor the admin AI runs. With it on, use the settings below to control each side separately.', 'moksa-for-woocommerce' ),
-				'id'    => 'moksafowo_ai_hub_master',
-			),
-			array(
-				'title'   => __( 'Enable AI features', 'moksa-for-woocommerce' ),
-				'id'      => 'moksafowo_ai_enabled',
-				'type'    => 'checkbox',
-				'default' => 'no',
-				'desc'    => __( 'The master switch for customer support, covering both storefront self-service and the admin AI assistant.', 'moksa-for-woocommerce' ),
-			),
-			array(
-				'type' => 'sectionend',
-				'id'   => 'moksafowo_ai_hub_master',
-			),
-
 			array(
 				'title' => __( 'Admin AI assistant', 'moksa-for-woocommerce' ),
 				'type'  => 'title',

@@ -2045,222 +2045,206 @@ msgstr "金門縣"
 msgid "Lienchiang County"
 msgstr "連江縣"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:72
+#: src/Modules/AiAssistant/Admin/Hub.php:93
 msgid "Settings saved."
 msgstr "設定已儲存。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:86
+#: src/Modules/AiAssistant/Admin/Hub.php:107
 #: src/Plugin.php:73
 msgid "Settings"
 msgstr "設定"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:92
+#: src/Modules/AiAssistant/Admin/Hub.php:113
 msgid "Support messages"
 msgstr "客服訊息"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:108
-msgid "✅ The WordPress 7.0 AI Client was found"
-msgstr "✅ 已偵測到 WordPress 7.0 AI Client"
+#: src/Modules/AiAssistant/Admin/Hub.php:129
+msgid "The WordPress 7.0 AI Client was found"
+msgstr "已偵測到 WordPress 7.0 AI Client"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:109
-msgid "⚠️ The WordPress 7.0 AI Client was not found"
-msgstr "⚠️ 未偵測到 WordPress 7.0 AI Client"
+#: src/Modules/AiAssistant/Admin/Hub.php:130
+msgid "The WordPress 7.0 AI Client was not found"
+msgstr "未偵測到 WordPress 7.0 AI Client"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:112
+#: src/Modules/AiAssistant/Admin/Hub.php:133
 msgid "About Moksa AI"
 msgstr "關於 Moksa AI"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:114
+#: src/Modules/AiAssistant/Admin/Hub.php:135
 msgid "The admin AI assistant and the automatic replies on the storefront both need the AI Client built into <strong>WordPress 7.0</strong>. Upgrade to 7.0, then add an OpenAI, Anthropic or Google key under Settings → Connectors. Usage is billed to your own key. Order lookup and messaging on the storefront work without a key."
 msgstr "後台 AI 助手與前台 AI 自動回覆需要 <strong>WordPress 7.0</strong> 內建的 AI Client:請先升級到 7.0,並到「設定 → Connectors」設定 OpenAI / Anthropic / Google 任一把金鑰(用量計費走你自己的金鑰)。前台客服的「自助查單 / 留言」不需金鑰即可使用。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:121
+#: src/Modules/AiAssistant/Admin/Hub.php:144
 msgid "Save settings"
 msgstr "儲存設定"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:132
+#: src/Modules/AiAssistant/Admin/Hub.php:155
 msgid "Connecting over MCP"
 msgstr "如何用 MCP 連線"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:133
+#: src/Modules/AiAssistant/Admin/Hub.php:156
 msgid "External AI tools such as mcp-remote, Claude and other standard MCP clients can connect straight to the endpoint below. No bridge is needed, and the endpoint is stateless so there is no session to manage:"
 msgstr "外部 AI 工具(mcp-remote / Claude 等標準 MCP 客戶端)可直接連到以下端點,不需橋接器(本端點為 stateless,免 session）:"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:136
+#: src/Modules/AiAssistant/Admin/Hub.php:159
 msgid "Use an account that can edit orders — ideally a <strong>dedicated, limited account rather than an administrator</strong> — and create a password under Users → Profile → Application Passwords."
 msgstr "用一個有「編輯訂單」權限的帳號(建議<strong>專用受限帳號,不要用管理員</strong>),到「使用者 → 個人資料 → 應用程式密碼」建立一組密碼。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:137
+#: src/Modules/AiAssistant/Admin/Hub.php:160
 msgid "Base64-encode “username:application password” with the spaces removed, and send it as an <code>Authorization: Basic &lt;base64&gt;</code> header."
 msgstr "把「帳號:應用程式密碼(去掉空格)」做 Base64,當成 <code>Authorization: Basic &lt;base64&gt;</code> 標頭。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:138
+#: src/Modules/AiAssistant/Admin/Hub.php:161
 msgid "Enter that endpoint and header in the MCP client and the tools will be listed."
 msgstr "在 MCP 客戶端填入上面端點 + 該認證標頭,即可列出工具。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:140
+#: src/Modules/AiAssistant/Admin/Hub.php:163
 msgid "Only <strong>read-only</strong> tools are exposed by default: order lookups, reports and a settings summary. To let an external AI change orders or issue invoices, turn on “Allow external AI to make changes” above — and every change still has to be confirmed in the admin."
 msgstr "預設只開放<strong>唯讀</strong>工具(查訂單 / 報表 / 設定彙整);要讓外部 AI 能改訂單 / 開發票,需另外開啟上方「允許外部 AI 執行變更動作」,且變更仍需在後台確認。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:150
-msgid "Enable Moksa AI"
-msgstr "啟用 Moksa AI"
-
-#: src/Modules/AiAssistant/Admin/Hub.php:152
-msgid "The master switch. With it off, neither the storefront nor the admin AI runs. With it on, use the settings below to control each side separately."
-msgstr "總開關。關閉時前台與後台 AI 都不啟用;開啟後再用下方分別控制前台 / 後台。"
-
-#: src/Modules/AiAssistant/Admin/Hub.php:156
-msgid "Enable AI features"
-msgstr "啟用 AI 功能"
-
-#: src/Modules/AiAssistant/Admin/Hub.php:160
-msgid "The master switch for customer support, covering both storefront self-service and the admin AI assistant."
-msgstr "智慧客服總開關(前台顧客自助 + 後台 AI 助手)。"
-
-#: src/Modules/AiAssistant/Admin/Hub.php:168
+#: src/Modules/AiAssistant/Admin/Hub.php:173
 msgid "Admin AI assistant"
 msgstr "後台 AI 助手"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:170
+#: src/Modules/AiAssistant/Admin/Hub.php:175
 msgid "A floating chat window in the bottom-right of the admin, where one sentence gets you an order, a count or a status. Requires WordPress 7.0."
 msgstr "後台右下角的浮動對話窗,用一句話查訂單 / 數量 / 狀態(需 WordPress 7.0)。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:174
+#: src/Modules/AiAssistant/Admin/Hub.php:179
 msgid "Enable the admin AI assistant"
 msgstr "啟用後台 AI 助手"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:178
+#: src/Modules/AiAssistant/Admin/Hub.php:183
 msgid "Show the Moksa AI chat window in the admin."
 msgstr "在後台顯示 Moksa AI 浮動對話窗。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:181
+#: src/Modules/AiAssistant/Admin/Hub.php:186
 msgid "Greeting"
 msgstr "問候語"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:185
-#: src/Modules/AiAssistant/Module.php:70
+#: src/Modules/AiAssistant/Admin/Hub.php:190
+#: src/Modules/AiAssistant/Module.php:69
 msgid "Hi, I'm Moksa AI. Ask me things like how many orders are awaiting shipment, or look up an invoice or tracking number."
 msgstr "嗨,我是 Moksa AI。可以問我:待出貨幾筆?或:查發票號 / 物流單號。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:186
+#: src/Modules/AiAssistant/Admin/Hub.php:191
 msgid "The first thing shown when the chat window opens."
 msgstr "開啟對話窗時的第一句招呼。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:189
+#: src/Modules/AiAssistant/Admin/Hub.php:194
 msgid "Example questions"
 msgstr "範例問題"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:193
-#: src/Modules/AiAssistant/Module.php:71
+#: src/Modules/AiAssistant/Admin/Hub.php:198
+#: src/Modules/AiAssistant/Module.php:70
 msgid "How many orders are awaiting shipment?,Order counts by status"
 msgstr "待出貨有幾筆?,各狀態訂單數量"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:194
+#: src/Modules/AiAssistant/Admin/Hub.php:199
 msgid "Shortcut questions shown under the chat window, separated by commas."
 msgstr "對話窗下方的快捷提問,以逗號分隔。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:198
+#: src/Modules/AiAssistant/Admin/Hub.php:203
 msgid "Enable the MCP server"
 msgstr "啟用對外 MCP 伺服器"
 
 #. translators: %s: MCP 端點網址
-#: src/Modules/AiAssistant/Admin/Hub.php:204
+#: src/Modules/AiAssistant/Admin/Hub.php:209
 #, php-format
 msgid "Lets external AI tools connect over MCP to look up orders and reports. They sign in with a WordPress application password and get the same permissions as editing orders. Endpoint: %s"
 msgstr "開啟後,外部 AI 工具可透過 MCP 連到本站查訂單 / 報表(需用 WordPress 應用程式密碼登入,權限同「編輯訂單」)。端點:%s"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:209
+#: src/Modules/AiAssistant/Admin/Hub.php:214
 msgid "Allow external AI to make changes (MCP)"
 msgstr "允許外部 AI 執行變更動作（MCP）"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:213
+#: src/Modules/AiAssistant/Admin/Hub.php:218
 msgid "External AI can only read by default. Turn this on to allow actions such as changing an order status or issuing an invoice — and each one still has to be confirmed in the admin before it runs."
 msgstr "預設只開放外部 AI 查詢(唯讀)。開啟後才允許改訂單狀態 / 開立發票等動作,且一律需要你在後台確認才會執行。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:221
+#: src/Modules/AiAssistant/Admin/Hub.php:226
 msgid "Storefront support (customer self-service)"
 msgstr "前台客服(顧客自助)"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:223
+#: src/Modules/AiAssistant/Admin/Hub.php:228
 msgid "A floating window on the storefront where customers look up their order with an order number and the last three digits of their billing phone, and leave a message. It follows fixed rules and needs no AI key."
 msgstr "前台浮動窗,讓顧客用「訂單編號 + 帳單電話末三碼」自助查單 / 留言。規則式,不需 AI 金鑰。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:227
+#: src/Modules/AiAssistant/Admin/Hub.php:232
 msgid "Enable the storefront support window"
 msgstr "啟用前台客服窗"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:231
+#: src/Modules/AiAssistant/Admin/Hub.php:236
 msgid "Show the floating order lookup window on the storefront."
 msgstr "在前台顯示浮動「訂單查詢」窗。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:234
+#: src/Modules/AiAssistant/Admin/Hub.php:239
 msgid "Window title"
 msgstr "視窗標題"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:237
+#: src/Modules/AiAssistant/Admin/Hub.php:242
+#: src/Modules/CustomerService/Module.php:75
 #: src/Modules/CustomerService/Module.php:77
-#: src/Modules/CustomerService/Module.php:79
 msgid "Order lookup"
 msgstr "訂單查詢"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:240
+#: src/Modules/AiAssistant/Admin/Hub.php:245
 msgid "Maximum verification attempts"
 msgstr "驗證嘗試上限"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:244
+#: src/Modules/AiAssistant/Admin/Hub.php:249
 msgid "After this many failures from the same order and IP address, lookups are locked for a while, so the last three digits cannot be guessed by brute force."
 msgstr "同一訂單+IP 連續錯誤達此次數即暫時鎖定(防末三碼暴力猜測)。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:248
+#: src/Modules/AiAssistant/Admin/Hub.php:253
 msgid "Lockout time (minutes)"
 msgstr "鎖定時間（分鐘）"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:255
+#: src/Modules/AiAssistant/Admin/Hub.php:260
 msgid "Where to show it"
 msgstr "顯示頁面"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:260
+#: src/Modules/AiAssistant/Admin/Hub.php:265
 msgid "Every page"
 msgstr "全部頁面"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:261
+#: src/Modules/AiAssistant/Admin/Hub.php:266
 msgid "Only the listed pages"
 msgstr "僅指定頁面"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:263
+#: src/Modules/AiAssistant/Admin/Hub.php:268
 msgid "Every page except the listed ones"
 msgstr "排除指定頁面"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:267
+#: src/Modules/AiAssistant/Admin/Hub.php:272
 msgid "Page IDs"
 msgstr "頁面 ID 清單"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:271
+#: src/Modules/AiAssistant/Admin/Hub.php:276
 msgid "Page or post IDs separated by commas, used with the setting above."
 msgstr "以逗號分隔的頁面 / 文章 ID,配合上方「僅指定 / 排除指定」使用。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:274
+#: src/Modules/AiAssistant/Admin/Hub.php:279
 msgid "Enable automatic AI replies on the storefront"
 msgstr "啟用前台 AI 自動回覆"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:278
+#: src/Modules/AiAssistant/Admin/Hub.php:283
 msgid "When a customer leaves a message, the AI answers straight away using that order and the FAQ below, and hands over to a person whenever it cannot. Requires WordPress 7.0. With this off, messages are simply passed on."
 msgstr "顧客留言時由 AI 依該訂單資訊與下方常見問答即時回覆,答不出來會自動轉給真人。需 WordPress 7.0;未啟用時為一般留言。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:281
+#: src/Modules/AiAssistant/Admin/Hub.php:286
 msgid "Frequently asked questions"
 msgstr "常見問答（FAQ）"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:286
+#: src/Modules/AiAssistant/Admin/Hub.php:291
 msgid "What the AI draws on when answering customers — dispatch times, returns and shipping rules, for example. One per line."
 msgstr "AI 回答顧客的依據,例如出貨時間、退換貨與運費規則。一行一則。"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:289
+#: src/Modules/AiAssistant/Admin/Hub.php:294
 msgid "AI replies per hour"
 msgstr "AI 回覆每小時上限"
 
-#: src/Modules/AiAssistant/Admin/Hub.php:293
+#: src/Modules/AiAssistant/Admin/Hub.php:298
 msgid "Keeps usage and cost in check. Once the limit is reached, messages are simply passed on."
 msgstr "控制用量與費用;超過後改為一般留言。"
 
@@ -2297,31 +2281,31 @@ msgstr "Moksa AI（Beta）— 用一句話查訂單 / 數量 / 狀態"
 msgid "Requires WordPress 7.0 and an AI key"
 msgstr "需 WordPress 7.0 並設定 AI 金鑰"
 
-#: src/Modules/AiAssistant/Module.php:81
+#: src/Modules/AiAssistant/Module.php:80
 msgid "For example: how many orders are awaiting shipment?"
 msgstr "例如:待出貨有幾筆?"
 
-#: src/Modules/AiAssistant/Module.php:83
-#: src/Modules/CustomerService/Module.php:100
+#: src/Modules/AiAssistant/Module.php:82
+#: src/Modules/CustomerService/Module.php:98
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:399
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:454
 msgid "Send"
 msgstr "送出"
 
-#: src/Modules/AiAssistant/Module.php:84
+#: src/Modules/AiAssistant/Module.php:83
 msgid "Looking that up"
 msgstr "查詢中"
 
-#: src/Modules/AiAssistant/Module.php:85
+#: src/Modules/AiAssistant/Module.php:84
 msgid "Clear"
 msgstr "清除"
 
-#: src/Modules/AiAssistant/Module.php:86
+#: src/Modules/AiAssistant/Module.php:85
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:67
 msgid "Something went wrong"
 msgstr "發生錯誤"
 
-#: src/Modules/AiAssistant/Module.php:87
+#: src/Modules/AiAssistant/Module.php:86
 msgid "(no reply)"
 msgstr "（無回覆）"
 
@@ -2851,12 +2835,12 @@ msgid "Open order"
 msgstr "開啟訂單"
 
 #: src/Modules/CustomerService/Admin/Inbox.php:104
-#: src/Modules/CustomerService/Module.php:103
+#: src/Modules/CustomerService/Module.php:101
 msgid "Support"
 msgstr "客服"
 
 #: src/Modules/CustomerService/Admin/Inbox.php:104
-#: src/Modules/CustomerService/Module.php:104
+#: src/Modules/CustomerService/Module.php:102
 msgid "AI support"
 msgstr "AI 客服"
 
@@ -2891,7 +2875,7 @@ msgstr "前台客服"
 msgid "Customers check their own order status, shipment and invoice, protected by a second verification step"
 msgstr "顧客自助查訂單狀態 / 物流 / 發票(二次驗證)"
 
-#: src/Modules/CustomerService/Module.php:80
+#: src/Modules/CustomerService/Module.php:78
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:151
 #: src/Modules/OrderLookup/Ability.php:486
 #: src/Modules/OrderLookup/Ability.php:573
@@ -2903,57 +2887,57 @@ msgstr "顧客自助查訂單狀態 / 物流 / 發票(二次驗證)"
 msgid "Order number"
 msgstr "訂單編號"
 
-#: src/Modules/CustomerService/Module.php:81
+#: src/Modules/CustomerService/Module.php:79
 msgid "Last three digits of the billing phone"
 msgstr "帳單電話末三碼"
 
-#: src/Modules/CustomerService/Module.php:82
+#: src/Modules/CustomerService/Module.php:80
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
 msgid "Look up"
 msgstr "查詢"
 
-#: src/Modules/CustomerService/Module.php:83
+#: src/Modules/CustomerService/Module.php:81
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:150
 msgid "Looking that up…"
 msgstr "查詢中…"
 
-#: src/Modules/CustomerService/Module.php:84
+#: src/Modules/CustomerService/Module.php:82
 msgid "Look up another order"
 msgstr "查其他訂單"
 
-#: src/Modules/CustomerService/Module.php:85
+#: src/Modules/CustomerService/Module.php:83
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:244
 msgid "Close"
 msgstr "關閉"
 
-#: src/Modules/CustomerService/Module.php:86
+#: src/Modules/CustomerService/Module.php:84
 msgid "Paid"
 msgstr "已付款"
 
-#: src/Modules/CustomerService/Module.php:87
+#: src/Modules/CustomerService/Module.php:85
 msgid "Unpaid"
 msgstr "未付款"
 
-#: src/Modules/CustomerService/Module.php:88
+#: src/Modules/CustomerService/Module.php:86
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:203
 #: src/Modules/Shipping/Statuses/Registrar.php:137
 msgid "Order status"
 msgstr "訂單狀態"
 
-#: src/Modules/CustomerService/Module.php:89
+#: src/Modules/CustomerService/Module.php:87
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:177
 msgid "Order total"
 msgstr "訂單金額"
 
-#: src/Modules/CustomerService/Module.php:90
+#: src/Modules/CustomerService/Module.php:88
 #: src/Modules/Paynow/Settings/SettingsTab.php:123
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:130
 msgid "Payment method"
 msgstr "付款方式"
 
-#: src/Modules/CustomerService/Module.php:91
+#: src/Modules/CustomerService/Module.php:89
 #: src/Modules/Ecpay/PaymentTypeCatalog.php:65
 #: src/Modules/Ecpay/Settings/SettingsTab.php:167
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:16
@@ -2976,7 +2960,7 @@ msgstr "付款方式"
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
-#: src/Modules/CustomerService/Module.php:92
+#: src/Modules/CustomerService/Module.php:90
 #: src/Modules/OrderLookup/SearchableKeys.php:190
 #: src/Modules/OrderLookup/SearchableKeys.php:196
 #: src/Modules/OrderLookup/SearchableKeys.php:261
@@ -2986,14 +2970,14 @@ msgstr "ATM 虛擬帳號"
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
-#: src/Modules/CustomerService/Module.php:93
+#: src/Modules/CustomerService/Module.php:91
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:61
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:66
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:202
 msgid "Shipping method"
 msgstr "運送方式"
 
-#: src/Modules/CustomerService/Module.php:94
+#: src/Modules/CustomerService/Module.php:92
 #: src/Modules/OrderLookup/SearchableKeys.php:100
 #: src/Modules/OrderLookup/SearchableKeys.php:106
 #: src/Modules/OrderLookup/SearchableKeys.php:112
@@ -3005,36 +2989,36 @@ msgstr "運送方式"
 msgid "Tracking number"
 msgstr "貨號"
 
-#: src/Modules/CustomerService/Module.php:95
+#: src/Modules/CustomerService/Module.php:93
 msgid "E-invoice number"
 msgstr "電子發票號碼"
 
-#: src/Modules/CustomerService/Module.php:96
+#: src/Modules/CustomerService/Module.php:94
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:166
 msgid "Items"
 msgstr "商品"
 
-#: src/Modules/CustomerService/Module.php:97
+#: src/Modules/CustomerService/Module.php:95
 msgid "Enter your order number and the last three digits of your billing phone to check on your order."
 msgstr "輸入訂單編號與帳單電話末三碼即可查詢訂單進度。"
 
-#: src/Modules/CustomerService/Module.php:98
+#: src/Modules/CustomerService/Module.php:96
 msgid "Contact us"
 msgstr "聯絡客服"
 
-#: src/Modules/CustomerService/Module.php:99
+#: src/Modules/CustomerService/Module.php:97
 msgid "← Back to the order"
 msgstr "← 返回訂單"
 
-#: src/Modules/CustomerService/Module.php:101
+#: src/Modules/CustomerService/Module.php:99
 msgid "Write a message…"
 msgstr "輸入訊息…"
 
-#: src/Modules/CustomerService/Module.php:102
+#: src/Modules/CustomerService/Module.php:100
 msgid "You"
 msgstr "您"
 
-#: src/Modules/CustomerService/Module.php:105
+#: src/Modules/CustomerService/Module.php:103
 msgid "Any questions? Send a message and we will get back to you as soon as we can."
 msgstr "有問題嗎?輸入訊息,我們會盡快回覆。"
 
@@ -12219,41 +12203,41 @@ msgstr "加速索引（大量訂單建議開啟）"
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:584
+#: src/Settings/SettingsPage.php:587
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:585
+#: src/Settings/SettingsPage.php:588
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:586
+#: src/Settings/SettingsPage.php:589
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:587
+#: src/Settings/SettingsPage.php:590
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:588
+#: src/Settings/SettingsPage.php:591
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:595
+#: src/Settings/SettingsPage.php:598
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:596
+#: src/Settings/SettingsPage.php:599
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:644
+#: src/Settings/SettingsPage.php:647
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:645
+#: src/Settings/SettingsPage.php:648
 msgid "Module overview"
 msgstr "模組總覽"
 

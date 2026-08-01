@@ -37,9 +37,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function boot(): void {
-		if ( 'yes' !== get_option( 'moksafowo_ai_enabled', 'no' ) ) {
-			return;
-		}
+		// 模組卡片（moksafowo_customer_service_enabled）是唯一的開關，見 AiAssistant\Module::boot()。
 		Schema::maybe_install();
 		add_action( 'rest_api_init', array( Rest::class, 'register' ) );
 		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );

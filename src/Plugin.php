@@ -89,14 +89,41 @@ final class Plugin {
 	}
 
 	public function on_woocommerce_init(): void {
+		self::migrate_ai_master_switch();
 		Settings\SettingsTab::register();
 		Modules\Shipping\Module::boot();
 		Modules\Address\TwAddress::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
-			Modules\AiAssistant\Admin\Hub::boot();
+			if ( $this->ai_hub_visible() ) {
+				Modules\AiAssistant\Admin\Hub::boot();
+			}
 		}
 		add_action( 'rest_api_init', [ Mcp\Server::class, 'register' ] );
 		$this->modules->boot();
+	}
+
+	/**
+	 * 「Moksa AI」子選單只在對應模組啟用時出現 —— 開關統一在「Moksa 電商工具 → 模組總覽」的卡片。
+	 */
+	private function ai_hub_visible(): bool {
+		return $this->modules->is_enabled( 'ai_assistant' )
+			|| $this->modules->is_enabled( 'customer_service' );
+	}
+
+	/**
+	 * v1.5.1 之前有第二層總開關 moksafowo_ai_enabled，兩個模組的 boot() 都會再檢查它。
+	 * 現在模組卡片是唯一開關，若舊站的總開關是關的，就把兩個模組一併關掉，維持原本的行為。
+	 */
+	private static function migrate_ai_master_switch(): void {
+		if ( 'done' === get_option( 'moksafowo_ai_master_migrated', '' ) ) {
+			return;
+		}
+		$old = get_option( 'moksafowo_ai_enabled', null );
+		if ( null !== $old && 'yes' !== $old ) {
+			update_option( 'moksafowo_ai_assistant_enabled', 'no', false );
+			update_option( 'moksafowo_customer_service_enabled', 'no', false );
+		}
+		update_option( 'moksafowo_ai_master_migrated', 'done', false );
 	}
 }

@@ -21,13 +21,33 @@
 	color: #646970;
 	line-height: 1.75;
 }
+/* 狀態徽章用 CSS 畫圓點，不用 emoji —— WordPress 會把 emoji 換成 s.w.org 的 <img>，
+   該網域被擋的站上就變成破圖加 alt 文字。 */
+.moksafowo-ai-ok,
+.moksafowo-ai-warn {
+	font-weight: 600;
+}
+.moksafowo-ai-ok::before,
+.moksafowo-ai-warn::before {
+	content: "";
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	margin-inline-end: 6px;
+	border-radius: 50%;
+	vertical-align: 1px;
+}
 .moksafowo-ai-ok {
 	color: #1a7f37;
-	font-weight: 600;
+}
+.moksafowo-ai-ok::before {
+	background: #1a7f37;
 }
 .moksafowo-ai-warn {
 	color: #b32d2e;
-	font-weight: 600;
+}
+.moksafowo-ai-warn::before {
+	background: #b32d2e;
 }
 
 /* 設定區段標題：金線在上方(標題下緣金色漸層)。 */

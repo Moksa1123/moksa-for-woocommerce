@@ -563,17 +563,20 @@ final class SettingsPage extends \WC_Settings_Page {
 			'shipping' => [],
 			'invoice'  => [],
 			'checkout' => [],
+			'tools'    => [],
 		];
+		// 訂單查號搜尋的開關與設定都在「進階設定」分頁，總覽不重複放卡片；
+		// 其餘工具類模組（AI 助手、前台客服）要有卡片，否則沒有地方可以啟用。
+		$overview_excluded = [ 'order_lookup' ];
 		foreach ( $registry->all() as $key => $class ) {
 			if ( ! class_exists( $class ) ) {
 				continue;
 			}
-			$instance = new $class();
-			$category = $instance->category();
-			// 工具類（訂單查號搜尋）的設定全部移到「進階設定」分頁，總覽不放卡片。
-			if ( 'tools' === $category ) {
+			if ( in_array( $key, $overview_excluded, true ) ) {
 				continue;
 			}
+			$instance = new $class();
+			$category = $instance->category();
 			if ( ! isset( $by_category[ $category ] ) ) {
 				$by_category[ $category ] = [];
 			}

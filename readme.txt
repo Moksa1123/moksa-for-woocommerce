@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,13 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.5.1 - 2026-08-01 =
+* Fix: the "About Moksa AI" status badge used emoji, which WordPress replaces with an image hosted on s.w.org. On sites where that host is unreachable the badge rendered as a broken image. It is now drawn in CSS and loads nothing external.
+* Fix: the Moksa AI submenu appeared under WooCommerce whether or not the assistant was in use. It now appears only once the Moksa AI or Storefront support module is enabled.
+* Fix: those two modules had no card on the module overview, so there was no way to enable them from the settings tab at all. They now appear under Tools alongside every other module.
+* Fix: both modules were behind two separate switches — the module card and a second master switch inside the Moksa AI screen — so enabling one alone did nothing. The module card is now the only switch. Sites that had the old master switch off keep both modules off.
+* The Moksa AI screen now uses the same collapsible section cards as the rest of the settings tab.
 
 = 1.5.0 - 2026-08-01 =
 * i18n: every translatable string is now written in English in the source, and Traditional Chinese ships as a real translation. Previously the source strings were Chinese, which meant the plugin could never be translated into any other language and WordPress.org reported it as having no Traditional Chinese localisation at all. 2,442 strings are covered, so Chinese stores see exactly the same wording as before.
