@@ -11,6 +11,14 @@ defined( 'ABSPATH' ) || exit;
 
 final class SettingsPage extends \WC_Settings_Page {
 
+	/**
+	 * 不在「模組總覽」放卡片的模組 —— 它們的開關在別的分頁。
+	 *
+	 * ⚠️ 渲染與儲存必須用同一份清單。只在渲染端排除、儲存端照樣迭代，
+	 * 會讓沒有卡片的模組每次儲存都被設成 'no'（沒有 POST 值就當作沒勾）。
+	 */
+	private const OVERVIEW_EXCLUDED = [ 'order_lookup' ];
+
 	public function __construct() {
 		$this->id    = SettingsTab::TAB_ID;
 		$this->label = __( 'Moksa E-Commerce Tools', 'moksa-for-woocommerce' );
@@ -565,14 +573,11 @@ final class SettingsPage extends \WC_Settings_Page {
 			'checkout' => [],
 			'tools'    => [],
 		];
-		// 訂單查號搜尋的開關與設定都在「進階設定」分頁，總覽不重複放卡片；
-		// 其餘工具類模組（AI 助手、前台客服）要有卡片，否則沒有地方可以啟用。
-		$overview_excluded = [ 'order_lookup' ];
 		foreach ( $registry->all() as $key => $class ) {
 			if ( ! class_exists( $class ) ) {
 				continue;
 			}
-			if ( in_array( $key, $overview_excluded, true ) ) {
+			if ( in_array( $key, self::OVERVIEW_EXCLUDED, true ) ) {
 				continue;
 			}
 			$instance = new $class();
@@ -666,6 +671,12 @@ final class SettingsPage extends \WC_Settings_Page {
 		$registry = Plugin::instance()->modules();
 		$posted   = wp_unslash( $_POST );
 		foreach ( $registry->all() as $key => $class ) {
+			// 只寫「這一頁真的有卡片」的模組。沒渲染的模組不會有 POST 值，
+			// 照樣寫入等於每次按儲存就把它關掉 —— 訂單查號搜尋的開關在「進階設定」，
+			// 之前就是這樣被無聲關掉的（連帶讓 AI 助手失去全部工具）。
+			if ( in_array( $key, self::OVERVIEW_EXCLUDED, true ) ) {
+				continue;
+			}
 			$option = sprintf( 'moksafowo_%s_enabled', $key );
 			$value  = isset( $posted[ $option ] ) && 'yes' === $posted[ $option ] ? 'yes' : 'no';
 			update_option( $option, $value );

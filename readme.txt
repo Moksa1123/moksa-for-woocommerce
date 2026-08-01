@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.5.4 - 2026-08-01 =
+* Fix: saving the module list switched off any module whose card is not on that screen. Order number lookup is configured on the Advanced tab, so every save silently turned it off — and because it is what registers the assistant's tools, the AI assistant was left with nothing to work with.
+* Fix: enabling only the AI assistant gave it no tools at all, so the chat window never appeared and nothing seemed to happen. It now registers the order abilities it needs on its own.
+* Fix: opening the Moksa AI screen while both modules were off showed "you do not have permission to access this page", which is what WordPress says about a page that is not registered — it was never a permissions problem. The screen now explains the situation and links to the module list.
+* Fix: the checkout field order list was missing the email field.
 
 = 1.5.3 - 2026-08-01 =
 * Fix: 1.5.2 could show a floating assistant button on every admin screen even when nothing was available to run, opening an empty panel. It now appears only when there is something to show.

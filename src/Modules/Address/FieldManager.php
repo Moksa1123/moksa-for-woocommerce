@@ -72,6 +72,14 @@ final class FieldManager {
 			'enabled'  => true,
 			'required' => true,
 		],
+		// Email 只存在於帳單欄位（運送地址沒有 shipping_email）。寬度固定 100 ——
+		// 若給 50 而與鄰欄配對，運送地址少了這一欄會讓配對錯位。
+		[
+			'key'      => 'email',
+			'width'    => 100,
+			'enabled'  => true,
+			'required' => true,
+		],
 	];
 
 	private const FIELD_LABELS = [
@@ -85,6 +93,7 @@ final class FieldManager {
 		'city'       => '鄉 / 鎮 / 區',
 		'postcode'   => '郵遞區號',
 		'phone'      => '電話',
+		'email'      => '電子郵件（僅帳單）',
 	];
 
 	private const FIELD_REPOPULATE = [

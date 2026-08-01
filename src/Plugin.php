@@ -95,20 +95,12 @@ final class Plugin {
 		Modules\Address\TwAddress::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
-			if ( $this->ai_hub_visible() ) {
-				Modules\AiAssistant\Admin\Hub::boot();
-			}
+			// Hub 一律 boot —— 它自己決定要不要出現在側邊欄（見 Hub::menu()）。
+			// 不 boot 的話頁面連路由都沒有，使用者點到舊連結會拿到誤導的權限錯誤。
+			Modules\AiAssistant\Admin\Hub::boot();
 		}
 		add_action( 'rest_api_init', [ Mcp\Server::class, 'register' ] );
 		$this->modules->boot();
-	}
-
-	/**
-	 * 「Moksa AI」子選單只在對應模組啟用時出現 —— 開關統一在「Moksa 電商工具 → 模組總覽」的卡片。
-	 */
-	private function ai_hub_visible(): bool {
-		return $this->modules->is_enabled( 'ai_assistant' )
-			|| $this->modules->is_enabled( 'customer_service' );
 	}
 
 	/**

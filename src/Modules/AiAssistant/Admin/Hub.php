@@ -66,14 +66,24 @@ final class Hub {
 		);
 	}
 
+	/**
+	 * 模組啟用時掛在 WooCommerce 底下；沒啟用時改掛 null parent ——
+	 * 頁面仍可路由（不會變成 WordPress 那句「沒有存取這個頁面的權限」，
+	 * 那其實是「頁面沒註冊」的訊息，看起來卻像權限問題），但不佔側邊欄。
+	 * 側邊欄是在 admin_menu 建的，早於設定儲存，所以剛切換完的那一次載入
+	 * 本來就看不到新項目 —— 這樣使用者點到舊連結時會看到說明而不是錯誤。
+	 */
 	public static function menu(): void {
-		$unread = Threads::count_unread();
+		$visible = \Moksafowo\Plugin::instance()->modules()->is_enabled( 'ai_assistant' )
+			|| \Moksafowo\Plugin::instance()->modules()->is_enabled( 'customer_service' );
+
+		$unread = $visible ? Threads::count_unread() : 0;
 		$label  = Config::NAME;
 		if ( $unread > 0 ) {
 			$label .= ' <span class="awaiting-mod">' . esc_html( (string) $unread ) . '</span>';
 		}
 		add_submenu_page(
-			'woocommerce',
+			$visible ? 'woocommerce' : null,
 			Config::NAME,
 			$label,
 			self::CAP,
@@ -82,8 +92,23 @@ final class Hub {
 		);
 	}
 
+	/** 模組都沒開時顯示的說明頁 —— 取代 WordPress 那句誤導的權限錯誤。 */
+	private static function render_disabled_notice(): void {
+		$url = admin_url( 'admin.php?page=wc-settings&tab=' . \Moksafowo\Settings\SettingsTab::TAB_ID );
+		echo '<div class="wrap woocommerce"><h1>' . esc_html( Config::NAME ) . '</h1>';
+		echo '<div class="notice notice-info"><p>';
+		echo esc_html__( 'Moksa AI and Storefront support are both switched off, so there is nothing to configure here yet.', 'moksa-for-woocommerce' );
+		echo '</p><p><a class="button button-primary" href="' . esc_url( $url ) . '">'
+			. esc_html__( 'Go to the module list', 'moksa-for-woocommerce' ) . '</a></p></div></div>';
+	}
+
 	public static function render(): void {
 		if ( ! current_user_can( self::CAP ) ) {
+			return;
+		}
+		$modules = \Moksafowo\Plugin::instance()->modules();
+		if ( ! $modules->is_enabled( 'ai_assistant' ) && ! $modules->is_enabled( 'customer_service' ) ) {
+			self::render_disabled_notice();
 			return;
 		}
 		Schema::maybe_install();

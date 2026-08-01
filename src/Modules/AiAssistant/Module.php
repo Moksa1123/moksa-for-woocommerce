@@ -45,6 +45,11 @@ final class Module extends AbstractModule {
 			return;
 		}
 
+		// 這些 ability 由 OrderLookup 模組註冊，但它們是 AI 助手唯一的工具來源。
+		// 只開 AI、沒開 OrderLookup 時，助手會拿到 0 個工具 —— 選單有、對話窗不出現，
+		// 商家只會覺得「我開了但沒反應」。所以這裡確保註冊一定發生（內部有 once 閘）。
+		\Moksafowo\Modules\OrderLookup\Module::register_abilities();
+
 		add_filter( 'moksa_ai_abilities', [ self::class, 'register_abilities' ] );
 		add_filter( 'moksa_ai_destructive_handlers', [ self::class, 'register_destructive_handlers' ] );
 		add_filter( 'moksa_ai_system_instruction', [ self::class, 'register_system_instruction' ] );
