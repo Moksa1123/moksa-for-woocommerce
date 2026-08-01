@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.5.3 - 2026-08-01 =
+* Fix: 1.5.2 could show a floating assistant button on every admin screen even when nothing was available to run, opening an empty panel. It now appears only when there is something to show.
+* Fix: the assistant button used an emoji, which WordPress replaces with an image hosted on s.w.org; on sites that cannot reach that host it rendered as a broken image. It is now drawn as an inline icon and loads nothing external.
+* Fix: the fallback panel shown when no AI provider is configured was untranslated. Its labels now follow the site language.
 
 = 1.5.2 - 2026-08-01 =
 * The Moksa AI chat window is now a shared component. When several Moksa plugins are installed alongside each other they no longer each draw their own floating window; one window serves them all and can reach every plugin's abilities. Installed on its own, this plugin behaves exactly as before.
