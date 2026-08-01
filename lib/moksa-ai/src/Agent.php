@@ -1,53 +1,63 @@
 <?php
-
-declare( strict_types=1 );
-
-namespace Moksafowo\Modules\AiAssistant;
-
-defined( 'ABSPATH' ) || exit;
-
 /**
- * WP 7.0 AI Client agentic 迴圈 —— 把 moksa-for-woocommerce abilities 當工具,跑「生成 → 執行 ability
- * → 餵回 → 再生成」直到文字答覆。破壞性 ability 會被攔下,改回傳「需確認」讓人工按鈕確認。
+ * Moksa AI Agent — WordPress 7.0 AI Client 的 agentic 迴圈。
  *
- * 安全:① abilities 白名單(模型只能呼叫傳入的)② 每個 ability permission_callback(核心強制)
- * ③ 破壞性動作一律走人工確認(本 class 攔截,不在迴圈內執行)。
+ * 把各外掛註冊進 Registry 的 abilities 當工具，跑「生成 → 執行 ability → 餵回 → 再生成」
+ * 直到拿到文字答覆。破壞性 ability 會被攔下，改回傳「需確認」讓人工按鈕確認，
+ * 絕不在迴圈內執行。
  *
- * 回傳一律結構化陣列:
+ * 安全三層：
+ *   ① ability 白名單（模型只能呼叫傳進來的）
+ *   ② 每個 ability 自己的 permission_callback（核心強制）
+ *   ③ 破壞性動作一律走人工確認（本 class 攔截）
+ *
+ * 回傳一律結構化陣列：
  *   ['type'=>'text','reply'=>string]
  *   ['type'=>'confirm','token'=>string,'summary'=>string]
  *   ['type'=>'error','message'=>string]
+ *
+ * @package Moksa\AI
  */
+
+declare( strict_types=1 );
+
+namespace Moksa\AI;
+
+defined( 'ABSPATH' ) || exit;
+
 final class Agent {
 
-	const MAX_TURNS = 8;
-	const MODELS    = array( 'gemini-2.5-flash', 'claude-sonnet-4-6', 'gpt-4o-mini' );
+	const MAX_TURNS      = 8;
+	const MODELS         = array( 'gemini-2.5-flash', 'claude-sonnet-4-6', 'gpt-4o-mini' );
+	const CONFIRM_PREFIX = 'moksa_ai_confirm_';
+	const CONFIRM_TTL    = 5 * MINUTE_IN_SECONDS;
 
 	/**
-	 * @param string   $user_text 商家提問。
-	 * @param string[] $abilities 暴露給 AI 的 ability 白名單。
-	 * @param string   $system    系統提示。
+	 * @param string                                     $user_text 商家提問。
+	 * @param array<int, array{role?:string, text?:string}> $prior     前端帶來的對話歷史。
 	 * @return array<string,mixed>
 	 */
-	public static function run( string $user_text, array $abilities, string $system, array $prior = array() ): array {
-		if ( ! function_exists( 'wp_ai_client_prompt' ) || empty( $abilities ) ) {
-			return self::err( __( 'The AI Client is unavailable. It requires WordPress 7.0.', 'moksa-for-woocommerce' ) );
+	public static function run( string $user_text, array $prior = array() ): array {
+		$abilities = Registry::abilities();
+		if ( ! function_exists( 'wp_ai_client_prompt' ) || array() === $abilities ) {
+			return self::err( Registry::string( 'unavailable' ) );
 		}
 
+		$system   = Registry::system_instruction();
 		$resolver = new \WP_AI_Client_Ability_Function_Resolver( ...$abilities );
 
 		$destructive = array();
-		foreach ( Config::destructive_abilities() as $name ) {
+		foreach ( Registry::destructive_abilities() as $name ) {
 			$destructive[ \WP_AI_Client_Ability_Function_Resolver::ability_name_to_function_name( $name ) ] = $name;
 		}
 
 		$history = self::seed_history( $prior );
 		$current = $user_text;
-		$models  = self::MODELS; // 本地可變副本:卡在會回空內容的 provider 時可換家。
+		$models  = self::MODELS; // 本地可變副本：卡在會回空內容的 provider 時可換家。
 
 		for ( $turn = 0; $turn < self::MAX_TURNS; $turn++ ) {
-			// 逐家 model failover:某家(常見 Gemini 回空 content.parts / connector 失效)失敗就換下一家,
-			// 而不是整個請求失敗。using_model_preference 本身不會在單次呼叫失敗時自動換家。
+			// 逐家 model failover：某家失敗（常見 Gemini 回空 content.parts、或 connector 失效）
+			// 就換下一家，而不是整個請求失敗。using_model_preference 本身不會自動換家。
 			$result   = null;
 			$last_err = '';
 			foreach ( $models as $model ) {
@@ -66,7 +76,7 @@ final class Agent {
 				$last_err = $attempt->get_error_message();
 			}
 			if ( null === $result ) {
-				return self::err( $last_err !== '' ? $last_err : __( 'The AI cannot answer right now. Please try again shortly.', 'moksa-for-woocommerce' ) );
+				return self::err( '' !== $last_err ? $last_err : Registry::string( 'busy' ) );
 			}
 
 			$assistant = $result->toMessage();
@@ -86,36 +96,42 @@ final class Agent {
 				if ( '' !== trim( $text ) ) {
 					return self::text( $text );
 				}
-				$history[] = is_string( $current )
-					? new \WordPress\AiClient\Messages\DTO\UserMessage( array( new \WordPress\AiClient\Messages\DTO\MessagePart( $current ) ) )
-					: $current;
+				$history[] = self::as_user_message( $current );
 				$current   = new \WordPress\AiClient\Messages\DTO\UserMessage(
-					array( new \WordPress\AiClient\Messages\DTO\MessagePart( '請根據前面工具查到的資料,用繁體中文文字簡短回答我的問題。' ) )
+					array( new \WordPress\AiClient\Messages\DTO\MessagePart( 'Answer my question in text now, briefly, using what the tools already returned.' ) )
 				);
-				// 空內容無工具呼叫:把這家移到隊尾,下個 turn 換別家先試,避免卡在會回空的 provider。
+				// 空內容又沒有工具呼叫：把這家移到隊尾，下個 turn 換別家先試。
 				$models[] = array_shift( $models );
 				continue;
 			}
 
 			$tool_response = $resolver->execute_abilities( $assistant );
-			$history[]     = is_string( $current )
-				? new \WordPress\AiClient\Messages\DTO\UserMessage( array( new \WordPress\AiClient\Messages\DTO\MessagePart( $current ) ) )
-				: $current;
+			$history[]     = self::as_user_message( $current );
 			$history[]     = $assistant;
 			$current       = $tool_response;
 		}
 
-		return self::err( __( 'The AI could not finish after several attempts. Try asking a different way.', 'moksa-for-woocommerce' ) );
+		return self::err( Registry::string( 'exhausted' ) );
 	}
 
 	/**
-	 * 把前端帶來的對話歷史 seed 成 AI Client 訊息(上下文記憶)。
+	 * @param string|object $current 上一輪的使用者訊息或工具回應。
+	 * @return object
+	 */
+	private static function as_user_message( $current ) {
+		return is_string( $current )
+			? new \WordPress\AiClient\Messages\DTO\UserMessage( array( new \WordPress\AiClient\Messages\DTO\MessagePart( $current ) ) )
+			: $current;
+	}
+
+	/**
+	 * 把前端帶來的對話歷史 seed 成 AI Client 訊息（上下文記憶）。
 	 *
-	 * 各家 provider 對歷史要求嚴格交替且由 user 起,故:去開頭的 assistant、
-	 * 合併連續同角色、移除結尾的 user(避免與接下來的新 user prompt 連續)。
+	 * 各家 provider 對歷史要求嚴格交替且由 user 起，故：去開頭的 assistant、
+	 * 合併連續同角色、移除結尾的 user（避免與接下來的新 user prompt 連續）。
 	 *
 	 * @param array<int, array{role?:string, text?:string}> $prior 前端對話歷史。
-	 * @return object[] UserMessage / ModelMessage 陣列。
+	 * @return object[]
 	 */
 	private static function seed_history( array $prior ): array {
 		$turns = array();
@@ -158,7 +174,7 @@ final class Agent {
 	/**
 	 * 掃描助理訊息有沒有呼叫破壞性 ability。
 	 *
-	 * @param object               $assistant   助理訊息(WP AI Client Message)。
+	 * @param object               $assistant   助理訊息。
 	 * @param array<string,string> $destructive function-name => ability-name。
 	 * @return array{ability:string, args:array}|null
 	 */
@@ -181,16 +197,16 @@ final class Agent {
 	}
 
 	/**
-	 * 準備破壞性動作(只驗證描述,不執行),存一次性 token,回「需確認」。
+	 * 準備破壞性動作（只驗證並產生摘要，不執行），存一次性 token，回「需確認」。
 	 *
 	 * @param string $ability ability 名稱。
 	 * @param array  $args    AI 給的參數。
 	 * @return array<string,mixed>
 	 */
 	private static function prepare_confirm( string $ability, array $args ): array {
-		$handlers = Config::destructive_handlers();
-		if ( ! isset( $handlers[ $ability ]['prepare'] ) || ! is_callable( $handlers[ $ability ]['prepare'] ) ) {
-			return self::err( __( 'Unsupported action.', 'moksa-for-woocommerce' ) );
+		$handlers = Registry::destructive_handlers();
+		if ( ! isset( $handlers[ $ability ]['prepare'] ) ) {
+			return self::err( Registry::string( 'unsupported' ) );
 		}
 
 		$prepared = call_user_func( $handlers[ $ability ]['prepare'], $args );
@@ -198,18 +214,18 @@ final class Agent {
 			return self::err( $prepared->get_error_message() );
 		}
 		if ( ! is_array( $prepared ) || empty( $prepared['summary'] ) ) {
-			return self::err( __( 'This action could not be prepared.', 'moksa-for-woocommerce' ) );
+			return self::err( Registry::string( 'notPrepared' ) );
 		}
 
 		$token = wp_generate_password( 24, false, false );
 		set_transient(
-			'moksafowo_ai_confirm_' . $token,
+			self::CONFIRM_PREFIX . $token,
 			array(
 				'user'    => get_current_user_id(),
 				'ability' => $ability,
 				'params'  => $prepared,
 			),
-			5 * MINUTE_IN_SECONDS
+			self::CONFIRM_TTL
 		);
 
 		return array(

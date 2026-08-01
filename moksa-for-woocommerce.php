@@ -53,6 +53,13 @@ if ( ! file_exists( $mo_autoload ) ) {
 }
 require_once $mo_autoload;
 
+/*
+ * Moksa AI 共用層 —— 每個 Moksa 外掛都 bundle 一份，全站只有版本最高的那份會執行
+ * （見 lib/moksa-ai/moksa-ai.php 的選舉）。這個檔案不宣告任何類別或常數，
+ * 所以多個外掛同時載入也不會撞。
+ */
+require_once MOKSAFOWO_PLUGIN_DIR . 'lib/moksa-ai/moksa-ai.php';
+
 /* HPOS + Block Checkout compatibility — must run before woocommerce_init */
 add_action(
 	'before_woocommerce_init',
