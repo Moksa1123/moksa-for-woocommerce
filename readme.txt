@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.5.2 - 2026-08-01 =
+* The Moksa AI chat window is now a shared component. When several Moksa plugins are installed alongside each other they no longer each draw their own floating window; one window serves them all and can reach every plugin's abilities. Installed on its own, this plugin behaves exactly as before.
+* Fix: the assistant advertised its 28 abilities to the AI model even when the module that actually registers them was switched off. A model given a tool name that does not exist does not report an error — it invents an answer that looks plausible. Only abilities that are genuinely registered are offered now.
 
 = 1.5.1 - 2026-08-01 =
 * Fix: the "About Moksa AI" status badge used emoji, which WordPress replaces with an image hosted on s.w.org. On sites where that host is unreachable the badge rendered as a broken image. It is now drawn in CSS and loads nothing external.

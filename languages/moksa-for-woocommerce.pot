@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.5.1\n"
+"Project-Id-Version: Moksa for WooCommerce 1.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-01T03:42:37+00:00\n"
+"POT-Creation-Date: 2026-08-01T05:14:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -67,6 +67,7 @@ msgid "Moksa requires WooCommerce %1$s or higher. You are running %2$s."
 msgstr ""
 
 #: src/Mcp/Server.php:255
+#: src/Modules/AiAssistant/Module.php:109
 #: src/Modules/AiAssistant/Rest.php:139
 #: src/Modules/CustomerService/Admin/Inbox.php:127
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:52
@@ -2124,7 +2125,7 @@ msgid "Greeting"
 msgstr ""
 
 #: src/Modules/AiAssistant/Admin/Hub.php:190
-#: src/Modules/AiAssistant/Module.php:69
+#: src/Modules/AiAssistant/Module.php:96
 msgid "Hi, I'm Moksa AI. Ask me things like how many orders are awaiting shipment, or look up an invoice or tracking number."
 msgstr ""
 
@@ -2137,7 +2138,7 @@ msgid "Example questions"
 msgstr ""
 
 #: src/Modules/AiAssistant/Admin/Hub.php:198
-#: src/Modules/AiAssistant/Module.php:70
+#: src/Modules/AiAssistant/Module.php:89
 msgid "How many orders are awaiting shipment?,Order counts by status"
 msgstr ""
 
@@ -2250,23 +2251,28 @@ msgid "Keeps usage and cost in check. Once the limit is reached, messages are si
 msgstr ""
 
 #: src/Modules/AiAssistant/Agent.php:34
+#: src/Modules/AiAssistant/Module.php:103
 msgid "The AI Client is unavailable. It requires WordPress 7.0."
 msgstr ""
 
 #: src/Modules/AiAssistant/Agent.php:69
+#: src/Modules/AiAssistant/Module.php:104
 msgid "The AI cannot answer right now. Please try again shortly."
 msgstr ""
 
 #: src/Modules/AiAssistant/Agent.php:108
+#: src/Modules/AiAssistant/Module.php:105
 msgid "The AI could not finish after several attempts. Try asking a different way."
 msgstr ""
 
 #: src/Modules/AiAssistant/Agent.php:193
+#: src/Modules/AiAssistant/Module.php:106
 #: src/Modules/AiAssistant/Rest.php:147
 msgid "Unsupported action."
 msgstr ""
 
 #: src/Modules/AiAssistant/Agent.php:201
+#: src/Modules/AiAssistant/Module.php:107
 msgid "This action could not be prepared."
 msgstr ""
 
@@ -2274,42 +2280,43 @@ msgstr ""
 msgid "You are Moksa AI, the WooCommerce admin assistant for a Taiwanese online store. These are your tools: (1) find a single order by order number, e-invoice number, tracking number or payment transaction ID — when the user simply gives a number, such as “order 2855” or “status of 2855?”, treat it as an order number and use this tool; it is the right choice when all that is needed is a status or which order is meant; (2) get the full details of one order — items, totals, payment and shipping method, pickup store, invoice number and whether it has been issued, tracking number and payment transaction ID — use this for questions like “has the invoice been issued”, “what is the tracking number”, “which store is it going to” or “what did they buy”; (3) count orders and see the breakdown by status, or list the orders in one status (awaiting shipment is processing, awaiting payment is pending, finished is completed); (4) change an order status — update-order-status for one order, batch-update-order-status for several; (5) issue an e-invoice with issue-invoice; (6) void an e-invoice with void-invoice, which needs a reason; (7) print shipping labels with print-shipping-label, for one or more orders that already have shipments; (8) create a shipment with create-shipment, which books it with the carrier and returns a tracking number, after which the label can be printed. Tools 4 to 8 are only proposed: the user is asked to press Confirm before anything happens, so never ask for confirmation yourself. (9) add an order note with add-order-note, which is low risk and runs immediately; (10) list payment, shipping and e-invoice channels with list-channels (read-only); (11) enable or disable a channel with toggle-channel — pass the channel name such as “SmilePay shipping” directly, with no need to list them first (destructive, so it goes through confirmation); (12) add an invoice donation charity with add-donation-org, giving a name and love code (destructive, confirmed); (13) issue an invoice allowance with issue-allowance, giving an amount (destructive, confirmed); (14) get an advanced order list with list-orders, filtered by status, date range or payment method (read-only); (15) list a payment service's individual methods with list-payment-methods (read-only); (16) enable or disable those methods with toggle-payment-method, such as ECPay's one-off card payment or Apple Pay, passing the names directly (destructive, confirmed); (17) list invoice issuing options with list-invoice-channels (read-only); (18) enable or disable them with toggle-invoice-channel — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID (destructive, confirmed); (19) resend the payment details email with resend-payment-email, sending the ATM or convenience store details to the customer (destructive, confirmed); (20) get tracking links with get-tracking-link (read-only); (21) check payment status with get-payment-status — method, whether it is paid, transaction ID, last four card digits, ATM and convenience store details, with a live NewebPay query where applicable (read-only); (22) summarize the plugin settings with get-plugin-settings — which channels are on, test or production mode, when invoices are issued, which fields order lookup searches and whether AI is enabled, never credentials (read-only); (23) list shipping zones and methods with list-shipping-zones (read-only); (24) enable or disable a shipping method with toggle-shipping-method, naming the method directly, such as “SmilePay T-Cat ambient” (destructive, confirmed); (25) create shipments in bulk with batch-create-shipment (destructive, confirmed); (26) find a customer's orders with find-customer-orders by email, phone or name (read-only); (27) get revenue statistics with sales-summary — revenue, order count, status breakdown and average order value for a period, defaulting to this month (read-only). Tools 11 to 13, 16, 18, 19, 24 and 25 are also only proposed and wait for confirmation. Always look up the real data with a tool before answering, then reply briefly and clearly in the language the merchant is using. Report only the orders that genuinely match the question, and never pad the answer with unrelated ones. If nothing is found, say so plainly rather than inventing anything. If asked for something the tools cannot do, such as printing many shipping labels at once or changing a great many statuses, do not simply say it is impossible — explain that it can be done by ticking the orders in the WooCommerce order list and using the bulk actions menu above, and that you can help with lookups and single status changes. If several things are asked at once, gather everything with the appropriate tools first, then combine the answers into a single reply. Always finish with text; never stop at a tool call without answering."
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:25
+#: src/Modules/AiAssistant/Module.php:26
 msgid "Moksa AI (beta) — one sentence gets you an order, a count or a status"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:37
+#: src/Modules/AiAssistant/Module.php:38
 msgid "Requires WordPress 7.0 and an AI key"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:80
+#: src/Modules/AiAssistant/Module.php:97
 msgid "For example: how many orders are awaiting shipment?"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:82
+#: src/Modules/AiAssistant/Module.php:98
 #: src/Modules/CustomerService/Module.php:98
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:399
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:454
 msgid "Send"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:83
+#: src/Modules/AiAssistant/Module.php:99
 msgid "Looking that up"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:84
+#: src/Modules/AiAssistant/Module.php:100
 msgid "Clear"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:85
+#: src/Modules/AiAssistant/Module.php:101
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:67
 msgid "Something went wrong"
 msgstr ""
 
-#: src/Modules/AiAssistant/Module.php:86
+#: src/Modules/AiAssistant/Module.php:102
 msgid "(no reply)"
 msgstr ""
 
+#: src/Modules/AiAssistant/Module.php:108
 #: src/Modules/AiAssistant/Rest.php:136
 msgid "That confirmation has expired or no longer exists. Please start again."
 msgstr ""
