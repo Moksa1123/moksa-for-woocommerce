@@ -191,6 +191,52 @@ final class StoreSelector {
 		);
 	}
 
+	/**
+	 * 後台改門市用的地圖 payload。跟 ajax_open_map() 同一份請求，差別只在 state 標了
+	 * context=admin，callback 才知道要 postMessage 回訂單頁而不是導回結帳。
+	 *
+	 * @return array{api_url:string,form_data:array<string,string>}|\WP_Error
+	 */
+	public static function admin_map_payload( \WC_Order $order, string $method_id ) {
+		if ( ! isset( Module::method_map()[ $method_id ] ) ) {
+			return new \WP_Error( 'moksafowo_not_newebpay', __( 'This is not a NewebPay shipping method.', 'moksa-for-woocommerce' ) );
+		}
+
+		$mtn = self::generate_mtn();
+		set_transient(
+			self::STATE_PREFIX . $mtn,
+			[
+				'method_id' => $method_id,
+				'time'      => time(),
+				'context'   => 'admin',
+			],
+			30 * MINUTE_IN_SECONDS
+		);
+
+		$enabled   = (array) get_option( 'moksafowo_newebpay_shipping_enabled_carriers', [ '1', '2', '3', '4' ] );
+		$ship_type = (string) ( $order->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ) ?: '' );
+		if ( '' === $ship_type || ( $enabled && ! in_array( $ship_type, $enabled, true ) ) ) {
+			$ship_type = $enabled ? (string) reset( $enabled ) : '1';
+		}
+
+		$result = ShippingRequest::open_store_map(
+			[
+				'MerchantOrderNo' => $mtn,
+				'LgsType'         => (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' ),
+				'ShipType'        => $ship_type,
+				'ReturnURL'       => add_query_arg( 'wc-api', 'moksafowo_newebpay_shipping_map_callback', home_url( '/' ) ),
+			]
+		);
+		if ( ! $result['ok'] ) {
+			return new \WP_Error( 'moksafowo_map_failed', (string) $result['message'] );
+		}
+
+		return [
+			'api_url'   => $result['api_url'],
+			'form_data' => $result['form_data'],
+		];
+	}
+
 	public static function handle_callback(): void {
 		// Newebpay store-map callback: cross-site POST from Newebpay; no WP nonce possible.
 		// Source authenticity verified via HashData SHA256 + hash_equals before decryption,
@@ -243,6 +289,13 @@ final class StoreSelector {
 		if ( '' === $store['id'] ) {
 			status_header( 400 );
 			exit( 'Missing StoreID' );
+		}
+
+		// 後台改門市：不碰 session、不碰訂單，直接把門市 postMessage 回訂單編輯頁讓商家確認後再存
+		if ( 'admin' === ( $state['context'] ?? '' ) ) {
+			delete_transient( self::STATE_PREFIX . $mtn );
+			delete_transient( self::STATE_PREFIX . $mtn . '_ref' );
+			\Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::render_return( $store );
 		}
 
 		// transient + session 雙寫

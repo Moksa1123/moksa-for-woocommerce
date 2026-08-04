@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.5.4
+Stable tag: 1.6.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.6.0 - 2026-08-04 =
+* New: change the pickup store on a convenience-store order from the order screen. Open the shipping address for editing and you get store number, store name and store address fields, plus a "Choose store on map" button that opens the carrier's own store map in a new window and fills the fields in when you pick a store. Works for ECPay, NewebPay, PAYUNi and SmilePay pickup methods, and on orders you create in the admin yourself.
+* New: changing the store leaves an order note recording the old and new store number, as a reminder that a shipment created earlier still points at the old store.
+* Removed an admin store-map callback endpoint in the PAYUNi shipping module that nothing linked to and that no longer worked on HPOS sites.
 
 = 1.5.4 - 2026-08-01 =
 * Fix: saving the module list switched off any module whose card is not on that screen. Order number lookup is configured on the Advanced tab, so every save silently turned it off — and because it is what registers the assistant's tools, the AI assistant was left with nothing to work with.

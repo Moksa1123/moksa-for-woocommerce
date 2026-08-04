@@ -59,7 +59,35 @@ final class Module extends AbstractModule {
 			Operations\PrintProxy::init();
 		}
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 		Emails\EmailTrackingProvider::init();
+	}
+
+	/**
+	 * @param array<string,array<string,mixed>> $providers Registered providers.
+	 * @return array<string,array<string,mixed>>
+	 */
+	public static function register_cvs_store_editor( array $providers ): array {
+		$methods = [];
+		foreach ( self::method_map() as $id => $class ) {
+			if ( is_subclass_of( $class, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
+				$methods[ $id ] = $id;
+			}
+		}
+		if ( empty( $methods ) ) {
+			return $providers;
+		}
+		$providers['ecpay'] = [
+			'label'    => __( 'ECPay convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'  => $methods,
+			'meta'     => [
+				'id'      => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID,
+				'name'    => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME,
+				'address' => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS,
+			],
+			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+		];
+		return $providers;
 	}
 
 	public static function register_batch_print( array $providers ): array {

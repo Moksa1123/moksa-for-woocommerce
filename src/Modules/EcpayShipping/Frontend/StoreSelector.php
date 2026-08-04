@@ -164,6 +164,55 @@ final class StoreSelector {
 		);
 	}
 
+	/**
+	 * 後台改門市用的地圖 payload。跟 ajax_open_map() 同一份簽章邏輯，差別只在
+	 * state 裡標了 context=admin，callback 才知道要 postMessage 回訂單頁而不是導回結帳。
+	 *
+	 * @return array{api_url:string,form_data:array<string,string>}|\WP_Error
+	 */
+	public static function admin_map_payload( \WC_Order $order, string $method_id ) {
+		$map = Module::method_map();
+		if ( ! isset( $map[ $method_id ] ) ) {
+			return new \WP_Error( 'moksafowo_not_ecpay', __( 'This is not an ECPay shipping method.', 'moksa-for-woocommerce' ) );
+		}
+		$class = $map[ $method_id ];
+		if ( ! is_subclass_of( $class, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
+			return new \WP_Error( 'moksafowo_not_cvs', __( 'This shipping method does not need a store.', 'moksa-for-woocommerce' ) );
+		}
+
+		$method  = new $class();
+		$subtype = $method->logistics_sub_type();
+		$mtn     = Helper::generate_merchant_trade_no( $order->get_id() );
+
+		set_transient(
+			self::STATE_PREFIX . $mtn,
+			[
+				'method_id'  => $method_id,
+				'pending_id' => $order->get_id(),
+				'referrer'   => '',
+				'context'    => 'admin',
+			],
+			30 * MINUTE_IN_SECONDS
+		);
+
+		$payload                  = [
+			'MerchantID'       => Helper::merchant_id( $subtype ),
+			'MerchantTradeNo'  => $mtn,
+			'LogisticsType'    => 'CVS',
+			'LogisticsSubType' => $subtype,
+			'IsCollection'     => 'cod' === (string) $order->get_payment_method() ? 'Y' : 'N',
+			'ServerReplyURL'   => add_query_arg( 'wc-api', 'moksafowo_ecpay_shipping_map_callback', home_url( '/' ) ),
+			'ExtraData'        => '',
+			'Device'           => '0',
+		];
+		$payload['CheckMacValue'] = Helper::generate_check_mac_value( $payload, $subtype );
+
+		return [
+			'api_url'   => Helper::map_endpoint(),
+			'form_data' => $payload,
+		];
+	}
+
 	public static function handle_callback(): void {
 		// ECPay store-map callback: cross-site POST from ECPay server; no WP nonce possible.
 		// Anti-tamper guard: MerchantTradeNo must match a transient set when the map was legitimately opened
@@ -203,6 +252,12 @@ final class StoreSelector {
 			status_header( 400 );
 			echo 'Missing CVSStoreID';
 			exit;
+		}
+
+		// 後台改門市：不碰 session、不碰訂單，直接把門市 postMessage 回訂單編輯頁讓商家確認後再存
+		if ( 'admin' === ( $state['context'] ?? '' ) ) {
+			delete_transient( self::STATE_PREFIX . $mtn );
+			\Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::render_return( $store );
 		}
 
 		$token = wp_generate_password( 24, false );

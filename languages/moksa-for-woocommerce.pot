@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-01T15:21:06+00:00\n"
+"POT-Creation-Date: 2026-08-04T07:43:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -82,9 +82,9 @@ msgstr ""
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:83
 #: src/Modules/NewebpayShipping/Module.php:108
-#: src/Modules/NewebpayShipping/Module.php:152
+#: src/Modules/NewebpayShipping/Module.php:133
+#: src/Modules/NewebpayShipping/Module.php:177
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1161
 #: src/Modules/Payuni/PayuniPayment.php:215
@@ -5038,7 +5038,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:83
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:75
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:95
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
 msgid "Choose a pickup store"
 msgstr ""
 
@@ -5046,8 +5046,8 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:76
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:181
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:757
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:96
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:779
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Change store"
 msgstr ""
 
@@ -5059,7 +5059,7 @@ msgstr ""
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:86
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:79
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
 #: templates/emails/moksa-cvs-arrived.php:37
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
@@ -5070,10 +5070,13 @@ msgid "The ECPay store picker could not be opened. Please try again later."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:116
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:176
 msgid "This is not an ECPay shipping method."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:121
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:180
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
 msgid "This shipping method does not need a store."
 msgstr ""
 
@@ -5203,39 +5206,43 @@ msgstr ""
 msgid "7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and post office delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:67
+#: src/Modules/EcpayShipping/Module.php:81
+msgid "ECPay convenience store pickup"
+msgstr ""
+
+#: src/Modules/EcpayShipping/Module.php:95
 msgid "ECPay 7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:68
+#: src/Modules/EcpayShipping/Module.php:96
 msgid "ECPay 7-ELEVEN B2C frozen"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:69
+#: src/Modules/EcpayShipping/Module.php:97
 msgid "ECPay FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:70
+#: src/Modules/EcpayShipping/Module.php:98
 msgid "ECPay Hi-Life pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:71
+#: src/Modules/EcpayShipping/Module.php:99
 msgid "ECPay OK Mart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:72
+#: src/Modules/EcpayShipping/Module.php:100
 msgid "ECPay T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:73
+#: src/Modules/EcpayShipping/Module.php:101
 msgid "ECPay Chunghwa Post"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:110
+#: src/Modules/EcpayShipping/Module.php:138
 msgid "ECPay convenience store labels"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:122
+#: src/Modules/EcpayShipping/Module.php:150
 msgid "ECPay home delivery labels"
 msgstr ""
 
@@ -5255,6 +5262,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:60
 #: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:60
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:157
 msgid "No pickup store has been chosen yet."
 msgstr ""
 
@@ -6024,9 +6032,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:88
 #: src/Modules/NewebpayShipping/Module.php:113
-#: src/Modules/NewebpayShipping/Module.php:157
+#: src/Modules/NewebpayShipping/Module.php:138
+#: src/Modules/NewebpayShipping/Module.php:182
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6430,8 +6438,8 @@ msgstr ""
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:78
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:182
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:761
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:783
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "No pickup store chosen yet"
 msgstr ""
 
@@ -6448,6 +6456,7 @@ msgid "OK mart"
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:148
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:202
 msgid "This is not a NewebPay shipping method."
 msgstr ""
 
@@ -6477,50 +6486,51 @@ msgstr ""
 msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:65
+#: src/Modules/NewebpayShipping/Module.php:70
+#: src/Modules/NewebpayShipping/Module.php:90
 msgid "NewebPay convenience store pickup"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:69
+#: src/Modules/NewebpayShipping/Module.php:94
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr ""
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:96
+#: src/Modules/NewebpayShipping/Module.php:121
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:117
+#: src/Modules/NewebpayShipping/Module.php:142
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:122
+#: src/Modules/NewebpayShipping/Module.php:147
 #, php-format
 msgid "The lookup failed: %s"
 msgstr ""
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:132
+#: src/Modules/NewebpayShipping/Module.php:157
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr ""
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:142
+#: src/Modules/NewebpayShipping/Module.php:167
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:161
+#: src/Modules/NewebpayShipping/Module.php:186
 msgid "No shipment has been created for this order yet."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:166
+#: src/Modules/NewebpayShipping/Module.php:191
 #, php-format
 msgid "Tracking failed: %s"
 msgstr ""
@@ -8557,8 +8567,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:716
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:725
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:738
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:747
 msgid "Convenience store"
 msgstr ""
 
@@ -9049,7 +9059,7 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:69
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:75
-#: src/Modules/PayuniShipping/PayuniShipping.php:305
+#: src/Modules/PayuniShipping/PayuniShipping.php:338
 msgid "Shipping Phone"
 msgstr ""
 
@@ -9142,7 +9152,6 @@ msgstr ""
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:235
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:302
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:472
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:379
 msgid "Permission denied."
 msgstr ""
 
@@ -9165,6 +9174,7 @@ msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:257
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:274
 msgid "Order not found."
 msgstr ""
 
@@ -9184,7 +9194,6 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:305
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:475
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:384
 msgid "Invalid security token."
 msgstr ""
 
@@ -9332,7 +9341,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:180
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:218
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:221
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:762
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
 msgid "Choose a store"
 msgstr ""
 
@@ -9371,37 +9380,40 @@ msgid "The chosen shipping method does not match the cart."
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:299
 msgid "Please choose a convenience store pickup method"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:362
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:369
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:421
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:428
 msgid "Returning to checkout…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:363
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:422
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:312
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:313
 msgid "Store selected"
 msgstr ""
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:366
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:425
 #, php-format
 msgid "Store chosen: %s"
 msgstr ""
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:368
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:427
 #, php-format
 msgid "Store address: %s"
 msgstr ""
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:751
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:773
 #, php-format
 msgid "Store number: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:753
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:775
 msgid "Outlying islands"
 msgstr ""
 
@@ -9495,59 +9507,63 @@ msgstr ""
 msgid "PAYUNi shipment created, number %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:174
+#: src/Modules/PayuniShipping/PayuniShipping.php:186
+msgid "PAYUNi convenience store pickup"
+msgstr ""
+
+#: src/Modules/PayuniShipping/PayuniShipping.php:207
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:175
+#: src/Modules/PayuniShipping/PayuniShipping.php:208
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:176
+#: src/Modules/PayuniShipping/PayuniShipping.php:209
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:177
+#: src/Modules/PayuniShipping/PayuniShipping.php:210
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:178
+#: src/Modules/PayuniShipping/PayuniShipping.php:211
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:179
+#: src/Modules/PayuniShipping/PayuniShipping.php:212
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:182
+#: src/Modules/PayuniShipping/PayuniShipping.php:215
 msgid "PAYUNi T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:183
+#: src/Modules/PayuniShipping/PayuniShipping.php:216
 msgid "PAYUNi T-Cat ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:184
+#: src/Modules/PayuniShipping/PayuniShipping.php:217
 msgid "PAYUNi T-Cat frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:185
+#: src/Modules/PayuniShipping/PayuniShipping.php:218
 msgid "PAYUNi T-Cat chilled"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:244
 msgid "PAYUNi convenience store labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:227
+#: src/Modules/PayuniShipping/PayuniShipping.php:260
 msgid "PAYUNi home delivery labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:563
+#: src/Modules/PayuniShipping/PayuniShipping.php:596
 msgid "General Settings"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:564
+#: src/Modules/PayuniShipping/PayuniShipping.php:597
 msgid "Shipping Settings"
 msgstr ""
 
@@ -10549,6 +10565,72 @@ msgstr ""
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:591
 #, php-format
 msgid "Print label %d"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:112
+msgid "Pickup store number"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:121
+msgid "Pickup store name"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:130
+msgid "Pickup store address"
+msgstr ""
+
+#. translators: 1: previous store number, 2: new store number
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:156
+#, php-format
+msgid "Pickup store changed from %1$s to %2$s. Any shipment already created still points at the old store — delete it and create a new one."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:157
+msgid "(none)"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:220
+msgid "Choose store on map"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:226
+msgid "The store is only saved when you update the order. Changing the store here does not reissue the shipment — delete the existing shipment and create it again."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:255
+msgid "Opening the store map…"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:256
+msgid "Store filled in. Remember to update the order."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:257
+msgid "The store map window was blocked. Allow pop-ups for this site and try again."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:258
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:287
+msgid "The store map could not be opened."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:268
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
+msgid "You are not allowed to edit orders."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:279
+msgid "This order does not use a convenience store pickup method."
+msgstr ""
+
+#. translators: 1: store number, 2: store name
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:316
+#, php-format
+msgid "Store: %1$s %2$s"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:318
+msgid "You can close this window and go back to the order — remember to update the order to keep the change."
 msgstr ""
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:109
@@ -11697,35 +11779,39 @@ msgstr ""
 msgid "7-ELEVEN and FamilyMart pickup, plus T-Cat ambient, chilled and frozen"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:88
+#: src/Modules/SmilepayShipping/Module.php:68
+msgid "SmilePay convenience store pickup"
+msgstr ""
+
+#: src/Modules/SmilepayShipping/Module.php:111
 msgid "SmilePay 7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:89
+#: src/Modules/SmilepayShipping/Module.php:112
 msgid "SmilePay FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:92
+#: src/Modules/SmilepayShipping/Module.php:115
 msgid "SmilePay convenience store labels"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:102
+#: src/Modules/SmilepayShipping/Module.php:125
 msgid "SmilePay T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:103
+#: src/Modules/SmilepayShipping/Module.php:126
 msgid "SmilePay T-Cat ambient"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:104
+#: src/Modules/SmilepayShipping/Module.php:127
 msgid "SmilePay T-Cat chilled"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:105
+#: src/Modules/SmilepayShipping/Module.php:128
 msgid "SmilePay T-Cat frozen"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:118
+#: src/Modules/SmilepayShipping/Module.php:141
 msgid "SmilePay T-Cat labels"
 msgstr ""
 

@@ -21,6 +21,8 @@ final class StoreSelector {
 
 		// callback endpoint — SmilePay 選店後 redirect 回此
 		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_emap', [ __CLASS__, 'handle_emap_callback' ] );
+		// 後台改門市走另一個 endpoint —— EMAP 的 url 參數不能帶 query string（SmilePay 回傳時會直接接 ?storeid=）
+		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_emap_admin', [ __CLASS__, 'handle_admin_emap_callback' ] );
 
 		// 結帳頁 enqueue JS 注入按鈕
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
@@ -108,6 +110,54 @@ final class StoreSelector {
 			has_block( 'woocommerce/checkout', $post )
 			|| has_shortcode( $post->post_content, 'woocommerce_checkout' )
 		);
+	}
+
+	private const ADMIN_STATE = 'moksafowo_smilepay_admin_emap_';
+
+	/**
+	 * 後台改門市用的 EMAP 網址。SmilePay 是 GET 導頁，沒有簽章可驗，
+	 * 所以回程只認「同一個管理者剛剛開過地圖」的 transient，而且只畫頁面不寫訂單。
+	 *
+	 * @return array{url:string}|\WP_Error
+	 */
+	public static function admin_map_payload( \WC_Order $order, string $method_id ) {
+		$brands = [
+			'moksafowo_smilepay_shipping_cvs_711'  => '711',
+			'moksafowo_smilepay_shipping_cvs_fami' => 'FAMI',
+		];
+		if ( ! isset( $brands[ $method_id ] ) ) {
+			return new \WP_Error( 'moksafowo_not_cvs', __( 'This shipping method does not need a store.', 'moksa-for-woocommerce' ) );
+		}
+
+		set_transient( self::ADMIN_STATE . get_current_user_id(), 1, 30 * MINUTE_IN_SECONDS );
+
+		return [
+			'url' => ShippingRequest::build_emap_url(
+				$brands[ $method_id ] . Helper::cvs_service_type(),
+				wp_create_nonce( 'moksafowo_smilepay_emap_' . get_current_user_id() ),
+				home_url( '/wc-api/moksafowo_smilepay_shipping_emap_admin' )
+			),
+		];
+	}
+
+	public static function handle_admin_emap_callback(): void {
+		// SmilePay EMAP 回程：GET 導頁、協定無簽章。這裡不寫任何訂單／session 狀態，
+		// 只把門市畫回開啟它的訂單編輯頁；門市要等商家在後台按更新訂單才會存。
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! get_transient( self::ADMIN_STATE . get_current_user_id() ) ) {
+			wp_die( esc_html__( 'You are not allowed to edit orders.', 'moksa-for-woocommerce' ), 403 );
+		}
+		delete_transient( self::ADMIN_STATE . get_current_user_id() );
+
+		$store = [
+			'id'      => isset( $_GET['storeid'] ) ? sanitize_text_field( wp_unslash( $_GET['storeid'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP redirect; no nonce possible (protocol limitation); guarded by capability + one-shot transient above; render-only, no state written.
+			'name'    => isset( $_GET['storename'] ) ? sanitize_text_field( wp_unslash( $_GET['storename'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- see above.
+			'address' => isset( $_GET['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_GET['storeaddress'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- see above.
+		];
+		if ( '' === $store['id'] ) {
+			wp_die( esc_html__( 'No pickup store has been chosen yet.', 'moksa-for-woocommerce' ), 400 );
+		}
+
+		\Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::render_return( $store );
 	}
 
 	public static function handle_emap_callback(): void {

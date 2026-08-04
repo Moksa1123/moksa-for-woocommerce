@@ -54,10 +54,35 @@ final class Module extends AbstractModule {
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_query', [ __CLASS__, 'ajax_query_shipment' ] );
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
 		Frontend\StoreSelector::init();
+		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 		}
+	}
+
+	/**
+	 * @param array<string,array<string,mixed>> $providers Registered providers.
+	 * @return array<string,array<string,mixed>>
+	 */
+	public static function register_cvs_store_editor( array $providers ): array {
+		$providers['newebpay'] = [
+			'label'    => __( 'NewebPay convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'  => [ 'moksafowo_newebpay_shipping_cvs' => 'moksafowo_newebpay_shipping_cvs' ],
+			'meta'     => [
+				'id'      => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID,
+				'name'    => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME,
+				'address' => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS,
+			],
+			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			// 建單讀共用鍵，但模組自己的鍵也有人讀（PickupNotice / 客戶端顯示），一起寫才不會兩邊對不上
+			'sync'     => static function ( \WC_Order $order, array $store ): void {
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_ID, $store['id'] );
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_NAME, $store['name'] );
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_ADDR, $store['address'] );
+			},
+		];
+		return $providers;
 	}
 
 	public static function register_batch_print( array $providers ): array {

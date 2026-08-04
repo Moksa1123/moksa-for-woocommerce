@@ -14,6 +14,7 @@ use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
 use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 
 use Moksafowo\Modules\Shared\Frontend\Interstitial;
+use Moksafowo\Modules\Shipping\Admin\CvsStoreEditor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -59,7 +60,6 @@ class StoreSelector {
 		add_action( 'wp_ajax_nopriv_moksafowo_payuni_clear_store_data', array( __CLASS__, 'ajax_clear_store_data' ) );
 
 		add_action( 'woocommerce_api_moksafowo_payuni_store_callback', array( __CLASS__, 'handle_store_map_return' ) );
-		add_action( 'woocommerce_api_moksafowo_payuni_admin_store_callback', array( __CLASS__, 'handle_admin_store_map_return' ) );
 
 		add_filter( 'woocommerce_update_order_review_fragments', array( __CLASS__, 'add_store_data_fragment' ) );
 
@@ -285,6 +285,57 @@ JS
 		);
 	}
 
+	/**
+	 * 後台改門市用的地圖 payload。跟 ajax_open_store_map() 同一份加密請求，差別在
+	 * 後台沒有購物車 / session 可綁，改用「訂單上的 CVS 運送方式」當授權來源，
+	 * 且 token transient 標了 context=admin，callback 才知道要 postMessage 回訂單頁。
+	 *
+	 * @param \WC_Order $order     Order.
+	 * @param string    $method_id Shipping method id.
+	 * @return array{api_url:string,form_data:array<string,string>}|\WP_Error
+	 */
+	public static function admin_map_payload( \WC_Order $order, string $method_id ) {
+		if ( ! str_contains( $method_id, 'moksafowo_payuni_shipping_711' ) ) {
+			return new \WP_Error( 'moksafowo_not_cvs', __( 'Please choose a convenience store pickup method', 'moksa-for-woocommerce' ) );
+		}
+
+		$token = wp_generate_password( 24, false, false );
+		set_transient(
+			'moksafowo_payuni_store_' . $token,
+			array(
+				'pending' => true,
+				'context' => 'admin',
+			),
+			30 * MINUTE_IN_SECONDS
+		);
+		$callback_url = add_query_arg( 'moksafowo_token', $token, WC()->api_request_url( 'moksafowo_payuni_store_callback' ) );
+
+		$encrypt_info = array(
+			'MerID'        => Credentials::merchant_id(),
+			'Timestamp'    => time(),
+			'MerKeyNo'     => '1234567890',
+			'GoodsType'    => '1',
+			'LgsType'      => LgsType::get_lgs_type_by_shipping_method( $method_id ),
+			'ShipType'     => '1',
+			'MapType'      => '2',
+			'MapReturnURL' => esc_url_raw( $callback_url ),
+			'Tag'          => '2',
+			'MobileTag'    => 'N',
+		);
+
+		$encrypted_info = PayuniShipping::encrypt( $encrypt_info );
+
+		return array(
+			'api_url'   => PayuniShipping::$api_url . '/logistics/ship_map',
+			'form_data' => array(
+				'MerID'       => Credentials::merchant_id(),
+				'Version'     => '1.1',
+				'EncryptInfo' => $encrypted_info,
+				'HashInfo'    => PayuniShipping::hash_info( $encrypted_info ),
+			),
+		);
+	}
+
 	public static function handle_store_map_return() {
 		// PAYUNi store-map callback: cross-site POST from PAYUNi; no WP nonce possible.
 		// Source authenticity verified via HashInfo hash_equals (PayuniShipping::hash_info) before decryption.
@@ -331,7 +382,15 @@ JS
 
 		// PRIMARY: transient by token — PAYUNi cross-site POST 可能在新 session 跑，session key 不可靠
 		$incoming_token = isset( $_GET['moksafowo_token'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_token'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- PAYUNi store callback; HashInfo verified above; token is a one-shot transient lookup key, sanitized via sanitize_key.
-		if ( strlen( $incoming_token ) >= 16 && get_transient( 'moksafowo_payuni_store_' . $incoming_token ) !== false ) {
+		$state          = strlen( $incoming_token ) >= 16 ? get_transient( 'moksafowo_payuni_store_' . $incoming_token ) : false;
+
+		// 後台改門市：不碰 session、不碰訂單，直接把門市 postMessage 回訂單編輯頁讓商家確認後再存
+		if ( is_array( $state ) && 'admin' === ( $state['context'] ?? '' ) ) {
+			delete_transient( 'moksafowo_payuni_store_' . $incoming_token );
+			CvsStoreEditor::render_return( $store_data );
+		}
+
+		if ( false !== $state ) {
 			set_transient( 'moksafowo_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
 			PayuniShipping::log( 'Store data saved to transient; token=' . substr( $incoming_token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
 		} else {
@@ -371,43 +430,6 @@ JS
 			$forms_html,
 			'setTimeout(function(){document.getElementById("moksafowo-payuni-store-redirect").submit();},1500);'
 		);
-		exit;
-	}
-
-	public static function handle_admin_store_map_return() {
-		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
-		}
-		$nonce    = isset( $_POST['_wpnonce'] ) ? sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ) : '';
-		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
-		if ( ! $order_id || ! wp_verify_nonce( $nonce, 'moksafowo_payuni_admin_store_' . $order_id ) ) {
-			wp_die( esc_html__( 'Invalid security token.', 'moksa-for-woocommerce' ), 403 );
-		}
-
-		$store_data = array(
-			'CVSStoreID'   => isset( $_POST['CVSStoreID'] ) ? sanitize_text_field( wp_unslash( $_POST['CVSStoreID'] ) ) : '',
-			'CVSStoreName' => isset( $_POST['CVSStoreName'] ) ? sanitize_text_field( wp_unslash( $_POST['CVSStoreName'] ) ) : '',
-			'CVSAddress'   => isset( $_POST['CVSAddress'] ) ? sanitize_text_field( wp_unslash( $_POST['CVSAddress'] ) ) : '',
-		);
-
-		$order = wc_get_order( $order_id );
-		if ( $order ) {
-			$unified_store_data = array(
-				'id'      => $store_data['CVSStoreID'],
-				'name'    => $store_data['CVSStoreName'],
-				'address' => $store_data['CVSAddress'],
-			);
-
-			$order->update_meta_data( OrderMeta::STORE_DATA_JSON, wp_json_encode( $unified_store_data ) );
-			// 舊格式向下相容
-			$order->update_meta_data( OrderMeta::StoreId, $store_data['CVSStoreID'] );
-			$order->update_meta_data( OrderMeta::StoreName, $store_data['CVSStoreName'] );
-			$order->update_meta_data( OrderMeta::StoreAddr, $store_data['CVSAddress'] );
-
-			$order->save();
-		}
-
-		wp_safe_redirect( admin_url( 'post.php?post=' . $order_id . '&action=edit&payuni_store_updated=1' ) );
 		exit;
 	}
 

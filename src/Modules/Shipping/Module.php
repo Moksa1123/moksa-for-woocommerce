@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Shipping;
 
 use Moksafowo\Modules\Shipping\Admin\BatchPrintAdminUI;
+use Moksafowo\Modules\Shipping\Admin\CvsStoreEditor;
 use Moksafowo\Modules\Shipping\Admin\ShippingCardSection;
 use Moksafowo\Modules\Shipping\Frontend\CartTempLabel;
 use Moksafowo\Modules\Shipping\Shortcodes\AddFee;
@@ -22,6 +23,7 @@ final class Module {
 		CartTempLabel::init();
 		if ( is_admin() ) {
 			ProductTempField::init();
+			CvsStoreEditor::init();
 		}
 		// CSV hooks 需在 WPCLI / cron / REST 也能 fire，脫離 admin guard
 		ProductTempField::init_csv_hooks();

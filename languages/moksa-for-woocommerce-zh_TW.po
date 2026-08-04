@@ -81,9 +81,9 @@ msgstr "Moksa 需要 WooCommerce %1$s 或更高版本，目前為 %2$s。"
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:83
 #: src/Modules/NewebpayShipping/Module.php:108
-#: src/Modules/NewebpayShipping/Module.php:152
+#: src/Modules/NewebpayShipping/Module.php:133
+#: src/Modules/NewebpayShipping/Module.php:177
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1161
 #: src/Modules/Payuni/PayuniPayment.php:215
@@ -5037,7 +5037,7 @@ msgstr "綠界物流"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:83
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:75
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:95
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
 msgid "Choose a pickup store"
 msgstr "選擇取貨門市"
 
@@ -5045,8 +5045,8 @@ msgstr "選擇取貨門市"
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:76
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:181
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:757
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:96
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:779
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Change store"
 msgstr "更換門市"
 
@@ -5058,7 +5058,7 @@ msgstr "尚未選擇門市"
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:86
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:79
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
 #: templates/emails/moksa-cvs-arrived.php:37
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
@@ -5069,10 +5069,13 @@ msgid "The ECPay store picker could not be opened. Please try again later."
 msgstr "無法開啟綠界選店畫面，請稍後再試。"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:116
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:176
 msgid "This is not an ECPay shipping method."
 msgstr "不是綠界物流方式。"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:121
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:180
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
 msgid "This shipping method does not need a store."
 msgstr "此物流方式不需選店。"
 
@@ -5202,39 +5205,43 @@ msgstr "綠界物流 — 7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 中華
 msgid "7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and post office delivery"
 msgstr "7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配"
 
-#: src/Modules/EcpayShipping/Module.php:67
+#: src/Modules/EcpayShipping/Module.php:81
+msgid "ECPay convenience store pickup"
+msgstr "綠界超商取貨"
+
+#: src/Modules/EcpayShipping/Module.php:95
 msgid "ECPay 7-ELEVEN pickup"
 msgstr "綠界 7-11 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:68
+#: src/Modules/EcpayShipping/Module.php:96
 msgid "ECPay 7-ELEVEN B2C frozen"
 msgstr "綠界 7-11 B2C 冷凍"
 
-#: src/Modules/EcpayShipping/Module.php:69
+#: src/Modules/EcpayShipping/Module.php:97
 msgid "ECPay FamilyMart pickup"
 msgstr "綠界 全家取貨"
 
-#: src/Modules/EcpayShipping/Module.php:70
+#: src/Modules/EcpayShipping/Module.php:98
 msgid "ECPay Hi-Life pickup"
 msgstr "綠界 萊爾富取貨"
 
-#: src/Modules/EcpayShipping/Module.php:71
+#: src/Modules/EcpayShipping/Module.php:99
 msgid "ECPay OK Mart pickup"
 msgstr "綠界 OK 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:72
+#: src/Modules/EcpayShipping/Module.php:100
 msgid "ECPay T-Cat home delivery"
 msgstr "綠界 黑貓宅配"
 
-#: src/Modules/EcpayShipping/Module.php:73
+#: src/Modules/EcpayShipping/Module.php:101
 msgid "ECPay Chunghwa Post"
 msgstr "綠界 中華郵政"
 
-#: src/Modules/EcpayShipping/Module.php:110
+#: src/Modules/EcpayShipping/Module.php:138
 msgid "ECPay convenience store labels"
 msgstr "綠界 超商標籤"
 
-#: src/Modules/EcpayShipping/Module.php:122
+#: src/Modules/EcpayShipping/Module.php:150
 msgid "ECPay home delivery labels"
 msgstr "綠界 宅配標籤"
 
@@ -5254,6 +5261,7 @@ msgstr "訂單沒有商品可建立物流單。"
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:60
 #: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:60
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:157
 msgid "No pickup store has been chosen yet."
 msgstr "尚未選擇取貨門市。"
 
@@ -6023,9 +6031,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:88
 #: src/Modules/NewebpayShipping/Module.php:113
-#: src/Modules/NewebpayShipping/Module.php:157
+#: src/Modules/NewebpayShipping/Module.php:138
+#: src/Modules/NewebpayShipping/Module.php:182
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6429,8 +6437,8 @@ msgstr "請選擇取貨超商："
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:78
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:182
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:761
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:783
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "No pickup store chosen yet"
 msgstr "尚未選擇取貨門市"
 
@@ -6447,6 +6455,7 @@ msgid "OK mart"
 msgstr "OK 超商"
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:148
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:202
 msgid "This is not a NewebPay shipping method."
 msgstr "不是藍新物流方式。"
 
@@ -6476,50 +6485,51 @@ msgstr "藍新物流"
 msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr "超商取貨 — 7-11 / 全家 / 萊爾富 / OK"
 
-#: src/Modules/NewebpayShipping/Module.php:65
+#: src/Modules/NewebpayShipping/Module.php:70
+#: src/Modules/NewebpayShipping/Module.php:90
 msgid "NewebPay convenience store pickup"
 msgstr "藍新超商取貨"
 
-#: src/Modules/NewebpayShipping/Module.php:69
+#: src/Modules/NewebpayShipping/Module.php:94
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr "藍新物流託運單"
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:96
+#: src/Modules/NewebpayShipping/Module.php:121
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr "藍新物流單建立成功（單號 %s）"
 
-#: src/Modules/NewebpayShipping/Module.php:117
+#: src/Modules/NewebpayShipping/Module.php:142
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr "訂單尚未建單，無 MerchantOrderNo 可查詢。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:122
+#: src/Modules/NewebpayShipping/Module.php:147
 #, php-format
 msgid "The lookup failed: %s"
 msgstr "查詢失敗：%s"
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:132
+#: src/Modules/NewebpayShipping/Module.php:157
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr "查詢藍新物流：%s"
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:142
+#: src/Modules/NewebpayShipping/Module.php:167
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr "查詢成功 — %s"
 
-#: src/Modules/NewebpayShipping/Module.php:161
+#: src/Modules/NewebpayShipping/Module.php:186
 msgid "No shipment has been created for this order yet."
 msgstr "訂單尚未建單。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:166
+#: src/Modules/NewebpayShipping/Module.php:191
 #, php-format
 msgid "Tracking failed: %s"
 msgstr "追蹤失敗：%s"
@@ -8556,8 +8566,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr "取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。"
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:716
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:725
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:738
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:747
 msgid "Convenience store"
 msgstr "超商門市"
 
@@ -9048,7 +9058,7 @@ msgstr "門市地址"
 
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:69
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:75
-#: src/Modules/PayuniShipping/PayuniShipping.php:305
+#: src/Modules/PayuniShipping/PayuniShipping.php:338
 msgid "Shipping Phone"
 msgstr "收件人電話"
 
@@ -9141,7 +9151,6 @@ msgstr "PAYUNi 建立物流單失敗："
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:235
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:302
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:472
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:379
 msgid "Permission denied."
 msgstr "權限不足。"
 
@@ -9164,6 +9173,7 @@ msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr "PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s"
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:257
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:274
 msgid "Order not found."
 msgstr "找不到訂單。"
 
@@ -9183,7 +9193,6 @@ msgstr "包裝規格更新成功。"
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:305
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:475
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:384
 msgid "Invalid security token."
 msgstr "安全權杖無效。"
 
@@ -9331,7 +9340,7 @@ msgstr "取消物流單失敗。"
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:180
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:218
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:221
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:762
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
 msgid "Choose a store"
 msgstr "選擇門市"
 
@@ -9370,37 +9379,40 @@ msgid "The chosen shipping method does not match the cart."
 msgstr "選取的運送方式與購物車不符。"
 
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:299
 msgid "Please choose a convenience store pickup method"
 msgstr "請選擇超商取貨運送方式"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:362
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:369
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:421
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:428
 msgid "Returning to checkout…"
 msgstr "正在返回結帳頁面..."
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:363
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:422
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:312
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:313
 msgid "Store selected"
 msgstr "門市選擇完成"
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:366
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:425
 #, php-format
 msgid "Store chosen: %s"
 msgstr "選擇的門市：%s"
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:368
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:427
 #, php-format
 msgid "Store address: %s"
 msgstr "門市地址：%s"
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:751
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:773
 #, php-format
 msgid "Store number: %s"
 msgstr "門市代號: %s"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:753
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:775
 msgid "Outlying islands"
 msgstr "離島地區"
 
@@ -9494,59 +9506,63 @@ msgstr "正在列印 PAYUNi 物流標籤…"
 msgid "PAYUNi shipment created, number %s"
 msgstr "PAYUNi 物流單建立成功（單號 %s）"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:174
+#: src/Modules/PayuniShipping/PayuniShipping.php:186
+msgid "PAYUNi convenience store pickup"
+msgstr "PAYUNi 超商取貨"
+
+#: src/Modules/PayuniShipping/PayuniShipping.php:207
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr "PAYUNi 7-11 C2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:175
+#: src/Modules/PayuniShipping/PayuniShipping.php:208
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr "PAYUNi 7-11 B2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:176
+#: src/Modules/PayuniShipping/PayuniShipping.php:209
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr "PAYUNi 7-11 店到店常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:177
+#: src/Modules/PayuniShipping/PayuniShipping.php:210
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr "PAYUNi 7-11 店到店冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:178
+#: src/Modules/PayuniShipping/PayuniShipping.php:211
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr "PAYUNi 7-11 大宗常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:179
+#: src/Modules/PayuniShipping/PayuniShipping.php:212
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr "PAYUNi 7-11 大宗冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:182
+#: src/Modules/PayuniShipping/PayuniShipping.php:215
 msgid "PAYUNi T-Cat home delivery"
 msgstr "PAYUNi 黑貓宅配"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:183
+#: src/Modules/PayuniShipping/PayuniShipping.php:216
 msgid "PAYUNi T-Cat ambient"
 msgstr "PAYUNi 黑貓常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:184
+#: src/Modules/PayuniShipping/PayuniShipping.php:217
 msgid "PAYUNi T-Cat frozen"
 msgstr "PAYUNi 黑貓冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:185
+#: src/Modules/PayuniShipping/PayuniShipping.php:218
 msgid "PAYUNi T-Cat chilled"
 msgstr "PAYUNi 黑貓冷藏"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:244
 msgid "PAYUNi convenience store labels"
 msgstr "PAYUNi 超商標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:227
+#: src/Modules/PayuniShipping/PayuniShipping.php:260
 msgid "PAYUNi home delivery labels"
 msgstr "PAYUNi 宅配標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:563
+#: src/Modules/PayuniShipping/PayuniShipping.php:596
 msgid "General Settings"
 msgstr "一般設定"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:564
+#: src/Modules/PayuniShipping/PayuniShipping.php:597
 msgid "Shipping Settings"
 msgstr "運送設定"
 
@@ -10549,6 +10565,72 @@ msgstr "請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗
 #, php-format
 msgid "Print label %d"
 msgstr "列印第 %d 份"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:112
+msgid "Pickup store number"
+msgstr "取貨門市編號"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:121
+msgid "Pickup store name"
+msgstr "取貨門市名稱"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:130
+msgid "Pickup store address"
+msgstr "取貨門市地址"
+
+#. translators: 1: previous store number, 2: new store number
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:156
+#, php-format
+msgid "Pickup store changed from %1$s to %2$s. Any shipment already created still points at the old store — delete it and create a new one."
+msgstr "取貨門市已從 %1$s 改為 %2$s。已建立的物流單仍寄往舊門市，請先刪除再重新建立。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:157
+msgid "(none)"
+msgstr "（無）"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:220
+msgid "Choose store on map"
+msgstr "開地圖選門市"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:226
+msgid "The store is only saved when you update the order. Changing the store here does not reissue the shipment — delete the existing shipment and create it again."
+msgstr "門市要按下更新訂單才會存檔。在這裡改門市不會重新取號，請先刪除原本的物流單再重新建立。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:255
+msgid "Opening the store map…"
+msgstr "正在開啟門市地圖…"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:256
+msgid "Store filled in. Remember to update the order."
+msgstr "門市已帶入，記得按更新訂單。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:257
+msgid "The store map window was blocked. Allow pop-ups for this site and try again."
+msgstr "門市地圖視窗被瀏覽器擋下了，請允許本站的彈出視窗後再試一次。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:258
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:287
+msgid "The store map could not be opened."
+msgstr "門市地圖無法開啟。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:268
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
+msgid "You are not allowed to edit orders."
+msgstr "目前的登入身分沒有編輯訂單的權限。"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:279
+msgid "This order does not use a convenience store pickup method."
+msgstr "這張訂單的運送方式不是超商取貨。"
+
+#. translators: 1: store number, 2: store name
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:316
+#, php-format
+msgid "Store: %1$s %2$s"
+msgstr "門市：%1$s %2$s"
+
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:318
+msgid "You can close this window and go back to the order — remember to update the order to keep the change."
+msgstr "可以關閉這個視窗回到訂單了，記得按更新訂單才會存檔。"
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:109
 msgid "No PAYUNi shipment has been created yet."
@@ -11696,35 +11778,39 @@ msgstr "SmilePay 物流 — 7-11 / 全家 / 黑貓 (常溫/冷藏/冷凍)"
 msgid "7-ELEVEN and FamilyMart pickup, plus T-Cat ambient, chilled and frozen"
 msgstr "7-11 / 全家 取貨 + 黑貓 常溫/冷藏/冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:88
+#: src/Modules/SmilepayShipping/Module.php:68
+msgid "SmilePay convenience store pickup"
+msgstr "速買配超商取貨"
+
+#: src/Modules/SmilepayShipping/Module.php:111
 msgid "SmilePay 7-ELEVEN pickup"
 msgstr "速買配 7-11 取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:89
+#: src/Modules/SmilepayShipping/Module.php:112
 msgid "SmilePay FamilyMart pickup"
 msgstr "速買配 全家取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:92
+#: src/Modules/SmilepayShipping/Module.php:115
 msgid "SmilePay convenience store labels"
 msgstr "速買配 超商標籤"
 
-#: src/Modules/SmilepayShipping/Module.php:102
+#: src/Modules/SmilepayShipping/Module.php:125
 msgid "SmilePay T-Cat home delivery"
 msgstr "速買配 黑貓宅配"
 
-#: src/Modules/SmilepayShipping/Module.php:103
+#: src/Modules/SmilepayShipping/Module.php:126
 msgid "SmilePay T-Cat ambient"
 msgstr "速買配 黑貓常溫"
 
-#: src/Modules/SmilepayShipping/Module.php:104
+#: src/Modules/SmilepayShipping/Module.php:127
 msgid "SmilePay T-Cat chilled"
 msgstr "速買配 黑貓冷藏"
 
-#: src/Modules/SmilepayShipping/Module.php:105
+#: src/Modules/SmilepayShipping/Module.php:128
 msgid "SmilePay T-Cat frozen"
 msgstr "速買配 黑貓冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:118
+#: src/Modules/SmilepayShipping/Module.php:141
 msgid "SmilePay T-Cat labels"
 msgstr "速買配 黑貓標籤"
 

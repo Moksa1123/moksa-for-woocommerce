@@ -1,21 +1,8 @@
 (function( $ ) {
 	'use strict';
 
-	$(document).on('click', '.edit_address', function () {
-
-		if ($('#_shipping_moksafowo_payuni_storeid').length) {
-			$('a.load_customer_shipping').remove();
-			$('a.billing-same-as-shipping').remove();
-
-			$('._shipping_company_field').hide();
-			$('._shipping_address_1_field').hide();
-			$('._shipping_address_2_field').hide();
-			$('._shipping_city_field').hide();
-			$('._shipping_postcode_field').hide();
-			$('._shipping_country_field').hide();
-			$('._shipping_state_field').hide();
-		}
-	});
+	// 超商訂單隱藏街道地址欄的邏輯已移到共用層（Shipping/assets/js/admin-cvs-store.js），
+	// 四家物流一致，不再綁 PAYUNi 專屬的欄位 id。
 
 	// 列印 / 下載標籤 — 開新分頁送 PAYUNi（物流資訊卡片化後從這裡委派，原在 metabox inline JS）。
 	$(document).on('click', '.print-label', function(){

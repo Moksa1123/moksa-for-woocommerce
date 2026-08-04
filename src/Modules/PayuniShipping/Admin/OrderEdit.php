@@ -51,20 +51,8 @@ class OrderEdit {
 		}
 
 		if ( false !== $shipping_method ) {
-
-			$shipping_fields['moksafowo_payuni_storeid']      = array(
-				'label' => __( 'Store ID', 'moksa-for-woocommerce' ),
-				'show'  => false,
-			);
-			$shipping_fields['moksafowo_payuni_storename']    = array(
-				'label' => __( 'Store Name', 'moksa-for-woocommerce' ),
-				'show'  => false,
-			);
-			$shipping_fields['moksafowo_payuni_storeaddress'] = array(
-				'label' => __( 'Store Address', 'moksa-for-woocommerce' ),
-				'show'  => false,
-			);
-
+			// 門市三欄由 Shipping\Admin\CvsStoreEditor 統一提供（四家共用，且真的讀寫得到 meta）。
+			// 這裡原本那三欄沒帶 'id'，WC 存進 _shipping_moksafowo_payuni_store* —— 沒有人讀，等於白填。
 			$shipping_fields['phone'] = array(
 				'label' => __( 'Shipping Phone', 'moksa-for-woocommerce' ),
 			);

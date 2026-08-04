@@ -166,7 +166,40 @@ class PayuniShipping {
 		Operations\PrintProxy::init();
 
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 		Emails\EmailTrackingProvider::init();
+	}
+
+	/**
+	 * @param array<string,array<string,mixed>> $providers Registered providers.
+	 * @return array<string,array<string,mixed>>
+	 */
+	public static function register_cvs_store_editor( array $providers ): array {
+		$methods = [];
+		foreach ( array_keys( (array) self::$cvs_methods ) as $mid ) {
+			$methods[ (string) $mid ] = (string) $mid;
+		}
+		if ( empty( $methods ) ) {
+			return $providers;
+		}
+		$providers['payuni'] = [
+			'label'    => __( 'PAYUNi convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'  => $methods,
+			'meta'     => [
+				'id'      => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID,
+				'name'    => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME,
+				'address' => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS,
+			],
+			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			// 建單讀共用鍵，但顯示層讀 STORE_DATA_JSON / 舊三鍵，全部一起寫才不會兩邊對不上
+			'sync'     => static function ( \WC_Order $order, array $store ): void {
+				$order->update_meta_data( Utils\OrderMeta::STORE_DATA_JSON, wp_json_encode( $store ) );
+				$order->update_meta_data( Utils\OrderMeta::StoreId, $store['id'] );
+				$order->update_meta_data( Utils\OrderMeta::StoreName, $store['name'] );
+				$order->update_meta_data( Utils\OrderMeta::StoreAddr, $store['address'] );
+			},
+		];
+		return $providers;
 	}
 
 	public static function register_batch_print( array $providers ): array {

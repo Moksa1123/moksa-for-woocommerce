@@ -49,6 +49,7 @@ final class Module extends AbstractModule {
 		add_action( 'woocommerce_api_moksafowo_smilepay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 		Frontend\StoreSelector::init();
 		Frontend\CustomerOrderView::init();
 		if ( is_admin() ) {
@@ -56,6 +57,28 @@ final class Module extends AbstractModule {
 			Operations\PrintProxy::init();
 		}
 		Emails\EmailTrackingProvider::init();
+	}
+
+	/**
+	 * @param array<string,array<string,mixed>> $providers Registered providers.
+	 * @return array<string,array<string,mixed>>
+	 */
+	public static function register_cvs_store_editor( array $providers ): array {
+		$providers['smilepay'] = [
+			'label'    => __( 'SmilePay convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'  => [
+				'moksafowo_smilepay_shipping_cvs_711'  => 'moksafowo_smilepay_shipping_cvs_711',
+				'moksafowo_smilepay_shipping_cvs_fami' => 'moksafowo_smilepay_shipping_cvs_fami',
+			],
+			// 速買配自己一組鍵，沒併進共用鍵 —— 建單與顯示都讀這三個
+			'meta'     => [
+				'id'      => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ID,
+				'name'    => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_NAME,
+				'address' => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ADDR,
+			],
+			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+		];
+		return $providers;
 	}
 
 	public static function method_map(): array {
