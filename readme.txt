@@ -4,12 +4,12 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
 WC requires at least: 9.9
-WC tested up to: 10.7
+WC tested up to: 11.0
 
 A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping and e-invoice integrations.
 
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.6.2 - 2026-08-05 =
+* Tested against WooCommerce 11.0.
+* Fix: the store picker layout setting showed "one column" as selected on stores that had never saved it, while the checkout actually rendered two columns. The two now agree.
 
 = 1.6.1 - 2026-08-05 =
 * Fix: switching an order to (or away from) a convenience-store method in the items panel now updates the store fields straight away. They used to appear only after saving the order and reloading the page, which made it look like you could not pick a store on an order you created in the admin yourself.

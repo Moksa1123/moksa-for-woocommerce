@@ -133,8 +133,10 @@ class PayuniShipping {
 		self::$order_status_at_receiver_cvs    = get_option( 'moksafowo_payuni_shipping_order_status_at_receiver_cvs' );
 		self::$order_status_pickuped           = get_option( 'moksafowo_payuni_shipping_order_status_pickuped' );
 
-		self::$tcat_delivery_time  = get_option( 'moksafowo_payuni_shipping_tcat_delivery_time', '04' );
-		self::$cvs_selector_layout = get_option( 'moksafowo_payuni_shipping_cvs_selector_layout', 'two_column' );
+		self::$tcat_delivery_time = get_option( 'moksafowo_payuni_shipping_tcat_delivery_time', '04' );
+		// fallback 必須跟 Settings\SettingsTab 宣告的 'default' 一致 —— 不一致時，
+		// 沒存過設定的站台會出現「設定頁顯示單欄、實際畫成雙欄」。
+		self::$cvs_selector_layout = get_option( 'moksafowo_payuni_shipping_cvs_selector_layout', 'single_column' );
 
 		add_filter( 'woocommerce_shipping_methods', array( self::get_instance(), 'moksafowo_payuni_add_shipping_methods' ) );
 		add_filter( 'woocommerce_checkout_fields', array( self::get_instance(), 'moksafowo_payuni_shpping_cvs_field' ), 9999 );
