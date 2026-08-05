@@ -194,6 +194,39 @@ final class CvsStoreEditor {
 	}
 
 	/**
+	 * 從後台表單以外的地方改門市（目前是 AI 助手）用的單一入口。
+	 * 三個欄位一起寫，再跑該家的 sync —— 跟後台存檔走同一組 meta 與同一個 sync callback，
+	 * 兩條路徑不會寫出不一樣的結果。呼叫端負責 capability 與訂單備註。
+	 *
+	 * @param \WC_Order                                     $order Order.
+	 * @param array{id:string,name?:string,address?:string} $store Store data.
+	 * @return array{id:string,name:string,address:string}|null 寫入後的值；訂單不是超商取貨時回 null。
+	 */
+	public static function write_store( \WC_Order $order, array $store ): ?array {
+		$match = self::match( $order );
+		if ( null === $match ) {
+			return null;
+		}
+		$meta = $match['provider']['meta'];
+
+		$order->update_meta_data( $meta['id'], (string) ( $store['id'] ?? '' ) );
+		if ( ! empty( $meta['name'] ) ) {
+			$order->update_meta_data( $meta['name'], (string) ( $store['name'] ?? '' ) );
+		}
+		if ( ! empty( $meta['address'] ) ) {
+			$order->update_meta_data( $meta['address'], (string) ( $store['address'] ?? '' ) );
+		}
+
+		self::run_sync( $order, $match['provider'] );
+
+		return [
+			'id'      => (string) $order->get_meta( $meta['id'] ),
+			'name'    => empty( $meta['name'] ) ? '' : (string) $order->get_meta( $meta['name'] ),
+			'address' => empty( $meta['address'] ) ? '' : (string) $order->get_meta( $meta['address'] ),
+		];
+	}
+
+	/**
 	 * @param \WC_Order           $order    Order.
 	 * @param array<string,mixed> $provider Provider descriptor.
 	 */

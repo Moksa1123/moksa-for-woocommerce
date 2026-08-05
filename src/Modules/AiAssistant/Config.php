@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\AiAssistant;
 
 use Moksafowo\Modules\OrderLookup\BatchUpdateOrderStatus;
+use Moksafowo\Modules\OrderLookup\ChangePickupStore;
 use Moksafowo\Modules\OrderLookup\ChannelOps;
 use Moksafowo\Modules\OrderLookup\DonationOrgOps;
 use Moksafowo\Modules\OrderLookup\InvoiceChannelOps;
@@ -13,6 +14,7 @@ use Moksafowo\Modules\OrderLookup\PaymentMethodOps;
 use Moksafowo\Modules\OrderLookup\PrintShippingLabel;
 use Moksafowo\Modules\OrderLookup\ResendPaymentEmail;
 use Moksafowo\Modules\OrderLookup\ShipmentOps;
+use Moksafowo\Modules\OrderLookup\ShipmentRecordOps;
 use Moksafowo\Modules\OrderLookup\ShippingZoneOps;
 use Moksafowo\Modules\OrderLookup\UpdateOrderStatus;
 
@@ -42,6 +44,9 @@ final class Config {
 			'moksa-for-woocommerce/void-invoice',
 			'moksa-for-woocommerce/print-shipping-label',
 			'moksa-for-woocommerce/create-shipment',
+			'moksa-for-woocommerce/change-pickup-store',
+			'moksa-for-woocommerce/list-shipments',
+			'moksa-for-woocommerce/delete-shipment',
 			'moksa-for-woocommerce/add-order-note',
 			'moksa-for-woocommerce/list-channels',
 			'moksa-for-woocommerce/toggle-channel',
@@ -55,6 +60,7 @@ final class Config {
 			'moksa-for-woocommerce/resend-payment-email',
 			'moksa-for-woocommerce/get-tracking-link',
 			'moksa-for-woocommerce/get-payment-status',
+			'moksa-for-woocommerce/query-payment',
 			'moksa-for-woocommerce/get-plugin-settings',
 			'moksa-for-woocommerce/list-shipping-zones',
 			'moksa-for-woocommerce/toggle-shipping-method',
@@ -96,6 +102,14 @@ final class Config {
 			'moksa-for-woocommerce/create-shipment'        => array(
 				'prepare' => array( ShipmentOps::class, 'prepare' ),
 				'apply'   => array( ShipmentOps::class, 'apply' ),
+			),
+			'moksa-for-woocommerce/change-pickup-store'    => array(
+				'prepare' => array( ChangePickupStore::class, 'prepare' ),
+				'apply'   => array( ChangePickupStore::class, 'apply' ),
+			),
+			'moksa-for-woocommerce/delete-shipment'        => array(
+				'prepare' => array( ShipmentRecordOps::class, 'prepare' ),
+				'apply'   => array( ShipmentRecordOps::class, 'apply' ),
 			),
 			'moksa-for-woocommerce/batch-create-shipment'  => array(
 				'prepare' => array( ShipmentOps::class, 'batch_prepare' ),

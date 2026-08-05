@@ -111,6 +111,21 @@ final class Module extends AbstractModule {
 			}
 		}
 		$counter = static fn( \WC_Order $o ): int => count( Operations\CreateOrder::get_records( $o ) );
+		// AI / MCP 用：列出與刪除物流單記錄（走 ShipmentRecords 門面）
+		$lister  = static function ( \WC_Order $o ): array {
+			$out = [];
+			foreach ( Operations\CreateOrder::get_records( $o ) as $r ) {
+				$out[] = [
+					'id'         => (string) ( $r['id'] ?? '' ),
+					'tracking'   => trim( (string) ( $r['cvs_payment_no'] ?? '' ) . ' ' . (string) ( $r['cvs_validation_no'] ?? '' ) ),
+					'created_at' => (string) ( $r['created_at'] ?? '' ),
+					'temp'       => (string) ( $r['temp'] ?? '' ),
+					'note'       => (string) ( $r['rtn_msg'] ?? '' ),
+				];
+			}
+			return $out;
+		};
+		$deleter = static fn( \WC_Order $o, string $id ): bool => Operations\CreateOrder::delete_record( $o, $id );
 		// A6 僅 UNIMARTC2C / UNIMART / UNIMARTFREEZE / POST 支援
 		$row_modes = static function ( \WC_Order $o ): array {
 			$records = Operations\CreateOrder::get_records( $o );
@@ -141,6 +156,8 @@ final class Module extends AbstractModule {
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
 				'record_counter'  => $counter,
 				'record_temps'    => $temps,
+				'record_lister'   => $lister,
+				'record_deleter'  => $deleter,
 				'paper_modes'     => [ '1', '2' ],
 				'row_paper_modes' => $row_modes,
 			];
@@ -153,6 +170,8 @@ final class Module extends AbstractModule {
 				'handler'         => [ Operations\BatchPrint::class, 'render' ],
 				'record_counter'  => $counter,
 				'record_temps'    => $temps,
+				'record_lister'   => $lister,
+				'record_deleter'  => $deleter,
 				'paper_modes'     => [ '1', '2' ], // POST 支援 A6；TCAT 只 A4（row_paper_modes 細控）
 				'row_paper_modes' => $row_modes,
 			];

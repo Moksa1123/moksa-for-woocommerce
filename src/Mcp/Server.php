@@ -114,7 +114,14 @@ final class Server {
 					$id,
 					array(
 						'protocolVersion' => self::PROTOCOL,
-						'capabilities'    => array( 'tools' => array( 'listChanged' => false ) ),
+						'capabilities'    => array(
+							'tools'     => array( 'listChanged' => false ),
+							'resources' => array(
+								'subscribe'   => false,
+								'listChanged' => false,
+							),
+							'prompts'   => array( 'listChanged' => false ),
+						),
 						'serverInfo'      => array(
 							'name'    => 'moksa-for-woocommerce',
 							'title'   => 'Moksa 電商工具',
@@ -135,6 +142,27 @@ final class Server {
 
 			case 'tools/call':
 				return self::call_tool( $id, $params );
+
+			case 'resources/list':
+				return self::rpc_result( $id, array( 'resources' => Catalog::resources() ) );
+
+			case 'resources/read':
+				$uri  = isset( $params['uri'] ) ? sanitize_text_field( (string) $params['uri'] ) : '';
+				$read = Catalog::read( $uri );
+				return is_wp_error( $read )
+					? self::rpc_error( $id, -32602, $read->get_error_message() )
+					: self::rpc_result( $id, $read );
+
+			case 'prompts/list':
+				return self::rpc_result( $id, array( 'prompts' => Catalog::prompts() ) );
+
+			case 'prompts/get':
+				$pname = isset( $params['name'] ) ? sanitize_key( (string) $params['name'] ) : '';
+				$pargs = isset( $params['arguments'] ) && is_array( $params['arguments'] ) ? $params['arguments'] : array();
+				$got   = Catalog::prompt( $pname, $pargs );
+				return is_wp_error( $got )
+					? self::rpc_error( $id, -32602, $got->get_error_message() )
+					: self::rpc_result( $id, $got );
 
 			default:
 				return $is_note ? null : self::rpc_error( $id, -32601, 'Method not found: ' . $method );

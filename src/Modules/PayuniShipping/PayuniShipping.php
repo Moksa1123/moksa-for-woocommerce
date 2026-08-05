@@ -241,6 +241,22 @@ class PayuniShipping {
 			return array_keys( $out );
 		};
 
+		// AI / MCP 用：列出與刪除物流單記錄（走 ShipmentRecords 門面）
+		$lister  = static function ( \WC_Order $o ): array {
+			$out = [];
+			foreach ( Operations\CreateOrderUnified::get_records( $o ) as $r ) {
+				$out[] = [
+					'id'         => (string) ( $r['ship_trade_no'] ?? '' ),
+					'tracking'   => (string) ( $r['odno'] ?? '' ),
+					'created_at' => (string) ( $r['created_at'] ?? '' ),
+					'temp'       => (string) ( $r['temp'] ?? '' ),
+					'note'       => (string) ( $r['rtn_msg'] ?? '' ),
+				];
+			}
+			return $out;
+		};
+		$deleter = static fn( \WC_Order $o, string $id ): bool => Operations\CreateOrderUnified::delete_record( $o, $id );
+
 		if ( ! empty( $cvs ) ) {
 			$providers['moksafowo-payuni-cvs'] = [
 				'label'           => __( 'PAYUNi convenience store labels', 'moksa-for-woocommerce' ),
@@ -249,6 +265,8 @@ class PayuniShipping {
 				'handler'         => [ Operations\BatchPrint::class, 'cvs' ],
 				'record_counter'  => $counter,
 				'record_temps'    => $temps_fn,
+				'record_lister'   => $lister,
+				'record_deleter'  => $deleter,
 				// LabelMode: 1=A4 / 2=直立式 A6（僅 B2C 適用）；C2C 只能 A4
 				'paper_modes'     => [ '1', '2' ],
 				'row_paper_modes' => static function ( \WC_Order $o ): array {
@@ -265,6 +283,8 @@ class PayuniShipping {
 				'handler'        => [ Operations\BatchPrint::class, 'home' ],
 				'record_counter' => $counter,
 				'record_temps'   => $temps_fn,
+				'record_lister'  => $lister,
+				'record_deleter' => $deleter,
 				'paper_modes'    => [ '1' ], // TCAT PrintType 固定 1，API 不接受 paper size
 			];
 		}

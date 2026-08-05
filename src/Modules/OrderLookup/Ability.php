@@ -238,6 +238,9 @@ final class Ability {
 		self::register_print_label();
 		self::register_add_note();
 		self::register_create_shipment();
+		self::register_change_pickup_store();
+		self::register_shipment_records();
+		self::register_query_payment();
 		self::register_channel_and_donation();
 		self::register_allowance_and_list();
 		self::register_payment_methods();
@@ -1084,6 +1087,194 @@ final class Ability {
 				'execute_callback'    => [ ShipmentOps::class, 'prepare' ],
 				'permission_callback' => static function (): bool {
 					return current_user_can( ShipmentOps::CAP );
+				},
+				'meta'                => [
+					'show_in_rest' => false,
+					'annotations'  => [
+						'readonly'    => false,
+						'destructive' => true,
+						'idempotent'  => false,
+					],
+					'mcp'          => [
+						'public' => true,
+						'type'   => 'tool',
+					],
+				],
+			]
+		);
+	}
+
+	private static function register_query_payment(): void {
+		wp_register_ability(
+			'moksa-for-woocommerce/query-payment',
+			[
+				'label'               => __( 'Look the payment up at the provider', 'moksa-for-woocommerce' ),
+				'description'         => __( 'Ask the payment provider directly what happened to the transaction on an order — whether it was authorised, how much was captured and when. Use this when the order and the provider might disagree, for example when a customer says they paid but the order still shows unpaid. Works for ECPay card payments and PAYUNi. For what this site already recorded, use get-payment-status instead, which does not call the provider. Read-only.', 'moksa-for-woocommerce' ),
+				'category'            => 'moksa-for-woocommerce',
+				'input_schema'        => [
+					'type'                 => 'object',
+					'properties'           => [
+						'order' => [
+							'type'        => 'string',
+							'description' => __( 'The order number, for example 2896', 'moksa-for-woocommerce' ),
+						],
+					],
+					'required'             => [ 'order' ],
+					'additionalProperties' => false,
+				],
+				'output_schema'       => [
+					'type'       => 'object',
+					'properties' => [
+						'provider' => [ 'type' => 'string' ],
+						'details'  => [ 'type' => 'object' ],
+					],
+				],
+				'execute_callback'    => [ QueryPayment::class, 'run' ],
+				'permission_callback' => static function (): bool {
+					return current_user_can( QueryPayment::CAP );
+				},
+				'meta'                => [
+					'show_in_rest' => false,
+					'annotations'  => [
+						'readonly'    => true,
+						'destructive' => false,
+						'idempotent'  => true,
+					],
+					'mcp'          => [
+						'public' => true,
+						'type'   => 'tool',
+					],
+				],
+			]
+		);
+	}
+
+	private static function register_shipment_records(): void {
+		wp_register_ability(
+			'moksa-for-woocommerce/list-shipments',
+			[
+				'label'               => __( 'List the shipments on an order', 'moksa-for-woocommerce' ),
+				'description'         => __( 'List the shipments already created for an order, with their shipment numbers, tracking numbers and when they were created. Use this before deleting a shipment so you know which number to give.', 'moksa-for-woocommerce' ),
+				'category'            => 'moksa-for-woocommerce',
+				'input_schema'        => [
+					'type'                 => 'object',
+					'properties'           => [
+						'order' => [
+							'type'        => 'string',
+							'description' => __( 'The order number, for example 2896', 'moksa-for-woocommerce' ),
+						],
+					],
+					'required'             => [ 'order' ],
+					'additionalProperties' => false,
+				],
+				'output_schema'       => [
+					'type'       => 'object',
+					'properties' => [
+						'count'   => [ 'type' => 'integer' ],
+						'records' => [ 'type' => 'array' ],
+					],
+				],
+				'execute_callback'    => [ ShipmentRecordOps::class, 'list_records' ],
+				'permission_callback' => static function (): bool {
+					return current_user_can( ShipmentRecordOps::CAP );
+				},
+				'meta'                => [
+					'show_in_rest' => false,
+					'annotations'  => [
+						'readonly'    => true,
+						'destructive' => false,
+						'idempotent'  => true,
+					],
+					'mcp'          => [
+						'public' => true,
+						'type'   => 'tool',
+					],
+				],
+			]
+		);
+
+		wp_register_ability(
+			'moksa-for-woocommerce/delete-shipment',
+			[
+				'label'               => __( 'Delete a shipment from an order', 'moksa-for-woocommerce' ),
+				'description'         => __( 'Remove a shipment record from an order so the shipment can be created again — for example after the pickup store was changed. This only removes the record on this site; it does not cancel the booking with the carrier, so never use it for a parcel that is already on its way. This is a destructive action — calling the tool only proposes it, and nothing is deleted until the user presses Confirm, so there is no need to ask for confirmation yourself. If the order has more than one shipment you must say which shipment number to delete.', 'moksa-for-woocommerce' ),
+				'category'            => 'moksa-for-woocommerce',
+				'input_schema'        => [
+					'type'                 => 'object',
+					'properties'           => [
+						'order'           => [
+							'type'        => 'string',
+							'description' => __( 'The order number, for example 2896', 'moksa-for-woocommerce' ),
+						],
+						'shipment_number' => [
+							'type'        => 'string',
+							'description' => __( 'Which shipment to delete. Can be left out only when the order has exactly one shipment.', 'moksa-for-woocommerce' ),
+						],
+					],
+					'required'             => [ 'order' ],
+					'additionalProperties' => false,
+				],
+				'output_schema'       => [
+					'type'       => 'object',
+					'properties' => [ 'summary' => [ 'type' => 'string' ] ],
+				],
+				'execute_callback'    => [ ShipmentRecordOps::class, 'prepare' ],
+				'permission_callback' => static function (): bool {
+					return current_user_can( ShipmentRecordOps::CAP );
+				},
+				'meta'                => [
+					'show_in_rest' => false,
+					'annotations'  => [
+						'readonly'    => false,
+						'destructive' => true,
+						'idempotent'  => false,
+					],
+					'mcp'          => [
+						'public' => true,
+						'type'   => 'tool',
+					],
+				],
+			]
+		);
+	}
+
+	private static function register_change_pickup_store(): void {
+		wp_register_ability(
+			'moksa-for-woocommerce/change-pickup-store',
+			[
+				'label'               => __( 'Change the pickup store', 'moksa-for-woocommerce' ),
+				'description'         => __( 'Change which convenience store an order is picked up at, by store number. Use this when a customer asks to collect the parcel somewhere else. This is a destructive action — calling the tool only proposes the change, and nothing happens until the user presses Confirm, so there is no need to ask for confirmation yourself. It does not re-book the shipment: if a shipment was already created it still points at the old store and has to be deleted and created again on the order screen. If the store name and address are not given they are cleared, because keeping the old ones would show the new number next to the old store name.', 'moksa-for-woocommerce' ),
+				'category'            => 'moksa-for-woocommerce',
+				'input_schema'        => [
+					'type'                 => 'object',
+					'properties'           => [
+						'order'         => [
+							'type'        => 'string',
+							'description' => __( 'The order number, for example 2896', 'moksa-for-woocommerce' ),
+						],
+						'store_id'      => [
+							'type'        => 'string',
+							'description' => __( 'The number of the store to switch to, for example 131386', 'moksa-for-woocommerce' ),
+						],
+						'store_name'    => [
+							'type'        => 'string',
+							'description' => __( 'The store name, if the user gave one. Leave it out rather than guessing — a wrong name is worse than none.', 'moksa-for-woocommerce' ),
+						],
+						'store_address' => [
+							'type'        => 'string',
+							'description' => __( 'The store address, if the user gave one. Leave it out rather than guessing.', 'moksa-for-woocommerce' ),
+						],
+					],
+					'required'             => [ 'order', 'store_id' ],
+					'additionalProperties' => false,
+				],
+				'output_schema'       => [
+					'type'       => 'object',
+					'properties' => [ 'summary' => [ 'type' => 'string' ] ],
+				],
+				'execute_callback'    => [ ChangePickupStore::class, 'prepare' ],
+				'permission_callback' => static function (): bool {
+					return current_user_can( ChangePickupStore::CAP );
 				},
 				'meta'                => [
 					'show_in_rest' => false,

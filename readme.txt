@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.6.3
+Stable tag: 1.7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,13 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.7.0 - 2026-08-05 =
+* New: the assistant can change the pickup store on a convenience store order, by store number. It shows you what will change and waits for your confirmation, warns you when a shipment already points at the old store, and never re-books the shipment on its own.
+* New: the assistant can list the shipments on an order and delete one, so a shipment can be created again — for example after the pickup store was changed. Deleting only removes the record on this site; it does not cancel the booking with the carrier.
+* New: the assistant can look a payment up at the provider (ECPay card payments and PAYUNi) for when the order and the provider disagree, such as a customer saying they paid while the order still shows unpaid.
+* New for MCP clients: the store now also offers resources (what the store has switched on, the shipping methods on offer, sales over the last 30 days) and ready-made prompts (daily shipping run, checking payments against the provider, finding orders missing an e-invoice, moving an order to another store).
+* Fix: on the order screen, the two buttons in the PAYUNi shipping card were touching each other with no space between them.
 
 = 1.6.3 - 2026-08-05 =
 * Fix: creating an ECPay shipment failed with "商品名稱請設定為最多50字元" (10500038) on orders whose product names are in Chinese. ECPay counts a Chinese character as two, but the item name was being trimmed by character count, so a 50-character Chinese name reached ECPay as 100. It is now trimmed the same way ECPay measures it, and English names can still use the full 50 characters.

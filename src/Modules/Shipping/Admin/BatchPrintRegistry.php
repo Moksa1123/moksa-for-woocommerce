@@ -48,6 +48,10 @@ final class BatchPrintRegistry {
 				'row_paper_modes' => is_callable( $entry['row_paper_modes'] ?? null ) ? $entry['row_paper_modes'] : null,
 				// fn( WC_Order ): int[] — 多溫層溫層集合（溫層 pill 用）
 				'record_temps'    => is_callable( $entry['record_temps'] ?? null ) ? $entry['record_temps'] : null,
+				// fn( WC_Order ): array[] — 列出物流單記錄（ShipmentRecords 用；各家形狀不同各自實作）
+				'record_lister'   => is_callable( $entry['record_lister'] ?? null ) ? $entry['record_lister'] : null,
+				// fn( WC_Order, string $id ): bool — 刪掉一筆記錄；沒掛就是不支援
+				'record_deleter'  => is_callable( $entry['record_deleter'] ?? null ) ? $entry['record_deleter'] : null,
 			];
 		}
 		self::$cache = $normalized;

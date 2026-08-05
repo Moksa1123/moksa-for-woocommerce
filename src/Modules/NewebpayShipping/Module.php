@@ -86,16 +86,51 @@ final class Module extends AbstractModule {
 	}
 
 	public static function register_batch_print( array $providers ): array {
-		$titles                    = [
+		$titles  = [
 			'moksafowo_newebpay_shipping_cvs' => __( 'NewebPay convenience store pickup', 'moksa-for-woocommerce' ),
 		];
-		$counter                   = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
+		$counter = static fn( \WC_Order $o ): int => Operations\PrintLabel::record_count( $o );
+		// 藍新沒有 records 陣列，只有單鍵 —— 這裡把它包成一筆虛擬記錄，
+		// 刪除就是清掉那組鍵（只清站上的，不會通知藍新作廢）
+		$lister  = static function ( \WC_Order $o ): array {
+			$no = (string) $o->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_LGS_NO );
+			if ( '' === $no ) {
+				return [];
+			}
+			return [
+				[
+					'id'       => $no,
+					'tracking' => $no,
+					'note'     => (string) $o->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STATUS ),
+				],
+			];
+		};
+		$deleter = static function ( \WC_Order $o, string $id ): bool {
+			if ( (string) $o->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_LGS_NO ) !== $id ) {
+				return false;
+			}
+			foreach ( [
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_LGS_NO,
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_LGS_TYPE,
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO,
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_SHIP_TYPE,
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_TRADE_TYPE,
+				\Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STATUS,
+			] as $k ) {
+				$o->delete_meta_data( $k );
+			}
+			$o->save();
+			return true;
+		};
+
 		$providers['newebpay-cvs'] = [
 			'label'          => __( 'NewebPay shipment', 'moksa-for-woocommerce' ),
 			'category'       => 'cvs',
 			'method_ids'     => $titles,
 			'handler'        => [ Operations\PrintLabel::class, 'render' ],
 			'record_counter' => $counter,
+			'record_lister'  => $lister,
+			'record_deleter' => $deleter,
 			// NPA-B54 回傳統一 PDF，A6 規格無效
 			'paper_modes'    => [ '1' ],
 		];

@@ -205,6 +205,47 @@ final class CreateOrderUnified {
 		return [];
 	}
 
+	/**
+	 * 刪掉一筆記錄（只刪站上的記錄，不會通知 PAYUNi 作廢）。
+	 * 刪完要重新鏡射最新一筆到單鍵，否則 UI 會顯示已經不存在的物流單。
+	 */
+	public static function delete_record( \WC_Order $order, string $ship_trade_no ): bool {
+		$records = self::get_records( $order );
+		$kept    = array_values(
+			array_filter( $records, static fn( array $r ): bool => (string) ( $r['ship_trade_no'] ?? '' ) !== $ship_trade_no )
+		);
+		if ( count( $kept ) === count( $records ) ) {
+			return false;
+		}
+
+		if ( empty( $kept ) ) {
+			$order->delete_meta_data( Keys::PAYUNI_SHIPPING_RECORDS );
+			foreach ( [
+				OrderMeta::ShipTradeNo,
+				OrderMeta::Odno,
+				OrderMeta::ShipType,
+				OrderMeta::LgsType,
+				OrderMeta::GoodsType,
+				OrderMeta::FileNo,
+				OrderMeta::ValidationNo,
+			] as $k ) {
+				$order->delete_meta_data( $k );
+			}
+		} else {
+			$order->update_meta_data( Keys::PAYUNI_SHIPPING_RECORDS, $kept );
+			$latest = end( $kept );
+			$order->update_meta_data( OrderMeta::ShipTradeNo, (string) ( $latest['ship_trade_no'] ?? '' ) );
+			$order->update_meta_data( OrderMeta::Odno, (string) ( $latest['odno'] ?? '' ) );
+			$order->update_meta_data( OrderMeta::ShipType, (string) ( $latest['ship_type'] ?? '' ) );
+			$order->update_meta_data( OrderMeta::LgsType, (string) ( $latest['lgs_type'] ?? '' ) );
+			$order->update_meta_data( OrderMeta::GoodsType, (string) ( $latest['goods_type'] ?? '' ) );
+			$order->update_meta_data( OrderMeta::FileNo, (string) ( $latest['file_no'] ?? '' ) );
+		}
+
+		$order->save();
+		return true;
+	}
+
 
 	private static function build_request_args_for_package( \WC_Order $order, array $pkg, $method ): array {
 		$temp         = (int) $pkg['temp'];

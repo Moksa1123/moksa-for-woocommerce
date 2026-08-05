@@ -65,7 +65,154 @@ msgstr "Moksa 需要啟用 WooCommerce。"
 msgid "Moksa requires WooCommerce %1$s or higher. You are running %2$s."
 msgstr "Moksa 需要 WooCommerce %1$s 或更高版本，目前為 %2$s。"
 
-#: src/Mcp/Server.php:255
+#: src/Mcp/Catalog.php:32
+msgid "What this store has switched on"
+msgstr "這家店開了哪些功能"
+
+#: src/Mcp/Catalog.php:33
+msgid "Which payment, shipping and e-invoice providers are enabled, and whether each is in test mode. Read this first to know what the store can actually do."
+msgstr "啟用了哪些金流、物流與電子發票服務商，以及各自是不是測試模式。先讀這個才知道這家店實際做得到什麼。"
+
+#: src/Mcp/Catalog.php:39
+msgid "Shipping methods on offer"
+msgstr "提供的運送方式"
+
+#: src/Mcp/Catalog.php:40
+msgid "The shipping methods customers can choose, by zone, including which are convenience store pickup."
+msgstr "顧客可選的運送方式，依出貨區域分列，並標示哪些是超商取貨。"
+
+#: src/Mcp/Catalog.php:46
+msgid "Sales over the last 30 days"
+msgstr "近 30 天銷售"
+
+#: src/Mcp/Catalog.php:47
+msgid "Order counts and revenue for the last 30 days, broken down by status."
+msgstr "近 30 天的訂單數與營收，依訂單狀態分列。"
+
+#: src/Mcp/Catalog.php:58
+#: src/Mcp/Catalog.php:152
+#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:28
+#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:99
+#: src/Modules/OrderLookup/ChangePickupStore.php:34
+#: src/Modules/OrderLookup/ChangePickupStore.php:134
+#: src/Modules/OrderLookup/ChannelOps.php:166
+#: src/Modules/OrderLookup/ChannelOps.php:206
+#: src/Modules/OrderLookup/DonationOrgOps.php:42
+#: src/Modules/OrderLookup/DonationOrgOps.php:97
+#: src/Modules/OrderLookup/InvoiceChannelOps.php:168
+#: src/Modules/OrderLookup/InvoiceChannelOps.php:214
+#: src/Modules/OrderLookup/InvoiceOps.php:96
+#: src/Modules/OrderLookup/InvoiceOps.php:138
+#: src/Modules/OrderLookup/InvoiceOps.php:168
+#: src/Modules/OrderLookup/InvoiceOps.php:212
+#: src/Modules/OrderLookup/InvoiceOps.php:241
+#: src/Modules/OrderLookup/InvoiceOps.php:301
+#: src/Modules/OrderLookup/PaymentMethodOps.php:276
+#: src/Modules/OrderLookup/PaymentMethodOps.php:334
+#: src/Modules/OrderLookup/QueryPayment.php:52
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:36
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:69
+#: src/Modules/OrderLookup/ShipmentOps.php:101
+#: src/Modules/OrderLookup/ShipmentOps.php:142
+#: src/Modules/OrderLookup/ShipmentOps.php:200
+#: src/Modules/OrderLookup/ShipmentOps.php:259
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:30
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:67
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:163
+#: src/Modules/OrderLookup/ShippingZoneOps.php:118
+#: src/Modules/OrderLookup/ShippingZoneOps.php:151
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:28
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:70
+msgid "This action requires the Manage WooCommerce permission."
+msgstr "此操作需要「管理 WooCommerce」權限。"
+
+#. translators: %s: resource URI
+#: src/Mcp/Catalog.php:73
+#, php-format
+msgid "Unknown resource: %s"
+msgstr "不存在的資源：%s"
+
+#: src/Mcp/Catalog.php:98
+msgid "Daily shipping run"
+msgstr "每日出貨作業"
+
+#: src/Mcp/Catalog.php:99
+msgid "Work through today's paid orders: which still need a shipment created, which are ready to print, and which are waiting at the store."
+msgstr "把今天已付款的訂單走一遍：哪些還沒建物流單、哪些可以列印標籤、哪些已到店等待取貨。"
+
+#: src/Mcp/Catalog.php:104
+msgid "Check payments against the provider"
+msgstr "跟金流商對帳"
+
+#: src/Mcp/Catalog.php:105
+msgid "Find orders where this site and the payment provider might disagree, and look each one up at the provider."
+msgstr "找出網站與金流商可能對不上的訂單，逐筆去金流商那邊查。"
+
+#: src/Mcp/Catalog.php:109
+msgid "How many days back to look. Defaults to 7."
+msgstr "往前查幾天，預設 7 天。"
+
+#: src/Mcp/Catalog.php:116
+msgid "Find orders missing an e-invoice"
+msgstr "找出漏開發票的訂單"
+
+#: src/Mcp/Catalog.php:117
+msgid "List completed orders that have no e-invoice number yet, so none are missed before the filing deadline."
+msgstr "列出已完成但還沒有發票號碼的訂單，避免申報期限前漏開。"
+
+#: src/Mcp/Catalog.php:121
+msgid "How many days back to look. Defaults to 30."
+msgstr "往前查幾天，預設 30 天。"
+
+#: src/Mcp/Catalog.php:128
+msgid "Move an order to another store"
+msgstr "把訂單改到別家門市"
+
+#: src/Mcp/Catalog.php:129
+msgid "A customer wants to collect the parcel somewhere else: change the pickup store and, if a shipment already exists, delete it and create it again."
+msgstr "顧客想改到別家超商取貨：更換取貨門市，若已經建過物流單就刪掉重建。"
+
+#: src/Mcp/Catalog.php:133
+msgid "The order number."
+msgstr "訂單編號。"
+
+#: src/Mcp/Catalog.php:138
+msgid "The new store number."
+msgstr "新的門市編號。"
+
+#: src/Mcp/Catalog.php:161
+msgid "Go through the orders that are paid but not shipped yet. For each one tell me whether a shipment has been created, and if not create it. Then tell me which ones are ready for their labels to be printed. Use list-orders, list-shipments and create-shipment. Do not print anything without asking me first."
+msgstr "把已付款但尚未出貨的訂單走一遍。逐筆告訴我有沒有建過物流單，沒有的話就建。接著告訴我哪些可以列印標籤了。請用 list-orders、list-shipments 與 create-shipment。沒有先問過我之前不要列印任何東西。"
+
+#. translators: %d: number of days
+#: src/Mcp/Catalog.php:167
+#, php-format
+msgid "Look at orders from the last %d days that are still pending or on hold even though the customer may have paid. For each one, look the payment up at the provider with query-payment and tell me where this site and the provider disagree. Do not change any order status — just report."
+msgstr "檢視近 %d 天內仍停在待付款或保留中、但顧客可能已經付款的訂單。逐筆用 query-payment 去金流商查，告訴我網站與金流商在哪裡對不上。不要更改任何訂單狀態，只要回報。"
+
+#. translators: %d: number of days
+#: src/Mcp/Catalog.php:175
+#, php-format
+msgid "List completed orders from the last %d days that still have no e-invoice number, using get-order-details to confirm each one. Show them as a list with the order number, date and amount. Do not issue any invoices — just tell me which are missing."
+msgstr "列出近 %d 天內已完成、但仍沒有發票號碼的訂單，逐筆用 get-order-details 確認。用清單呈現訂單編號、日期與金額。不要開立任何發票，只要告訴我哪些漏了。"
+
+#: src/Mcp/Catalog.php:182
+msgid "This prompt needs both an order number and a store number."
+msgstr "這個提示樣板需要同時提供訂單編號與門市編號。"
+
+#. translators: 1: order number, 2: store number
+#: src/Mcp/Catalog.php:186
+#, php-format
+msgid "The customer on order %1$s wants to collect at store %2$s instead. Change the pickup store. Then check with list-shipments whether a shipment already exists — if it does, delete it and create it again so the label goes to the new store. Walk me through each step and stop at every confirmation."
+msgstr "訂單 %1$s 的顧客想改到門市 %2$s 取貨。請更換取貨門市，接著用 list-shipments 確認有沒有已建立的物流單 —— 有的話就刪掉重建，讓標籤寄往新門市。每一步都帶著我走，每個確認關卡都停下來。"
+
+#. translators: %s: prompt name
+#: src/Mcp/Catalog.php:194
+#, php-format
+msgid "Unknown prompt: %s"
+msgstr "不存在的提示樣板：%s"
+
+#: src/Mcp/Server.php:283
 #: src/Modules/AiAssistant/Module.php:114
 #: src/Modules/AiAssistant/Rest.php:139
 #: src/Modules/CustomerService/Admin/Inbox.php:127
@@ -81,11 +228,11 @@ msgstr "Moksa 需要 WooCommerce %1$s 或更高版本，目前為 %2$s。"
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:108
-#: src/Modules/NewebpayShipping/Module.php:133
-#: src/Modules/NewebpayShipping/Module.php:177
+#: src/Modules/NewebpayShipping/Module.php:143
+#: src/Modules/NewebpayShipping/Module.php:168
+#: src/Modules/NewebpayShipping/Module.php:212
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
-#: src/Modules/OrderLookup/Ability.php:1161
+#: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:333
@@ -100,7 +247,7 @@ msgstr "Moksa 需要 WooCommerce %1$s 或更高版本，目前為 %2$s。"
 msgid "You do not have permission to do this."
 msgstr "權限不足。"
 
-#: src/Mcp/Server.php:263
+#: src/Mcp/Server.php:291
 msgid "The tool failed to run. Please try again later."
 msgstr "工具執行失敗,請稍後再試。"
 
@@ -2283,7 +2430,7 @@ msgstr "不支援的操作。"
 msgid "This action could not be prepared."
 msgstr "無法準備此操作。"
 
-#: src/Modules/AiAssistant/Config.php:141
+#: src/Modules/AiAssistant/Config.php:155
 msgid "You are Moksa AI, the WooCommerce admin assistant for a Taiwanese online store. These are your tools: (1) find a single order by order number, e-invoice number, tracking number or payment transaction ID — when the user simply gives a number, such as “order 2855” or “status of 2855?”, treat it as an order number and use this tool; it is the right choice when all that is needed is a status or which order is meant; (2) get the full details of one order — items, totals, payment and shipping method, pickup store, invoice number and whether it has been issued, tracking number and payment transaction ID — use this for questions like “has the invoice been issued”, “what is the tracking number”, “which store is it going to” or “what did they buy”; (3) count orders and see the breakdown by status, or list the orders in one status (awaiting shipment is processing, awaiting payment is pending, finished is completed); (4) change an order status — update-order-status for one order, batch-update-order-status for several; (5) issue an e-invoice with issue-invoice; (6) void an e-invoice with void-invoice, which needs a reason; (7) print shipping labels with print-shipping-label, for one or more orders that already have shipments; (8) create a shipment with create-shipment, which books it with the carrier and returns a tracking number, after which the label can be printed. Tools 4 to 8 are only proposed: the user is asked to press Confirm before anything happens, so never ask for confirmation yourself. (9) add an order note with add-order-note, which is low risk and runs immediately; (10) list payment, shipping and e-invoice channels with list-channels (read-only); (11) enable or disable a channel with toggle-channel — pass the channel name such as “SmilePay shipping” directly, with no need to list them first (destructive, so it goes through confirmation); (12) add an invoice donation charity with add-donation-org, giving a name and love code (destructive, confirmed); (13) issue an invoice allowance with issue-allowance, giving an amount (destructive, confirmed); (14) get an advanced order list with list-orders, filtered by status, date range or payment method (read-only); (15) list a payment service's individual methods with list-payment-methods (read-only); (16) enable or disable those methods with toggle-payment-method, such as ECPay's one-off card payment or Apple Pay, passing the names directly (destructive, confirmed); (17) list invoice issuing options with list-invoice-channels (read-only); (18) enable or disable them with toggle-invoice-channel — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID (destructive, confirmed); (19) resend the payment details email with resend-payment-email, sending the ATM or convenience store details to the customer (destructive, confirmed); (20) get tracking links with get-tracking-link (read-only); (21) check payment status with get-payment-status — method, whether it is paid, transaction ID, last four card digits, ATM and convenience store details, with a live NewebPay query where applicable (read-only); (22) summarize the plugin settings with get-plugin-settings — which channels are on, test or production mode, when invoices are issued, which fields order lookup searches and whether AI is enabled, never credentials (read-only); (23) list shipping zones and methods with list-shipping-zones (read-only); (24) enable or disable a shipping method with toggle-shipping-method, naming the method directly, such as “SmilePay T-Cat ambient” (destructive, confirmed); (25) create shipments in bulk with batch-create-shipment (destructive, confirmed); (26) find a customer's orders with find-customer-orders by email, phone or name (read-only); (27) get revenue statistics with sales-summary — revenue, order count, status breakdown and average order value for a period, defaulting to this month (read-only). Tools 11 to 13, 16, 18, 19, 24 and 25 are also only proposed and wait for confirmation. Always look up the real data with a tool before answering, then reply briefly and clearly in the language the merchant is using. Report only the orders that genuinely match the question, and never pad the answer with unrelated ones. If nothing is found, say so plainly rather than inventing anything. If asked for something the tools cannot do, such as printing many shipping labels at once or changing a great many statuses, do not simply say it is impossible — explain that it can be done by ticking the orders in the WooCommerce order list and using the bulk actions menu above, and that you can help with lookups and single status changes. If several things are asked at once, gather everything with the appropriate tools first, then combine the answers into a single reply. Always finish with text; never stop at a tool call without answering."
 msgstr "你是台灣電商商家的 WooCommerce 後台助手 Moksa AI。你有這些工具:(1) 依訂單編號、電子發票號碼、物流單號或金流交易序號查單筆訂單 —— 使用者直接給一組數字(如「訂單2855」或「2855 狀態?」)時,就把它當訂單編號用這個工具查,只需要狀態或找到是哪一筆時用它;(2) 查單筆訂單的完整明細(品項、金額、付款 / 配送方式、取貨門市、發票號碼與是否已開立、物流單號、金流序號)—— 被問到「發票開了嗎 / 物流單號 / 取哪間門市 / 買了什麼」就用這個;(3) 查訂單數量與各狀態筆數分布,或列出某狀態的訂單(例:待出貨 = processing、待付款 = pending、已完成 = completed);(4) 更改訂單狀態 —— 單筆用 update-order-status、一次多筆用 batch-update-order-status;(5) 開立電子發票 issue-invoice;(6) 作廢電子發票 void-invoice(需作廢原因);(7) 列印物流單 print-shipping-label(單筆或多筆,訂單需已建立託運單);(8) 建立託運單 create-shipment(向物流商建單取號,建單後才能列印)。第 4-8 項都會先提出、由系統要求使用者按「確認執行」後才動作,你不必自己再追問確認。(9) 新增訂單備註 add-order-note(低風險,直接執行);(10) 列出金流/物流/發票管道與啟用狀態 list-channels(唯讀);(11) 啟用/停用管道 toggle-channel(channel 可直接給管道名稱如「速買配物流」,不必先查清單;破壞性走確認);(12) 新增發票捐贈單位 add-donation-org(名稱+愛心碼;破壞性走確認);(13) 開立發票折讓單 issue-allowance(需金額;破壞性走確認);(14) 進階訂單列表 list-orders(依狀態/日期區間/金流篩選;唯讀報表);(15) 列出某金流的個別付款方式 list-payment-methods(唯讀);(16) 啟用/停用金流的個別付款方式 toggle-payment-method(如綠界的信用卡一次付清、Apple Pay;methods 直接給名稱;破壞性走確認);(17) 列出發票開立方式 list-invoice-channels(唯讀);(18) 啟用/停用發票開立方式 toggle-invoice-channel(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編;破壞性走確認);(19) 重寄付款資訊信 resend-payment-email(ATM/超商繳費資訊給顧客;破壞性走確認);(20) 取貨態追蹤連結 get-tracking-link(唯讀);(21) 查付款狀態 get-payment-status(付款方式/是否已付/交易序號/卡末四/ATM/超商;藍新即時 B02;唯讀);(22) 彙整外掛設定 get-plugin-settings(哪些管道開著/測試正式/發票開立時機/查號欄位/AI 開關,不含憑證;唯讀);(23) 列出運送區域與方式 list-shipping-zones(唯讀);(24) 啟用/停用運送方式 toggle-shipping-method(WC 運送區域內的個別物流方式如「速買配黑貓常溫」;method 直接給名稱;破壞性走確認);(25) 批次建立託運單 batch-create-shipment(一次多筆建單取號;破壞性走確認);(26) 查顧客訂單 find-customer-orders(email/電話/姓名;唯讀);(27) 營收訂單統計 sales-summary(某期間營收/訂單數/狀態分布/客單價,不給日期=本月;唯讀)。第 11-13、16、18-19、24-25 項都先提出、確認後才動作。回答前務必先用工具查真實資料,再用繁體中文簡短清楚回答;只回報真正符合查詢的訂單,不要附帶不相關的訂單。查不到就明說,不要編造。若被問到目前工具做不到的操作(如批次列印物流單、大量改狀態),不要只說「無法」,要說明那可在 WooCommerce「訂單」列表勾選多筆後用上方的「批次操作」完成,我目前只能協助查詢與單筆狀態變更。若使用者一次問多件事,先用對應工具把所有需要的資料查齊,再把各項答案合併成一段繁體中文文字一次回覆;每次都務必以文字作結,不要只停在工具呼叫而沒給出文字答覆。"
 
@@ -2892,11 +3039,11 @@ msgstr "顧客自助查訂單狀態 / 物流 / 發票(二次驗證)"
 
 #: src/Modules/CustomerService/Module.php:78
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:151
-#: src/Modules/OrderLookup/Ability.php:486
-#: src/Modules/OrderLookup/Ability.php:573
-#: src/Modules/OrderLookup/Ability.php:613
-#: src/Modules/OrderLookup/Ability.php:837
-#: src/Modules/OrderLookup/Ability.php:1116
+#: src/Modules/OrderLookup/Ability.php:489
+#: src/Modules/OrderLookup/Ability.php:576
+#: src/Modules/OrderLookup/Ability.php:616
+#: src/Modules/OrderLookup/Ability.php:840
+#: src/Modules/OrderLookup/Ability.php:1307
 #: src/Modules/OrderLookup/OrderNumberLookup.php:34
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:70
 msgid "Order number"
@@ -2908,7 +3055,7 @@ msgstr "帳單電話末三碼"
 
 #: src/Modules/CustomerService/Module.php:80
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:122
 msgid "Look up"
 msgstr "查詢"
 
@@ -3450,7 +3597,8 @@ msgstr "條碼第 %d 段"
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:419
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:456
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:148
-#: src/Modules/OrderLookup/Ability.php:1171
+#: src/Modules/OrderLookup/Ability.php:1362
+#: src/Modules/OrderLookup/ChangePickupStore.php:139
 #: src/Modules/OrderLookup/InvoiceOps.php:100
 #: src/Modules/OrderLookup/InvoiceOps.php:172
 #: src/Modules/OrderLookup/InvoiceOps.php:245
@@ -3458,6 +3606,7 @@ msgstr "條碼第 %d 段"
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
 #: src/Modules/OrderLookup/ShipmentOps.php:105
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:168
 #: src/Modules/OrderLookup/TrackingLookup.php:67
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:75
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
@@ -5068,13 +5217,13 @@ msgstr "門市代號"
 msgid "The ECPay store picker could not be opened. Please try again later."
 msgstr "無法開啟綠界選店畫面，請稍後再試。"
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:116
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:176
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:117
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:177
 msgid "This is not an ECPay shipping method."
 msgstr "不是綠界物流方式。"
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:121
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:180
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:122
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:181
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
 msgid "This shipping method does not need a store."
 msgstr "此物流方式不需選店。"
@@ -5237,11 +5386,11 @@ msgstr "綠界 黑貓宅配"
 msgid "ECPay Chunghwa Post"
 msgstr "綠界 中華郵政"
 
-#: src/Modules/EcpayShipping/Module.php:138
+#: src/Modules/EcpayShipping/Module.php:153
 msgid "ECPay convenience store labels"
 msgstr "綠界 超商標籤"
 
-#: src/Modules/EcpayShipping/Module.php:150
+#: src/Modules/EcpayShipping/Module.php:167
 msgid "ECPay home delivery labels"
 msgstr "綠界 宅配標籤"
 
@@ -6031,9 +6180,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:113
-#: src/Modules/NewebpayShipping/Module.php:138
-#: src/Modules/NewebpayShipping/Module.php:182
+#: src/Modules/NewebpayShipping/Module.php:148
+#: src/Modules/NewebpayShipping/Module.php:173
+#: src/Modules/NewebpayShipping/Module.php:217
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6490,46 +6639,46 @@ msgstr "超商取貨 — 7-11 / 全家 / 萊爾富 / OK"
 msgid "NewebPay convenience store pickup"
 msgstr "藍新超商取貨"
 
-#: src/Modules/NewebpayShipping/Module.php:94
+#: src/Modules/NewebpayShipping/Module.php:127
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr "藍新物流託運單"
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:121
+#: src/Modules/NewebpayShipping/Module.php:156
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr "藍新物流單建立成功（單號 %s）"
 
-#: src/Modules/NewebpayShipping/Module.php:142
+#: src/Modules/NewebpayShipping/Module.php:177
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr "訂單尚未建單，無 MerchantOrderNo 可查詢。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:147
+#: src/Modules/NewebpayShipping/Module.php:182
 #, php-format
 msgid "The lookup failed: %s"
 msgstr "查詢失敗：%s"
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:157
+#: src/Modules/NewebpayShipping/Module.php:192
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr "查詢藍新物流：%s"
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:167
+#: src/Modules/NewebpayShipping/Module.php:202
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr "查詢成功 — %s"
 
-#: src/Modules/NewebpayShipping/Module.php:186
+#: src/Modules/NewebpayShipping/Module.php:221
 msgid "No shipment has been created for this order yet."
 msgstr "訂單尚未建單。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:191
+#: src/Modules/NewebpayShipping/Module.php:226
 #, php-format
 msgid "Tracking failed: %s"
 msgstr "追蹤失敗：%s"
@@ -6805,361 +6954,384 @@ msgid "Move an order to a new status such as processing, completed or cancelled.
 msgstr "把指定訂單改成新的狀態(如 processing 處理中、completed 已完成、cancelled 已取消)。這是破壞性操作 —— 呼叫此工具只會「提出」變更,系統會要求使用者按「確認執行」後才真正變更,你不需要自己再追問確認。"
 
 #: src/Modules/OrderLookup/Ability.php:201
-#: src/Modules/OrderLookup/Ability.php:1074
-#: src/Modules/OrderLookup/Ability.php:1247
-#: src/Modules/OrderLookup/Ability.php:1287
+#: src/Modules/OrderLookup/Ability.php:1077
+#: src/Modules/OrderLookup/Ability.php:1119
+#: src/Modules/OrderLookup/Ability.php:1164
+#: src/Modules/OrderLookup/Ability.php:1207
+#: src/Modules/OrderLookup/Ability.php:1253
+#: src/Modules/OrderLookup/Ability.php:1438
+#: src/Modules/OrderLookup/Ability.php:1478
 msgid "The order number, for example 2896"
 msgstr "訂單編號(如 2896)"
 
 #: src/Modules/OrderLookup/Ability.php:205
-#: src/Modules/OrderLookup/Ability.php:1338
+#: src/Modules/OrderLookup/Ability.php:1529
 msgid "The target status slug, such as processing, completed, cancelled, on-hold or refunded"
 msgstr "目標狀態 slug,如 processing / completed / cancelled / on-hold / refunded"
 
-#: src/Modules/OrderLookup/Ability.php:255
+#: src/Modules/OrderLookup/Ability.php:258
 msgid "Create shipments in bulk"
 msgstr "批次建立託運單"
 
-#: src/Modules/OrderLookup/Ability.php:256
+#: src/Modules/OrderLookup/Ability.php:259
 msgid "Create shipments for several orders at once and get their tracking numbers, choosing the carrier automatically from each order's shipping method. This is destructive and cannot be undone — calling the tool only proposes it, and nothing is created until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "一次為「多筆」訂單建立託運單並取得物流單號(依各訂單運送方式自動判斷物流商)。破壞性、不可逆 —— 呼叫只會「提出」,使用者按「確認執行」後才建單,你不需要自己再追問。"
 
-#: src/Modules/OrderLookup/Ability.php:264
+#: src/Modules/OrderLookup/Ability.php:267
 msgid "An array of order numbers, for example [\"2867\",\"2664\"]"
 msgstr "訂單編號陣列(如 [\"2867\",\"2664\"])"
 
-#: src/Modules/OrderLookup/Ability.php:296
+#: src/Modules/OrderLookup/Ability.php:299
 msgid "Find a customer's orders"
 msgstr "查顧客訂單"
 
-#: src/Modules/OrderLookup/Ability.php:297
+#: src/Modules/OrderLookup/Ability.php:300
 msgid "Look up every order belonging to a customer by email address, phone number or name, and return the list along with the total amount paid. Read-only."
 msgstr "用顧客的 email、電話或姓名查他的所有訂單(回傳訂單清單與已付款累計)。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:304
+#: src/Modules/OrderLookup/Ability.php:307
 msgid "The customer's email address, phone number or name"
 msgstr "顧客 email / 電話 / 姓名"
 
-#: src/Modules/OrderLookup/Ability.php:336
+#: src/Modules/OrderLookup/Ability.php:339
 msgid "Revenue and order statistics"
 msgstr "營收訂單統計"
 
-#: src/Modules/OrderLookup/Ability.php:337
+#: src/Modules/OrderLookup/Ability.php:340
 msgid "Order count, paid revenue, status breakdown and average order value for a period. The period is optional and defaults to this_month: today, yesterday, this_month, last_month, this_year or custom. With custom, also pass date_from and date_to in YYYY-MM-DD format. Read-only."
 msgstr "某期間的訂單數、已付款營收、各狀態分布、平均客單價。period 選填(預設本月 this_month):today / yesterday / this_month / last_month / this_year / custom(custom 時再給 date_from、date_to,格式 YYYY-MM-DD)。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:346
+#: src/Modules/OrderLookup/Ability.php:349
 msgid "The period. Optional, defaults to this_month. One of today, yesterday, this_month, last_month, this_year or custom"
 msgstr "期間(選填,預設 this_month)。今天=today、昨天=yesterday、本月=this_month、上個月=last_month、今年=this_year、自訂區間=custom"
 
-#: src/Modules/OrderLookup/Ability.php:350
+#: src/Modules/OrderLookup/Ability.php:353
 msgid "Start date in YYYY-MM-DD format, used with the custom period"
 msgstr "custom 時的起始日期 YYYY-MM-DD"
 
-#: src/Modules/OrderLookup/Ability.php:354
+#: src/Modules/OrderLookup/Ability.php:357
 msgid "End date in YYYY-MM-DD format, used with the custom period"
 msgstr "custom 時的結束日期 YYYY-MM-DD"
 
-#: src/Modules/OrderLookup/Ability.php:391
+#: src/Modules/OrderLookup/Ability.php:394
 msgid "List shipping zones and methods"
 msgstr "列出運送區域與方式"
 
-#: src/Modules/OrderLookup/Ability.php:392
+#: src/Modules/OrderLookup/Ability.php:395
 msgid "List every shipping method in the WooCommerce shipping zones, such as 7-ELEVEN pickup or T-Cat ambient and frozen delivery, along with whether each is enabled. Use it to confirm a method name before switching it. No parameters. Read-only."
 msgstr "列出 WooCommerce 運送區域內所有運送方式(7-11 取貨 / 黑貓常溫冷凍 等)與啟用狀態。切換前先用這個確認方式名稱。免參數。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:400
-#: src/Modules/OrderLookup/Ability.php:531
+#: src/Modules/OrderLookup/Ability.php:403
+#: src/Modules/OrderLookup/Ability.php:534
 msgid "Optional, can be omitted"
 msgstr "選填,可省略"
 
-#: src/Modules/OrderLookup/Ability.php:432
+#: src/Modules/OrderLookup/Ability.php:435
 msgid "Enable or disable a shipping method"
 msgstr "啟用/停用運送方式"
 
-#: src/Modules/OrderLookup/Ability.php:433
+#: src/Modules/OrderLookup/Ability.php:436
 msgid "Enable or disable one shipping method in a WooCommerce shipping zone, for example “SmilePay T-Cat ambient” or “ECPay 7-ELEVEN pickup”. Pass the method name directly. This is a destructive action because it changes what customers can choose at checkout — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "啟用或停用 WooCommerce 運送區域內的某個運送方式(如「速買配 黑貓常溫」「綠界 7-11 取貨」)。method 直接給方式名稱即可。這是破壞性操作(影響前台結帳可選的運送方式)—— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:440
+#: src/Modules/OrderLookup/Ability.php:443
 msgid "The shipping method name, for example SmilePay T-Cat ambient"
 msgstr "運送方式名稱(如 速買配 黑貓常溫)"
 
-#: src/Modules/OrderLookup/Ability.php:444
-#: src/Modules/OrderLookup/Ability.php:704
-#: src/Modules/OrderLookup/Ability.php:795
-#: src/Modules/OrderLookup/Ability.php:988
+#: src/Modules/OrderLookup/Ability.php:447
+#: src/Modules/OrderLookup/Ability.php:707
+#: src/Modules/OrderLookup/Ability.php:798
+#: src/Modules/OrderLookup/Ability.php:991
 msgid "true to enable, false to disable"
 msgstr "true=啟用、false=停用"
 
-#: src/Modules/OrderLookup/Ability.php:478
+#: src/Modules/OrderLookup/Ability.php:481
 msgid "Check payment status"
 msgstr "查付款狀態"
 
-#: src/Modules/OrderLookup/Ability.php:479
+#: src/Modules/OrderLookup/Ability.php:482
 msgid "Check the payment status of an order: payment method, whether it is paid, transaction ID, last four card digits, ATM virtual account and convenience store payment code. NewebPay orders are also queried live against NewebPay. Read-only."
 msgstr "查某訂單的付款狀態:付款方式、是否已付款、交易序號、卡末四、ATM 虛擬帳號、超商繳費代碼。藍新金流訂單會額外向藍新做即時查詢(B02)。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:522
+#: src/Modules/OrderLookup/Ability.php:525
 msgid "Summarize plugin settings"
 msgstr "彙整外掛設定"
 
-#: src/Modules/OrderLookup/Ability.php:523
+#: src/Modules/OrderLookup/Ability.php:526
 msgid "Summarize the current non-sensitive settings: which payment, shipping and e-invoice channels are enabled, whether each module is in test or production mode, when invoices are issued, which fields order number lookup searches, and whether the AI assistant is on. No credentials are included. No parameters. Read-only."
 msgstr "彙整目前非敏感設定:哪些金流/物流/發票管道啟用、各模組測試或正式模式、發票開立時機、訂單查號可搜尋欄位、AI 助手是否啟用。不含任何憑證。免參數。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:565
+#: src/Modules/OrderLookup/Ability.php:568
 msgid "Resend the payment details email"
 msgstr "重寄付款資訊信"
 
-#: src/Modules/OrderLookup/Ability.php:566
+#: src/Modules/OrderLookup/Ability.php:569
 msgid "Resend the payment details email, such as the ATM virtual account or convenience store payment code, to the customer. Only orders that have those details can be sent; card orders have none. This is a destructive action because it emails the customer — calling the tool only proposes it, and nothing is sent until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "重寄付款資訊信(ATM 虛擬帳號 / 超商繳費代碼等)給訂單的顧客。只有有這類付款資訊的訂單可寄(信用卡訂單沒有)。這是破壞性操作(會寄信給顧客)—— 呼叫只會「提出」,使用者按「確認執行」後才寄出,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:605
+#: src/Modules/OrderLookup/Ability.php:608
 msgid "Get tracking links"
 msgstr "取貨態追蹤連結"
 
-#: src/Modules/OrderLookup/Ability.php:606
+#: src/Modules/OrderLookup/Ability.php:609
 msgid "Get the shipment tracking links for an order: each carrier's public tracking page plus the tracking number. Read-only."
 msgstr "取某訂單的物流貨態追蹤連結(各家物流的公開查詢頁 + 物流單號)。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:647
+#: src/Modules/OrderLookup/Ability.php:650
 msgid "List invoice issuing options"
 msgstr "列出發票開立方式"
 
-#: src/Modules/OrderLookup/Ability.php:648
+#: src/Modules/OrderLookup/Ability.php:651
 msgid "List the issuing options an e-invoice service (ECPay, ezPay, SmilePay, PayNow or Amego) supports — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation and tax ID — along with whether each is enabled. Read-only."
 msgstr "列出某家電子發票(綠界/ezPay/速買配/PayNow/Amego)支援的開立方式(會員載具/手機條碼/自然人憑證/紙本/捐贈/統編)與啟用狀態。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:655
-#: src/Modules/OrderLookup/Ability.php:695
+#: src/Modules/OrderLookup/Ability.php:658
+#: src/Modules/OrderLookup/Ability.php:698
 msgid "The e-invoice module name or slug, for example ECPay or ecpay"
 msgstr "發票模組名稱或 slug(如 綠界 / ecpay)"
 
-#: src/Modules/OrderLookup/Ability.php:687
+#: src/Modules/OrderLookup/Ability.php:690
 msgid "Enable or disable invoice issuing options"
 msgstr "啟用/停用發票開立方式"
 
-#: src/Modules/OrderLookup/Ability.php:688
+#: src/Modules/OrderLookup/Ability.php:691
 msgid "Enable or disable one or more issuing options for an e-invoice service: member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID. Pass the option names directly. This is a destructive action — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "啟用或停用某家電子發票的一或多種開立方式(會員載具、手機條碼、自然人憑證、紙本、捐贈、統編)。channels 直接給名稱即可。這是破壞性操作 —— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:700
+#: src/Modules/OrderLookup/Ability.php:703
 msgid "An array of issuing option names, for example [\"Mobile barcode\",\"Donation\"]"
 msgstr "開立方式名稱陣列(如 [\"手機條碼\",\"捐贈\"])"
 
-#: src/Modules/OrderLookup/Ability.php:738
+#: src/Modules/OrderLookup/Ability.php:741
 msgid "List payment methods"
 msgstr "列出金流付款方式"
 
-#: src/Modules/OrderLookup/Ability.php:739
+#: src/Modules/OrderLookup/Ability.php:742
 msgid "List every individual payment method offered by a payment service (ECPay, NewebPay, PAYUNi, SmilePay, PayNow or PChomePay) and whether each is enabled. Use it to confirm what is available before switching anything. Read-only."
 msgstr "列出某個金流(綠界/藍新/PAYUNi/速買配/PayNow/PChomePay)所有「個別付款方式」與啟用狀態。切換前先用這個確認有哪些方式。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:746
-#: src/Modules/OrderLookup/Ability.php:786
+#: src/Modules/OrderLookup/Ability.php:749
+#: src/Modules/OrderLookup/Ability.php:789
 msgid "The payment service name or slug, for example ECPay or ecpay"
 msgstr "金流名稱或 slug(如 綠界 / ecpay)"
 
-#: src/Modules/OrderLookup/Ability.php:778
+#: src/Modules/OrderLookup/Ability.php:781
 msgid "Enable or disable payment methods"
 msgstr "啟用/停用金流付款方式"
 
-#: src/Modules/OrderLookup/Ability.php:779
+#: src/Modules/OrderLookup/Ability.php:782
 msgid "Enable or disable one or more individual payment methods within a payment service, such as ECPay's one-off credit card payment, Apple Pay or ATM. Pass the method names directly. This is a destructive action — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "啟用或停用某個金流裡的一或多個「個別付款方式」(如綠界的信用卡一次付清、Apple Pay、ATM)。methods 直接給方式名稱即可。這是破壞性操作 —— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:791
+#: src/Modules/OrderLookup/Ability.php:794
 msgid "An array of payment method names, for example [\"Credit card, pay in full\",\"Apple Pay\"]"
 msgstr "付款方式名稱陣列(如 [\"信用卡一次付清\",\"Apple Pay\"])"
 
-#: src/Modules/OrderLookup/Ability.php:829
+#: src/Modules/OrderLookup/Ability.php:832
 msgid "Issue an invoice allowance"
 msgstr "開立發票折讓單"
 
-#: src/Modules/OrderLookup/Ability.php:830
+#: src/Modules/OrderLookup/Ability.php:833
 msgid "Issue an allowance against an order's existing e-invoice, used for partial refunds. An amount is required. Only ECPay, ezPay and Amego support this. It is destructive and cannot be undone — calling the tool only proposes it, and nothing is issued until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "為訂單已開立的電子發票開立折讓單(部分退款用),需指定折讓金額。僅綠界/ezPay/Amego 支援。破壞性、不可逆 —— 呼叫只會「提出」,使用者按「確認執行」後才開立,你不需要自己再追問。"
 
-#: src/Modules/OrderLookup/Ability.php:841
+#: src/Modules/OrderLookup/Ability.php:844
 msgid "The allowance amount as a whole number, which cannot exceed the order total"
 msgstr "折讓金額(整數,不可超過訂單金額)"
 
-#: src/Modules/OrderLookup/Ability.php:873
+#: src/Modules/OrderLookup/Ability.php:876
 msgid "Advanced order list"
 msgstr "進階訂單列表"
 
-#: src/Modules/OrderLookup/Ability.php:874
+#: src/Modules/OrderLookup/Ability.php:877
 msgid "Return an actual list of orders, filtered by status, date range (date_from and date_to in YYYY-MM-DD format) and payment method. The list is compact and returns 20 orders by default, up to a maximum of 50. If you only need counts per status, use query-orders instead. Read-only."
 msgstr "回傳「實際訂單清單」:依狀態、日期區間(date_from / date_to,YYYY-MM-DD)、金流方式篩選,回精簡清單(預設 20 筆、上限 50)。只要各狀態的筆數 / 數量請改用 query-orders。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:881
+#: src/Modules/OrderLookup/Ability.php:884
 msgid "An order status slug such as processing or completed. Omit it for every status"
 msgstr "訂單狀態 slug(如 processing / completed),不給則全部"
 
-#: src/Modules/OrderLookup/Ability.php:885
+#: src/Modules/OrderLookup/Ability.php:888
 msgid "Start date in YYYY-MM-DD format"
 msgstr "起始日期 YYYY-MM-DD"
 
-#: src/Modules/OrderLookup/Ability.php:889
+#: src/Modules/OrderLookup/Ability.php:892
 msgid "End date in YYYY-MM-DD format"
 msgstr "結束日期 YYYY-MM-DD"
 
-#: src/Modules/OrderLookup/Ability.php:893
+#: src/Modules/OrderLookup/Ability.php:896
 msgid "Payment method ID (optional)"
 msgstr "金流方式 id(選填)"
 
-#: src/Modules/OrderLookup/Ability.php:897
+#: src/Modules/OrderLookup/Ability.php:900
 msgid "How many orders to return. Defaults to 20, maximum 50"
 msgstr "最多幾筆(預設 20,上限 50)"
 
-#: src/Modules/OrderLookup/Ability.php:934
+#: src/Modules/OrderLookup/Ability.php:937
 msgid "List payment, shipping and e-invoice channels"
 msgstr "列出金流/物流/發票管道"
 
-#: src/Modules/OrderLookup/Ability.php:935
+#: src/Modules/OrderLookup/Ability.php:938
 msgid "List the payment, shipping and e-invoice channels with their slugs and whether each is enabled. Use all for everything, or filter with payment, shipping or invoice. Read-only."
 msgstr "列出金流、物流、電子發票管道與其啟用狀態(含 slug)。category 用 all 取全部,或 payment / shipping / invoice 篩選。唯讀。"
 
-#: src/Modules/OrderLookup/Ability.php:944
+#: src/Modules/OrderLookup/Ability.php:947
 msgid "Optional, defaults to all. Or filter with payment, shipping or invoice"
 msgstr "選填,預設 all(全部);或 payment / shipping / invoice 篩選"
 
-#: src/Modules/OrderLookup/Ability.php:976
+#: src/Modules/OrderLookup/Ability.php:979
 msgid "Enable or disable a channel"
 msgstr "啟用/停用管道"
 
-#: src/Modules/OrderLookup/Ability.php:977
+#: src/Modules/OrderLookup/Ability.php:980
 msgid "Enable or disable a payment, shipping or e-invoice channel. Pass the channel name (such as “SmilePay shipping”) or its slug directly; there is no need to list them first. This is a destructive action, because disabling a channel changes what customers can choose at checkout and enabling one without credentials causes errors on the storefront — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself. It does not touch credentials or the test and production switch."
 msgstr "啟用或停用某個金流/物流/電子發票管道。channel 可直接給管道名稱(如「速買配物流」)或 slug,不必先查清單。這是破壞性操作(停用會影響結帳可用方式、啟用未設定憑證的管道會在前台出錯)—— 呼叫只會「提出」,使用者按「確認執行」後才生效,你不需要自己再追問。不處理憑證與測試/正式切換。"
 
-#: src/Modules/OrderLookup/Ability.php:984
+#: src/Modules/OrderLookup/Ability.php:987
 msgid "The channel name or slug, for example “SmilePay shipping” or smilepay_shipping"
 msgstr "管道名稱或 slug(如「速買配物流」或 smilepay_shipping)"
 
-#: src/Modules/OrderLookup/Ability.php:1020
+#: src/Modules/OrderLookup/Ability.php:1023
 msgid "Add an invoice donation charity"
 msgstr "新增發票捐贈單位"
 
-#: src/Modules/OrderLookup/Ability.php:1021
+#: src/Modules/OrderLookup/Ability.php:1024
 msgid "Add a charity, with its name and love code, to the donation list of the enabled e-invoice module so customers can choose it at checkout. A love code is 3 to 7 digits. Calling the tool only proposes it, and nothing is saved until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "新增一個電子發票捐贈單位(社福團體名稱 + 愛心碼)到啟用中發票模組的捐贈名單,之後結帳的捐贈選單就能選。愛心碼為 3-7 碼數字。呼叫只會「提出」,使用者按「確認執行」後才寫入,你不需要自己再追問。"
 
-#: src/Modules/OrderLookup/Ability.php:1028
+#: src/Modules/OrderLookup/Ability.php:1031
 msgid "The name of the charity"
 msgstr "捐贈單位 / 社福團體名稱"
 
-#: src/Modules/OrderLookup/Ability.php:1032
+#: src/Modules/OrderLookup/Ability.php:1035
 msgid "The love code, 3 to 7 digits"
 msgstr "愛心碼(3-7 碼數字)"
 
-#: src/Modules/OrderLookup/Ability.php:1066
+#: src/Modules/OrderLookup/Ability.php:1069
 msgid "Create a shipment"
 msgstr "建立託運單"
 
-#: src/Modules/OrderLookup/Ability.php:1067
+#: src/Modules/OrderLookup/Ability.php:1070
 msgid "Create a shipment with the carrier for an order and get its tracking number, choosing the carrier automatically from the order's shipping method. This is destructive and cannot be undone, because it places a real booking with the carrier — calling the tool only proposes it, and nothing is created until the user presses Confirm, so there is no need to ask for confirmation yourself. A label can only be printed once the shipment exists."
 msgstr "為訂單向物流商建立託運單並取得物流單號(依訂單的運送方式自動判斷物流商)。這是破壞性、不可逆的操作(會向物流商真實下單)—— 呼叫此工具只會「提出」,使用者按「確認執行」後才真正建單,你不需要自己再追問確認。建單後才能列印物流單。"
 
-#: src/Modules/OrderLookup/Ability.php:1108
+#: src/Modules/OrderLookup/Ability.php:1111
+msgid "Look the payment up at the provider"
+msgstr "向金流商查詢這筆交易"
+
+#: src/Modules/OrderLookup/Ability.php:1112
+msgid "Ask the payment provider directly what happened to the transaction on an order — whether it was authorised, how much was captured and when. Use this when the order and the provider might disagree, for example when a customer says they paid but the order still shows unpaid. Works for ECPay card payments and PAYUNi. For what this site already recorded, use get-payment-status instead, which does not call the provider. Read-only."
+msgstr "直接問金流商這張訂單的交易怎麼了 —— 有沒有授權成功、請款多少、什麼時候。訂單與金流商可能對不上時用，例如顧客說付了但訂單還顯示未付款。支援綠界信用卡與 PAYUNi。只想看網站自己記錄的內容請改用 get-payment-status，那支不會打金流商。唯讀。"
+
+#: src/Modules/OrderLookup/Ability.php:1156
+msgid "List the shipments on an order"
+msgstr "列出訂單的物流單"
+
+#: src/Modules/OrderLookup/Ability.php:1157
+msgid "List the shipments already created for an order, with their shipment numbers, tracking numbers and when they were created. Use this before deleting a shipment so you know which number to give."
+msgstr "列出這張訂單已經建立的物流單，含物流單號、追蹤號碼與建立時間。要刪除物流單之前先用這支，才知道該給哪個單號。"
+
+#: src/Modules/OrderLookup/Ability.php:1199
+msgid "Delete a shipment from an order"
+msgstr "刪除訂單的物流單"
+
+#: src/Modules/OrderLookup/Ability.php:1200
+msgid "Remove a shipment record from an order so the shipment can be created again — for example after the pickup store was changed. This only removes the record on this site; it does not cancel the booking with the carrier, so never use it for a parcel that is already on its way. This is a destructive action — calling the tool only proposes it, and nothing is deleted until the user presses Confirm, so there is no need to ask for confirmation yourself. If the order has more than one shipment you must say which shipment number to delete."
+msgstr "把物流單記錄從訂單移除，讓物流單可以重新建立 —— 例如改過取貨門市之後。這只會刪掉網站上的記錄，不會向物流商作廢已建立的單，所以包裹已經在路上時絕對不要用。這是破壞性操作 —— 呼叫這個工具只會提出變更，要等使用者按下確認才會刪除，所以不需要自己再問一次。訂單有一張以上物流單時，一定要指定要刪哪個單號。"
+
+#: src/Modules/OrderLookup/Ability.php:1211
+msgid "Which shipment to delete. Can be left out only when the order has exactly one shipment."
+msgstr "要刪除哪一張物流單。只有在訂單剛好只有一張時才可以不填。"
+
+#: src/Modules/OrderLookup/Ability.php:1245
+msgid "Change the pickup store"
+msgstr "更換取貨門市"
+
+#: src/Modules/OrderLookup/Ability.php:1246
+msgid "Change which convenience store an order is picked up at, by store number. Use this when a customer asks to collect the parcel somewhere else. This is a destructive action — calling the tool only proposes the change, and nothing happens until the user presses Confirm, so there is no need to ask for confirmation yourself. It does not re-book the shipment: if a shipment was already created it still points at the old store and has to be deleted and created again on the order screen. If the store name and address are not given they are cleared, because keeping the old ones would show the new number next to the old store name."
+msgstr "用門市編號更換訂單的超商取貨門市，顧客要求改到別家超商取貨時用。這是破壞性操作 —— 呼叫這個工具只會提出變更，要等使用者按下確認才會執行，所以不需要自己再問一次。它不會重新建立物流單：已經建過的物流單仍寄往舊門市，必須到訂單頁刪除後重新建立。沒有給門市名稱與地址時這兩欄會被清空，因為留著舊的會變成新編號配舊店名。"
+
+#: src/Modules/OrderLookup/Ability.php:1257
+msgid "The number of the store to switch to, for example 131386"
+msgstr "要改成的門市編號，例如 131386"
+
+#: src/Modules/OrderLookup/Ability.php:1261
+msgid "The store name, if the user gave one. Leave it out rather than guessing — a wrong name is worse than none."
+msgstr "門市名稱，使用者有講才填。不確定就不要填 —— 填錯比留空更糟。"
+
+#: src/Modules/OrderLookup/Ability.php:1265
+msgid "The store address, if the user gave one. Leave it out rather than guessing."
+msgstr "門市地址，使用者有講才填。不確定就不要填。"
+
+#: src/Modules/OrderLookup/Ability.php:1299
 msgid "Add an order note"
 msgstr "新增訂單備註"
 
-#: src/Modules/OrderLookup/Ability.php:1109
+#: src/Modules/OrderLookup/Ability.php:1300
 msgid "Add an internal note to an order. It is for your own records and is not sent to the customer."
 msgstr "為指定訂單加一則內部備註(記事用,不寄給客戶)。"
 
-#: src/Modules/OrderLookup/Ability.php:1120
+#: src/Modules/OrderLookup/Ability.php:1311
 msgid "The note"
 msgstr "備註內容"
 
-#: src/Modules/OrderLookup/Ability.php:1177
+#: src/Modules/OrderLookup/Ability.php:1368
 msgid "The note cannot be empty."
 msgstr "備註內容不可空白。"
 
 #. translators: %s: order number
-#: src/Modules/OrderLookup/Ability.php:1184
+#: src/Modules/OrderLookup/Ability.php:1375
 #, php-format
 msgid "A note was added to order #%s."
 msgstr "已為訂單 #%s 加上備註。"
 
-#: src/Modules/OrderLookup/Ability.php:1192
+#: src/Modules/OrderLookup/Ability.php:1383
 msgid "Print shipping labels"
 msgstr "列印物流單"
 
-#: src/Modules/OrderLookup/Ability.php:1193
+#: src/Modules/OrderLookup/Ability.php:1384
 msgid "Print shipping labels for one or more orders, grouped automatically by carrier. Calling the tool only proposes it; the print page opens once the user presses Confirm. An order needs an existing shipment before it has a label to print."
 msgstr "為一筆或多筆訂單列印物流標籤(託運單)。自動依各訂單的物流商分組。呼叫此工具只會「提出」,使用者按「確認執行」後會開啟列印頁。訂單需已建立託運單才有標籤可印。"
 
-#: src/Modules/OrderLookup/Ability.php:1201
+#: src/Modules/OrderLookup/Ability.php:1392
 msgid "An array of order numbers to print, for example [\"2867\",\"2664\"]"
 msgstr "要列印的訂單編號陣列(如 [\"2867\",\"2664\"])"
 
-#: src/Modules/OrderLookup/Ability.php:1205
+#: src/Modules/OrderLookup/Ability.php:1396
 msgid "Paper: 1 for A4 (the default) or 2 for an A6 label printer"
 msgstr "紙張:1=A4(預設)、2=A6 標籤機"
 
-#: src/Modules/OrderLookup/Ability.php:1239
+#: src/Modules/OrderLookup/Ability.php:1430
 msgid "Issue an e-invoice"
 msgstr "開立電子發票"
 
-#: src/Modules/OrderLookup/Ability.php:1240
+#: src/Modules/OrderLookup/Ability.php:1431
 msgid "Issue an e-invoice for an order, using the invoice service and invoice type already set on it. This is a destructive tax operation that cannot be undone — calling the tool only proposes it, and nothing is issued until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "為指定訂單開立電子發票(自動依訂單設定的發票商與發票類型)。這是破壞性、不可逆的稅務操作 —— 呼叫此工具只會「提出」,系統會要求使用者按「確認執行」後才真正開立,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:1279
+#: src/Modules/OrderLookup/Ability.php:1470
 msgid "Void an e-invoice"
 msgstr "作廢電子發票"
 
-#: src/Modules/OrderLookup/Ability.php:1280
+#: src/Modules/OrderLookup/Ability.php:1471
 msgid "Void the e-invoice already issued for an order. A reason is required. This is a destructive tax operation that cannot be undone — calling the tool only proposes it, and nothing is voided until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr "作廢指定訂單已開立的電子發票,需提供作廢原因。這是破壞性、不可逆的稅務操作 —— 呼叫此工具只會「提出」,系統會要求使用者按「確認執行」後才真正作廢,你不需要自己再追問確認。"
 
-#: src/Modules/OrderLookup/Ability.php:1291
+#: src/Modules/OrderLookup/Ability.php:1482
 msgid "The reason for voiding, for example a customer cancellation or an issuing mistake"
 msgstr "作廢原因(如:客戶取消、開立錯誤)"
 
-#: src/Modules/OrderLookup/Ability.php:1325
+#: src/Modules/OrderLookup/Ability.php:1516
 msgid "Change order status in bulk"
 msgstr "批次更改訂單狀態"
 
-#: src/Modules/OrderLookup/Ability.php:1326
+#: src/Modules/OrderLookup/Ability.php:1517
 msgid "Move several orders to the same new status at once, such as processing, completed or cancelled. This is a destructive action — calling the tool only proposes the change, and nothing happens until the user presses Confirm, so there is no need to ask for confirmation yourself. Use this whenever the user mentions two or more orders together."
 msgstr "把「多筆」訂單一次改成同一個新狀態(如 processing 處理中、completed 已完成、cancelled 已取消)。這是破壞性操作 —— 呼叫此工具只會「提出」變更,系統會要求使用者按「確認執行」後才真正變更,你不需要自己再追問確認。只要使用者一次提到兩筆以上訂單就用這個。"
 
-#: src/Modules/OrderLookup/Ability.php:1334
+#: src/Modules/OrderLookup/Ability.php:1525
 msgid "An array of order numbers to change, for example [\"2896\",\"2897\",\"2900\"]"
 msgstr "要變更的訂單編號陣列(如 [\"2896\",\"2897\",\"2900\"])"
-
-#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:28
-#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:99
-#: src/Modules/OrderLookup/ChannelOps.php:166
-#: src/Modules/OrderLookup/ChannelOps.php:206
-#: src/Modules/OrderLookup/DonationOrgOps.php:42
-#: src/Modules/OrderLookup/DonationOrgOps.php:97
-#: src/Modules/OrderLookup/InvoiceChannelOps.php:168
-#: src/Modules/OrderLookup/InvoiceChannelOps.php:214
-#: src/Modules/OrderLookup/InvoiceOps.php:96
-#: src/Modules/OrderLookup/InvoiceOps.php:138
-#: src/Modules/OrderLookup/InvoiceOps.php:168
-#: src/Modules/OrderLookup/InvoiceOps.php:212
-#: src/Modules/OrderLookup/InvoiceOps.php:241
-#: src/Modules/OrderLookup/InvoiceOps.php:301
-#: src/Modules/OrderLookup/PaymentMethodOps.php:276
-#: src/Modules/OrderLookup/PaymentMethodOps.php:334
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:36
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:69
-#: src/Modules/OrderLookup/ShipmentOps.php:101
-#: src/Modules/OrderLookup/ShipmentOps.php:142
-#: src/Modules/OrderLookup/ShipmentOps.php:200
-#: src/Modules/OrderLookup/ShipmentOps.php:259
-#: src/Modules/OrderLookup/ShippingZoneOps.php:118
-#: src/Modules/OrderLookup/ShippingZoneOps.php:151
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:28
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:70
-msgid "This action requires the Manage WooCommerce permission."
-msgstr "此操作需要「管理 WooCommerce」權限。"
 
 #: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:35
 msgid "No orders were given to change."
@@ -7211,6 +7383,98 @@ msgstr "✅ 已將 %1$d/%2$d 筆訂單改為「%3$s」:%4$s。"
 #, php-format
 msgid "⚠️ Failed: %s. Please check on the order page."
 msgstr "⚠️ 失敗:%s,請至訂單頁確認。"
+
+#. translators: %s: order number
+#: src/Modules/OrderLookup/ChangePickupStore.php:51
+#, php-format
+msgid "Order #%s is not a convenience store pickup order, so it has no pickup store to change."
+msgstr "訂單 #%s 不是超商取貨訂單，沒有取貨門市可以更換。"
+
+#. translators: 1: order number, 2: store number
+#: src/Modules/OrderLookup/ChangePickupStore.php:74
+#, php-format
+msgid "Order #%1$s is already set to pick up at store %2$s, so there is nothing to change."
+msgstr "訂單 #%1$s 的取貨門市已經是 %2$s 了，不需要更換。"
+
+#. translators: 1: order number, 2: carrier label, 3: previous store, 4: new store
+#: src/Modules/OrderLookup/ChangePickupStore.php:88
+#, php-format
+msgid "Change the pickup store on order #%1$s (%2$s) from %3$s to %4$s."
+msgstr "將訂單 #%1$s（%2$s）的取貨門市從 %3$s 改為 %4$s。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:91
+msgid "(no store set)"
+msgstr "（尚未設定門市）"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:96
+msgid "No store name or address was given, so those two fields will be cleared — leaving the old ones would show the new number with the old store name."
+msgstr "沒有提供門市名稱與地址，這兩欄會被清空 —— 留著舊的會變成新編號配舊店名。"
+
+#. translators: %d: number of shipments already created
+#: src/Modules/OrderLookup/ChangePickupStore.php:102
+#, php-format
+msgid "Warning: %d shipment has already been created for this order and it still points at the old store. Delete it and create it again after this change."
+msgid_plural "Warning: %d shipments have already been created for this order and they still point at the old store. Delete them and create them again after this change."
+msgstr[0] "注意：這張訂單已經建立了 %d 張物流單，仍寄往舊門市。改完之後請刪除再重新建立。"
+msgstr[1] "注意：這張訂單已經建立了 %d 張物流單，仍寄往舊門市。改完之後請刪除再重新建立。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:145
+msgid "This order is no longer a convenience store pickup order, so the store was not changed."
+msgstr "這張訂單已經不是超商取貨了，門市沒有變更。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:148
+msgid "The shipping method on this order changed after the proposal was made, so the store was not changed. Please ask again."
+msgstr "提出變更之後這張訂單的運送方式被改過了，門市沒有變更。請重新指示一次。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:166
+msgid "The pickup store could not be written to the order."
+msgstr "取貨門市無法寫入這張訂單。"
+
+#. translators: 1: previous store number, 2: new store number
+#: src/Modules/OrderLookup/ChangePickupStore.php:172
+#, php-format
+msgid "Pickup store changed from %1$s to %2$s in Moksa AI. Any shipment already created still points at the old store — delete it and create a new one."
+msgstr "透過 Moksa AI 將取貨門市從 %1$s 改為 %2$s。已建立的物流單仍寄往舊門市，請先刪除再重新建立。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:173
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:168
+msgid "(none)"
+msgstr "（無）"
+
+#. translators: 1: expected store number, 2: store number actually stored
+#: src/Modules/OrderLookup/ChangePickupStore.php:187
+#, php-format
+msgid "The change was submitted, but the order still shows store %2$s instead of %1$s. Please check the order screen."
+msgstr "變更已送出，但訂單上顯示的門市仍是 %2$s 而不是 %1$s。請到訂單頁確認。"
+
+#. translators: 1: order number, 2: new store
+#: src/Modules/OrderLookup/ChangePickupStore.php:196
+#, php-format
+msgid "✅ Order #%1$s now picks up at store %2$s, and a follow-up check confirms it was saved."
+msgstr "✅ 訂單 #%1$s 的取貨門市已改為 %2$s，回頭再查一次確認確實存檔了。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:203
+msgid "The shipment created earlier still points at the old store — delete it on the order screen and create it again."
+msgstr "先前建立的物流單仍寄往舊門市 —— 請到訂單頁刪除後重新建立。"
+
+#. translators: %s: order reference the user gave
+#: src/Modules/OrderLookup/ChangePickupStore.php:217
+#: src/Modules/OrderLookup/QueryPayment.php:60
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:216
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:38
+#, php-format
+msgid "Order not found: %s."
+msgstr "找不到訂單:%s。"
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:231
+msgid "Please give the store number to change to."
+msgstr "請提供要更換的門市編號。"
+
+#. translators: %s: the store number that was given
+#: src/Modules/OrderLookup/ChangePickupStore.php:238
+#, php-format
+msgid "That does not look like a store number: %s. A store number is letters and digits only."
+msgstr "這看起來不像門市編號：%s。門市編號只會是英文字母與數字。"
 
 #: src/Modules/OrderLookup/ChannelOps.php:35
 #: src/Modules/OrderLookup/PaymentMethodOps.php:27
@@ -7632,6 +7896,24 @@ msgstr "✅ 已準備 %d 份物流標籤,正在開啟列印頁。"
 msgid "(%d orders skipped because they have no label)"
 msgstr "(略過 %d 筆無標籤)"
 
+#. translators: 1: order number, 2: payment method title
+#: src/Modules/OrderLookup/QueryPayment.php:76
+#, php-format
+msgid "Order #%1$s was paid with %2$s, which cannot be looked up at the provider from here. Only ECPay card payments and PAYUNi support this. Use get-payment-status for what this site already recorded."
+msgstr "訂單 #%1$s 的付款方式是 %2$s，無法從這裡向金流商查詢。目前只有綠界信用卡與 PAYUNi 支援。想看網站自己記錄的內容請用 get-payment-status。"
+
+#: src/Modules/OrderLookup/QueryPayment.php:88
+msgid "The ECPay payment module is switched off, so the provider cannot be contacted."
+msgstr "綠界金流模組是關閉的，無法連線到服務商。"
+
+#: src/Modules/OrderLookup/QueryPayment.php:112
+msgid "The PAYUNi payment module is switched off, so the provider cannot be contacted."
+msgstr "PAYUNi 金流模組是關閉的，無法連線到服務商。"
+
+#: src/Modules/OrderLookup/QueryPayment.php:118
+msgid "PAYUNi did not return any information for this order."
+msgstr "PAYUNi 沒有回傳這張訂單的任何資訊。"
+
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:43
 msgid "This order has no payment details to resend. Card orders, for example, have no ATM or convenience store payment details."
 msgstr "此訂單沒有可重寄的付款資訊(例如信用卡訂單沒有 ATM / 超商繳費資訊)。"
@@ -7804,6 +8086,58 @@ msgstr "✅ 已為 %1$d/%2$d 筆建立託運單:%3$s。"
 msgid "⚠️ Failed: %s."
 msgstr "⚠️ 失敗:%s。"
 
+#. translators: %s: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:84
+#, php-format
+msgid "Order #%s has no shipments to delete."
+msgstr "訂單 #%s 沒有可以刪除的物流單。"
+
+#. translators: 1: order number, 2: comma separated shipment numbers
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:101
+#, php-format
+msgid "Order #%1$s has more than one shipment (%2$s). Say which shipment number to delete."
+msgstr "訂單 #%1$s 有一張以上的物流單（%2$s）。請指定要刪除哪個單號。"
+
+#. translators: 1: shipment number, 2: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:122
+#, php-format
+msgid "Shipment %1$s does not belong to order #%2$s."
+msgstr "物流單 %1$s 不屬於訂單 #%2$s。"
+
+#. translators: %s: carrier name
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:133
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:82
+#, php-format
+msgid "Shipment records for %s cannot be deleted from here yet."
+msgstr "%s 的物流單記錄目前還無法從這裡刪除。"
+
+#. translators: 1: shipment number, 2: carrier, 3: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:147
+#, php-format
+msgid "Delete shipment %1$s (%2$s) from order #%3$s. This only removes the record on this site — it does not cancel the booking with the carrier, so do not delete it if the parcel is already on its way. Delete it when you need to create the shipment again, for example after changing the pickup store."
+msgstr "從訂單 #%3$s 刪除物流單 %1$s（%2$s）。這只會刪掉網站上的記錄 —— 不會向物流商作廢，所以包裹已經在路上時不要刪。需要重新建立物流單時才刪，例如改過取貨門市之後。"
+
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:173
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:68
+msgid "No shipment number was given."
+msgstr "沒有提供物流單號。"
+
+#. translators: %s: shipment number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:184
+#, php-format
+msgid "Shipment %s was removed from this order in Moksa AI. The booking with the carrier was not cancelled."
+msgstr "透過 Moksa AI 從這張訂單移除物流單 %s。並未向物流商作廢。"
+
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:195
+msgid "The delete was submitted, but the shipment is still on the order. Please check the order screen."
+msgstr "刪除已送出，但物流單仍在訂單上。請到訂單頁確認。"
+
+#. translators: 1: shipment number, 2: order number, 3: how many shipments remain
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:201
+#, php-format
+msgid "✅ Shipment %1$s was removed from order #%2$s (%3$d left). You can create the shipment again now."
+msgstr "✅ 已從訂單 #%2$s 移除物流單 %1$s（剩 %3$d 張）。現在可以重新建立物流單了。"
+
 #: src/Modules/OrderLookup/ShippingZoneOps.php:37
 msgid "Other regions"
 msgstr "其他地區"
@@ -7827,12 +8161,6 @@ msgstr "沒有可變更的運送方式。"
 #, php-format
 msgid "✅ The shipping method is now %1$s: %2$s."
 msgstr "✅ 已%1$s運送方式:%2$s。"
-
-#. translators: %s: order reference the user gave
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:38
-#, php-format
-msgid "Order not found: %s."
-msgstr "找不到訂單:%s。"
 
 #. translators: 1: order number, 2: current status, 3: target status
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:58
@@ -9044,29 +9372,17 @@ msgstr "批次列印超商取貨標籤"
 msgid "Bulk print T-Cat home delivery labels"
 msgstr "批次列印黑貓宅配標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:56
-msgid "Store ID"
-msgstr "門市代號"
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:60
-msgid "Store Name"
-msgstr "門市名稱"
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:64
-msgid "Store Address"
-msgstr "門市地址"
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:69
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:75
-#: src/Modules/PayuniShipping/PayuniShipping.php:338
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:57
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:63
+#: src/Modules/PayuniShipping/PayuniShipping.php:360
 msgid "Shipping Phone"
 msgstr "收件人電話"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:89
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:77
 msgid "Create PAYUNi Shipping Order"
 msgstr "建立 PAYUNi 物流訂單"
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:91
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:79
 msgid "Re-Create PAYUNi Shipping Order"
 msgstr "重新建立 PAYUNi 物流訂單"
 
@@ -9122,7 +9438,7 @@ msgstr "下載標籤"
 msgid "Print label"
 msgstr "列印標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:119
 msgid "Shipment actions"
 msgstr "物流單動作"
 
@@ -9173,7 +9489,8 @@ msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr "PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s"
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:257
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:274
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:320
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:353
 msgid "Order not found."
 msgstr "找不到訂單。"
 
@@ -9389,8 +9706,8 @@ msgid "Returning to checkout…"
 msgstr "正在返回結帳頁面..."
 
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:422
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:312
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:313
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr "門市選擇完成"
 
@@ -9506,63 +9823,63 @@ msgstr "正在列印 PAYUNi 物流標籤…"
 msgid "PAYUNi shipment created, number %s"
 msgstr "PAYUNi 物流單建立成功（單號 %s）"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:186
+#: src/Modules/PayuniShipping/PayuniShipping.php:188
 msgid "PAYUNi convenience store pickup"
 msgstr "PAYUNi 超商取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:207
+#: src/Modules/PayuniShipping/PayuniShipping.php:209
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr "PAYUNi 7-11 C2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:208
+#: src/Modules/PayuniShipping/PayuniShipping.php:210
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr "PAYUNi 7-11 B2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:209
+#: src/Modules/PayuniShipping/PayuniShipping.php:211
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr "PAYUNi 7-11 店到店常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:210
+#: src/Modules/PayuniShipping/PayuniShipping.php:212
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr "PAYUNi 7-11 店到店冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:213
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr "PAYUNi 7-11 大宗常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:212
+#: src/Modules/PayuniShipping/PayuniShipping.php:214
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr "PAYUNi 7-11 大宗冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:215
+#: src/Modules/PayuniShipping/PayuniShipping.php:217
 msgid "PAYUNi T-Cat home delivery"
 msgstr "PAYUNi 黑貓宅配"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:216
+#: src/Modules/PayuniShipping/PayuniShipping.php:218
 msgid "PAYUNi T-Cat ambient"
 msgstr "PAYUNi 黑貓常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:217
+#: src/Modules/PayuniShipping/PayuniShipping.php:219
 msgid "PAYUNi T-Cat frozen"
 msgstr "PAYUNi 黑貓冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:218
+#: src/Modules/PayuniShipping/PayuniShipping.php:220
 msgid "PAYUNi T-Cat chilled"
 msgstr "PAYUNi 黑貓冷藏"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:244
+#: src/Modules/PayuniShipping/PayuniShipping.php:262
 msgid "PAYUNi convenience store labels"
 msgstr "PAYUNi 超商標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:260
+#: src/Modules/PayuniShipping/PayuniShipping.php:280
 msgid "PAYUNi home delivery labels"
 msgstr "PAYUNi 宅配標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:596
+#: src/Modules/PayuniShipping/PayuniShipping.php:618
 msgid "General Settings"
 msgstr "一般設定"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:597
+#: src/Modules/PayuniShipping/PayuniShipping.php:619
 msgid "Shipping Settings"
 msgstr "運送設定"
 
@@ -10566,71 +10883,78 @@ msgstr "請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗
 msgid "Print label %d"
 msgstr "列印第 %d 份"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:112
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:123
 msgid "Pickup store number"
 msgstr "取貨門市編號"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:121
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
 msgid "Pickup store name"
 msgstr "取貨門市名稱"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:130
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
 msgid "Pickup store address"
 msgstr "取貨門市地址"
 
 #. translators: 1: previous store number, 2: new store number
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:156
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:167
 #, php-format
 msgid "Pickup store changed from %1$s to %2$s. Any shipment already created still points at the old store — delete it and create a new one."
 msgstr "取貨門市已從 %1$s 改為 %2$s。已建立的物流單仍寄往舊門市，請先刪除再重新建立。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:157
-msgid "(none)"
-msgstr "（無）"
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:220
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:265
 msgid "Choose store on map"
 msgstr "開地圖選門市"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:226
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:271
 msgid "The store is only saved when you update the order. Changing the store here does not reissue the shipment — delete the existing shipment and create it again."
 msgstr "門市要按下更新訂單才會存檔。在這裡改門市不會重新取號，請先刪除原本的物流單再重新建立。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:255
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:301
 msgid "Opening the store map…"
 msgstr "正在開啟門市地圖…"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:256
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:302
 msgid "Store filled in. Remember to update the order."
 msgstr "門市已帶入，記得按更新訂單。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:257
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:303
 msgid "The store map window was blocked. Allow pop-ups for this site and try again."
 msgstr "門市地圖視窗被瀏覽器擋下了，請允許本站的彈出視窗後再試一次。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:258
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:287
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:304
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:333
 msgid "The store map could not be opened."
 msgstr "門市地圖無法開啟。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:268
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:314
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:347
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
 msgid "You are not allowed to edit orders."
 msgstr "目前的登入身分沒有編輯訂單的權限。"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:279
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:325
 msgid "This order does not use a convenience store pickup method."
 msgstr "這張訂單的運送方式不是超商取貨。"
 
 #. translators: 1: store number, 2: store name
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:316
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:409
 #, php-format
 msgid "Store: %1$s %2$s"
 msgstr "門市：%1$s %2$s"
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:318
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:411
 msgid "You can close this window and go back to the order — remember to update the order to keep the change."
 msgstr "可以關閉這個視窗回到訂單了，記得按更新訂單才會存檔。"
+
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:89
+msgid "That shipment record could not be deleted."
+msgstr "這筆物流單記錄無法刪除。"
+
+#. translators: %s: shipment number
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:97
+#, php-format
+msgid "This order has no shipment numbered %s."
+msgstr "這張訂單沒有單號為 %s 的物流單。"
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:109
 msgid "No PAYUNi shipment has been created yet."
@@ -11790,27 +12114,27 @@ msgstr "速買配 7-11 取貨"
 msgid "SmilePay FamilyMart pickup"
 msgstr "速買配 全家取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:115
+#: src/Modules/SmilepayShipping/Module.php:131
 msgid "SmilePay convenience store labels"
 msgstr "速買配 超商標籤"
 
-#: src/Modules/SmilepayShipping/Module.php:125
+#: src/Modules/SmilepayShipping/Module.php:143
 msgid "SmilePay T-Cat home delivery"
 msgstr "速買配 黑貓宅配"
 
-#: src/Modules/SmilepayShipping/Module.php:126
+#: src/Modules/SmilepayShipping/Module.php:144
 msgid "SmilePay T-Cat ambient"
 msgstr "速買配 黑貓常溫"
 
-#: src/Modules/SmilepayShipping/Module.php:127
+#: src/Modules/SmilepayShipping/Module.php:145
 msgid "SmilePay T-Cat chilled"
 msgstr "速買配 黑貓冷藏"
 
-#: src/Modules/SmilepayShipping/Module.php:128
+#: src/Modules/SmilepayShipping/Module.php:146
 msgid "SmilePay T-Cat frozen"
 msgstr "速買配 黑貓冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:141
+#: src/Modules/SmilepayShipping/Module.php:159
 msgid "SmilePay T-Cat labels"
 msgstr "速買配 黑貓標籤"
 
@@ -11870,30 +12194,30 @@ msgstr "速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s"
 msgid "SmilePay created the T-Cat home delivery shipment — %1$s (serial number %2$s, waybill number %3$s)"
 msgstr "速買配黑貓宅配建單成功 — %1$s（物流序號 %2$s 託運單號 %3$s）"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:303
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:337
 msgid "This store pickup order has no store yet. Ask the customer to choose one at checkout, or set it yourself."
 msgstr "此 CVS 訂單尚未選店。請顧客在結帳頁選店或商家手動指定。"
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:345
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:379
 #, php-format
 msgid "The SmilePay store pickup shipment could not be created: %s"
 msgstr "速買配超商建單失敗：%s"
 
 #. translators: 1: smilepay order no, 2: pickup code
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:357
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:391
 #, php-format
 msgid "SmilePay store pickup shipment created (serial number %1$s, pickup code %2$s)"
 msgstr "速買配超商建單成功（物流序號 %1$s 取貨碼 %2$s）"
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:383
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:417
 #, php-format
 msgid "The SmilePay T-Cat home delivery shipment could not be created: %s"
 msgstr "速買配黑貓宅配建單失敗：%s"
 
 #. translators: 1: smilepay order no, 2: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:392
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:426
 #, php-format
 msgid "SmilePay T-Cat home delivery shipment created (serial number %1$s, waybill number %2$s)"
 msgstr "速買配黑貓宅配建單成功（物流序號 %1$s 託運單號 %2$s）"

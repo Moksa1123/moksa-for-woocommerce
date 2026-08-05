@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.5.4\n"
+"Project-Id-Version: Moksa for WooCommerce 1.6.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-04T07:43:33+00:00\n"
+"POT-Creation-Date: 2026-08-05T15:27:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -66,7 +66,154 @@ msgstr ""
 msgid "Moksa requires WooCommerce %1$s or higher. You are running %2$s."
 msgstr ""
 
-#: src/Mcp/Server.php:255
+#: src/Mcp/Catalog.php:32
+msgid "What this store has switched on"
+msgstr ""
+
+#: src/Mcp/Catalog.php:33
+msgid "Which payment, shipping and e-invoice providers are enabled, and whether each is in test mode. Read this first to know what the store can actually do."
+msgstr ""
+
+#: src/Mcp/Catalog.php:39
+msgid "Shipping methods on offer"
+msgstr ""
+
+#: src/Mcp/Catalog.php:40
+msgid "The shipping methods customers can choose, by zone, including which are convenience store pickup."
+msgstr ""
+
+#: src/Mcp/Catalog.php:46
+msgid "Sales over the last 30 days"
+msgstr ""
+
+#: src/Mcp/Catalog.php:47
+msgid "Order counts and revenue for the last 30 days, broken down by status."
+msgstr ""
+
+#: src/Mcp/Catalog.php:58
+#: src/Mcp/Catalog.php:152
+#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:28
+#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:99
+#: src/Modules/OrderLookup/ChangePickupStore.php:34
+#: src/Modules/OrderLookup/ChangePickupStore.php:134
+#: src/Modules/OrderLookup/ChannelOps.php:166
+#: src/Modules/OrderLookup/ChannelOps.php:206
+#: src/Modules/OrderLookup/DonationOrgOps.php:42
+#: src/Modules/OrderLookup/DonationOrgOps.php:97
+#: src/Modules/OrderLookup/InvoiceChannelOps.php:168
+#: src/Modules/OrderLookup/InvoiceChannelOps.php:214
+#: src/Modules/OrderLookup/InvoiceOps.php:96
+#: src/Modules/OrderLookup/InvoiceOps.php:138
+#: src/Modules/OrderLookup/InvoiceOps.php:168
+#: src/Modules/OrderLookup/InvoiceOps.php:212
+#: src/Modules/OrderLookup/InvoiceOps.php:241
+#: src/Modules/OrderLookup/InvoiceOps.php:301
+#: src/Modules/OrderLookup/PaymentMethodOps.php:276
+#: src/Modules/OrderLookup/PaymentMethodOps.php:334
+#: src/Modules/OrderLookup/QueryPayment.php:52
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:36
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:69
+#: src/Modules/OrderLookup/ShipmentOps.php:101
+#: src/Modules/OrderLookup/ShipmentOps.php:142
+#: src/Modules/OrderLookup/ShipmentOps.php:200
+#: src/Modules/OrderLookup/ShipmentOps.php:259
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:30
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:67
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:163
+#: src/Modules/OrderLookup/ShippingZoneOps.php:118
+#: src/Modules/OrderLookup/ShippingZoneOps.php:151
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:28
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:70
+msgid "This action requires the Manage WooCommerce permission."
+msgstr ""
+
+#. translators: %s: resource URI
+#: src/Mcp/Catalog.php:73
+#, php-format
+msgid "Unknown resource: %s"
+msgstr ""
+
+#: src/Mcp/Catalog.php:98
+msgid "Daily shipping run"
+msgstr ""
+
+#: src/Mcp/Catalog.php:99
+msgid "Work through today's paid orders: which still need a shipment created, which are ready to print, and which are waiting at the store."
+msgstr ""
+
+#: src/Mcp/Catalog.php:104
+msgid "Check payments against the provider"
+msgstr ""
+
+#: src/Mcp/Catalog.php:105
+msgid "Find orders where this site and the payment provider might disagree, and look each one up at the provider."
+msgstr ""
+
+#: src/Mcp/Catalog.php:109
+msgid "How many days back to look. Defaults to 7."
+msgstr ""
+
+#: src/Mcp/Catalog.php:116
+msgid "Find orders missing an e-invoice"
+msgstr ""
+
+#: src/Mcp/Catalog.php:117
+msgid "List completed orders that have no e-invoice number yet, so none are missed before the filing deadline."
+msgstr ""
+
+#: src/Mcp/Catalog.php:121
+msgid "How many days back to look. Defaults to 30."
+msgstr ""
+
+#: src/Mcp/Catalog.php:128
+msgid "Move an order to another store"
+msgstr ""
+
+#: src/Mcp/Catalog.php:129
+msgid "A customer wants to collect the parcel somewhere else: change the pickup store and, if a shipment already exists, delete it and create it again."
+msgstr ""
+
+#: src/Mcp/Catalog.php:133
+msgid "The order number."
+msgstr ""
+
+#: src/Mcp/Catalog.php:138
+msgid "The new store number."
+msgstr ""
+
+#: src/Mcp/Catalog.php:161
+msgid "Go through the orders that are paid but not shipped yet. For each one tell me whether a shipment has been created, and if not create it. Then tell me which ones are ready for their labels to be printed. Use list-orders, list-shipments and create-shipment. Do not print anything without asking me first."
+msgstr ""
+
+#. translators: %d: number of days
+#: src/Mcp/Catalog.php:167
+#, php-format
+msgid "Look at orders from the last %d days that are still pending or on hold even though the customer may have paid. For each one, look the payment up at the provider with query-payment and tell me where this site and the provider disagree. Do not change any order status — just report."
+msgstr ""
+
+#. translators: %d: number of days
+#: src/Mcp/Catalog.php:175
+#, php-format
+msgid "List completed orders from the last %d days that still have no e-invoice number, using get-order-details to confirm each one. Show them as a list with the order number, date and amount. Do not issue any invoices — just tell me which are missing."
+msgstr ""
+
+#: src/Mcp/Catalog.php:182
+msgid "This prompt needs both an order number and a store number."
+msgstr ""
+
+#. translators: 1: order number, 2: store number
+#: src/Mcp/Catalog.php:186
+#, php-format
+msgid "The customer on order %1$s wants to collect at store %2$s instead. Change the pickup store. Then check with list-shipments whether a shipment already exists — if it does, delete it and create it again so the label goes to the new store. Walk me through each step and stop at every confirmation."
+msgstr ""
+
+#. translators: %s: prompt name
+#: src/Mcp/Catalog.php:194
+#, php-format
+msgid "Unknown prompt: %s"
+msgstr ""
+
+#: src/Mcp/Server.php:283
 #: src/Modules/AiAssistant/Module.php:114
 #: src/Modules/AiAssistant/Rest.php:139
 #: src/Modules/CustomerService/Admin/Inbox.php:127
@@ -82,11 +229,11 @@ msgstr ""
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:108
-#: src/Modules/NewebpayShipping/Module.php:133
-#: src/Modules/NewebpayShipping/Module.php:177
+#: src/Modules/NewebpayShipping/Module.php:143
+#: src/Modules/NewebpayShipping/Module.php:168
+#: src/Modules/NewebpayShipping/Module.php:212
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
-#: src/Modules/OrderLookup/Ability.php:1161
+#: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:333
@@ -101,7 +248,7 @@ msgstr ""
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: src/Mcp/Server.php:263
+#: src/Mcp/Server.php:291
 msgid "The tool failed to run. Please try again later."
 msgstr ""
 
@@ -2284,7 +2431,7 @@ msgstr ""
 msgid "This action could not be prepared."
 msgstr ""
 
-#: src/Modules/AiAssistant/Config.php:141
+#: src/Modules/AiAssistant/Config.php:155
 msgid "You are Moksa AI, the WooCommerce admin assistant for a Taiwanese online store. These are your tools: (1) find a single order by order number, e-invoice number, tracking number or payment transaction ID — when the user simply gives a number, such as “order 2855” or “status of 2855?”, treat it as an order number and use this tool; it is the right choice when all that is needed is a status or which order is meant; (2) get the full details of one order — items, totals, payment and shipping method, pickup store, invoice number and whether it has been issued, tracking number and payment transaction ID — use this for questions like “has the invoice been issued”, “what is the tracking number”, “which store is it going to” or “what did they buy”; (3) count orders and see the breakdown by status, or list the orders in one status (awaiting shipment is processing, awaiting payment is pending, finished is completed); (4) change an order status — update-order-status for one order, batch-update-order-status for several; (5) issue an e-invoice with issue-invoice; (6) void an e-invoice with void-invoice, which needs a reason; (7) print shipping labels with print-shipping-label, for one or more orders that already have shipments; (8) create a shipment with create-shipment, which books it with the carrier and returns a tracking number, after which the label can be printed. Tools 4 to 8 are only proposed: the user is asked to press Confirm before anything happens, so never ask for confirmation yourself. (9) add an order note with add-order-note, which is low risk and runs immediately; (10) list payment, shipping and e-invoice channels with list-channels (read-only); (11) enable or disable a channel with toggle-channel — pass the channel name such as “SmilePay shipping” directly, with no need to list them first (destructive, so it goes through confirmation); (12) add an invoice donation charity with add-donation-org, giving a name and love code (destructive, confirmed); (13) issue an invoice allowance with issue-allowance, giving an amount (destructive, confirmed); (14) get an advanced order list with list-orders, filtered by status, date range or payment method (read-only); (15) list a payment service's individual methods with list-payment-methods (read-only); (16) enable or disable those methods with toggle-payment-method, such as ECPay's one-off card payment or Apple Pay, passing the names directly (destructive, confirmed); (17) list invoice issuing options with list-invoice-channels (read-only); (18) enable or disable them with toggle-invoice-channel — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID (destructive, confirmed); (19) resend the payment details email with resend-payment-email, sending the ATM or convenience store details to the customer (destructive, confirmed); (20) get tracking links with get-tracking-link (read-only); (21) check payment status with get-payment-status — method, whether it is paid, transaction ID, last four card digits, ATM and convenience store details, with a live NewebPay query where applicable (read-only); (22) summarize the plugin settings with get-plugin-settings — which channels are on, test or production mode, when invoices are issued, which fields order lookup searches and whether AI is enabled, never credentials (read-only); (23) list shipping zones and methods with list-shipping-zones (read-only); (24) enable or disable a shipping method with toggle-shipping-method, naming the method directly, such as “SmilePay T-Cat ambient” (destructive, confirmed); (25) create shipments in bulk with batch-create-shipment (destructive, confirmed); (26) find a customer's orders with find-customer-orders by email, phone or name (read-only); (27) get revenue statistics with sales-summary — revenue, order count, status breakdown and average order value for a period, defaulting to this month (read-only). Tools 11 to 13, 16, 18, 19, 24 and 25 are also only proposed and wait for confirmation. Always look up the real data with a tool before answering, then reply briefly and clearly in the language the merchant is using. Report only the orders that genuinely match the question, and never pad the answer with unrelated ones. If nothing is found, say so plainly rather than inventing anything. If asked for something the tools cannot do, such as printing many shipping labels at once or changing a great many statuses, do not simply say it is impossible — explain that it can be done by ticking the orders in the WooCommerce order list and using the bulk actions menu above, and that you can help with lookups and single status changes. If several things are asked at once, gather everything with the appropriate tools first, then combine the answers into a single reply. Always finish with text; never stop at a tool call without answering."
 msgstr ""
 
@@ -2893,11 +3040,11 @@ msgstr ""
 
 #: src/Modules/CustomerService/Module.php:78
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:151
-#: src/Modules/OrderLookup/Ability.php:486
-#: src/Modules/OrderLookup/Ability.php:573
-#: src/Modules/OrderLookup/Ability.php:613
-#: src/Modules/OrderLookup/Ability.php:837
-#: src/Modules/OrderLookup/Ability.php:1116
+#: src/Modules/OrderLookup/Ability.php:489
+#: src/Modules/OrderLookup/Ability.php:576
+#: src/Modules/OrderLookup/Ability.php:616
+#: src/Modules/OrderLookup/Ability.php:840
+#: src/Modules/OrderLookup/Ability.php:1307
 #: src/Modules/OrderLookup/OrderNumberLookup.php:34
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:70
 msgid "Order number"
@@ -2909,7 +3056,7 @@ msgstr ""
 
 #: src/Modules/CustomerService/Module.php:80
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:122
 msgid "Look up"
 msgstr ""
 
@@ -3451,7 +3598,8 @@ msgstr ""
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:419
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:456
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:148
-#: src/Modules/OrderLookup/Ability.php:1171
+#: src/Modules/OrderLookup/Ability.php:1362
+#: src/Modules/OrderLookup/ChangePickupStore.php:139
 #: src/Modules/OrderLookup/InvoiceOps.php:100
 #: src/Modules/OrderLookup/InvoiceOps.php:172
 #: src/Modules/OrderLookup/InvoiceOps.php:245
@@ -3459,6 +3607,7 @@ msgstr ""
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
 #: src/Modules/OrderLookup/ShipmentOps.php:105
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:168
 #: src/Modules/OrderLookup/TrackingLookup.php:67
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:75
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
@@ -5069,13 +5218,13 @@ msgstr ""
 msgid "The ECPay store picker could not be opened. Please try again later."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:116
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:176
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:117
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:177
 msgid "This is not an ECPay shipping method."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:121
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:180
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:122
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:181
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
 msgid "This shipping method does not need a store."
 msgstr ""
@@ -5238,11 +5387,11 @@ msgstr ""
 msgid "ECPay Chunghwa Post"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:138
+#: src/Modules/EcpayShipping/Module.php:153
 msgid "ECPay convenience store labels"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:150
+#: src/Modules/EcpayShipping/Module.php:167
 msgid "ECPay home delivery labels"
 msgstr ""
 
@@ -6032,9 +6181,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:113
-#: src/Modules/NewebpayShipping/Module.php:138
-#: src/Modules/NewebpayShipping/Module.php:182
+#: src/Modules/NewebpayShipping/Module.php:148
+#: src/Modules/NewebpayShipping/Module.php:173
+#: src/Modules/NewebpayShipping/Module.php:217
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6491,46 +6640,46 @@ msgstr ""
 msgid "NewebPay convenience store pickup"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:94
+#: src/Modules/NewebpayShipping/Module.php:127
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr ""
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:121
+#: src/Modules/NewebpayShipping/Module.php:156
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:142
+#: src/Modules/NewebpayShipping/Module.php:177
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:147
+#: src/Modules/NewebpayShipping/Module.php:182
 #, php-format
 msgid "The lookup failed: %s"
 msgstr ""
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:157
+#: src/Modules/NewebpayShipping/Module.php:192
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr ""
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:167
+#: src/Modules/NewebpayShipping/Module.php:202
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:186
+#: src/Modules/NewebpayShipping/Module.php:221
 msgid "No shipment has been created for this order yet."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:191
+#: src/Modules/NewebpayShipping/Module.php:226
 #, php-format
 msgid "Tracking failed: %s"
 msgstr ""
@@ -6806,360 +6955,383 @@ msgid "Move an order to a new status such as processing, completed or cancelled.
 msgstr ""
 
 #: src/Modules/OrderLookup/Ability.php:201
-#: src/Modules/OrderLookup/Ability.php:1074
-#: src/Modules/OrderLookup/Ability.php:1247
-#: src/Modules/OrderLookup/Ability.php:1287
+#: src/Modules/OrderLookup/Ability.php:1077
+#: src/Modules/OrderLookup/Ability.php:1119
+#: src/Modules/OrderLookup/Ability.php:1164
+#: src/Modules/OrderLookup/Ability.php:1207
+#: src/Modules/OrderLookup/Ability.php:1253
+#: src/Modules/OrderLookup/Ability.php:1438
+#: src/Modules/OrderLookup/Ability.php:1478
 msgid "The order number, for example 2896"
 msgstr ""
 
 #: src/Modules/OrderLookup/Ability.php:205
-#: src/Modules/OrderLookup/Ability.php:1338
+#: src/Modules/OrderLookup/Ability.php:1529
 msgid "The target status slug, such as processing, completed, cancelled, on-hold or refunded"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:255
+#: src/Modules/OrderLookup/Ability.php:258
 msgid "Create shipments in bulk"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:256
+#: src/Modules/OrderLookup/Ability.php:259
 msgid "Create shipments for several orders at once and get their tracking numbers, choosing the carrier automatically from each order's shipping method. This is destructive and cannot be undone — calling the tool only proposes it, and nothing is created until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:264
+#: src/Modules/OrderLookup/Ability.php:267
 msgid "An array of order numbers, for example [\"2867\",\"2664\"]"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:296
+#: src/Modules/OrderLookup/Ability.php:299
 msgid "Find a customer's orders"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:297
+#: src/Modules/OrderLookup/Ability.php:300
 msgid "Look up every order belonging to a customer by email address, phone number or name, and return the list along with the total amount paid. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:304
+#: src/Modules/OrderLookup/Ability.php:307
 msgid "The customer's email address, phone number or name"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:336
+#: src/Modules/OrderLookup/Ability.php:339
 msgid "Revenue and order statistics"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:337
+#: src/Modules/OrderLookup/Ability.php:340
 msgid "Order count, paid revenue, status breakdown and average order value for a period. The period is optional and defaults to this_month: today, yesterday, this_month, last_month, this_year or custom. With custom, also pass date_from and date_to in YYYY-MM-DD format. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:346
+#: src/Modules/OrderLookup/Ability.php:349
 msgid "The period. Optional, defaults to this_month. One of today, yesterday, this_month, last_month, this_year or custom"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:350
+#: src/Modules/OrderLookup/Ability.php:353
 msgid "Start date in YYYY-MM-DD format, used with the custom period"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:354
+#: src/Modules/OrderLookup/Ability.php:357
 msgid "End date in YYYY-MM-DD format, used with the custom period"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:391
+#: src/Modules/OrderLookup/Ability.php:394
 msgid "List shipping zones and methods"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:392
+#: src/Modules/OrderLookup/Ability.php:395
 msgid "List every shipping method in the WooCommerce shipping zones, such as 7-ELEVEN pickup or T-Cat ambient and frozen delivery, along with whether each is enabled. Use it to confirm a method name before switching it. No parameters. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:400
-#: src/Modules/OrderLookup/Ability.php:531
+#: src/Modules/OrderLookup/Ability.php:403
+#: src/Modules/OrderLookup/Ability.php:534
 msgid "Optional, can be omitted"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:432
+#: src/Modules/OrderLookup/Ability.php:435
 msgid "Enable or disable a shipping method"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:433
+#: src/Modules/OrderLookup/Ability.php:436
 msgid "Enable or disable one shipping method in a WooCommerce shipping zone, for example “SmilePay T-Cat ambient” or “ECPay 7-ELEVEN pickup”. Pass the method name directly. This is a destructive action because it changes what customers can choose at checkout — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:440
+#: src/Modules/OrderLookup/Ability.php:443
 msgid "The shipping method name, for example SmilePay T-Cat ambient"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:444
-#: src/Modules/OrderLookup/Ability.php:704
-#: src/Modules/OrderLookup/Ability.php:795
-#: src/Modules/OrderLookup/Ability.php:988
+#: src/Modules/OrderLookup/Ability.php:447
+#: src/Modules/OrderLookup/Ability.php:707
+#: src/Modules/OrderLookup/Ability.php:798
+#: src/Modules/OrderLookup/Ability.php:991
 msgid "true to enable, false to disable"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:478
+#: src/Modules/OrderLookup/Ability.php:481
 msgid "Check payment status"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:479
+#: src/Modules/OrderLookup/Ability.php:482
 msgid "Check the payment status of an order: payment method, whether it is paid, transaction ID, last four card digits, ATM virtual account and convenience store payment code. NewebPay orders are also queried live against NewebPay. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:522
+#: src/Modules/OrderLookup/Ability.php:525
 msgid "Summarize plugin settings"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:523
+#: src/Modules/OrderLookup/Ability.php:526
 msgid "Summarize the current non-sensitive settings: which payment, shipping and e-invoice channels are enabled, whether each module is in test or production mode, when invoices are issued, which fields order number lookup searches, and whether the AI assistant is on. No credentials are included. No parameters. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:565
+#: src/Modules/OrderLookup/Ability.php:568
 msgid "Resend the payment details email"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:566
+#: src/Modules/OrderLookup/Ability.php:569
 msgid "Resend the payment details email, such as the ATM virtual account or convenience store payment code, to the customer. Only orders that have those details can be sent; card orders have none. This is a destructive action because it emails the customer — calling the tool only proposes it, and nothing is sent until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:605
+#: src/Modules/OrderLookup/Ability.php:608
 msgid "Get tracking links"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:606
+#: src/Modules/OrderLookup/Ability.php:609
 msgid "Get the shipment tracking links for an order: each carrier's public tracking page plus the tracking number. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:647
+#: src/Modules/OrderLookup/Ability.php:650
 msgid "List invoice issuing options"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:648
+#: src/Modules/OrderLookup/Ability.php:651
 msgid "List the issuing options an e-invoice service (ECPay, ezPay, SmilePay, PayNow or Amego) supports — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation and tax ID — along with whether each is enabled. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:655
-#: src/Modules/OrderLookup/Ability.php:695
+#: src/Modules/OrderLookup/Ability.php:658
+#: src/Modules/OrderLookup/Ability.php:698
 msgid "The e-invoice module name or slug, for example ECPay or ecpay"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:687
+#: src/Modules/OrderLookup/Ability.php:690
 msgid "Enable or disable invoice issuing options"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:688
+#: src/Modules/OrderLookup/Ability.php:691
 msgid "Enable or disable one or more issuing options for an e-invoice service: member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID. Pass the option names directly. This is a destructive action — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:700
+#: src/Modules/OrderLookup/Ability.php:703
 msgid "An array of issuing option names, for example [\"Mobile barcode\",\"Donation\"]"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:738
+#: src/Modules/OrderLookup/Ability.php:741
 msgid "List payment methods"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:739
+#: src/Modules/OrderLookup/Ability.php:742
 msgid "List every individual payment method offered by a payment service (ECPay, NewebPay, PAYUNi, SmilePay, PayNow or PChomePay) and whether each is enabled. Use it to confirm what is available before switching anything. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:746
-#: src/Modules/OrderLookup/Ability.php:786
+#: src/Modules/OrderLookup/Ability.php:749
+#: src/Modules/OrderLookup/Ability.php:789
 msgid "The payment service name or slug, for example ECPay or ecpay"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:778
+#: src/Modules/OrderLookup/Ability.php:781
 msgid "Enable or disable payment methods"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:779
+#: src/Modules/OrderLookup/Ability.php:782
 msgid "Enable or disable one or more individual payment methods within a payment service, such as ECPay's one-off credit card payment, Apple Pay or ATM. Pass the method names directly. This is a destructive action — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:791
+#: src/Modules/OrderLookup/Ability.php:794
 msgid "An array of payment method names, for example [\"Credit card, pay in full\",\"Apple Pay\"]"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:829
+#: src/Modules/OrderLookup/Ability.php:832
 msgid "Issue an invoice allowance"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:830
+#: src/Modules/OrderLookup/Ability.php:833
 msgid "Issue an allowance against an order's existing e-invoice, used for partial refunds. An amount is required. Only ECPay, ezPay and Amego support this. It is destructive and cannot be undone — calling the tool only proposes it, and nothing is issued until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:841
+#: src/Modules/OrderLookup/Ability.php:844
 msgid "The allowance amount as a whole number, which cannot exceed the order total"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:873
+#: src/Modules/OrderLookup/Ability.php:876
 msgid "Advanced order list"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:874
+#: src/Modules/OrderLookup/Ability.php:877
 msgid "Return an actual list of orders, filtered by status, date range (date_from and date_to in YYYY-MM-DD format) and payment method. The list is compact and returns 20 orders by default, up to a maximum of 50. If you only need counts per status, use query-orders instead. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:881
+#: src/Modules/OrderLookup/Ability.php:884
 msgid "An order status slug such as processing or completed. Omit it for every status"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:885
+#: src/Modules/OrderLookup/Ability.php:888
 msgid "Start date in YYYY-MM-DD format"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:889
+#: src/Modules/OrderLookup/Ability.php:892
 msgid "End date in YYYY-MM-DD format"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:893
+#: src/Modules/OrderLookup/Ability.php:896
 msgid "Payment method ID (optional)"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:897
+#: src/Modules/OrderLookup/Ability.php:900
 msgid "How many orders to return. Defaults to 20, maximum 50"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:934
+#: src/Modules/OrderLookup/Ability.php:937
 msgid "List payment, shipping and e-invoice channels"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:935
+#: src/Modules/OrderLookup/Ability.php:938
 msgid "List the payment, shipping and e-invoice channels with their slugs and whether each is enabled. Use all for everything, or filter with payment, shipping or invoice. Read-only."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:944
+#: src/Modules/OrderLookup/Ability.php:947
 msgid "Optional, defaults to all. Or filter with payment, shipping or invoice"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:976
+#: src/Modules/OrderLookup/Ability.php:979
 msgid "Enable or disable a channel"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:977
+#: src/Modules/OrderLookup/Ability.php:980
 msgid "Enable or disable a payment, shipping or e-invoice channel. Pass the channel name (such as “SmilePay shipping”) or its slug directly; there is no need to list them first. This is a destructive action, because disabling a channel changes what customers can choose at checkout and enabling one without credentials causes errors on the storefront — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself. It does not touch credentials or the test and production switch."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:984
+#: src/Modules/OrderLookup/Ability.php:987
 msgid "The channel name or slug, for example “SmilePay shipping” or smilepay_shipping"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1020
+#: src/Modules/OrderLookup/Ability.php:1023
 msgid "Add an invoice donation charity"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1021
+#: src/Modules/OrderLookup/Ability.php:1024
 msgid "Add a charity, with its name and love code, to the donation list of the enabled e-invoice module so customers can choose it at checkout. A love code is 3 to 7 digits. Calling the tool only proposes it, and nothing is saved until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1028
+#: src/Modules/OrderLookup/Ability.php:1031
 msgid "The name of the charity"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1032
+#: src/Modules/OrderLookup/Ability.php:1035
 msgid "The love code, 3 to 7 digits"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1066
+#: src/Modules/OrderLookup/Ability.php:1069
 msgid "Create a shipment"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1067
+#: src/Modules/OrderLookup/Ability.php:1070
 msgid "Create a shipment with the carrier for an order and get its tracking number, choosing the carrier automatically from the order's shipping method. This is destructive and cannot be undone, because it places a real booking with the carrier — calling the tool only proposes it, and nothing is created until the user presses Confirm, so there is no need to ask for confirmation yourself. A label can only be printed once the shipment exists."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1108
+#: src/Modules/OrderLookup/Ability.php:1111
+msgid "Look the payment up at the provider"
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1112
+msgid "Ask the payment provider directly what happened to the transaction on an order — whether it was authorised, how much was captured and when. Use this when the order and the provider might disagree, for example when a customer says they paid but the order still shows unpaid. Works for ECPay card payments and PAYUNi. For what this site already recorded, use get-payment-status instead, which does not call the provider. Read-only."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1156
+msgid "List the shipments on an order"
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1157
+msgid "List the shipments already created for an order, with their shipment numbers, tracking numbers and when they were created. Use this before deleting a shipment so you know which number to give."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1199
+msgid "Delete a shipment from an order"
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1200
+msgid "Remove a shipment record from an order so the shipment can be created again — for example after the pickup store was changed. This only removes the record on this site; it does not cancel the booking with the carrier, so never use it for a parcel that is already on its way. This is a destructive action — calling the tool only proposes it, and nothing is deleted until the user presses Confirm, so there is no need to ask for confirmation yourself. If the order has more than one shipment you must say which shipment number to delete."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1211
+msgid "Which shipment to delete. Can be left out only when the order has exactly one shipment."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1245
+msgid "Change the pickup store"
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1246
+msgid "Change which convenience store an order is picked up at, by store number. Use this when a customer asks to collect the parcel somewhere else. This is a destructive action — calling the tool only proposes the change, and nothing happens until the user presses Confirm, so there is no need to ask for confirmation yourself. It does not re-book the shipment: if a shipment was already created it still points at the old store and has to be deleted and created again on the order screen. If the store name and address are not given they are cleared, because keeping the old ones would show the new number next to the old store name."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1257
+msgid "The number of the store to switch to, for example 131386"
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1261
+msgid "The store name, if the user gave one. Leave it out rather than guessing — a wrong name is worse than none."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1265
+msgid "The store address, if the user gave one. Leave it out rather than guessing."
+msgstr ""
+
+#: src/Modules/OrderLookup/Ability.php:1299
 msgid "Add an order note"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1109
+#: src/Modules/OrderLookup/Ability.php:1300
 msgid "Add an internal note to an order. It is for your own records and is not sent to the customer."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1120
+#: src/Modules/OrderLookup/Ability.php:1311
 msgid "The note"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1177
+#: src/Modules/OrderLookup/Ability.php:1368
 msgid "The note cannot be empty."
 msgstr ""
 
 #. translators: %s: order number
-#: src/Modules/OrderLookup/Ability.php:1184
+#: src/Modules/OrderLookup/Ability.php:1375
 #, php-format
 msgid "A note was added to order #%s."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1192
+#: src/Modules/OrderLookup/Ability.php:1383
 msgid "Print shipping labels"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1193
+#: src/Modules/OrderLookup/Ability.php:1384
 msgid "Print shipping labels for one or more orders, grouped automatically by carrier. Calling the tool only proposes it; the print page opens once the user presses Confirm. An order needs an existing shipment before it has a label to print."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1201
+#: src/Modules/OrderLookup/Ability.php:1392
 msgid "An array of order numbers to print, for example [\"2867\",\"2664\"]"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1205
+#: src/Modules/OrderLookup/Ability.php:1396
 msgid "Paper: 1 for A4 (the default) or 2 for an A6 label printer"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1239
+#: src/Modules/OrderLookup/Ability.php:1430
 msgid "Issue an e-invoice"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1240
+#: src/Modules/OrderLookup/Ability.php:1431
 msgid "Issue an e-invoice for an order, using the invoice service and invoice type already set on it. This is a destructive tax operation that cannot be undone — calling the tool only proposes it, and nothing is issued until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1279
+#: src/Modules/OrderLookup/Ability.php:1470
 msgid "Void an e-invoice"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1280
+#: src/Modules/OrderLookup/Ability.php:1471
 msgid "Void the e-invoice already issued for an order. A reason is required. This is a destructive tax operation that cannot be undone — calling the tool only proposes it, and nothing is voided until the user presses Confirm, so there is no need to ask for confirmation yourself."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1291
+#: src/Modules/OrderLookup/Ability.php:1482
 msgid "The reason for voiding, for example a customer cancellation or an issuing mistake"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1325
+#: src/Modules/OrderLookup/Ability.php:1516
 msgid "Change order status in bulk"
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1326
+#: src/Modules/OrderLookup/Ability.php:1517
 msgid "Move several orders to the same new status at once, such as processing, completed or cancelled. This is a destructive action — calling the tool only proposes the change, and nothing happens until the user presses Confirm, so there is no need to ask for confirmation yourself. Use this whenever the user mentions two or more orders together."
 msgstr ""
 
-#: src/Modules/OrderLookup/Ability.php:1334
+#: src/Modules/OrderLookup/Ability.php:1525
 msgid "An array of order numbers to change, for example [\"2896\",\"2897\",\"2900\"]"
-msgstr ""
-
-#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:28
-#: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:99
-#: src/Modules/OrderLookup/ChannelOps.php:166
-#: src/Modules/OrderLookup/ChannelOps.php:206
-#: src/Modules/OrderLookup/DonationOrgOps.php:42
-#: src/Modules/OrderLookup/DonationOrgOps.php:97
-#: src/Modules/OrderLookup/InvoiceChannelOps.php:168
-#: src/Modules/OrderLookup/InvoiceChannelOps.php:214
-#: src/Modules/OrderLookup/InvoiceOps.php:96
-#: src/Modules/OrderLookup/InvoiceOps.php:138
-#: src/Modules/OrderLookup/InvoiceOps.php:168
-#: src/Modules/OrderLookup/InvoiceOps.php:212
-#: src/Modules/OrderLookup/InvoiceOps.php:241
-#: src/Modules/OrderLookup/InvoiceOps.php:301
-#: src/Modules/OrderLookup/PaymentMethodOps.php:276
-#: src/Modules/OrderLookup/PaymentMethodOps.php:334
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:36
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:69
-#: src/Modules/OrderLookup/ShipmentOps.php:101
-#: src/Modules/OrderLookup/ShipmentOps.php:142
-#: src/Modules/OrderLookup/ShipmentOps.php:200
-#: src/Modules/OrderLookup/ShipmentOps.php:259
-#: src/Modules/OrderLookup/ShippingZoneOps.php:118
-#: src/Modules/OrderLookup/ShippingZoneOps.php:151
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:28
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:70
-msgid "This action requires the Manage WooCommerce permission."
 msgstr ""
 
 #: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:35
@@ -7211,6 +7383,98 @@ msgstr ""
 #: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:138
 #, php-format
 msgid "⚠️ Failed: %s. Please check on the order page."
+msgstr ""
+
+#. translators: %s: order number
+#: src/Modules/OrderLookup/ChangePickupStore.php:51
+#, php-format
+msgid "Order #%s is not a convenience store pickup order, so it has no pickup store to change."
+msgstr ""
+
+#. translators: 1: order number, 2: store number
+#: src/Modules/OrderLookup/ChangePickupStore.php:74
+#, php-format
+msgid "Order #%1$s is already set to pick up at store %2$s, so there is nothing to change."
+msgstr ""
+
+#. translators: 1: order number, 2: carrier label, 3: previous store, 4: new store
+#: src/Modules/OrderLookup/ChangePickupStore.php:88
+#, php-format
+msgid "Change the pickup store on order #%1$s (%2$s) from %3$s to %4$s."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:91
+msgid "(no store set)"
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:96
+msgid "No store name or address was given, so those two fields will be cleared — leaving the old ones would show the new number with the old store name."
+msgstr ""
+
+#. translators: %d: number of shipments already created
+#: src/Modules/OrderLookup/ChangePickupStore.php:102
+#, php-format
+msgid "Warning: %d shipment has already been created for this order and it still points at the old store. Delete it and create it again after this change."
+msgid_plural "Warning: %d shipments have already been created for this order and they still point at the old store. Delete them and create them again after this change."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:145
+msgid "This order is no longer a convenience store pickup order, so the store was not changed."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:148
+msgid "The shipping method on this order changed after the proposal was made, so the store was not changed. Please ask again."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:166
+msgid "The pickup store could not be written to the order."
+msgstr ""
+
+#. translators: 1: previous store number, 2: new store number
+#: src/Modules/OrderLookup/ChangePickupStore.php:172
+#, php-format
+msgid "Pickup store changed from %1$s to %2$s in Moksa AI. Any shipment already created still points at the old store — delete it and create a new one."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:173
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:168
+msgid "(none)"
+msgstr ""
+
+#. translators: 1: expected store number, 2: store number actually stored
+#: src/Modules/OrderLookup/ChangePickupStore.php:187
+#, php-format
+msgid "The change was submitted, but the order still shows store %2$s instead of %1$s. Please check the order screen."
+msgstr ""
+
+#. translators: 1: order number, 2: new store
+#: src/Modules/OrderLookup/ChangePickupStore.php:196
+#, php-format
+msgid "✅ Order #%1$s now picks up at store %2$s, and a follow-up check confirms it was saved."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:203
+msgid "The shipment created earlier still points at the old store — delete it on the order screen and create it again."
+msgstr ""
+
+#. translators: %s: order reference the user gave
+#: src/Modules/OrderLookup/ChangePickupStore.php:217
+#: src/Modules/OrderLookup/QueryPayment.php:60
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:216
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:38
+#, php-format
+msgid "Order not found: %s."
+msgstr ""
+
+#: src/Modules/OrderLookup/ChangePickupStore.php:231
+msgid "Please give the store number to change to."
+msgstr ""
+
+#. translators: %s: the store number that was given
+#: src/Modules/OrderLookup/ChangePickupStore.php:238
+#, php-format
+msgid "That does not look like a store number: %s. A store number is letters and digits only."
 msgstr ""
 
 #: src/Modules/OrderLookup/ChannelOps.php:35
@@ -7633,6 +7897,24 @@ msgstr ""
 msgid "(%d orders skipped because they have no label)"
 msgstr ""
 
+#. translators: 1: order number, 2: payment method title
+#: src/Modules/OrderLookup/QueryPayment.php:76
+#, php-format
+msgid "Order #%1$s was paid with %2$s, which cannot be looked up at the provider from here. Only ECPay card payments and PAYUNi support this. Use get-payment-status for what this site already recorded."
+msgstr ""
+
+#: src/Modules/OrderLookup/QueryPayment.php:88
+msgid "The ECPay payment module is switched off, so the provider cannot be contacted."
+msgstr ""
+
+#: src/Modules/OrderLookup/QueryPayment.php:112
+msgid "The PAYUNi payment module is switched off, so the provider cannot be contacted."
+msgstr ""
+
+#: src/Modules/OrderLookup/QueryPayment.php:118
+msgid "PAYUNi did not return any information for this order."
+msgstr ""
+
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:43
 msgid "This order has no payment details to resend. Card orders, for example, have no ATM or convenience store payment details."
 msgstr ""
@@ -7805,6 +8087,58 @@ msgstr ""
 msgid "⚠️ Failed: %s."
 msgstr ""
 
+#. translators: %s: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:84
+#, php-format
+msgid "Order #%s has no shipments to delete."
+msgstr ""
+
+#. translators: 1: order number, 2: comma separated shipment numbers
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:101
+#, php-format
+msgid "Order #%1$s has more than one shipment (%2$s). Say which shipment number to delete."
+msgstr ""
+
+#. translators: 1: shipment number, 2: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:122
+#, php-format
+msgid "Shipment %1$s does not belong to order #%2$s."
+msgstr ""
+
+#. translators: %s: carrier name
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:133
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:82
+#, php-format
+msgid "Shipment records for %s cannot be deleted from here yet."
+msgstr ""
+
+#. translators: 1: shipment number, 2: carrier, 3: order number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:147
+#, php-format
+msgid "Delete shipment %1$s (%2$s) from order #%3$s. This only removes the record on this site — it does not cancel the booking with the carrier, so do not delete it if the parcel is already on its way. Delete it when you need to create the shipment again, for example after changing the pickup store."
+msgstr ""
+
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:173
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:68
+msgid "No shipment number was given."
+msgstr ""
+
+#. translators: %s: shipment number
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:184
+#, php-format
+msgid "Shipment %s was removed from this order in Moksa AI. The booking with the carrier was not cancelled."
+msgstr ""
+
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:195
+msgid "The delete was submitted, but the shipment is still on the order. Please check the order screen."
+msgstr ""
+
+#. translators: 1: shipment number, 2: order number, 3: how many shipments remain
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:201
+#, php-format
+msgid "✅ Shipment %1$s was removed from order #%2$s (%3$d left). You can create the shipment again now."
+msgstr ""
+
 #: src/Modules/OrderLookup/ShippingZoneOps.php:37
 msgid "Other regions"
 msgstr ""
@@ -7827,12 +8161,6 @@ msgstr ""
 #: src/Modules/OrderLookup/ShippingZoneOps.php:175
 #, php-format
 msgid "✅ The shipping method is now %1$s: %2$s."
-msgstr ""
-
-#. translators: %s: order reference the user gave
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:38
-#, php-format
-msgid "Order not found: %s."
 msgstr ""
 
 #. translators: 1: order number, 2: current status, 3: target status
@@ -9045,29 +9373,17 @@ msgstr ""
 msgid "Bulk print T-Cat home delivery labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:56
-msgid "Store ID"
-msgstr ""
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:60
-msgid "Store Name"
-msgstr ""
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:64
-msgid "Store Address"
-msgstr ""
-
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:69
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:75
-#: src/Modules/PayuniShipping/PayuniShipping.php:338
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:57
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:63
+#: src/Modules/PayuniShipping/PayuniShipping.php:360
 msgid "Shipping Phone"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:89
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:77
 msgid "Create PAYUNi Shipping Order"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderEdit.php:91
+#: src/Modules/PayuniShipping/Admin/OrderEdit.php:79
 msgid "Re-Create PAYUNi Shipping Order"
 msgstr ""
 
@@ -9123,7 +9439,7 @@ msgstr ""
 msgid "Print label"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:119
 msgid "Shipment actions"
 msgstr ""
 
@@ -9174,7 +9490,8 @@ msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:257
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:274
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:320
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:353
 msgid "Order not found."
 msgstr ""
 
@@ -9390,8 +9707,8 @@ msgid "Returning to checkout…"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:422
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:312
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:313
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr ""
 
@@ -9507,63 +9824,63 @@ msgstr ""
 msgid "PAYUNi shipment created, number %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:186
+#: src/Modules/PayuniShipping/PayuniShipping.php:188
 msgid "PAYUNi convenience store pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:207
+#: src/Modules/PayuniShipping/PayuniShipping.php:209
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:208
+#: src/Modules/PayuniShipping/PayuniShipping.php:210
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:209
+#: src/Modules/PayuniShipping/PayuniShipping.php:211
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:210
+#: src/Modules/PayuniShipping/PayuniShipping.php:212
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:213
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:212
+#: src/Modules/PayuniShipping/PayuniShipping.php:214
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:215
+#: src/Modules/PayuniShipping/PayuniShipping.php:217
 msgid "PAYUNi T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:216
+#: src/Modules/PayuniShipping/PayuniShipping.php:218
 msgid "PAYUNi T-Cat ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:217
+#: src/Modules/PayuniShipping/PayuniShipping.php:219
 msgid "PAYUNi T-Cat frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:218
+#: src/Modules/PayuniShipping/PayuniShipping.php:220
 msgid "PAYUNi T-Cat chilled"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:244
+#: src/Modules/PayuniShipping/PayuniShipping.php:262
 msgid "PAYUNi convenience store labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:260
+#: src/Modules/PayuniShipping/PayuniShipping.php:280
 msgid "PAYUNi home delivery labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:596
+#: src/Modules/PayuniShipping/PayuniShipping.php:618
 msgid "General Settings"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:597
+#: src/Modules/PayuniShipping/PayuniShipping.php:619
 msgid "Shipping Settings"
 msgstr ""
 
@@ -10567,70 +10884,77 @@ msgstr ""
 msgid "Print label %d"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:112
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:123
 msgid "Pickup store number"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:121
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
 msgid "Pickup store name"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:130
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
 msgid "Pickup store address"
 msgstr ""
 
 #. translators: 1: previous store number, 2: new store number
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:156
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:167
 #, php-format
 msgid "Pickup store changed from %1$s to %2$s. Any shipment already created still points at the old store — delete it and create a new one."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:157
-msgid "(none)"
-msgstr ""
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:220
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:265
 msgid "Choose store on map"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:226
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:271
 msgid "The store is only saved when you update the order. Changing the store here does not reissue the shipment — delete the existing shipment and create it again."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:255
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:301
 msgid "Opening the store map…"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:256
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:302
 msgid "Store filled in. Remember to update the order."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:257
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:303
 msgid "The store map window was blocked. Allow pop-ups for this site and try again."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:258
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:287
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:304
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:333
 msgid "The store map could not be opened."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:268
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:314
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:347
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
 msgid "You are not allowed to edit orders."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:279
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:325
 msgid "This order does not use a convenience store pickup method."
 msgstr ""
 
 #. translators: 1: store number, 2: store name
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:316
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:409
 #, php-format
 msgid "Store: %1$s %2$s"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:318
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:411
 msgid "You can close this window and go back to the order — remember to update the order to keep the change."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:89
+msgid "That shipment record could not be deleted."
+msgstr ""
+
+#. translators: %s: shipment number
+#: src/Modules/Shipping/Admin/ShipmentRecords.php:97
+#, php-format
+msgid "This order has no shipment numbered %s."
 msgstr ""
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:109
@@ -11791,27 +12115,27 @@ msgstr ""
 msgid "SmilePay FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:115
+#: src/Modules/SmilepayShipping/Module.php:131
 msgid "SmilePay convenience store labels"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:125
+#: src/Modules/SmilepayShipping/Module.php:143
 msgid "SmilePay T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:126
+#: src/Modules/SmilepayShipping/Module.php:144
 msgid "SmilePay T-Cat ambient"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:127
+#: src/Modules/SmilepayShipping/Module.php:145
 msgid "SmilePay T-Cat chilled"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:128
+#: src/Modules/SmilepayShipping/Module.php:146
 msgid "SmilePay T-Cat frozen"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:141
+#: src/Modules/SmilepayShipping/Module.php:159
 msgid "SmilePay T-Cat labels"
 msgstr ""
 
@@ -11871,30 +12195,30 @@ msgstr ""
 msgid "SmilePay created the T-Cat home delivery shipment — %1$s (serial number %2$s, waybill number %3$s)"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:303
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:337
 msgid "This store pickup order has no store yet. Ask the customer to choose one at checkout, or set it yourself."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:345
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:379
 #, php-format
 msgid "The SmilePay store pickup shipment could not be created: %s"
 msgstr ""
 
 #. translators: 1: smilepay order no, 2: pickup code
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:357
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:391
 #, php-format
 msgid "SmilePay store pickup shipment created (serial number %1$s, pickup code %2$s)"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:383
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:417
 #, php-format
 msgid "The SmilePay T-Cat home delivery shipment could not be created: %s"
 msgstr ""
 
 #. translators: 1: smilepay order no, 2: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:392
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:426
 #, php-format
 msgid "SmilePay T-Cat home delivery shipment created (serial number %1$s, waybill number %2$s)"
 msgstr ""

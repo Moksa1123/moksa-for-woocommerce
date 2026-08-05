@@ -112,8 +112,15 @@ class OrderMetaBox {
 			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( 'Print label', 'moksa-for-woocommerce' ) . '</button>';
 		}
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label_btn built locally with esc_attr/esc_html applied
-		echo '<tr id="moksafowo-payuni-action"><th style="text-align:left;">' . esc_html__( 'Shipment actions', 'moksa-for-woocommerce' ) . '</th><td>' . $label_btn . '<button class="button update-delivery-status" data-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button></td></tr>';
+		// 動作列走整列（colspan=2）+ 標題在上：這張卡片只有 200px 出頭，
+		// 擠在右邊的值欄裡兩顆按鈕放不下，會上下堆疊。按鈕本身包 flex 給間距。
+		echo '<tr id="moksafowo-payuni-action"><td colspan="2" style="padding-top:10px;">'
+			. '<div style="font-weight:600;margin-bottom:6px;">' . esc_html__( 'Shipment actions', 'moksa-for-woocommerce' ) . '</div>'
+			. '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label_btn built locally with esc_attr/esc_html applied
+			. $label_btn
+			. '<button class="button update-delivery-status" data-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button>'
+			. '</div></td></tr>';
 		echo '</table>';
 
 		return (string) ob_get_clean();

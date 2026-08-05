@@ -107,16 +107,34 @@ final class Module extends AbstractModule {
 	public static function register_batch_print( array $providers ): array {
 		$counter = static fn( \WC_Order $o ): int => Operations\BatchPrint::record_count( $o );
 
-		$cvs_titles                = [
+		$cvs_titles = [
 			'moksafowo_smilepay_shipping_cvs_711'  => __( 'SmilePay 7-ELEVEN pickup', 'moksa-for-woocommerce' ),
 			'moksafowo_smilepay_shipping_cvs_fami' => __( 'SmilePay FamilyMart pickup', 'moksa-for-woocommerce' ),
 		];
+		// AI / MCP 用：列出與刪除物流單記錄（走 ShipmentRecords 門面）
+		$lister  = static function ( \WC_Order $o ): array {
+			$out = [];
+			foreach ( Operations\CreateOrder::get_records( $o ) as $r ) {
+				$out[] = [
+					'id'         => (string) ( $r['smseid'] ?? '' ),
+					'tracking'   => (string) ( $r['track_num'] ?? '' ),
+					'created_at' => (string) ( $r['created_at'] ?? '' ),
+					'temp'       => (string) ( $r['temp'] ?? '' ),
+					'note'       => (string) ( $r['rtn_msg'] ?? '' ),
+				];
+			}
+			return $out;
+		};
+		$deleter = static fn( \WC_Order $o, string $id ): bool => Operations\CreateOrder::delete_record( $o, $id );
+
 		$providers['smilepay-cvs'] = [
 			'label'          => __( 'SmilePay convenience store labels', 'moksa-for-woocommerce' ),
 			'category'       => 'cvs',
 			'method_ids'     => $cvs_titles,
 			'handler'        => [ Operations\BatchPrint::class, 'cvs' ],
 			'record_counter' => $counter,
+			'record_lister'  => $lister,
+			'record_deleter' => $deleter,
 			// SmilePay CVS print API 固定格式，不分紙張
 			'paper_modes'    => [ '1' ],
 		];
@@ -144,6 +162,8 @@ final class Module extends AbstractModule {
 			'handler'        => [ Operations\BatchPrint::class, 'home' ],
 			'record_counter' => $counter,
 			'record_temps'   => $temps,
+			'record_lister'  => $lister,
+			'record_deleter' => $deleter,
 			'paper_modes'    => [ '1' ],
 		];
 

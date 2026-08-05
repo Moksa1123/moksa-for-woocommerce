@@ -247,6 +247,39 @@ final class CreateOrder {
 		return [];
 	}
 
+	/**
+	 * 刪掉一筆記錄（只刪站上的記錄，不會通知速買配作廢）。
+	 * 刪完要重新鏡射最新一筆到單鍵，否則 UI 會顯示已經不存在的物流單。
+	 */
+	public static function delete_record( \WC_Order $order, string $smseid ): bool {
+		$records = self::get_records( $order );
+		$kept    = array_values(
+			array_filter( $records, static fn( array $r ): bool => (string) ( $r['smseid'] ?? '' ) !== $smseid )
+		);
+		if ( count( $kept ) === count( $records ) ) {
+			return false;
+		}
+
+		if ( empty( $kept ) ) {
+			$order->delete_meta_data( Keys::SMILEPAY_SHIPPING_RECORDS );
+			foreach ( [
+				Keys::SMILEPAY_SHIPPING_NO,
+				Keys::SMILEPAY_SHIPPING_TYPE,
+				Keys::SMILEPAY_SHIPPING_TRACK_NO,
+			] as $k ) {
+				$order->delete_meta_data( $k );
+			}
+		} else {
+			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_RECORDS, $kept );
+			$latest = end( $kept );
+			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_NO, (string) ( $latest['smseid'] ?? '' ) );
+			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TRACK_NO, (string) ( $latest['track_num'] ?? '' ) );
+		}
+
+		$order->save();
+		return true;
+	}
+
 	private static function temp_to_temperature_code( int $temp ): string {
 		return match ( $temp ) {
 			ProductTemp::REFRIGERATED => '0002',
