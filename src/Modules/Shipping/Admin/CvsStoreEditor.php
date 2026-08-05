@@ -38,6 +38,7 @@ final class CvsStoreEditor {
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', [ __CLASS__, 'render_picker' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 		add_action( 'wp_ajax_moksafowo_cvs_admin_open_map', [ __CLASS__, 'ajax_open_map' ] );
+		add_action( 'wp_ajax_moksafowo_cvs_admin_fields', [ __CLASS__, 'ajax_fields' ] );
 	}
 
 	/**
@@ -104,7 +105,17 @@ final class CvsStoreEditor {
 		if ( null === $match ) {
 			return $fields;
 		}
-		$meta = $match['provider']['meta'];
+		return array_merge( $fields, self::store_fields( $order, $match['provider'] ) );
+	}
+
+	/**
+	 * @param \WC_Order           $order    Order.
+	 * @param array<string,mixed> $provider Provider descriptor.
+	 * @return array<string,array<string,mixed>>
+	 */
+	private static function store_fields( \WC_Order $order, array $provider ): array {
+		$meta   = $provider['meta'];
+		$fields = [];
 
 		// value 一定要自己給 —— WC 的預設值查的是 _shipping_{key}，跟我們的 meta key 不同
 		$fields['moksafowo_cvs_store_id'] = [
@@ -210,6 +221,7 @@ final class CvsStoreEditor {
 		$has_map = isset( $match['provider']['open_map'] ) && is_callable( $match['provider']['open_map'] );
 		?>
 		<div class="edit_address moksafowo-cvs-store-picker"
+			data-provider="<?php echo esc_attr( $match['key'] ); ?>"
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>"
 			data-store-id-field="<?php echo esc_attr( $match['provider']['meta']['id'] ); ?>"
 			data-store-name-field="<?php echo esc_attr( (string) ( $match['provider']['meta']['name'] ?? '' ) ); ?>"
@@ -249,6 +261,7 @@ final class CvsStoreEditor {
 			'moksafowoCvsStoreEditor',
 			[
 				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
 				'messageType' => self::MESSAGE_TYPE,
 				'origin'      => self::origin(),
 				'i18n'        => [
@@ -288,6 +301,53 @@ final class CvsStoreEditor {
 		}
 
 		wp_send_json_success( $result );
+	}
+
+	/**
+	 * 後台把運送方式改成（或改離開）超商取貨時，訂單資料面板是伺服器端畫好的、不會跟著
+	 * 品項面板的 AJAX 重畫。這支負責回傳當下該有的門市欄位，讓前端就地換掉，
+	 * 商家不用先存檔再重新整理才看得到門市欄位。
+	 */
+	public static function ajax_fields(): void {
+		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_send_json_error( [ 'message' => __( 'You are not allowed to edit orders.', 'moksa-for-woocommerce' ) ], 403 );
+		}
+
+		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+		$order    = $order_id > 0 ? wc_get_order( $order_id ) : null;
+		if ( ! $order instanceof \WC_Order ) {
+			wp_send_json_error( [ 'message' => __( 'Order not found.', 'moksa-for-woocommerce' ) ], 404 );
+		}
+
+		$match = self::match( $order );
+		if ( null === $match ) {
+			wp_send_json_success(
+				[
+					'provider' => '',
+					'fields'   => '',
+					'picker'   => '',
+				]
+			);
+		}
+
+		ob_start();
+		foreach ( self::store_fields( $order, $match['provider'] ) as $field ) {
+			woocommerce_wp_text_input( $field );
+		}
+		$fields_html = (string) ob_get_clean();
+
+		ob_start();
+		self::render_picker( $order );
+		$picker_html = (string) ob_get_clean();
+
+		wp_send_json_success(
+			[
+				'provider' => $match['key'],
+				'fields'   => $fields_html,
+				'picker'   => $picker_html,
+			]
+		);
 	}
 
 	/**

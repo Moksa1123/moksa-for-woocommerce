@@ -15,7 +15,10 @@
 	font-size: 14px;
 	color: #1d2327;
 	text-align: left;
-	container-type: inline-size;
+	/* 不能用 container-type: inline-size —— Classic 結帳時這張卡在 review-order
+	   <table> 的 <td> 裡，inline-size containment 會讓瀏覽器把它的 intrinsic width
+	   當成 0，auto table layout 就把欄寬全給了左邊標籤欄，卡片被壓成一直條。
+	   窄畫面改用下面的 @media 處理。 */
 }
 
 /* 已選門市 / 未選 的上排:資訊在左、按鈕在右 */
@@ -112,7 +115,7 @@
 	line-height: 1.4;
 }
 
-@container (max-width: 260px) {
+@media (max-width: 600px) {
 	.moksafowo-cvs-store__row {
 		flex-direction: column;
 		align-items: flex-start;
@@ -120,18 +123,5 @@
 
 	.moksafowo-cvs-store__info {
 		width: 100%;
-	}
-}
-
-@supports not (container-type: inline-size) {
-	@media (max-width: 360px) {
-		.moksafowo-cvs-store__row {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-
-		.moksafowo-cvs-store__info {
-			width: 100%;
-		}
 	}
 }

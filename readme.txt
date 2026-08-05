@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.6.1 - 2026-08-05 =
+* Fix: switching an order to (or away from) a convenience-store method in the items panel now updates the store fields straight away. They used to appear only after saving the order and reloading the page, which made it look like you could not pick a store on an order you created in the admin yourself.
+* Fix: the convenience-store card on the classic checkout was squashed into a narrow strip on phones. The card is now given the full width of the order summary, with the label on its own line.
 
 = 1.6.0 - 2026-08-04 =
 * New: change the pickup store on a convenience-store order from the order screen. Open the shipping address for editing and you get store number, store name and store address fields, plus a "Choose store on map" button that opens the carrier's own store map in a new window and fills the fields in when you pick a store. Works for ECPay, NewebPay, PAYUNi and SmilePay pickup methods, and on orders you create in the admin yourself.

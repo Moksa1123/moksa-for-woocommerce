@@ -100,7 +100,8 @@ final class StoreSelector {
 	}
 
 	public static function render_classic(): void {
-		echo '<tr class="moksafowo-ecpay-shipping-store-row" style="display:none"><th></th><td><div id="moksafowo-ecpay-shipping-store-host" class="moksafowo-ecpay-shipping-store"></div></td></tr>';
+		// colspan=2：標籤格是空的，佔著只會讓卡片被擠進右邊那條窄欄
+		echo '<tr class="moksafowo-ecpay-shipping-store-row" style="display:none"><td colspan="2"><div id="moksafowo-ecpay-shipping-store-host" class="moksafowo-ecpay-shipping-store"></div></td></tr>';
 	}
 
 	public static function ajax_open_map(): void {

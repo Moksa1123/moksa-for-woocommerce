@@ -39,7 +39,10 @@
 	color: #1d2327;
 	/* WC 把 review-order 塞 <tfoot>，<tfoot td> 預設 text-align: right 要 reset */
 	text-align: left;
-	container-type: inline-size;
+	/* 這裡不能用 container-type: inline-size —— 這張卡在 review-order <table> 的
+	   <td> 裡，而 inline-size containment 會讓瀏覽器「當它沒有內容」去算 intrinsic
+	   width。auto table layout 於是把欄寬幾乎全給了左邊的標籤欄（實測 412px 視窗下
+	   th 244px / td 66px），卡片被壓成一直條。窄畫面的排版改用下面的 @media 處理。 */
 }
 
 /* Block：host 現在塞進 .wc-block-components-checkout-step 內部，繼承 step 的
@@ -198,32 +201,48 @@ body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-addres
 	outline-offset: 2px;
 }
 
+/* Block 的卡片在一般 flow 的 div 裡，containment 安全，維持 container query */
 @container (max-width: 260px) {
-	.moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
-	.moksafowo-payuni-store-selector .moksafowo-payuni-no-store,
 	.moksafowo-payuni-block-store > div {
 		flex-direction: column;
 		align-items: flex-start;
 	}
 
-	.moksafowo-payuni-selected-store .store-info,
 	.moksafowo-payuni-block-store .moksafowo-payuni-block-store__name {
 		width: 100%;
 	}
 }
 
-@supports not (container-type: inline-size) {
-	@media (max-width: 360px) {
-		.moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
-		.moksafowo-payuni-store-selector .moksafowo-payuni-no-store,
-		.moksafowo-payuni-block-store > div {
-			flex-direction: column;
-			align-items: flex-start;
-		}
+/* Classic：窄畫面時標籤與內容各佔一整列，讓卡片拿到整個表格寬度。
+   維持兩欄的話 auto table layout 會把大半寬度分給標籤欄，剩下的空間塞不下
+   門市資訊 + 按鈕。 */
+@media (max-width: 600px) {
+	.moksafowo-payuni-store-selector-row.moksafowo-payuni-layout-two_column {
+		display: block;
+		width: 100%;
+	}
 
-		.moksafowo-payuni-selected-store .store-info,
-		.moksafowo-payuni-block-store .moksafowo-payuni-block-store__name {
-			width: 100%;
-		}
+	.moksafowo-payuni-layout-two_column > th,
+	.moksafowo-payuni-layout-two_column > td {
+		display: block;
+		width: 100%;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.moksafowo-payuni-layout-two_column > th {
+		padding-bottom: 6px;
+		white-space: normal;
+		text-align: left;
+	}
+
+	.moksafowo-payuni-store-selector .moksafowo-payuni-selected-store,
+	.moksafowo-payuni-store-selector .moksafowo-payuni-no-store {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.moksafowo-payuni-selected-store .store-info {
+		width: 100%;
 	}
 }
