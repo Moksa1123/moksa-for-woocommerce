@@ -278,7 +278,8 @@ final class CreateOrder {
 			'Address'          => $address,
 			'Email'            => $order->get_billing_email(),
 			'Data_id'          => (string) $order->get_id() . 'T' . $temp,
-			'od_sob'           => mb_substr( (string) $pkg['goods_name'], 0, 60 ),
+			// 按顯示寬度切（全形算 2），與物流業者計算長度的方式一致
+			'od_sob'           => mb_strimwidth( (string) $pkg['goods_name'], 0, 60, '', 'UTF-8' ),
 			'Amount'           => max( 1, (int) $pkg['amount'] ),
 			'Logistics_store'  => '',
 			'Roturl'           => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),

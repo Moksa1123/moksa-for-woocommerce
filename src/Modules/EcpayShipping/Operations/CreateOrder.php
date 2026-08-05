@@ -493,9 +493,22 @@ final class CreateOrder {
 		return null;
 	}
 
+	/**
+	 * 綠界 GoodsName 的規則是「最多 50 字元，中文算 2 個」（英文 50 字 / 中文 25 字）。
+	 * mb_substr() 是按「字數」切，中文 50 字會被綠界算成 100 —— 建單就回
+	 * 10500038「商品名稱請設定為最多50字元」。改用 mb_strimwidth()，它的寬度計算
+	 * 跟綠界同一套（全形算 2、半形算 1），英文品名也還是能用滿 50 個字元。
+	 *
+	 * 違規字元換成空白而不是刪掉：SplitByTemp 用 # 串接多個品名，而 # 正好在綠界的
+	 * 禁用清單裡，直接刪會讓品名黏成一團。
+	 */
 	private static function sanitize_goods_name( string $name ): string {
-		$name = preg_replace( '/[\^\'`!@#\$%\*\+\\\\\"<>|_\[\]]/u', '', $name ) ?? ''; // ECPay 禁特殊字元
-		return mb_substr( $name, 0, 50 );
+		$name = preg_replace( '/[\^\'`!@#\$%&\*\+\\\\\"<>|_\[\]]/u', ' ', $name ) ?? '';
+		$name = trim( (string) preg_replace( '/\s+/u', ' ', $name ) );
+		$name = trim( mb_strimwidth( $name, 0, 50, '', 'UTF-8' ) );
+
+		// 整串都是違規字元時不能送空的，綠界會退件
+		return '' === $name ? '網路商品一批' : $name;
 	}
 
 	private static function sender_name(): string {

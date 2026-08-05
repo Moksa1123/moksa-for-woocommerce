@@ -247,8 +247,10 @@ final class CreateOrderUnified {
 			$args['StoreID']          = '';
 			$args['ConsigneeAddress'] = self::get_shipping_address( $order );
 			$args['DeliveryTimeTag']  = PayuniShipping::get_tcat_delivery_time();
-			$args['ProdDesc']         = mb_substr( (string) $pkg['goods_name'], 0, 50 );
-			$args['NotifyURL']        = wc()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' );
+			// 按顯示寬度切（全形算 2），跟金流／物流業者計算長度的方式一致；
+			// mb_substr() 按字數切會讓中文品名實際長度爆掉（綠界那邊就是這樣被退件的）
+			$args['ProdDesc']  = mb_strimwidth( (string) $pkg['goods_name'], 0, 50, '', 'UTF-8' );
+			$args['NotifyURL'] = wc()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' );
 		}
 
 		return apply_filters( 'moksafowo_payuni_shipping_unified_order_request_args', $args, $order, $pkg, $method );

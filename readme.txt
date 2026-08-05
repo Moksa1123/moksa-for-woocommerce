@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.6.3 - 2026-08-05 =
+* Fix: creating an ECPay shipment failed with "商品名稱請設定為最多50字元" (10500038) on orders whose product names are in Chinese. ECPay counts a Chinese character as two, but the item name was being trimmed by character count, so a 50-character Chinese name reached ECPay as 100. It is now trimmed the same way ECPay measures it, and English names can still use the full 50 characters.
+* Fix: characters ECPay rejects are now replaced with a space instead of being deleted, so several product names no longer run together on the label.
+* The same character-count trimming was applied to the PAYUNi and SmilePay shipment descriptions as a precaution.
 
 = 1.6.2 - 2026-08-05 =
 * Tested against WooCommerce 11.0.
