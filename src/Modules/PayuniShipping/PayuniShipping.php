@@ -143,8 +143,7 @@ class PayuniShipping {
 		add_filter( 'woocommerce_update_order_review_fragments', array( self::get_instance(), 'shipping_choose_cvs_info' ) );
 		add_action( 'woocommerce_checkout_process', array( self::get_instance(), 'moksafowo_payuni_shipping_fields_validation' ) );
 
-		// Block checkout 不 fire woocommerce_checkout_process — throw RouteException 擋下未選門市的下單
-		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( __CLASS__, 'block_validate_cvs_store' ), 10, 2 );
+		// 未選門市的擋單改由共用的 Shipping\Frontend\CvsStoreRequired 處理（Classic + Block，四家一致）
 
 		add_action( 'woocommerce_checkout_create_order', array( self::get_instance(), 'moksafowo_payuni_save_order_hd_shipping_meta' ), 20, 2 );
 		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'moksafowo_payuni_checkout_enqueue_scripts' ), 9 );
@@ -185,16 +184,17 @@ class PayuniShipping {
 			return $providers;
 		}
 		$providers['payuni'] = [
-			'label'    => __( 'PAYUNi convenience store pickup', 'moksa-for-woocommerce' ),
-			'methods'  => $methods,
-			'meta'     => [
+			'label'            => __( 'PAYUNi convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'          => $methods,
+			'meta'             => [
 				'id'      => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID,
 				'name'    => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME,
 				'address' => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS,
 			],
-			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			'open_map'         => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			'session_store_id' => [ Frontend\StoreSelector::class, 'session_store_id' ],
 			// 建單讀共用鍵，但顯示層讀 STORE_DATA_JSON / 舊三鍵，全部一起寫才不會兩邊對不上
-			'sync'     => static function ( \WC_Order $order, array $store ): void {
+			'sync'             => static function ( \WC_Order $order, array $store ): void {
 				$order->update_meta_data( Utils\OrderMeta::STORE_DATA_JSON, wp_json_encode( $store ) );
 				$order->update_meta_data( Utils\OrderMeta::StoreId, $store['id'] );
 				$order->update_meta_data( Utils\OrderMeta::StoreName, $store['name'] );
@@ -488,10 +488,6 @@ class PayuniShipping {
 	}
 
 
-
-	public static function block_validate_cvs_store( \WC_Order $order, $request ): void {
-		StoreValidation::block_validate_cvs_store( $order, $request );
-	}
 
 	public static function moksafowo_payuni_shipping_fields_validation() {
 		StoreValidation::classic_fields_validation();

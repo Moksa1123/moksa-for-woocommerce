@@ -433,6 +433,15 @@ JS
 		exit;
 	}
 
+	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */
+	public static function session_store_id(): string {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return '';
+		}
+		$store = WC()->session->get( 'moksafowo_payuni_selected_store_data' );
+		return is_array( $store ) ? (string) ( $store['id'] ?? '' ) : '';
+	}
+
 	public static function ajax_get_store_data() {
 		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 		$cid = WC()->session ? WC()->session->get_customer_id() : '(no session)';

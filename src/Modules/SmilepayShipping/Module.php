@@ -65,18 +65,19 @@ final class Module extends AbstractModule {
 	 */
 	public static function register_cvs_store_editor( array $providers ): array {
 		$providers['smilepay'] = [
-			'label'    => __( 'SmilePay convenience store pickup', 'moksa-for-woocommerce' ),
-			'methods'  => [
+			'label'            => __( 'SmilePay convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'          => [
 				'moksafowo_smilepay_shipping_cvs_711'  => 'moksafowo_smilepay_shipping_cvs_711',
 				'moksafowo_smilepay_shipping_cvs_fami' => 'moksafowo_smilepay_shipping_cvs_fami',
 			],
 			// 速買配自己一組鍵，沒併進共用鍵 —— 建單與顯示都讀這三個
-			'meta'     => [
+			'meta'             => [
 				'id'      => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ID,
 				'name'    => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_NAME,
 				'address' => \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ADDR,
 			],
-			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			'open_map'         => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			'session_store_id' => [ Frontend\StoreSelector::class, 'session_store_id' ],
 		];
 		return $providers;
 	}

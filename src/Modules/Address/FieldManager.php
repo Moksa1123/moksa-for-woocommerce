@@ -123,7 +123,10 @@ final class FieldManager {
 		add_action( 'woocommerce_admin_field_moksafowo_field_manager', [ __CLASS__, 'render_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_admin_assets' ] );
 
-		if ( 'yes' === get_option( self::OPTION_TOGGLE, 'no' ) ) {
+		// 上面兩個 hook 是設定頁的欄位渲染，不能被區塊開關關掉，否則那一區畫不出來也存不回去。
+		// 區塊開關只管「有沒有真的套用到結帳欄位」，且關掉時子項一律視為關閉。
+		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
+			&& 'yes' === get_option( self::OPTION_TOGGLE, 'no' ) ) {
 			add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'apply_to_default_fields' ], 20 );
 			add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'apply_to_billing_fields' ], 20 );
 			add_filter( 'woocommerce_shipping_fields', [ __CLASS__, 'apply_to_shipping_fields' ], 20 );

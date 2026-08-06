@@ -90,7 +90,7 @@ msgid "Order counts and revenue for the last 30 days, broken down by status."
 msgstr "近 30 天的訂單數與營收，依訂單狀態分列。"
 
 #: src/Mcp/Catalog.php:58
-#: src/Mcp/Catalog.php:152
+#: src/Mcp/Catalog.php:153
 #: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:28
 #: src/Modules/OrderLookup/BatchUpdateOrderStatus.php:99
 #: src/Modules/OrderLookup/ChangePickupStore.php:34
@@ -180,34 +180,34 @@ msgstr "訂單編號。"
 msgid "The new store number."
 msgstr "新的門市編號。"
 
-#: src/Mcp/Catalog.php:161
+#: src/Mcp/Catalog.php:162
 msgid "Go through the orders that are paid but not shipped yet. For each one tell me whether a shipment has been created, and if not create it. Then tell me which ones are ready for their labels to be printed. Use list-orders, list-shipments and create-shipment. Do not print anything without asking me first."
 msgstr "把已付款但尚未出貨的訂單走一遍。逐筆告訴我有沒有建過物流單，沒有的話就建。接著告訴我哪些可以列印標籤了。請用 list-orders、list-shipments 與 create-shipment。沒有先問過我之前不要列印任何東西。"
 
 #. translators: %d: number of days
-#: src/Mcp/Catalog.php:167
+#: src/Mcp/Catalog.php:168
 #, php-format
 msgid "Look at orders from the last %d days that are still pending or on hold even though the customer may have paid. For each one, look the payment up at the provider with query-payment and tell me where this site and the provider disagree. Do not change any order status — just report."
 msgstr "檢視近 %d 天內仍停在待付款或保留中、但顧客可能已經付款的訂單。逐筆用 query-payment 去金流商查，告訴我網站與金流商在哪裡對不上。不要更改任何訂單狀態，只要回報。"
 
 #. translators: %d: number of days
-#: src/Mcp/Catalog.php:175
+#: src/Mcp/Catalog.php:176
 #, php-format
 msgid "List completed orders from the last %d days that still have no e-invoice number, using get-order-details to confirm each one. Show them as a list with the order number, date and amount. Do not issue any invoices — just tell me which are missing."
 msgstr "列出近 %d 天內已完成、但仍沒有發票號碼的訂單，逐筆用 get-order-details 確認。用清單呈現訂單編號、日期與金額。不要開立任何發票，只要告訴我哪些漏了。"
 
-#: src/Mcp/Catalog.php:182
+#: src/Mcp/Catalog.php:183
 msgid "This prompt needs both an order number and a store number."
 msgstr "這個提示樣板需要同時提供訂單編號與門市編號。"
 
 #. translators: 1: order number, 2: store number
-#: src/Mcp/Catalog.php:186
+#: src/Mcp/Catalog.php:187
 #, php-format
 msgid "The customer on order %1$s wants to collect at store %2$s instead. Change the pickup store. Then check with list-shipments whether a shipment already exists — if it does, delete it and create it again so the label goes to the new store. Walk me through each step and stop at every confirmation."
 msgstr "訂單 %1$s 的顧客想改到門市 %2$s 取貨。請更換取貨門市，接著用 list-shipments 確認有沒有已建立的物流單 —— 有的話就刪掉重建，讓標籤寄往新門市。每一步都帶著我走，每個確認關卡都停下來。"
 
 #. translators: %s: prompt name
-#: src/Mcp/Catalog.php:194
+#: src/Mcp/Catalog.php:195
 #, php-format
 msgid "Unknown prompt: %s"
 msgstr "不存在的提示樣板：%s"
@@ -228,9 +228,9 @@ msgstr "不存在的提示樣板：%s"
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:143
-#: src/Modules/NewebpayShipping/Module.php:168
-#: src/Modules/NewebpayShipping/Module.php:212
+#: src/Modules/NewebpayShipping/Module.php:144
+#: src/Modules/NewebpayShipping/Module.php:169
+#: src/Modules/NewebpayShipping/Module.php:213
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
@@ -262,8 +262,8 @@ msgstr "鄉鎮市區"
 
 #: src/Modules/Address/BlockField.php:227
 #: src/Modules/Address/BlockField.php:303
-#: src/Modules/Address/TwAddress.php:149
-#: src/Modules/Address/TwAddress.php:189
+#: src/Modules/Address/TwAddress.php:156
+#: src/Modules/Address/TwAddress.php:196
 msgid "Select…"
 msgstr "請選擇…"
 
@@ -3083,7 +3083,7 @@ msgstr "未付款"
 
 #: src/Modules/CustomerService/Module.php:86
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:203
-#: src/Modules/Shipping/Statuses/Registrar.php:137
+#: src/Modules/Shipping/Statuses/Registrar.php:144
 msgid "Order status"
 msgstr "訂單狀態"
 
@@ -3118,7 +3118,7 @@ msgstr "付款方式"
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:519
+#: src/Settings/SettingsPage.php:541
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
@@ -3128,7 +3128,7 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:66
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:49
-#: src/Settings/SettingsPage.php:526
+#: src/Settings/SettingsPage.php:548
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
@@ -3147,7 +3147,7 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:50
-#: src/Settings/SettingsPage.php:498
+#: src/Settings/SettingsPage.php:520
 msgid "Tracking number"
 msgstr "貨號"
 
@@ -3337,7 +3337,7 @@ msgstr "已請款 NT$%d，可部分或全額退款。"
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:281
 #: src/Modules/EzpayInvoice/Operations/Issue.php:236
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:93
-#: src/Modules/Shipping/Statuses/Registrar.php:59
+#: src/Modules/Shipping/Statuses/Registrar.php:66
 #: src/Modules/SmilepayInvoice/Operations/Issue.php:246
 msgid "Refund"
 msgstr "退款"
@@ -5194,7 +5194,7 @@ msgstr "選擇取貨門市"
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:76
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:181
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:779
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:788
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Change store"
 msgstr "更換門市"
@@ -5358,39 +5358,39 @@ msgstr "7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配"
 msgid "ECPay convenience store pickup"
 msgstr "綠界超商取貨"
 
-#: src/Modules/EcpayShipping/Module.php:95
+#: src/Modules/EcpayShipping/Module.php:97
 msgid "ECPay 7-ELEVEN pickup"
 msgstr "綠界 7-11 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:96
+#: src/Modules/EcpayShipping/Module.php:98
 msgid "ECPay 7-ELEVEN B2C frozen"
 msgstr "綠界 7-11 B2C 冷凍"
 
-#: src/Modules/EcpayShipping/Module.php:97
+#: src/Modules/EcpayShipping/Module.php:99
 msgid "ECPay FamilyMart pickup"
 msgstr "綠界 全家取貨"
 
-#: src/Modules/EcpayShipping/Module.php:98
+#: src/Modules/EcpayShipping/Module.php:100
 msgid "ECPay Hi-Life pickup"
 msgstr "綠界 萊爾富取貨"
 
-#: src/Modules/EcpayShipping/Module.php:99
+#: src/Modules/EcpayShipping/Module.php:101
 msgid "ECPay OK Mart pickup"
 msgstr "綠界 OK 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:100
+#: src/Modules/EcpayShipping/Module.php:102
 msgid "ECPay T-Cat home delivery"
 msgstr "綠界 黑貓宅配"
 
-#: src/Modules/EcpayShipping/Module.php:101
+#: src/Modules/EcpayShipping/Module.php:103
 msgid "ECPay Chunghwa Post"
 msgstr "綠界 中華郵政"
 
-#: src/Modules/EcpayShipping/Module.php:153
+#: src/Modules/EcpayShipping/Module.php:155
 msgid "ECPay convenience store labels"
 msgstr "綠界 超商標籤"
 
-#: src/Modules/EcpayShipping/Module.php:167
+#: src/Modules/EcpayShipping/Module.php:169
 msgid "ECPay home delivery labels"
 msgstr "綠界 宅配標籤"
 
@@ -6180,9 +6180,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:148
-#: src/Modules/NewebpayShipping/Module.php:173
-#: src/Modules/NewebpayShipping/Module.php:217
+#: src/Modules/NewebpayShipping/Module.php:149
+#: src/Modules/NewebpayShipping/Module.php:174
+#: src/Modules/NewebpayShipping/Module.php:218
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6586,7 +6586,7 @@ msgstr "請選擇取貨超商："
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:78
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:182
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:783
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:792
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "No pickup store chosen yet"
 msgstr "尚未選擇取貨門市"
@@ -6635,50 +6635,50 @@ msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr "超商取貨 — 7-11 / 全家 / 萊爾富 / OK"
 
 #: src/Modules/NewebpayShipping/Module.php:70
-#: src/Modules/NewebpayShipping/Module.php:90
+#: src/Modules/NewebpayShipping/Module.php:91
 msgid "NewebPay convenience store pickup"
 msgstr "藍新超商取貨"
 
-#: src/Modules/NewebpayShipping/Module.php:127
+#: src/Modules/NewebpayShipping/Module.php:128
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr "藍新物流託運單"
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:156
+#: src/Modules/NewebpayShipping/Module.php:157
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr "藍新物流單建立成功（單號 %s）"
 
-#: src/Modules/NewebpayShipping/Module.php:177
+#: src/Modules/NewebpayShipping/Module.php:178
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr "訂單尚未建單，無 MerchantOrderNo 可查詢。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:182
+#: src/Modules/NewebpayShipping/Module.php:183
 #, php-format
 msgid "The lookup failed: %s"
 msgstr "查詢失敗：%s"
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:192
+#: src/Modules/NewebpayShipping/Module.php:193
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr "查詢藍新物流：%s"
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:202
+#: src/Modules/NewebpayShipping/Module.php:203
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr "查詢成功 — %s"
 
-#: src/Modules/NewebpayShipping/Module.php:221
+#: src/Modules/NewebpayShipping/Module.php:222
 msgid "No shipment has been created for this order yet."
 msgstr "訂單尚未建單。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:226
+#: src/Modules/NewebpayShipping/Module.php:227
 #, php-format
 msgid "Tracking failed: %s"
 msgstr "追蹤失敗：%s"
@@ -6747,7 +6747,7 @@ msgid "In transit"
 msgstr "配送中"
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:40
-#: src/Modules/Shipping/Statuses/Registrar.php:55
+#: src/Modules/Shipping/Statuses/Registrar.php:62
 msgid "Arrived at the store, waiting for pickup"
 msgstr "已到店待取"
 
@@ -7799,7 +7799,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr "訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號"
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:477
+#: src/Settings/SettingsPage.php:497
 msgid "Order number lookup"
 msgstr "訂單查號搜尋"
 
@@ -7958,7 +7958,7 @@ msgstr "訂單 #%1$s · %2$s · %3$s · %4$s"
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:505
+#: src/Settings/SettingsPage.php:527
 msgid "Payment transaction ID"
 msgstr "金流交易序號"
 
@@ -7972,7 +7972,7 @@ msgstr "金流交易序號"
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
-#: src/Settings/SettingsPage.php:491
+#: src/Settings/SettingsPage.php:513
 msgid "Invoice number"
 msgstr "發票號碼"
 
@@ -7981,7 +7981,7 @@ msgstr "發票號碼"
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:512
+#: src/Settings/SettingsPage.php:534
 msgid "Tax ID"
 msgstr "統一編號"
 
@@ -7994,13 +7994,13 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:533
+#: src/Settings/SettingsPage.php:555
 msgid "Last four card digits"
 msgstr "卡末四碼"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:540
+#: src/Settings/SettingsPage.php:562
 msgid "T-Cat tracking number"
 msgstr "黑貓追蹤號"
 
@@ -8894,8 +8894,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr "取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。"
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:738
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:747
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:756
 msgid "Convenience store"
 msgstr "超商門市"
 
@@ -9438,7 +9438,7 @@ msgstr "下載標籤"
 msgid "Print label"
 msgstr "列印標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:119
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:118
 msgid "Shipment actions"
 msgstr "物流單動作"
 
@@ -9657,7 +9657,7 @@ msgstr "取消物流單失敗。"
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:180
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:218
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:221
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:793
 msgid "Choose a store"
 msgstr "選擇門市"
 
@@ -9724,25 +9724,16 @@ msgid "Store address: %s"
 msgstr "門市地址：%s"
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:773
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:782
 #, php-format
 msgid "Store number: %s"
 msgstr "門市代號: %s"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:775
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
 msgid "Outlying islands"
 msgstr "離島地區"
 
-#: src/Modules/PayuniShipping/Frontend/StoreValidation.php:45
-#: src/Modules/PayuniShipping/Frontend/StoreValidation.php:49
-msgid "Please choose a pickup store first."
-msgstr "請先選擇取貨門市。"
-
-#: src/Modules/PayuniShipping/Frontend/StoreValidation.php:84
-msgid "Please choose a convenience store to collect from."
-msgstr "請選擇取貨超商門市。"
-
-#: src/Modules/PayuniShipping/Frontend/StoreValidation.php:97
+#: src/Modules/PayuniShipping/Frontend/StoreValidation.php:46
 msgid "The recipient's phone number is not valid. Please enter a working mobile or landline number."
 msgstr "收件人電話格式不正確，請填入有效的手機或市話號碼。"
 
@@ -9823,7 +9814,7 @@ msgstr "正在列印 PAYUNi 物流標籤…"
 msgid "PAYUNi shipment created, number %s"
 msgstr "PAYUNi 物流單建立成功（單號 %s）"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:188
+#: src/Modules/PayuniShipping/PayuniShipping.php:187
 msgid "PAYUNi convenience store pickup"
 msgstr "PAYUNi 超商取貨"
 
@@ -9875,11 +9866,11 @@ msgstr "PAYUNi 超商標籤"
 msgid "PAYUNi home delivery labels"
 msgstr "PAYUNi 宅配標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:618
+#: src/Modules/PayuniShipping/PayuniShipping.php:614
 msgid "General Settings"
 msgstr "一般設定"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:619
+#: src/Modules/PayuniShipping/PayuniShipping.php:615
 msgid "Shipping Settings"
 msgstr "運送設定"
 
@@ -11120,6 +11111,16 @@ msgstr "查詢："
 msgid "%1$s%2$d items in total"
 msgstr "共%1$s%2$d 件"
 
+#: src/Modules/Shipping/Frontend/CvsStoreRequired.php:136
+msgid "Please choose a pickup store before placing the order."
+msgstr "請先選擇取貨門市才能送出訂單。"
+
+#. translators: %s: shipping method name, e.g. ECPay convenience store pickup
+#: src/Modules/Shipping/Frontend/CvsStoreRequired.php:140
+#, php-format
+msgid "You chose %s, so please pick the store to collect from before placing the order."
+msgstr "您選擇的是%s，請先選擇要取貨的門市才能送出訂單。"
+
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:60
 msgid "Shipping method name"
 msgstr "物流名稱"
@@ -11270,53 +11271,53 @@ msgstr "<code>[moksafowo_addfee weight=\"20\"]</code> — 每公斤 20 元"
 msgid "Attributes: <code>temp_1</code> = ambient base, <code>temp_2</code> = chilled base, <code>temp_3</code> = frozen base, <code>cool</code> = added when anything needs refrigeration, <code>cool_2</code> = extra for chilled, <code>cool_3</code> = extra for frozen, <code>qty</code> = per item, <code>weight</code> = per kilogram."
 msgstr "屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 base、<code>temp_3</code>=冷凍 base、<code>cool</code>=任一冷的就加、<code>cool_2</code>=冷藏額外加、<code>cool_3</code>=冷凍額外加、<code>qty</code>=每件加、<code>weight</code>=每公斤加。"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:53
+#: src/Modules/Shipping/Statuses/Registrar.php:60
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:211
 msgid "Processing"
 msgstr "處理中"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:54
-#: src/Modules/Shipping/Statuses/Registrar.php:197
+#: src/Modules/Shipping/Statuses/Registrar.php:61
+#: src/Modules/Shipping/Statuses/Registrar.php:204
 #: src/Modules/SmilepayShipping/Api/IpnHandler.php:111
-#: src/Settings/SettingsPage.php:367
+#: src/Settings/SettingsPage.php:375
 msgid "Shipped"
 msgstr "已出貨"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:56
-#: src/Modules/Shipping/Statuses/Registrar.php:201
+#: src/Modules/Shipping/Statuses/Registrar.php:63
+#: src/Modules/Shipping/Statuses/Registrar.php:208
 msgid "Store closed"
 msgstr "門市關轉"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:57
+#: src/Modules/Shipping/Statuses/Registrar.php:64
 msgid "Completed"
 msgstr "完成"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:58
+#: src/Modules/Shipping/Statuses/Registrar.php:65
 msgid "Cancelled / failed"
 msgstr "已取消 / 失敗"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:60
+#: src/Modules/Shipping/Statuses/Registrar.php:67
 msgid "On hold / pending payment"
 msgstr "保留 / 待付款"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:138
+#: src/Modules/Shipping/Statuses/Registrar.php:145
 msgid "Background"
 msgstr "背景"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:139
+#: src/Modules/Shipping/Statuses/Registrar.php:146
 msgid "Text"
 msgstr "文字"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:140
+#: src/Modules/Shipping/Statuses/Registrar.php:147
 msgid "Preview"
 msgstr "預覽"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:199
+#: src/Modules/Shipping/Statuses/Registrar.php:206
 msgid "Arrived at store"
 msgstr "已到店待取"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:215
+#: src/Modules/Shipping/Statuses/Registrar.php:222
 #, php-format
 msgid "Arrived at store <span class=\"count\">(%s)</span>"
 msgid_plural "Arrived at store <span class=\"count\">(%s)</span>"
@@ -11324,7 +11325,7 @@ msgstr[0] "已到店待取 <span class=\"count\">(%s)</span>"
 msgstr[1] "已到店待取 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:218
+#: src/Modules/Shipping/Statuses/Registrar.php:225
 #, php-format
 msgid "Store closed <span class=\"count\">(%s)</span>"
 msgid_plural "Store closed <span class=\"count\">(%s)</span>"
@@ -11332,7 +11333,7 @@ msgstr[0] "門市關轉 <span class=\"count\">(%s)</span>"
 msgstr[1] "門市關轉 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:222
+#: src/Modules/Shipping/Statuses/Registrar.php:229
 #, php-format
 msgid "Shipped <span class=\"count\">(%s)</span>"
 msgid_plural "Shipped <span class=\"count\">(%s)</span>"
@@ -11340,7 +11341,7 @@ msgstr[0] "已出貨 <span class=\"count\">(%s)</span>"
 msgstr[1] "已出貨 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: order status label
-#: src/Modules/Shipping/Statuses/Registrar.php:309
+#: src/Modules/Shipping/Statuses/Registrar.php:316
 #, php-format
 msgid "Change status to: %s"
 msgstr "變更狀態為：%s"
@@ -12106,35 +12107,35 @@ msgstr "7-11 / 全家 取貨 + 黑貓 常溫/冷藏/冷凍"
 msgid "SmilePay convenience store pickup"
 msgstr "速買配超商取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:111
+#: src/Modules/SmilepayShipping/Module.php:112
 msgid "SmilePay 7-ELEVEN pickup"
 msgstr "速買配 7-11 取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:112
+#: src/Modules/SmilepayShipping/Module.php:113
 msgid "SmilePay FamilyMart pickup"
 msgstr "速買配 全家取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:131
+#: src/Modules/SmilepayShipping/Module.php:132
 msgid "SmilePay convenience store labels"
 msgstr "速買配 超商標籤"
 
-#: src/Modules/SmilepayShipping/Module.php:143
+#: src/Modules/SmilepayShipping/Module.php:144
 msgid "SmilePay T-Cat home delivery"
 msgstr "速買配 黑貓宅配"
 
-#: src/Modules/SmilepayShipping/Module.php:144
+#: src/Modules/SmilepayShipping/Module.php:145
 msgid "SmilePay T-Cat ambient"
 msgstr "速買配 黑貓常溫"
 
-#: src/Modules/SmilepayShipping/Module.php:145
+#: src/Modules/SmilepayShipping/Module.php:146
 msgid "SmilePay T-Cat chilled"
 msgstr "速買配 黑貓冷藏"
 
-#: src/Modules/SmilepayShipping/Module.php:146
+#: src/Modules/SmilepayShipping/Module.php:147
 msgid "SmilePay T-Cat frozen"
 msgstr "速買配 黑貓冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:159
+#: src/Modules/SmilepayShipping/Module.php:160
 msgid "SmilePay T-Cat labels"
 msgstr "速買配 黑貓標籤"
 
@@ -12468,6 +12469,10 @@ msgstr "建議開啟（責任轉移、降低盜刷爭議）。開啟後付款會
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/Settings/AdvancedSections.php:62
+msgid "Enable this section"
+msgstr "啟用這個區塊"
+
 #: src/Settings/SettingsPage.php:24
 msgid "Moksa E-Commerce Tools"
 msgstr "Moksa 電商工具"
@@ -12512,157 +12517,177 @@ msgstr "物流共用設定"
 msgid "Behavior settings shared by every shipping module."
 msgstr "所有物流模組共用的行為設定。"
 
-#: src/Settings/SettingsPage.php:338
+#: src/Settings/SettingsPage.php:339
+msgid "Turn this off to remove the bulk label printing tools from the order list. The shipping modules themselves keep working, and you can still create and print labels from an individual order."
+msgstr "關掉後訂單列表不再出現批次列印標籤的工具。物流模組本身照常運作，單張訂單裡仍然可以建立與列印標籤。"
+
+#: src/Settings/SettingsPage.php:342
 msgid "Bulk printing interface"
 msgstr "批次列印介面"
 
-#: src/Settings/SettingsPage.php:342
+#: src/Settings/SettingsPage.php:346
 msgid "Basic — use the built-in WooCommerce bulk actions dropdown: tick the orders, then pick the bulk action."
 msgstr "基本 — 走 WooCommerce 內建下拉選單，自己勾訂單再選批次操作。"
 
-#: src/Settings/SettingsPage.php:350
+#: src/Settings/SettingsPage.php:354
 msgid "Advanced — the “ECPay store / home delivery labels” toolbar button opens a dialog that hides already-printed orders, so you can tick them and print in one go without missing any."
 msgstr "進階 — 點工具列「綠界 超商/宅配標籤」按鈕後跳出彈窗，自動過濾未印單，一次勾選一鍵列印（防漏印）。"
 
-#: src/Settings/SettingsPage.php:361
+#: src/Settings/SettingsPage.php:365
 msgid "Custom order statuses"
 msgstr "自訂訂單狀態"
 
-#: src/Settings/SettingsPage.php:363
+#: src/Settings/SettingsPage.php:367
 msgid "Custom order statuses shared by the shipping modules. Once disabled they no longer appear on the order edit screen or in the bulk actions menu, but existing orders keep the status they already have."
 msgstr "物流模組共用的自訂訂單狀態。停用後不再出現在訂單編輯頁與批次操作選單，但既有訂單仍保留原狀態。"
 
-#: src/Settings/SettingsPage.php:371
+#: src/Settings/SettingsPage.php:372
+msgid "Turn this off to remove all of the custom statuses below in one go, whichever of them are ticked. Orders already using one keep it."
+msgstr "關掉後底下的自訂狀態一律不啟用，不管各自有沒有勾選。已經是這些狀態的訂單維持原狀。"
+
+#: src/Settings/SettingsPage.php:379
 msgid "The carrier has collected the parcel and delivery is under way"
 msgstr "物流商已收件並開始配送"
 
-#: src/Settings/SettingsPage.php:378
+#: src/Settings/SettingsPage.php:386
 msgid "Arrived at the store and waiting for pickup (convenience store pickup only)"
 msgstr "已到店待取（超商取貨流程專用）"
 
-#: src/Settings/SettingsPage.php:385
+#: src/Settings/SettingsPage.php:393
 msgid "Store closed (the convenience store has closed and another store must be chosen)"
 msgstr "門市關轉（超商門市關閉，需重選門市）"
 
-#: src/Settings/SettingsPage.php:395
+#: src/Settings/SettingsPage.php:403
 msgid "Order status colors"
 msgstr "訂單狀態顏色"
 
-#: src/Settings/SettingsPage.php:397
+#: src/Settings/SettingsPage.php:405
 msgid "Background and text colors for the status labels in the WordPress order list. Click a swatch to pick a color with the built-in WordPress color picker; the preview on the right updates as you go."
 msgstr "WordPress 後台訂單列表狀態標籤的底色與文字顏色。點色塊用 WordPress 內建選色器選色，右邊即時預覽。"
 
-#: src/Settings/SettingsPage.php:411
+#: src/Settings/SettingsPage.php:410
+msgid "Turn this off to leave the order list using the WooCommerce status colors. Useful when these colors clash with your admin theme. Your chosen colors are kept and come back when you turn it on again."
+msgstr "關掉後訂單列表改用 WooCommerce 原本的狀態顏色。顏色跟後台佈景衝突時用得上。你設定的顏色會保留，重新打開就回來。"
+
+#: src/Settings/SettingsPage.php:423
 msgid "Taiwan address tools"
 msgstr "台灣地址工具"
 
-#: src/Settings/SettingsPage.php:413
+#: src/Settings/SettingsPage.php:425
 msgid "Taiwan localization for the checkout address fields. Works with both classic and block checkout."
 msgstr "結帳頁地址欄位的台灣本地化加強。傳統結帳與區塊結帳都相容。"
 
-#: src/Settings/SettingsPage.php:417
+#: src/Settings/SettingsPage.php:430
+msgid "Turn this off to leave checkout addresses exactly as WooCommerce renders them, whichever options below are ticked. Turn it off first if another address plugin is fighting with these."
+msgstr "關掉後結帳地址完全照 WooCommerce 原樣呈現，不管底下有沒有勾選。跟其他地址外掛打架時，先關這個。"
+
+#: src/Settings/SettingsPage.php:433
 msgid "Enable Taiwan city and district dropdowns"
 msgstr "啟用台灣縣市/鄉鎮下拉選單"
 
-#: src/Settings/SettingsPage.php:421
+#: src/Settings/SettingsPage.php:437
 msgid "Turn the city and district address fields into dropdowns so customers cannot mistype them."
 msgstr "把地址欄位的「縣 / 市」「鄉 / 鎮 / 區」改成下拉選單，避免顧客手動拼錯。"
 
-#: src/Settings/SettingsPage.php:427
+#: src/Settings/SettingsPage.php:443
 msgid "Fill in the postcode automatically once the city and district are chosen, using the latest official postcode table"
 msgstr "選完縣市鄉鎮後自動帶入郵遞區號（依政府最新郵遞區號表）"
 
-#: src/Settings/SettingsPage.php:434
+#: src/Settings/SettingsPage.php:450
 msgid "Swap the name fields — change the WooCommerce default “First name / Last name” order to the Taiwanese “Last name / First name”."
 msgstr "姓名對調 — 把 WooCommerce 預設「名字 / 姓氏」順序改成台灣慣例「姓氏 / 名字」。"
 
-#: src/Settings/SettingsPage.php:441
+#: src/Settings/SettingsPage.php:457
 msgid "Hide the “Country / Region” field (for stores that only ship within Taiwan)"
 msgstr "隱藏「國家 / 地區」欄位（單一台灣站適用）"
 
-#: src/Settings/SettingsPage.php:448
+#: src/Settings/SettingsPage.php:464
 msgid "Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout."
 msgstr "啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳與區塊結帳都會套用順序與 50% / 100% 寬度。"
 
-#: src/Settings/SettingsPage.php:459
+#: src/Settings/SettingsPage.php:475
 msgid "Taiwan field order and widths"
 msgstr "台灣欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:461
+#: src/Settings/SettingsPage.php:477
 msgid "Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page."
 msgstr "拖曳重排欄位、選 50% 或 100% 寬度。需勾選上方「啟用台式欄位順序」才會套用到結帳頁。"
 
-#: src/Settings/SettingsPage.php:465
+#: src/Settings/SettingsPage.php:482
+msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
+msgstr "關掉後結帳欄位維持 WooCommerce 預設的順序與寬度。你排好的版面會保留，重新打開就回來。"
+
+#: src/Settings/SettingsPage.php:485
 msgid "Field order and width"
 msgstr "欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:467
+#: src/Settings/SettingsPage.php:487
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout."
 msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。"
 
-#: src/Settings/SettingsPage.php:479
+#: src/Settings/SettingsPage.php:499
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr "讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。"
 
-#: src/Settings/SettingsPage.php:483
+#: src/Settings/SettingsPage.php:503
 msgid "Enable order number lookup"
 msgstr "啟用訂單查號搜尋"
 
-#: src/Settings/SettingsPage.php:487
+#: src/Settings/SettingsPage.php:507
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr "開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。"
 
-#: src/Settings/SettingsPage.php:490
+#: src/Settings/SettingsPage.php:512
 msgid "Number types to search"
 msgstr "搜尋號碼類型"
 
-#: src/Settings/SettingsPage.php:545
+#: src/Settings/SettingsPage.php:567
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr "勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。"
 
-#: src/Settings/SettingsPage.php:548
+#: src/Settings/SettingsPage.php:570
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr "加速索引（大量訂單建議開啟）"
 
-#: src/Settings/SettingsPage.php:552
+#: src/Settings/SettingsPage.php:574
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:592
+#: src/Settings/SettingsPage.php:614
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:593
+#: src/Settings/SettingsPage.php:615
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:594
+#: src/Settings/SettingsPage.php:616
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:595
+#: src/Settings/SettingsPage.php:617
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:596
+#: src/Settings/SettingsPage.php:618
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:603
+#: src/Settings/SettingsPage.php:625
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:604
+#: src/Settings/SettingsPage.php:626
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:652
+#: src/Settings/SettingsPage.php:674
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:675
 msgid "Module overview"
 msgstr "模組總覽"
 

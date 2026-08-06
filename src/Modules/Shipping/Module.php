@@ -17,7 +17,9 @@ final class Module {
 
 	public static function boot(): void {
 		Registrar::init();
-		BatchPrintAdminUI::init();
+		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::SHIPPING_COMMON ) ) {
+			BatchPrintAdminUI::init();
+		}
 		ShippingCardSection::init();
 		AddFee::init();
 		CartTempLabel::init();
@@ -29,6 +31,7 @@ final class Module {
 		ProductTempField::init_csv_hooks();
 		add_filter( 'woocommerce_email_classes', [ __CLASS__, 'register_email_classes' ] );
 		Emails\EmailTrackingSection::init();
+		Frontend\CvsStoreRequired::init();
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'register_frontend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'register_admin_assets' ] );
 	}

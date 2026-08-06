@@ -78,14 +78,16 @@ final class Module extends AbstractModule {
 			return $providers;
 		}
 		$providers['ecpay'] = [
-			'label'    => __( 'ECPay convenience store pickup', 'moksa-for-woocommerce' ),
-			'methods'  => $methods,
-			'meta'     => [
+			'label'            => __( 'ECPay convenience store pickup', 'moksa-for-woocommerce' ),
+			'methods'          => $methods,
+			'meta'             => [
 				'id'      => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID,
 				'name'    => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME,
 				'address' => \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS,
 			],
-			'open_map' => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			'open_map'         => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
+			// 結帳時擋「選了超商卻沒選門市」用（CvsStoreRequired）
+			'session_store_id' => [ Frontend\StoreSelector::class, 'session_store_id' ],
 		];
 		return $providers;
 	}

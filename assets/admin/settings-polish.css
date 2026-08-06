@@ -98,3 +98,12 @@
 body.woocommerce_page_wc-settings #mainform p.submit{
 	margin-top:24px;
 }
+
+/* 區塊總開關關掉時的視覺提示 —— 真正的停用在伺服器端（AdvancedSections::is_on），
+   這裡只是讓人看得出「這些設定現在不會生效」。刻意不用 disabled：
+   被 disable 的 checkbox 不會送出，儲存時會被當成取消勾選。 */
+.moksafowo-section-off {
+	opacity: .45;
+	filter: grayscale(1);
+	transition: opacity .15s ease;
+}

@@ -10,45 +10,6 @@ defined( 'ABSPATH' ) || exit;
 final class StoreValidation {
 
 
-	public static function block_validate_cvs_store( \WC_Order $order, $request ): void {
-		// 跳過試算 call（換金流 / 換物流時 Block 會打 __experimental_calc_totals=true，不是真下單）
-		if ( $request && method_exists( $request, 'get_param' ) && $request->get_param( '__experimental_calc_totals' ) ) {
-			return;
-		}
-
-		$is_cvs = false;
-		foreach ( $order->get_shipping_methods() as $method ) {
-			$mid = strstr( $method->get_method_id(), ':', true ) ?: $method->get_method_id();
-			if ( isset( PayuniShipping::$cvs_methods[ $mid ] ) ) {
-				$is_cvs = true;
-				break;
-			}
-		}
-		if ( ! $is_cvs ) {
-			return;
-		}
-
-		$store_id = '';
-		if ( WC()->session ) {
-			$session_store = WC()->session->get( 'moksafowo_payuni_selected_store_data' );
-			if ( is_array( $session_store ) && ! empty( $session_store['id'] ) ) {
-				$store_id = (string) $session_store['id'];
-			}
-		}
-		if ( '' !== $store_id ) {
-			return;
-		}
-
-		if ( class_exists( '\\Automattic\\WooCommerce\\StoreApi\\Exceptions\\RouteException' ) ) {
-			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException(
-				'moksafowo_payuni_cvs_no_store',
-				esc_html__( 'Please choose a pickup store first.', 'moksa-for-woocommerce' ),
-				400
-			);
-		}
-		throw new \Exception( esc_html__( 'Please choose a pickup store first.', 'moksa-for-woocommerce' ) );
-	}
-
 	public static function classic_fields_validation(): void {
 		// 與 WC core 的 process_checkout() 驗同一顆 nonce，同一種寫法（woocommerce_checkout_process 必帶）。
 		if ( ! isset( $_POST['woocommerce-process-checkout-nonce'] )
@@ -69,20 +30,8 @@ final class StoreValidation {
 			}
 		}
 
-		$store_id = '';
-		if ( ! empty( $_POST['moksafowo_payuni_selected_store_id'] ) ) {
-			$store_id = sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) );
-		}
-		if ( empty( $store_id ) && WC()->session ) {
-			$session_store = WC()->session->get( 'moksafowo_payuni_selected_store_data' );
-			if ( is_array( $session_store ) && ! empty( $session_store['id'] ) ) {
-				$store_id = (string) $session_store['id'];
-			}
-		}
-
-		if ( $need_cvs && empty( $store_id ) ) {
-			wc_add_notice( __( 'Please choose a convenience store to collect from.', 'moksa-for-woocommerce' ), 'error' );
-		}
+		// 「選了超商卻沒選門市」的擋單已移到共用的 Shipping\Frontend\CvsStoreRequired
+		// （Classic + Block、四家一致）。這裡只留 PAYUNi 專屬的收件電話驗證與欄位必填切換。
 
 		$shipping_phone = isset( $_POST['shipping_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_phone'] ) ) : '';
 		if ( empty( $shipping_phone ) ) {

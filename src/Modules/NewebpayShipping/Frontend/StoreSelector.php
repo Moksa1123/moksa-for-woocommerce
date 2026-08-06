@@ -345,6 +345,15 @@ final class StoreSelector {
 		wp_send_json_success( $store );
 	}
 
+	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */
+	public static function session_store_id(): string {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return '';
+		}
+		$store = WC()->session->get( self::SESSION_KEY );
+		return is_array( $store ) ? (string) ( $store['id'] ?? '' ) : '';
+	}
+
 	public static function save_to_order( \WC_Order $order, array $data ): void {
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			return;

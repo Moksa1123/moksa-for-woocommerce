@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.7.0
+Stable tag: 1.8.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.0 - 2026-08-06 =
+* Fix: a customer could place an order with convenience store pickup without ever choosing a store, leaving an order that cannot be shipped. Checkout now stops and asks for the store. This applies to ECPay, NewebPay and SmilePay pickup, on both the block and the classic checkout — previously only PAYUNi pickup was checked.
+* New: every section on the Advanced tab now has its own "Enable this section" switch — shared shipping settings, custom order statuses, order status colors, Taiwan address tools, and Taiwan field order and widths. Switching one off really stops that feature running, rather than only hiding the settings, which is what you want when another plugin is competing for the same part of the checkout. Your settings inside the section are kept, so switching it back on restores everything as it was.
 
 = 1.7.0 - 2026-08-05 =
 * New: the assistant can change the pickup store on a convenience store order, by store number. It shows you what will change and waits for your confirmation, warns you when a shipment already points at the old store, and never re-books the shipment on its own.

@@ -196,6 +196,14 @@ final class StoreSelector {
 		exit;
 	}
 
+	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */
+	public static function session_store_id(): string {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return '';
+		}
+		return (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_id', '' );
+	}
+
 	public static function save_to_order( $order, $data ): void {
 		if ( ! $order instanceof \WC_Order || ! WC()->session ) {
 			return;

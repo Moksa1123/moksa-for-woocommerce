@@ -13,6 +13,15 @@ final class TwAddress {
 	private static ?array $cities_cache = null;
 
 	public static function init(): void {
+		// 欄位順序與寬度是進階設定裡獨立的一區，跟地址工具各自可以關。
+		// init() 一定要跑（裡面有設定頁的欄位渲染），區塊開關在 FieldManager 內部判斷。
+		FieldManager::init();
+
+		// 區塊總開關關掉時，底下的子項一律不生效（見 AdvancedSections 的兩層開關備註）
+		if ( ! \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_ADDRESS ) ) {
+			return;
+		}
+
 		if ( 'yes' === get_option( 'moksafowo_tw_address_dropdown_enabled', 'no' ) ) {
 			self::init_dropdown();
 		}
@@ -22,8 +31,6 @@ final class TwAddress {
 		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
 			self::init_hide_country();
 		}
-
-		FieldManager::init();
 
 		// WC TW 預設 `{last_name} {first_name}` 在 Block 跑不出來（Block 只認 `{name}`）；
 		// priority 100 跑在 PayuniShipping payuni_address_format(10) 之後再次 override。

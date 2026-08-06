@@ -32,17 +32,24 @@ final class Registrar {
 	];
 
 	public static function init(): void {
-		add_action( 'init', [ __CLASS__, 'register_post_statuses' ] );
-		add_filter( 'wc_order_statuses', [ __CLASS__, 'add_to_wc_order_statuses' ] );
-		add_filter( 'woocommerce_register_shop_order_post_statuses', [ __CLASS__, 'add_to_shop_order_post_statuses' ] );
-		add_filter( 'woocommerce_order_is_paid_statuses', [ __CLASS__, 'mark_post_payment_statuses_as_paid' ] );
-		add_filter( 'wc_order_is_editable', [ __CLASS__, 'lock_order_editing_after_shipping' ], 10, 2 );
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inject_admin_badge_css' ] );
+		// 自訂狀態與狀態顏色是進階設定裡兩個獨立的區塊，各自可以關掉，所以分開註冊。
+		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::ORDER_STATUSES ) ) {
+			add_action( 'init', [ __CLASS__, 'register_post_statuses' ] );
+			add_filter( 'wc_order_statuses', [ __CLASS__, 'add_to_wc_order_statuses' ] );
+			add_filter( 'woocommerce_register_shop_order_post_statuses', [ __CLASS__, 'add_to_shop_order_post_statuses' ] );
+			add_filter( 'woocommerce_order_is_paid_statuses', [ __CLASS__, 'mark_post_payment_statuses_as_paid' ] );
+			add_filter( 'wc_order_is_editable', [ __CLASS__, 'lock_order_editing_after_shipping' ], 10, 2 );
 
-		// 自訂狀態需兩個 filter（legacy + HPOS DataViews）
-		add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'add_bulk_actions' ] );
-		add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'add_bulk_actions' ] );
+			// 自訂狀態需兩個 filter（legacy + HPOS DataViews）
+			add_filter( 'bulk_actions-edit-shop_order', [ __CLASS__, 'add_bulk_actions' ] );
+			add_filter( 'bulk_actions-woocommerce_page_wc-orders', [ __CLASS__, 'add_bulk_actions' ] );
+		}
 
+		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::STATUS_COLORS ) ) {
+			add_action( 'admin_enqueue_scripts', [ __CLASS__, 'inject_admin_badge_css' ] );
+		}
+
+		// 顏色設定欄位本身一定要註冊，否則關掉顏色後那一區就畫不出來、也存不回去
 		add_action( 'woocommerce_admin_field_moksafowo_status_color_grid', [ __CLASS__, 'render_color_grid_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_color_grid_assets' ] );
 		add_action( 'woocommerce_update_options_' . \Moksafowo\Settings\SettingsTab::TAB_ID, [ __CLASS__, 'save_color_grid' ] );

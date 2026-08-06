@@ -334,6 +334,10 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc'  => __( 'Behavior settings shared by every shipping module.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shipping_common_section',
 			],
+			AdvancedSections::toggle_field(
+				AdvancedSections::SHIPPING_COMMON,
+				__( 'Turn this off to remove the bulk label printing tools from the order list. The shipping modules themselves keep working, and you can still create and print labels from an individual order.', 'moksa-for-woocommerce' )
+			),
 			[
 				'title'         => __( 'Bulk printing interface', 'moksa-for-woocommerce' ),
 				'id'            => 'moksafowo_shipping_bulk_print_mode_basic',
@@ -363,6 +367,10 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc'  => __( 'Custom order statuses shared by the shipping modules. Once disabled they no longer appear on the order edit screen or in the bulk actions menu, but existing orders keep the status they already have.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shipping_status_section',
 			],
+			AdvancedSections::toggle_field(
+				AdvancedSections::ORDER_STATUSES,
+				__( 'Turn this off to remove all of the custom statuses below in one go, whichever of them are ticked. Orders already using one keep it.', 'moksa-for-woocommerce' )
+			),
 			[
 				'title'         => __( 'Shipped', 'moksa-for-woocommerce' ),
 				'id'            => 'moksafowo_shipping_status_moksafowo_shipped_enabled',
@@ -397,6 +405,10 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc'  => __( 'Background and text colors for the status labels in the WordPress order list. Click a swatch to pick a color with the built-in WordPress color picker; the preview on the right updates as you go.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shipping_status_color_section',
 			],
+			AdvancedSections::toggle_field(
+				AdvancedSections::STATUS_COLORS,
+				__( 'Turn this off to leave the order list using the WooCommerce status colors. Useful when these colors clash with your admin theme. Your chosen colors are kept and come back when you turn it on again.', 'moksa-for-woocommerce' )
+			),
 			[
 				'type' => 'moksafowo_status_color_grid',
 				'id'   => 'moksafowo_status_color_grid',
@@ -413,6 +425,10 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc'  => __( 'Taiwan localization for the checkout address fields. Works with both classic and block checkout.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_tw_address_section',
 			],
+			AdvancedSections::toggle_field(
+				AdvancedSections::TW_ADDRESS,
+				__( 'Turn this off to leave checkout addresses exactly as WooCommerce renders them, whichever options below are ticked. Turn it off first if another address plugin is fighting with these.', 'moksa-for-woocommerce' )
+			),
 			[
 				'title'         => __( 'Enable Taiwan city and district dropdowns', 'moksa-for-woocommerce' ),
 				'id'            => 'moksafowo_tw_address_dropdown_enabled',
@@ -461,6 +477,10 @@ final class SettingsPage extends \WC_Settings_Page {
 				'desc'  => __( 'Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_tw_field_manager_section',
 			],
+			AdvancedSections::toggle_field(
+				AdvancedSections::TW_FIELD_LAYOUT,
+				__( 'Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again.', 'moksa-for-woocommerce' )
+			),
 			[
 				'title' => __( 'Field order and width', 'moksa-for-woocommerce' ),
 				'type'  => 'moksafowo_field_manager',
@@ -485,6 +505,8 @@ final class SettingsPage extends \WC_Settings_Page {
 				'type'    => 'checkbox',
 				'default' => 'no',
 				'desc'    => __( 'Once enabled you can look up orders by the numbers below from the order list search box and the command palette.', 'moksa-for-woocommerce' ),
+				// 這一區的總開關就是它（不另外開一個，見 AdvancedSections）
+				'class'   => 'moksafowo-section-master',
 			],
 			[
 				'title'         => __( 'Number types to search', 'moksa-for-woocommerce' ),

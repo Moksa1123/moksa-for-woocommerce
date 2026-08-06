@@ -77,7 +77,30 @@
 			});
 		});
 	}
-	function init(){ group(); bindMutualExclusion(); }
+	// 區塊總開關關掉時，把同一區其餘設定變灰 —— 讓人一眼看出「這些現在不會生效」。
+	// 真正的停用在伺服器端（AdvancedSections::is_on），這裡純粹是視覺提示，
+	// 所以不 disable 欄位：disable 掉的 checkbox 不會送出，儲存時會被當成取消勾選。
+	function bindSectionMasters(){
+		var masters = document.querySelectorAll('input.moksafowo-section-master[type="checkbox"]');
+		masters.forEach(function(master){
+			var table = master.closest('table.form-table');
+			if(!table) return;
+			var ownRow = master.closest('tr');
+			var rows = Array.prototype.filter.call(table.querySelectorAll('tr'), function(tr){
+				return tr !== ownRow;
+			});
+			if(!rows.length) return;
+
+			var apply = function(){
+				rows.forEach(function(tr){
+					tr.classList.toggle('moksafowo-section-off', !master.checked);
+				});
+			};
+			master.addEventListener('change', apply);
+			apply();
+		});
+	}
+	function init(){ group(); bindMutualExclusion(); bindSectionMasters(); }
 	if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
 	else init();
 })();
