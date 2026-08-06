@@ -111,6 +111,10 @@ final class Module extends AbstractModule {
 				'unsupported'  => __( 'Unsupported action.', 'moksa-for-woocommerce' ),
 				'notPrepared'  => __( 'This action could not be prepared.', 'moksa-for-woocommerce' ),
 				'confirmStale' => __( 'That confirmation has expired or no longer exists. Please start again.', 'moksa-for-woocommerce' ),
+				// 確認關卡的兩顆按鈕。共用層自己不做 gettext（bundle 的函式庫用自己的 textdomain
+				// 會被 Plugin Check 擋），所以少餵這兩個的話中文站會看到英文的 Confirm / Cancel。
+				'confirmRun'   => __( 'Confirm', 'moksa-for-woocommerce' ),
+				'confirmSkip'  => __( 'Cancel', 'moksa-for-woocommerce' ),
 				'noPermission' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ),
 				'examples'     => $examples,
 			]

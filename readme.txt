@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -15,7 +15,7 @@ A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping
 
 == Description ==
 
-A Taiwan-focused WooCommerce extension. Toggleable modules cover ECPay (綠界), NewebPay (藍新), SmilePay (速買配), LINE Pay, PAYUNi (統一金流), PayNow (立即富), PChomePay (支付連), TapPay and Shopline Payments for payments; ECPay, NewebPay, SmilePay, PAYUNi and PayNow for convenience-store + home-delivery shipping; ezPay, ECPay, SmilePay, PayNow and AMEGO for Taiwan e-invoicing.
+A Taiwan-focused WooCommerce extension. Toggleable modules cover ECPay (綠界), NewebPay (藍新), SmilePay (速買配), LINE Pay, PAYUNi (統一金流), PayNow (立吉富), PChomePay (支付連), TapPay and Shopline Payments for payments; ECPay, NewebPay, SmilePay, PAYUNi and PayNow for convenience-store + home-delivery shipping; ezPay, ECPay, SmilePay, PayNow and AMEGO for Taiwan e-invoicing.
 
 Enable only the providers you need from a single settings page — payment, shipping and invoice modules are fully independent and can be mixed in any combination.
 
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.1 - 2026-08-06 =
+* Fix: the two buttons on the assistant's confirmation step were labelled "Confirm" and "Cancel" in English on non-English sites. They now follow the site language.
+* Fix: translations for text coming from JavaScript were never compiled into the format WordPress loads, so those strings would have stayed in English no matter what the site language was.
+* Fix: PayNow's Chinese name was written two different ways in this readme.
+* A full Traditional Chinese translation of this readme is now maintained alongside the plugin translation.
 
 = 1.8.0 - 2026-08-06 =
 * Fix: a customer could place an order with convenience store pickup without ever choosing a store, leaving an order that cannot be shipped. Checkout now stops and asks for the store. This applies to ECPay, NewebPay and SmilePay pickup, on both the block and the classic checkout — previously only PAYUNi pickup was checked.

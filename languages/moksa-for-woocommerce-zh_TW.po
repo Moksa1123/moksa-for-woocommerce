@@ -5,6 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
+"PO-Revision-Date: 2026-08-06 00:00+0800\n"
+"Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -213,7 +215,7 @@ msgid "Unknown prompt: %s"
 msgstr "不存在的提示樣板：%s"
 
 #: src/Mcp/Server.php:283
-#: src/Modules/AiAssistant/Module.php:114
+#: src/Modules/AiAssistant/Module.php:118
 #: src/Modules/AiAssistant/Rest.php:139
 #: src/Modules/CustomerService/Admin/Inbox.php:127
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:52
@@ -2475,6 +2477,19 @@ msgstr "（無回覆）"
 msgid "That confirmation has expired or no longer exists. Please start again."
 msgstr "確認已失效或不存在,請重新操作。"
 
+#: src/Modules/AiAssistant/Module.php:116
+msgid "Confirm"
+msgstr "確認執行"
+
+#: src/Modules/AiAssistant/Module.php:117
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:107
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:113
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:164
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:171
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
+msgid "Cancel"
+msgstr "取消"
+
 #: src/Modules/AmegoInvoice/Admin/OrderMetaBox.php:21
 msgid "AMEGO"
 msgstr "Amego"
@@ -4441,14 +4456,6 @@ msgstr "作廢原因（最多 20 字）"
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:163
 msgid "Confirm void"
 msgstr "確認作廢"
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:107
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:113
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:164
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:171
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
-msgid "Cancel"
-msgstr "取消"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:111
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:169
@@ -7416,7 +7423,6 @@ msgstr "沒有提供門市名稱與地址，這兩欄會被清空 —— 留著�
 msgid "Warning: %d shipment has already been created for this order and it still points at the old store. Delete it and create it again after this change."
 msgid_plural "Warning: %d shipments have already been created for this order and they still point at the old store. Delete them and create them again after this change."
 msgstr[0] "注意：這張訂單已經建立了 %d 張物流單，仍寄往舊門市。改完之後請刪除再重新建立。"
-msgstr[1] "注意：這張訂單已經建立了 %d 張物流單，仍寄往舊門市。改完之後請刪除再重新建立。"
 
 #: src/Modules/OrderLookup/ChangePickupStore.php:145
 msgid "This order is no longer a convenience store pickup order, so the store was not changed."
@@ -11322,7 +11328,6 @@ msgstr "已到店待取"
 msgid "Arrived at store <span class=\"count\">(%s)</span>"
 msgid_plural "Arrived at store <span class=\"count\">(%s)</span>"
 msgstr[0] "已到店待取 <span class=\"count\">(%s)</span>"
-msgstr[1] "已到店待取 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
 #: src/Modules/Shipping/Statuses/Registrar.php:225
@@ -11330,7 +11335,6 @@ msgstr[1] "已到店待取 <span class=\"count\">(%s)</span>"
 msgid "Store closed <span class=\"count\">(%s)</span>"
 msgid_plural "Store closed <span class=\"count\">(%s)</span>"
 msgstr[0] "門市關轉 <span class=\"count\">(%s)</span>"
-msgstr[1] "門市關轉 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
 #: src/Modules/Shipping/Statuses/Registrar.php:229
@@ -11338,7 +11342,6 @@ msgstr[1] "門市關轉 <span class=\"count\">(%s)</span>"
 msgid "Shipped <span class=\"count\">(%s)</span>"
 msgid_plural "Shipped <span class=\"count\">(%s)</span>"
 msgstr[0] "已出貨 <span class=\"count\">(%s)</span>"
-msgstr[1] "已出貨 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: order status label
 #: src/Modules/Shipping/Statuses/Registrar.php:316
