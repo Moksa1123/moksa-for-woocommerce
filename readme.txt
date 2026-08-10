@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.2 - 2026-08-10 =
+* Fix: when other Moksa plugins are installed alongside this one, a single badly described tool in any of them could make the assistant fail with a "Bad Request (400)" before it ran anything — including the order tools in this plugin. The shared assistant now corrects such descriptions on the way to the AI provider, so one plugin can no longer take the whole assistant down.
 
 = 1.8.1 - 2026-08-06 =
 * Fix: the two buttons on the assistant's confirmation step were labelled "Confirm" and "Cancel" in English on non-English sites. They now follow the site language.
