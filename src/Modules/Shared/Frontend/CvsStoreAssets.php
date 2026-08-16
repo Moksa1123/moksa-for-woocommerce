@@ -15,6 +15,7 @@ final class CvsStoreAssets {
 
 	const STYLE  = 'moksafowo-cvs-store';
 	const SCRIPT = 'moksafowo-cvs-store-card';
+	const FIELDS = 'moksafowo-cvs-checkout-fields';
 
 	public static function enqueue(): void {
 		$base = 'src/Modules/Shared/Frontend/assets/';
@@ -27,12 +28,26 @@ final class CvsStoreAssets {
 			file_exists( $css ) ? (string) filemtime( $css ) : MOKSAFOWO_VERSION
 		);
 
+		// 欄位保存要先於卡片 helper 載入：submitForm() 會呼叫它。jQuery 只用來聽
+		// updated_checkout（WC 的自訂事件，原生監聽器收不到），沒有也能運作。
+		$fields = MOKSAFOWO_PLUGIN_DIR . $base . 'js/cvs-checkout-fields.js';
+		if ( ! wp_script_is( self::FIELDS, 'registered' ) ) {
+			wp_register_script(
+				self::FIELDS,
+				MOKSAFOWO_PLUGIN_URL . $base . 'js/cvs-checkout-fields.js',
+				[ 'jquery' ],
+				file_exists( $fields ) ? (string) filemtime( $fields ) : MOKSAFOWO_VERSION,
+				true
+			);
+		}
+		wp_enqueue_script( self::FIELDS );
+
 		$js = MOKSAFOWO_PLUGIN_DIR . $base . 'js/cvs-store-card.js';
 		if ( ! wp_script_is( self::SCRIPT, 'registered' ) ) {
 			wp_register_script(
 				self::SCRIPT,
 				MOKSAFOWO_PLUGIN_URL . $base . 'js/cvs-store-card.js',
-				[],
+				[ self::FIELDS ],
 				file_exists( $js ) ? (string) filemtime( $js ) : MOKSAFOWO_VERSION,
 				true
 			);

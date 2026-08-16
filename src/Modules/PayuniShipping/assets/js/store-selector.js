@@ -359,14 +359,11 @@
             const $btn = $('.moksafowo-payuni-store-map-btn');
             $btn.prop('disabled', true).text(moksafowo_payuni_store_selector.labels.loading);
             
-            // Save form data before redirecting to CVS selection
-            // Set flag to prevent auto-save during CVS selection
+            // 離開結帳頁前先保住已填欄位。實作在共用層（Shared/Frontend/assets/js/
+            // cvs-checkout-fields.js），四家物流商同一份，PAYUNi 自己那份已移除。
             window.moksafowoPayuniSelectingStore = true;
-            
-            // If save-fields.js is loaded, use its saveForm method
-            if (typeof window.moksafowoPayuniCheckoutForm !== 'undefined' && window.moksafowoPayuniCheckoutForm.saveForm) {
-                window.moksafowoPayuniCheckoutForm.saveForm();
-                this.log('Form data saved before CVS selection');
+            if ( window.moksafowoCvsFields && window.moksafowoCvsFields.save ) {
+                window.moksafowoCvsFields.save();
             }
 
             // Get shipping method, handling both radio button and single method cases

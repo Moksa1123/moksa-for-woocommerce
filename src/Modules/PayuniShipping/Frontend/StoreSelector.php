@@ -198,7 +198,7 @@ jQuery(function($){$('form.checkout').on('change','input[name="payment_method"]'
 JS
 		);
 
-		wp_enqueue_script( 'moksafowo-payuni-save-fields', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/save-fields.js', array( 'jquery' ), MOKSAFOWO_VERSION, true );
+		// 欄位保存已移到共用層（CvsStoreAssets::FIELDS），這裡不再各自載一份。
 
 		$stored_store_data = null;
 		if ( WC()->session ) {

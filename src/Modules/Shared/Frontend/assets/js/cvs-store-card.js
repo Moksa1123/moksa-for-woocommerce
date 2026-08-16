@@ -69,6 +69,11 @@
 	}
 
 	function submitForm( apiUrl, formData ) {
+		// 這一步會整頁導離結帳頁，回來是全新載入 —— 先把顧客填好的欄位存起來，
+		// 否則姓名電話地址全空。四家物流商都經過這裡，所以接在這裡就一次覆蓋。
+		if ( window.moksafowoCvsFields && window.moksafowoCvsFields.save ) {
+			window.moksafowoCvsFields.save();
+		}
 		var f = document.createElement( 'form' );
 		f.method = 'POST';
 		f.action = apiUrl;
