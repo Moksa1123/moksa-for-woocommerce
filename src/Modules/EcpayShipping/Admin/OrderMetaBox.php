@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\EcpayShipping\Admin;
 use Moksafowo\Modules\EcpayShipping\Module;
 use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
 use Moksafowo\Modules\EcpayShipping\Operations\PrintLabel;
+use Moksafowo\Modules\EcpayShipping\Operations\PrintProxy;
 use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
 use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
 use Moksafowo\Order\Meta\Keys;
@@ -150,7 +151,7 @@ final class OrderMetaBox {
 			if ( ! empty( $records ) ) :
 				$order_total = (int) round( (float) $order->get_total() );
 				$is_cod      = 'cod' === (string) $order->get_payment_method();
-				$a6_subtypes = [ 'UNIMARTC2C', 'POST' ]; // 其他物流隱藏 A6 按鈕
+				$a6_subtypes = PrintProxy::A6_SUBTYPES; // 其他物流隱藏 A6 按鈕
 				$is_split    = count( $records ) > 1;
 				?>
 				<?php if ( $is_split ) : ?>

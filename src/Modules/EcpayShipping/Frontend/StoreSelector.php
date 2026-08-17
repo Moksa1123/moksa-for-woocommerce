@@ -19,6 +19,12 @@ final class StoreSelector {
 	private const TOKEN_QUERY         = 'moksafowo_ecpay_store';
 
 	public static function init(): void {
+		// 門市 token 在「渲染結帳頁的那個請求」裡就兌換掉，不要等頁面載入後再發 AJAX。
+		// 走 AJAX 會跟 WooCommerce 自己的 update_order_review 併發：對方在我們寫入前
+		// 載入 session、在 shutdown 存回，把門市蓋掉 —— 顧客明明選了卻顯示沒選，
+		// 再撞上「未選門市不准下單」就直接結不了帳。這裡提前到 template_redirect，
+		// 那時 WC session 已就緒，而任何結帳 AJAX 都還沒開始。
+		add_action( 'template_redirect', [ __CLASS__, 'consume_token_early' ], 5 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 		add_action( 'woocommerce_review_order_after_shipping', [ __CLASS__, 'render_classic' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_open_map', [ __CLASS__, 'ajax_open_map' ] );
@@ -282,6 +288,36 @@ final class StoreSelector {
 		$checkout_url = add_query_arg( self::TOKEN_QUERY, $token, $base_url );
 		wp_safe_redirect( $checkout_url );
 		exit;
+	}
+
+	/**
+	 * 結帳頁帶著 ?moksafowo_ecpay_store=<token> 進來時，當場把門市寫進 session。
+	 *
+	 * token 是我們自己發的一次性亂數（24 字元、30 分鐘到期），本身就是憑證，
+	 * 而且只會影響請求者自己的 session，所以不另外要 nonce。
+	 */
+	public static function consume_token_early(): void {
+		if ( is_admin() || wp_doing_ajax() ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token 本身即憑證，僅寫入請求者自己的 session。
+		$token = isset( $_GET[ self::TOKEN_QUERY ] ) ? sanitize_text_field( wp_unslash( $_GET[ self::TOKEN_QUERY ] ) ) : '';
+		if ( '' === $token ) {
+			return;
+		}
+
+		$store = get_transient( self::TRANSIENT_PREFIX . $token );
+		if ( ! is_array( $store ) ) {
+			return; // 已被兌換或過期；前端會退回讀 session。
+		}
+
+		if ( function_exists( 'WC' ) ) {
+			WC()->initialize_session();
+			if ( WC()->session ) {
+				WC()->session->set( self::SESSION_KEY, $store );
+			}
+		}
+		delete_transient( self::TRANSIENT_PREFIX . $token );
 	}
 
 	public static function ajax_resolve_token(): void {

@@ -54,6 +54,8 @@ final class Module extends AbstractModule {
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_query', [ __CLASS__, 'ajax_query_shipment' ] );
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
 		Frontend\StoreSelector::init();
+		Frontend\CustomerOrderView::init();
+		Emails\EmailTrackingProvider::init();
 		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 
 		if ( is_admin() ) {

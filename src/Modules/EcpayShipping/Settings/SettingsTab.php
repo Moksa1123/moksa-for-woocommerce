@@ -24,6 +24,21 @@ final class SettingsTab {
 				'default' => 'yes',
 				'desc'    => __( 'For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. Untick it once you go live.', 'moksa-for-woocommerce' ),
 			],
+			// 這個選項決定 7-11 / 全家 / 萊爾富 / OK 走哪一組物流代碼，四個 Method 都讀它。
+			// 早期版本有這個欄位，後來被移掉卻留下讀取端 —— 結果商家填了 B2C 憑證永遠用不到，
+			// 而且沒有任何 UI 可以切回來。補回設定頁。
+			[
+				'title'    => __( 'Convenience store account type', 'moksa-for-woocommerce' ),
+				'id'       => 'moksafowo_ecpay_shipping_cvs_type',
+				'type'     => 'select',
+				'default'  => 'C2C',
+				'options'  => [
+					'C2C' => __( 'C2C — store-to-store, no monthly fee (most common)', 'moksa-for-woocommerce' ),
+					'B2C' => __( 'B2C — bulk warehouse, needs a separate contract and a monthly fee', 'moksa-for-woocommerce' ),
+				],
+				'desc'     => __( 'Which ECPay account your 7-ELEVEN, FamilyMart, Hi-Life and OK Mart shipments run through. Fill in the credentials for whichever one you pick below. Changing this only affects shipments created from now on; those already booked keep the account they were created with.', 'moksa-for-woocommerce' ),
+				'desc_tip' => false,
+			],
 			[
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_ecpay_shipping_section',

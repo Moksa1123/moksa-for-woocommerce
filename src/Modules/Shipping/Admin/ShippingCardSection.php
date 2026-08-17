@@ -257,6 +257,15 @@ final class ShippingCardSection {
 		}
 		if ( '' !== $lgs_no ) {
 			echo '<p><strong>' . esc_html__( 'NewebPay shipping ID:', 'moksa-for-woocommerce' ) . '</strong><span style="font-family:monospace;">' . esc_html( $lgs_no ) . '</span></p>';
+			$tracking_info = TrackingLink::for_newebpay_record(
+				[
+					'ship_type' => (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ),
+					'lgs_no'    => $lgs_no,
+				]
+			);
+			if ( null !== $tracking_info ) {
+				echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
+			}
 		}
 		if ( '' !== $lgs_type ) {
 			echo '<p><strong>' . esc_html__( 'Shipping type:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $lgs_type ) . '</p>';

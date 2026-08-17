@@ -132,25 +132,11 @@
 		} catch ( _ ) { /* noop */ }
 	}
 
+	// token 已由伺服器在渲染這一頁時兌換進 session（StoreSelector::consume_token_early），
+	// 所以這裡只要讀 session。網址上的 token 清掉純粹是為了不讓它留在網址列 / 被重新整理。
 	function fetchStore( cb ) {
-		const token = readToken();
-		if ( token ) {
-			const fd = new FormData();
-			fd.append( 'action', 'moksafowo_ecpay_shipping_resolve_token' );
-			fd.append( 'token', token );
-			fd.append( 'nonce', cfg.nonce );
-			fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
-				.then( function ( r ) { return r.json(); } )
-				.then( function ( resp ) {
-					cleanToken();
-					if ( resp && resp.success && resp.data ) {
-						cb( resp.data );
-					} else {
-						sessionLookup( cb );
-					}
-				} )
-				.catch( function () { sessionLookup( cb ); } );
-			return;
+		if ( readToken() ) {
+			cleanToken();
 		}
 		sessionLookup( cb );
 	}
@@ -168,14 +154,22 @@
 	}
 
 	let renderQueued = false;
+	let lastStore = null;
 	function render() {
 		const method = chosenShippingMethod();
 		if ( ! isCvsMethod( method ) ) {
+			lastStore = null;
 			clear();
 			return;
 		}
 		fetchStore( function ( store ) {
-			paint( store && store.id ? store : null );
+			// 已經有門市了就不要被之後回來的空結果蓋掉 —— 多個 render 併發時，
+			// 慢的那個可能查在 session 寫入之前。要清除門市走的是 clear()，不是這裡。
+			if ( ( ! store || ! store.id ) && lastStore ) {
+				return;
+			}
+			lastStore = store && store.id ? store : null;
+			paint( lastStore );
 		} );
 	}
 	function scheduleRender() {

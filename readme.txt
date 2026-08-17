@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.8.3
+Stable tag: 1.8.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.4 - 2026-08-17 =
+* Fix: after choosing a convenience store, the checkout could still say no store had been picked — and because a store is required to order, the customer was left unable to check out at all. It depended on timing, so it looked intermittent. The chosen store is now recorded while the page is being loaded, before anything else on the checkout can overwrite it.
+* Fix: the A6 label button was missing on 7-ELEVEN bulk and frozen shipments, which do support A6. All the places that decide this now read the same list.
+* New: NewebPay pickup orders now show the shipping details to the customer — the tracking number reaches the shipping notification e-mail, the order page shows a shipping card with the pickup store, and there is a link through to the carrier's own tracking page. ECPay, SmilePay and PAYUNi already had all three.
+* New: the ECPay shipping settings have a "Convenience store account type" option again, so you can choose between the standard (C2C) and bulk (B2C) account. The setting was being read but had no way to change it, which left the bulk credentials unusable.
 
 = 1.8.3 - 2026-08-17 =
 * Fix: choosing a convenience store on the classic checkout wiped everything the customer had already typed. Picking a store leaves the site for the carrier's store map and comes back, and the checkout page was rebuilt empty, so name, phone, e-mail and address all had to be entered again. Those details are now carried across and put back automatically. This applies to ECPay, NewebPay and SmilePay pickup, which had no such handling at all; PAYUNi already did, and now shares the same one. The block checkout was never affected.

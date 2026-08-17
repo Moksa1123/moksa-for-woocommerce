@@ -136,7 +136,7 @@ final class Module extends AbstractModule {
 			}
 			$latest  = end( $records );
 			$subtype = (string) ( $latest['subtype'] ?? '' );
-			return in_array( $subtype, [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ], true ) ? [ '1', '2' ] : [ '1' ];
+			return in_array( $subtype, Operations\PrintProxy::A6_SUBTYPES, true ) ? [ '1', '2' ] : [ '1' ];
 		};
 		// 舊 records 未記 temp 時 subtype fallback：UNIMARTFREEZE=3，其餘=1
 		$temps = static function ( \WC_Order $o ): array {

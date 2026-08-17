@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-08-16 00:00+0800\n"
+"PO-Revision-Date: 2026-08-17 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -227,12 +227,12 @@ msgstr "不存在的提示樣板：%s"
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:396
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:414
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:450
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:140
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:215
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:149
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:224
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:144
-#: src/Modules/NewebpayShipping/Module.php:169
-#: src/Modules/NewebpayShipping/Module.php:213
+#: src/Modules/NewebpayShipping/Module.php:146
+#: src/Modules/NewebpayShipping/Module.php:171
+#: src/Modules/NewebpayShipping/Module.php:215
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
@@ -2923,7 +2923,7 @@ msgstr "輸入捐贈機構（每行一筆），格式為：社福團體名稱|�
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:123
 #: src/Modules/Ecpay/Settings/SettingsTab.php:126
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:199
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:166
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:181
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:124
 #: src/Modules/Linepay/Settings/SettingsTab.php:46
 #: src/Modules/Newebpay/Settings/SettingsTab.php:121
@@ -3611,7 +3611,7 @@ msgstr "條碼第 %d 段"
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:401
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:419
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:456
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:148
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:157
 #: src/Modules/OrderLookup/Ability.php:1362
 #: src/Modules/OrderLookup/ChangePickupStore.php:139
 #: src/Modules/OrderLookup/InvoiceOps.php:100
@@ -4148,8 +4148,8 @@ msgstr "上線前用，勾選後所有交易走測試環境不會真扣款。上
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:28
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:28
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:39
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:83
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:54
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:98
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:146
 #: src/Modules/Newebpay/Settings/SettingsTab.php:26
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:49
@@ -4161,8 +4161,8 @@ msgstr "測試 MerchantID"
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:34
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:34
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:45
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:89
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:60
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:104
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:151
 #: src/Modules/Newebpay/Settings/SettingsTab.php:31
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:54
@@ -4173,8 +4173,8 @@ msgstr "測試 HashKey"
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:40
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:40
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:51
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:95
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:66
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:110
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:157
 #: src/Modules/Newebpay/Settings/SettingsTab.php:36
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:59
@@ -4185,8 +4185,8 @@ msgstr "測試 HashIV"
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:46
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:46
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:57
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:101
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:72
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:116
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:174
 #: src/Modules/Newebpay/Settings/SettingsTab.php:41
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:75
@@ -4198,8 +4198,8 @@ msgstr "正式 MerchantID"
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:51
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:51
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:62
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:106
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:77
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:121
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:179
 #: src/Modules/Newebpay/Settings/SettingsTab.php:46
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:80
@@ -4210,8 +4210,8 @@ msgstr "正式 HashKey"
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:56
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:56
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:67
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:111
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:82
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:126
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:184
 #: src/Modules/Newebpay/Settings/SettingsTab.php:51
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:85
@@ -4759,7 +4759,7 @@ msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 
 #: src/Modules/EcpayInvoice/Operations/Issue.php:183
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:194
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:161
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:176
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:110
 msgid "Other"
@@ -4986,6 +4986,8 @@ msgstr "重新建立物流單"
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:303
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:131
+#: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:72
+#: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:76
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:33
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:74
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:78
@@ -5115,6 +5117,7 @@ msgid "That shipment record could not be found."
 msgstr "找不到此筆物流單記錄。"
 
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:148
+#: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:87
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:109
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
@@ -5146,6 +5149,7 @@ msgid "This order is split into %d shipments by temperature zone"
 msgstr "本訂單依商品溫層拆成 %d 張物流單"
 
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:210
+#: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:102
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:169
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:62
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:67
@@ -5501,49 +5505,49 @@ msgstr "沒有可列印的物流單。"
 msgid "The shipping type is missing."
 msgstr "物流型別缺漏。"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:64
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:73
 msgid "Print shipping label (A4)"
 msgstr "列印物流標籤 A4"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:64
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:73
 msgid "Print shipping label (A6)"
 msgstr "列印物流標籤 A6"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:152
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:161
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:112
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:152
 msgid "This order has no shipment yet."
 msgstr "此訂單尚未建立物流單。"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:165
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:174
 msgid "The shipment details are incomplete."
 msgstr "物流單資料不完整。"
 
 #. translators: 1: number of shipping subtypes, 2: number of print windows that will open
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:178
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:187
 #, php-format
 msgid "This order uses %1$d different carriers, so %2$d print windows will open."
 msgstr "此訂單含 %1$d 種物流通路（subtype），會分別開啟 %2$d 個列印視窗。"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:179
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:188
 msgid "If the browser blocks the pop-ups, allow them and click Print shipping label again."
 msgstr "若瀏覽器擋住跳出視窗，請允許彈出後重新點擊「列印物流標籤」。"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:195
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:204
 msgid "Print shipping label"
 msgstr "列印物流標籤"
 
 #. translators: %d: total number of shipping labels across all subtypes
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:197
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:206
 #, php-format
 msgid "Printing %d shipping labels…"
 msgstr "正在列印 %d 張物流標籤…"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:225
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:234
 msgid "A required parameter is missing."
 msgstr "缺少必要參數。"
 
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:315
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:324
 msgid "Generating the shipping label…"
 msgstr "物流標籤產生中，請稍候…"
 
@@ -5558,76 +5562,92 @@ msgstr "物流憑證設定完，到「WooCommerce → 設定 → 運送方式」
 msgid "For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. Untick it once you go live."
 msgstr "上線前用，勾選後，所有物流單走測試環境不會真出貨。上線後請取消勾選。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:33
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:31
+msgid "Convenience store account type"
+msgstr "超商帳號類型"
+
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:36
+msgid "C2C — store-to-store, no monthly fee (most common)"
+msgstr "C2C — 店到店，免月租（最常見）"
+
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:37
+msgid "B2C — bulk warehouse, needs a separate contract and a monthly fee"
+msgstr "B2C — 大宗寄倉，需另簽約並支付月租"
+
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:39
+msgid "Which ECPay account your 7-ELEVEN, FamilyMart, Hi-Life and OK Mart shipments run through. Fill in the credentials for whichever one you pick below. Changing this only affects shipments created from now on; those already booked keep the account they were created with."
+msgstr "你的 7-11、全家、萊爾富與 OK 超商物流要走哪一組綠界帳號。選好之後，請在下方填入該組的憑證。變更此設定只會影響之後建立的物流單，已建立的仍沿用當時的帳號。"
+
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:48
 msgid "Standard shipping account (C2C)"
 msgstr "一般寄件帳號（C2C）"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:35
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:50
 msgid "For individuals and small stores sending a few parcels store-to-store through 7-ELEVEN, FamilyMart, Hi-Life or OK Mart. <strong>No monthly fee</strong>, and by far the most common choice. Skip it if you have not applied."
 msgstr "個人或店家少量寄件，從 7-11 / 全家 / 萊爾富 / OK 超商店到店取貨。<strong>免月租</strong>，最常見。沒申請就跳過。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:77
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:92
 msgid "Bulk shipping account (B2C)"
 msgstr "大宗寄件帳號（B2C）"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:79
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:94
 msgid "For businesses sending in volume through 7-ELEVEN, FamilyMart and Hi-Life bulk pickup, as well as T-Cat, Chunghwa Post and Kerry TJ. <strong>Requires a monthly contract</strong>. Skip it if you have not applied."
 msgstr "企業大量寄件 — 7-11 / 全家 / 萊爾富 超商大宗，以及黑貓宅配 / 中華郵政 / 嘉里大榮。<strong>需簽月租合約</strong>。沒申請就跳過。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:121
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:136
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:121
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:88
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:76
 msgid "Sender details"
 msgstr "寄件人資料"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:123
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:138
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:123
 msgid "The sender details printed on convenience store labels, and used by the carrier to reach you on home deliveries."
 msgstr "超商取貨標籤上的寄件人資訊，宅配時供物流商聯絡。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:127
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:142
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:94
 msgid "Name"
 msgstr "姓名"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:130
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:145
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:130
 msgid "1 to 10 Chinese characters, or 1 to 20 Latin characters."
 msgstr "中文 1-10 字 / 英文 1-20 字。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:133
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:148
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:99
 msgid "Phone"
 msgstr "電話"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:136
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:151
 msgid "Landline number."
 msgstr "室內電話。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:139
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:154
 msgid "Mobile"
 msgstr "手機"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:142
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:157
 msgid "Required for home delivery and T-Cat."
 msgstr "宅配 / 黑貓必填。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:145
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:160
 msgid "Email"
 msgstr "電子郵件"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:150
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:165
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:154
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:99
 msgid "Sender address"
 msgstr "寄件地址"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:153
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:168
 msgid "Used for home delivery. Convenience store shipping does not need it."
 msgstr "宅配用，超商寄件不需要。"
 
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:170
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:185
 msgid "Turn this on when investigating a problem shipment."
 msgstr "排查物流單異常時開啟。"
 
@@ -6187,9 +6207,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:149
-#: src/Modules/NewebpayShipping/Module.php:174
-#: src/Modules/NewebpayShipping/Module.php:218
+#: src/Modules/NewebpayShipping/Module.php:151
+#: src/Modules/NewebpayShipping/Module.php:176
+#: src/Modules/NewebpayShipping/Module.php:220
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6587,6 +6607,12 @@ msgstr "藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）"
 msgid "NewebPay shipping returned an unexpected format"
 msgstr "藍新物流回傳格式錯誤"
 
+#: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:77
+#: src/Modules/NewebpayShipping/Module.php:72
+#: src/Modules/NewebpayShipping/Module.php:93
+msgid "NewebPay convenience store pickup"
+msgstr "藍新超商取貨"
+
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:77
 msgid "Choose a convenience store:"
 msgstr "請選擇取貨超商："
@@ -6641,51 +6667,46 @@ msgstr "藍新物流"
 msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr "超商取貨 — 7-11 / 全家 / 萊爾富 / OK"
 
-#: src/Modules/NewebpayShipping/Module.php:70
-#: src/Modules/NewebpayShipping/Module.php:91
-msgid "NewebPay convenience store pickup"
-msgstr "藍新超商取貨"
-
-#: src/Modules/NewebpayShipping/Module.php:128
+#: src/Modules/NewebpayShipping/Module.php:130
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr "藍新物流託運單"
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:157
+#: src/Modules/NewebpayShipping/Module.php:159
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr "藍新物流單建立成功（單號 %s）"
 
-#: src/Modules/NewebpayShipping/Module.php:178
+#: src/Modules/NewebpayShipping/Module.php:180
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr "訂單尚未建單，無 MerchantOrderNo 可查詢。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:183
+#: src/Modules/NewebpayShipping/Module.php:185
 #, php-format
 msgid "The lookup failed: %s"
 msgstr "查詢失敗：%s"
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:193
+#: src/Modules/NewebpayShipping/Module.php:195
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr "查詢藍新物流：%s"
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:203
+#: src/Modules/NewebpayShipping/Module.php:205
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr "查詢成功 — %s"
 
-#: src/Modules/NewebpayShipping/Module.php:222
+#: src/Modules/NewebpayShipping/Module.php:224
 msgid "No shipment has been created for this order yet."
 msgstr "訂單尚未建單。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:227
+#: src/Modules/NewebpayShipping/Module.php:229
 #, php-format
 msgid "Tracking failed: %s"
 msgstr "追蹤失敗：%s"
@@ -6736,7 +6757,7 @@ msgstr "數量"
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:15
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:20
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:366
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:375
 msgid "Shipment created"
 msgstr "已建單"
 
@@ -10583,7 +10604,7 @@ msgstr "此運送方式非由本外掛的物流模組處理。"
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:107
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:115
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:251
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:316
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:325
 msgid "Shipping method:"
 msgstr "運送方式："
 
@@ -10970,8 +10991,8 @@ msgid "Shipment number:"
 msgstr "物流單號："
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:209
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:278
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:344
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:287
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:353
 msgid "Shipping status:"
 msgstr "物流狀態："
 
@@ -10983,50 +11004,50 @@ msgstr "尚未取得藍新物流資訊。顧客可在結帳頁選店，或商家
 msgid "NewebPay shipping ID:"
 msgstr "藍新物流編號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:262
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:322
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:271
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:331
 msgid "Shipping type:"
 msgstr "物流類型："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:265
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:325
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:274
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:334
 msgid "Pickup store:"
 msgstr "取貨門市："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:275
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:335
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:284
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:344
 msgid "Store address:"
 msgstr "門市地址："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:283
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:292
 msgid "Create NewebPay shipment"
 msgstr "建立藍新物流單"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:286
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:295
 msgid "Check current status"
 msgstr "查詢即時狀態"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:287
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:296
 msgid "Shipment tracking"
 msgstr "物流追蹤"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:319
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:328
 msgid "SmilePay serial number:"
 msgstr "速買配序號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:338
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:347
 msgid "Pickup code:"
 msgstr "取貨碼："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:341
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:350
 msgid "T-Cat waybill number:"
 msgstr "黑貓託運單號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:358
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:367
 msgid "No SmilePay shipment has been created yet."
 msgstr "尚未建立速買配物流單。"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:364
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:373
 msgid "Create SmilePay shipment"
 msgstr "建立速買配物流單"
 
@@ -11391,22 +11412,22 @@ msgstr "此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物
 msgid "Empty or Inherit means the parent product setting is used."
 msgstr "空 / 繼承 = 跟父商品設定走。"
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:166
+#: src/Modules/Shipping/Tracking/TrackingLink.php:190
 msgid "Copy tracking number"
 msgstr "複製貨號"
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:167
+#: src/Modules/Shipping/Tracking/TrackingLink.php:191
 msgid "Copy"
 msgstr "複製"
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:177
+#: src/Modules/Shipping/Tracking/TrackingLink.php:201
 #, php-format
 msgid "Track %s shipment"
 msgstr "查詢 %s 貨態"
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:180
+#: src/Modules/Shipping/Tracking/TrackingLink.php:204
 #, php-format
 msgid "Open %s tracking"
 msgstr "前往 %s 查詢"

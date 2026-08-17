@@ -16,6 +16,15 @@ final class PrintProxy {
 	private const ACTION_QUICK       = 'moksafowo_ecpay_shipping_print_quick';
 	private const NONCE_ACTION_QUICK = 'moksafowo_ecpay_shipping_print_quick';
 
+	/**
+	 * 支援 A6 標籤機的物流子類型。其餘（TCAT / FAMI / HILIFE / OK）只有 A4。
+	 *
+	 * 這份清單原本在四個地方各寫一次，其中 Admin\OrderMetaBox 少了 UNIMART 與
+	 * UNIMARTFREEZE —— 那兩種明明送得出 A6，訂單頁卻沒有按鈕可按。集中成一份，
+	 * 之後只會有一個地方要改。
+	 */
+	public const A6_SUBTYPES = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
+
 	public static function init(): void {
 		add_action( 'admin_post_' . self::ACTION, [ __CLASS__, 'handle' ] );
 		add_action( 'admin_post_' . self::ACTION_QUICK, [ __CLASS__, 'handle_quick' ] );
@@ -41,7 +50,7 @@ final class PrintProxy {
 		}
 
 		// 任一 record 是 A6-capable subtype 就顯示 A6 按鈕；其他 subtype 自動 fallback A4
-		$a6_subtypes      = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
+		$a6_subtypes      = self::A6_SUBTYPES;
 		$any_a6_supported = false;
 		foreach ( $records as $r ) {
 			if ( in_array( (string) ( $r['subtype'] ?? '' ), $a6_subtypes, true ) ) {
@@ -166,7 +175,7 @@ JS;
 		}
 
 		// TCAT / FAMI / HILIFE / OK 不支援 A6；自動降 A4
-		$a6_subtypes = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
+		$a6_subtypes = self::A6_SUBTYPES;
 
 		$nonce      = wp_create_nonce( self::NONCE_ACTION );
 		$action_url = self::action_url();

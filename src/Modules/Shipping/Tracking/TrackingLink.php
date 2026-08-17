@@ -49,6 +49,30 @@ final class TrackingLink {
 	}
 
 
+	/**
+	 * 藍新的物流資料是平鋪在 order meta 上（不像綠界是 records 陣列），
+	 * 所以呼叫端要自己組成 [ 'ship_type' => …, 'lgs_no' => … ] 再傳進來。
+	 *
+	 * NDNS ShipType：1=7-ELEVEN、2=全家、3=萊爾富、4=OK mart。
+	 *
+	 * @param array<string,mixed> $record 物流資料。
+	 */
+	public static function for_newebpay_record( array $record ): ?array {
+		$tracking_no = (string) ( $record['lgs_no'] ?? '' );
+		switch ( (string) ( $record['ship_type'] ?? '' ) ) {
+			case '1':
+				return self::resolve_carrier_link( 'UNIMART', $tracking_no );
+			case '2':
+				return self::resolve_carrier_link( 'FAMI', $tracking_no );
+			case '3':
+				return self::resolve_carrier_link( 'HILIFE', $tracking_no );
+			case '4':
+				return self::resolve_carrier_link( 'OKMART', $tracking_no );
+		}
+		return null;
+	}
+
+
 	private static function resolve_carrier_link( string $subtype, string $tracking_no ): ?array {
 		switch ( $subtype ) {
 			case 'TCAT':
