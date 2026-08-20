@@ -180,7 +180,10 @@ final class Server {
 			return $out;
 		}
 		$expose_destructive = 'yes' === get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' );
-		foreach ( wp_get_abilities() as $ability ) {
+		// namespace 讓核心先過濾掉別的外掛（站上通常註冊了三位數個 ability，我們只佔一小部分）。
+		// $args 是 WP 7.1 才加的，7.0 會靜默忽略而回傳全部 —— 所以下面的前綴檢查一定要留著，
+		// 那才是真正把關的那一道；這裡的 namespace 只是省掉白跑的迴圈。
+		foreach ( wp_get_abilities( array( 'namespace' => 'moksa-for-woocommerce' ) ) as $ability ) {
 			if ( ! is_object( $ability ) || ! method_exists( $ability, 'get_name' ) ) {
 				continue;
 			}
@@ -220,6 +223,25 @@ final class Server {
 	}
 
 	/**
+	 * 把 schema 交給核心正規化成「用戶端吃得下」的形狀：空陣列補成 {}、拿掉
+	 * sanitize_callback / validate_callback / arg_options 這些只有伺服器端看得懂的鍵。
+	 *
+	 * 核心這支是 WP 7.1 才有的，7.0 站台原樣回傳。用可變函式呼叫是為了避開 Plugin Check
+	 * 的靜態相容性掃描誤判（外掛宣告 Requires at least: 7.0），與共用層 Agent.php 同一個作法。
+	 *
+	 * @param array<string,mixed> $schema 原始 schema。
+	 * @return array<string,mixed>
+	 */
+	private static function for_client( array $schema ): array {
+		$fn = 'wp_prepare_json_schema_for_client';
+		if ( ! function_exists( $fn ) ) {
+			return $schema;
+		}
+		$prepared = $fn( $schema );
+		return is_array( $prepared ) ? $prepared : $schema;
+	}
+
+	/**
 	 * @param object $ability WP_Ability。
 	 * @return array<string,mixed>
 	 */
@@ -229,7 +251,7 @@ final class Server {
 		$ann   = isset( $meta['annotations'] ) && is_array( $meta['annotations'] ) ? $meta['annotations'] : array();
 		$input = $ability->get_input_schema();
 		$input = is_array( $input ) && ! empty( $input )
-			? $input
+			? self::for_client( $input )
 			: array(
 				'type'       => 'object',
 				'properties' => (object) array(),
@@ -250,6 +272,7 @@ final class Server {
 
 		$out = $ability->get_output_schema();
 		if ( is_array( $out ) && ! empty( $out ) ) {
+			$out                  = self::for_client( $out );
 			$wrap_key             = self::wrap_key( $out );
 			$tool['outputSchema'] = null === $wrap_key
 				? $out

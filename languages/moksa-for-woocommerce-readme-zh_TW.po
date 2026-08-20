@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce readme\n"
-"PO-Revision-Date: 2026-08-17 00:00+0800\n"
+"PO-Revision-Date: 2026-08-20 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -316,497 +316,505 @@ msgid "Changelog"
 msgstr "變更紀錄"
 
 #. sub #77
+msgid "1.8.5 - 2026-08-20"
+msgstr "1.8.5 - 2026-08-20"
+
+#. li #78
+msgid "Compatibility: tested with WordPress 7.1. The drag-and-drop checkout field ordering, the settings screens and the assistant's tools were all checked against it and behave as before."
+msgstr "相容性：已在 WordPress 7.1 上測試。結帳欄位的拖曳排序、各設定頁面與助手的工具都實際跑過，行為與先前相同。"
+
+#. sub #79
 msgid "1.8.4 - 2026-08-17"
 msgstr "1.8.4 - 2026-08-17"
 
-#. li #78
+#. li #80
 msgid "Fix: after choosing a convenience store, the checkout could still say no store had been picked — and because a store is required to order, the customer was left unable to check out at all. It depended on timing, so it looked intermittent. The chosen store is now recorded while the page is being loaded, before anything else on the checkout can overwrite it."
 msgstr "修正：選好超商門市之後，結帳頁仍可能顯示尚未選擇門市；而因為未選門市不能下訂，顧客等於完全無法完成結帳。這個問題取決於時間差，所以看起來時好時壞。現在選定的門市會在頁面載入的當下就記錄下來，早於結帳頁上任何其他動作，不會再被覆蓋。"
 
-#. li #79
+#. li #81
 msgid "Fix: the A6 label button was missing on 7-ELEVEN bulk and frozen shipments, which do support A6. All the places that decide this now read the same list."
 msgstr "修正：7-11 大宗與冷凍的物流單其實支援 A6，訂單頁卻沒有 A6 按鈕。現在所有判斷此事的地方都改讀同一份清單。"
 
-#. li #80
+#. li #82
 msgid "New: NewebPay pickup orders now show the shipping details to the customer — the tracking number reaches the shipping notification e-mail, the order page shows a shipping card with the pickup store, and there is a link through to the carrier's own tracking page. ECPay, SmilePay and PAYUNi already had all three."
 msgstr "新增：藍新超商取貨的訂單現在會把物流資訊呈現給顧客 —— 物流編號會出現在出貨通知信、訂單頁會顯示含取件門市的物流卡片，並提供前往超商官方貨態查詢頁的連結。綠界、速買配與統一金流原本就都有這三項。"
 
-#. li #81
+#. li #83
 msgid "New: the ECPay shipping settings have a \"Convenience store account type\" option again, so you can choose between the standard (C2C) and bulk (B2C) account. The setting was being read but had no way to change it, which left the bulk credentials unusable."
 msgstr "新增：綠界物流設定重新提供「超商帳號類型」選項，可在一般（C2C）與大宗（B2C）帳號之間切換。這個設定原本有被程式讀取，卻沒有任何地方可以變更，導致大宗帳號的憑證填了也用不到。"
 
-#. sub #82
+#. sub #84
 msgid "1.8.3 - 2026-08-17"
 msgstr "1.8.3 - 2026-08-17"
 
-#. li #83
+#. li #85
 msgid "Fix: choosing a convenience store on the classic checkout wiped everything the customer had already typed. Picking a store leaves the site for the carrier's store map and comes back, and the checkout page was rebuilt empty, so name, phone, e-mail and address all had to be entered again. Those details are now carried across and put back automatically. This applies to ECPay, NewebPay and SmilePay pickup, which had no such handling at all; PAYUNi already did, and now shares the same one. The block checkout was never affected."
 msgstr "修正：在傳統結帳選擇超商門市時，顧客已經填好的資料會全部消失。選門市會離開網站前往物流業者的門市地圖再回來，而結帳頁是重新載入的空白狀態，於是姓名、電話、電子郵件與地址都得重打一次。現在這些內容會被帶著走並自動填回。綠界、藍新與速買配的超商取貨先前完全沒有這項處理，本次一併補上；統一金流原本就有，現在改用同一份共用實作。區塊結帳不受此問題影響。"
 
-#. sub #84
+#. sub #86
 msgid "1.8.2 - 2026-08-10"
 msgstr "1.8.2 - 2026-08-10"
 
-#. li #85
+#. li #87
 msgid "Fix: when other Moksa plugins are installed alongside this one, a single badly described tool in any of them could make the assistant fail with a \"Bad Request (400)\" before it ran anything — including the order tools in this plugin. The shared assistant now corrects such descriptions on the way to the AI provider, so one plugin can no longer take the whole assistant down."
 msgstr "修正：當這個外掛與其他 Moksa 外掛同時安裝時，只要其中任何一個外掛有一項工具的描述寫得不合規，助手就會在還沒開始執行前就以「Bad Request (400)」失敗 —— 連本外掛的訂單工具也一起不能用。共用的助手現在會在送往 AI 服務商的途中修正這類描述，因此單一外掛不再有辦法讓整個助手停擺。"
 
-#. sub #86
+#. sub #88
 msgid "1.8.1 - 2026-08-06"
 msgstr "1.8.1 - 2026-08-06"
 
-#. li #87
+#. li #89
 msgid "Fix: the two buttons on the assistant's confirmation step were labelled \"Confirm\" and \"Cancel\" in English on non-English sites. They now follow the site language."
 msgstr "修正：助手確認關卡的兩顆按鈕，在非英文網站上仍顯示英文的「Confirm」與「Cancel」。現在會跟隨網站語言。"
 
-#. li #88
+#. li #90
 msgid "Fix: translations for text coming from JavaScript were never compiled into the format WordPress loads, so those strings would have stayed in English no matter what the site language was."
 msgstr "修正：來自 JavaScript 的文字，其翻譯從未被編譯成 WordPress 實際會載入的格式，因此不論網站語言為何，那些字串都會停留在英文。"
 
-#. li #89
+#. li #91
 msgid "Fix: PayNow's Chinese name was written two different ways in this readme."
 msgstr "修正：立吉富的中文名稱在這份 readme 裡出現了兩種寫法。"
 
-#. li #90
+#. li #92
 msgid "A full Traditional Chinese translation of this readme is now maintained alongside the plugin translation."
 msgstr "這份 readme 現在也維護一份完整的繁體中文翻譯，與外掛本體的翻譯並行。"
 
-#. sub #91
+#. sub #93
 msgid "1.8.0 - 2026-08-06"
 msgstr "1.8.0 - 2026-08-06"
 
-#. li #92
+#. li #94
 msgid "Fix: a customer could place an order with convenience store pickup without ever choosing a store, leaving an order that cannot be shipped. Checkout now stops and asks for the store. This applies to ECPay, NewebPay and SmilePay pickup, on both the block and the classic checkout — previously only PAYUNi pickup was checked."
 msgstr "修正：顧客選了超商取貨卻沒有選門市，也能把訂單送出，留下一張根本無法出貨的訂單。現在結帳會擋下來並要求選擇門市。綠界、藍新與速買配的超商取貨，在區塊結帳與傳統結帳都適用 —— 先前只有統一金流的超商取貨會檢查。"
 
-#. li #93
+#. li #95
 msgid "New: every section on the Advanced tab now has its own \"Enable this section\" switch — shared shipping settings, custom order statuses, order status colors, Taiwan address tools, and Taiwan field order and widths. Switching one off really stops that feature running, rather than only hiding the settings, which is what you want when another plugin is competing for the same part of the checkout. Your settings inside the section are kept, so switching it back on restores everything as it was."
 msgstr "新增：進階分頁的每一個區塊現在都有自己的「啟用這個區塊」開關 —— 共用物流設定、自訂訂單狀態、訂單狀態顏色、台灣地址工具，以及台灣欄位順序與寬度。關掉開關是真的讓該功能停止運作，而不是只把設定藏起來；當另一個外掛正在爭搶結帳的同一塊地盤時，你要的就是這個。區塊內的設定會原封不動保留，重新開啟就回到原狀。"
 
-#. sub #94
+#. sub #96
 msgid "1.7.0 - 2026-08-05"
 msgstr "1.7.0 - 2026-08-05"
 
-#. li #95
+#. li #97
 msgid "New: the assistant can change the pickup store on a convenience store order, by store number. It shows you what will change and waits for your confirmation, warns you when a shipment already points at the old store, and never re-books the shipment on its own."
 msgstr "新增：助手可以用門市編號變更超商取貨訂單的取件門市。它會先告訴你將要變更的內容並等你確認，若已經有物流單指向舊門市也會提醒你，而且絕不會自作主張重新建立物流單。"
 
-#. li #96
+#. li #98
 msgid "New: the assistant can list the shipments on an order and delete one, so a shipment can be created again — for example after the pickup store was changed. Deleting only removes the record on this site; it does not cancel the booking with the carrier."
 msgstr "新增：助手可以列出訂單上的物流單並刪除其中一筆，讓物流單能重新建立 —— 例如在變更取件門市之後。刪除只會移除本站上的紀錄，不會向物流業者取消該筆委託。"
 
-#. li #97
+#. li #99
 msgid "New: the assistant can look a payment up at the provider (ECPay card payments and PAYUNi) for when the order and the provider disagree, such as a customer saying they paid while the order still shows unpaid."
 msgstr "新增：助手可以直接向服務商查詢款項狀態（綠界信用卡與統一金流），適合用在訂單與服務商說法不一致的時候，例如顧客說已經付款、但訂單仍顯示未付款。"
 
-#. li #98
+#. li #100
 msgid "New for MCP clients: the store now also offers resources (what the store has switched on, the shipping methods on offer, sales over the last 30 days) and ready-made prompts (daily shipping run, checking payments against the provider, finding orders missing an e-invoice, moving an order to another store)."
 msgstr "MCP 用戶端新增：商店現在也提供資源（商店啟用了哪些功能、提供哪些運送方式、近 30 天的銷售）與現成的提示詞（每日出貨作業、與服務商對帳、找出漏開電子發票的訂單、把訂單改到另一家門市）。"
 
-#. li #99
+#. li #101
 msgid "Fix: on the order screen, the two buttons in the PAYUNi shipping card were touching each other with no space between them."
 msgstr "修正：訂單頁面上，統一金流物流卡片裡的兩顆按鈕緊貼在一起，中間完全沒有留白。"
 
-#. sub #100
+#. sub #102
 msgid "1.6.3 - 2026-08-05"
 msgstr "1.6.3 - 2026-08-05"
 
-#. li #101
+#. li #103
 msgid "Fix: creating an ECPay shipment failed with \"商品名稱請設定為最多50字元\" (10500038) on orders whose product names are in Chinese. ECPay counts a Chinese character as two, but the item name was being trimmed by character count, so a 50-character Chinese name reached ECPay as 100. It is now trimmed the same way ECPay measures it, and English names can still use the full 50 characters."
 msgstr "修正：商品名稱是中文的訂單，建立綠界物流單時會失敗並顯示「商品名稱請設定為最多50字元」（10500038）。綠界把一個中文字算成兩個字元，但商品名稱是照字元數截斷的，於是 50 個中文字送到綠界那邊變成 100。現在改成用綠界的計算方式截斷，英文名稱仍然可以用滿 50 個字元。"
 
-#. li #102
+#. li #104
 msgid "Fix: characters ECPay rejects are now replaced with a space instead of being deleted, so several product names no longer run together on the label."
 msgstr "修正：綠界不接受的字元現在會替換成空白，而不是直接刪掉，這樣標籤上好幾個商品名稱才不會黏成一團。"
 
-#. li #103
+#. li #105
 msgid "The same character-count trimming was applied to the PAYUNi and SmilePay shipment descriptions as a precaution."
 msgstr "同樣的字元寬度截斷方式也套用到統一金流與速買配的物流品名，作為預防。"
 
-#. sub #104
+#. sub #106
 msgid "1.6.2 - 2026-08-05"
 msgstr "1.6.2 - 2026-08-05"
 
-#. li #105
+#. li #107
 msgid "Tested against WooCommerce 11.0."
 msgstr "已在 WooCommerce 11.0 上完成測試。"
 
-#. li #106
+#. li #108
 msgid "Fix: the store picker layout setting showed \"one column\" as selected on stores that had never saved it, while the checkout actually rendered two columns. The two now agree."
 msgstr "修正：從未儲存過門市選擇器版面設定的商店，設定畫面顯示的是「單欄」，但結帳實際上是用雙欄呈現。現在兩邊一致了。"
 
-#. sub #107
+#. sub #109
 msgid "1.6.1 - 2026-08-05"
 msgstr "1.6.1 - 2026-08-05"
 
-#. li #108
+#. li #110
 msgid "Fix: switching an order to (or away from) a convenience-store method in the items panel now updates the store fields straight away. They used to appear only after saving the order and reloading the page, which made it look like you could not pick a store on an order you created in the admin yourself."
 msgstr "修正：在訂單項目面板把運送方式改成（或改離）超商取貨方式時，門市欄位現在會立刻更新。以前必須先儲存訂單並重新載入頁面才會出現，讓人以為自己在後台建立的訂單根本沒辦法選門市。"
 
-#. li #109
+#. li #111
 msgid "Fix: the convenience-store card on the classic checkout was squashed into a narrow strip on phones. The card is now given the full width of the order summary, with the label on its own line."
 msgstr "修正：傳統結帳的超商門市卡片在手機上被擠成一條細長條。現在卡片會佔滿訂單摘要的寬度，標籤也獨立成一行。"
 
-#. sub #110
+#. sub #112
 msgid "1.6.0 - 2026-08-04"
 msgstr "1.6.0 - 2026-08-04"
 
-#. li #111
+#. li #113
 msgid "New: change the pickup store on a convenience-store order from the order screen. Open the shipping address for editing and you get store number, store name and store address fields, plus a \"Choose store on map\" button that opens the carrier's own store map in a new window and fills the fields in when you pick a store. Works for ECPay, NewebPay, PAYUNi and SmilePay pickup methods, and on orders you create in the admin yourself."
 msgstr "新增：可以從訂單頁面變更超商取貨訂單的取件門市。把收件地址切換到編輯狀態，就會出現門市編號、門市名稱與門市地址欄位，以及一顆「用地圖選門市」按鈕 —— 它會在新視窗開啟該物流業者自己的門市地圖，選好門市後自動把欄位填回來。綠界、藍新、統一金流與速買配的超商取貨方式都適用，你自己在後台建立的訂單也適用。"
 
-#. li #112
+#. li #114
 msgid "New: changing the store leaves an order note recording the old and new store number, as a reminder that a shipment created earlier still points at the old store."
 msgstr "新增：變更門市時會留下一筆訂單備註，記錄新舊門市編號，提醒你先前建立的物流單仍然指向舊門市。"
 
-#. li #113
+#. li #115
 msgid "Removed an admin store-map callback endpoint in the PAYUNi shipping module that nothing linked to and that no longer worked on HPOS sites."
 msgstr "移除了統一金流物流模組裡一個後台門市地圖回呼端點 —— 沒有任何地方連到它，而且在 HPOS 網站上早已無法運作。"
 
-#. sub #114
+#. sub #116
 msgid "1.5.4 - 2026-08-01"
 msgstr "1.5.4 - 2026-08-01"
 
-#. li #115
+#. li #117
 msgid "Fix: saving the module list switched off any module whose card is not on that screen. Order number lookup is configured on the Advanced tab, so every save silently turned it off — and because it is what registers the assistant's tools, the AI assistant was left with nothing to work with."
 msgstr "修正：儲存模組清單時，會把所有卡片不在該畫面上的模組一併關閉。訂單查號設定在進階分頁上，所以每存一次就被靜靜關掉一次 —— 而它正是註冊助手工具的地方，於是 AI 助手就變成無事可做。"
 
-#. li #116
+#. li #118
 msgid "Fix: enabling only the AI assistant gave it no tools at all, so the chat window never appeared and nothing seemed to happen. It now registers the order abilities it needs on its own."
 msgstr "修正：只啟用 AI 助手時，它一個工具都拿不到，對話窗因此從未出現，看起來就像什麼事都沒發生。現在它會自行註冊所需的訂單能力。"
 
-#. li #117
+#. li #119
 msgid "Fix: opening the Moksa AI screen while both modules were off showed \"you do not have permission to access this page\", which is what WordPress says about a page that is not registered — it was never a permissions problem. The screen now explains the situation and links to the module list."
 msgstr "修正：兩個模組都關閉時開啟 Moksa AI 畫面，會顯示「你沒有權限存取此頁面」—— 那是 WordPress 對一個未註冊頁面的固定說法，從來就不是權限問題。現在這個畫面會說明狀況，並提供前往模組清單的連結。"
 
-#. li #118
+#. li #120
 msgid "Fix: the checkout field order list was missing the email field."
 msgstr "修正：結帳欄位順序清單漏了電子郵件欄位。"
 
-#. sub #119
+#. sub #121
 msgid "1.5.3 - 2026-08-01"
 msgstr "1.5.3 - 2026-08-01"
 
-#. li #120
+#. li #122
 msgid "Fix: 1.5.2 could show a floating assistant button on every admin screen even when nothing was available to run, opening an empty panel. It now appears only when there is something to show."
 msgstr "修正：1.5.2 可能在每一個後台畫面都顯示浮動助手按鈕，即使根本沒有任何可執行的東西，點開只是一個空面板。現在只有真的有內容可顯示時才會出現。"
 
-#. li #121
+#. li #123
 msgid "Fix: the assistant button used an emoji, which WordPress replaces with an image hosted on s.w.org; on sites that cannot reach that host it rendered as a broken image. It is now drawn as an inline icon and loads nothing external."
 msgstr "修正：助手按鈕使用了 emoji，而 WordPress 會把 emoji 換成 s.w.org 上的圖片；連不到該主機的網站就會看到破圖。現在改用內嵌圖示繪製，不載入任何外部資源。"
 
-#. li #122
+#. li #124
 msgid "Fix: the fallback panel shown when no AI provider is configured was untranslated. Its labels now follow the site language."
 msgstr "修正：尚未設定 AI 服務商時顯示的備援面板沒有翻譯。它的文字現在會跟隨網站語言。"
 
-#. sub #123
+#. sub #125
 msgid "1.5.2 - 2026-08-01"
 msgstr "1.5.2 - 2026-08-01"
 
-#. li #124
+#. li #126
 msgid "The Moksa AI chat window is now a shared component. When several Moksa plugins are installed alongside each other they no longer each draw their own floating window; one window serves them all and can reach every plugin's abilities. Installed on its own, this plugin behaves exactly as before."
 msgstr "Moksa AI 對話窗改成共用元件。當多個 Moksa 外掛同時安裝時，它們不再各自畫一個浮動視窗；一個視窗服務全部，並且能使用每個外掛的能力。單獨安裝這個外掛時，行為與先前完全相同。"
 
-#. li #125
+#. li #127
 msgid "Fix: the assistant advertised its 28 abilities to the AI model even when the module that actually registers them was switched off. A model given a tool name that does not exist does not report an error — it invents an answer that looks plausible. Only abilities that are genuinely registered are offered now."
 msgstr "修正：即使真正註冊能力的模組是關閉的，助手仍然向 AI 模型宣告它有那 28 項能力。模型拿到一個不存在的工具名稱不會回報錯誤 —— 它會編出一個看起來很合理的答案。現在只會提供真正註冊成功的能力。"
 
-#. sub #126
+#. sub #128
 msgid "1.5.1 - 2026-08-01"
 msgstr "1.5.1 - 2026-08-01"
 
-#. li #127
+#. li #129
 msgid "Fix: the \"About Moksa AI\" status badge used emoji, which WordPress replaces with an image hosted on s.w.org. On sites where that host is unreachable the badge rendered as a broken image. It is now drawn in CSS and loads nothing external."
 msgstr "修正：「關於 Moksa AI」狀態徽章使用了 emoji，而 WordPress 會把 emoji 換成 s.w.org 上的圖片。在連不到該主機的網站上，徽章就會變成破圖。現在改用 CSS 繪製，不載入任何外部資源。"
 
-#. li #128
+#. li #130
 msgid "Fix: the Moksa AI submenu appeared under WooCommerce whether or not the assistant was in use. It now appears only once the Moksa AI or Storefront support module is enabled."
 msgstr "修正：不管有沒有在用助手，Moksa AI 子選單都會出現在 WooCommerce 底下。現在只有啟用 Moksa AI 或前台客服模組之後才會出現。"
 
-#. li #129
+#. li #131
 msgid "Fix: those two modules had no card on the module overview, so there was no way to enable them from the settings tab at all. They now appear under Tools alongside every other module."
 msgstr "修正：這兩個模組在模組總覽上沒有卡片，因此根本無法從設定分頁啟用它們。現在它們會和其他模組一樣列在「工具」分類下。"
 
-#. li #130
+#. li #132
 msgid "Fix: both modules were behind two separate switches — the module card and a second master switch inside the Moksa AI screen — so enabling one alone did nothing. The module card is now the only switch. Sites that had the old master switch off keep both modules off."
 msgstr "修正：這兩個模組原本被兩道開關擋著 —— 模組卡片，以及 Moksa AI 畫面裡的第二道總開關 —— 所以只開其中一道毫無作用。現在模組卡片是唯一的開關。原本總開關是關閉狀態的網站，兩個模組維持關閉。"
 
-#. li #131
+#. li #133
 msgid "The Moksa AI screen now uses the same collapsible section cards as the rest of the settings tab."
 msgstr "Moksa AI 畫面現在改用與設定分頁其他地方相同的可收合區塊卡片。"
 
-#. sub #132
+#. sub #134
 msgid "1.5.0 - 2026-08-01"
 msgstr "1.5.0 - 2026-08-01"
 
-#. li #133
+#. li #135
 msgid "i18n: every translatable string is now written in English in the source, and Traditional Chinese ships as a real translation. Previously the source strings were Chinese, which meant the plugin could never be translated into any other language and WordPress.org reported it as having no Traditional Chinese localisation at all. 2,442 strings are covered, so Chinese stores see exactly the same wording as before."
 msgstr "i18n：所有可翻譯字串的原始文字現在一律以英文撰寫，繁體中文則以真正的翻譯形式隨附。先前原始字串是中文，這代表這個外掛永遠無法被翻譯成其他語言，而且 WordPress.org 會判定它完全沒有繁體中文在地化。這次涵蓋 2,442 條字串，因此中文商店看到的用字與先前完全相同。"
 
-#. li #134
+#. li #136
 msgid "i18n: Taiwanese cities and districts now use a translator context (`_x`), so the districts that share a name across cities — Zhongzheng in both Taipei and Keelung, for example — are no longer collapsed into one entry that translators cannot tell apart."
 msgstr "i18n：台灣縣市與鄉鎮區現在帶有譯者情境（`_x`），因此跨縣市同名的行政區 —— 例如台北與基隆都有的中正區 —— 不會再被併成同一條、讓譯者無從分辨。"
 
-#. li #135
+#. li #137
 msgid "Fix: invoice line-item units sent to the e-invoice services were wrapped in a translation call, so on a non-Chinese site they would have been submitted in the site language instead of the value the tax authority expects. They are now sent as fixed data."
 msgstr "修正：送往電子發票服務的品項單位先前被包在翻譯函式裡，所以在非中文網站上，送出去的會是網站語言而不是稅務機關要求的值。現在改以固定資料送出。"
 
-#. li #136
+#. li #138
 msgid "Fix: the order-status labels shown as post-status counts in the admin order list are now translatable in their own right rather than reusing an unrelated shipment-tracking string."
 msgstr "修正：後台訂單列表中作為文章狀態計數顯示的訂單狀態標籤，現在有自己獨立的可翻譯字串，不再沿用一條無關的物流貨態字串。"
 
-#. li #137
+#. li #139
 msgid "Dev: the translation catalogue is generated from a single English-to-Chinese map and the build fails if any string is missing a translation, so a new string can no longer ship untranslated."
 msgstr "開發：翻譯目錄由單一份英中對照表產生，只要有任何字串缺少翻譯，建置就會失敗，因此新字串再也不可能未翻譯就出貨。"
 
-#. sub #138
+#. sub #140
 msgid "1.4.9 - 2026-07-26"
 msgstr "1.4.9 - 2026-07-26"
 
-#. li #139
+#. li #141
 msgid "Security: two SmilePay logistics endpoints (T-cat tracking-number retrieval and C2B label data) were still declared with plain http://; both now use https:// (verified reachable), so every request the plugin makes is TLS-encrypted as the readme states."
 msgstr "安全性：速買配物流的兩個端點（黑貓貨號取得與 C2B 標籤資料）先前仍以純 http:// 宣告；兩者現在都改用 https://（已驗證可連線），因此外掛發出的每一個請求都如 readme 所述經過 TLS 加密。"
 
-#. li #140
+#. li #142
 msgid "Security: the module on/off save handler and the order-status colour save handler verified neither a nonce nor a capability inside the method, relying on the WooCommerce settings page upstream. Both now verify the WooCommerce settings nonce and the manage_woocommerce capability inline, in the same form WooCommerce core uses."
 msgstr "安全性：模組開關儲存處理程序與訂單狀態顏色儲存處理程序，在方法內部既沒有驗證 nonce 也沒有檢查權限，而是仰賴上游的 WooCommerce 設定頁。現在兩者都以 WooCommerce 核心相同的形式，就地驗證 WooCommerce 設定 nonce 與 manage_woocommerce 權限。"
 
-#. li #141
+#. li #143
 msgid "Security: the quick-edit and bulk-edit handlers for the product temperature-zone field verified a nonce name that WooCommerce never issues for those forms, so the check always failed and the field silently stopped saving from quick/bulk edit. They now verify the same woocommerce_quick_edit_nonce that WooCommerce core verifies, restoring the feature."
 msgstr "安全性：商品溫層欄位的快速編輯與批次編輯處理程序，驗證的是一個 WooCommerce 在那些表單上從不發放的 nonce 名稱，因此檢查永遠失敗，該欄位也就無聲無息地無法從快速／批次編輯儲存。現在改為驗證 WooCommerce 核心實際驗證的 woocommerce_quick_edit_nonce，功能已恢復。"
 
-#. li #142
+#. li #144
 msgid "Security: the classic-checkout store validation and the PAYUNi store-restore handler now verify their nonces first, in straight-line form, before touching any request field."
 msgstr "安全性：傳統結帳的門市驗證與統一金流的門市還原處理程序，現在都以直線式寫法先驗證 nonce，才碰任何請求欄位。"
 
-#. li #143
+#. li #145
 msgid "readme: every provider entry now lists its test/sandbox hostname inline and carries an explicit Terms link and an explicit Privacy link (providers publishing a single combined document have both links pointing at it, with a note); the AMEGO terms link points at the actual terms page; added the previously undocumented ecpayment-stage.ecpay.com.tw test hostname."
 msgstr "readme：每一個服務商條目現在都直接列出其測試／沙箱主機名稱，並附上明確的服務條款連結與明確的隱私權政策連結（服務商若只發佈單一份合併文件，兩個連結會指向同一份並加註說明）；AMEGO 的條款連結改指向真正的條款頁；補上先前未記載的 ecpayment-stage.ecpay.com.tw 測試主機。"
 
-#. sub #144
+#. sub #146
 msgid "1.4.8 - 2026-07-19"
 msgstr "1.4.8 - 2026-07-19"
 
-#. li #145
+#. li #147
 msgid "i18n: the text domain is now `moksa-for-woocommerce`, matching the assigned plugin slug (all 4,000+ gettext calls, the plugin header, the block-checkout scripts and the bundled zh_TW translation files were updated; the main plugin file was renamed accordingly)."
 msgstr "i18n：文字網域改為 `moksa-for-woocommerce`，與核配的外掛代稱一致（全部 4,000 多個 gettext 呼叫、外掛標頭、區塊結帳腳本與隨附的 zh_TW 翻譯檔都已更新；外掛主檔亦隨之更名）。"
 
-#. li #146
+#. li #148
 msgid "Security: the PChomePay webhook no longer trusts its payload at all. On top of the source-IP allowlist, every notification now triggers a server-to-server query back to PChomePay (`GET /v1/payment/{id}`) and the authoritative API response gates the order transition: `order_confirm` requires API status S with a matching amount, and expiry/failure notifications are rejected for orders the API reports as paid. The allowlisted IPs are now filterable via `moksafowo_pchomepay_notify_ips`."
 msgstr "安全性：支付連 webhook 不再信任其內容。除了來源 IP 白名單之外，每一筆通知現在都會觸發一次回查支付連的伺服器對伺服器請求（`GET /v1/payment/{id}`），並以 API 的權威回應決定訂單是否轉換狀態：`order_confirm` 必須 API 狀態為 S 且金額相符，而 API 回報為已付款的訂單則會拒絕過期／失敗通知。白名單 IP 現在可透過 `moksafowo_pchomepay_notify_ips` 過濾。"
 
-#. li #147
+#. li #149
 msgid "Security: the product temperature quick-edit / bulk-edit / product-save / variation-save handlers now re-verify the WooCommerce nonce and check `edit_product` capability in-place (fail-closed) instead of relying on the upstream caller having done so."
 msgstr "安全性：商品溫層的快速編輯／批次編輯／商品儲存／變體儲存處理程序，現在都會就地重新驗證 WooCommerce nonce 並檢查 `edit_product` 權限（失敗即拒絕），而不是仰賴上游呼叫端已經做過。"
 
-#. li #148
+#. li #150
 msgid "readme: each SmilePay integration now explains that ssl.smse.com.tw is SmilePay's own API hostname (smse.com.tw and smilepay.net are operated by the same company, 訊航科技); OpenAI policy links point at the individual terms and privacy pages."
 msgstr "readme：每一個速買配整合現在都會說明 ssl.smse.com.tw 是速買配自己的 API 主機名稱（smse.com.tw 與 smilepay.net 由同一家公司訊航科技營運）；OpenAI 的政策連結改指向個別的條款與隱私權頁面。"
 
-#. sub #149
+#. sub #151
 msgid "1.4.7 - 2026-07-12"
 msgstr "1.4.7 - 2026-07-12"
 
-#. li #150
+#. li #152
 msgid "Naming: the PHP namespace root was changed from `MoksaWeb\\Mowc\\` to `Moksafowo\\`, so every global identifier the plugin declares (namespaces, constants, options, hooks, AJAX actions, database tables) now shares the single `moksafowo` prefix."
 msgstr "命名：PHP 命名空間根目錄由 `MoksaWeb\\Mowc\\` 改為 `Moksafowo\\`，因此外掛宣告的每一個全域識別字（命名空間、常數、選項、掛鉤、AJAX action、資料表）現在共用單一的 `moksafowo` 前綴。"
 
-#. li #151
+#. li #153
 msgid "Naming: six filters were still published under WooCommerce-prefixed hook names (`woocommerce_get_sections_*`, `woocommerce_get_settings_*`, `woocommerce_shipping_*_is_available`) even though the methods that fire them fully override WooCommerce and never call the parent implementation. They are now `moksafowo_*`."
 msgstr "命名：有六個過濾器仍以 WooCommerce 前綴的掛鉤名稱發佈（`woocommerce_get_sections_*`、`woocommerce_get_settings_*`、`woocommerce_shipping_*_is_available`），儘管觸發它們的方法完全覆寫了 WooCommerce、從不呼叫父類實作。現在一律改為 `moksafowo_*`。"
 
-#. li #152
+#. li #154
 msgid "Naming: the checkout field namespace and admin CSS class prefix were unified under `moksafowo`; the unused legacy `MOWP_VAULT_KEY` constant fallback was removed."
 msgstr "命名：結帳欄位命名空間與後台 CSS 類別前綴統一收斂到 `moksafowo`；未使用的舊 `MOWP_VAULT_KEY` 常數備援已移除。"
 
-#. li #153
+#. li #155
 msgid "Database: every table name now goes through `$wpdb->prepare()` using the `%i` identifier placeholder, and every `LIKE` pattern through `%s`. No table name or search term is interpolated into SQL anywhere in the plugin, including `uninstall.php`."
 msgstr "資料庫：每一個資料表名稱現在都透過 `$wpdb->prepare()` 搭配 `%i` 識別字佔位符處理，每一個 `LIKE` 樣式則透過 `%s`。外掛裡任何地方都不再把資料表名稱或搜尋字串直接串進 SQL，`uninstall.php` 也一樣。"
 
-#. li #154
+#. li #156
 msgid "Fix: `Aes::decrypt_cbc_hex()` validated its input only after calling `hex2bin()`, which emitted a PHP warning on malformed input before the exception was thrown. It now validates first."
 msgstr "修正：`Aes::decrypt_cbc_hex()` 先呼叫 `hex2bin()` 才驗證輸入，導致格式錯誤的輸入會在丟出例外之前先發出一則 PHP warning。現在改為先驗證。"
 
-#. li #155
+#. li #157
 msgid "Admin: order detail notes no longer expose the internal plugin codename."
 msgstr "後台：訂單詳情備註不再洩漏外掛的內部代號。"
 
-#. sub #156
+#. sub #158
 msgid "1.4.6 - 2026-07-12"
 msgstr "1.4.6 - 2026-07-12"
 
-#. li #157
+#. li #159
 msgid "Security fix: the NewebPay logistics store-map callback verified its signature only when a HashData value was actually supplied, so an attacker could omit it to skip verification. Now rejected (fail-closed) whenever HashData is missing."
 msgstr "安全性修正：藍新物流的門市地圖回呼，只有在實際帶了 HashData 值時才驗證簽章，攻擊者只要省略它就能跳過驗證。現在只要缺少 HashData 一律拒絕（失敗即拒絕）。"
 
-#. li #158
+#. li #160
 msgid "Security fix: PayNow's secondary PassCode2 check (barcode/e-wallet payments) was skipped when the field was empty instead of being required; now fail-closed."
 msgstr "安全性修正：立吉富的第二道 PassCode2 檢查（超商條碼／電子錢包付款）在該欄位為空時是跳過而非要求，現在改為失敗即拒絕。"
 
-#. li #159
+#. li #161
 msgid "Settings: corrected the SmilePay \"Mid\" field description, which still described the old skip-if-empty behaviour after the fail-closed fix."
 msgstr "設定：修正速買配「Mid」欄位的說明文字 —— 在改為失敗即拒絕之後，它仍在描述舊的「空值就跳過」行為。"
 
-#. li #160
+#. li #162
 msgid "readme: OpenAI's Terms/Privacy links replaced with OpenAI's policy hub, which several individual policy sub-pages intermittently blocked as bot traffic."
 msgstr "readme：OpenAI 的條款／隱私權連結改為指向 OpenAI 的政策總覽頁，因為好幾個個別政策子頁會不定時把存取判定為機器人流量而擋下。"
 
-#. li #161
+#. li #163
 msgid "Added explicit references to the exact WooCommerce core methods (`WC_Settings_Page`, `WC_Shipping_Method::is_available()`) that mandate the `woocommerce_*`-prefixed filter tag names flagged by the automated prefix scan — these are WooCommerce's own extension-point names, not ones this plugin defines."
 msgstr "補上明確的說明，指出自動化前綴掃描標記的那些 `woocommerce_*` 前綴過濾器標籤名稱，是由哪些 WooCommerce 核心方法（`WC_Settings_Page`、`WC_Shipping_Method::is_available()`）所規定 —— 那是 WooCommerce 自己的擴充點名稱，不是這個外掛定義的。"
 
-#. sub #162
+#. sub #164
 msgid "1.4.5 - 2026-07-12"
 msgstr "1.4.5 - 2026-07-12"
 
-#. li #163
+#. li #165
 msgid "Security hardening: the SmilePay payment callback now rejects requests when the merchant verification code (參數碼) is not configured (fail-closed) and only accepts callbacks for orders actually paid via SmilePay."
 msgstr "安全性強化：速買配的付款回呼現在會在商家驗證參數碼未設定時拒絕請求（失敗即拒絕），而且只接受確實透過速買配付款的訂單的回呼。"
 
-#. li #164
+#. li #166
 msgid "The LINE Pay admin confirm action now uses the standard check_ajax_referer() flow."
 msgstr "LINE Pay 後台的確認動作現在改用標準的 check_ajax_referer() 流程。"
 
-#. li #165
+#. li #167
 msgid "Readme: clarified SmilePay/ezPay combined terms & privacy documents and documented carrier tracking links (pure hyperlinks — the plugin never contacts those hosts) with verified policy links."
 msgstr "readme：釐清速買配／ezPay 的服務條款與隱私權合併文件，並記載了貨態查詢連結（純超連結 —— 外掛從不連線那些主機）與已驗證的政策連結。"
 
-#. sub #166
+#. sub #168
 msgid "1.4.4 - 2026-07-05"
 msgstr "1.4.4 - 2026-07-05"
 
-#. li #167
+#. li #169
 msgid "Removed a non-functional leftover PAYUNi credentials migrator (its map used identical source and target option names, so it did nothing)."
 msgstr "移除了一個沒有作用的統一金流憑證遷移程式殘留（它的對應表來源與目標選項名稱相同，等於什麼都沒做）。"
 
-#. li #168
+#. li #170
 msgid "The e-invoice donation-organization option is now written under a statically-prefixed, allow-listed option name."
 msgstr "電子發票的捐贈機構選項現在改以靜態前綴、列入白名單的選項名稱寫入。"
 
-#. li #169
+#. li #171
 msgid "Reworked the PAYUNi store-selection restore so the nonce verification is inline and explicit."
 msgstr "重寫統一金流的門市選擇還原流程，讓 nonce 驗證改為就地且明確。"
 
-#. sub #170
+#. sub #172
 msgid "1.4.3 - 2026-06-28"
 msgstr "1.4.3 - 2026-06-28"
 
-#. li #171
+#. li #173
 msgid "Completed the \"External services\" documentation in the readme to list every payment, shipping and e-invoice endpoint the plugin can contact, including the credit-card query endpoint and all sandbox/test hostnames."
 msgstr "補完 readme 的「外部服務」說明，列出外掛可能連線的每一個金流、物流與電子發票端點，包含信用卡查詢端點與所有沙箱／測試主機名稱。"
 
-#. li #172
+#. li #174
 msgid "Minor security hardening of the PAYUNi store-selection AJAX handler: the request nonce is now verified before any other processing."
 msgstr "統一金流門市選擇 AJAX 處理程序的次要安全性強化：請求的 nonce 現在會在任何其他處理之前先驗證。"
 
-#. sub #173
+#. sub #175
 msgid "1.4.2 - 2026-06-21"
 msgstr "1.4.2 - 2026-06-21"
 
-#. li #174
+#. li #176
 msgid "Improved the AI assistant's handling of multi-part questions (e.g. asking for revenue and pending-shipment counts in one message) so they are answered reliably in a single reply."
 msgstr "改善 AI 助手處理多重問題的方式（例如在同一則訊息裡同時問營業額與待出貨筆數），讓它能可靠地在單一回覆中一併回答。"
 
-#. sub #175
+#. sub #177
 msgid "1.4.1 - 2026-06-20"
 msgstr "1.4.1 - 2026-06-20"
 
-#. li #176
+#. li #178
 msgid "Further hardened output escaping on the admin order payment panel and the customer payment-information notice and email (allow-listed HTML at the point of output)."
 msgstr "進一步強化後台訂單金流面板、顧客付款資訊通知與電子郵件的輸出跳脫（在輸出當下以白名單方式處理 HTML）。"
 
-#. sub #177
+#. sub #179
 msgid "1.4.0 - 2026-06-20"
 msgstr "1.4.0 - 2026-06-20"
 
-#. li #178
+#. li #180
 msgid "E-invoice fields on the block checkout now show, hide and validate through WooCommerce's native conditional field logic (JSON Schema) instead of custom scripting, for reliable behaviour across WooCommerce updates."
 msgstr "區塊結帳上的電子發票欄位，現在改用 WooCommerce 原生的條件式欄位邏輯（JSON Schema）來顯示、隱藏與驗證，不再依賴自訂腳本，行為在 WooCommerce 更新之後依然可靠。"
 
-#. li #179
+#. li #181
 msgid "The mobile-barcode and personal-certificate carrier inputs are now separate fields, each with its own format validation."
 msgstr "手機條碼與自然人憑證載具的輸入現在拆成各自獨立的欄位，各有自己的格式驗證。"
 
-#. li #180
+#. li #182
 msgid "Raised the minimum WooCommerce version to 9.9, required by the native conditional checkout fields."
 msgstr "將 WooCommerce 最低版本提高到 9.9，這是原生條件式結帳欄位所需要的。"
 
-#. li #181
+#. li #183
 msgid "Internal consolidation of the e-invoice checkout-field code, plus further hardening of asset loading and input handling."
 msgstr "電子發票結帳欄位程式碼的內部整併，並進一步強化資源載入與輸入處理。"
 
-#. sub #182
+#. sub #184
 msgid "1.3.0 - 2026-06-18"
 msgstr "1.3.0 - 2026-06-18"
 
-#. li #183
+#. li #185
 msgid "New Moksa AI in-admin assistant (requires WordPress 7.0 AI Client and a configured AI connector): query and manage orders, e-invoices, shipping labels and module settings in natural language, with a human confirmation step before any change is applied."
 msgstr "全新的 Moksa AI 後台助手（需要 WordPress 7.0 AI Client 與已設定的 AI 連接器）：用自然語言查詢與管理訂單、電子發票、物流標籤與模組設定，任何變更套用之前都有一道人工確認關卡。"
 
-#. li #184
+#. li #186
 msgid "Order tools via the WordPress Abilities API: find order by number, order details, order counts, status changes (single and batch), order notes, and an advanced order list."
 msgstr "透過 WordPress Abilities API 提供的訂單工具：以編號查訂單、訂單明細、訂單筆數、狀態變更（單筆與批次）、訂單備註，以及進階訂單清單。"
 
-#. li #185
+#. li #187
 msgid "Taiwan e-invoice actions: issue, void and allowance, plus per-channel issuing-method toggles."
 msgstr "台灣電子發票動作：開立、作廢與折讓，另有各通路的開立方式開關。"
 
-#. li #186
+#. li #188
 msgid "Shipping: create a logistics booking and print labels (single and batch)."
 msgstr "物流：建立物流委託單與列印標籤（單筆與批次）。"
 
-#. li #187
+#. li #189
 msgid "Manage settings by natural language: enable or disable provider modules, individual payment methods and invoice issuing methods — each behind a confirmation step. Credentials and sandbox/live switches are never exposed."
 msgstr "用自然語言管理設定：啟用或停用服務商模組、個別付款方式與發票開立方式 —— 每一項都有確認關卡。憑證與測試／正式模式切換永遠不會被暴露。"
 
-#. li #188
+#. li #190
 msgid "Raised the minimum WordPress version to 7.0, required by the AI assistant and the Abilities API. Core payment, shipping and invoice features are unchanged."
 msgstr "將 WordPress 最低版本提高到 7.0，這是 AI 助手與 Abilities API 所需要的。核心的金流、物流與發票功能不受影響。"
 
-#. li #189
+#. li #191
 msgid "Removed the unused SMS module."
 msgstr "移除未使用的簡訊模組。"
 
-#. sub #190
+#. sub #192
 msgid "1.1.0 - 2026-06-05"
 msgstr "1.1.0 - 2026-06-05"
 
-#. li #191
+#. li #193
 msgid "All global identifiers renamed to the unique `moksafowo` prefix (options, hooks, AJAX actions, gateway IDs, script handles, order meta, custom order statuses) per WordPress.org review."
 msgstr "依 WordPress.org 審查要求，所有全域識別字改用獨一無二的 `moksafowo` 前綴（選項、掛鉤、AJAX action、金流 ID、腳本 handle、訂單 meta、自訂訂單狀態）。"
 
-#. li #192
+#. li #194
 msgid "Hardened all payment / logistics webhook handlers: signature verification before any use, full per-field input sanitization, no raw request logging."
 msgstr "強化所有金流／物流 webhook 處理程序：任何使用之前先驗證簽章、每個欄位完整清理輸入、不記錄原始請求內容。"
 
-#. li #193
+#. li #195
 msgid "Store-selection restore at checkout now requires a nonce."
 msgstr "結帳時的門市選擇還原現在需要 nonce。"
 
-#. li #194
+#. li #196
 msgid "All inline `<script>` / `<style>` output replaced with `wp_enqueue_*`, `wp_add_inline_*` and `wp_print_inline_script_tag()`."
 msgstr "所有行內 `<script>` ／ `<style>` 輸出改用 `wp_enqueue_*`、`wp_add_inline_*` 與 `wp_print_inline_script_tag()`。"
 
-#. li #195
+#. li #197
 msgid "All dynamic admin card / tracking-link HTML now escaped through explicit `wp_kses` allowlists at output time."
 msgstr "所有動態產生的後台卡片／貨態連結 HTML，現在都在輸出當下透過明確的 `wp_kses` 白名單跳脫。"
 
-#. sub #196
+#. sub #198
 msgid "1.0.0 - 2026-05-26"
 msgstr "1.0.0 - 2026-05-26"
 
-#. li #197
+#. li #199
 msgid "Initial public release on the WordPress.org Plugin Directory."
 msgstr "在 WordPress.org 外掛目錄首次公開發佈。"
 
-#. section #198
+#. section #200
 msgid "Upgrade Notice"
 msgstr "升級說明"
 
-#. sub #199
+#. sub #201
 msgid "1.0.0"
 msgstr "1.0.0"
 
-#. block #200
+#. block #202
 msgid "Initial public release."
 msgstr "首次公開發佈。"

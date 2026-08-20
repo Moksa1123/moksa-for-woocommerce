@@ -2,9 +2,9 @@
 Contributors: moksa0923
 Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.8.4
+Stable tag: 1.8.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.5 - 2026-08-20 =
+* Compatibility: tested with WordPress 7.1. The drag-and-drop checkout field ordering, the settings screens and the assistant's tools were all checked against it and behave as before.
 
 = 1.8.4 - 2026-08-17 =
 * Fix: after choosing a convenience store, the checkout could still say no store had been picked — and because a store is required to order, the customer was left unable to check out at all. It depended on timing, so it looked intermittent. The chosen store is now recorded while the page is being loaded, before anything else on the checkout can overwrite it.

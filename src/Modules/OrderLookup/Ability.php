@@ -1589,7 +1589,18 @@ final class Ability {
 
 	/**
 	 * 註冊時 gate MCP 暴露：設定關閉時，把破壞性 moksa-for-woocommerce 能力的 meta.mcp.public 設為
-	 * false（WordPress 核心 MCP Adapter 據此不暴露），並記錄供 deprecated WC endpoint 同步排除。
+	 * false，並記錄供 deprecated WC endpoint 同步排除。
+	 *
+	 * **核心不讀 `meta.mcp.public`** —— WP 7.1 的 Abilities API 對 `meta['mcp']` 零引用，
+	 * 核心的 `meta['public']` 只用來 seed `show_in_rest`，而我們每個 ability 都顯式寫了
+	 * `show_in_rest`，所以那條路輪不到它。
+	 *
+	 * **但讀它的不只我們自己。** 官方 MCP Adapter（`WordPress/mcp-adapter`，非核心）的
+	 * `McpAbilityExposure::is_meta_public()` 第一件事就是讀 `meta.mcp.public`，而且它
+	 * **優先於** `meta.public`：`false` 會把一個 public 的能力擋在 MCP 外，`true` 會把
+	 * private 的放進去。也就是說站台一旦裝了官方 adapter，這道 gate 就是唯一擋住那 15 個
+	 * 破壞性能力被暴露出去的東西 —— **不要因為「好像只有自己讀」就把它拿掉**，
+	 * 也別把這個鍵換成核心的 `public`（那會同時廢掉我們自己的 server 與 adapter 兩道）。
 	 * 破壞性能力即使暴露也只會「提議」（execute_callback 一律是 propose-only 的 *prepare），
 	 * 真正變更在非-ability 的 *apply（僅站內確認 REST 可達）。此 gate 為防禦縱深。
 	 *
