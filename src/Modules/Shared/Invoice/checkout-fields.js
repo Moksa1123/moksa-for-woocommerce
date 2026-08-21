@@ -102,6 +102,73 @@
 		}
 	}
 
+	/**
+	 * 借用頁面上既有的必填 / 選填標記當範本，而不是自己拼字串 —— 那兩個標記的文案
+	 * （「*」的 title、「(選填)」）是 WooCommerce 核心自己的翻譯，猜錯就會混進英文。
+	 * 發票類型一定是必填、且結帳頁一定有選填欄位，所以兩個範本都取得到。
+	 */
+	const markers = { required: null, optional: null };
+	function markerTemplates() {
+		// 只在「真的抓到」時才存起來。Classic 結帳會 AJAX 重繪整張表單，第一次 tick()
+		// 可能早於表單存在；若把當下的 null 快取住，之後就永遠補不上標記了。
+		if ( ! markers.required ) {
+			// 用 class 選、不綁標籤名：WooCommerce 舊版是 <abbr class="required">，
+			// 目前版本是 <span class="required" aria-hidden="true">，寫死其一就會抓不到。
+			const req = document.querySelector( '.form-row label .required' );
+			if ( req ) {
+				markers.required = req.cloneNode( true );
+			}
+		}
+		if ( ! markers.optional ) {
+			const opt = document.querySelector( '.form-row label .optional' );
+			if ( opt ) {
+				markers.optional = opt.cloneNode( true );
+			}
+		}
+		return markers;
+	}
+
+	/**
+	 * Classic 沒有 JSON Schema，required 只能在這裡跟著顯示條件一起切。
+	 *
+	 * 刻意**不動原生 required 屬性**：被 display:none 藏起來的欄位若帶 required，
+	 * 瀏覽器會以「An invalid form control is not focusable」擋下整張表單且不給提示，
+	 * 商家會看到按了沒反應。這裡只切 WooCommerce 自己認得的 validate-required class
+	 * 與 label 上的視覺標記，真正的守門仍在 server 端的 after_checkout_validation。
+	 */
+	function setRequired( row, required ) {
+		if ( ! row ) {
+			return;
+		}
+		row.classList.toggle( 'validate-required', required );
+
+		const label = row.querySelector( 'label' );
+		if ( ! label ) {
+			return;
+		}
+		const tpl     = markerTemplates();
+		const reqNode = label.querySelector( '.required' );
+		const optNode = label.querySelector( '.optional' );
+
+		if ( required ) {
+			if ( optNode ) {
+				optNode.remove();
+			}
+			if ( ! reqNode && tpl.required ) {
+				label.appendChild( document.createTextNode( ' ' ) );
+				label.appendChild( tpl.required.cloneNode( true ) );
+			}
+			return;
+		}
+		if ( reqNode ) {
+			reqNode.remove();
+		}
+		if ( ! optNode && tpl.optional ) {
+			label.appendChild( document.createTextNode( ' ' ) );
+			label.appendChild( tpl.optional.cloneNode( true ) );
+		}
+	}
+
 	function classicVisibility() {
 		const typeSel = document.querySelector( '[name="moksafowo_invoice_type"]' );
 		if ( ! typeSel ) {
@@ -112,13 +179,24 @@
 		const carrier    = carrierSel ? carrierSel.value : '';
 		const isCarrier  = 'b2c_carrier' === type;
 		const needNum    = isCarrier && ( 'mobile' === carrier || 'cert' === carrier );
+		const isB2b      = 'b2b' === type;
+		const isDonate   = 'b2c_donate' === type;
 
-		showRow( classicRow( 'invoice_carrier_type' ), isCarrier );
-		showRow( classicRow( 'invoice_carrier_num' ), needNum );
-		showRow( classicRow( 'invoice_buyer_ubn' ), 'b2b' === type );
-		showRow( classicRow( 'invoice_buyer_name' ), 'b2b' === type );
-		showRow( classicRow( 'invoice_donate_org' ), 'b2c_donate' === type );
-		showRow( classicRow( 'invoice_love_code' ), 'b2c_donate' === type );
+		// 條件與必填一一對應，數值與 Block 的 JSON Schema 相同（見 InvoiceCheckoutFields）。
+		// 例外只有捐贈單位：它是帶入捐贈碼用的便利下拉，Block 那邊也是 required=false。
+		const rows = [
+			[ 'invoice_carrier_type', isCarrier, isCarrier ],
+			[ 'invoice_carrier_num', needNum, needNum ],
+			[ 'invoice_buyer_ubn', isB2b, isB2b ],
+			[ 'invoice_buyer_name', isB2b, isB2b ],
+			[ 'invoice_donate_org', isDonate, false ],
+			[ 'invoice_love_code', isDonate, isDonate ],
+		];
+		rows.forEach( function ( item ) {
+			const row = classicRow( item[ 0 ] );
+			showRow( row, item[ 1 ] );
+			setRequired( row, item[ 2 ] );
+		} );
 	}
 
 	function tick() {
