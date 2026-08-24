@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.8.6
+Stable tag: 1.8.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.7 - 2026-08-24 =
+* Fix: ECPay convenience store orders stopped moving through their statuses. A parcel that reached the pickup store stayed marked as shipped, and once the customer collected it the order went to "arrived at store" instead of completing. The codes the carrier sends were being read against the wrong list — the ones for the standard (C2C) account and the bulk (B2C) account overlap in wording but mean different things — so arrival was never recognised and collection was mistaken for arrival. Every code is now matched to what it actually means.
+* Fix: returned ECPay parcels never reached a refunded status, so returns were invisible on the orders screen. They were being sent to an order status that does not exist, which left the order wherever it was.
+* Fix: a parcel reported lost by the carrier was being marked as completed.
+* Fix: opening an order paid through PAYUNi JKOPAY, iCash Pay, credit card reward points, or the single entry point showed "There has been a critical error on this website" in place of the payment details. Payment, invoicing and the order itself were unaffected — only the order screen failed to draw.
 
 = 1.8.6 - 2026-08-20 =
 * Fix: on the classic checkout the e-invoice fields were labelled "(optional)" even when they had to be filled in — the carrier type, the carrier number, the tax ID and company name, and the donation code. The order was then refused on submission with nothing to explain why. Each field is now marked as required exactly when it is, which is what the block checkout already did.

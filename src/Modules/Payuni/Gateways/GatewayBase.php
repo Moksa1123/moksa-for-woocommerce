@@ -223,6 +223,10 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		return $is_available;
 	}
 
+	public static function get_payment_order_metas() {
+		return array();
+	}
+
 	public static function get_order_metas() {
 		return array_merge( PayuniPayment::$order_metas, static::get_payment_order_metas() );
 	}
