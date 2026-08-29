@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.8.7
+Stable tag: 1.8.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.8.8 - 2026-08-24 =
+* Fix: on orders shipped by home delivery, the order screen showed the shipping county as an internal code — "HSINCHU CITY" where the billing address correctly said 新竹市. The shipping address is rendered under a placeholder country used to pick the Taiwanese layout, and WooCommerce could not look the county name up against it. The county name is now filled in for those addresses.
+* Fix: three Taiwanese districts were missing from the district dropdown — East and North in Hsinchu City, and East in Chiayi City. Each had been overwritten by a neighbouring district in the same city, so Hsinchu offered Xiangshan three times over and Chiayi offered West twice. Customers living in those districts could not pick their own, which left the address and the postcode on their order wrong. The full list of 370 districts has been checked against the reference data and now matches it exactly.
 
 = 1.8.7 - 2026-08-24 =
 * Fix: ECPay convenience store orders stopped moving through their statuses. A parcel that reached the pickup store stayed marked as shipped, and once the customer collected it the order went to "arrived at store" instead of completing. The codes the carrier sends were being read against the wrong list — the ones for the standard (C2C) account and the bulk (B2C) account overlap in wording but mean different things — so arrival was never recognised and collection was mistaken for arrival. Every code is now matched to what it actually means.

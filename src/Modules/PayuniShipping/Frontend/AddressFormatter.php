@@ -68,6 +68,12 @@ final class AddressFormatter {
 	}
 
 	public static function address_replacements( $replacements, $args ) {
+		// PNHD / PNCVS 是為了換地址版型而塞的假國別。WC 的 get_formatted_address()
+		// 用 states[<country>][<state>] 查縣市名，查不到就退回原始代碼 —— 運送地址
+		// 因此顯示「HSINCHU CITY」而帳單顯示「新竹市」。這裡把縣市名補回去。
+		if ( ! empty( $args['state'] ) && in_array( $args['country'] ?? '', array( 'PNHD', 'PNCVS' ), true ) ) {
+			$replacements['{state}'] = \Moksafowo\Modules\Address\TwAddress::state_label( (string) $args['state'] );
+		}
 		if ( isset( $args['moksafowo_payuni_storeid'] ) ) {
 			$replacements['{payuni_storeid}']      = $args['moksafowo_payuni_storeid'];
 			$replacements['{payuni_storename}']    = $args['moksafowo_payuni_storename'] ?? '';

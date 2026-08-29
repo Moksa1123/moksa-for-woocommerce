@@ -81,8 +81,8 @@ return [
 			[ _x( 'Nanao Township', 'TW Yilan County', 'moksa-for-woocommerce' ), '272' ],
 		],
 		'HSINCHU CITY'      => [
-			[ _x( 'Xiangshan Dist', 'TW Hsinchu City', 'moksa-for-woocommerce' ), '300' ],
-			[ _x( 'Xiangshan Dist', 'TW Hsinchu City', 'moksa-for-woocommerce' ), '300' ],
+			[ _x( 'East Dist', 'TW Hsinchu City', 'moksa-for-woocommerce' ), '300' ],
+			[ _x( 'North Dist', 'TW Hsinchu City', 'moksa-for-woocommerce' ), '300' ],
 			[ _x( 'Xiangshan Dist', 'TW Hsinchu City', 'moksa-for-woocommerce' ), '300' ],
 		],
 		'HSINCHU COUNTY'    => [
@@ -210,7 +210,7 @@ return [
 			[ _x( 'Lugu Township', 'TW Nantou County', 'moksa-for-woocommerce' ), '558' ],
 		],
 		'CHIAYI CITY'       => [
-			[ _x( 'West Dist', 'TW Chiayi City', 'moksa-for-woocommerce' ), '600' ],
+			[ _x( 'East Dist', 'TW Chiayi City', 'moksa-for-woocommerce' ), '600' ],
 			[ _x( 'West Dist', 'TW Chiayi City', 'moksa-for-woocommerce' ), '600' ],
 		],
 		'CHIAYI COUNTY'     => [

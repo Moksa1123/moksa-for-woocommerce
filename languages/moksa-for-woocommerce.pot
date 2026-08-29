@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.8.3\n"
+"Project-Id-Version: Moksa for WooCommerce 1.8.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-16T17:33:11+00:00\n"
+"POT-Creation-Date: 2026-08-29T13:16:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -213,9 +213,8 @@ msgstr ""
 msgid "Unknown prompt: %s"
 msgstr ""
 
-#: src/Mcp/Server.php:283
+#: src/Mcp/Server.php:306
 #: src/Modules/AiAssistant/Module.php:118
-#: src/Modules/AiAssistant/Rest.php:139
 #: src/Modules/CustomerService/Admin/Inbox.php:127
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:52
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:71
@@ -223,9 +222,9 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:229
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:251
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:267
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:396
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:414
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:450
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:397
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:415
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:451
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:149
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:224
 #: src/Modules/Linepay/LinePay.php:73
@@ -248,7 +247,7 @@ msgstr ""
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: src/Mcp/Server.php:291
+#: src/Mcp/Server.php:314
 msgid "The tool failed to run. Please try again later."
 msgstr ""
 
@@ -589,7 +588,15 @@ msgid "Nanao Township"
 msgstr ""
 
 #: src/Modules/Address/Data/cities-tw.php:84
+msgctxt "TW Hsinchu City"
+msgid "East Dist"
+msgstr ""
+
 #: src/Modules/Address/Data/cities-tw.php:85
+msgctxt "TW Hsinchu City"
+msgid "North Dist"
+msgstr ""
+
 #: src/Modules/Address/Data/cities-tw.php:86
 msgctxt "TW Hsinchu City"
 msgid "Xiangshan Dist"
@@ -1156,6 +1163,10 @@ msgid "Lugu Township"
 msgstr ""
 
 #: src/Modules/Address/Data/cities-tw.php:213
+msgctxt "TW Chiayi City"
+msgid "East Dist"
+msgstr ""
+
 #: src/Modules/Address/Data/cities-tw.php:214
 msgctxt "TW Chiayi City"
 msgid "West Dist"
@@ -2405,32 +2416,6 @@ msgstr ""
 msgid "Keeps usage and cost in check. Once the limit is reached, messages are simply passed on."
 msgstr ""
 
-#: src/Modules/AiAssistant/Agent.php:34
-#: src/Modules/AiAssistant/Module.php:108
-msgid "The AI Client is unavailable. It requires WordPress 7.0."
-msgstr ""
-
-#: src/Modules/AiAssistant/Agent.php:69
-#: src/Modules/AiAssistant/Module.php:109
-msgid "The AI cannot answer right now. Please try again shortly."
-msgstr ""
-
-#: src/Modules/AiAssistant/Agent.php:108
-#: src/Modules/AiAssistant/Module.php:110
-msgid "The AI could not finish after several attempts. Try asking a different way."
-msgstr ""
-
-#: src/Modules/AiAssistant/Agent.php:193
-#: src/Modules/AiAssistant/Module.php:111
-#: src/Modules/AiAssistant/Rest.php:147
-msgid "Unsupported action."
-msgstr ""
-
-#: src/Modules/AiAssistant/Agent.php:201
-#: src/Modules/AiAssistant/Module.php:112
-msgid "This action could not be prepared."
-msgstr ""
-
 #: src/Modules/AiAssistant/Config.php:155
 msgid "You are Moksa AI, the WooCommerce admin assistant for a Taiwanese online store. These are your tools: (1) find a single order by order number, e-invoice number, tracking number or payment transaction ID — when the user simply gives a number, such as “order 2855” or “status of 2855?”, treat it as an order number and use this tool; it is the right choice when all that is needed is a status or which order is meant; (2) get the full details of one order — items, totals, payment and shipping method, pickup store, invoice number and whether it has been issued, tracking number and payment transaction ID — use this for questions like “has the invoice been issued”, “what is the tracking number”, “which store is it going to” or “what did they buy”; (3) count orders and see the breakdown by status, or list the orders in one status (awaiting shipment is processing, awaiting payment is pending, finished is completed); (4) change an order status — update-order-status for one order, batch-update-order-status for several; (5) issue an e-invoice with issue-invoice; (6) void an e-invoice with void-invoice, which needs a reason; (7) print shipping labels with print-shipping-label, for one or more orders that already have shipments; (8) create a shipment with create-shipment, which books it with the carrier and returns a tracking number, after which the label can be printed. Tools 4 to 8 are only proposed: the user is asked to press Confirm before anything happens, so never ask for confirmation yourself. (9) add an order note with add-order-note, which is low risk and runs immediately; (10) list payment, shipping and e-invoice channels with list-channels (read-only); (11) enable or disable a channel with toggle-channel — pass the channel name such as “SmilePay shipping” directly, with no need to list them first (destructive, so it goes through confirmation); (12) add an invoice donation charity with add-donation-org, giving a name and love code (destructive, confirmed); (13) issue an invoice allowance with issue-allowance, giving an amount (destructive, confirmed); (14) get an advanced order list with list-orders, filtered by status, date range or payment method (read-only); (15) list a payment service's individual methods with list-payment-methods (read-only); (16) enable or disable those methods with toggle-payment-method, such as ECPay's one-off card payment or Apple Pay, passing the names directly (destructive, confirmed); (17) list invoice issuing options with list-invoice-channels (read-only); (18) enable or disable them with toggle-invoice-channel — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID (destructive, confirmed); (19) resend the payment details email with resend-payment-email, sending the ATM or convenience store details to the customer (destructive, confirmed); (20) get tracking links with get-tracking-link (read-only); (21) check payment status with get-payment-status — method, whether it is paid, transaction ID, last four card digits, ATM and convenience store details, with a live NewebPay query where applicable (read-only); (22) summarize the plugin settings with get-plugin-settings — which channels are on, test or production mode, when invoices are issued, which fields order lookup searches and whether AI is enabled, never credentials (read-only); (23) list shipping zones and methods with list-shipping-zones (read-only); (24) enable or disable a shipping method with toggle-shipping-method, naming the method directly, such as “SmilePay T-Cat ambient” (destructive, confirmed); (25) create shipments in bulk with batch-create-shipment (destructive, confirmed); (26) find a customer's orders with find-customer-orders by email, phone or name (read-only); (27) get revenue statistics with sales-summary — revenue, order count, status breakdown and average order value for a period, defaulting to this month (read-only). Tools 11 to 13, 16, 18, 19, 24 and 25 are also only proposed and wait for confirmation. Always look up the real data with a tool before answering, then reply briefly and clearly in the language the merchant is using. Report only the orders that genuinely match the question, and never pad the answer with unrelated ones. If nothing is found, say so plainly rather than inventing anything. If asked for something the tools cannot do, such as printing many shipping labels at once or changing a great many statuses, do not simply say it is impossible — explain that it can be done by ticking the orders in the WooCommerce order list and using the bulk actions menu above, and that you can help with lookups and single status changes. If several things are asked at once, gather everything with the appropriate tools first, then combine the answers into a single reply. Always finish with text; never stop at a tool call without answering."
 msgstr ""
@@ -2471,8 +2456,27 @@ msgstr ""
 msgid "(no reply)"
 msgstr ""
 
+#: src/Modules/AiAssistant/Module.php:108
+msgid "The AI Client is unavailable. It requires WordPress 7.0."
+msgstr ""
+
+#: src/Modules/AiAssistant/Module.php:109
+msgid "The AI cannot answer right now. Please try again shortly."
+msgstr ""
+
+#: src/Modules/AiAssistant/Module.php:110
+msgid "The AI could not finish after several attempts. Try asking a different way."
+msgstr ""
+
+#: src/Modules/AiAssistant/Module.php:111
+msgid "Unsupported action."
+msgstr ""
+
+#: src/Modules/AiAssistant/Module.php:112
+msgid "This action could not be prepared."
+msgstr ""
+
 #: src/Modules/AiAssistant/Module.php:113
-#: src/Modules/AiAssistant/Rest.php:136
 msgid "That confirmation has expired or no longer exists. Please start again."
 msgstr ""
 
@@ -3606,10 +3610,10 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:234
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:257
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:273
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:333
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:401
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:419
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:456
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:334
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:402
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:420
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:457
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:157
 #: src/Modules/OrderLookup/Ability.php:1362
 #: src/Modules/OrderLookup/ChangePickupStore.php:139
@@ -4611,7 +4615,7 @@ msgid "Could not issue the allowance:"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:200
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:339
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:340
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:272
 msgid "Something went wrong. Please try again later, or check the logs."
 msgstr ""
@@ -4867,14 +4871,14 @@ msgstr ""
 
 #. translators: %d: package count
 #. translators: %d: number of split shipping records
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:160
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:161
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:124
 #, php-format
 msgid "This order is split into %d shipments by temperature zone, each printed and tracked on its own."
 msgstr ""
 
 #. translators: %d: cash-on-delivery amount in TWD
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:193
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:194
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:138
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:204
 #, php-format
@@ -4882,107 +4886,107 @@ msgid "NT$%d (cash on delivery)"
 msgstr ""
 
 #. translators: %d: cash-on-delivery amount in TWD
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:193
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:194
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:138
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:205
 msgid "No"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:212
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:213
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:222
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:122
 msgid "Shipping number:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:218
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:219
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:125
 msgid "Waybill number:"
 msgstr ""
 
 #. translators: %d: declared value amount in TWD
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:221
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:222
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:166
 msgid "Declared value:"
 msgstr ""
 
 #. translators: %d: declared value amount in TWD
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:221
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:222
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:166
 #, php-format
 msgid "NT$%d"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:222
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:223
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:242
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:167
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:201
 msgid "Amount to collect:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:228
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:229
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:170
 msgid "Created:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:236
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:237
 msgid "(today)"
 msgstr ""
 
 #. translators: %d: 天數
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:239
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:240
 #, php-format
 msgid "(%d days ago)"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:247
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:248
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:216
 msgid "Status updated:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:251
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:252
 msgid "Not updated yet"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:255
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:256
 msgid "Status:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:272
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:273
 msgid "Print A4"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:272
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:273
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:176
 msgid "A4"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:278
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:279
 msgid "Print A6 label"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:278
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:279
 msgid "A6"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:283
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:284
 msgid "Delete this record"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:284
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:285
 msgid "Delete"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:294
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:295
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:138
 msgid "Create shipment"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:294
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:295
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:138
 msgid "Recreate shipment"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:303
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:304
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:131
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:72
@@ -4998,96 +5002,96 @@ msgstr ""
 msgid "Shipping details"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:329
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:330
 msgid "Creating…"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:330
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:331
 msgid "The shipment was created. Refresh the page to see the full details."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:331
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:332
 msgid "Could not create:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:332
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:333
 msgid "This order already has shipments, so only the missing ones will be created. To rebuild them all, delete the existing records first. Continue?"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:334
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:335
 msgid "Delete this shipment record?"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:335
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:336
 msgid "Deleted. Refreshing the page."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:336
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:337
 msgid "Could not delete:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:337
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:338
 msgid "Could not print:"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:338
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:339
 msgid "Printing…"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:340
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
 #: src/Modules/Linepay/LinePay.php:139
 #: src/Modules/Payuni/PayuniPayment.php:206
 msgid "Connection error. Please try again later."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:378
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:379
 #: src/Modules/EcpayShipping/Module.php:34
 #: src/Modules/NewebpayShipping/Module.php:34
 #: src/Modules/SmilepayShipping/Module.php:34
 msgid "7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:379
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:380
 #: src/Modules/EcpayShipping/Module.php:35
 #: src/Modules/NewebpayShipping/Module.php:35
 #: src/Modules/SmilepayShipping/Module.php:35
 msgid "FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:380
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:381
 #: src/Modules/EcpayShipping/Module.php:36
 #: src/Modules/NewebpayShipping/Module.php:36
 msgid "Hi-Life pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:381
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:382
 #: src/Modules/EcpayShipping/Module.php:37
 #: src/Modules/NewebpayShipping/Module.php:37
 msgid "OK Mart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:382
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:383
 msgid "7-ELEVEN bulk"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:383
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:384
 #: src/Modules/EcpayShipping/Methods/Cvs711B2CFreeze.php:25
 msgid "7-ELEVEN frozen"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:384
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:385
 msgid "FamilyMart bulk"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:385
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:386
 msgid "Hi-Life bulk"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:386
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:387
 msgid "OK Mart bulk"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:387
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:388
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:24
 #: src/Modules/EcpayShipping/Module.php:38
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:30
@@ -5097,21 +5101,21 @@ msgstr ""
 msgid "T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:388
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:389
 #: src/Modules/EcpayShipping/Methods/HomePost.php:24
 #: src/Modules/EcpayShipping/Module.php:39
 msgid "Chunghwa Post"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:434
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:435
 msgid "That shipment could not be found."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:459
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:460
 msgid "The shipping ID is missing."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:463
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:464
 msgid "That shipment record could not be found."
 msgstr ""
 
@@ -5194,13 +5198,13 @@ msgstr ""
 msgid "ECPay shipping"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:83
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:89
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:75
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
 msgid "Choose a pickup store"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:84
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:90
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:76
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:181
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
@@ -5209,12 +5213,12 @@ msgstr ""
 msgid "Change store"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:85
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:220
 msgid "No store chosen yet"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:86
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:92
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:79
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
@@ -5223,17 +5227,17 @@ msgstr ""
 msgid "Store number"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:87
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:93
 msgid "The ECPay store picker could not be opened. Please try again later."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:117
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:177
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:123
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:183
 msgid "This is not an ECPay shipping method."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:122
-#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:181
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:128
+#: src/Modules/EcpayShipping/Frontend/StoreSelector.php:187
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
 msgid "This shipping method does not need a store."
 msgstr ""
