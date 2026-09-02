@@ -20,12 +20,13 @@ final class StatusMapper extends AbstractStatusMapper {
 		'43' => 'failed',
 		'44' => 'failed',
 		'46' => 'failed',
-		'51' => 'refunded',          // 退貨
-		'52' => 'refunded',
-		'53' => 'refunded',
-		'55' => 'refunded',
-		'56' => 'refunded',
-		'82' => 'refunded',
+		// 退貨群組 —— 超商取件退回即「未取件」，不自動轉已退費（退款由商家決定）。
+		'51' => 'moksa-unclaimed',
+		'52' => 'moksa-unclaimed',
+		'53' => 'moksa-unclaimed',
+		'55' => 'moksa-unclaimed',
+		'56' => 'moksa-unclaimed',
+		'82' => 'moksa-unclaimed',
 		'81' => 'moksa-store-closed', // 門市暫歇
 	];
 

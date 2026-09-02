@@ -62,8 +62,11 @@
 			}
 		} );
 
-		// 選 city → 自動帶入 postcode
+		// 選 city → 自動帶入 postcode（設定頁可關）
 		$( document.body ).on( 'change', 'select.city_select', function () {
+			if ( moksafowo_tw_address.postcode_autofill === false ) {
+				return;
+			}
 			const $form = $( this ).closest( '.form-row' ).parent();
 			const postcode = $form.find( '#billing_city, #shipping_city, #calc_shipping_city' ).find( ':selected' ).data( 'postcode' );
 			const $postcode = $form.find( '#billing_postcode, #shipping_postcode, #calc_shipping_postcode' );

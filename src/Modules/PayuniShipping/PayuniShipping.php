@@ -161,6 +161,7 @@ class PayuniShipping {
 		ShippingRequest::init();
 		ShippingResponse::init();
 		Webhook\StatusMapper::init();
+		Webhook\Reconciler::init();
 		OrderEdit::init();
 		StoreSelector::init();
 		Admin\OrderListHelper::init();

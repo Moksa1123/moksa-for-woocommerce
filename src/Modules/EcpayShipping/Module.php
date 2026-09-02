@@ -49,6 +49,7 @@ final class Module extends AbstractModule {
 
 		add_action( 'woocommerce_api_moksafowo_ecpay_shipping_status', [ Webhook\IpnHandler::class, 'handle' ] );
 		Webhook\StatusMapper::init();
+		Webhook\Reconciler::init();
 		Frontend\StoreSelector::init();
 		Frontend\CustomerOrderView::init();
 		// WC 用 woocommerce_get_order_address（不是 woocommerce_order_get_address）

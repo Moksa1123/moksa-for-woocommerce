@@ -29,6 +29,13 @@ final class Registrar {
 			'color'    => '#996800',
 			'public'   => true,
 		],
+		'moksa-unclaimed'    => [
+			'label'    => '未取件',
+			'badge'    => '未取件',
+			'wc_label' => '未取件 <span class="count">(%s)</span>',
+			'color'    => '#8a2be2',
+			'public'   => true,
+		],
 	];
 
 	public static function init(): void {
@@ -61,6 +68,7 @@ final class Registrar {
 			'moksa-shipped'      => __( 'Shipped', 'moksa-for-woocommerce' ),
 			'moksa-cvs-arrived'  => __( 'Arrived at the store, waiting for pickup', 'moksa-for-woocommerce' ),
 			'moksa-store-closed' => __( 'Store closed', 'moksa-for-woocommerce' ),
+			'moksa-unclaimed'    => __( 'Not collected', 'moksa-for-woocommerce' ),
 			'completed'          => __( 'Completed', 'moksa-for-woocommerce' ),
 			'cancelled'          => __( 'Cancelled / failed', 'moksa-for-woocommerce' ),
 			'refunded'           => __( 'Refund', 'moksa-for-woocommerce' ),
@@ -74,6 +82,7 @@ final class Registrar {
 			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
 			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
 			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
+			'moksa-unclaimed'    => [ '#7c3aed', '#ffffff' ],
 			'completed'          => [ '#d1fae5', '#065f46' ],
 			'cancelled'          => [ '#fee2e2', '#991b1b' ],
 			'refunded'           => [ '#e2e8f0', '#475569' ],
@@ -206,6 +215,8 @@ JS;
 				return __( 'Arrived at store', 'moksa-for-woocommerce' );
 			case 'moksa-store-closed':
 				return __( 'Store closed', 'moksa-for-woocommerce' );
+			case 'moksa-unclaimed':
+				return __( 'Not collected', 'moksa-for-woocommerce' );
 		}
 		return $slug;
 	}
@@ -223,6 +234,9 @@ JS;
 			case 'moksa-store-closed':
 				/* translators: %s: number of orders in this status */
 				return _n_noop( 'Store closed <span class="count">(%s)</span>', 'Store closed <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
+			case 'moksa-unclaimed':
+				/* translators: %s: number of orders in this status */
+				return _n_noop( 'Not collected <span class="count">(%s)</span>', 'Not collected <span class="count">(%s)</span>', 'moksa-for-woocommerce' );
 			case 'moksa-shipped':
 			default:
 				/* translators: %s: number of orders in this status */
@@ -292,6 +306,7 @@ JS;
 		$paid[] = 'moksa-shipped';
 		$paid[] = 'moksa-cvs-arrived';
 		$paid[] = 'moksa-store-closed';
+		$paid[] = 'moksa-unclaimed';
 		return $paid;
 	}
 
@@ -300,7 +315,7 @@ JS;
 			return $editable;
 		}
 		$status = method_exists( $order, 'get_status' ) ? $order->get_status() : '';
-		if ( in_array( $status, [ 'moksa-shipped', 'moksa-cvs-arrived', 'moksa-store-closed' ], true ) ) {
+		if ( in_array( $status, [ 'moksa-shipped', 'moksa-cvs-arrived', 'moksa-store-closed', 'moksa-unclaimed' ], true ) ) {
 			return false;
 		}
 		return $editable;
@@ -365,7 +380,9 @@ JS;
 			return self::$palette_cache;
 		}
 
-		// failed 共用 cancelled；pending 共用 on-hold 的 option key
+		// failed 共用 cancelled；pending 共用 on-hold 的 option key。
+		// moksa-* 的 key 是 slug 直接 str_replace('-','_')，跟 render/save 那邊同一個算法 ——
+		// 這裡曾寫成 moksafowo_*，跟儲存的 key 對不上，顏色設定存了卻永遠不生效。
 		$defaults    = [
 			'processing'         => [ '#dbeafe', '#1e40af' ],
 			'completed'          => [ '#d1fae5', '#065f46' ],
@@ -377,6 +394,7 @@ JS;
 			'moksa-shipped'      => [ '#1d4ed8', '#ffffff' ],
 			'moksa-cvs-arrived'  => [ '#d97706', '#ffffff' ],
 			'moksa-store-closed' => [ '#b45309', '#ffffff' ],
+			'moksa-unclaimed'    => [ '#7c3aed', '#ffffff' ],
 		];
 		$option_keys = [
 			'processing'         => 'moksafowo_status_color_processing',
@@ -386,9 +404,10 @@ JS;
 			'refunded'           => 'moksafowo_status_color_refunded',
 			'on-hold'            => 'moksafowo_status_color_on_hold',
 			'pending'            => 'moksafowo_status_color_on_hold',
-			'moksa-shipped'      => 'moksafowo_status_color_moksafowo_shipped',
-			'moksa-cvs-arrived'  => 'moksafowo_status_color_moksafowo_cvs_arrived',
-			'moksa-store-closed' => 'moksafowo_status_color_moksafowo_store_closed',
+			'moksa-shipped'      => 'moksafowo_status_color_moksa_shipped',
+			'moksa-cvs-arrived'  => 'moksafowo_status_color_moksa_cvs_arrived',
+			'moksa-store-closed' => 'moksafowo_status_color_moksa_store_closed',
+			'moksa-unclaimed'    => 'moksafowo_status_color_moksa_unclaimed',
 		];
 
 		$palette = [];

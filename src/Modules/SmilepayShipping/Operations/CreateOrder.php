@@ -275,6 +275,13 @@ final class CreateOrder {
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_NO, (string) ( $latest['smseid'] ?? '' ) );
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_TRACK_NO, (string) ( $latest['track_num'] ?? '' ) );
 		}
+		$order->add_order_note(
+			sprintf(
+			/* translators: %s: SmilePay shipment number */
+				__( 'Shipment record #%s was deleted from this site only. SmilePay is not notified.', 'moksa-for-woocommerce' ),
+				$smseid
+			)
+		);
 
 		$order->save();
 		return true;

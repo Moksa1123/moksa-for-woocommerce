@@ -90,11 +90,13 @@ final class Plugin {
 
 	public function on_woocommerce_init(): void {
 		self::migrate_ai_master_switch();
+		self::migrate_option_key_mismatches();
 		Settings\SettingsTab::register();
 		Modules\Shipping\Module::boot();
 		Modules\Address\TwAddress::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
+			Modules\Shared\Admin\PaymentQuery::boot();
 			// Hub 一律 boot —— 它自己決定要不要出現在側邊欄（見 Hub::menu()）。
 			// 不 boot 的話頁面連路由都沒有，使用者點到舊連結會拿到誤導的權限錯誤。
 			Modules\AiAssistant\Admin\Hub::boot();
@@ -107,6 +109,29 @@ final class Plugin {
 	 * v1.5.1 之前有第二層總開關 moksafowo_ai_enabled，兩個模組的 boot() 都會再檢查它。
 	 * 現在模組卡片是唯一開關，若舊站的總開關是關的，就把兩個模組一併關掉，維持原本的行為。
 	 */
+	/**
+	 * v1.8.9 修了兩組「設定頁存的 key」跟「程式讀的 key」對不上的問題：
+	 * - 物流狀態開關：設定頁存 moksafowo_shipping_status_moksafowo_<x>_enabled，
+	 *   Registrar 讀 moksafowo_shipping_status_moksa_<x>_enabled → 勾不勾都沒差。
+	 *   商家若真的關過某個狀態，值在舊 key 上，搬過來才不會升級後又冒出來。
+	 * - 郵遞區號自動帶入：設定從沒被 JS 讀過，一直都是開的。設定頁只要存過一次
+	 *   就會留下 no（checkbox 預設沒勾），修好之後不能讓它突然關掉，統一設成 yes。
+	 */
+	private static function migrate_option_key_mismatches(): void {
+		if ( 'done' === get_option( 'moksafowo_option_keys_migrated_189', '' ) ) {
+			return;
+		}
+		foreach ( [ 'shipped', 'cvs_arrived', 'store_closed' ] as $x ) {
+			$old = get_option( 'moksafowo_shipping_status_moksafowo_' . $x . '_enabled', null );
+			if ( null !== $old ) {
+				update_option( 'moksafowo_shipping_status_moksa_' . $x . '_enabled', $old, false );
+				delete_option( 'moksafowo_shipping_status_moksafowo_' . $x . '_enabled' );
+			}
+		}
+		update_option( 'moksafowo_tw_address_postcode_autofill', 'yes', false );
+		update_option( 'moksafowo_option_keys_migrated_189', 'done', false );
+	}
+
 	private static function migrate_ai_master_switch(): void {
 		if ( 'done' === get_option( 'moksafowo_ai_master_migrated', '' ) ) {
 			return;

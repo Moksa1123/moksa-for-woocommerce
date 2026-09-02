@@ -65,6 +65,12 @@ class StoreSelector {
 
 		add_action( 'woocommerce_checkout_update_order_review', array( __CLASS__, 'update_session_shipping_method' ) );
 
+		// 門市 token 在渲染結帳頁的那個請求就兌換掉，不要等頁面載入後再發 AJAX。
+		// 走 AJAX 會跟 WooCommerce 的 update_order_review 併發，對方會把門市蓋掉 ——
+		// 顧客明明選了卻顯示沒選，再撞上「未選門市不准下單」就結不了帳。
+		// 而且 Classic 結帳原本完全沒有伺服器端消費者，只靠 callback 那份 best-effort
+		// session（跨站 POST 可能換 session，註解自己也標了不可靠）。
+		add_action( 'template_redirect', array( __CLASS__, 'consume_token_early' ), 5 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 
 		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'modify_billing_fields_for_cvs' ), 20 );
@@ -454,6 +460,34 @@ JS
 			wp_send_json_success( $store_data );
 		} else {
 			wp_send_json_error( array( 'message' => '沒有已選擇的門市' ) );
+		}
+	}
+
+	/**
+	 * 一次性 token 在 template_redirect 當場兌換進 session，避開 update_order_review 競態。
+	 * 兌換後不刪 transient —— Block 結帳的 JS 仍會走 ajax_resolve_store_token 再讀一次，
+	 * 那邊才是 one-shot 刪除點。transient 本身 30 分鐘後自然過期。
+	 */
+	public static function consume_token_early() {
+		if ( is_admin() || wp_doing_ajax() ) {
+			return;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token 本身即憑證，僅寫入請求者自己的 session。
+		$token = isset( $_GET['moksafowo_store'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_store'] ) ) : '';
+		if ( strlen( $token ) < 16 ) {
+			return;
+		}
+
+		$store_data = get_transient( 'moksafowo_payuni_store_' . $token );
+		if ( ! is_array( $store_data ) || empty( $store_data['id'] ) ) {
+			return; // 尚未寫入、已過期，或是還沒選店的 pending 佔位。
+		}
+
+		if ( function_exists( 'WC' ) ) {
+			WC()->initialize_session();
+			if ( WC()->session ) {
+				WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
+			}
 		}
 	}
 

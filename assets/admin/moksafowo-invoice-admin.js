@@ -210,6 +210,14 @@
 			cfg.invalid_ok, cfg.invalid_fail, cfg.invalidating );
 	} );
 
+	// 查詢 — 向服務商問這張發票目前的狀態，結果寫進訂單備註。
+	$( document ).on( 'click', '.moksafowo-invoice-meta .moksafowo-invoice-query', function ( e ) {
+		e.preventDefault();
+		const c = ctx( $( this ) );
+		run( c, { action: c.prefix + '_query', order_id: c.order, nonce: c.nonce },
+			cfg.query_ok, cfg.query_fail, cfg.querying );
+	} );
+
 	// 折讓 — 內聯金額輸入（取代 prompt/alert）。
 	$( document ).on( 'click', '.moksafowo-invoice-meta .moksafowo-invoice-allowance', function ( e ) {
 		e.preventDefault();

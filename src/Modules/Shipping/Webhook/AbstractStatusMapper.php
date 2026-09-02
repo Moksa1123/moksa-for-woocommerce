@@ -42,8 +42,9 @@ abstract class AbstractStatusMapper {
 
 		do_action( "moksafowo_shipping_status_changed_{$slug}", $order, $provider, $code );
 
-		// mo-* 自訂狀態走自家 email；WC 既有狀態走 WC 內建 email pipeline
-		if ( str_starts_with( $slug, 'mo-' ) ) {
+		// moksa-* 自訂狀態走自家 email；WC 既有狀態走 WC 內建 email pipeline。
+		// 前綴曾是 mo-，改名成 moksa- 後這裡漏改，導致三封物流信從未觸發。
+		if ( str_starts_with( $slug, 'moksa-' ) ) {
 			do_action( 'moksafowo_shipping_status_' . $slug . '_notification', $order->get_id(), $order );
 		}
 	}

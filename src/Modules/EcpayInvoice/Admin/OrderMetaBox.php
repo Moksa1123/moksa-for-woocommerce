@@ -5,6 +5,7 @@ namespace Moksafowo\Modules\EcpayInvoice\Admin;
 
 use Moksafowo\Modules\EcpayInvoice\Operations\Allowance;
 use Moksafowo\Modules\EcpayInvoice\Operations\Invalid;
+use Moksafowo\Modules\EcpayInvoice\Operations\Query;
 use Moksafowo\Modules\EcpayInvoice\Operations\Issue;
 use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
 use Moksafowo\Modules\Shared\Invoice\AdminIssueForm;
@@ -30,6 +31,7 @@ final class OrderMetaBox {
 		add_action( 'wp_ajax_moksafowo_ecpay_invoice_issue', [ __CLASS__, 'ajax_issue' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_invoice_invalid', [ __CLASS__, 'ajax_invalid' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_invoice_allowance', [ __CLASS__, 'ajax_allowance' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_invoice_query', [ __CLASS__, 'ajax_query' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
@@ -99,7 +101,8 @@ final class OrderMetaBox {
 			} else {
 				echo '<p style="margin-top:.6em;">';
 				echo '<button type="button" class="button moksafowo-ecpay-invoice-invalid">' . esc_html__( 'Void invoice', 'moksa-for-woocommerce' ) . '</button> ';
-				echo '<button type="button" class="button moksafowo-ecpay-invoice-allowance">' . esc_html__( 'Issue allowance', 'moksa-for-woocommerce' ) . '</button>';
+				echo '<button type="button" class="button moksafowo-ecpay-invoice-allowance">' . esc_html__( 'Issue allowance', 'moksa-for-woocommerce' ) . '</button> ';
+				echo '<button type="button" class="button moksafowo-ecpay-invoice-query">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button>';
 				echo '</p>';
 				echo '<div class="moksafowo-inv-invalid-form" style="display:none;margin-top:.5em;">';
 				echo '<input type="text" class="moksafowo-inv-invalid-reason" maxlength="20" style="display:block;width:100%;margin-bottom:.4em;" placeholder="' . esc_attr__( 'Reason for voiding (up to 20 characters)', 'moksa-for-woocommerce' ) . '">';
@@ -197,6 +200,9 @@ final class OrderMetaBox {
 					'allowance_need_amount' => __( 'Please enter an allowance amount.', 'moksa-for-woocommerce' ),
 					'allowance_ok'          => __( 'The allowance was issued.', 'moksa-for-woocommerce' ),
 					'allowance_fail'        => __( 'Could not issue the allowance:', 'moksa-for-woocommerce' ),
+					'querying'              => __( 'Looking up…', 'moksa-for-woocommerce' ),
+					'query_ok'              => __( 'Looked up. See the order notes for what the provider reported.', 'moksa-for-woocommerce' ),
+					'query_fail'            => __( 'Could not look up:', 'moksa-for-woocommerce' ),
 					'unknown_error'         => __( 'Something went wrong. Please try again later, or check the logs.', 'moksa-for-woocommerce' ),
 				],
 			]
@@ -274,6 +280,40 @@ final class OrderMetaBox {
 		}
 
 		$result = Allowance::run( $order, $amount );
+		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
+	}
+
+	/**
+	 * 向綠界查這張發票目前的狀態，結果寫進訂單備註。
+	 * 只讀不覆蓋本地欄位 —— 避免一次查詢把商家手動修正過的資料蓋掉。
+	 */
+	public static function ajax_query(): void {
+		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
+		}
+		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+		$order    = $order_id ? wc_get_order( $order_id ) : null;
+		if ( ! $order instanceof \WC_Order ) {
+			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
+		}
+
+		$result = Query::run( $order );
+		if ( ! empty( $result['ok'] ) ) {
+			$lines = [];
+			foreach ( (array) ( $result['lines'] ?? [] ) as $k => $v ) {
+				$lines[] = sanitize_text_field( (string) $k ) . ': ' . sanitize_text_field( (string) $v );
+			}
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: status sentence, 2: the invoice details returned by ECPay */
+					__( 'Invoice status looked up at ECPay — %1$s %2$s', 'moksa-for-woocommerce' ),
+					(string) ( $result['message'] ?? '' ),
+					$lines ? '（' . implode( ' / ', $lines ) . '）' : ''
+				)
+			);
+			$order->save();
+		}
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 

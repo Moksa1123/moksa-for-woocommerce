@@ -113,14 +113,16 @@ final class IpnHandler {
 				return [ __( 'Arrived at the store', 'moksa-for-woocommerce' ), 'moksa-cvs-arrived' ];
 			case 3:
 				return [ __( 'Collected by the customer', 'moksa-for-woocommerce' ), 'completed' ];
+			// 4~7 是「顧客沒取貨 → 包裹一路退回」的同一條鏈，整條停在未取件。
+			// 4 曾對到 cancelled，那會觸發 WC 自動回補庫存 —— 包裹還在路上就先加回可售量。
 			case 4:
-				return [ __( 'Returned by the customer', 'moksa-for-woocommerce' ), 'cancelled' ];
+				return [ __( 'Returned by the customer', 'moksa-for-woocommerce' ), 'moksa-unclaimed' ];
 			case 5:
-				return [ __( 'Arrived at the return store', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Arrived at the return store', 'moksa-for-woocommerce' ), 'moksa-unclaimed' ];
 			case 6:
-				return [ __( 'Return collected', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Return collected', 'moksa-for-woocommerce' ), 'moksa-unclaimed' ];
 			case 7:
-				return [ __( 'Return arrived at the distribution center', 'moksa-for-woocommerce' ), '' ];
+				return [ __( 'Return arrived at the distribution center', 'moksa-for-woocommerce' ), 'moksa-unclaimed' ];
 			default:
 				/* translators: %d: SmilePay status code */
 				return [ sprintf( __( 'Status code %d', 'moksa-for-woocommerce' ), $code ), '' ];

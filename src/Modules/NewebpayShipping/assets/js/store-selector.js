@@ -104,14 +104,25 @@
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( ( r ) => r.json() )
 			.then( ( res ) => {
-				if ( res.success ) {
-					window.__moksafowoNewebpayStore = res.data;
-					// 清掉 query string
-					const u = new URL( window.location.href );
-					u.searchParams.delete( cfg.token_query );
-					history.replaceState( null, '', u.toString() );
+				if ( ! res || ! res.success ) {
+					// token 已被 template_redirect 兌換掉是正常情形 —— session 裡已經有門市，
+					// refresh() 會從那裡讀到。真正失效時 refresh() 顯示未選，顧客可再選一次。
 					refresh();
+					return;
 				}
+				window.__moksafowoNewebpayStore = res.data;
+				refresh();
+			} )
+			.catch( function () {
+				// 網路中斷或回應不是 JSON（例如 PHP 錯誤吐 HTML）。不能靜默 —— 否則顧客
+				// 明明選了門市卻看到空白，也不知道要重選。
+				refresh();
+			} )
+			.finally( function () {
+				// 無論成敗都清掉 query string，避免重新整理時重送已失效的 token。
+				const u = new URL( window.location.href );
+				u.searchParams.delete( cfg.token_query );
+				history.replaceState( null, '', u.toString() );
 			} );
 	}
 

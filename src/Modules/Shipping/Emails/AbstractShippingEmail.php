@@ -33,6 +33,19 @@ abstract class AbstractShippingEmail extends \WC_Email {
 		add_action( 'moksafowo_shipping_status_' . $slug . '_notification', [ $this, 'trigger' ], 10, 2 );
 	}
 
+	/**
+	 * 這幾封信因為狀態 slug 前綴比對錯誤（比 `mo-`、實際是 `moksa-`）從未觸發過。
+	 * 修好觸發點後預設維持關閉，否則既有站台升級完就會突然開始寄信給顧客；
+	 * 要用的商家自己到 WooCommerce → 設定 → 電子郵件裡打開。
+	 * 已自行存過設定的站台不受影響（存過的值優先於 default）。
+	 */
+	public function init_form_fields() {
+		parent::init_form_fields();
+		if ( isset( $this->form_fields['enabled'] ) ) {
+			$this->form_fields['enabled']['default'] = 'no';
+		}
+	}
+
 	public function trigger( $order_id, $order = false ): void {
 		$this->setup_locale();
 

@@ -464,7 +464,7 @@ final class PaymentRequest {
 		LinePay::log( '[execute] http response code: ' . $http_status . ', response body: ' . wc_print_r( $response_body, true ) );
 
 		if ( 200 !== $http_status ) {
-			throw new Exception( esc_html( sprintf( 'Execute API http response not success. http response code: %s. url: $s', $http_status, $url ) ) );
+			throw new Exception( esc_html( sprintf( 'Execute API http response not success. http response code: %1$s. url: %2$s', $http_status, $url ) ) );
 		}
 
 		return $response_body;

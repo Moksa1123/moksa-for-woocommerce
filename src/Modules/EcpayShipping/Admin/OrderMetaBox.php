@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\EcpayShipping\Admin;
 
+use Moksafowo\Modules\EcpayShipping\Api\Helper;
 use Moksafowo\Modules\EcpayShipping\Module;
 use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
 use Moksafowo\Modules\EcpayShipping\Operations\PrintLabel;
@@ -60,6 +61,7 @@ final class OrderMetaBox {
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_create_order', [ __CLASS__, 'ajax_create_order' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_print_label', [ __CLASS__, 'ajax_print_label' ] );
 		add_action( 'wp_ajax_moksafowo_ecpay_shipping_delete_record', [ __CLASS__, 'ajax_delete_record' ] );
+		add_action( 'wp_ajax_moksafowo_ecpay_shipping_query_status', [ __CLASS__, 'ajax_query_status' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
@@ -279,6 +281,10 @@ final class OrderMetaBox {
 								title="<?php esc_attr_e( 'Print A6 label', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'A6', 'moksa-for-woocommerce' ); ?></button>
 							<?php endif; ?>
 							<button type="button"
+	class="button button-small moksafowo-ecpay-shipping-query"
+								data-logistics-id="<?php echo esc_attr( $id ); ?>"
+								title="<?php esc_attr_e( 'Ask ECPay for the current status of this shipment', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'Look up', 'moksa-for-woocommerce' ); ?></button>
+							<button type="button"
 	class="button button-small button-link-delete moksafowo-ecpay-shipping-delete-record"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								title="<?php esc_attr_e( 'Delete this record', 'moksa-for-woocommerce' ); ?>"
@@ -337,6 +343,9 @@ final class OrderMetaBox {
 					'delete_fail'      => __( 'Could not delete:', 'moksa-for-woocommerce' ),
 					'print_fail'       => __( 'Could not print:', 'moksa-for-woocommerce' ),
 					'printing'         => __( 'Printing…', 'moksa-for-woocommerce' ),
+					'query_running'    => __( 'Looking up…', 'moksa-for-woocommerce' ),
+					'query_ok'         => __( 'Current status from ECPay: ', 'moksa-for-woocommerce' ),
+					'query_fail'       => __( 'The status could not be looked up: ', 'moksa-for-woocommerce' ),
 					'unknown_error'    => __( 'Something went wrong. Please try again later, or check the logs.', 'moksa-for-woocommerce' ),
 					'ajax_error'       => __( 'Connection error. Please try again later.', 'moksa-for-woocommerce' ),
 				],
@@ -464,5 +473,76 @@ final class OrderMetaBox {
 			wp_send_json_error( [ 'message' => __( 'That shipment record could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		wp_send_json_success( [ 'message' => 'deleted' ] );
+	}
+
+	/**
+	 * 立刻向綠界查這張物流單的貨態。跟每小時的補查排程走同一支 API 與同一條
+	 * StatusMapper，差別只在這裡是商家主動觸發、不必等排程。
+	 */
+	public static function ajax_query_status(): void {
+		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
+		}
+		$order_id     = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+		$logistics_id = isset( $_POST['logistics_id'] ) ? sanitize_text_field( wp_unslash( $_POST['logistics_id'] ) ) : '';
+		$order        = $order_id ? wc_get_order( $order_id ) : null;
+		if ( ! $order instanceof \WC_Order ) {
+			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
+		}
+		if ( '' === $logistics_id ) {
+			wp_send_json_error( [ 'message' => __( 'The shipping ID is missing.', 'moksa-for-woocommerce' ) ], 400 );
+		}
+
+		$subtype = 'UNIMARTC2C';
+		foreach ( CreateOrder::get_records( $order ) as $r ) {
+			if ( (string) ( $r['id'] ?? '' ) === $logistics_id ) {
+				$subtype = (string) ( $r['subtype'] ?? $subtype );
+				break;
+			}
+		}
+
+		$result = Helper::query_logistics_trade_info( $logistics_id, $subtype );
+		if ( empty( $result['ok'] ) ) {
+			wp_send_json_error(
+				[
+					'message' => sprintf(
+						/* translators: %s: error message from the carrier */
+						__( 'ECPay could not be reached for this shipment: %s', 'moksa-for-woocommerce' ),
+						(string) $result['msg']
+					),
+				],
+				502
+			);
+		}
+
+		$code   = (string) $result['code'];
+		$msg    = (string) $result['msg'];
+		$before = $order->get_status();
+
+		$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_CODE, $code );
+		$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, $msg );
+		$order->add_order_note(
+			sprintf(
+				/* translators: 1: status message, 2: status code */
+				__( 'ECPay shipping status looked up: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),
+				$msg,
+				$code
+			)
+		);
+		$order->save();
+
+		// 走跟 IPN / 補查排程完全相同的對應路徑。
+		do_action( 'moksafowo_ecpay_shipping_status_received', $order, $code, $msg );
+
+		$after = wc_get_order( $order->get_id() )->get_status();
+		wp_send_json_success(
+			[
+				'code'           => $code,
+				'message'        => $msg,
+				'status_changed' => $before !== $after,
+				'status'         => $after,
+			]
+		);
 	}
 }

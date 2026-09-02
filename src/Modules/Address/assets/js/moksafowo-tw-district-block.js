@@ -67,8 +67,11 @@
 		}
 	}
 
-	/** district 變更 → 寫 postcode */
+	/** district 變更 → 寫 postcode（設定頁可關） */
 	function syncPostcode( prefix ) {
+		if ( moksafowo_tw_district.autofill === false ) {
+			return;
+		}
 		const select = getSelect( prefix );
 		if ( ! select || ! select.value ) {
 			return;

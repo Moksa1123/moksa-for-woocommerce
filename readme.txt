@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.8.8
+Stable tag: 1.9.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,26 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.9.0 - 2026-09-02 =
+New
+* A "Not collected" order status for pickup orders the customer never collected. The whole carrier sequence — from "not collected", through the parcel going back to the store, to the seller taking it back — now ends there instead of in "Refunded". Nothing is refunded automatically any more: whether and when to refund is yours to decide.
+* A follow-up status check. Carriers push status updates to your site, but a push can go missing — and the order then sits on an old status for good, with nothing to recover it. Once an hour the site now asks the carrier directly about orders that have not moved, and applies whatever it reports. Covers ECPay and PAYUNi; it can be switched off, and you can set how long to wait first, under the shipping settings.
+* "Look up" buttons on the order screen, to ask the provider what it currently holds rather than trusting what was written here at the time: ECPay shipments, ECPay invoices, and NewebPay, PChomePay, TapPay and Shopline Payments payments. Whatever comes back is written into the order notes.
+* Payment details for PChomePay, TapPay and Shopline Payments now appear on the order screen at all — transaction ID, status, amount, card digits and virtual account. Previously those three showed nothing.
+
+Fixed
+* Choosing a convenience store on the NewebPay and PAYUNi checkouts could leave the order saying no store had been picked — and because a store is required, the customer could not check out at all. It depended on timing, so it looked intermittent. ECPay was fixed this way in 1.8.4; these two now match.
+* A SmilePay parcel the customer returned was marked as cancelled, which put the stock back on sale while the parcel was still on its way back. The rest of that return sequence did not move the order at all.
+* Refunds on PAYUNi credit card reward points and the single entry point failed with no reason given — both were offered as refundable but had nothing behind the button.
+* Shipments printed through PAYUNi kept appearing in the "not yet printed" list, because the list was looking for a field that does not exist.
+* The shipping status e-mails (shipped, arrived at store, store closed) had never been sent at all. They now work, and stay switched off — turn on the ones you want under WooCommerce → Settings → Emails.
+* Ticking or unticking the custom shipping statuses had no effect, and the status colours were saved but never used. Both were reading a different setting from the one being written. Your existing choices are carried over.
+* The "fill in the postcode automatically" setting was never read — the postcode was always filled in regardless. It is now honoured, and stays on.
+* Deleting a PAYUNi or SmilePay shipment record left no trace in the order notes, so there was afterwards no way to tell what had been removed.
+* On the order screen, shipping addresses for home delivery showed the county as an internal code — "HSINCHU CITY" where the billing address correctly said 新竹市. This is now repaired whichever plugin causes it.
+* Looking a PAYUNi shipment up from the order screen updated the shipping details but left the order status alone, so the two disagreed.
+* On sites where the customer service assistant was newly installed, its front-end replies never started, because it was still checking a setting removed in 1.5.1.
 
 = 1.8.8 - 2026-08-24 =
 * Fix: on orders shipped by home delivery, the order screen showed the shipping county as an internal code — "HSINCHU CITY" where the billing address correctly said 新竹市. The shipping address is rendered under a placeholder country used to pick the Taiwanese layout, and WooCommerce could not look the county name up against it. The county name is now filled in for those addresses.

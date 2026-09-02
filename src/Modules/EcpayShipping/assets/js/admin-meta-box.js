@@ -106,6 +106,38 @@
 		} );
 	} );
 
+	$( document ).on( 'click', '.moksafowo-ecpay-shipping-query', function ( e ) {
+		e.preventDefault();
+		const $btn = $( this );
+		const $box = $btn.closest( '.moksafowo-ecpay-shipping-meta' );
+		const orderId = getOrderId( $box );
+		const nonce = getNonce( $box );
+		const logisticsId = $btn.data( 'logistics-id' );
+		const original = $btn.text();
+		$btn.prop( 'disabled', true ).text( cfg.i18n.query_running );
+		$.post( cfg.ajax_url, {
+			action: 'moksafowo_ecpay_shipping_query_status',
+			order_id: orderId,
+			nonce: nonce,
+			logistics_id: logisticsId,
+		} ).done( function ( resp ) {
+			if ( resp && resp.success && resp.data ) {
+				// 狀態有變就重載，讓訂單狀態與備註一起更新；沒變就只提示，不打斷操作。
+				if ( resp.data.status_changed ) {
+					location.reload();
+					return;
+				}
+				alert( cfg.i18n.query_ok + resp.data.message + ' (' + resp.data.code + ')' );
+			} else {
+				alert( cfg.i18n.query_fail + ( ( resp && resp.data && resp.data.message ) || cfg.i18n.unknown_error ) );
+			}
+			$btn.prop( 'disabled', false ).text( original );
+		} ).fail( function () {
+			alert( cfg.i18n.query_fail + cfg.i18n.ajax_error );
+			$btn.prop( 'disabled', false ).text( original );
+		} );
+	} );
+
 	function submitForm( apiUrl, formData ) {
 		// write form HTML 進預先 open 的 window，inline script auto-submit，只開一個 tab。
 		const w = window.open( '', '_blank' );

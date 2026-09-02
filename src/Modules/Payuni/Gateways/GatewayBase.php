@@ -227,6 +227,17 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		return array();
 	}
 
+	/**
+	 * 退款走 PaymentRequest::refund()，它自己從 Credentials 取憑證，不吃 $this->gateway。
+	 * 放在基底是因為 CreditRed / Unified 都在 supports 宣告了 refunds 卻沒有實作 ——
+	 * 商家按退款只會拿到一個沒有原因的失敗。其餘 gateway 各自的同名實作內容一致，
+	 * 保留不動（覆寫後行為相同）。
+	 */
+	public function process_refund( $order_id, $amount = null, $reason = '' ) {
+		$request = new PaymentRequest();
+		return $request->refund( $order_id, $amount, $reason );
+	}
+
 	public static function get_order_metas() {
 		return array_merge( PayuniPayment::$order_metas, static::get_payment_order_metas() );
 	}

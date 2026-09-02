@@ -21,6 +21,8 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_PROD_CREATE    = 'https://logistics.ecpay.com.tw/Express/Create';
 	public const ENDPOINT_SANDBOX_MAP    = 'https://logistics-stage.ecpay.com.tw/Express/map';
 	public const ENDPOINT_PROD_MAP       = 'https://logistics.ecpay.com.tw/Express/map';
+	public const ENDPOINT_SANDBOX_QUERY  = 'https://logistics-stage.ecpay.com.tw/Helper/QueryLogisticsTradeInfo/V2';
+	public const ENDPOINT_PROD_QUERY     = 'https://logistics.ecpay.com.tw/Helper/QueryLogisticsTradeInfo/V2';
 
 	protected static function option_prefix(): string {
 		return 'moksafowo_ecpay_shipping';
@@ -85,6 +87,88 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function map_endpoint(): string {
 		return self::is_sandbox() ? self::ENDPOINT_SANDBOX_MAP : self::ENDPOINT_PROD_MAP;
+	}
+
+	public static function query_endpoint(): string {
+		return self::is_sandbox() ? self::ENDPOINT_SANDBOX_QUERY : self::ENDPOINT_PROD_QUERY;
+	}
+
+	/**
+	 * 主動查一筆物流單的目前貨態。IPN 掉了的時候這是唯一的補救路徑。
+	 *
+	 * 回應是 URL-encoded 字串（非 JSON），成功時含 LogisticsStatus / LogisticsSubType。
+	 *
+	 * @return array{ok:bool,code:string,msg:string,subtype:string,raw:array}
+	 */
+	public static function query_logistics_trade_info( string $logistics_id, string $subtype ): array {
+		$fail = static fn( string $m ): array => [
+			'ok'      => false,
+			'code'    => '',
+			'msg'     => $m,
+			'subtype' => '',
+			'raw'     => [],
+		];
+
+		if ( '' === $logistics_id ) {
+			return $fail( 'missing AllPayLogisticsID' );
+		}
+
+		$payload                  = [
+			'MerchantID'        => self::merchant_id( $subtype ),
+			'AllPayLogisticsID' => $logistics_id,
+			'TimeStamp'         => (string) time(),
+		];
+		$payload['CheckMacValue'] = self::generate_check_mac_value( $payload, $subtype );
+
+		$response = wp_safe_remote_post(
+			self::query_endpoint(),
+			[
+				'timeout' => 30,
+				'body'    => $payload,
+			]
+		);
+		if ( is_wp_error( $response ) ) {
+			self::log( 'query trade info wp_error', [ 'msg' => $response->get_error_message() ] );
+			return $fail( $response->get_error_message() );
+		}
+
+		// 回應跟建單同樣是 `<0|1>|<payload>` 管線格式，不是 JSON。查無資料時綠界回
+		// HTTP 500 + `0|找不到訂單`，所以不能只看狀態碼，要看 body 開頭。
+		$body = trim( (string) wp_remote_retrieve_body( $response ) );
+		if ( '' === $body ) {
+			return $fail( 'empty response' );
+		}
+		if ( ! str_starts_with( $body, '1|' ) ) {
+			[ , $msg ] = array_pad( explode( '|', $body, 2 ), 2, '' );
+			self::log(
+				'query trade info rejected',
+				[
+					'logistics_id' => $logistics_id,
+					'body'         => $body,
+				]
+			);
+			return $fail( sanitize_text_field( $msg ) );
+		}
+
+		parse_str( substr( $body, 2 ), $parsed );
+		if ( ! is_array( $parsed ) || empty( $parsed ) ) {
+			return $fail( 'unparseable response' );
+		}
+		$parsed = map_deep( $parsed, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+
+		// 貨態在 LogisticsStatus；RtnCode 是「這次查詢」的結果，不是貨態，不可混用。
+		$status = (string) ( $parsed['LogisticsStatus'] ?? '' );
+		if ( '' === $status ) {
+			return $fail( (string) ( $parsed['RtnMsg'] ?? 'no LogisticsStatus in response' ) );
+		}
+
+		return [
+			'ok'      => true,
+			'code'    => $status,
+			'msg'     => (string) ( $parsed['LogisticsStatusMsg'] ?? $parsed['RtnMsg'] ?? '' ),
+			'subtype' => (string) ( $parsed['LogisticsSubType'] ?? $subtype ),
+			'raw'     => $parsed,
+		];
 	}
 
 	public static function has_credentials_for( string $group ): bool {

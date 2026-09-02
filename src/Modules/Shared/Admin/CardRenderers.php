@@ -51,13 +51,19 @@ final class CardRenderers {
 			$html = self::render_newebpay( $order );
 		} elseif ( 'moksafowo-linepay' === $method ) {
 			$html = self::render_linepay( $order );
+		} elseif ( str_starts_with( $method, 'moksafowo_pchomepay_' ) ) {
+			$html = self::render_pchomepay( $order );
+		} elseif ( str_starts_with( $method, 'moksafowo_tappay' ) ) {
+			$html = self::render_tappay( $order );
+		} elseif ( str_starts_with( $method, 'moksafowo_shopline' ) ) {
+			$html = self::render_shopline( $order );
 		}
 
 		if ( '' !== $html ) {
 			$cards[] = [
 				'slot'  => 'payment',
 				'title' => __( 'Payment information', 'moksa-for-woocommerce' ),
-				'html'  => $html . self::render_refund_block( $order ),
+				'html'  => $html . PaymentQuery::render_button( $order ) . self::render_refund_block( $order ),
 			];
 		}
 		return $cards;
@@ -391,6 +397,80 @@ final class CardRenderers {
 			'cert'   => __( 'Citizen Digital Certificate', 'moksa-for-woocommerce' ),
 			'paper'  => __( 'Paper', 'moksa-for-woocommerce' ),
 		][ $carrier ] ?? $carrier;
+	}
+
+	/** 共用的欄位列表輸出 —— 空值不畫，避免一堆空白列。 */
+	private static function lines_html( string $method_title, array $lines ): string {
+		ob_start();
+		echo '<p><strong>' . esc_html__( 'Payment method:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $method_title ) . '</p>';
+		foreach ( $lines as $label => $value ) {
+			if ( '' === (string) $value ) {
+				continue;
+			}
+			echo '<p><strong>' . esc_html( (string) $label ) . '</strong>' . esc_html( (string) $value ) . '</p>';
+		}
+		return (string) ob_get_clean();
+	}
+
+	private static function render_pchomepay( \WC_Order $order ): string {
+		$oid = (string) $order->get_meta( Keys::PCHOMEPAY_ORDER_ID );
+		if ( '' === $oid ) {
+			return self::lines_html( $order->get_payment_method_title() ?: 'PChomePay', [] )
+				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
+		}
+		return self::lines_html(
+			$order->get_payment_method_title() ?: 'PChomePay',
+			[
+				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => $oid,
+				__( 'Payment type:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_PAY_TYPE ),
+				__( 'Status:', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::PCHOMEPAY_STATUS ),
+				__( 'Amount:', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::PCHOMEPAY_TRADE_AMOUNT ),
+				__( 'Paid at:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_PAY_DATE ),
+				__( 'Last four card digits:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_CARD_LAST4 ),
+				__( 'Virtual account:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_VIRTUAL_ACCOUNT ),
+			]
+		);
+	}
+
+	private static function render_tappay( \WC_Order $order ): string {
+		$rec = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
+		if ( '' === $rec ) {
+			return self::lines_html( $order->get_payment_method_title() ?: 'TapPay', [] )
+				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
+		}
+		$paid_at = (string) $order->get_meta( Keys::TAPPAY_PAID_AT );
+		// TapPay 的入帳時間是毫秒 epoch，直接顯示對商家沒意義。
+		if ( '' !== $paid_at && ctype_digit( $paid_at ) ) {
+			$paid_at = wp_date( 'Y-m-d H:i:s', (int) ( (int) $paid_at / 1000 ) );
+		}
+		return self::lines_html(
+			$order->get_payment_method_title() ?: 'TapPay',
+			[
+				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => $rec,
+				__( 'Bank transaction ID:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::TAPPAY_BANK_TRANSACTION_ID ),
+				__( 'Bank authorization code:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::TAPPAY_AUTH_CODE ),
+				__( 'Last four card digits:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::TAPPAY_CARD_LAST4 ),
+				__( 'Issuing bank:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::TAPPAY_CARD_ISSUER ),
+				__( 'Paid at:', 'moksa-for-woocommerce' ) => $paid_at,
+			]
+		);
+	}
+
+	private static function render_shopline( \WC_Order $order ): string {
+		$sid = (string) $order->get_meta( Keys::SLP_SESSION_ID );
+		if ( '' === $sid ) {
+			return self::lines_html( $order->get_payment_method_title() ?: 'Shopline Payments', [] )
+				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
+		}
+		return self::lines_html(
+			$order->get_payment_method_title() ?: 'Shopline Payments',
+			[
+				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID ),
+				__( 'Session ID:', 'moksa-for-woocommerce' ) => $sid,
+				__( 'Status:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_STATUS ),
+				__( 'Payment type:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ),
+			]
+		);
 	}
 
 	private static function render_refund_block( \WC_Order $order ): string {

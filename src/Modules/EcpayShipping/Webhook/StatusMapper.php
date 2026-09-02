@@ -47,17 +47,34 @@ final class StatusMapper extends AbstractStatusMapper {
 		'2101' => 'moksa-store-closed', // 門市關轉店
 		'2104' => 'moksa-store-closed', // 門市關轉，請重選門市
 
-		// 退貨完成（包裹已回到賣家手上或原寄件門市）
-		'2044' => 'refunded',           // 賣家已取退回包裹（C2C）
-		'2070' => 'refunded',           // 賣家已取退回包裹（C2C）
-		'2072' => 'refunded',           // 包裹已退至原寄件門市（C2C）
-		'2076' => 'refunded',           // 買家未取包裹，已退回物流中心
-		'2078' => 'refunded',           // 買家未取包裹，已退回物流中心
-		'3019' => 'refunded',           // 包裹已退至原寄件門市（B2C）
-		'3023' => 'refunded',           // 賣家已取退回包裹（B2C）
-		'3025' => 'refunded',           // 買家未取包裹，已退回物流中心
-		'3031' => 'refunded',           // 包裹已退至指定寄件門市
-		'3310' => 'refunded',           // 已退回寄件人
+		// 未取件 —— 買家沒取貨的完整貨態鏈，從「未取」一路到「賣家取回包裹」。
+		// 全部停在未取件，不自動轉已退費：退不退款是商家決定，這裡只反映物流事實。
+		'2065' => 'moksa-unclaimed', // 買家未取包裹，將退回物流中心
+		'2074' => 'moksa-unclaimed', // 買家未取包裹，將退回物流中心
+		'2076' => 'moksa-unclaimed', // 買家未取包裹，已退回物流中心
+		'2078' => 'moksa-unclaimed', // 買家未取包裹，已退回物流中心
+		'2079' => 'moksa-unclaimed', // 買家未取退回 — 商品瑕疵
+		'2080' => 'moksa-unclaimed', // 買家未取退回 — 超材
+		'2081' => 'moksa-unclaimed', // 買家未取退回 — 違禁品
+		'2082' => 'moksa-unclaimed', // 買家未取退回 — 訂單資料重複上傳
+		'2083' => 'moksa-unclaimed', // 買家未取退回 — 已過門市進貨日
+		'2084' => 'moksa-unclaimed', // 買家未取退回 — 第一段標籤規格錯誤
+		'2085' => 'moksa-unclaimed', // 買家未取退回 — 第一段標籤無法判讀
+		'2086' => 'moksa-unclaimed', // 買家未取退回 — 第一段標籤資料錯誤
+		'2087' => 'moksa-unclaimed', // 買家未取退回 — 物流中心理貨中
+		'2088' => 'moksa-unclaimed', // 買家未取退回 — 商品遺失
+		'2089' => 'moksa-unclaimed', // 買家未取退回 — 門市指定不配送
+		'2092' => 'moksa-unclaimed', // 買家未取退回 — 門市關轉
+		'2093' => 'moksa-unclaimed', // 買家未取退回 — 爆量
+		'2072' => 'moksa-unclaimed', // 包裹已退至原寄件門市（C2C）
+		'2044' => 'moksa-unclaimed', // 賣家已取退回包裹（C2C）
+		'2070' => 'moksa-unclaimed', // 賣家已取退回包裹（C2C）
+		'3020' => 'moksa-unclaimed', // 買家未取包裹，將退回物流中心（B2C）
+		'3025' => 'moksa-unclaimed', // 買家未取包裹，已退回物流中心（B2C）
+		'3019' => 'moksa-unclaimed', // 包裹已退至原寄件門市（B2C）
+		'3031' => 'moksa-unclaimed', // 包裹已退至指定寄件門市
+		'3023' => 'moksa-unclaimed', // 賣家已取退回包裹（B2C）
+		'3310' => 'moksa-unclaimed', // 已退回寄件人（宅配 / 郵局）
 
 		// 配送失敗 / 貨件異常
 		'2033' => 'failed',             // 包裹超材，退回賣家

@@ -207,6 +207,14 @@
 			i18n.invalid_ok, i18n.invalid_fail, i18n.invalidating );
 	} );
 
+	// 查詢 — 向綠界問這張發票目前的狀態，結果寫進訂單備註。
+	$( document ).on( 'click', '.moksafowo-ecpay-invoice-query', function ( e ) {
+		e.preventDefault();
+		const c = ctx( $( this ) );
+		run( c, { action: 'moksafowo_ecpay_invoice_query', order_id: c.order, nonce: c.nonce },
+			i18n.query_ok, i18n.query_fail, i18n.querying );
+	} );
+
 	// 折讓 — 內聯金額輸入（取代 prompt/alert）。
 	$( document ).on( 'click', '.moksafowo-ecpay-invoice-allowance', function ( e ) {
 		e.preventDefault();

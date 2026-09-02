@@ -300,6 +300,7 @@ final class BlockField {
 				'field_id'    => self::FIELD_ID,
 				'by_state'    => $state_to_cities,
 				'postcodes'   => $postcode_map,
+				'autofill'    => TwAddress::postcode_autofill_enabled(),
 				'placeholder' => __( 'Select…', 'moksa-for-woocommerce' ),
 			]
 		);

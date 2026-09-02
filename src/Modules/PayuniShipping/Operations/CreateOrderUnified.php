@@ -241,6 +241,13 @@ final class CreateOrderUnified {
 			$order->update_meta_data( OrderMeta::GoodsType, (string) ( $latest['goods_type'] ?? '' ) );
 			$order->update_meta_data( OrderMeta::FileNo, (string) ( $latest['file_no'] ?? '' ) );
 		}
+		$order->add_order_note(
+			sprintf(
+			/* translators: %s: PAYUNi shipment trade number */
+				__( 'Shipment record #%s was deleted from this site only. PAYUNi is not notified.', 'moksa-for-woocommerce' ),
+				$ship_trade_no
+			)
+		);
 
 		$order->save();
 		return true;

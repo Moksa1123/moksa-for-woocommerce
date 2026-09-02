@@ -259,6 +259,7 @@ final class CustomerOrderView {
 				return 'blue';
 			case 'moksa-cvs-arrived':
 			case 'moksa-store-closed':
+			case 'moksa-unclaimed':
 				return 'amber';
 			case 'completed':
 				return 'green';

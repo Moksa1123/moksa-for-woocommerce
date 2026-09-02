@@ -211,6 +211,18 @@ class ShippingRequest {
 
 		self::update_order_logistic_meta( $order, $resp_info );
 
+		// 查回來的貨態要走 StatusMapper，否則 metabox 顯示「已到店」而訂單還掛在
+		// 「已出貨」—— 商家看到的兩個地方互相矛盾。跟 IPN / 補查排程同一條路徑。
+		$ship_status = (string) ( $resp_info['ShipStatus'] ?? '' );
+		if ( '' !== $ship_status && '-' !== $ship_status ) {
+			do_action(
+				'moksafowo_payuni_update_shipping_order_status',
+				$order,
+				$ship_status,
+				(string) ( $resp_info['ShipStatusDesc'] ?? '' )
+			);
+		}
+
 		if ( 'SUCCESS' !== $resp_info['Status'] ) {
 			$return = array(
 				'success' => false,

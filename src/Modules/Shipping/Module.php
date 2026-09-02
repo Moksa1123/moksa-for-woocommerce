@@ -17,6 +17,7 @@ final class Module {
 
 	public static function boot(): void {
 		Registrar::init();
+		Webhook\StatusReconciler::init();
 		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::SHIPPING_COMMON ) ) {
 			BatchPrintAdminUI::init();
 		}

@@ -42,6 +42,14 @@ abstract class AbstractAdminMetaBox {
 		return null;
 	}
 
+	/**
+	 * 向服務商查這張發票目前的狀態。回傳 null 代表該服務商沒有查詢 API，
+	 * 按鈕就不會出現 —— 按了沒用的按鈕比沒有更糟。
+	 */
+	protected static function query_callable(): ?callable {
+		return null;
+	}
+
 	protected static function allowance_no_meta_key(): string {
 		return '';
 	}
@@ -72,6 +80,9 @@ abstract class AbstractAdminMetaBox {
 		add_action( "wp_ajax_{$prefix}_invalid", [ static::class, 'ajax_invalid' ] );
 		if ( static::supports_allowance() ) {
 			add_action( "wp_ajax_{$prefix}_allowance", [ static::class, 'ajax_allowance' ] );
+		}
+		if ( null !== static::query_callable() ) {
+			add_action( "wp_ajax_{$prefix}_query", [ static::class, 'ajax_query' ] );
 		}
 		add_action( 'admin_enqueue_scripts', [ static::class, 'enqueue' ] );
 	}
@@ -154,7 +165,10 @@ abstract class AbstractAdminMetaBox {
 				echo '<p style="margin-top:.6em;">';
 				echo '<button type="button" class="button moksafowo-invoice-invalid">' . esc_html__( 'Void invoice', 'moksa-for-woocommerce' ) . '</button> ';
 				if ( static::supports_allowance() ) {
-					echo '<button type="button" class="button moksafowo-invoice-allowance">' . esc_html__( 'Issue allowance', 'moksa-for-woocommerce' ) . '</button>';
+					echo '<button type="button" class="button moksafowo-invoice-allowance">' . esc_html__( 'Issue allowance', 'moksa-for-woocommerce' ) . '</button> ';
+				}
+				if ( null !== static::query_callable() ) {
+					echo '<button type="button" class="button moksafowo-invoice-query">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button>';
 				}
 				echo '</p>';
 				// 作廢原因 — 內聯輸入（取代 JS prompt），按「作廢發票」展開
@@ -269,6 +283,9 @@ abstract class AbstractAdminMetaBox {
 					'allowance_need_amount' => __( 'Please enter an allowance amount.', 'moksa-for-woocommerce' ),
 					'allowance_ok'          => __( 'The allowance was issued.', 'moksa-for-woocommerce' ),
 					'allowance_fail'        => __( 'Could not issue the allowance:', 'moksa-for-woocommerce' ),
+					'querying'              => __( 'Looking up…', 'moksa-for-woocommerce' ),
+					'query_ok'              => __( 'Looked up. See the order notes for what the provider reported.', 'moksa-for-woocommerce' ),
+					'query_fail'            => __( 'Could not look up:', 'moksa-for-woocommerce' ),
 					'unknown_error'         => __( 'Something went wrong. Please try again later, or check the logs.', 'moksa-for-woocommerce' ),
 				]
 			);
@@ -326,6 +343,33 @@ abstract class AbstractAdminMetaBox {
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 
+
+	public static function ajax_query(): void {
+		[ $order ] = self::ajax_authenticate();
+		$callable  = static::query_callable();
+		if ( null === $callable ) {
+			wp_send_json_error( [ 'message' => __( 'This service does not support looking invoices up.', 'moksa-for-woocommerce' ) ] );
+		}
+		$result = (array) call_user_func( $callable, $order );
+
+		if ( ! empty( $result['ok'] ) ) {
+			$lines = [];
+			foreach ( (array) ( $result['lines'] ?? [] ) as $k => $v ) {
+				$lines[] = sanitize_text_field( (string) $k ) . ': ' . sanitize_text_field( (string) $v );
+			}
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: provider name, 2: the details returned by the provider */
+					__( 'Invoice status looked up at %1$s — %2$s', 'moksa-for-woocommerce' ),
+					static::provider_label(),
+					$lines ? implode( ' / ', $lines ) : (string) ( $result['message'] ?? '' )
+				)
+			);
+			$order->save();
+		}
+
+		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
+	}
 
 	private static function ajax_authenticate(): array {
 		check_ajax_referer( static::nonce_action(), 'nonce' );

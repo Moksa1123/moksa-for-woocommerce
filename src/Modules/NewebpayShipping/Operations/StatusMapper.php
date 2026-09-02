@@ -89,7 +89,7 @@ final class StatusMapper {
 			],
 			'-4'  => [
 				'label'     => __( 'Return — not collected in time', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
+				'wc_status' => 'moksa-unclaimed',
 				'type'      => 'returning',
 			],
 			'-5'  => [

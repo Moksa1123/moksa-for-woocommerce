@@ -61,7 +61,55 @@ final class Module extends AbstractGatewayModule {
 		add_action( 'woocommerce_api_moksafowo_pchomepay_payment', [ Api\IpnHandler::class, 'handle' ] );
 	}
 
+	/**
+	 * 向支付連查這筆訂單的權威付款狀態。webhook 本來就用同一支 API 做二次確認，
+	 * 這裡只是讓商家能自己按一下。
+	 *
+	 * @return array{ok:bool,message:string,lines:array<string,string>}
+	 */
+	public static function query_payment_status( \WC_Order $order ): array {
+		$oid = (string) $order->get_meta( Moksafowo\Order\Meta\Keys::PCHOMEPAY_ORDER_ID );
+		if ( '' === $oid ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'This order has no PChomePay transaction to look up yet.', 'moksa-for-woocommerce' ),
+				'lines'   => [],
+			];
+		}
+		$res = Api\Helper::api_get_payment( $oid );
+		if ( empty( $res['ok'] ) ) {
+			return [
+				'ok'      => false,
+				'message' => (string) ( $res['code'] ?? __( 'PChomePay could not be reached.', 'moksa-for-woocommerce' ) ),
+				'lines'   => [],
+			];
+		}
+		$d = (array) ( $res['data'] ?? [] );
+		return [
+			'ok'      => true,
+			'message' => (string) ( $d['status'] ?? 'OK' ),
+			'lines'   => array_filter(
+				[
+					__( 'Status', 'moksa-for-woocommerce' )         => (string) ( $d['status'] ?? '' ),
+					__( 'Payment type', 'moksa-for-woocommerce' )   => (string) ( $d['payment_type'] ?? '' ),
+					__( 'Amount', 'moksa-for-woocommerce' )         => (string) ( $d['trade_amount'] ?? '' ),
+					__( 'Paid at', 'moksa-for-woocommerce' )        => (string) ( $d['pay_date'] ?? '' ),
+					__( 'Transaction ID', 'moksa-for-woocommerce' ) => $oid,
+				],
+				static fn( string $v ): bool => '' !== $v
+			),
+		];
+	}
+
 	protected function boot_extras(): void {
+		add_filter(
+			'moksafowo_payment_query_handlers',
+			static function ( array $h ): array {
+				$h['moksafowo_pchomepay_'] = [ __CLASS__, 'query_payment_status' ];
+				return $h;
+			}
+		);
+
 		// 顧客端取號繳費資訊（ATM 虛擬帳號 / 超商代碼 / 條碼）。
 		Frontend\CustomerPaymentInfo::init();
 	}

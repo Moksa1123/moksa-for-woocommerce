@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\PayuniShipping\Admin;
 
+use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
 use Moksafowo\Modules\PayuniShipping\Utils\ShipType;
 use Moksafowo\Modules\Shipping\Admin\AbstractAdminActions;
 use Moksafowo\Modules\Shipping\AbstractProvider;
@@ -19,9 +20,11 @@ final class AdminActions extends AbstractAdminActions {
 				public function provider_name(): string {
 					return 'PAYUNi'; }
 				public function meta_key_trade_no(): string {
-					return '_moksafowo_payuni_shipping_trade_no'; }
+					return OrderMeta::ShipTradeNo; }
+				// 曾寫死 '_..._ship_no'，那個 key 不存在（實際是 OrderMeta::ShipNo = '_..._sno'），
+				// 「未列印訂單」的 NOT EXISTS 篩選因此永遠成立，印過的單也一直列在待印清單。
 				public function meta_key_ship_no(): string {
-					return '_moksafowo_payuni_shipping_ship_no'; }
+					return OrderMeta::ShipNo; }
 				public function is_supported_method( string $method_id ): bool {
 					return str_starts_with( $method_id, 'moksafowo_payuni_shipping_' );
 				}
@@ -59,8 +62,8 @@ final class AdminActions extends AbstractAdminActions {
 			if ( ! $order ) {
 				continue;
 			}
-			$trade_no = $order->get_meta( '_moksafowo_payuni_shipping_trade_no' );
-			$ship_no  = $order->get_meta( '_moksafowo_payuni_shipping_ship_no' );
+			$trade_no = $order->get_meta( OrderMeta::ShipTradeNo );
+			$ship_no  = $order->get_meta( OrderMeta::ShipNo );
 			if ( empty( $trade_no ) ) {
 				continue;
 			}

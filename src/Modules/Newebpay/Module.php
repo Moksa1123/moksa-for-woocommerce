@@ -82,12 +82,65 @@ final class Module extends AbstractGatewayModule {
 		return Gateways\Unified::GATEWAY_ID;
 	}
 
+	/**
+	 * 向藍新查這筆訂單的權威付款狀態。只讀不寫金流狀態 —— 要不要據此改訂單狀態
+	 * 是商家的決定，這裡只把事實寫進備註讓他判斷。
+	 *
+	 * @return array{ok:bool,message:string,lines:array<string,string>}
+	 */
+	public static function query_payment_status( \WC_Order $order ): array {
+		$mtn = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_MERCHANT_ORDER_NO );
+		if ( '' === $mtn ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'This order has no NewebPay transaction to look up yet.', 'moksa-for-woocommerce' ),
+				'lines'   => [],
+			];
+		}
+
+		$res = Api\PaymentRequest::query( $mtn, (int) round( (float) $order->get_total() ) );
+		if ( empty( $res['ok'] ) ) {
+			return [
+				'ok'      => false,
+				'message' => (string) ( $res['message'] ?? '' ),
+				'lines'   => [],
+			];
+		}
+
+		$d     = (array) ( $res['data'] ?? [] );
+		$lines = array_filter(
+			[
+				__( 'Trade status', 'moksa-for-woocommerce' ) => (string) ( $d['TradeStatus'] ?? '' ),
+				__( 'Payment type', 'moksa-for-woocommerce' ) => (string) ( $d['PaymentType'] ?? '' ),
+				__( 'Amount', 'moksa-for-woocommerce' )  => (string) ( $d['Amt'] ?? '' ),
+				__( 'Paid at', 'moksa-for-woocommerce' ) => (string) ( $d['PayTime'] ?? '' ),
+				__( 'Transaction ID', 'moksa-for-woocommerce' ) => (string) ( $d['TradeNo'] ?? '' ),
+			],
+			static fn( string $v ): bool => '' !== $v
+		);
+
+			return [
+				'ok'      => true,
+				'message' => (string) ( $d['TradeStatus'] ?? 'OK' ),
+				'lines'   => $lines,
+			];
+	}
+
 	protected function register_webhooks(): void {
 		add_action( 'woocommerce_api_moksafowo_newebpay_payment', [ Api\IpnHandler::class, 'handle' ] );
 	}
 
 	protected function boot_extras(): void {
 		add_filter( 'woocommerce_order_get_payment_method_title', [ __CLASS__, 'rebrand_legacy_payment_title' ], 10, 2 );
+
+		// 後台「查詢付款狀態」按鈕 —— 走共用層，UI 與權限只有一份。
+		add_filter(
+			'moksafowo_payment_query_handlers',
+			static function ( array $h ): array {
+				$h['moksafowo_newebpay_'] = [ __CLASS__, 'query_payment_status' ];
+				return $h;
+			}
+		);
 
 		Frontend\CustomerPaymentInfo::init();
 

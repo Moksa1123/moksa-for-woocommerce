@@ -36,6 +36,8 @@ final class TwAddress {
 		// priority 100 跑在 PayuniShipping payuni_address_format(10) 之後再次 override。
 		add_filter( 'woocommerce_localisation_address_formats', [ __CLASS__, 'tw_address_format_use_name_token' ], 100 );
 		add_filter( 'woocommerce_formatted_address_replacements', [ __CLASS__, 'tw_name_token_last_first_order' ], 10, 2 );
+		// priority 99：要跑在各家物流外掛（多半掛 10）之後，否則補好的縣市名又被蓋回代碼。
+		add_filter( 'woocommerce_formatted_address_replacements', [ __CLASS__, 'repair_pseudo_country_state' ], 99, 2 );
 
 		if ( self::any_toggle_on() ) {
 			add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_shared_css' ] );
@@ -49,6 +51,31 @@ final class TwAddress {
 			$formats['TW'] = "{postcode}\n{country} {state} {city}\n{address_1} {address_2}\n{company}\n{last_name} {first_name}\n";
 		}
 		return $formats;
+	}
+
+	/**
+	 * 台灣縣市名補救 —— 假國別把 WC 的縣市查表打斷時用。
+	 *
+	 * 好幾個台灣物流外掛（含本外掛的 PayuniShipping，以及 WPBrewer 的 payuni-shipping）
+	 * 會在 `woocommerce_order_formatted_shipping_address` 把 country 換成 `PNHD` /
+	 * `PNCVS` 之類的假值，只為了讓 WC 套不同的地址版型。副作用是 WC 用
+	 * `states[<country>][<state>]` 查縣市名時查不到，直接印出原始代碼 ——
+	 * 運送地址變成「HSINCHU CITY」而帳單是「新竹市」。
+	 *
+	 * 這裡只在「國別不是 TW、但縣市值剛好對得上台灣縣市代碼」時補中文，
+	 * 那組合只可能來自假國別，不會誤傷真的外國地址。
+	 */
+	public static function repair_pseudo_country_state( array $replacements, array $args ): array {
+		$country = (string) ( $args['country'] ?? '' );
+		$state   = (string) ( $args['state'] ?? '' );
+		if ( '' === $state || 'TW' === $country ) {
+			return $replacements;
+		}
+		$label = self::state_label( $state );
+		if ( $label !== $state ) {
+			$replacements['{state}'] = $label;
+		}
+		return $replacements;
 	}
 
 	public static function tw_name_token_last_first_order( array $replacements, array $args ): array {
@@ -185,14 +212,23 @@ final class TwAddress {
 		return $html;
 	}
 
+	/**
+	 * 「選好縣市區後自動帶入郵遞區號」設定。這個開關在設定頁存在很久，但兩支 JS 從來
+	 * 沒讀它 —— 一直都是無條件帶入，勾不勾都一樣。現在真的接上；預設 yes 維持原本行為。
+	 */
+	public static function postcode_autofill_enabled(): bool {
+		return 'yes' === get_option( 'moksafowo_tw_address_postcode_autofill', 'yes' );
+	}
+
 	public static function enqueue_dropdown_assets(): void {
 		if ( ! is_cart() && ! is_checkout() && ! is_wc_endpoint_url( 'edit-address' ) ) {
 			return;
 		}
 
 		$shared_data = [
-			'cities' => self::get_cities(),
-			'i18n'   => [
+			'cities'            => self::get_cities(),
+			'postcode_autofill' => self::postcode_autofill_enabled(),
+			'i18n'              => [
 				'select_placeholder' => __( 'Select…', 'moksa-for-woocommerce' ),
 			],
 		];
