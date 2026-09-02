@@ -315,6 +315,38 @@ msgstr "從訂單頁面開立電子發票，包含載具類型與手機條碼的
 msgid "Changelog"
 msgstr "變更紀錄"
 
+#. sub #1000
+msgid "1.10.0 - 2026-09-02"
+msgstr "1.10.0 - 2026-09-02"
+
+#. li #1001
+msgid "New"
+msgstr "新增"
+
+#. li #1002
+msgid "Eight more ways to pay through TapPay. Until now TapPay only offered the credit card form; it now also covers LINE Pay, JKOPAY, Easy Wallet, iPASS MONEY and PXPay Plus, plus Apple Pay, Google Pay and Samsung Pay. Each is off until you turn it on, and each still has to be enabled in your TapPay Portal first."
+msgstr "TapPay 新增八種付款方式。先前 TapPay 只有信用卡表單，現在還支援 LINE Pay、街口支付、悠遊付、一卡通 MONEY、全支付，以及 Apple Pay、Google Pay、Samsung Pay。每一種預設都是關閉的，要用請自行開啟；另外也必須先在你的 TapPay 後台開通該付款方式。"
+
+#. li #1003
+msgid "Apple Pay, Google Pay and Samsung Pay hide themselves on devices and browsers that cannot use them, so nobody picks a method they cannot complete. Apple Pay also checks the device actually has a card set up. Apple Pay needs your Apple Merchant ID and Google Pay needs your Google Merchant ID — until those are filled in, the method stays hidden rather than failing at checkout."
+msgstr "Apple Pay、Google Pay 與 Samsung Pay 會在不支援的裝置與瀏覽器上自動隱藏，顧客就不會選到一個結不了帳的付款方式。Apple Pay 還會確認裝置真的有設定好卡片。Apple Pay 需要填入 Apple 商家識別碼、Google Pay 需要 Google 商家識別碼 —— 沒填之前這些方式會維持隱藏，而不是讓顧客在結帳時失敗。"
+
+#. li #1004
+msgid "\"Look up\" buttons for e-invoices issued through ezPay and PayNow, alongside the ECPay one. The invoice details on the order screen are only ever what was written here when it was issued — if issuing timed out, or the invoice was later voided at the provider, this is how you find out. What comes back is written into the order notes."
+msgstr "透過 ezPay 與 PayNow 開立的電子發票也有「查詢」按鈕了，跟綠界一樣。訂單頁上的發票資料，一直都只是開立當下寫在這裡的內容 —— 如果開立時逾時、或發票後來在服務商那邊被作廢，就是靠這個功能才會知道。查詢結果會寫進訂單備註。"
+
+#. li #1005
+msgid "The TapPay look-up now also reports the bank settlement result, not just the transaction status TapPay holds. These are two different things at TapPay, and the bank result is the one that matters when the payout is disputed."
+msgstr "TapPay 的查詢現在也會回報銀行對帳結果，不只是 TapPay 端的交易狀態。這在 TapPay 是兩件不同的事，而出帳有爭議時要看的是銀行那一邊的結果。"
+
+#. li #1006
+msgid "Fixed"
+msgstr "修正"
+
+#. li #1007
+msgid "Looking up a PAYUNi shipment from the order screen updated the shipping details but left the order status alone, so the order screen and the shipping card disagreed with each other."
+msgstr "修正：從訂單頁查詢 PAYUNi 物流單時，只會更新物流資訊而不會變更訂單狀態，導致訂單狀態與物流資訊卡上顯示的內容互相矛盾。"
+
 #. sub #900
 msgid "1.9.0 - 2026-09-02"
 msgstr "1.9.0 - 2026-09-02"
