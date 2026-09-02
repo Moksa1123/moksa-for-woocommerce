@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.9.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.10.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-02T08:18:48+00:00\n"
+"POT-Creation-Date: 2026-09-02T11:21:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -2502,7 +2502,8 @@ msgstr ""
 
 #: src/Modules/AmegoInvoice/Admin/OrderMetaBox.php:70
 #: src/Modules/EcpayInvoice/Operations/Query.php:69
-#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:70
+#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:75
+#: src/Modules/EzpayInvoice/Operations/Query.php:76
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:53
 msgid "Random code"
 msgstr ""
@@ -4809,6 +4810,8 @@ msgid "Other"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:28
+#: src/Modules/EzpayInvoice/Operations/Query.php:31
+#: src/Modules/PaynowInvoice/Operations/Query.php:27
 msgid "This order has no invoice to look up yet."
 msgstr ""
 
@@ -4825,6 +4828,7 @@ msgid "This invoice is valid at ECPay."
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:66
+#: src/Modules/EzpayInvoice/Operations/Query.php:72
 #: src/Modules/OrderLookup/SearchableKeys.php:124
 #: src/Modules/OrderLookup/SearchableKeys.php:130
 #: src/Modules/OrderLookup/SearchableKeys.php:136
@@ -4832,6 +4836,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:148
 #: src/Modules/OrderLookup/SearchableKeys.php:154
 #: src/Modules/OrderLookup/SearchableKeys.php:256
+#: src/Modules/PaynowInvoice/Operations/Query.php:51
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
@@ -4840,12 +4845,16 @@ msgid "Invoice number"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:67
+#: src/Modules/EzpayInvoice/Operations/Query.php:74
+#: src/Modules/PaynowInvoice/Operations/Query.php:54
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:74
 #: src/Modules/Payuni/Gateways/GatewayBase.php:99
 msgid "Issued at"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:68
+#: src/Modules/EzpayInvoice/Operations/Query.php:75
+#: src/Modules/PaynowInvoice/Operations/Query.php:53
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:73
 #: src/Modules/Payuni/Gateways/GatewayBase.php:98
 msgid "Invoice amount"
@@ -5781,7 +5790,7 @@ msgstr ""
 msgid "ECPay shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr ""
 
-#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:21
+#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:22
 #: src/Modules/EzpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:43
 #: src/Modules/Shared/Admin/CardRenderers.php:293
@@ -5906,6 +5915,40 @@ msgstr ""
 msgid "ezPay invoice issued — number %1$s, random code %2$s (%3$s)"
 msgstr ""
 
+#: src/Modules/EzpayInvoice/Operations/Query.php:51
+msgid "ezPay could not be reached."
+msgstr ""
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:60
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
+#: src/Modules/Payuni/Gateways/GatewayBase.php:129
+msgid "Issued"
+msgstr ""
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:61
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
+#: src/Modules/Payuni/Gateways/GatewayBase.php:133
+msgid "Voided"
+msgstr ""
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:62
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:39
+#: src/Modules/NewebpayShipping/Operations/StatusMapper.php:55
+#: src/Modules/Shared/Admin/CardRenderers.php:554
+msgid "Cancelled"
+msgstr ""
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:63
+msgid "Waiting to be issued"
+msgstr ""
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:73
+#: src/Modules/PaynowInvoice/Operations/Query.php:52
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
+#: src/Modules/Payuni/Gateways/GatewayBase.php:137
+msgid "Issuing status"
+msgstr ""
+
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:15
 msgid "Connects to ezPay e-invoicing. Sign up in the ezPay dashboard, create a store, then enter its credentials below."
 msgstr ""
@@ -5963,18 +6006,12 @@ msgstr ""
 msgid "Authorized (awaiting capture)"
 msgstr ""
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:39
-#: src/Modules/NewebpayShipping/Operations/StatusMapper.php:55
-#: src/Modules/Shared/Admin/CardRenderers.php:554
-msgid "Cancelled"
-msgstr ""
-
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:47
 #: src/Modules/Newebpay/Module.php:117
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:48
 #: src/Modules/Pchomepay/Module.php:97
 #: src/Modules/ShoplinePayments/Module.php:103
-#: src/Modules/Tappay/Module.php:95
+#: src/Modules/Tappay/Module.php:101
 msgid "Transaction ID"
 msgstr ""
 
@@ -6153,6 +6190,8 @@ msgstr ""
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:12
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:46
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:36
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:70
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:54
 #: src/Modules/Tappay/Gateways/Credit.php:36
 msgid "Enable this payment method"
 msgstr ""
@@ -6174,6 +6213,8 @@ msgstr ""
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:16
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:51
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:41
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:75
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:59
 #: src/Modules/Tappay/Gateways/Credit.php:41
 msgid "Title"
 msgstr ""
@@ -6198,6 +6239,8 @@ msgstr ""
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:11
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:54
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:44
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:78
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:62
 #: src/Modules/Tappay/Gateways/Credit.php:44
 msgid "The name customers see at checkout."
 msgstr ""
@@ -6219,6 +6262,8 @@ msgstr ""
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:23
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:58
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:48
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:82
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:66
 #: src/Modules/Tappay/Gateways/Credit.php:48
 msgid "Description"
 msgstr ""
@@ -6421,6 +6466,10 @@ msgstr ""
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:68
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:48
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:139
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:281
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:100
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:232
 #: src/Modules/Tappay/Gateways/Credit.php:95
 msgid "The order could not be found"
 msgstr ""
@@ -6677,7 +6726,7 @@ msgstr ""
 #: src/Modules/Newebpay/Module.php:115
 #: src/Modules/Pchomepay/Module.php:95
 #: src/Modules/ShoplinePayments/Module.php:101
-#: src/Modules/Tappay/Module.php:94
+#: src/Modules/Tappay/Module.php:100
 msgid "Amount"
 msgstr ""
 
@@ -7684,7 +7733,7 @@ msgstr ""
 #: src/Modules/OrderLookup/InvoiceOps.php:45
 #: src/Modules/OrderLookup/PaymentMethodOps.php:28
 #: src/Modules/Paynow/Module.php:21
-#: src/Modules/PaynowInvoice/Admin/OrderMetaBox.php:20
+#: src/Modules/PaynowInvoice/Admin/OrderMetaBox.php:21
 #: src/Modules/PaynowInvoice/Operations/AutoInvalid.php:20
 #: src/Settings/SettingsPage.php:238
 #: assets/blocks/build/methods/paynow/index.js:1
@@ -8629,6 +8678,14 @@ msgstr ""
 msgid "PayNow invoice issued — number %1$s (submission number %2$s)"
 msgstr ""
 
+#: src/Modules/PaynowInvoice/Operations/Query.php:36
+msgid "PayNow could not be reached."
+msgstr ""
+
+#: src/Modules/PaynowInvoice/Operations/Query.php:48
+msgid "PayNow holds this invoice."
+msgstr ""
+
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:15
 msgid "Connects to PayNow e-invoicing. Sign up with PayNow first, then enter your store credentials below."
 msgstr ""
@@ -8710,29 +8767,14 @@ msgstr ""
 msgid "Carrier details"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
-#: src/Modules/Payuni/Gateways/GatewayBase.php:129
-msgid "Issued"
-msgstr ""
-
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 #: src/Modules/Payuni/Gateways/GatewayBase.php:131
 msgid "Issuing failed"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
-#: src/Modules/Payuni/Gateways/GatewayBase.php:133
-msgid "Voided"
-msgstr ""
-
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 msgid "Unknown status"
-msgstr ""
-
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
-#: src/Modules/Payuni/Gateways/GatewayBase.php:137
-msgid "Issuing status"
 msgstr ""
 
 #: src/Modules/Payuni/Api/PaymentRequest.php:99
@@ -10557,7 +10599,7 @@ msgstr ""
 
 #: src/Modules/Pchomepay/Module.php:93
 #: src/Modules/ShoplinePayments/Module.php:100
-#: src/Modules/Tappay/Module.php:93
+#: src/Modules/Tappay/Module.php:99
 msgid "Status"
 msgstr ""
 
@@ -10857,6 +10899,8 @@ msgstr ""
 
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:61
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:51
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:85
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:69
 #: src/Modules/Tappay/Gateways/Credit.php:51
 msgid "The payment method description shown at checkout."
 msgstr ""
@@ -12586,7 +12630,7 @@ msgstr ""
 msgid "The sender address used for T-Cat home delivery."
 msgstr ""
 
-#: src/Modules/Tappay/Api/Client.php:76
+#: src/Modules/Tappay/Api/Client.php:126
 msgid "The TapPay partner key is not set."
 msgstr ""
 
@@ -12614,6 +12658,111 @@ msgstr ""
 #: src/Modules/Tappay/Gateways/Credit.php:183
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
+msgstr ""
+
+#. translators: %s: payment method name
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:150
+#, php-format
+msgid "%s did not return a payment token. Please try again."
+msgstr ""
+
+#. translators: 1: payment method name, 2: status code, 3: message
+#. translators: 1: wallet name, 2: status code, 3: message
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:212
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:168
+#, php-format
+msgid "%1$s payment failed (status code %2$d): %3$s"
+msgstr ""
+
+#. translators: %s: message from the payment provider
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:222
+#, php-format
+msgid "The payment could not be completed: %s"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:243
+#: src/Modules/Tappay/Gateways/Credit.php:198
+msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
+msgstr ""
+
+#. translators: 1: payment method name, 2: rec_trade_id
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:264
+#, php-format
+msgid "%1$s payment completed — transaction ID %2$s"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:285
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:236
+msgid "This order has no TapPay transaction to refund."
+msgstr ""
+
+#. translators: 1: status code, 2: message
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:295
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:246
+#: src/Modules/Tappay/Gateways/Credit.php:269
+#, php-format
+msgid "The TapPay refund failed (status code %1$d): %2$s"
+msgstr ""
+
+#. translators: 1: amount, 2: reason
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:305
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:256
+#, php-format
+msgid "TapPay refunded %1$s. Reason: %2$s"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:307
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:258
+msgid "not given"
+msgstr ""
+
+#. translators: %s: order number
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:322
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:274
+#, php-format
+msgid "Order %s"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:109
+msgid "The wallet did not return a payment token. Please try again."
+msgstr ""
+
+#. translators: %s: message from the payment provider
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:178
+#, php-format
+msgid "The payment could not be started: %s"
+msgstr ""
+
+#. translators: %s: wallet name
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:200
+#, php-format
+msgid "%s did not return a payment page to send the customer to."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:205
+msgid "The payment page could not be opened. Please choose another payment method."
+msgstr ""
+
+#. translators: %s: wallet name
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:217
+#, php-format
+msgid "Waiting for the customer to finish paying with %s."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:22
+msgid "TapPay — Apple Pay"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:26
+msgid "Pay with Apple Pay. Only available in Safari on an Apple device."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:32
+msgid "Apple Merchant ID"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:36
+msgid "From your Apple Developer account. You must also upload Apple's domain verification file to this site and enable Apple Pay in the TapPay Portal — without those the payment will fail."
 msgstr ""
 
 #: src/Modules/Tappay/Gateways/Credit.php:19
@@ -12647,24 +12796,86 @@ msgstr ""
 msgid "TapPay did not return a payment token. Please enter the card details again."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:198
-msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
-msgstr ""
-
 #: src/Modules/Tappay/Gateways/Credit.php:244
 msgid "The order has no TapPay transaction ID."
-msgstr ""
-
-#. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Gateways/Credit.php:269
-#, php-format
-msgid "The TapPay refund failed (status code %1$d): %2$s"
 msgstr ""
 
 #. translators: 1: amount, 2: rec_trade_id, 3: reason
 #: src/Modules/Tappay/Gateways/Credit.php:279
 #, php-format
 msgid "The TapPay refund of NT$%1$s was submitted (transaction ID %2$s) — %3$s"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/EasyWallet.php:22
+msgid "TapPay — Easy Wallet"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/EasyWallet.php:26
+msgid "Pay with Easy Wallet. You will be taken to Easy Wallet to confirm."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:22
+msgid "TapPay — Google Pay"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:26
+msgid "Pay with Google Pay."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:32
+msgid "Google Merchant ID"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:35
+msgid "From the Google Pay & Wallet Console. Sandbox works without it, but live payments do not. You must also register this site as an allowed origin with Google."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:39
+msgid "Merchant name shown to the customer"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:42
+msgid "Shown in the Google Pay sheet. Defaults to your site title when left blank."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/IPassMoney.php:22
+msgid "TapPay — iPASS MONEY"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/IPassMoney.php:26
+msgid "Pay with iPASS MONEY. You will be taken to iPASS MONEY to confirm."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/JkoPay.php:22
+msgid "TapPay — JKOPAY"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/JkoPay.php:26
+msgid "Pay with JKOPAY. You will be taken to JKOPAY to confirm."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/LinePay.php:22
+msgid "TapPay — LINE Pay"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/LinePay.php:26
+msgid "Pay with LINE Pay. You will be taken to LINE Pay to confirm."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/PxPayPlus.php:22
+msgid "TapPay — PXPay Plus"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/PxPayPlus.php:26
+msgid "Pay with PXPay Plus. You will be taken to PXPay Plus to confirm."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/SamsungPay.php:22
+msgid "TapPay — Samsung Pay"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/SamsungPay.php:26
+msgid "Pay with Samsung Pay. Only available on a Samsung device."
 msgstr ""
 
 #: src/Modules/Tappay/Module.php:18
@@ -12675,24 +12886,49 @@ msgstr ""
 msgid "Secure card payments without leaving your site"
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:73
+#: src/Modules/Tappay/Module.php:83
 msgid "TapPay could not be reached."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:83
+#: src/Modules/Tappay/Module.php:93
 msgid "TapPay has no record of this transaction yet."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:96
+#: src/Modules/Tappay/Module.php:102
 msgid "Bank transaction ID"
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:145
+#: src/Modules/Tappay/Module.php:113
+msgid "Bank settlement"
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:171
 msgid "Please fill in all the card details."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:146
+#: src/Modules/Tappay/Module.php:172
 msgid "No payment token was returned. Please check the card number."
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:196
+msgid "Payment service is unavailable. Please try again later."
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:197
+msgid "This payment method is not available on this store."
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:198
+#: src/Modules/Tappay/Module.php:234
+msgid "Could not start the payment. Please try again."
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:235
+msgid "Pay with Apple Pay"
+msgstr ""
+
+#: src/Modules/Tappay/Module.php:236
+msgid "Pay with Samsung Pay"
 msgstr ""
 
 #: src/Modules/Tappay/Settings/SettingsTab.php:15

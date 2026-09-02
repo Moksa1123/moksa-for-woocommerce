@@ -2503,7 +2503,8 @@ msgstr "Amego"
 
 #: src/Modules/AmegoInvoice/Admin/OrderMetaBox.php:70
 #: src/Modules/EcpayInvoice/Operations/Query.php:69
-#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:70
+#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:75
+#: src/Modules/EzpayInvoice/Operations/Query.php:76
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:53
 msgid "Random code"
 msgstr "隨機碼"
@@ -4810,6 +4811,8 @@ msgid "Other"
 msgstr "其他"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:28
+#: src/Modules/EzpayInvoice/Operations/Query.php:31
+#: src/Modules/PaynowInvoice/Operations/Query.php:27
 msgid "This order has no invoice to look up yet."
 msgstr "這筆訂單還沒有可查詢的發票。"
 
@@ -4826,6 +4829,7 @@ msgid "This invoice is valid at ECPay."
 msgstr "這張發票在綠界仍有效。"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:66
+#: src/Modules/EzpayInvoice/Operations/Query.php:72
 #: src/Modules/OrderLookup/SearchableKeys.php:124
 #: src/Modules/OrderLookup/SearchableKeys.php:130
 #: src/Modules/OrderLookup/SearchableKeys.php:136
@@ -4833,6 +4837,7 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/OrderLookup/SearchableKeys.php:148
 #: src/Modules/OrderLookup/SearchableKeys.php:154
 #: src/Modules/OrderLookup/SearchableKeys.php:256
+#: src/Modules/PaynowInvoice/Operations/Query.php:51
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
@@ -4841,12 +4846,16 @@ msgid "Invoice number"
 msgstr "發票號碼"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:67
+#: src/Modules/EzpayInvoice/Operations/Query.php:74
+#: src/Modules/PaynowInvoice/Operations/Query.php:54
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:74
 #: src/Modules/Payuni/Gateways/GatewayBase.php:99
 msgid "Issued at"
 msgstr "開立時間"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:68
+#: src/Modules/EzpayInvoice/Operations/Query.php:75
+#: src/Modules/PaynowInvoice/Operations/Query.php:53
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:73
 #: src/Modules/Payuni/Gateways/GatewayBase.php:98
 msgid "Invoice amount"
@@ -5782,7 +5791,7 @@ msgstr "綠界物流貨態：%2$s（狀態代碼 %1$s）"
 msgid "ECPay shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr "綠界主動補查到的物流狀態：%1$s（狀態碼 %2$s）"
 
-#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:21
+#: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:22
 #: src/Modules/EzpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:43
 #: src/Modules/Shared/Admin/CardRenderers.php:293
@@ -5907,6 +5916,40 @@ msgstr "ezPay 回應 SUCCESS 但沒帶 InvoiceNumber，請檢查 ezPay 後台。
 msgid "ezPay invoice issued — number %1$s, random code %2$s (%3$s)"
 msgstr "ezPay 發票已開立 — 號碼 %1$s 隨機碼 %2$s（%3$s）"
 
+#: src/Modules/EzpayInvoice/Operations/Query.php:51
+msgid "ezPay could not be reached."
+msgstr "無法連線到 ezPay。"
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:60
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
+#: src/Modules/Payuni/Gateways/GatewayBase.php:129
+msgid "Issued"
+msgstr "已開立"
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:61
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
+#: src/Modules/Payuni/Gateways/GatewayBase.php:133
+msgid "Voided"
+msgstr "已作廢"
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:62
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:39
+#: src/Modules/NewebpayShipping/Operations/StatusMapper.php:55
+#: src/Modules/Shared/Admin/CardRenderers.php:554
+msgid "Cancelled"
+msgstr "已取消"
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:63
+msgid "Waiting to be issued"
+msgstr "待開立"
+
+#: src/Modules/EzpayInvoice/Operations/Query.php:73
+#: src/Modules/PaynowInvoice/Operations/Query.php:52
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
+#: src/Modules/Payuni/Gateways/GatewayBase.php:137
+msgid "Issuing status"
+msgstr "開立狀態"
+
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:15
 msgid "Connects to ezPay e-invoicing. Sign up in the ezPay dashboard, create a store, then enter its credentials below."
 msgstr "ezPay 電子發票串接。請先至 ezPay 後台申請會員、開立商店，取得商店憑證後填入下方。"
@@ -5964,18 +6007,12 @@ msgstr "已預授權（待請款）"
 msgid "Authorized (awaiting capture)"
 msgstr "已授權（待請款）"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:39
-#: src/Modules/NewebpayShipping/Operations/StatusMapper.php:55
-#: src/Modules/Shared/Admin/CardRenderers.php:554
-msgid "Cancelled"
-msgstr "已取消"
-
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:47
 #: src/Modules/Newebpay/Module.php:117
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:48
 #: src/Modules/Pchomepay/Module.php:97
 #: src/Modules/ShoplinePayments/Module.php:103
-#: src/Modules/Tappay/Module.php:95
+#: src/Modules/Tappay/Module.php:101
 msgid "Transaction ID"
 msgstr "交易編號"
 
@@ -6154,6 +6191,8 @@ msgstr "啟用"
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:12
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:46
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:36
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:70
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:54
 #: src/Modules/Tappay/Gateways/Credit.php:36
 msgid "Enable this payment method"
 msgstr "啟用此付款方式"
@@ -6175,6 +6214,8 @@ msgstr "啟用此付款方式"
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:16
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:51
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:41
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:75
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:59
 #: src/Modules/Tappay/Gateways/Credit.php:41
 msgid "Title"
 msgstr "結帳顯示名稱"
@@ -6199,6 +6240,8 @@ msgstr "結帳顯示名稱"
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:11
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:54
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:44
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:78
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:62
 #: src/Modules/Tappay/Gateways/Credit.php:44
 msgid "The name customers see at checkout."
 msgstr "顧客在結帳頁看到的名稱。"
@@ -6220,6 +6263,8 @@ msgstr "顧客在結帳頁看到的名稱。"
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:23
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:58
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:48
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:82
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:66
 #: src/Modules/Tappay/Gateways/Credit.php:48
 msgid "Description"
 msgstr "結帳顯示說明"
@@ -6422,6 +6467,10 @@ msgstr "支付寶"
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:68
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:48
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:139
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:281
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:100
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:232
 #: src/Modules/Tappay/Gateways/Credit.php:95
 msgid "The order could not be found"
 msgstr "找不到訂單"
@@ -6678,7 +6727,7 @@ msgstr "付款方式"
 #: src/Modules/Newebpay/Module.php:115
 #: src/Modules/Pchomepay/Module.php:95
 #: src/Modules/ShoplinePayments/Module.php:101
-#: src/Modules/Tappay/Module.php:94
+#: src/Modules/Tappay/Module.php:100
 msgid "Amount"
 msgstr "金額"
 
@@ -7684,7 +7733,7 @@ msgstr "PAYUNi 付款"
 #: src/Modules/OrderLookup/InvoiceOps.php:45
 #: src/Modules/OrderLookup/PaymentMethodOps.php:28
 #: src/Modules/Paynow/Module.php:21
-#: src/Modules/PaynowInvoice/Admin/OrderMetaBox.php:20
+#: src/Modules/PaynowInvoice/Admin/OrderMetaBox.php:21
 #: src/Modules/PaynowInvoice/Operations/AutoInvalid.php:20
 #: src/Settings/SettingsPage.php:238
 #: assets/blocks/build/methods/paynow/index.js:1
@@ -8629,6 +8678,14 @@ msgstr "PayNow 回應成功但無法解析發票號碼。原始：%s"
 msgid "PayNow invoice issued — number %1$s (submission number %2$s)"
 msgstr "PayNow 發票已開立 — 號碼 %1$s（送單號 %2$s）"
 
+#: src/Modules/PaynowInvoice/Operations/Query.php:36
+msgid "PayNow could not be reached."
+msgstr "無法連線到 PayNow。"
+
+#: src/Modules/PaynowInvoice/Operations/Query.php:48
+msgid "PayNow holds this invoice."
+msgstr "PayNow 有這張發票的紀錄。"
+
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:15
 msgid "Connects to PayNow e-invoicing. Sign up with PayNow first, then enter your store credentials below."
 msgstr "PayNow 電子發票串接。請先至 PayNow 申請會員，取得商店憑證後填入下方。"
@@ -8710,30 +8767,15 @@ msgstr "未知載具"
 msgid "Carrier details"
 msgstr "載具資訊"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
-#: src/Modules/Payuni/Gateways/GatewayBase.php:129
-msgid "Issued"
-msgstr "已開立"
-
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 #: src/Modules/Payuni/Gateways/GatewayBase.php:131
 msgid "Issuing failed"
 msgstr "開立失敗"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
-#: src/Modules/Payuni/Gateways/GatewayBase.php:133
-msgid "Voided"
-msgstr "已作廢"
-
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 msgid "Unknown status"
 msgstr "未知狀態"
-
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
-#: src/Modules/Payuni/Gateways/GatewayBase.php:137
-msgid "Issuing status"
-msgstr "開立狀態"
 
 #: src/Modules/Payuni/Api/PaymentRequest.php:99
 msgid "Redirecting..."
@@ -10557,7 +10599,7 @@ msgstr "無法連線到支付連。"
 
 #: src/Modules/Pchomepay/Module.php:93
 #: src/Modules/ShoplinePayments/Module.php:100
-#: src/Modules/Tappay/Module.php:93
+#: src/Modules/Tappay/Module.php:99
 msgid "Status"
 msgstr "狀態"
 
@@ -10857,6 +10899,8 @@ msgstr "請於期限內以下列資訊完成付款。"
 
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:61
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:51
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:85
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:69
 #: src/Modules/Tappay/Gateways/Credit.php:51
 msgid "The payment method description shown at checkout."
 msgstr "結帳頁付款方式描述。"
@@ -12582,7 +12626,7 @@ msgstr "10 碼 09 開頭。"
 msgid "The sender address used for T-Cat home delivery."
 msgstr "黑貓宅配寄件人地址。"
 
-#: src/Modules/Tappay/Api/Client.php:76
+#: src/Modules/Tappay/Api/Client.php:126
 msgid "The TapPay partner key is not set."
 msgstr "TapPay Partner Key 未設定。"
 
@@ -12611,6 +12655,111 @@ msgstr "TapPay 等待顧客完成 3D 驗證。"
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
 msgstr "TapPay 付款失敗（狀態碼 %1$d）：%2$s"
+
+#. translators: %s: payment method name
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:150
+#, php-format
+msgid "%s did not return a payment token. Please try again."
+msgstr "%s 沒有回傳付款憑證，請再試一次。"
+
+#. translators: 1: payment method name, 2: status code, 3: message
+#. translators: 1: wallet name, 2: status code, 3: message
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:212
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:168
+#, php-format
+msgid "%1$s payment failed (status code %2$d): %3$s"
+msgstr "%1$s 付款失敗（狀態碼 %2$d）：%3$s"
+
+#. translators: %s: message from the payment provider
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:222
+#, php-format
+msgid "The payment could not be completed: %s"
+msgstr "付款未能完成：%s"
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:243
+#: src/Modules/Tappay/Gateways/Credit.php:198
+msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
+msgstr "等待顧客完成 TapPay 3D 驗證。"
+
+#. translators: 1: payment method name, 2: rec_trade_id
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:264
+#, php-format
+msgid "%1$s payment completed — transaction ID %2$s"
+msgstr "%1$s 付款完成 — 交易序號 %2$s"
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:285
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:236
+msgid "This order has no TapPay transaction to refund."
+msgstr "這筆訂單沒有可退款的 TapPay 交易。"
+
+#. translators: 1: status code, 2: message
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:295
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:246
+#: src/Modules/Tappay/Gateways/Credit.php:269
+#, php-format
+msgid "The TapPay refund failed (status code %1$d): %2$s"
+msgstr "TapPay 退款失敗（狀態碼 %1$d）：%2$s"
+
+#. translators: 1: amount, 2: reason
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:305
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:256
+#, php-format
+msgid "TapPay refunded %1$s. Reason: %2$s"
+msgstr "TapPay 已退款 %1$s，原因：%2$s"
+
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:307
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:258
+msgid "not given"
+msgstr "未填寫"
+
+#. translators: %s: order number
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:322
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:274
+#, php-format
+msgid "Order %s"
+msgstr "訂單 %s"
+
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:109
+msgid "The wallet did not return a payment token. Please try again."
+msgstr "電子錢包沒有回傳付款憑證，請再試一次。"
+
+#. translators: %s: message from the payment provider
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:178
+#, php-format
+msgid "The payment could not be started: %s"
+msgstr "無法開始付款：%s"
+
+#. translators: %s: wallet name
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:200
+#, php-format
+msgid "%s did not return a payment page to send the customer to."
+msgstr "%s 沒有回傳可導轉的付款頁面。"
+
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:205
+msgid "The payment page could not be opened. Please choose another payment method."
+msgstr "無法開啟付款頁面，請改用其他付款方式。"
+
+#. translators: %s: wallet name
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:217
+#, php-format
+msgid "Waiting for the customer to finish paying with %s."
+msgstr "等待顧客以 %s 完成付款。"
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:22
+msgid "TapPay — Apple Pay"
+msgstr "TapPay — Apple Pay"
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:26
+msgid "Pay with Apple Pay. Only available in Safari on an Apple device."
+msgstr "使用 Apple Pay 付款，僅支援 Apple 裝置的 Safari。"
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:32
+msgid "Apple Merchant ID"
+msgstr "Apple 商家識別碼"
+
+#: src/Modules/Tappay/Gateways/ApplePay.php:36
+msgid "From your Apple Developer account. You must also upload Apple's domain verification file to this site and enable Apple Pay in the TapPay Portal — without those the payment will fail."
+msgstr "來自你的 Apple Developer 帳號。另外必須把 Apple 的網域驗證檔上傳到本站，並在 TapPay 後台開通 Apple Pay，否則付款一定會失敗。"
 
 #: src/Modules/Tappay/Gateways/Credit.php:19
 #: src/Modules/Tappay/Gateways/Credit.php:26
@@ -12643,25 +12792,87 @@ msgstr "安全碼 CVC"
 msgid "TapPay did not return a payment token. Please enter the card details again."
 msgstr "無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。"
 
-#: src/Modules/Tappay/Gateways/Credit.php:198
-msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
-msgstr "等待顧客完成 TapPay 3D 驗證。"
-
 #: src/Modules/Tappay/Gateways/Credit.php:244
 msgid "The order has no TapPay transaction ID."
 msgstr "訂單缺少 TapPay 交易編號。"
-
-#. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Gateways/Credit.php:269
-#, php-format
-msgid "The TapPay refund failed (status code %1$d): %2$s"
-msgstr "TapPay 退款失敗（狀態碼 %1$d）：%2$s"
 
 #. translators: 1: amount, 2: rec_trade_id, 3: reason
 #: src/Modules/Tappay/Gateways/Credit.php:279
 #, php-format
 msgid "The TapPay refund of NT$%1$s was submitted (transaction ID %2$s) — %3$s"
 msgstr "TapPay 退款已送出（NT$%1$s，交易編號 %2$s）— %3$s"
+
+#: src/Modules/Tappay/Gateways/EasyWallet.php:22
+msgid "TapPay — Easy Wallet"
+msgstr "TapPay — 悠遊付"
+
+#: src/Modules/Tappay/Gateways/EasyWallet.php:26
+msgid "Pay with Easy Wallet. You will be taken to Easy Wallet to confirm."
+msgstr "使用悠遊付付款，將前往悠遊付完成確認。"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:22
+msgid "TapPay — Google Pay"
+msgstr "TapPay — Google Pay"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:26
+msgid "Pay with Google Pay."
+msgstr "使用 Google Pay 付款。"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:32
+msgid "Google Merchant ID"
+msgstr "Google 商家識別碼"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:35
+msgid "From the Google Pay & Wallet Console. Sandbox works without it, but live payments do not. You must also register this site as an allowed origin with Google."
+msgstr "來自 Google Pay & Wallet Console。沙箱可以不填，正式環境必填。另外要把本站登記為 Google 允許的來源網域。"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:39
+msgid "Merchant name shown to the customer"
+msgstr "顯示給顧客的商家名稱"
+
+#: src/Modules/Tappay/Gateways/GooglePay.php:42
+msgid "Shown in the Google Pay sheet. Defaults to your site title when left blank."
+msgstr "顯示在 Google Pay 付款視窗。留空時使用網站標題。"
+
+#: src/Modules/Tappay/Gateways/IPassMoney.php:22
+msgid "TapPay — iPASS MONEY"
+msgstr "TapPay — 一卡通 MONEY"
+
+#: src/Modules/Tappay/Gateways/IPassMoney.php:26
+msgid "Pay with iPASS MONEY. You will be taken to iPASS MONEY to confirm."
+msgstr "使用一卡通 MONEY 付款，將前往一卡通 MONEY 完成確認。"
+
+#: src/Modules/Tappay/Gateways/JkoPay.php:22
+msgid "TapPay — JKOPAY"
+msgstr "TapPay — 街口支付"
+
+#: src/Modules/Tappay/Gateways/JkoPay.php:26
+msgid "Pay with JKOPAY. You will be taken to JKOPAY to confirm."
+msgstr "使用街口支付付款，將前往街口支付完成確認。"
+
+#: src/Modules/Tappay/Gateways/LinePay.php:22
+msgid "TapPay — LINE Pay"
+msgstr "TapPay — LINE Pay"
+
+#: src/Modules/Tappay/Gateways/LinePay.php:26
+msgid "Pay with LINE Pay. You will be taken to LINE Pay to confirm."
+msgstr "使用 LINE Pay 付款，將前往 LINE Pay 完成確認。"
+
+#: src/Modules/Tappay/Gateways/PxPayPlus.php:22
+msgid "TapPay — PXPay Plus"
+msgstr "TapPay — 全支付"
+
+#: src/Modules/Tappay/Gateways/PxPayPlus.php:26
+msgid "Pay with PXPay Plus. You will be taken to PXPay Plus to confirm."
+msgstr "使用全支付付款，將前往全支付完成確認。"
+
+#: src/Modules/Tappay/Gateways/SamsungPay.php:22
+msgid "TapPay — Samsung Pay"
+msgstr "TapPay — Samsung Pay"
+
+#: src/Modules/Tappay/Gateways/SamsungPay.php:26
+msgid "Pay with Samsung Pay. Only available on a Samsung device."
+msgstr "使用 Samsung Pay 付款，僅支援 Samsung 裝置。"
 
 #: src/Modules/Tappay/Module.php:18
 msgid "TapPay — card payments taken on your own site, with 3-D Secure"
@@ -12671,25 +12882,50 @@ msgstr "TapPay 拍付 — 信用卡直連（TapPay Fields iframe，支援 3D 驗
 msgid "Secure card payments without leaving your site"
 msgstr "信用卡直接在本站安全付款"
 
-#: src/Modules/Tappay/Module.php:73
+#: src/Modules/Tappay/Module.php:83
 msgid "TapPay could not be reached."
 msgstr "無法連線到 TapPay。"
 
-#: src/Modules/Tappay/Module.php:83
+#: src/Modules/Tappay/Module.php:93
 msgid "TapPay has no record of this transaction yet."
 msgstr "TapPay 查不到這筆交易的紀錄。"
 
-#: src/Modules/Tappay/Module.php:96
+#: src/Modules/Tappay/Module.php:102
 msgid "Bank transaction ID"
 msgstr "收單行交易序號"
 
-#: src/Modules/Tappay/Module.php:145
+#: src/Modules/Tappay/Module.php:113
+msgid "Bank settlement"
+msgstr "銀行對帳結果"
+
+#: src/Modules/Tappay/Module.php:171
 msgid "Please fill in all the card details."
 msgstr "請完整填寫信用卡資訊。"
 
-#: src/Modules/Tappay/Module.php:146
+#: src/Modules/Tappay/Module.php:172
 msgid "No payment token was returned. Please check the card number."
 msgstr "無法取得付款憑證，請確認卡號是否正確。"
+
+#: src/Modules/Tappay/Module.php:196
+msgid "Payment service is unavailable. Please try again later."
+msgstr "付款服務目前無法使用，請稍後再試。"
+
+#: src/Modules/Tappay/Module.php:197
+msgid "This payment method is not available on this store."
+msgstr "本店尚未開通這個付款方式。"
+
+#: src/Modules/Tappay/Module.php:198
+#: src/Modules/Tappay/Module.php:234
+msgid "Could not start the payment. Please try again."
+msgstr "無法開始付款，請再試一次。"
+
+#: src/Modules/Tappay/Module.php:235
+msgid "Pay with Apple Pay"
+msgstr "使用 Apple Pay 付款"
+
+#: src/Modules/Tappay/Module.php:236
+msgid "Pay with Samsung Pay"
+msgstr "使用 Samsung Pay 付款"
 
 #: src/Modules/Tappay/Settings/SettingsTab.php:15
 msgid "Apply to TapPay for an app ID, app key, partner key and merchant ID, then add this site's address to the allowed domains in the TapPay dashboard."

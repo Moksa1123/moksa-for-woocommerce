@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.9.0
+Stable tag: 1.10.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,16 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.10.0 - 2026-09-02 =
+New
+* Eight more ways to pay through TapPay. Until now TapPay only offered the credit card form; it now also covers LINE Pay, JKOPAY, Easy Wallet, iPASS MONEY and PXPay Plus, plus Apple Pay, Google Pay and Samsung Pay. Each is off until you turn it on, and each still has to be enabled in your TapPay Portal first.
+* Apple Pay, Google Pay and Samsung Pay hide themselves on devices and browsers that cannot use them, so nobody picks a method they cannot complete. Apple Pay also checks the device actually has a card set up. Apple Pay needs your Apple Merchant ID and Google Pay needs your Google Merchant ID — until those are filled in, the method stays hidden rather than failing at checkout.
+* "Look up" buttons for e-invoices issued through ezPay and PayNow, alongside the ECPay one. The invoice details on the order screen are only ever what was written here when it was issued — if issuing timed out, or the invoice was later voided at the provider, this is how you find out. What comes back is written into the order notes.
+* The TapPay look-up now also reports the bank settlement result, not just the transaction status TapPay holds. These are two different things at TapPay, and the bank result is the one that matters when the payout is disputed.
+
+Fixed
+* Looking up a PAYUNi shipment from the order screen updated the shipping details but left the order status alone, so the order screen and the shipping card disagreed with each other.
 
 = 1.9.0 - 2026-09-02 =
 New

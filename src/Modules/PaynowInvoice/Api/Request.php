@@ -90,6 +90,41 @@ final class Request {
 	}
 
 
+	/**
+	 * 查單張發票目前狀態（PayNow_EInvoice v1.5 的 Sel_Invoice）。
+	 * 回應與其他方法一致：第一個字元 S 代表成功，其餘為錯誤訊息。
+	 */
+	public static function select_invoice( string $mem_cid, string $mem_password, string $invoice_no ): array {
+		$resp = self::post(
+			'/Sel_Invoice',
+			[
+				'mem_cid'      => $mem_cid,
+				'mem_password' => $mem_password,
+				'InvoiceNo'    => $invoice_no,
+			]
+		);
+		if ( ! $resp['ok'] ) {
+			return [
+				'ok'      => false,
+				'message' => $resp['message'],
+				'raw'     => $resp['raw'],
+			];
+		}
+		$raw = trim( $resp['body'] );
+		if ( 'S' !== substr( $raw, 0, 1 ) ) {
+			return [
+				'ok'      => false,
+				'message' => $raw,
+				'raw'     => $raw,
+			];
+		}
+		return [
+			'ok'      => true,
+			'message' => 'OK',
+			'raw'     => $raw,
+		];
+	}
+
 	private static function post( string $method_path, array $body ): array {
 		$url  = Helper::endpoint() . $method_path;
 		$resp = wp_remote_post(

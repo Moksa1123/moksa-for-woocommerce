@@ -19,6 +19,9 @@ final class Helper extends AbstractCredentialHelper {
 	public const PATH_PAY_BY_PRIME = '/tpc/payment/pay-by-prime';
 	public const PATH_REFUND       = '/tpc/transaction/refund';
 	public const PATH_QUERY        = '/tpc/transaction/query';
+	public const PATH_TRADE_HIST   = '/tpc/transaction/trade-history';
+	public const PATH_CAP          = '/tpc/transaction/cap';
+	public const PATH_RECONCILE    = '/tpc/transaction/reconciliation';
 
 	public const SANDBOX_APP_ID      = '11327';
 	public const SANDBOX_APP_KEY     = 'app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC';
@@ -114,6 +117,18 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function query_url(): string {
 		return self::base_url() . self::PATH_QUERY;
+	}
+
+	public static function trade_history_url(): string {
+		return self::base_url() . self::PATH_TRADE_HIST;
+	}
+
+	public static function cap_url(): string {
+		return self::base_url() . self::PATH_CAP;
+	}
+
+	public static function reconciliation_url(): string {
+		return self::base_url() . self::PATH_RECONCILE;
 	}
 
 	public static function build_order_number( \WC_Order $order, bool $retry = false ): string {

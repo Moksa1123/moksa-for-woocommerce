@@ -315,6 +315,110 @@ msgstr "從訂單頁面開立電子發票，包含載具類型與手機條碼的
 msgid "Changelog"
 msgstr "變更紀錄"
 
+#. sub #900
+msgid "1.9.0 - 2026-09-02"
+msgstr "1.9.0 - 2026-09-02"
+
+#. li #901
+msgid "New"
+msgstr "新增"
+
+#. li #902
+msgid "A \"Not collected\" order status for pickup orders the customer never collected. The whole carrier sequence — from \"not collected\", through the parcel going back to the store, to the seller taking it back — now ends there instead of in \"Refunded\". Nothing is refunded automatically any more: whether and when to refund is yours to decide."
+msgstr "新增「未取件」訂單狀態，適用顧客始終沒有取貨的超商取貨訂單。從「未取件」、包裹退回門市、到賣家取回，整條物流流程現在都停留在這個狀態，不再轉為「已退費」。外掛也不再自動退費：要不要退、什麼時候退，由你決定。"
+
+#. li #903
+msgid "A follow-up status check. Carriers push status updates to your site, but a push can go missing — and the order then sits on an old status for good, with nothing to recover it. Once an hour the site now asks the carrier directly about orders that have not moved, and applies whatever it reports. Covers ECPay and PAYUNi; it can be switched off, and you can set how long to wait first, under the shipping settings."
+msgstr "新增物流狀態補查。物流商會主動把貨態推送到你的網站，但推送可能遺失，訂單就會一直停在舊狀態，而且沒有任何補救機制。現在網站每小時會主動向物流商查詢那些狀態沒有變動的訂單，並套用物流商回報的結果。目前支援綠界與 PAYUNi；可以關閉，也可以在物流設定裡調整要等多久才查。"
+
+#. li #904
+msgid "\"Look up\" buttons on the order screen, to ask the provider what it currently holds rather than trusting what was written here at the time: ECPay shipments, ECPay invoices, and NewebPay, PChomePay, TapPay and Shopline Payments payments. Whatever comes back is written into the order notes."
+msgstr "訂單頁新增「查詢」按鈕，直接向服務商確認目前的實際狀態，而不是只相信當初寫在網站上的資料：綠界物流、綠界發票，以及藍新、支付連、TapPay 與 Shopline Payments 的付款。查詢結果會寫進訂單備註。"
+
+#. li #905
+msgid "Payment details for PChomePay, TapPay and Shopline Payments now appear on the order screen at all — transaction ID, status, amount, card digits and virtual account. Previously those three showed nothing."
+msgstr "支付連、TapPay 與 Shopline Payments 的付款資訊現在會顯示在訂單頁——交易序號、狀態、金額、卡號末四碼與虛擬帳號。先前這三家完全不會顯示任何內容。"
+
+#. li #906
+msgid "Fixed"
+msgstr "修正"
+
+#. li #907
+msgid "Choosing a convenience store on the NewebPay and PAYUNi checkouts could leave the order saying no store had been picked — and because a store is required, the customer could not check out at all. It depended on timing, so it looked intermittent. ECPay was fixed this way in 1.8.4; these two now match."
+msgstr "修正：在藍新與 PAYUNi 的結帳頁選擇超商門市後，訂單可能仍顯示尚未選擇門市——而由於門市是必填，顧客會完全無法完成結帳。這個問題跟時間點有關，所以看起來時好時壞。綠界已在 1.8.4 以相同方式修正，這兩家現在跟上。"
+
+#. li #908
+msgid "A SmilePay parcel the customer returned was marked as cancelled, which put the stock back on sale while the parcel was still on its way back. The rest of that return sequence did not move the order at all."
+msgstr "修正：速買配的顧客退貨包裹會被標示為已取消，導致包裹還在退回途中，庫存就先被加回可販售數量。而該退貨流程的後續階段則完全不會變更訂單狀態。"
+
+#. li #909
+msgid "Refunds on PAYUNi credit card reward points and the single entry point failed with no reason given — both were offered as refundable but had nothing behind the button."
+msgstr "修正：PAYUNi 的信用卡紅利折抵與單一入口付款方式，退款時會失敗且沒有任何原因說明——這兩者都宣告支援退款，但按鈕背後其實沒有實作。"
+
+#. li #910
+msgid "Shipments printed through PAYUNi kept appearing in the \"not yet printed\" list, because the list was looking for a field that does not exist."
+msgstr "修正：透過 PAYUNi 列印過的物流單，仍會一直出現在「尚未列印」清單中，因為該清單比對的是一個並不存在的欄位。"
+
+#. li #911
+msgid "The shipping status e-mails (shipped, arrived at store, store closed) had never been sent at all. They now work, and stay switched off — turn on the ones you want under WooCommerce → Settings → Emails."
+msgstr "修正：物流狀態通知信（已出貨、已到店待取、門市關轉）從來沒有真正寄出過。現在已可正常運作，但預設維持關閉——請到 WooCommerce → 設定 → 電子郵件中，自行開啟需要的信件。"
+
+#. li #912
+msgid "Ticking or unticking the custom shipping statuses had no effect, and the status colours were saved but never used. Both were reading a different setting from the one being written. Your existing choices are carried over."
+msgstr "修正：自訂物流訂單狀態的勾選與取消完全沒有作用，狀態顏色也是存得起來卻從未套用。兩者讀取的設定與實際儲存的設定並不相同。你原本的設定會自動沿用。"
+
+#. li #913
+msgid "The \"fill in the postcode automatically\" setting was never read — the postcode was always filled in regardless. It is now honoured, and stays on."
+msgstr "修正：「自動帶入郵遞區號」的設定從未被讀取——不論勾選與否都一律自動帶入。現在這個設定真的會生效，預設維持開啟。"
+
+#. li #914
+msgid "Deleting a PAYUNi or SmilePay shipment record left no trace in the order notes, so there was afterwards no way to tell what had been removed."
+msgstr "修正：刪除 PAYUNi 或速買配的物流單紀錄時，訂單備註不會留下任何紀錄，事後無從得知刪掉的是哪一筆。"
+
+#. li #915
+msgid "On the order screen, shipping addresses for home delivery showed the county as an internal code — \"HSINCHU CITY\" where the billing address correctly said 新竹市. This is now repaired whichever plugin causes it."
+msgstr "修正：訂單頁的宅配運送地址，縣市會顯示成內部代碼——帳單地址正確顯示「新竹市」，運送地址卻顯示「HSINCHU CITY」。現在不論是哪個外掛造成的都會自動修正。"
+
+#. li #916
+msgid "Looking a PAYUNi shipment up from the order screen updated the shipping details but left the order status alone, so the two disagreed."
+msgstr "修正：從訂單頁查詢 PAYUNi 物流單時，只會更新物流資訊而不會變更訂單狀態，導致兩邊顯示的內容互相矛盾。"
+
+#. li #917
+msgid "On sites where the customer service assistant was newly installed, its front-end replies never started, because it was still checking a setting removed in 1.5.1."
+msgstr "修正：在新安裝客服助理的網站上，前台的 AI 回覆功能從未啟動，因為程式仍在檢查一個已於 1.5.1 移除的設定。"
+
+#. sub #918
+msgid "1.8.8 - 2026-08-24"
+msgstr "1.8.8 - 2026-08-24"
+
+#. li #919
+msgid "Fix: on orders shipped by home delivery, the order screen showed the shipping county as an internal code — \"HSINCHU CITY\" where the billing address correctly said 新竹市. The shipping address is rendered under a placeholder country used to pick the Taiwanese layout, and WooCommerce could not look the county name up against it. The county name is now filled in for those addresses."
+msgstr "修正：宅配訂單的訂單頁，運送地址的縣市顯示成內部代碼——帳單地址正確顯示「新竹市」，運送地址卻是「HSINCHU CITY」。運送地址是以一個用來套用台灣版型的代用國別來呈現，WooCommerce 因此查不到對應的縣市名稱。現在這類地址會正確補上縣市名。"
+
+#. li #920
+msgid "Fix: three Taiwanese districts were missing from the district dropdown — East and North in Hsinchu City, and East in Chiayi City. Each had been overwritten by a neighbouring district in the same city, so Hsinchu offered Xiangshan three times over and Chiayi offered West twice. Customers living in those districts could not pick their own, which left the address and the postcode on their order wrong. The full list of 370 districts has been checked against the reference data and now matches it exactly."
+msgstr "修正：鄉鎮市區下拉選單少了三個行政區——新竹市的東區與北區，以及嘉義市的東區。這三筆各自被同縣市的鄰近行政區覆蓋，導致新竹市出現三次香山區、嘉義市出現兩次西區。住在這些行政區的顧客無法選到自己的區，訂單上的地址與郵遞區號因此錯誤。全部 370 個行政區已與參考資料逐筆比對，現在完全一致。"
+
+#. sub #921
+msgid "1.8.7 - 2026-08-24"
+msgstr "1.8.7 - 2026-08-24"
+
+#. li #922
+msgid "Fix: ECPay convenience store orders stopped moving through their statuses. A parcel that reached the pickup store stayed marked as shipped, and once the customer collected it the order went to \"arrived at store\" instead of completing. The codes the carrier sends were being read against the wrong list — the ones for the standard (C2C) account and the bulk (B2C) account overlap in wording but mean different things — so arrival was never recognised and collection was mistaken for arrival. Every code is now matched to what it actually means."
+msgstr "修正：綠界超商取貨訂單的狀態不再往下轉。包裹已送達取貨門市卻仍標示為已出貨，顧客取貨後訂單也只轉到「已到店待取」而非完成。物流商回傳的代碼被對照到錯誤的清單——一般（C2C）帳號與大宗（B2C）帳號的代碼文字相近但意義不同——因此到店從未被辨識，取貨也被誤判為到店。現在每個代碼都對應到它真正的意義。"
+
+#. li #923
+msgid "Fix: returned ECPay parcels never reached a refunded status, so returns were invisible on the orders screen. They were being sent to an order status that does not exist, which left the order wherever it was."
+msgstr "修正：綠界的退回包裹從未進入退費狀態，導致退貨在訂單列表上完全看不到。這些訂單被指定到一個並不存在的訂單狀態，因此停留在原本的狀態沒有變動。"
+
+#. li #924
+msgid "Fix: a parcel reported lost by the carrier was being marked as completed."
+msgstr "修正：物流商回報遺失的包裹，會被錯誤標示為已完成。"
+
+#. li #925
+msgid "Fix: opening an order paid through PAYUNi JKOPAY, iCash Pay, credit card reward points, or the single entry point showed \"There has been a critical error on this website\" in place of the payment details. Payment, invoicing and the order itself were unaffected — only the order screen failed to draw."
+msgstr "修正：開啟以 PAYUNi 街口支付、iCash Pay、信用卡紅利折抵或單一入口付款的訂單時，付款資訊區塊會顯示「這個網站發生嚴重錯誤」。付款、開立發票與訂單本身都不受影響——只有訂單頁無法正常繪製。"
+
 #. sub #77
 msgid "1.8.6 - 2026-08-20"
 msgstr "1.8.6 - 2026-08-20"

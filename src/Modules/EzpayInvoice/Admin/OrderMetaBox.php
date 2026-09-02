@@ -5,6 +5,7 @@ namespace Moksafowo\Modules\EzpayInvoice\Admin;
 
 use Moksafowo\Modules\EzpayInvoice\Operations\Allowance;
 use Moksafowo\Modules\EzpayInvoice\Operations\Invalid;
+use Moksafowo\Modules\EzpayInvoice\Operations\Query;
 use Moksafowo\Modules\EzpayInvoice\Operations\Issue;
 use Moksafowo\Modules\Shared\Invoice\AbstractAdminMetaBox;
 use Moksafowo\Order\Meta\Keys;
@@ -55,6 +56,10 @@ final class OrderMetaBox extends AbstractAdminMetaBox {
 
 	protected static function allowance_callable(): ?callable {
 		return [ Allowance::class, 'run' ];
+	}
+
+	protected static function query_callable(): ?callable {
+		return [ Query::class, 'run' ];
 	}
 
 	protected static function allowance_no_meta_key(): string {
