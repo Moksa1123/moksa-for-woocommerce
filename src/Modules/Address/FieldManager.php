@@ -74,6 +74,10 @@ final class FieldManager {
 		],
 		// Email 只存在於帳單欄位（運送地址沒有 shipping_email）。寬度固定 100 ——
 		// 若給 50 而與鄰欄配對，運送地址少了這一欄會讓配對錯位。
+		//
+		// ⚠️ 排序只對古典結帳有效。區塊結帳把電子郵件放在獨立的「聯絡資訊」步驟
+		// （.wc-block-checkout__contact-fields），它是地址表單的兄弟節點而不是子節點，
+		// 所以 block_field_order_css() 的 CSS order 搆不到 —— 那份 $map 刻意不列 email。
 		[
 			'key'      => 'email',
 			'width'    => 100,
@@ -93,7 +97,7 @@ final class FieldManager {
 		'city'       => '鄉 / 鎮 / 區',
 		'postcode'   => '郵遞區號',
 		'phone'      => '電話',
-		'email'      => '電子郵件（僅帳單）',
+		'email'      => '電子郵件（僅帳單、僅古典結帳）',
 	];
 
 	private const FIELD_REPOPULATE = [

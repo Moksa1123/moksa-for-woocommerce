@@ -512,7 +512,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			[
 				'title' => __( 'Field order and width', 'moksa-for-woocommerce' ),
 				'type'  => 'moksafowo_field_manager',
-				'desc'  => __( 'Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_tw_address_field_layout',
 			],
 			[

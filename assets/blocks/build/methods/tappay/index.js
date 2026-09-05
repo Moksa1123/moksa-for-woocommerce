@@ -368,3 +368,146 @@
 		},
 	} );
 } )();
+
+/**
+ * TapPay 電子錢包的 block-checkout 註冊（街口 / 悠遊付 / 一卡通 Money /
+ * 全支付 / LINE Pay）。
+ *
+ * 跟上面的信用卡同一套骨架，差別只在取 prime 的入口：信用卡走 TPDirect.card，
+ * 錢包走 TPDirect[<sdkNamespace>].getPrime()。命名空間由 PHP 端
+ * TappayBlocksMethod::payment_method_data_extra() 以 sdkNamespace 注入 ——
+ * 前端不再自己維護一份對照表，避免跟 PHP 走鐘（綠界分期就是這樣壞掉的）。
+ *
+ * 錢包沒有要填的欄位，content 只放說明文字；prime 拿到之後 PHP 端
+ * AbstractWalletGateway::process_payment() 走 pay-by-prime 換 payment_url 導轉。
+ *
+ * ⚠️ Apple / Google / Samsung Pay 不在這裡 —— 它們必須渲染各自的官方按鈕、
+ * 由按鈕點擊開啟 payment sheet，跟區塊結帳「送出訂單」的流程不同構，
+ * 目前只支援古典結帳（assets/public/moksafowo-tappay-devicewallet.js）。
+ */
+( function () {
+	'use strict';
+
+	if ( ! window.wc || ! window.wc.wcBlocksRegistry || ! window.wp || ! window.wp.element ) {
+		return;
+	}
+
+	var registry = window.wc.wcBlocksRegistry;
+	var el = window.wp.element.createElement;
+	var settings = window.wc.wcSettings;
+
+	var WALLET_IDS = [
+		'moksafowo_tappay_easywallet',
+		'moksafowo_tappay_jkopay',
+		'moksafowo_tappay_linepay',
+		'moksafowo_tappay_pxpayplus',
+		'moksafowo_tappay_ipassmoney',
+	];
+
+	var walletSdkReady = false;
+
+	function ensureWalletSdk( data ) {
+		if ( walletSdkReady ) {
+			return true;
+		}
+		if ( typeof window.TPDirect === 'undefined' ) {
+			return false;
+		}
+		try {
+			window.TPDirect.setupSDK(
+				parseInt( data.appId, 10 ) || 0,
+				data.appKey || '',
+				data.env === 'production' ? 'production' : 'sandbox'
+			);
+		} catch ( e ) {
+			// 已 setup 過會 throw —— 視為就緒。
+		}
+		walletSdkReady = true;
+		return true;
+	}
+
+	WALLET_IDS.forEach( function ( name ) {
+		var data =
+			settings && settings.getSetting ? settings.getSetting( name + '_data' ) : null;
+		if ( ! data || data.name !== name || ! data.sdkNamespace ) {
+			return;
+		}
+
+		var Content = function ( props ) {
+			var onPaymentSetup =
+				props &&
+				props.eventRegistration &&
+				props.eventRegistration.onPaymentSetup;
+
+			// Hooks 規則：useEffect 一定要無條件呼叫，訂閱與否在 effect 內部判斷。
+			window.wp.element.useEffect(
+					function () {
+						if ( ! onPaymentSetup ) {
+							return undefined;
+						}
+						return onPaymentSetup( function () {
+							return new Promise( function ( resolve ) {
+								if ( ! ensureWalletSdk( data ) ) {
+									resolve( {
+										type: 'error',
+										message: data.i18nSdkFailed || 'TapPay SDK 尚未載入，請重新整理頁面。',
+									} );
+									return;
+								}
+								var api = window.TPDirect[ data.sdkNamespace ];
+								if ( ! api || typeof api.getPrime !== 'function' ) {
+									resolve( {
+										type: 'error',
+										message: data.i18nSdkFailed || 'TapPay SDK 尚未載入，請重新整理頁面。',
+									} );
+									return;
+								}
+								api.getPrime( function ( result ) {
+									if ( ! result || result.status !== 0 || ! result.prime ) {
+										resolve( {
+											type: 'error',
+											message:
+												( result && result.msg ) ||
+												data.i18nPrimeFailed ||
+												'無法取得付款授權，請稍後再試。',
+										} );
+										return;
+									}
+									var pmData = {
+										moksafowo_tappay_prime: result.prime,
+									};
+									resolve( {
+										type: 'success',
+										paymentMethodData: pmData,
+										meta: { paymentMethodData: pmData },
+									} );
+								} );
+							} );
+						} );
+					},
+					[ onPaymentSetup ]
+				);
+
+			return el( 'div', null, data.description || '' );
+		};
+
+		var Label = function () {
+			return el( 'span', null, data.title || data.name );
+		};
+
+		registry.registerPaymentMethod( {
+			name: name,
+			label: el( Label ),
+			content: el( Content ),
+			edit: el( 'div', null, data.description || '' ),
+			canMakePayment: function () {
+				return true;
+			},
+			ariaLabel: data.title || data.name,
+			paymentMethodId: name,
+			supports: {
+				features: ( data && data.supports ) || [ 'products' ],
+			},
+		} );
+	} );
+} )();

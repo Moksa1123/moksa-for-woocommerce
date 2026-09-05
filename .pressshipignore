@@ -32,3 +32,7 @@ node_modules/
 .pressship-svn/
 *.zip
 *.log
+
+# pressship 內建預設會排除任何 build/ 目錄，這裡明確救回發佈必需的區塊 bundle
+!assets/blocks/build/
+!assets/blocks/build/**

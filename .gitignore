@@ -1,16 +1,13 @@
 # Build & dependencies
 /vendor/
 /node_modules/
-/assets/blocks/build/
-# All payment-method block JS are hand-coded (no webpack), so they must ship via git.
-!/assets/blocks/build/methods/payuni/
-!/assets/blocks/build/methods/ecpay/
-!/assets/blocks/build/methods/newebpay/
-!/assets/blocks/build/methods/pchomepay/
-!/assets/blocks/build/methods/paynow/
-!/assets/blocks/build/methods/smilepay/
-!/assets/blocks/build/methods/tappay/
-!/assets/blocks/build/methods/shopline-payments/
+# assets/blocks/build/ 刻意「不」忽略 —— 那是要隨發佈包出貨的產物（wp.org 端沒有
+# build step，區塊結帳靠這些 bundle 註冊付款方式）。
+#
+# ⚠️ 不要改回「忽略父目錄 + 用 ! 逐一救回」的寫法：gitignore 規定父目錄被排除後
+# 底下的檔案再怎麼 ! 都救不回來，於是 (a) 新增的 provider 會靜默漏掉（linepay 就是
+# 這樣沒進 repo），(b) 照 gitignore 語意走檔案系統的打包工具會把整個 build/ 丟掉 ——
+# pressship 就是，導致 wp.org 上架版本完全沒有區塊結帳的付款方式。
 /.phpunit.cache/
 /.phpcs-cache
 

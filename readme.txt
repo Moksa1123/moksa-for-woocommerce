@@ -4,12 +4,12 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.10.0
+Stable tag: 1.10.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
 WC requires at least: 9.9
-WC tested up to: 11.0
+WC tested up to: 11.1
 
 A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping and e-invoice integrations.
 
@@ -135,6 +135,17 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.10.1 - 2026-09-05 =
+Fixed
+* Payment methods did not appear at checkout on stores using the block checkout. The files that register each payment method with the block checkout were being dropped from the released package, so every method this plugin provides was invisible there — even though the settings were saved and everything looked correct in the admin. Classic checkout was never affected. This is the fix to install if your customers could not see any way to pay.
+* ECPay credit card instalments (3, 6, 12, 18 and 24 months) never appeared at the block checkout, because the block checkout looked them up under a different name than the one the settings were saved under.
+* The five TapPay wallets — LINE Pay, JKOPAY, Easy Wallet, iPASS MONEY and PXPay Plus — now work at the block checkout as well as the classic one. Apple Pay, Google Pay and Samsung Pay remain classic-checkout only.
+* The Taiwanese field order in Advanced settings did nothing at checkout unless one of the address tools happened to be switched on as well. It now works on its own, and the classic and block checkouts no longer disagree about whether it applies.
+* The email field cannot be moved at the block checkout: WooCommerce keeps it in its own Contact information step, separate from the address fields. Moving it still reorders the classic checkout, and the settings screen now says so instead of leaving you guessing.
+
+Changed
+* Confirmed compatible with WooCommerce 11.1.
 
 = 1.10.0 - 2026-09-02 =
 New

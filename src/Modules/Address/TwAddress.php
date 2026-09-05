@@ -17,8 +17,15 @@ final class TwAddress {
 		// init() 一定要跑（裡面有設定頁的欄位渲染），區塊開關在 FieldManager 內部判斷。
 		FieldManager::init();
 
+		// 欄位順序歸 TW_FIELD_LAYOUT 管，跟地址工具（TW_ADDRESS）是兩區，
+		// 所以不能被 TW_ADDRESS 的早退擋掉 —— 只開排序的站台一樣要吃到前台 CSS。
+		$layout_on = self::field_layout_on();
+
 		// 區塊總開關關掉時，底下的子項一律不生效（見 AdvancedSections 的兩層開關備註）
 		if ( ! \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_ADDRESS ) ) {
+			if ( $layout_on ) {
+				self::init_frontend_assets();
+			}
 			return;
 		}
 
@@ -39,11 +46,19 @@ final class TwAddress {
 		// priority 99：要跑在各家物流外掛（多半掛 10）之後，否則補好的縣市名又被蓋回代碼。
 		add_filter( 'woocommerce_formatted_address_replacements', [ __CLASS__, 'repair_pseudo_country_state' ], 99, 2 );
 
-		if ( self::any_toggle_on() ) {
-			add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_shared_css' ] );
-			add_filter( 'body_class', [ __CLASS__, 'add_body_classes' ] );
+		if ( self::any_toggle_on() || $layout_on ) {
+			self::init_frontend_assets();
 			add_filter( 'woocommerce_countries', [ __CLASS__, 'tw_first_in_dropdown' ] );
 		}
+	}
+
+	/**
+	 * 前台 CSS + body class。地址工具與欄位順序兩區都會用到，各自都可能是唯一開著的那個，
+	 * 所以抽出來讓兩條路徑共用（重複 add_* 由 WP 自身去重，掛兩次也安全）。
+	 */
+	private static function init_frontend_assets(): void {
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_shared_css' ] );
+		add_filter( 'body_class', [ __CLASS__, 'add_body_classes' ] );
 	}
 
 	public static function tw_address_format_use_name_token( array $formats ): array {
@@ -89,6 +104,16 @@ final class TwAddress {
 			$replacements['{name}'] = $name;
 		}
 		return $replacements;
+	}
+
+	/**
+	 * 欄位順序是進階設定裡「獨立的一區」，閘門必須跟 FieldManager::init() 一模一樣：
+	 * 區塊開關 TW_FIELD_LAYOUT + 自身 toggle。以前這裡直接讀 toggle，於是
+	 * 「區塊關掉但 toggle 還開著」時 Classic 不排、Block 照排，兩邊行為對不上。
+	 */
+	private static function field_layout_on(): bool {
+		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
+			&& 'yes' === get_option( 'moksafowo_tw_address_reorder_fields', 'no' );
 	}
 
 	private static function any_toggle_on(): bool {
@@ -281,7 +306,7 @@ final class TwAddress {
 		// 啟用台式欄位順序 → 整份 layout 的順序 + 寬度套到 Block。
 		// Block 地址表單為 flex-wrap、column-gap 12px,欄位預設 flex:1 0 calc(50% - 12px)。
 		// 50% → 同一基準(兩兩配對並排、落單自動撐滿);100% → flex:0 0 100% 整列。
-		if ( 'yes' === get_option( 'moksafowo_tw_address_reorder_fields', 'no' ) ) {
+		if ( self::field_layout_on() ) {
 			$css = '';
 			$idx = 0;
 			foreach ( FieldManager::get_layout() as $item ) {
@@ -338,7 +363,7 @@ final class TwAddress {
 			$classes[] = 'moksafowo-tw-name-swap';
 		}
 
-		if ( 'yes' === get_option( 'moksafowo_tw_address_reorder_fields', 'no' ) ) {
+		if ( self::field_layout_on() ) {
 			foreach ( FieldManager::get_layout() as $item ) {
 				$key = sanitize_html_class( (string) $item['key'] );
 				if ( empty( $item['enabled'] ) ) {
