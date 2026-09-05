@@ -310,18 +310,20 @@ final class TwAddress {
 		// Block 地址表單為 flex-wrap、column-gap 12px,欄位預設 flex:1 0 calc(50% - 12px)。
 		// 50% → 同一基準(兩兩配對並排、落單自動撐滿);100% → flex:0 0 100% 整列。
 		if ( self::field_layout_on() ) {
-			$css = '';
-			$idx = 0;
+			$css  = '';
+			$idx  = 0;
+			$used = [];
 			foreach ( FieldManager::get_layout() as $item ) {
 				$key = (string) ( $item['key'] ?? '' );
 				if ( ! isset( $map[ $key ] ) ) {
 					continue;
 				}
 				++$idx;
-				$flex = 50 === (int) ( $item['width'] ?? 100 ) ? '1 0 calc(50% - 12px)' : '0 0 100%';
-				$css .= sprintf( '%s %s{order:%d;flex:%s !important}', $scope, $map[ $key ], $idx, $flex );
+				$used[] = $map[ $key ];
+				$flex   = 50 === (int) ( $item['width'] ?? 100 ) ? '1 0 calc(50% - 12px)' : '0 0 100%';
+				$css   .= sprintf( '%s %s{order:%d;flex:%s !important}', $scope, $map[ $key ], $idx, $flex );
 			}
-			return $css;
+			return $css . self::narrow_screen_flex_fallback( $scope, $used );
 		}
 
 		// 只開姓名對調 → 負值 order 把姓氏 / 名字 排到其他欄位之前(姓氏在前)。
@@ -331,10 +333,47 @@ final class TwAddress {
 				$scope,
 				$map['last_name'],
 				$map['first_name']
-			);
+			) . self::narrow_screen_flex_fallback( $scope, [ $map['last_name'], $map['first_name'] ] );
 		}
 
 		return '';
+	}
+
+	/**
+	 * 補上 WooCommerce 在 400px 以下漏掉的 flex 宣告。
+	 *
+	 * WC 用三段 media query 把區塊地址表單設成 flex —— 400~519、520~699、700+ ——
+	 * **400px 以下沒有任何一段涵蓋**。那個寬度區間表單不是 flex 容器，而 `order`
+	 * 只對 flex / grid 子元素有效，於是整份排序靜默失效，欄位照 DOM 原順序由上往下排。
+	 * 多數手機是 360~390px，全部落在這個斷層裡 —— 「電腦順序對、手機不對」就是這樣來的。
+	 *
+	 * 補 flex 的同時把欄位一律拉成整列：WooCommerce 在這個寬度本來就是單欄，
+	 * 在 360px 硬套 50% 會擠成兩欄，跟它的小螢幕設計相衝。商家設的 50% / 100%
+	 * 仍然在 400px 以上照舊生效。
+	 *
+	 * @param string        $scope     區塊結帳的外層選擇器。
+	 * @param array<string> $selectors 這次有排到序的欄位選擇器。
+	 */
+	private static function narrow_screen_flex_fallback( string $scope, array $selectors ): string {
+		if ( empty( $selectors ) ) {
+			return '';
+		}
+		$form = sprintf(
+			'%1$s .wc-block-checkout__billing-fields .wc-block-components-address-form,%1$s .wc-block-checkout__shipping-fields .wc-block-components-address-form',
+			$scope
+		);
+		$full = implode(
+			',',
+			array_map(
+				static fn ( string $sel ): string => $scope . ' ' . $sel,
+				array_unique( $selectors )
+			)
+		);
+		return sprintf(
+			'@media (max-width:399px){%s{display:flex;flex-wrap:wrap}%s{flex:0 0 100%% !important}}',
+			$form,
+			$full
+		);
 	}
 
 	private static function init_hide_country(): void {

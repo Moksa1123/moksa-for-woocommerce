@@ -487,17 +487,20 @@ final class SettingsPage extends \WC_Settings_Page {
 				'checkboxgroup' => '',
 			],
 			[
-				'id'      => 'moksafowo_tw_address_reorder_fields',
-				'type'    => 'checkbox',
-				'desc'    => __( 'Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout.', 'moksa-for-woocommerce' ),
-				'default' => 'no',
-			],
-			[
-				'id'            => 'moksafowo_tw_address_phone_validate',
+				'id'            => 'moksafowo_tw_address_reorder_fields',
 				'type'          => 'checkbox',
-				'desc'          => __( 'Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected.', 'moksa-for-woocommerce' ),
+				'desc'          => __( 'Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout.', 'moksa-for-woocommerce' ),
 				'default'       => 'no',
 				'checkboxgroup' => 'end',
+			],
+			// 電話檢查跟上面那組下拉選單是兩件事，自成一列（不給 checkboxgroup，
+			// WC 才會連 <tr> 與標題欄一起輸出）。
+			[
+				'title'   => __( 'Phone number format', 'moksa-for-woocommerce' ),
+				'id'      => 'moksafowo_tw_address_phone_validate',
+				'type'    => 'checkbox',
+				'desc'    => __( 'Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected.', 'moksa-for-woocommerce' ),
+				'default' => 'no',
 			],
 			[
 				'type' => 'sectionend',

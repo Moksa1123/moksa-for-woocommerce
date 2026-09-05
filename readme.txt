@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.10.3
+Stable tag: 1.10.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.10.4 - 2026-09-05 =
+Fixed
+* The Taiwanese field order was ignored on phones narrower than 400 pixels — most phones — while working correctly on desktop. WooCommerce only lays the block checkout address form out in columns from 400 pixels up, and below that the ordering had nothing to attach to, so the fields fell back to WooCommerce's own order with the given name above the family name. The order now applies at every width; below 400 pixels every field takes a full row, matching how WooCommerce lays that width out.
+* The new phone number setting was drawn outside the settings table in Advanced settings, floating above the section with no label of its own. It now sits on its own labelled row.
+
 = 1.10.3 - 2026-09-05 =
 New
 * An optional check that the phone number is a Taiwanese mobile — 10 digits starting with 09. Turn it on under Advanced settings. Dashes, spaces, brackets, full-width digits and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 gets through and the order stores 0912345678. Landlines are rejected, and an empty field is still governed by whether you made the field required. Works on classic checkout, block checkout and the address form in My account.
@@ -154,16 +159,6 @@ Fixed
 
 Changed
 * Confirmed compatible with WooCommerce 11.1.
-
-= 1.10.0 - 2026-09-02 =
-New
-* Eight more ways to pay through TapPay. Until now TapPay only offered the credit card form; it now also covers LINE Pay, JKOPAY, Easy Wallet, iPASS MONEY and PXPay Plus, plus Apple Pay, Google Pay and Samsung Pay. Each is off until you turn it on, and each still has to be enabled in your TapPay Portal first.
-* Apple Pay, Google Pay and Samsung Pay hide themselves on devices and browsers that cannot use them, so nobody picks a method they cannot complete. Apple Pay also checks the device actually has a card set up. Apple Pay needs your Apple Merchant ID and Google Pay needs your Google Merchant ID — until those are filled in, the method stays hidden rather than failing at checkout.
-* "Look up" buttons for e-invoices issued through ezPay and PayNow, alongside the ECPay one. The invoice details on the order screen are only ever what was written here when it was issued — if issuing timed out, or the invoice was later voided at the provider, this is how you find out. What comes back is written into the order notes.
-* The TapPay look-up now also reports the bank settlement result, not just the transaction status TapPay holds. These are two different things at TapPay, and the bank result is the one that matters when the payout is disputed.
-
-Fixed
-* Looking up a PAYUNi shipment from the order screen updated the shipping details but left the order status alone, so the order screen and the shipping card disagreed with each other.
 
 
 Older entries are available in the plugin's repository.
