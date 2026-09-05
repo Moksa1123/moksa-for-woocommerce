@@ -1,13 +1,13 @@
 /**
  * Block Checkout client registrations for every SmilePay gateway.
  *
- * Each gateway 走自己的 `{id}_data` setting key（PHP 端 SmilepayBlocksMethod
- * 透過 get_payment_method_data() 注入），所以單支 bundle 自動 cover 所有
+ * 設定的取得走 shared/payment-method-data.js —— WC 11.1 起改成單一
+ * `paymentMethodData` 物件，舊的 `<id>_data` 已不存在，那支 helper 兩種都吃。
  * 開啟的 SmilePay gateway，不論勾了幾個。
  */
 
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
-import { getSetting } from '@woocommerce/settings';
+import { getPaymentMethodData } from '../../shared/payment-method-data';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
@@ -22,7 +22,7 @@ const SMILEPAY_IDS = [
 ];
 
 SMILEPAY_IDS.forEach( ( id ) => {
-	const settings = getSetting( id + '_data', null );
+	const settings = getPaymentMethodData( id );
 	if ( ! settings || ! settings.name ) {
 		return;
 	}

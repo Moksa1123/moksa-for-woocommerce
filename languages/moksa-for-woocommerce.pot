@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.10.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.10.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-02T11:21:07+00:00\n"
+"POT-Creation-Date: 2026-09-05T04:01:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -265,8 +265,8 @@ msgstr ""
 
 #: src/Modules/Address/BlockField.php:227
 #: src/Modules/Address/BlockField.php:304
-#: src/Modules/Address/TwAddress.php:183
-#: src/Modules/Address/TwAddress.php:232
+#: src/Modules/Address/TwAddress.php:211
+#: src/Modules/Address/TwAddress.php:260
 msgid "Select…"
 msgstr ""
 
@@ -2208,6 +2208,10 @@ msgstr ""
 msgid "Lienchiang County"
 msgstr ""
 
+#: src/Modules/Address/PhoneRule.php:76
+msgid "Enter a Taiwanese mobile number: 10 digits starting with 09 (for example 0912345678)."
+msgstr ""
+
 #: src/Modules/AiAssistant/Admin/Hub.php:100
 msgid "Moksa AI and Storefront support are both switched off, so there is nothing to configure here yet."
 msgstr ""
@@ -3144,7 +3148,7 @@ msgstr ""
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:569
+#: src/Settings/SettingsPage.php:575
 msgid "ATM virtual account"
 msgstr ""
 
@@ -3154,7 +3158,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:66
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:49
-#: src/Settings/SettingsPage.php:576
+#: src/Settings/SettingsPage.php:582
 msgid "Convenience store payment code"
 msgstr ""
 
@@ -3173,7 +3177,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:50
-#: src/Settings/SettingsPage.php:548
+#: src/Settings/SettingsPage.php:554
 msgid "Tracking number"
 msgstr ""
 
@@ -4840,7 +4844,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
-#: src/Settings/SettingsPage.php:541
+#: src/Settings/SettingsPage.php:547
 msgid "Invoice number"
 msgstr ""
 
@@ -8032,7 +8036,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr ""
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:525
+#: src/Settings/SettingsPage.php:531
 msgid "Order number lookup"
 msgstr ""
 
@@ -8191,7 +8195,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:555
+#: src/Settings/SettingsPage.php:561
 msgid "Payment transaction ID"
 msgstr ""
 
@@ -8200,7 +8204,7 @@ msgstr ""
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:562
+#: src/Settings/SettingsPage.php:568
 msgid "Tax ID"
 msgstr ""
 
@@ -8213,13 +8217,13 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:583
+#: src/Settings/SettingsPage.php:589
 msgid "Last four card digits"
 msgstr ""
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:590
+#: src/Settings/SettingsPage.php:596
 msgid "T-Cat tracking number"
 msgstr ""
 
@@ -13155,89 +13159,93 @@ msgstr ""
 msgid "Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:503
+#: src/Settings/SettingsPage.php:498
+msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:509
 msgid "Taiwan field order and widths"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:505
+#: src/Settings/SettingsPage.php:511
 msgid "Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:510
+#: src/Settings/SettingsPage.php:516
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:513
+#: src/Settings/SettingsPage.php:519
 msgid "Field order and width"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:515
-msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout."
+#: src/Settings/SettingsPage.php:521
+msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:527
+#: src/Settings/SettingsPage.php:533
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:531
+#: src/Settings/SettingsPage.php:537
 msgid "Enable order number lookup"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:535
+#: src/Settings/SettingsPage.php:541
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:540
+#: src/Settings/SettingsPage.php:546
 msgid "Number types to search"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:595
+#: src/Settings/SettingsPage.php:601
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:598
+#: src/Settings/SettingsPage.php:604
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:602
+#: src/Settings/SettingsPage.php:608
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:642
+#: src/Settings/SettingsPage.php:648
 msgid "Payment modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:643
+#: src/Settings/SettingsPage.php:649
 msgid "Shipping modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:644
+#: src/Settings/SettingsPage.php:650
 msgid "E-invoice modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:645
+#: src/Settings/SettingsPage.php:651
 msgid "Checkout tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:646
+#: src/Settings/SettingsPage.php:652
 msgid "Tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:659
 msgid "Moksa — Taiwan toolkit"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:660
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr ""
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:702
+#: src/Settings/SettingsPage.php:708
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:703
+#: src/Settings/SettingsPage.php:709
 msgid "Module overview"
 msgstr ""
 

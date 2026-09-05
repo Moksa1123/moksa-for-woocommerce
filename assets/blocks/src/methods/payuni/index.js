@@ -2,12 +2,12 @@
  * Block Checkout client registrations for every PAYUNi gateway.
  *
  * Each gateway calls `wp_set_script_translations` + `wp_localize_script` on
- * its own `mo_<id>_data` key, so this single bundle picks up however many
+ * 設定的取得走 shared/payment-method-data.js（WC 11.1 換了形狀，那支兩種都吃）。
  * gateways are enabled.
  */
 
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
-import { getSetting } from '@woocommerce/settings';
+import { getPaymentMethodData } from '../../shared/payment-method-data';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
@@ -35,7 +35,7 @@ const PAYUNI_IDS = [
 ];
 
 PAYUNI_IDS.forEach( ( id ) => {
-	const settings = getSetting( id + '_data', null );
+	const settings = getPaymentMethodData( id );
 	if ( ! settings || ! settings.name ) {
 		return;
 	}

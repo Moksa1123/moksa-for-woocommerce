@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.10.1
+Stable tag: 1.10.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,14 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.10.3 - 2026-09-05 =
+New
+* An optional check that the phone number is a Taiwanese mobile — 10 digits starting with 09. Turn it on under Advanced settings. Dashes, spaces, brackets, full-width digits and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 gets through and the order stores 0912345678. Landlines are rejected, and an empty field is still governed by whether you made the field required. Works on classic checkout, block checkout and the address form in My account.
+
+Fixed
+* Hiding the country field left the country showing in the address summary on the block checkout. That summary is a single line of text built from the address format rather than the field itself, so hiding the field alone never reached it. Order emails, the admin order screen and exports still show the country as before.
+* No payment method appeared at the block checkout on stores running WooCommerce 11.1. WooCommerce changed how it hands each payment method its settings to the browser in that release, and this plugin was still reading the old location — so every method went quietly missing, with nothing wrong-looking in the admin. All eleven providers are affected and all are fixed. Stores on WooCommerce 9.9 to 11.0 keep working as before.
+
 = 1.10.1 - 2026-09-05 =
 Fixed
 * Payment methods did not appear at checkout on stores using the block checkout. The files that register each payment method with the block checkout were being dropped from the released package, so every method this plugin provides was invisible there — even though the settings were saved and everything looked correct in the admin. Classic checkout was never affected. This is the fix to install if your customers could not see any way to pay.
@@ -157,190 +165,8 @@ New
 Fixed
 * Looking up a PAYUNi shipment from the order screen updated the shipping details but left the order status alone, so the order screen and the shipping card disagreed with each other.
 
-= 1.9.0 - 2026-09-02 =
-New
-* A "Not collected" order status for pickup orders the customer never collected. The whole carrier sequence — from "not collected", through the parcel going back to the store, to the seller taking it back — now ends there instead of in "Refunded". Nothing is refunded automatically any more: whether and when to refund is yours to decide.
-* A follow-up status check. Carriers push status updates to your site, but a push can go missing — and the order then sits on an old status for good, with nothing to recover it. Once an hour the site now asks the carrier directly about orders that have not moved, and applies whatever it reports. Covers ECPay and PAYUNi; it can be switched off, and you can set how long to wait first, under the shipping settings.
-* "Look up" buttons on the order screen, to ask the provider what it currently holds rather than trusting what was written here at the time: ECPay shipments, ECPay invoices, and NewebPay, PChomePay, TapPay and Shopline Payments payments. Whatever comes back is written into the order notes.
-* Payment details for PChomePay, TapPay and Shopline Payments now appear on the order screen at all — transaction ID, status, amount, card digits and virtual account. Previously those three showed nothing.
 
-Fixed
-* Choosing a convenience store on the NewebPay and PAYUNi checkouts could leave the order saying no store had been picked — and because a store is required, the customer could not check out at all. It depended on timing, so it looked intermittent. ECPay was fixed this way in 1.8.4; these two now match.
-* A SmilePay parcel the customer returned was marked as cancelled, which put the stock back on sale while the parcel was still on its way back. The rest of that return sequence did not move the order at all.
-* Refunds on PAYUNi credit card reward points and the single entry point failed with no reason given — both were offered as refundable but had nothing behind the button.
-* Shipments printed through PAYUNi kept appearing in the "not yet printed" list, because the list was looking for a field that does not exist.
-* The shipping status e-mails (shipped, arrived at store, store closed) had never been sent at all. They now work, and stay switched off — turn on the ones you want under WooCommerce → Settings → Emails.
-* Ticking or unticking the custom shipping statuses had no effect, and the status colours were saved but never used. Both were reading a different setting from the one being written. Your existing choices are carried over.
-* The "fill in the postcode automatically" setting was never read — the postcode was always filled in regardless. It is now honoured, and stays on.
-* Deleting a PAYUNi or SmilePay shipment record left no trace in the order notes, so there was afterwards no way to tell what had been removed.
-* On the order screen, shipping addresses for home delivery showed the county as an internal code — "HSINCHU CITY" where the billing address correctly said 新竹市. This is now repaired whichever plugin causes it.
-* Looking a PAYUNi shipment up from the order screen updated the shipping details but left the order status alone, so the two disagreed.
-* On sites where the customer service assistant was newly installed, its front-end replies never started, because it was still checking a setting removed in 1.5.1.
-
-= 1.8.8 - 2026-08-24 =
-* Fix: on orders shipped by home delivery, the order screen showed the shipping county as an internal code — "HSINCHU CITY" where the billing address correctly said 新竹市. The shipping address is rendered under a placeholder country used to pick the Taiwanese layout, and WooCommerce could not look the county name up against it. The county name is now filled in for those addresses.
-* Fix: three Taiwanese districts were missing from the district dropdown — East and North in Hsinchu City, and East in Chiayi City. Each had been overwritten by a neighbouring district in the same city, so Hsinchu offered Xiangshan three times over and Chiayi offered West twice. Customers living in those districts could not pick their own, which left the address and the postcode on their order wrong. The full list of 370 districts has been checked against the reference data and now matches it exactly.
-
-= 1.8.7 - 2026-08-24 =
-* Fix: ECPay convenience store orders stopped moving through their statuses. A parcel that reached the pickup store stayed marked as shipped, and once the customer collected it the order went to "arrived at store" instead of completing. The codes the carrier sends were being read against the wrong list — the ones for the standard (C2C) account and the bulk (B2C) account overlap in wording but mean different things — so arrival was never recognised and collection was mistaken for arrival. Every code is now matched to what it actually means.
-* Fix: returned ECPay parcels never reached a refunded status, so returns were invisible on the orders screen. They were being sent to an order status that does not exist, which left the order wherever it was.
-* Fix: a parcel reported lost by the carrier was being marked as completed.
-* Fix: opening an order paid through PAYUNi JKOPAY, iCash Pay, credit card reward points, or the single entry point showed "There has been a critical error on this website" in place of the payment details. Payment, invoicing and the order itself were unaffected — only the order screen failed to draw.
-
-= 1.8.6 - 2026-08-20 =
-* Fix: on the classic checkout the e-invoice fields were labelled "(optional)" even when they had to be filled in — the carrier type, the carrier number, the tax ID and company name, and the donation code. The order was then refused on submission with nothing to explain why. Each field is now marked as required exactly when it is, which is what the block checkout already did.
-
-= 1.8.5 - 2026-08-20 =
-* Compatibility: tested with WordPress 7.1. The drag-and-drop checkout field ordering, the settings screens and the assistant's tools were all checked against it and behave as before.
-
-= 1.8.4 - 2026-08-17 =
-* Fix: after choosing a convenience store, the checkout could still say no store had been picked — and because a store is required to order, the customer was left unable to check out at all. It depended on timing, so it looked intermittent. The chosen store is now recorded while the page is being loaded, before anything else on the checkout can overwrite it.
-* Fix: the A6 label button was missing on 7-ELEVEN bulk and frozen shipments, which do support A6. All the places that decide this now read the same list.
-* New: NewebPay pickup orders now show the shipping details to the customer — the tracking number reaches the shipping notification e-mail, the order page shows a shipping card with the pickup store, and there is a link through to the carrier's own tracking page. ECPay, SmilePay and PAYUNi already had all three.
-* New: the ECPay shipping settings have a "Convenience store account type" option again, so you can choose between the standard (C2C) and bulk (B2C) account. The setting was being read but had no way to change it, which left the bulk credentials unusable.
-
-= 1.8.3 - 2026-08-17 =
-* Fix: choosing a convenience store on the classic checkout wiped everything the customer had already typed. Picking a store leaves the site for the carrier's store map and comes back, and the checkout page was rebuilt empty, so name, phone, e-mail and address all had to be entered again. Those details are now carried across and put back automatically. This applies to ECPay, NewebPay and SmilePay pickup, which had no such handling at all; PAYUNi already did, and now shares the same one. The block checkout was never affected.
-
-= 1.8.2 - 2026-08-10 =
-* Fix: when other Moksa plugins are installed alongside this one, a single badly described tool in any of them could make the assistant fail with a "Bad Request (400)" before it ran anything — including the order tools in this plugin. The shared assistant now corrects such descriptions on the way to the AI provider, so one plugin can no longer take the whole assistant down.
-
-= 1.8.1 - 2026-08-06 =
-* Fix: the two buttons on the assistant's confirmation step were labelled "Confirm" and "Cancel" in English on non-English sites. They now follow the site language.
-* Fix: translations for text coming from JavaScript were never compiled into the format WordPress loads, so those strings would have stayed in English no matter what the site language was.
-* Fix: PayNow's Chinese name was written two different ways in this readme.
-* A full Traditional Chinese translation of this readme is now maintained alongside the plugin translation.
-
-= 1.8.0 - 2026-08-06 =
-* Fix: a customer could place an order with convenience store pickup without ever choosing a store, leaving an order that cannot be shipped. Checkout now stops and asks for the store. This applies to ECPay, NewebPay and SmilePay pickup, on both the block and the classic checkout — previously only PAYUNi pickup was checked.
-* New: every section on the Advanced tab now has its own "Enable this section" switch — shared shipping settings, custom order statuses, order status colors, Taiwan address tools, and Taiwan field order and widths. Switching one off really stops that feature running, rather than only hiding the settings, which is what you want when another plugin is competing for the same part of the checkout. Your settings inside the section are kept, so switching it back on restores everything as it was.
-
-= 1.7.0 - 2026-08-05 =
-* New: the assistant can change the pickup store on a convenience store order, by store number. It shows you what will change and waits for your confirmation, warns you when a shipment already points at the old store, and never re-books the shipment on its own.
-* New: the assistant can list the shipments on an order and delete one, so a shipment can be created again — for example after the pickup store was changed. Deleting only removes the record on this site; it does not cancel the booking with the carrier.
-* New: the assistant can look a payment up at the provider (ECPay card payments and PAYUNi) for when the order and the provider disagree, such as a customer saying they paid while the order still shows unpaid.
-* New for MCP clients: the store now also offers resources (what the store has switched on, the shipping methods on offer, sales over the last 30 days) and ready-made prompts (daily shipping run, checking payments against the provider, finding orders missing an e-invoice, moving an order to another store).
-* Fix: on the order screen, the two buttons in the PAYUNi shipping card were touching each other with no space between them.
-
-= 1.6.3 - 2026-08-05 =
-* Fix: creating an ECPay shipment failed with "商品名稱請設定為最多50字元" (10500038) on orders whose product names are in Chinese. ECPay counts a Chinese character as two, but the item name was being trimmed by character count, so a 50-character Chinese name reached ECPay as 100. It is now trimmed the same way ECPay measures it, and English names can still use the full 50 characters.
-* Fix: characters ECPay rejects are now replaced with a space instead of being deleted, so several product names no longer run together on the label.
-* The same character-count trimming was applied to the PAYUNi and SmilePay shipment descriptions as a precaution.
-
-= 1.6.2 - 2026-08-05 =
-* Tested against WooCommerce 11.0.
-* Fix: the store picker layout setting showed "one column" as selected on stores that had never saved it, while the checkout actually rendered two columns. The two now agree.
-
-= 1.6.1 - 2026-08-05 =
-* Fix: switching an order to (or away from) a convenience-store method in the items panel now updates the store fields straight away. They used to appear only after saving the order and reloading the page, which made it look like you could not pick a store on an order you created in the admin yourself.
-* Fix: the convenience-store card on the classic checkout was squashed into a narrow strip on phones. The card is now given the full width of the order summary, with the label on its own line.
-
-= 1.6.0 - 2026-08-04 =
-* New: change the pickup store on a convenience-store order from the order screen. Open the shipping address for editing and you get store number, store name and store address fields, plus a "Choose store on map" button that opens the carrier's own store map in a new window and fills the fields in when you pick a store. Works for ECPay, NewebPay, PAYUNi and SmilePay pickup methods, and on orders you create in the admin yourself.
-* New: changing the store leaves an order note recording the old and new store number, as a reminder that a shipment created earlier still points at the old store.
-* Removed an admin store-map callback endpoint in the PAYUNi shipping module that nothing linked to and that no longer worked on HPOS sites.
-
-= 1.5.4 - 2026-08-01 =
-* Fix: saving the module list switched off any module whose card is not on that screen. Order number lookup is configured on the Advanced tab, so every save silently turned it off — and because it is what registers the assistant's tools, the AI assistant was left with nothing to work with.
-* Fix: enabling only the AI assistant gave it no tools at all, so the chat window never appeared and nothing seemed to happen. It now registers the order abilities it needs on its own.
-* Fix: opening the Moksa AI screen while both modules were off showed "you do not have permission to access this page", which is what WordPress says about a page that is not registered — it was never a permissions problem. The screen now explains the situation and links to the module list.
-* Fix: the checkout field order list was missing the email field.
-
-= 1.5.3 - 2026-08-01 =
-* Fix: 1.5.2 could show a floating assistant button on every admin screen even when nothing was available to run, opening an empty panel. It now appears only when there is something to show.
-* Fix: the assistant button used an emoji, which WordPress replaces with an image hosted on s.w.org; on sites that cannot reach that host it rendered as a broken image. It is now drawn as an inline icon and loads nothing external.
-* Fix: the fallback panel shown when no AI provider is configured was untranslated. Its labels now follow the site language.
-
-= 1.5.2 - 2026-08-01 =
-* The Moksa AI chat window is now a shared component. When several Moksa plugins are installed alongside each other they no longer each draw their own floating window; one window serves them all and can reach every plugin's abilities. Installed on its own, this plugin behaves exactly as before.
-* Fix: the assistant advertised its 28 abilities to the AI model even when the module that actually registers them was switched off. A model given a tool name that does not exist does not report an error — it invents an answer that looks plausible. Only abilities that are genuinely registered are offered now.
-
-= 1.5.1 - 2026-08-01 =
-* Fix: the "About Moksa AI" status badge used emoji, which WordPress replaces with an image hosted on s.w.org. On sites where that host is unreachable the badge rendered as a broken image. It is now drawn in CSS and loads nothing external.
-* Fix: the Moksa AI submenu appeared under WooCommerce whether or not the assistant was in use. It now appears only once the Moksa AI or Storefront support module is enabled.
-* Fix: those two modules had no card on the module overview, so there was no way to enable them from the settings tab at all. They now appear under Tools alongside every other module.
-* Fix: both modules were behind two separate switches — the module card and a second master switch inside the Moksa AI screen — so enabling one alone did nothing. The module card is now the only switch. Sites that had the old master switch off keep both modules off.
-* The Moksa AI screen now uses the same collapsible section cards as the rest of the settings tab.
-
-= 1.5.0 - 2026-08-01 =
-* i18n: every translatable string is now written in English in the source, and Traditional Chinese ships as a real translation. Previously the source strings were Chinese, which meant the plugin could never be translated into any other language and WordPress.org reported it as having no Traditional Chinese localisation at all. 2,442 strings are covered, so Chinese stores see exactly the same wording as before.
-* i18n: Taiwanese cities and districts now use a translator context (`_x`), so the districts that share a name across cities — Zhongzheng in both Taipei and Keelung, for example — are no longer collapsed into one entry that translators cannot tell apart.
-* Fix: invoice line-item units sent to the e-invoice services were wrapped in a translation call, so on a non-Chinese site they would have been submitted in the site language instead of the value the tax authority expects. They are now sent as fixed data.
-* Fix: the order-status labels shown as post-status counts in the admin order list are now translatable in their own right rather than reusing an unrelated shipment-tracking string.
-* Dev: the translation catalogue is generated from a single English-to-Chinese map and the build fails if any string is missing a translation, so a new string can no longer ship untranslated.
-
-= 1.4.9 - 2026-07-26 =
-* Security: two SmilePay logistics endpoints (T-cat tracking-number retrieval and C2B label data) were still declared with plain http://; both now use https:// (verified reachable), so every request the plugin makes is TLS-encrypted as the readme states.
-* Security: the module on/off save handler and the order-status colour save handler verified neither a nonce nor a capability inside the method, relying on the WooCommerce settings page upstream. Both now verify the WooCommerce settings nonce and the manage_woocommerce capability inline, in the same form WooCommerce core uses.
-* Security: the quick-edit and bulk-edit handlers for the product temperature-zone field verified a nonce name that WooCommerce never issues for those forms, so the check always failed and the field silently stopped saving from quick/bulk edit. They now verify the same woocommerce_quick_edit_nonce that WooCommerce core verifies, restoring the feature.
-* Security: the classic-checkout store validation and the PAYUNi store-restore handler now verify their nonces first, in straight-line form, before touching any request field.
-* readme: every provider entry now lists its test/sandbox hostname inline and carries an explicit Terms link and an explicit Privacy link (providers publishing a single combined document have both links pointing at it, with a note); the AMEGO terms link points at the actual terms page; added the previously undocumented ecpayment-stage.ecpay.com.tw test hostname.
-
-= 1.4.8 - 2026-07-19 =
-* i18n: the text domain is now `moksa-for-woocommerce`, matching the assigned plugin slug (all 4,000+ gettext calls, the plugin header, the block-checkout scripts and the bundled zh_TW translation files were updated; the main plugin file was renamed accordingly).
-* Security: the PChomePay webhook no longer trusts its payload at all. On top of the source-IP allowlist, every notification now triggers a server-to-server query back to PChomePay (`GET /v1/payment/{id}`) and the authoritative API response gates the order transition: `order_confirm` requires API status S with a matching amount, and expiry/failure notifications are rejected for orders the API reports as paid. The allowlisted IPs are now filterable via `moksafowo_pchomepay_notify_ips`.
-* Security: the product temperature quick-edit / bulk-edit / product-save / variation-save handlers now re-verify the WooCommerce nonce and check `edit_product` capability in-place (fail-closed) instead of relying on the upstream caller having done so.
-* readme: each SmilePay integration now explains that ssl.smse.com.tw is SmilePay's own API hostname (smse.com.tw and smilepay.net are operated by the same company, 訊航科技); OpenAI policy links point at the individual terms and privacy pages.
-
-= 1.4.7 - 2026-07-12 =
-* Naming: the PHP namespace root was changed from `MoksaWeb\Mowc\` to `Moksafowo\`, so every global identifier the plugin declares (namespaces, constants, options, hooks, AJAX actions, database tables) now shares the single `moksafowo` prefix.
-* Naming: six filters were still published under WooCommerce-prefixed hook names (`woocommerce_get_sections_*`, `woocommerce_get_settings_*`, `woocommerce_shipping_*_is_available`) even though the methods that fire them fully override WooCommerce and never call the parent implementation. They are now `moksafowo_*`.
-* Naming: the checkout field namespace and admin CSS class prefix were unified under `moksafowo`; the unused legacy `MOWP_VAULT_KEY` constant fallback was removed.
-* Database: every table name now goes through `$wpdb->prepare()` using the `%i` identifier placeholder, and every `LIKE` pattern through `%s`. No table name or search term is interpolated into SQL anywhere in the plugin, including `uninstall.php`.
-* Fix: `Aes::decrypt_cbc_hex()` validated its input only after calling `hex2bin()`, which emitted a PHP warning on malformed input before the exception was thrown. It now validates first.
-* Admin: order detail notes no longer expose the internal plugin codename.
-
-= 1.4.6 - 2026-07-12 =
-* Security fix: the NewebPay logistics store-map callback verified its signature only when a HashData value was actually supplied, so an attacker could omit it to skip verification. Now rejected (fail-closed) whenever HashData is missing.
-* Security fix: PayNow's secondary PassCode2 check (barcode/e-wallet payments) was skipped when the field was empty instead of being required; now fail-closed.
-* Settings: corrected the SmilePay "Mid" field description, which still described the old skip-if-empty behaviour after the fail-closed fix.
-* readme: OpenAI's Terms/Privacy links replaced with OpenAI's policy hub, which several individual policy sub-pages intermittently blocked as bot traffic.
-* Added explicit references to the exact WooCommerce core methods (`WC_Settings_Page`, `WC_Shipping_Method::is_available()`) that mandate the `woocommerce_*`-prefixed filter tag names flagged by the automated prefix scan — these are WooCommerce's own extension-point names, not ones this plugin defines.
-
-= 1.4.5 - 2026-07-12 =
-* Security hardening: the SmilePay payment callback now rejects requests when the merchant verification code (參數碼) is not configured (fail-closed) and only accepts callbacks for orders actually paid via SmilePay.
-* The LINE Pay admin confirm action now uses the standard check_ajax_referer() flow.
-* Readme: clarified SmilePay/ezPay combined terms & privacy documents and documented carrier tracking links (pure hyperlinks — the plugin never contacts those hosts) with verified policy links.
-
-= 1.4.4 - 2026-07-05 =
-* Removed a non-functional leftover PAYUNi credentials migrator (its map used identical source and target option names, so it did nothing).
-* The e-invoice donation-organization option is now written under a statically-prefixed, allow-listed option name.
-* Reworked the PAYUNi store-selection restore so the nonce verification is inline and explicit.
-
-= 1.4.3 - 2026-06-28 =
-* Completed the "External services" documentation in the readme to list every payment, shipping and e-invoice endpoint the plugin can contact, including the credit-card query endpoint and all sandbox/test hostnames.
-* Minor security hardening of the PAYUNi store-selection AJAX handler: the request nonce is now verified before any other processing.
-
-= 1.4.2 - 2026-06-21 =
-* Improved the AI assistant's handling of multi-part questions (e.g. asking for revenue and pending-shipment counts in one message) so they are answered reliably in a single reply.
-
-= 1.4.1 - 2026-06-20 =
-* Further hardened output escaping on the admin order payment panel and the customer payment-information notice and email (allow-listed HTML at the point of output).
-
-= 1.4.0 - 2026-06-20 =
-* E-invoice fields on the block checkout now show, hide and validate through WooCommerce's native conditional field logic (JSON Schema) instead of custom scripting, for reliable behaviour across WooCommerce updates.
-* The mobile-barcode and personal-certificate carrier inputs are now separate fields, each with its own format validation.
-* Raised the minimum WooCommerce version to 9.9, required by the native conditional checkout fields.
-* Internal consolidation of the e-invoice checkout-field code, plus further hardening of asset loading and input handling.
-
-= 1.3.0 - 2026-06-18 =
-* New Moksa AI in-admin assistant (requires WordPress 7.0 AI Client and a configured AI connector): query and manage orders, e-invoices, shipping labels and module settings in natural language, with a human confirmation step before any change is applied.
-* Order tools via the WordPress Abilities API: find order by number, order details, order counts, status changes (single and batch), order notes, and an advanced order list.
-* Taiwan e-invoice actions: issue, void and allowance, plus per-channel issuing-method toggles.
-* Shipping: create a logistics booking and print labels (single and batch).
-* Manage settings by natural language: enable or disable provider modules, individual payment methods and invoice issuing methods — each behind a confirmation step. Credentials and sandbox/live switches are never exposed.
-* Raised the minimum WordPress version to 7.0, required by the AI assistant and the Abilities API. Core payment, shipping and invoice features are unchanged.
-* Removed the unused SMS module.
-
-= 1.1.0 - 2026-06-05 =
-* All global identifiers renamed to the unique `moksafowo` prefix (options, hooks, AJAX actions, gateway IDs, script handles, order meta, custom order statuses) per WordPress.org review.
-* Hardened all payment / logistics webhook handlers: signature verification before any use, full per-field input sanitization, no raw request logging.
-* Store-selection restore at checkout now requires a nonce.
-* All inline `<script>` / `<style>` output replaced with `wp_enqueue_*`, `wp_add_inline_*` and `wp_print_inline_script_tag()`.
-* All dynamic admin card / tracking-link HTML now escaped through explicit `wp_kses` allowlists at output time.
-
-= 1.0.0 - 2026-05-26 =
-* Initial public release on the WordPress.org Plugin Directory.
+Older entries are available in the plugin's repository.
 
 == Upgrade Notice ==
 

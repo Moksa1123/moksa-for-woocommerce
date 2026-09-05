@@ -38,6 +38,9 @@ final class TwAddress {
 		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
 			self::init_hide_country();
 		}
+		if ( PhoneRule::enabled() ) {
+			PhoneValidator::init();
+		}
 
 		// WC TW 預設 `{last_name} {first_name}` 在 Block 跑不出來（Block 只認 `{name}`）；
 		// priority 100 跑在 PayuniShipping payuni_address_format(10) 之後再次 override。
@@ -337,6 +340,37 @@ final class TwAddress {
 	private static function init_hide_country(): void {
 		add_filter( 'default_checkout_billing_country', [ __CLASS__, 'default_country_tw' ] );
 		add_filter( 'default_checkout_shipping_country', [ __CLASS__, 'default_country_tw' ] );
+		// 110：要跑在 tw_address_format_use_name_token(100) 之後。
+		add_filter( 'woocommerce_localisation_address_formats', [ __CLASS__, 'strip_country_from_tw_format' ], 110 );
+	}
+
+	/**
+	 * 區塊結帳的「地址摘要卡」是照 countryData[TW].format 組出來的單一文字節點
+	 * （`100, 台灣 台北市, ...`），CSS 蓋得掉欄位、蓋不掉字串裡的一段，所以要從
+	 * 格式本身把 {country} 拿掉。
+	 *
+	 * 只在結帳 / 購物車頁動手。地址格式是全站共用的，而且 WC_Countries 每個請求只算
+	 * 一次就快取，所以這裡不能無條件改 —— 訂單信、後台訂單、匯出的地址都要保留國家。
+	 * 區塊結帳送單走的是 Store API 的另一個請求（不是結帳頁），因此信件不受影響。
+	 * 訂單完成頁也排除，那頁的地址視同訂單紀錄。
+	 *
+	 * @param array<string,string> $formats 各國地址格式。
+	 * @return array<string,string>
+	 */
+	public static function strip_country_from_tw_format( array $formats ): array {
+		if ( is_admin() || ! isset( $formats['TW'] ) ) {
+			return $formats;
+		}
+		if ( ! function_exists( 'is_checkout' ) || ( ! is_checkout() && ! is_cart() ) ) {
+			return $formats;
+		}
+		if ( function_exists( 'is_order_received_page' ) && is_order_received_page() ) {
+			return $formats;
+		}
+
+		// 連同後面那個空格一起拿掉，避免留下 `  台北市` 這種雙空白。
+		$formats['TW'] = str_replace( [ '{country} ', '{country}' ], '', $formats['TW'] );
+		return $formats;
 	}
 
 	public static function default_country_tw( $country ) {

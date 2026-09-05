@@ -37,10 +37,23 @@
 
 	var NAME = 'moksafowo_tappay_credit';
 
-	var data =
-		settings && settings.getSetting
-			? settings.getSetting( NAME + '_data' )
-			: null;
+	/**
+	 * WC 11.1 起付款方式設定改成單一 `paymentMethodData` 物件（以 gateway id 為 key），
+	 * 舊的 `<id>_data` 已不存在。本外掛支援 WC 9.9+，兩種都要吃。
+	 * 對應 webpack 那邊的 assets/blocks/src/shared/payment-method-data.js。
+	 */
+	function moksafowoGetPaymentMethodData( id ) {
+		if ( ! settings || ! settings.getSetting ) {
+			return null;
+		}
+		var bundle = settings.getSetting( 'paymentMethodData', null );
+		if ( bundle && typeof bundle === 'object' && bundle[ id ] ) {
+			return bundle[ id ];
+		}
+		return settings.getSetting( id + '_data', null );
+	}
+
+	var data = moksafowoGetPaymentMethodData( NAME );
 
 	if ( ! data || data.name !== NAME ) {
 		return;
@@ -396,6 +409,22 @@
 	var el = window.wp.element.createElement;
 	var settings = window.wc.wcSettings;
 
+	/**
+	 * WC 11.1 起付款方式設定改成單一 `paymentMethodData` 物件（以 gateway id 為 key），
+	 * 舊的 `<id>_data` 已不存在。本外掛支援 WC 9.9+，兩種都要吃。
+	 * 對應 webpack 那邊的 assets/blocks/src/shared/payment-method-data.js。
+	 */
+	function moksafowoGetPaymentMethodData( id ) {
+		if ( ! settings || ! settings.getSetting ) {
+			return null;
+		}
+		var bundle = settings.getSetting( 'paymentMethodData', null );
+		if ( bundle && typeof bundle === 'object' && bundle[ id ] ) {
+			return bundle[ id ];
+		}
+		return settings.getSetting( id + '_data', null );
+	}
+
 	var WALLET_IDS = [
 		'moksafowo_tappay_easywallet',
 		'moksafowo_tappay_jkopay',
@@ -427,8 +456,7 @@
 	}
 
 	WALLET_IDS.forEach( function ( name ) {
-		var data =
-			settings && settings.getSetting ? settings.getSetting( name + '_data' ) : null;
+		var data = moksafowoGetPaymentMethodData( name );
 		if ( ! data || data.name !== name || ! data.sdkNamespace ) {
 			return;
 		}

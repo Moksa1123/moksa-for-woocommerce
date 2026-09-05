@@ -7,13 +7,13 @@
  */
 
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
-import { getSetting } from '@woocommerce/settings';
+import { getPaymentMethodData } from '../../shared/payment-method-data';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 
 const PAYMENT_METHOD_ID = 'moksafowo_linepay';
 
-const settings = getSetting( `${ PAYMENT_METHOD_ID }_data`, {} );
+const settings = getPaymentMethodData( PAYMENT_METHOD_ID ) || {};
 const label = decodeEntities( settings.title || __( 'LINE Pay', 'moksa-for-woocommerce' ) );
 
 const Label = ( { components } ) => {

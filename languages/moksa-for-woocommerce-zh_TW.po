@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-09-04 00:00+0800\n"
+"PO-Revision-Date: 2026-09-05 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -266,8 +266,8 @@ msgstr "鄉鎮市區"
 
 #: src/Modules/Address/BlockField.php:227
 #: src/Modules/Address/BlockField.php:304
-#: src/Modules/Address/TwAddress.php:183
-#: src/Modules/Address/TwAddress.php:232
+#: src/Modules/Address/TwAddress.php:211
+#: src/Modules/Address/TwAddress.php:260
 msgid "Select…"
 msgstr "請選擇…"
 
@@ -2209,6 +2209,10 @@ msgstr "金門縣"
 msgid "Lienchiang County"
 msgstr "連江縣"
 
+#: src/Modules/Address/PhoneRule.php:76
+msgid "Enter a Taiwanese mobile number: 10 digits starting with 09 (for example 0912345678)."
+msgstr "請輸入台灣手機號碼：09 開頭共 10 碼（例如 0912345678）。"
+
 #: src/Modules/AiAssistant/Admin/Hub.php:100
 msgid "Moksa AI and Storefront support are both switched off, so there is nothing to configure here yet."
 msgstr "Moksa AI 與前台客服目前都是關閉的，這裡還沒有可以設定的項目。"
@@ -3145,7 +3149,7 @@ msgstr "付款方式"
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:569
+#: src/Settings/SettingsPage.php:575
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
@@ -3155,7 +3159,7 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:66
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:49
-#: src/Settings/SettingsPage.php:576
+#: src/Settings/SettingsPage.php:582
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
@@ -3174,7 +3178,7 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:50
-#: src/Settings/SettingsPage.php:548
+#: src/Settings/SettingsPage.php:554
 msgid "Tracking number"
 msgstr "貨號"
 
@@ -4841,7 +4845,7 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
-#: src/Settings/SettingsPage.php:541
+#: src/Settings/SettingsPage.php:547
 msgid "Invoice number"
 msgstr "發票號碼"
 
@@ -8032,7 +8036,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr "訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號"
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:525
+#: src/Settings/SettingsPage.php:531
 msgid "Order number lookup"
 msgstr "訂單查號搜尋"
 
@@ -8191,7 +8195,7 @@ msgstr "訂單 #%1$s · %2$s · %3$s · %4$s"
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:555
+#: src/Settings/SettingsPage.php:561
 msgid "Payment transaction ID"
 msgstr "金流交易序號"
 
@@ -8200,7 +8204,7 @@ msgstr "金流交易序號"
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:562
+#: src/Settings/SettingsPage.php:568
 msgid "Tax ID"
 msgstr "統一編號"
 
@@ -8213,13 +8217,13 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:583
+#: src/Settings/SettingsPage.php:589
 msgid "Last four card digits"
 msgstr "卡末四碼"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:590
+#: src/Settings/SettingsPage.php:596
 msgid "T-Cat tracking number"
 msgstr "黑貓追蹤號"
 
@@ -13151,89 +13155,93 @@ msgstr "隱藏「國家 / 地區」欄位（單一台灣站適用）"
 msgid "Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout."
 msgstr "啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳與區塊結帳都會套用順序與 50% / 100% 寬度。"
 
-#: src/Settings/SettingsPage.php:503
+#: src/Settings/SettingsPage.php:498
+msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
+msgstr "檢查電話是否為台灣手機號碼 —— 09 開頭共 10 碼。檢查前會先清掉連字號、空白與 +886 國碼，所以顧客輸入 0912-345-678 或 +886912345678 都會通過，訂單裡統一存成 0912345678。市話不接受。"
+
+#: src/Settings/SettingsPage.php:509
 msgid "Taiwan field order and widths"
 msgstr "台灣欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:505
+#: src/Settings/SettingsPage.php:511
 msgid "Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page."
 msgstr "拖曳重排欄位、選 50% 或 100% 寬度。需勾選上方「啟用台式欄位順序」才會套用到結帳頁。"
 
-#: src/Settings/SettingsPage.php:510
+#: src/Settings/SettingsPage.php:516
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr "關掉後結帳欄位維持 WooCommerce 預設的順序與寬度。你排好的版面會保留，重新打開就回來。"
 
-#: src/Settings/SettingsPage.php:513
+#: src/Settings/SettingsPage.php:519
 msgid "Field order and width"
 msgstr "欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:515
-msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout."
-msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。"
+#: src/Settings/SettingsPage.php:521
+msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
+msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。（電子郵件例外：區塊結帳把它放在獨立的「聯絡資訊」步驟，移動它只會改到古典結帳。）"
 
-#: src/Settings/SettingsPage.php:527
+#: src/Settings/SettingsPage.php:533
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr "讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。"
 
-#: src/Settings/SettingsPage.php:531
+#: src/Settings/SettingsPage.php:537
 msgid "Enable order number lookup"
 msgstr "啟用訂單查號搜尋"
 
-#: src/Settings/SettingsPage.php:535
+#: src/Settings/SettingsPage.php:541
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr "開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。"
 
-#: src/Settings/SettingsPage.php:540
+#: src/Settings/SettingsPage.php:546
 msgid "Number types to search"
 msgstr "搜尋號碼類型"
 
-#: src/Settings/SettingsPage.php:595
+#: src/Settings/SettingsPage.php:601
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr "勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。"
 
-#: src/Settings/SettingsPage.php:598
+#: src/Settings/SettingsPage.php:604
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr "加速索引（大量訂單建議開啟）"
 
-#: src/Settings/SettingsPage.php:602
+#: src/Settings/SettingsPage.php:608
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:642
+#: src/Settings/SettingsPage.php:648
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:643
+#: src/Settings/SettingsPage.php:649
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:644
+#: src/Settings/SettingsPage.php:650
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:645
+#: src/Settings/SettingsPage.php:651
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:646
+#: src/Settings/SettingsPage.php:652
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:659
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:660
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:702
+#: src/Settings/SettingsPage.php:708
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:703
+#: src/Settings/SettingsPage.php:709
 msgid "Module overview"
 msgstr "模組總覽"
 
