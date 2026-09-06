@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.10.3\n"
+"Project-Id-Version: Moksa for WooCommerce 1.10.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-05T05:38:26+00:00\n"
+"POT-Creation-Date: 2026-09-06T10:44:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -3176,7 +3176,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:50
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
 #: src/Settings/SettingsPage.php:557
 msgid "Tracking number"
 msgstr ""
@@ -5252,7 +5252,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:109
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
-#: templates/emails/moksa-cvs-arrived.php:34
+#: templates/emails/moksa-cvs-arrived.php:35
 #: templates/emails/plain/moksa-cvs-arrived.php:21
 msgid "Pickup store"
 msgstr ""
@@ -5350,7 +5350,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
-#: templates/emails/moksa-cvs-arrived.php:37
+#: templates/emails/moksa-cvs-arrived.php:38
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
 msgstr ""
@@ -10885,19 +10885,19 @@ msgstr ""
 msgid "[{site_title}] Payment details for order {order_number}"
 msgstr ""
 
-#: src/Modules/Shared/Email/PaymentInfoEmail.php:73
+#: src/Modules/Shared/Email/PaymentInfoEmail.php:77
 msgid "Hi, your order has been placed. Please use the details below to pay before the deadline:"
 msgstr ""
 
-#: src/Modules/Shared/Email/PaymentInfoEmail.php:94
+#: src/Modules/Shared/Email/PaymentInfoEmail.php:99
 msgid "Please pay before the deadline:"
 msgstr ""
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:69
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
 msgid "Payment details"
 msgstr ""
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:70
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
 msgid "Please use the details below to pay before the deadline."
 msgstr ""
 
@@ -11367,36 +11367,36 @@ msgstr ""
 msgid "Store closed — please choose another pickup store"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:46
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:70
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:62
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:86
 msgid "Track shipment"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:49
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
 msgid "Carrier"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:51
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:67
 msgid "Tracking link"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:57
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:73
 msgid "Track now"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:58
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:74
 msgid "Open tracking page"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:82
 msgid "Note: T-Cat supports one-click tracking. For other carriers, copy the tracking number and paste it on the carrier’s own website."
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:75
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:91
 msgid "Tracking number:"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:77
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:93
 msgid "Track:"
 msgstr ""
 
@@ -13266,8 +13266,12 @@ msgid "Disabled"
 msgstr ""
 
 #. translators: %s: customer first name
-#: templates/emails/moksa-cvs-arrived.php:26
-#: templates/emails/moksa-shipped.php:19
+#: templates/emails/block/moksa-cvs-arrived.php:27
+#: templates/emails/block/moksa-shipped.php:27
+#: templates/emails/block/moksa-store-closed.php:27
+#: templates/emails/block/moksafowo-payment-info.php:23
+#: templates/emails/moksa-cvs-arrived.php:27
+#: templates/emails/moksa-shipped.php:20
 #: templates/emails/moksa-store-closed.php:15
 #: templates/emails/plain/moksa-cvs-arrived.php:17
 #: templates/emails/plain/moksa-shipped.php:10
@@ -13276,22 +13280,52 @@ msgstr ""
 msgid "Hi %s,"
 msgstr ""
 
-#: templates/emails/moksa-cvs-arrived.php:29
+#: templates/emails/block/moksa-cvs-arrived.php:32
+msgid "Your parcel has arrived at the convenience store. Please collect it before the deadline shown below."
+msgstr ""
+
+#. translators: %s: store admin email
+#: templates/emails/block/moksa-cvs-arrived.php:42
+#: templates/emails/block/moksa-shipped.php:42
+#: templates/emails/block/moksa-store-closed.php:42
+#, php-format
+msgid "If you have any questions about this order, contact us at %s."
+msgstr ""
+
+#: templates/emails/block/moksa-shipped.php:32
+msgid "Your order has shipped and is on its way. The tracking number and shipping status are below."
+msgstr ""
+
+#: templates/emails/block/moksa-store-closed.php:32
+msgid "The store you chose was closed, so your parcel has been redirected. The new pickup location is below."
+msgstr ""
+
+#: templates/emails/block/moksafowo-payment-info.php:28
+msgid "Your order has been placed. Please use the payment details below before the deadline."
+msgstr ""
+
+#. translators: %s: store admin email
+#: templates/emails/block/moksafowo-payment-info.php:38
+#, php-format
+msgid "If you have any questions about this payment, contact us at %s."
+msgstr ""
+
+#: templates/emails/moksa-cvs-arrived.php:30
 #: templates/emails/plain/moksa-cvs-arrived.php:18
 msgid "Your parcel has arrived at the pickup store. Please bring your ID and collect it within 7 days."
 msgstr ""
 
-#: templates/emails/moksa-cvs-arrived.php:40
+#: templates/emails/moksa-cvs-arrived.php:41
 #: templates/emails/plain/moksa-cvs-arrived.php:27
 msgid "Store address"
 msgstr ""
 
-#: templates/emails/moksa-cvs-arrived.php:45
+#: templates/emails/moksa-cvs-arrived.php:46
 #: templates/emails/plain/moksa-cvs-arrived.php:30
 msgid "Parcels not collected in time are returned to the distribution center, and a return shipping fee may apply."
 msgstr ""
 
-#: templates/emails/moksa-shipped.php:22
+#: templates/emails/moksa-shipped.php:23
 msgid "Your order has shipped and is on its way. You can view the tracking number and shipping status in your account."
 msgstr ""
 

@@ -4,6 +4,7 @@
  *
  * @var WC_Order $order
  * @var string   $email_heading
+ * @var string   $additional_content
  * @var bool     $sent_to_admin
  * @var bool     $plain_text
  * @var WC_Email $email
@@ -27,5 +28,13 @@ do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_tex
 do_action( 'moksafowo_shipping_email_tracking_info', $order, false );
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+
+/**
+ * 商家在信件設定頁填的「額外內容」。核心範本都印這一段，我們原本漏了，
+ * 導致商家編輯了卻什麼都不會出現。
+ */
+if ( ! empty( $additional_content ) ) {
+	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
+}
 
 do_action( 'woocommerce_email_footer', $email );

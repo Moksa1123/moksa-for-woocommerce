@@ -9,6 +9,22 @@ final class EmailTrackingSection {
 
 	public static function init(): void {
 		add_action( 'moksafowo_shipping_email_tracking_info', [ __CLASS__, 'render' ], 10, 2 );
+		// 區塊信件編輯器不跑我們的 PHP 範本，它渲染的是 WooCommerce 共用的
+		// emails/block/general-block-email.php，物流追蹤要改掛在它留的擴充點上，
+		// 否則新介面寄出的信會少掉貨態與物流編號。
+		add_action( 'woocommerce_email_general_block_content', [ __CLASS__, 'render_for_block_email' ], 10, 3 );
+	}
+
+	/**
+	 * @param bool      $sent_to_admin 是否寄給管理員。
+	 * @param bool      $plain_text    是否為純文字。
+	 * @param \WC_Email $email         信件物件。
+	 */
+	public static function render_for_block_email( $sent_to_admin, $plain_text, $email ): void {
+		if ( ! $email instanceof AbstractShippingEmail ) {
+			return;
+		}
+		self::render( $email->object ?? null, (bool) $plain_text );
 	}
 
 	public static function render( $order, bool $plain_text = false ): void {

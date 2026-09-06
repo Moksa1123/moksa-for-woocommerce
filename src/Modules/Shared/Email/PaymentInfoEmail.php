@@ -21,6 +21,10 @@ final class PaymentInfoEmail extends \WC_Email {
 
 		$this->template_html  = '';
 		$this->template_plain = '';
+		// WC 的區塊信件編輯器預設是拿 template_plain 把 'plain' 換成 'block' 推導出
+		// 區塊範本名；這封信沒有純文字範本，推導不出來，所以明確指定。
+		$this->template_block = 'emails/block/moksafowo-payment-info.php';
+		$this->template_base  = MOKSAFOWO_PLUGIN_DIR . 'templates/';
 
 		// 取號資訊擷取完成時觸發。
 		add_action( 'moksafowo_payment_info_email', [ $this, 'trigger' ], 10, 1 );
@@ -84,6 +88,7 @@ final class PaymentInfoEmail extends \WC_Email {
 				]
 			);
 		}
+		$this->render_additional_content_html();
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
 		echo wc_get_template_html( 'emails/email-footer.php', [] );
 		return (string) ob_get_clean();
@@ -97,6 +102,48 @@ final class PaymentInfoEmail extends \WC_Email {
 				$lines[] = ( $row['label'] ?? '' ) . '：' . $row['value'];
 			}
 		}
+		$extra = (string) $this->get_additional_content();
+		if ( '' !== trim( $extra ) ) {
+			$lines[] = '';
+			$lines[] = wp_strip_all_tags( wptexturize( $extra ) );
+		}
 		return implode( "\n", $lines ) . "\n";
+	}
+
+	/**
+	 * 商家在信件設定頁填的「額外內容」。核心每封信都印這一段，這封原本漏了，
+	 * 商家編輯了不會有任何效果。
+	 */
+	private function render_additional_content_html(): void {
+		$extra = (string) $this->get_additional_content();
+		if ( '' === trim( $extra ) ) {
+			return;
+		}
+		echo wp_kses_post( wpautop( wptexturize( $extra ) ) );
+	}
+
+	/**
+	 * 區塊信件編輯器 email-content 佔位符要填的內容。
+	 *
+	 * 預設實作渲染的是 WooCommerce 的 emails/block/general-block-email.php，
+	 * 那份只處理訂單明細；這封信的主體是取號表格，所以自己組。
+	 */
+	public function get_block_editor_email_template_content() {
+		$rows = $this->object instanceof \WC_Order ? PaymentInfoBox::rows( $this->object ) : [];
+		ob_start();
+		echo wp_kses( PaymentInfoBox::render_html( $rows ), PaymentInfoBox::kses_allowlist() );
+		if ( $this->object instanceof \WC_Order ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
+			echo wc_get_template_html(
+				'emails/email-order-details.php',
+				[
+					'order'         => $this->object,
+					'sent_to_admin' => false,
+					'plain_text'    => false,
+					'email'         => $this,
+				]
+			);
+		}
+		return (string) ob_get_clean();
 	}
 }

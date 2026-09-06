@@ -27,6 +27,15 @@ final class PaymentInfoBox {
 					return $emails;
 				}
 			);
+			// WC 11 的區塊信件編輯器只認一份白名單，沒加進去的信件在新介面
+			// 沒有「編輯 / 預覽 / 測試信」，商家等於不能自訂內容。
+			add_filter(
+				'woocommerce_transactional_emails_for_block_editor',
+				static function ( array $ids ): array {
+					$ids[] = 'moksafowo_payment_info';
+					return $ids;
+				}
+			);
 		}
 
 		$render = static function ( $order ) use ( $resolver ): void {

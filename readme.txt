@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.10.4
+Stable tag: 1.10.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.10.5 - 2026-09-06 =
+Fixed
+* This plugin's emails could not be customized on WooCommerce 11 once the block email editor was switched on. That editor only offers Edit, Preview and Send test for emails on a list WooCommerce keeps, and third-party emails have to ask to be on it — so the four emails this plugin sends sat in the list with no way to open them. They now behave exactly like WooCommerce's own emails, opening in the block editor with an editable greeting, message and closing around the order details.
+* The "Additional content" field did nothing on any of this plugin's emails. Whatever a merchant typed there was never printed, in the HTML or the plain-text version. It now appears in the same place WooCommerce puts it. (With the block email editor switched on, WooCommerce ignores that field for its own emails too — you edit the content in the editor instead.)
+* Shipping status and tracking numbers were about to go missing from these emails under the block editor, which does not run the plugin's own templates. They are now attached to the extension point WooCommerce provides for that.
 
 = 1.10.4 - 2026-09-05 =
 Fixed

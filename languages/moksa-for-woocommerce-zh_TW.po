@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-09-05 00:00+0800\n"
+"PO-Revision-Date: 2026-09-06 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -3177,7 +3177,7 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:50
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
 #: src/Settings/SettingsPage.php:557
 msgid "Tracking number"
 msgstr "貨號"
@@ -5253,7 +5253,7 @@ msgstr "查詢到的綠界物流狀態：%1$s（狀態碼 %2$s）"
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:109
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
-#: templates/emails/moksa-cvs-arrived.php:34
+#: templates/emails/moksa-cvs-arrived.php:35
 #: templates/emails/plain/moksa-cvs-arrived.php:21
 msgid "Pickup store"
 msgstr "取貨門市"
@@ -5351,7 +5351,7 @@ msgstr "尚未選擇門市"
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
-#: templates/emails/moksa-cvs-arrived.php:37
+#: templates/emails/moksa-cvs-arrived.php:38
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
 msgstr "門市代號"
@@ -10885,19 +10885,19 @@ msgstr "請完成付款"
 msgid "[{site_title}] Payment details for order {order_number}"
 msgstr "【{site_title}】訂單 {order_number} 繳費資訊"
 
-#: src/Modules/Shared/Email/PaymentInfoEmail.php:73
+#: src/Modules/Shared/Email/PaymentInfoEmail.php:77
 msgid "Hi, your order has been placed. Please use the details below to pay before the deadline:"
 msgstr "您好，您的訂單已成立，請於期限內以下列資訊完成付款："
 
-#: src/Modules/Shared/Email/PaymentInfoEmail.php:94
+#: src/Modules/Shared/Email/PaymentInfoEmail.php:99
 msgid "Please pay before the deadline:"
 msgstr "請於期限內完成付款："
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:69
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
 msgid "Payment details"
 msgstr "繳費資訊"
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:70
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
 msgid "Please use the details below to pay before the deadline."
 msgstr "請於期限內以下列資訊完成付款。"
 
@@ -11367,36 +11367,36 @@ msgstr "【重要】請重新選擇取件門市（訂單 #{order_number}）"
 msgid "Store closed — please choose another pickup store"
 msgstr "門市關轉，請重新選擇取件門市"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:46
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:70
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:62
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:86
 msgid "Track shipment"
 msgstr "貨態查詢"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:49
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
 msgid "Carrier"
 msgstr "物流商"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:51
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:67
 msgid "Tracking link"
 msgstr "查詢連結"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:57
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:73
 msgid "Track now"
 msgstr "一鍵查詢"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:58
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:74
 msgid "Open tracking page"
 msgstr "前往查詢頁"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:82
 msgid "Note: T-Cat supports one-click tracking. For other carriers, copy the tracking number and paste it on the carrier’s own website."
 msgstr "※ 黑貓宅急便為一鍵查詢，其他物流請複製貨號後到該物流網站貼上查詢。"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:75
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:91
 msgid "Tracking number:"
 msgstr "貨號："
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:77
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:93
 msgid "Track:"
 msgstr "查詢："
 
@@ -13262,8 +13262,12 @@ msgid "Disabled"
 msgstr "已停用"
 
 #. translators: %s: customer first name
-#: templates/emails/moksa-cvs-arrived.php:26
-#: templates/emails/moksa-shipped.php:19
+#: templates/emails/block/moksa-cvs-arrived.php:27
+#: templates/emails/block/moksa-shipped.php:27
+#: templates/emails/block/moksa-store-closed.php:27
+#: templates/emails/block/moksafowo-payment-info.php:23
+#: templates/emails/moksa-cvs-arrived.php:27
+#: templates/emails/moksa-shipped.php:20
 #: templates/emails/moksa-store-closed.php:15
 #: templates/emails/plain/moksa-cvs-arrived.php:17
 #: templates/emails/plain/moksa-shipped.php:10
@@ -13272,22 +13276,52 @@ msgstr "已停用"
 msgid "Hi %s,"
 msgstr "%s 您好，"
 
-#: templates/emails/moksa-cvs-arrived.php:29
+#: templates/emails/block/moksa-cvs-arrived.php:32
+msgid "Your parcel has arrived at the convenience store. Please collect it before the deadline shown below."
+msgstr "你的包裹已送達超商門市，請於下方顯示的期限前完成取件。"
+
+#. translators: %s: store admin email
+#: templates/emails/block/moksa-cvs-arrived.php:42
+#: templates/emails/block/moksa-shipped.php:42
+#: templates/emails/block/moksa-store-closed.php:42
+#, php-format
+msgid "If you have any questions about this order, contact us at %s."
+msgstr "訂單有任何問題，請透過 %s 與我們聯絡。"
+
+#: templates/emails/block/moksa-shipped.php:32
+msgid "Your order has shipped and is on its way. The tracking number and shipping status are below."
+msgstr "你的訂單已出貨，正在配送途中。物流編號與貨態如下。"
+
+#: templates/emails/block/moksa-store-closed.php:32
+msgid "The store you chose was closed, so your parcel has been redirected. The new pickup location is below."
+msgstr "你原本選擇的門市已關轉，包裹已改送至其他門市。新的取件地點如下。"
+
+#: templates/emails/block/moksafowo-payment-info.php:28
+msgid "Your order has been placed. Please use the payment details below before the deadline."
+msgstr "你的訂單已成立，請於期限前依下列繳費資訊完成付款。"
+
+#. translators: %s: store admin email
+#: templates/emails/block/moksafowo-payment-info.php:38
+#, php-format
+msgid "If you have any questions about this payment, contact us at %s."
+msgstr "付款有任何問題，請透過 %s 與我們聯絡。"
+
+#: templates/emails/moksa-cvs-arrived.php:30
 #: templates/emails/plain/moksa-cvs-arrived.php:18
 msgid "Your parcel has arrived at the pickup store. Please bring your ID and collect it within 7 days."
 msgstr "您的包裹已送達取件門市，請於 7 天內持證件至門市取貨。"
 
-#: templates/emails/moksa-cvs-arrived.php:40
+#: templates/emails/moksa-cvs-arrived.php:41
 #: templates/emails/plain/moksa-cvs-arrived.php:27
 msgid "Store address"
 msgstr "門市地址"
 
-#: templates/emails/moksa-cvs-arrived.php:45
+#: templates/emails/moksa-cvs-arrived.php:46
 #: templates/emails/plain/moksa-cvs-arrived.php:30
 msgid "Parcels not collected in time are returned to the distribution center, and a return shipping fee may apply."
 msgstr "逾期未取件，包裹將退回物流中心，並可能產生退運費用。"
 
-#: templates/emails/moksa-shipped.php:22
+#: templates/emails/moksa-shipped.php:23
 msgid "Your order has shipped and is on its way. You can view the tracking number and shipping status in your account."
 msgstr "您的訂單已出貨，物流商正在處理運送中。可至會員中心查看出貨單編號與物流狀態。"
 

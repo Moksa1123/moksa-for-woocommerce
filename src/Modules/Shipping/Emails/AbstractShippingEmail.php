@@ -77,15 +77,20 @@ abstract class AbstractShippingEmail extends \WC_Email {
 		$this->restore_locale();
 	}
 
+	/**
+	 * additional_content 一定要傳。WooCommerce 每封信的設定頁都有「額外內容」欄位，
+	 * 核心範本靠這個變數把它印出來；漏傳的話商家在後台編輯了卻什麼都不會發生。
+	 */
 	public function get_content_html(): string {
 		return wc_get_template_html(
 			$this->template_html,
 			[
-				'order'         => $this->object,
-				'email_heading' => $this->get_heading(),
-				'sent_to_admin' => false,
-				'plain_text'    => false,
-				'email'         => $this,
+				'order'              => $this->object,
+				'email_heading'      => $this->get_heading(),
+				'additional_content' => $this->get_additional_content(),
+				'sent_to_admin'      => false,
+				'plain_text'         => false,
+				'email'              => $this,
 			],
 			'',
 			$this->template_base
@@ -96,11 +101,12 @@ abstract class AbstractShippingEmail extends \WC_Email {
 		return wc_get_template_html(
 			$this->template_plain,
 			[
-				'order'         => $this->object,
-				'email_heading' => $this->get_heading(),
-				'sent_to_admin' => false,
-				'plain_text'    => true,
-				'email'         => $this,
+				'order'              => $this->object,
+				'email_heading'      => $this->get_heading(),
+				'additional_content' => $this->get_additional_content(),
+				'sent_to_admin'      => false,
+				'plain_text'         => true,
+				'email'              => $this,
 			],
 			'',
 			$this->template_base
