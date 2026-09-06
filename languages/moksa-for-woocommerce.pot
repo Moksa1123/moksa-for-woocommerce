@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.10.4\n"
+"Project-Id-Version: Moksa for WooCommerce 1.10.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-06T10:44:10+00:00\n"
+"POT-Creation-Date: 2026-09-06T11:30:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -3146,6 +3146,7 @@ msgstr ""
 #: src/Modules/Pchomepay/Module.php:32
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:15
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
+#: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
 #: src/Settings/SettingsPage.php:578
@@ -3156,8 +3157,9 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:190
 #: src/Modules/OrderLookup/SearchableKeys.php:196
 #: src/Modules/OrderLookup/SearchableKeys.php:261
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:66
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:49
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
+#: src/Modules/Shared/Email/PersonalizationTags.php:79
 #: src/Settings/SettingsPage.php:585
 msgid "Convenience store payment code"
 msgstr ""
@@ -3176,6 +3178,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
+#: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
 #: src/Settings/SettingsPage.php:557
 msgid "Tracking number"
@@ -3576,49 +3579,51 @@ msgstr ""
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr ""
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:35
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:36
 #: src/Modules/Payuni/Gateways/Atm.php:54
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Shared/Email/PersonalizationTags.php:77
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:35
 msgid "Bank code"
 msgstr ""
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:42
 #: src/Modules/Payuni/Gateways/Atm.php:53
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:39
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:41
 msgid "Virtual account"
 msgstr ""
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:44
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:61
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:83
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:44
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:61
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:83
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:47
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:66
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:47
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:66
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:86
 #: src/Modules/Payuni/Gateways/Atm.php:55
 #: src/Modules/Payuni/Gateways/Cvs.php:55
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:85
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:108
 msgid "Pay before"
 msgstr ""
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:54
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:54
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:58
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:58
 #: src/Modules/Payuni/Gateways/Cvs.php:53
 msgid "Payment code"
 msgstr ""
 
 #. translators: %d: barcode segment index
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:75
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:75
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:53
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:63
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:69
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:56
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:67
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:79
 #, php-format
 msgid "Barcode segment %d"
 msgstr ""
@@ -4844,6 +4849,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
+#: src/Modules/Shared/Email/PersonalizationTags.php:56
 #: src/Settings/SettingsPage.php:550
 msgid "Invoice number"
 msgstr ""
@@ -9435,6 +9441,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr ""
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:80
+#: src/Modules/Shared/Email/PersonalizationTags.php:47
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:180
 msgid "E-invoice"
 msgstr ""
@@ -10893,8 +10900,47 @@ msgstr ""
 msgid "Please pay before the deadline:"
 msgstr ""
 
+#: src/Modules/Shared/Email/PersonalizationTags.php:45
+msgid "Shipping and pickup"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:46
 #: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
 msgid "Payment details"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:51
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
+msgid "Pickup store name"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:52
+msgid "Pickup store ID"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:53
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
+msgid "Pickup store address"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:55
+msgid "Shipping provider"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:80
+msgid "Barcode segment 1"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:81
+msgid "Barcode segment 2"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:82
+msgid "Barcode segment 3"
+msgstr ""
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:83
+msgid "Payment deadline"
 msgstr ""
 
 #: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
@@ -11171,14 +11217,6 @@ msgstr ""
 
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:123
 msgid "Pickup store number"
-msgstr ""
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
-msgid "Pickup store name"
-msgstr ""
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
-msgid "Pickup store address"
 msgstr ""
 
 #. translators: 1: previous store number, 2: new store number
@@ -11984,11 +12022,11 @@ msgstr ""
 msgid "The response from SmilePay could not be parsed, which usually means a connection problem"
 msgstr ""
 
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:48
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:53
 msgid "ibon payment code"
 msgstr ""
 
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:57
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:66
 msgid "FamiPort payment code"
 msgstr ""
 

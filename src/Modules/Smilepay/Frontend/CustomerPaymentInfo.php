@@ -31,33 +31,43 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::SMILEPAY_PAY_ATM_BANK_NO );
 			if ( '' !== $bank ) {
 				$rows[] = [
+					'key'   => 'atm_bank',
 					'label' => __( 'Bank code', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
+				'key'   => 'atm_account',
 				'label' => __( 'Virtual account', 'moksa-for-woocommerce' ),
 				'value' => $atm_acct,
 			];
-			return $rows;
+			return self::with_deadline( $order, $rows );
 		}
 
 		if ( '' !== $ibon_no ) {
-			return [
+			return self::with_deadline(
+				$order,
 				[
-					'label' => __( 'ibon payment code', 'moksa-for-woocommerce' ),
-					'value' => $ibon_no,
-				],
-			];
+					[
+						'key'   => 'cvs_code',
+						'label' => __( 'ibon payment code', 'moksa-for-woocommerce' ),
+						'value' => $ibon_no,
+					],
+				]
+			);
 		}
 
 		if ( '' !== $fami_no ) {
-			return [
+			return self::with_deadline(
+				$order,
 				[
-					'label' => __( 'FamiPort payment code', 'moksa-for-woocommerce' ),
-					'value' => $fami_no,
-				],
-			];
+					[
+						'key'   => 'cvs_code',
+						'label' => __( 'FamiPort payment code', 'moksa-for-woocommerce' ),
+						'value' => $fami_no,
+					],
+				]
+			);
 		}
 
 		if ( '' !== $barcode1 ) {
@@ -68,14 +78,37 @@ final class CustomerPaymentInfo {
 					/* translators: %d: barcode segment index */
 					$label  = sprintf( __( 'Barcode segment %d', 'moksa-for-woocommerce' ), $i + 1 );
 					$rows[] = [
+						'key'   => 'barcode_' . ( $i + 1 ),
 						'label' => $label,
 						'value' => $bc,
 					];
 				}
 			}
-			return $rows;
+			return self::with_deadline( $order, $rows );
 		}
 
 		return [];
+	}
+
+	/**
+	 * 補上繳費期限。
+	 *
+	 * SmilePay 的 Pay_End_Date 一直有存進訂單，但這支 resolver 從來沒把它輸出，
+	 * 顧客因此看不到期限 —— 其餘四家金流都有給。
+	 *
+	 * @param \WC_Order                                  $order 訂單。
+	 * @param array<int,array<string,string>>            $rows  既有的列。
+	 * @return array<int,array<string,string>>
+	 */
+	private static function with_deadline( \WC_Order $order, array $rows ): array {
+		$end = (string) $order->get_meta( Keys::SMILEPAY_PAY_END_DATE );
+		if ( '' !== $end ) {
+			$rows[] = [
+				'key'   => 'deadline',
+				'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
+				'value' => $end,
+			];
+		}
+		return $rows;
 	}
 }

@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.10.5
+Stable tag: 1.11.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,14 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.11.0 - 2026-09-06 =
+New
+* Thirteen Taiwan-specific fields are now available as personalization tags in the block email editor, so you can write your own sentence around them instead of accepting a fixed paragraph and a table. Pickup store name, ID and address, tracking number, shipping provider, invoice number, bank code, ATM virtual account, convenience store payment code, the three barcode segments, and the payment deadline.
+* The payment tags read from this plugin's shared payment layer rather than from any one provider, so a store that switches between ECPay, NewebPay, PayNow, PChomePay and SmilePay keeps the same tags working without touching its emails.
+
+Fixed
+* SmilePay orders never showed the payment deadline to the customer, even though the date was recorded on the order. The other four payment providers all showed it.
+
 = 1.10.5 - 2026-09-06 =
 Fixed
 * This plugin's emails could not be customized on WooCommerce 11 once the block email editor was switched on. That editor only offers Edit, Preview and Send test for emails on a list WooCommerce keeps, and third-party emails have to ask to be on it — so the four emails this plugin sends sat in the list with no way to open them. They now behave exactly like WooCommerce's own emails, opening in the block editor with an editable greeting, message and closing around the order details.
@@ -154,17 +162,6 @@ New
 Fixed
 * Hiding the country field left the country showing in the address summary on the block checkout. That summary is a single line of text built from the address format rather than the field itself, so hiding the field alone never reached it. Order emails, the admin order screen and exports still show the country as before.
 * No payment method appeared at the block checkout on stores running WooCommerce 11.1. WooCommerce changed how it hands each payment method its settings to the browser in that release, and this plugin was still reading the old location — so every method went quietly missing, with nothing wrong-looking in the admin. All eleven providers are affected and all are fixed. Stores on WooCommerce 9.9 to 11.0 keep working as before.
-
-= 1.10.1 - 2026-09-05 =
-Fixed
-* Payment methods did not appear at checkout on stores using the block checkout. The files that register each payment method with the block checkout were being dropped from the released package, so every method this plugin provides was invisible there — even though the settings were saved and everything looked correct in the admin. Classic checkout was never affected. This is the fix to install if your customers could not see any way to pay.
-* ECPay credit card instalments (3, 6, 12, 18 and 24 months) never appeared at the block checkout, because the block checkout looked them up under a different name than the one the settings were saved under.
-* The five TapPay wallets — LINE Pay, JKOPAY, Easy Wallet, iPASS MONEY and PXPay Plus — now work at the block checkout as well as the classic one. Apple Pay, Google Pay and Samsung Pay remain classic-checkout only.
-* The Taiwanese field order in Advanced settings did nothing at checkout unless one of the address tools happened to be switched on as well. It now works on its own, and the classic and block checkouts no longer disagree about whether it applies.
-* The email field cannot be moved at the block checkout: WooCommerce keeps it in its own Contact information step, separate from the address fields. Moving it still reorders the classic checkout, and the settings screen now says so instead of leaving you guessing.
-
-Changed
-* Confirmed compatible with WooCommerce 11.1.
 
 
 Older entries are available in the plugin's repository.

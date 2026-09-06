@@ -3147,6 +3147,7 @@ msgstr "付款方式"
 #: src/Modules/Pchomepay/Module.php:32
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:15
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
+#: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
 #: src/Settings/SettingsPage.php:578
@@ -3157,8 +3158,9 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/OrderLookup/SearchableKeys.php:190
 #: src/Modules/OrderLookup/SearchableKeys.php:196
 #: src/Modules/OrderLookup/SearchableKeys.php:261
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:66
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:49
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
+#: src/Modules/Shared/Email/PersonalizationTags.php:79
 #: src/Settings/SettingsPage.php:585
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
@@ -3177,10 +3179,11 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
+#: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
 #: src/Settings/SettingsPage.php:557
 msgid "Tracking number"
-msgstr "貨號"
+msgstr "物流編號"
 
 #: src/Modules/CustomerService/Module.php:93
 msgid "E-invoice number"
@@ -3577,49 +3580,51 @@ msgstr "綠界取號完成（%1$s，等待付款。狀態代碼 %2$s）"
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr "綠界付款失敗：%1$s（狀態代碼 %2$s）"
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:35
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:36
 #: src/Modules/Payuni/Gateways/Atm.php:54
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:33
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:34
+#: src/Modules/Shared/Email/PersonalizationTags.php:77
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:35
 msgid "Bank code"
 msgstr "銀行代碼"
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:42
 #: src/Modules/Payuni/Gateways/Atm.php:53
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:38
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:39
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:40
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:41
 msgid "Virtual account"
 msgstr "虛擬帳號"
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:44
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:61
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:83
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:44
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:61
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:83
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:47
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:66
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:47
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:66
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:86
 #: src/Modules/Payuni/Gateways/Atm.php:55
 #: src/Modules/Payuni/Gateways/Cvs.php:55
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:85
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:90
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:108
 msgid "Pay before"
 msgstr "繳費期限"
 
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:54
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:54
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:58
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:58
 #: src/Modules/Payuni/Gateways/Cvs.php:53
 msgid "Payment code"
 msgstr "繳費代碼"
 
 #. translators: %d: barcode segment index
-#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:75
-#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:75
-#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:53
-#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:63
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:69
+#: src/Modules/Ecpay/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Newebpay/Frontend/CustomerPaymentInfo.php:81
+#: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:56
+#: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:67
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:79
 #, php-format
 msgid "Barcode segment %d"
 msgstr "條碼第 %d 段"
@@ -4845,6 +4850,7 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/Payuni/Admin/OrderList.php:35
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
+#: src/Modules/Shared/Email/PersonalizationTags.php:56
 #: src/Settings/SettingsPage.php:550
 msgid "Invoice number"
 msgstr "發票號碼"
@@ -9435,6 +9441,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr "PAYUNi 收銀台的顯示語言。"
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:80
+#: src/Modules/Shared/Email/PersonalizationTags.php:47
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:180
 msgid "E-invoice"
 msgstr "電子發票"
@@ -10893,9 +10900,48 @@ msgstr "您好，您的訂單已成立，請於期限內以下列資訊完成付
 msgid "Please pay before the deadline:"
 msgstr "請於期限內完成付款："
 
+#: src/Modules/Shared/Email/PersonalizationTags.php:45
+msgid "Shipping and pickup"
+msgstr "物流與取件"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:46
 #: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
 msgid "Payment details"
 msgstr "繳費資訊"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:51
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
+msgid "Pickup store name"
+msgstr "取件門市名稱"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:52
+msgid "Pickup store ID"
+msgstr "取件門市代號"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:53
+#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
+msgid "Pickup store address"
+msgstr "取件門市地址"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:55
+msgid "Shipping provider"
+msgstr "物流商"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:80
+msgid "Barcode segment 1"
+msgstr "條碼第一段"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:81
+msgid "Barcode segment 2"
+msgstr "條碼第二段"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:82
+msgid "Barcode segment 3"
+msgstr "條碼第三段"
+
+#: src/Modules/Shared/Email/PersonalizationTags.php:83
+msgid "Payment deadline"
+msgstr "繳費期限"
 
 #: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
 msgid "Please use the details below to pay before the deadline."
@@ -11172,14 +11218,6 @@ msgstr "列印第 %d 份"
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:123
 msgid "Pickup store number"
 msgstr "取貨門市編號"
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
-msgid "Pickup store name"
-msgstr "取貨門市名稱"
-
-#: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
-msgid "Pickup store address"
-msgstr "取貨門市地址"
 
 #. translators: 1: previous store number, 2: new store number
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:167
@@ -11980,11 +12018,11 @@ msgstr "SmilePay 信用卡授權失敗：%s"
 msgid "The response from SmilePay could not be parsed, which usually means a connection problem"
 msgstr "SmilePay 回傳格式無法解析（連線異常）"
 
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:48
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:53
 msgid "ibon payment code"
 msgstr "ibon 繳費代碼"
 
-#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:57
+#: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:66
 msgid "FamiPort payment code"
 msgstr "FamiPort 繳費代碼"
 

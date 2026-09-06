@@ -30,11 +30,13 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::PCHOMEPAY_BANK_CODE );
 			if ( '' !== $bank ) {
 				$rows[] = [
+					'key'   => 'atm_bank',
 					'label' => __( 'Bank code', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
+				'key'   => 'atm_account',
 				'label' => __( 'Virtual account', 'moksa-for-woocommerce' ),
 				'value' => $virtual_account,
 			];
@@ -46,6 +48,7 @@ final class CustomerPaymentInfo {
 				$order,
 				[
 					[
+						'key'   => 'cvs_code',
 						'label' => __( 'Convenience store payment code', 'moksa-for-woocommerce' ),
 						'value' => $pincode,
 					],
@@ -59,6 +62,7 @@ final class CustomerPaymentInfo {
 				$bc = (string) $order->get_meta( $key );
 				if ( '' !== $bc ) {
 					$rows[] = [
+						'key'   => 'barcode_' . ( $i + 1 ),
 						/* translators: %d: barcode segment index */
 						'label' => sprintf( __( 'Barcode segment %d', 'moksa-for-woocommerce' ), $i + 1 ),
 						'value' => $bc,
@@ -82,6 +86,7 @@ final class CustomerPaymentInfo {
 			$exp = "{$m[1]}/{$m[2]}/{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}";
 		}
 		$rows[] = [
+			'key'   => 'deadline',
 			'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 			'value' => $exp,
 		];

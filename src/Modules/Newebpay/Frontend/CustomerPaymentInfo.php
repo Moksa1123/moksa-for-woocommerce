@@ -30,17 +30,20 @@ final class CustomerPaymentInfo {
 			$bank = (string) $order->get_meta( Keys::NEWEBPAY_ATM_BANK_CODE );
 			if ( '' !== $bank ) {
 				$rows[] = [
+					'key'   => 'atm_bank',
 					'label' => __( 'Bank code', 'moksa-for-woocommerce' ),
 					'value' => $bank,
 				];
 			}
 			$rows[] = [
+				'key'   => 'atm_account',
 				'label' => __( 'Virtual account', 'moksa-for-woocommerce' ),
 				'value' => $atm_acct,
 			];
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_ATM_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
+					'key'   => 'deadline',
 					'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
@@ -51,6 +54,7 @@ final class CustomerPaymentInfo {
 		if ( '' !== $cvs_no ) {
 			$rows   = [
 				[
+					'key'   => 'cvs_code',
 					'label' => __( 'Payment code', 'moksa-for-woocommerce' ),
 					'value' => $cvs_no,
 				],
@@ -58,6 +62,7 @@ final class CustomerPaymentInfo {
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_CVS_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
+					'key'   => 'deadline',
 					'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
@@ -71,6 +76,7 @@ final class CustomerPaymentInfo {
 				$bc = (string) $order->get_meta( $key );
 				if ( '' !== $bc ) {
 					$rows[] = [
+						'key'   => 'barcode_' . ( $i + 1 ),
 						/* translators: %d: barcode segment index */
 						'label' => sprintf( __( 'Barcode segment %d', 'moksa-for-woocommerce' ), $i + 1 ),
 						'value' => $bc,
@@ -80,6 +86,7 @@ final class CustomerPaymentInfo {
 			$expire = (string) $order->get_meta( Keys::NEWEBPAY_BARCODE_EXPIRE_DATE );
 			if ( '' !== $expire ) {
 				$rows[] = [
+					'key'   => 'deadline',
 					'label' => __( 'Pay before', 'moksa-for-woocommerce' ),
 					'value' => $expire,
 				];
