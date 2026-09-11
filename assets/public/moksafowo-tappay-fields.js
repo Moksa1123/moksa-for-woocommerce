@@ -24,7 +24,6 @@
 	var I18N = cfg.i18n || {};
 
 	var sdkReady = false;
-	var fieldsMounted = false;
 	var canGetPrime = false;
 	var submitting = false;
 
@@ -72,18 +71,18 @@
 	}
 
 	function mountFields() {
-		if ( fieldsMounted ) {
-			return;
-		}
 		var $c = $container();
-		if (
-			! $c.length ||
-			! $c.find( '#moksafowo-tappay-card-number' ).length ||
-			! ensureSdk()
-		) {
+		var $number = $c.find( '#moksafowo-tappay-card-number' );
+		if ( ! $c.length || ! $number.length || ! ensureSdk() ) {
 			return;
 		}
-		fieldsMounted = true;
+		// 以 DOM 為準判斷要不要重掛，不能用 boolean flag：WC 的 update_order_review
+		// （切運送方式、輸入折扣碼、甚至頁面載入後那次自動刷新）會把付款欄位整塊換掉，
+		// 原本掛進去的 TapPay iframe 變孤兒節點，flag 卻仍是 true → 永遠不重掛，
+		// 顧客看到欄位卻打不進字。容器空了就重掛。
+		if ( $number.children().length > 0 ) {
+			return;
+		}
 
 		try {
 			window.TPDirect.card.setup( {
@@ -125,7 +124,7 @@
 				togglePlaceOrder();
 			} );
 		} catch ( e ) {
-			fieldsMounted = false;
+			// 掛載失敗留空容器，下一次 updated_checkout 會再試。
 		}
 	}
 
@@ -152,9 +151,10 @@
 			var card = result.card || {};
 			var $c = $container();
 			$c.find( '.moksafowo-tappay-prime' ).val( card.prime || '' );
-			$c.find( '.moksafowo-tappay-bin' ).val( card.bin_code || '' );
+			// TapPay 文件的鍵名是 bincode / lastfour（無底線）；兩種都收，免得 SDK 版本不同就漏掉。
+			$c.find( '.moksafowo-tappay-bin' ).val( card.bincode || card.bin_code || '' );
 			$c.find( '.moksafowo-tappay-last-four' ).val(
-				card.last_four || ''
+				card.lastfour || card.last_four || ''
 			);
 			$c.find( '.moksafowo-tappay-issuer' ).val( card.issuer || '' );
 			// prime 已寫入 → 放行原本的 checkout submit。
@@ -163,9 +163,13 @@
 	}
 
 	// 攔截傳統結帳 submit：先 getPrime，拿到再放行。
-	$( document.body ).on(
-		'checkout_place_order_' + GATEWAY,
-		function () {
+	//
+	// 一定要綁在 form.checkout 本身。WooCommerce checkout.js 的 submit() 是對表單
+	// 呼叫 $form.triggerHandler( 'checkout_place_order_<id>' )，而 triggerHandler
+	// 不冒泡 —— 掛在 document.body 上的 handler 永遠不會被叫到，WC 就當作沒有
+	// 金流要攔，帶著空的 prime 把訂單送出去。
+	// updated_checkout 後表單一般不會整個換掉，但保險起見每次重綁（namespace 去重）。
+	function onPlaceOrder() {
 			if ( ! selectedGateway() ) {
 				return true;
 			}
@@ -195,11 +199,18 @@
 			setError( '' );
 			injectPrimeAndSubmit( $( 'form.checkout' ) );
 			return false; // 先擋住，getPrime callback 內 re-submit。
-		}
-	);
+	}
+
+	function bindPlaceOrder() {
+		var evt = 'checkout_place_order_' + GATEWAY;
+		$( 'form.checkout' )
+			.off( evt + '.moksafowoTappay' )
+			.on( evt + '.moksafowoTappay', onPlaceOrder );
+	}
 
 	// updated_checkout / payment_method 變更後重新 mount + gate。
 	$( document.body ).on( 'updated_checkout', function () {
+		bindPlaceOrder();
 		mountFields();
 		togglePlaceOrder();
 	} );
@@ -211,6 +222,7 @@
 	} );
 
 	$( function () {
+		bindPlaceOrder();
 		mountFields();
 		togglePlaceOrder();
 	} );

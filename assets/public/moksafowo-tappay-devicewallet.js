@@ -228,13 +228,39 @@
 		} );
 	}
 
+	/**
+	 * 顧客沒按 Apple / Google / Samsung Pay 的按鈕、直接按 WC 的「下單購買」時，
+	 * prime 是空的，送出去只會在伺服器端失敗。這裡擋下來並提示。
+	 * 綁在 form.checkout 本身 —— WC 用 triggerHandler 觸發，不冒泡，掛 body 沒用。
+	 */
+	function onPlaceOrder() {
+		var selected = $( 'input[name="payment_method"]:checked' ).val();
+		var $box = $( '.moksafowo-tappay-devicewallet[data-moksafowo-tappay-gateway="' + selected + '"]' );
+		if ( ! $box.length ) {
+			return true; // 不是我們的行動支付 —— 完全不介入。
+		}
+		if ( $box.find( '.moksafowo-tappay-prime' ).val() ) {
+			return true; // 按鈕流程已拿到 prime，放行。
+		}
+		showError( $box, I18N.use_button || 'Please pay with the button above.' );
+		return false;
+	}
+
+	function bindPlaceOrder() {
+		$( 'form.checkout' )
+			.off( 'checkout_place_order.moksafowoTappayDevice' )
+			.on( 'checkout_place_order.moksafowoTappayDevice', onPlaceOrder );
+	}
+
 	$( document.body ).on( 'updated_checkout payment_method_selected', function () {
 		// 付款方式重畫後容器是新的，要重掛。
 		prepared = {};
+		bindPlaceOrder();
 		mountAll();
 	} );
 
 	$( function () {
+		bindPlaceOrder();
 		mountAll();
 	} );
 } )( jQuery );

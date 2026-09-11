@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-09-06 00:00+0800\n"
+"PO-Revision-Date: 2026-09-11 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -255,17 +255,17 @@ msgstr "權限不足。"
 msgid "The tool failed to run. Please try again later."
 msgstr "工具執行失敗,請稍後再試。"
 
-#: src/Modules/Address/BlockField.php:126
-#: src/Modules/Address/BlockField.php:142
+#: src/Modules/Address/BlockField.php:150
+#: src/Modules/Address/BlockField.php:166
 msgid "Please select a district for home delivery orders."
 msgstr "宅配訂單請選擇鄉鎮市區。"
 
-#: src/Modules/Address/BlockField.php:221
+#: src/Modules/Address/BlockField.php:245
 msgid "District"
 msgstr "鄉鎮市區"
 
-#: src/Modules/Address/BlockField.php:227
-#: src/Modules/Address/BlockField.php:304
+#: src/Modules/Address/BlockField.php:251
+#: src/Modules/Address/BlockField.php:328
 #: src/Modules/Address/TwAddress.php:211
 #: src/Modules/Address/TwAddress.php:260
 msgid "Select…"
@@ -12948,24 +12948,28 @@ msgstr "請完整填寫信用卡資訊。"
 msgid "No payment token was returned. Please check the card number."
 msgstr "無法取得付款憑證，請確認卡號是否正確。"
 
-#: src/Modules/Tappay/Module.php:196
+#: src/Modules/Tappay/Module.php:204
 msgid "Payment service is unavailable. Please try again later."
 msgstr "付款服務目前無法使用，請稍後再試。"
 
-#: src/Modules/Tappay/Module.php:197
+#: src/Modules/Tappay/Module.php:205
 msgid "This payment method is not available on this store."
 msgstr "本店尚未開通這個付款方式。"
 
-#: src/Modules/Tappay/Module.php:198
-#: src/Modules/Tappay/Module.php:234
+#: src/Modules/Tappay/Module.php:206
+#: src/Modules/Tappay/Module.php:242
 msgid "Could not start the payment. Please try again."
 msgstr "無法開始付款，請再試一次。"
 
-#: src/Modules/Tappay/Module.php:235
+#: src/Modules/Tappay/Module.php:243
+msgid "Please pay with the button above."
+msgstr "請使用上方的付款按鈕付款。"
+
+#: src/Modules/Tappay/Module.php:244
 msgid "Pay with Apple Pay"
 msgstr "使用 Apple Pay 付款"
 
-#: src/Modules/Tappay/Module.php:236
+#: src/Modules/Tappay/Module.php:245
 msgid "Pay with Samsung Pay"
 msgstr "使用 Samsung Pay 付款"
 

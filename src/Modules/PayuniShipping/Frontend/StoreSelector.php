@@ -117,7 +117,8 @@ class StoreSelector {
 			return $value;
 		}
 
-		$is_address_field = (bool) preg_match( '/^billing_(address_|postcode|city|state|country|company)/', (string) $input );
+		// country 不洗：它決定運送區域，洗掉會讓所有運送方式消失（見 modify_billing_fields_for_cvs）。
+		$is_address_field = (bool) preg_match( '/^billing_(address_|postcode|city|state|company)/', (string) $input );
 		if ( ! $is_address_field ) {
 			// Shipping fields & non-address billing fields untouched.
 			if ( 'N/A' === $value && (bool) preg_match( '/^shipping_(address_|postcode|city|state|country|company)/', (string) $input ) ) {
@@ -895,8 +896,12 @@ JS
 			return $fields;
 		}
 
+		// billing_country 刻意不在這裡：運送區域比對靠的就是國家，把它改選填、預設空，
+		// WC 載入後自動的 update_order_review 就會送 country="" 回去 → 對不到任何區域
+		// → 所有運送方式消失（連觸發這段的超商取貨自己也消失），接著 chosen method 被清、
+		// 國家又回來、方式又出現 —— 頁面來回翻轉。送單端 set_default_billing_address_for_cvs()
+		// 本來就保留國家，渲染端要跟它一致。
 		$address_fields = array(
-			'billing_country',
 			'billing_postcode',
 			'billing_state',
 			'billing_city',

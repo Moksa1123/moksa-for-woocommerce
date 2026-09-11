@@ -173,6 +173,14 @@ final class Module extends AbstractGatewayModule {
 				],
 			]
 		);
+		// 容器沒有尺寸 iframe 就看不到 —— CSS 跟 JS 一起走。
+		$css_path = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-tappay-fields.css';
+		wp_enqueue_style(
+			'moksafowo-tappay-fields',
+			MOKSAFOWO_PLUGIN_URL . 'assets/public/moksafowo-tappay-fields.css',
+			[],
+			file_exists( $css_path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $css_path ) : MOKSAFOWO_VERSION
+		);
 		wp_enqueue_script( 'moksafowo-tappay-sdk' );
 		wp_enqueue_script( 'moksafowo-tappay-fields' );
 
@@ -232,6 +240,7 @@ final class Module extends AbstractGatewayModule {
 				'googleMerchantName' => $google instanceof Gateways\GooglePay ? $google->merchant_name() : '',
 				'i18n'               => [
 					'prime_failed' => __( 'Could not start the payment. Please try again.', 'moksa-for-woocommerce' ),
+					'use_button'   => __( 'Please pay with the button above.', 'moksa-for-woocommerce' ),
 					'pay_apple'    => __( 'Pay with Apple Pay', 'moksa-for-woocommerce' ),
 					'pay_samsung'  => __( 'Pay with Samsung Pay', 'moksa-for-woocommerce' ),
 				],

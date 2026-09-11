@@ -302,6 +302,14 @@ final class FieldManager {
 		$layout  = self::get_layout();
 		$enabled = array_values( array_filter( $layout, static fn ( array $i ): bool => ! empty( $i['enabled'] ) ) );
 
+		// 半寬配對只能算「畫面上真的看得到」的欄位。「隱藏國家」把 country 藏掉了，
+		// 但它在 layout 裡仍是 enabled，若照樣佔一個配對位置，後面每一格的
+		// form-row-first / form-row-last 都會錯位：郵遞區號拿到 last 卻排在左邊，
+		// 佈景給 last 的左側間距就整個露出來（看起來像那格往右縮了一截）。
+		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
+			$enabled = array_values( array_filter( $enabled, static fn ( array $i ): bool => 'country' !== ( $i['key'] ?? '' ) ) );
+		}
+
 		foreach ( $layout as $item ) {
 			if ( empty( $item['enabled'] ) ) {
 				$key = $prefix . $item['key'];

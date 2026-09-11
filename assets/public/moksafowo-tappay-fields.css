@@ -1,0 +1,55 @@
+/**
+ * TapPay 傳統結帳的卡號 / 到期日 / CCV 容器。
+ *
+ * TPDirect.card.setup() 把安全 iframe 掛進這三個空容器，容器本身沒有任何尺寸 ——
+ * 不給明確高度的話 iframe 存在於 DOM 裡但畫面上看不到也點不到。
+ * 樣式對齊 TapPay 官方範例（.valid / .invalid 由 SDK 加在容器上）。
+ */
+.moksafowo-tappay-field {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	height: 44px;
+	padding: 0 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	line-height: 42px;
+}
+
+.moksafowo-tappay-field.valid {
+	border-color: #1a7f37;
+}
+
+.moksafowo-tappay-field.invalid {
+	border-color: #b32d2e;
+}
+
+.moksafowo-tappay-field iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/*
+ * 到期日 / CVC 是 WooCommerce 的 form-row-first / form-row-last（float 排版）。
+ * 容器不清除浮動的話，payment_box 的高度在這一列中間就結束，
+ * 兩個欄位會壓到下一個付款方式上 —— 不分寬度都會發生。
+ */
+.moksafowo-tappay-fields::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.moksafowo-tappay-fields .form-row label {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.moksafowo-tappay-error {
+	display: none;
+	color: #b32d2e;
+	margin-top: 8px;
+}

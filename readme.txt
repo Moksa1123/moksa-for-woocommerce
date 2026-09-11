@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.11.0
+Stable tag: 1.11.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,15 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.11.1 - 2026-09-11 =
+Fixed
+* TapPay credit card on the classic (shortcode) checkout could not complete an order. The handler that fetches the card token before submitting was attached to the page body, but WooCommerce fires that event directly on the form without bubbling, so it never ran and every order was submitted with an empty token. It is now attached to the form itself. Thanks to Leo at ECLORE for the report, which traced this to the exact line in WooCommerce and confirmed the fix on a live site.
+* The TapPay card fields disappeared as soon as the checkout refreshed itself — switching shipping method, applying a coupon, or the refresh WooCommerce runs on load. The secure fields are now re-mounted whenever WooCommerce replaces that part of the page. Also reported by Leo.
+* The TapPay card number, expiry and CVC boxes had no size of their own, so on many themes they were invisible and could not be clicked. They now ship with their own styling, and the expiry / CVC row no longer spills over the next payment method. Also reported by Leo.
+* Stores using the Taiwanese city and district dropdowns could not complete a home-delivery order on the classic checkout: the district field was hidden, while the checkout still insisted it be filled in. The field was only meant to be hidden on the block checkout, where a separate district field takes its place.
+* Shipping methods vanished from the classic checkout right after it loaded, showing "Enter your address to view shipping options" instead, and came back on a page refresh. When PAYUNi convenience-store pickup was the first shipping method and "hide billing address fields for store pickup" was on, the country was being blanked along with the rest of the address — but the country is what picks the shipping zone, so every method disappeared, including the pickup option that triggered it. The country now stays put; only the street-level fields are cleared.
+* With "Hide the country field" on, the classic checkout's half-width fields fell out of step — a field would sit in the left column but be styled as the right one, showing up as an odd indent on the postcode. The hidden country field no longer counts toward pairing.
+
 = 1.11.0 - 2026-09-06 =
 New
 * Thirteen Taiwan-specific fields are now available as personalization tags in the block email editor, so you can write your own sentence around them instead of accepting a fixed paragraph and a table. Pickup store name, ID and address, tracking number, shipping provider, invoice number, bank code, ATM virtual account, convenience store payment code, the three barcode segments, and the payment deadline.
@@ -149,19 +158,6 @@ Fixed
 * This plugin's emails could not be customized on WooCommerce 11 once the block email editor was switched on. That editor only offers Edit, Preview and Send test for emails on a list WooCommerce keeps, and third-party emails have to ask to be on it — so the four emails this plugin sends sat in the list with no way to open them. They now behave exactly like WooCommerce's own emails, opening in the block editor with an editable greeting, message and closing around the order details.
 * The "Additional content" field did nothing on any of this plugin's emails. Whatever a merchant typed there was never printed, in the HTML or the plain-text version. It now appears in the same place WooCommerce puts it. (With the block email editor switched on, WooCommerce ignores that field for its own emails too — you edit the content in the editor instead.)
 * Shipping status and tracking numbers were about to go missing from these emails under the block editor, which does not run the plugin's own templates. They are now attached to the extension point WooCommerce provides for that.
-
-= 1.10.4 - 2026-09-05 =
-Fixed
-* The Taiwanese field order was ignored on phones narrower than 400 pixels — most phones — while working correctly on desktop. WooCommerce only lays the block checkout address form out in columns from 400 pixels up, and below that the ordering had nothing to attach to, so the fields fell back to WooCommerce's own order with the given name above the family name. The order now applies at every width; below 400 pixels every field takes a full row, matching how WooCommerce lays that width out.
-* The new phone number setting was drawn outside the settings table in Advanced settings, floating above the section with no label of its own. It now sits on its own labelled row.
-
-= 1.10.3 - 2026-09-05 =
-New
-* An optional check that the phone number is a Taiwanese mobile — 10 digits starting with 09. Turn it on under Advanced settings. Dashes, spaces, brackets, full-width digits and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 gets through and the order stores 0912345678. Landlines are rejected, and an empty field is still governed by whether you made the field required. Works on classic checkout, block checkout and the address form in My account.
-
-Fixed
-* Hiding the country field left the country showing in the address summary on the block checkout. That summary is a single line of text built from the address format rather than the field itself, so hiding the field alone never reached it. Order emails, the admin order screen and exports still show the country as before.
-* No payment method appeared at the block checkout on stores running WooCommerce 11.1. WooCommerce changed how it hands each payment method its settings to the browser in that release, and this plugin was still reading the old location — so every method went quietly missing, with nothing wrong-looking in the admin. All eleven providers are affected and all are fixed. Stores on WooCommerce 9.9 to 11.0 keep working as before.
 
 
 Older entries are available in the plugin's repository.

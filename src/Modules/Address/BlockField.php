@@ -59,7 +59,18 @@ final class BlockField {
 		$registered = true;
 	}
 
+	/**
+	 * 只在區塊結帳把核心 city 藏起來 —— 那裡由 moksafowo/district 額外欄位取代它。
+	 *
+	 * 傳統結帳沒有額外欄位這回事，city 就是鄉鎮市區的下拉本體；若在這裡也標
+	 * hidden，WooCommerce 的 country-select.js 會照 locale 把 #billing_city_field
+	 * 藏掉，而 validate_district_for_home() 又要求宅配必填 → 顧客看不到欄位、
+	 * 卻被擋在「請選擇鄉鎮市區」，整頁結不了帳。「我的帳號 → 地址」也是傳統表單。
+	 */
 	public static function make_tw_city_optional( array $locale ): array {
+		if ( ! self::is_block_checkout_context() ) {
+			return $locale;
+		}
 		if ( ! isset( $locale['TW'] ) || ! is_array( $locale['TW'] ) ) {
 			$locale['TW'] = [];
 		}
@@ -69,6 +80,19 @@ final class BlockField {
 		$locale['TW']['city']['required'] = false;
 		$locale['TW']['city']['hidden']   = true;
 		return $locale;
+	}
+
+	/** Store API 請求一律是區塊；前台則看結帳頁本身是不是區塊，且只限結帳頁。 */
+	private static function is_block_checkout_context(): bool {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			$route = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			return false !== strpos( $route, '/wc/store/' );
+		}
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return false;
+		}
+		$page_id = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'checkout' ) : 0;
+		return $page_id > 0 && function_exists( 'has_block' ) && has_block( 'woocommerce/checkout', $page_id );
 	}
 
 	public static function fill_city_from_district( \WC_Order $order, $request ): void {

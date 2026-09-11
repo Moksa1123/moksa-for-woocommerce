@@ -67,37 +67,42 @@
 		setupSdk();
 	} );
 
-	$( document ).on( 'submit', 'form.checkout', function ( e ) {
+	// 攔截「下單購買」：先 getPrime，拿到再放行。
+	//
+	// 綁在 form.checkout 本身的 checkout_place_order，不能用 delegation 攔原生
+	// submit：WooCommerce 自己的 submit handler 直接綁在表單上、先跑，等事件冒泡到
+	// document 時它已經帶著空的 prime 把訂單送出去了。而 WC 觸發 checkout_place_order
+	// 用的是 triggerHandler（不冒泡），所以也不能掛在 document.body。
+	// 用泛用的 checkout_place_order 一次涵蓋五個錢包，靠 activeWallet() 判斷是不是我們的。
+	function onPlaceOrder() {
 		var $box = activeWallet();
 		if ( ! $box ) {
-			return; // 不是我們的錢包 —— 完全不介入。
+			return true; // 不是我們的錢包 —— 完全不介入。
 		}
 
 		var $prime = $box.find( '.moksafowo-tappay-prime' );
 		if ( $prime.val() ) {
-			return; // 已經取到 prime，放行。
+			return true; // 已經取到 prime，放行。
 		}
-
-		e.preventDefault();
 		if ( submitting ) {
-			return;
+			return false;
 		}
 
 		if ( ! setupSdk() ) {
 			showError( $box, I18N.sdk_failed || 'Payment service is unavailable. Please try again later.' );
-			return;
+			return false;
 		}
 
 		var ns = $box.data( 'moksafowo-tappay-sdk' );
 		if ( ! ns || ! window.TPDirect[ ns ] || typeof window.TPDirect[ ns ].getPrime !== 'function' ) {
 			// 該錢包在商家的 TapPay 帳號未開通時，SDK 不會掛上對應命名空間。
 			showError( $box, I18N.not_enabled || 'This payment method is not available on this store.' );
-			return;
+			return false;
 		}
 
 		submitting = true;
 		clearError( $box );
-		var $form = $( this );
+		var $form = $( 'form.checkout' );
 
 		window.TPDirect[ ns ].getPrime( function ( result ) {
 			submitting = false;
@@ -111,5 +116,15 @@
 			$prime.val( result.prime );
 			$form.trigger( 'submit' );
 		} );
-	} );
+		return false; // 先擋住，getPrime callback 內 re-submit。
+	}
+
+	function bindPlaceOrder() {
+		$( 'form.checkout' )
+			.off( 'checkout_place_order.moksafowoTappayWallet' )
+			.on( 'checkout_place_order.moksafowoTappayWallet', onPlaceOrder );
+	}
+
+	$( document.body ).on( 'updated_checkout', bindPlaceOrder );
+	$( bindPlaceOrder );
 } )( jQuery );
