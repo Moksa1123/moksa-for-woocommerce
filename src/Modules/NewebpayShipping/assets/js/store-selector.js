@@ -136,6 +136,13 @@
 			setTimeout( refresh, 200 );
 		}
 	} );
+	// 傳統結帳：卡片塞在 #shipping_method 裡，而 WC 的 update_order_review 會把整個
+	// 訂單摘要（含 #shipping_method）換掉 —— 切運送方式後 200ms 畫的卡片，AJAX 回來
+	// 就被清光，之後沒人再畫。綠界 / PAYUNi / 速買配都接了這個事件，藍新漏了。
+	if ( window.jQuery ) {
+		window.jQuery( document.body ).on( 'updated_checkout updated_shipping_method', () => setTimeout( refresh, 0 ) );
+	}
+
 	if ( document.readyState === 'loading' ) {
 		document.addEventListener( 'DOMContentLoaded', () => { resolveToken(); refresh(); } );
 	} else {

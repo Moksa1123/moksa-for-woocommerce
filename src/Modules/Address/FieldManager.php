@@ -72,8 +72,8 @@ final class FieldManager {
 			'enabled'  => true,
 			'required' => true,
 		],
-		// Email 只存在於帳單欄位（運送地址沒有 shipping_email）。寬度固定 100 ——
-		// 若給 50 而與鄰欄配對，運送地址少了這一欄會讓配對錯位。
+		// Email 只存在於帳單欄位（運送地址沒有 shipping_email）。預設 100 只是保守，
+		// 設 50 也可以：apply_layout() 的配對只算該表單存在的欄位，運送那邊不會錯位。
 		//
 		// ⚠️ 排序只對古典結帳有效。區塊結帳把電子郵件放在獨立的「聯絡資訊」步驟
 		// （.wc-block-checkout__contact-fields），它是地址表單的兄弟節點而不是子節點，
@@ -97,7 +97,7 @@ final class FieldManager {
 		'city'       => '鄉 / 鎮 / 區',
 		'postcode'   => '郵遞區號',
 		'phone'      => '電話',
-		'email'      => '電子郵件（僅帳單、僅古典結帳）',
+		'email'      => '電子郵件（僅帳單；50% 需與另一個 50% 相鄰；僅古典結帳）',
 	];
 
 	private const FIELD_REPOPULATE = [
@@ -126,6 +126,7 @@ final class FieldManager {
 	public static function init(): void {
 		add_action( 'woocommerce_admin_field_moksafowo_field_manager', [ __CLASS__, 'render_field' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_admin_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_pairing_script' ] );
 
 		// 上面兩個 hook 是設定頁的欄位渲染，不能被區塊開關關掉，否則那一區畫不出來也存不回去。
 		// 區塊開關只管「有沒有真的套用到結帳欄位」，且關掉時子項一律視為關閉。
@@ -260,6 +261,28 @@ final class FieldManager {
 		<?php
 	}
 
+	/** 傳統結帳 / 我的帳號地址表單：依可見欄位重算半寬配對。區塊結帳不用（它走 CSS order）。 */
+	public static function enqueue_pairing_script(): void {
+		if ( ! \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
+			|| 'yes' !== get_option( self::OPTION_TOGGLE, 'no' ) ) {
+			return;
+		}
+		if ( ! is_checkout() && ! is_wc_endpoint_url( 'edit-address' ) ) {
+			return;
+		}
+		if ( is_checkout() && function_exists( 'has_block' ) && has_block( 'woocommerce/checkout', (int) wc_get_page_id( 'checkout' ) ) ) {
+			return;
+		}
+		$path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Address/assets/js/moksafowo-tw-field-pairing.js';
+		wp_enqueue_script(
+			'moksafowo-tw-field-pairing',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/js/moksafowo-tw-field-pairing.js',
+			[ 'jquery' ],
+			file_exists( $path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $path ) : MOKSAFOWO_VERSION,
+			true
+		);
+	}
+
 	public static function enqueue_admin_assets( string $hook ): void {
 		if ( ! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
@@ -325,6 +348,17 @@ final class FieldManager {
 			}
 		}
 
+		// 配對只算「這張表單裡真的存在」的欄位。帳單有 email、運送沒有 shipping_email，
+		// 若照 layout 原樣算，email 在運送表單仍佔一格 → 它的搭檔（例如電話）拿到
+		// form-row-first 卻沒有 last，跟被藏的 country 是同一種錯位。每張表單各自對齊後，
+		// email 設 50% 就安全了：帳單並排、運送落單自動撐滿。
+		$enabled = array_values(
+			array_filter(
+				$enabled,
+				static fn ( array $i ): bool => isset( $fields[ $prefix . ( $i['key'] ?? '' ) ] )
+			)
+		);
+
 		// 半寬配對只在「相鄰兩個 enabled + 50%」成立；落單 50% fallback wide。
 		$classes_by_idx = [];
 		$total          = count( $enabled );
@@ -353,10 +387,14 @@ final class FieldManager {
 			$existing = isset( $fields[ $key ]['class'] ) && is_array( $fields[ $key ]['class'] )
 				? $fields[ $key ]['class']
 				: [];
-			$existing = array_diff( $existing, [ 'form-row-first', 'form-row-last', 'form-row-wide' ] );
+			$existing = array_diff( $existing, [ 'form-row-first', 'form-row-last', 'form-row-wide', 'moksafowo-w-50', 'moksafowo-w-100' ] );
 			if ( isset( $classes_by_idx[ $idx ] ) ) {
 				$existing[] = $classes_by_idx[ $idx ];
 			}
+			// 讓前端知道商家設的寬度。這裡算出的 first/last 只是初始值 —— 欄位會被各種機制
+			// 事後藏掉（隱藏國家、超商取貨隱藏帳單地址、WC 自己的設定），PHP 在渲染前
+			// 不可能全知道；moksafowo-tw-field-pairing.js 每次 WC 刷新後依「實際看得到的欄位」重算。
+			$existing[] = 50 === (int) ( $item['width'] ?? 100 ) ? 'moksafowo-w-50' : 'moksafowo-w-100';
 			$fields[ $key ]['class'] = array_values( $existing );
 		}
 

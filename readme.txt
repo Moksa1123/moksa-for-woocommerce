@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.11.1
+Stable tag: 1.11.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.11.2 - 2026-09-11 =
+Fixed
+* Half-width fields on the classic checkout could end up stranded at half width on their own — the phone field, for instance, whenever its neighbour had been hidden by store-pickup billing hiding, the country-hiding option, or a WooCommerce setting. Pairing was decided once on the server before any of that hiding happened. It is now re-checked in the browser from the fields actually on screen, every time the checkout refreshes, so a field whose partner disappears takes the full row.
+* The email field could not usefully be set to 50% width: pairing reserved a slot for it on the shipping address form, which has no email field, so its neighbour there fell out of step. Pairing is now worked out per form from the fields it actually contains.
+* NewebPay convenience-store pickup on the classic checkout never showed the store picker. The picker was drawn 200 ms after choosing the method, and WooCommerce's own refresh then replaced that part of the page and wiped it. It is now redrawn after every refresh, the same way the ECPay, PAYUNi and SmilePay pickers already were.
+
 = 1.11.1 - 2026-09-11 =
 Fixed
 * TapPay credit card on the classic (shortcode) checkout could not complete an order. The handler that fetches the card token before submitting was attached to the page body, but WooCommerce fires that event directly on the form without bubbling, so it never ran and every order was submitted with an empty token. It is now attached to the form itself. Thanks to Leo at ECLORE for the report, which traced this to the exact line in WooCommerce and confirmed the fix on a live site.
@@ -152,12 +158,6 @@ New
 
 Fixed
 * SmilePay orders never showed the payment deadline to the customer, even though the date was recorded on the order. The other four payment providers all showed it.
-
-= 1.10.5 - 2026-09-06 =
-Fixed
-* This plugin's emails could not be customized on WooCommerce 11 once the block email editor was switched on. That editor only offers Edit, Preview and Send test for emails on a list WooCommerce keeps, and third-party emails have to ask to be on it — so the four emails this plugin sends sat in the list with no way to open them. They now behave exactly like WooCommerce's own emails, opening in the block editor with an editable greeting, message and closing around the order details.
-* The "Additional content" field did nothing on any of this plugin's emails. Whatever a merchant typed there was never printed, in the HTML or the plain-text version. It now appears in the same place WooCommerce puts it. (With the block email editor switched on, WooCommerce ignores that field for its own emails too — you edit the content in the editor instead.)
-* Shipping status and tracking numbers were about to go missing from these emails under the block editor, which does not run the plugin's own templates. They are now attached to the extension point WooCommerce provides for that.
 
 
 Older entries are available in the plugin's repository.
