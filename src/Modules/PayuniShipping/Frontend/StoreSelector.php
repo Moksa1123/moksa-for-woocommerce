@@ -73,7 +73,8 @@ class StoreSelector {
 		add_action( 'template_redirect', array( __CLASS__, 'consume_token_early' ), 5 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 
-		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'modify_billing_fields_for_cvs' ), 20 );
+		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'modify_billing_fields_for_cvs' ), 110 );
+		add_filter( 'woocommerce_get_country_locale', array( __CLASS__, 'relax_tw_locale_for_cvs' ), 200 );
 		add_filter( 'woocommerce_checkout_posted_data', array( __CLASS__, 'set_default_billing_address_for_cvs' ), 10 );
 		// Block 不走 woocommerce_checkout_posted_data；pri 100 確保 WC core 處理完才清地址
 		add_filter( 'woocommerce_checkout_get_value', array( __CLASS__, 'strip_na_placeholder_for_home_delivery' ), 10, 2 );
@@ -162,7 +163,8 @@ class StoreSelector {
 			return;
 		}
 
-		wp_enqueue_script( 'moksafowo-payuni-store-selector', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/store-selector.js', array( 'jquery' ), MOKSAFOWO_VERSION, true );
+		$selector_js = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/store-selector.js';
+		wp_enqueue_script( 'moksafowo-payuni-store-selector', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/js/store-selector.js', array( 'jquery' ), file_exists( $selector_js ) ? (string) filemtime( $selector_js ) : MOKSAFOWO_VERSION, true );
 		wp_enqueue_style( 'moksafowo-payuni-store-selector', ( MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/' ) . 'assets/css/store-selector.css', array(), MOKSAFOWO_VERSION );
 
 		if ( $post && has_block( 'woocommerce/checkout', $post ) ) {
@@ -879,6 +881,37 @@ JS
 		return WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 	}
 
+	/**
+	 * 區塊結帳選了超商時，地址欄只用 CSS 藏起來，驗證照跑。回訪顧客有舊地址會過，
+	 * 第一次購買的顧客郵遞區號是空的，就卡在看不見的欄位上下不了單。
+	 * 區塊前端驗證與 Store API 都讀 country locale，從這裡放寬兩邊一起生效。
+	 */
+	public static function relax_tw_locale_for_cvs( $locale ) {
+		if ( ! is_array( $locale ) || ! WC()->session || ! self::is_block_checkout_context() ) {
+			return $locale;
+		}
+		$chosen    = (array) WC()->session->get( 'chosen_shipping_methods', array() );
+		$method    = (string) ( $chosen[0] ?? '' );
+		$method_id = strpos( $method, ':' ) !== false ? explode( ':', $method )[0] : $method;
+		if ( '' === $method_id || ! PayuniShipping::needs_cvs( $method_id ) ) {
+			return $locale;
+		}
+		foreach ( array( 'state', 'city', 'postcode', 'address_1' ) as $key ) {
+			$locale['TW'][ $key ]['required'] = false;
+		}
+		return $locale;
+	}
+
+	/** 傳統結帳的必填已由 modify_billing_fields_for_cvs + 前端腳本處理，這裡只管區塊結帳。 */
+	private static function is_block_checkout_context(): bool {
+		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( false !== strpos( rawurldecode( $uri ), '/wc/store/' ) ) {
+			return true;
+		}
+		$post = get_post();
+		return $post instanceof \WP_Post && has_block( 'woocommerce/checkout', $post );
+	}
+
 	public static function modify_billing_fields_for_cvs( $fields ) {
 		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
 			return $fields;
@@ -912,6 +945,11 @@ JS
 
 		foreach ( $address_fields as $field ) {
 			if ( isset( $fields['billing'][ $field ] ) ) {
+				// 標記原本必填，前端切回宅配時才知道要把必填加回去。
+				if ( ! empty( $fields['billing'][ $field ]['required'] ) ) {
+					$fields['billing'][ $field ]['class']   = (array) ( $fields['billing'][ $field ]['class'] ?? array() );
+					$fields['billing'][ $field ]['class'][] = 'moksafowo-payuni-required-for-home';
+				}
 				$fields['billing'][ $field ]['required'] = false;
 				// 不用 'N/A' 佔位：returning customer 切回宅配時舊值會重浮
 				if ( ! isset( $fields['billing'][ $field ]['default'] ) ) {

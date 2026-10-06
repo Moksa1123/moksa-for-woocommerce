@@ -484,19 +484,21 @@ final class SettingsPage extends \WC_Settings_Page {
 				'type'          => 'checkbox',
 				'desc'          => __( 'Hide the “Country / Region” field (for stores that only ship within Taiwan)', 'moksa-for-woocommerce' ),
 				'default'       => 'no',
-				'checkboxgroup' => '',
-			],
-			[
-				'id'            => 'moksafowo_tw_address_reorder_fields',
-				'type'          => 'checkbox',
-				'desc'          => __( 'Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout.', 'moksa-for-woocommerce' ),
-				'default'       => 'no',
 				'checkboxgroup' => 'end',
 			],
-			// 電話檢查跟上面那組下拉選單是兩件事，自成一列（不給 checkboxgroup，
-			// WC 才會連 <tr> 與標題欄一起輸出）。
 			[
-				'title'   => __( 'Phone number format', 'moksa-for-woocommerce' ),
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_tw_address_section',
+			],
+
+			// 電話格式自成一區、沒有區塊總開關：它跟地址工具無關，很多站只要這一項。
+			[
+				'title' => __( 'Phone number format', 'moksa-for-woocommerce' ),
+				'type'  => 'title',
+				'id'    => 'moksafowo_tw_phone_section',
+			],
+			[
+				'title'   => __( 'Taiwanese mobile check', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_tw_address_phone_validate',
 				'type'    => 'checkbox',
 				'desc'    => __( 'Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected.', 'moksa-for-woocommerce' ),
@@ -504,14 +506,14 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'moksafowo_tw_address_section',
+				'id'   => 'moksafowo_tw_phone_section',
 			],
 
 			// 台灣欄位順序與寬度（field manager UI）
 			[
 				'title' => __( 'Taiwan field order and widths', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( 'Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_tw_field_manager_section',
 			],
 			AdvancedSections::toggle_field(

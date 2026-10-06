@@ -57,6 +57,21 @@ final class IpnHandler {
 		$payment_type = (string) ( $posted['PaymentType'] ?? '' );
 		$trade_no     = (string) ( $posted['TradeNo'] ?? '' );
 
+		// 已付款的單只接受付款成功通知；其他通知會先覆蓋交易編號，之後退款、查詢就拿錯那一筆。
+		if ( $order->is_paid() && 1 !== $rtn_code ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: rtn message, 2: rtn code */
+					__( 'ECPay sent a notice (%1$s, status code %2$s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					wc_clean( wp_unslash( (string) ( $posted['RtnMsg'] ?? '' ) ) ),
+					(string) $rtn_code
+				)
+			);
+			$order->save();
+			echo '1|OK';
+			exit;
+		}
+
 		$order->update_meta_data( Keys::ECPAY_TRADE_NO, $trade_no );
 		$order->update_meta_data( Keys::ECPAY_MERCHANT_TRADE_NO, $merchant_trade_no );
 		$order->update_meta_data( Keys::ECPAY_PAYMENT_TYPE, $payment_type );
@@ -71,7 +86,20 @@ final class IpnHandler {
 
 		if ( in_array( $rtn_code, [ 1, 2, 10100073 ], true ) ) {
 			if ( 1 === $rtn_code ) {
-				if ( ! $order->is_paid() ) {
+				$paid_amt = (int) ( $posted['TradeAmt'] ?? 0 );
+				$total    = (float) $order->get_total();
+				if ( ! $order->is_paid() && $paid_amt !== (int) round( $total ) && $paid_amt !== (int) ceil( $total ) ) {
+					// 待付款訂單被重新結帳改了金額，顧客卻在舊分頁用舊金額付款。
+					$order->update_status(
+						'on-hold',
+						sprintf(
+							/* translators: 1: paid amount, 2: order total */
+							__( 'ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+							$paid_amt,
+							$order->get_total()
+						)
+					);
+				} elseif ( ! $order->is_paid() ) {
 					$order->payment_complete( $trade_no );
 					$order->add_order_note(
 						sprintf(

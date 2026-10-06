@@ -93,6 +93,16 @@ final class StatusReconciler {
 		return $out;
 	}
 
+	/**
+	 * 每輪挑單的候選池上限。一輪只「查」BATCH 筆，但要多撈一些才能跳過剛查過的。
+	 */
+	private const POOL = 300;
+
+	/** 只追建立 30 天內的訂單 —— 再舊的多半是沒出貨的單，查了也是白耗物流商配額。 */
+	private const MAX_AGE_DAYS = 30;
+
+	private const THROTTLE_PREFIX = 'moksafowo_ship_rc_';
+
 	public static function run(): void {
 		if ( ! self::enabled() ) {
 			return;
@@ -103,22 +113,38 @@ final class StatusReconciler {
 		}
 
 		$cutoff = time() - ( self::min_hours() * HOUR_IN_SECONDS );
-		$orders = wc_get_orders(
+		$ids    = wc_get_orders(
 			[
-				'limit'         => self::BATCH,
+				'limit'         => self::POOL,
 				'type'          => 'shop_order',
 				'status'        => self::STUCK_STATUSES,
 				'orderby'       => 'modified',
 				'order'         => 'ASC',
-				'date_modified' => '<' . gmdate( 'Y-m-d H:i:s', $cutoff ),
+				// 一定要傳 Unix timestamp：傳 'Y-m-d H:i:s' 字串時 WC 會用網站時區解讀，
+				// 而這裡算的是 UTC，台灣站等於門檻被往前推 8 小時（6 小時變 14 小時）。
+				'date_modified' => '<' . $cutoff,
+				'date_created'  => '>' . ( time() - self::MAX_AGE_DAYS * DAY_IN_SECONDS ),
+				'return'        => 'ids',
 			]
 		);
-		if ( empty( $orders ) ) {
+		if ( empty( $ids ) ) {
 			return;
 		}
 
-		$checked = 0;
-		foreach ( $orders as $order ) {
+		// 「剛查過」記在暫存，不寫進訂單。寫訂單會觸發 woocommerce_update_order，
+		// 接了 webhook / n8n 的站每小時每筆卡住的單都被叫醒一次。
+		// 也因為不再碰訂單，date_modified 不會前進 —— 挑單若只取最舊 30 筆，
+		// 每輪都會是同一批，第 31 筆以後永遠輪不到；所以多撈、跳過節流中的，湊滿為止。
+		$throttle = self::min_hours() * HOUR_IN_SECONDS;
+		$checked  = 0;
+		foreach ( $ids as $id ) {
+			if ( $checked >= self::BATCH ) {
+				break;
+			}
+			if ( false !== get_transient( self::THROTTLE_PREFIX . $id ) ) {
+				continue;
+			}
+			$order = wc_get_order( $id );
 			if ( ! $order instanceof \WC_Order ) {
 				continue;
 			}
@@ -126,16 +152,18 @@ final class StatusReconciler {
 				try {
 					if ( $cb( $order ) ) {
 						++$checked;
+						set_transient( self::THROTTLE_PREFIX . $id, time(), $throttle );
 						break;
 					}
 				} catch ( \Throwable $e ) {
-					// 一筆訂單查失敗不能讓整批停擺。
+					// 一筆訂單查失敗不能讓整批停擺；也記節流，免得每輪重撞同一筆壞單。
+					set_transient( self::THROTTLE_PREFIX . $id, time(), $throttle );
 					Logger::info(
 						'shipping-reconcile',
 						'reconciler threw',
 						[
 							'provider' => $slug,
-							'order_id' => $order->get_id(),
+							'order_id' => $id,
 							'msg'      => $e->getMessage(),
 						]
 					);
@@ -148,7 +176,7 @@ final class StatusReconciler {
 				'shipping-reconcile',
 				'batch done',
 				[
-					'scanned' => count( $orders ),
+					'pool'    => count( $ids ),
 					'queried' => $checked,
 				]
 			);

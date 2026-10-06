@@ -63,6 +63,18 @@ final class Helper extends AbstractCredentialHelper {
 		return '' !== self::dcvc() && '' !== self::rvg2c() && '' !== self::verify_key();
 	}
 
+	/**
+	 * 回呼網址上的訂單專屬 key。Mid_smilepay 的秘密只有 4 位參數碼，可能值不到百種，
+	 * 光靠它擋不住偽造；key 用站台密鑰簽，顧客就算知道自己的 order_key 也算不出來。
+	 */
+	public static function callback_key( \WC_Order $order ): string {
+		return substr( hash_hmac( 'sha256', 'smilepay-roturl|' . $order->get_id() . '|' . $order->get_order_key(), wp_salt( 'auth' ) ), 0, 32 );
+	}
+
+	public static function keyed_roturl( string $url, \WC_Order $order ): string {
+		return add_query_arg( 'mfk', self::callback_key( $order ), $url );
+	}
+
 	public static function calc_mid_smilepay( string $mid, string $amount, string $smseid ): string {
 		$r_all = substr( $smseid, -4, 4 );
 		$r_all = str_pad( $r_all, 4, '9', STR_PAD_LEFT );

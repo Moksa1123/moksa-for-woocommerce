@@ -17,6 +17,11 @@ final class TwAddress {
 		// init() 一定要跑（裡面有設定頁的欄位渲染），區塊開關在 FieldManager 內部判斷。
 		FieldManager::init();
 
+		// 電話格式檢查是獨立功能，不跟地址工具的區塊開關連動 —— 很多站只要它。
+		if ( PhoneRule::enabled() ) {
+			PhoneValidator::init();
+		}
+
 		// 欄位順序歸 TW_FIELD_LAYOUT 管，跟地址工具（TW_ADDRESS）是兩區，
 		// 所以不能被 TW_ADDRESS 的早退擋掉 —— 只開排序的站台一樣要吃到前台 CSS。
 		$layout_on = self::field_layout_on();
@@ -37,9 +42,6 @@ final class TwAddress {
 		}
 		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
 			self::init_hide_country();
-		}
-		if ( PhoneRule::enabled() ) {
-			PhoneValidator::init();
 		}
 
 		// WC TW 預設 `{last_name} {first_name}` 在 Block 跑不出來（Block 只認 `{name}`）；
@@ -115,8 +117,7 @@ final class TwAddress {
 	 * 「區塊關掉但 toggle 還開著」時 Classic 不排、Block 照排，兩邊行為對不上。
 	 */
 	private static function field_layout_on(): bool {
-		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
-			&& 'yes' === get_option( 'moksafowo_tw_address_reorder_fields', 'no' );
+		return FieldManager::layout_enabled();
 	}
 
 	private static function any_toggle_on(): bool {

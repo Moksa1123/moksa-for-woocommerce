@@ -132,13 +132,15 @@ final class Helper extends AbstractCredentialHelper {
 			return $fail( $response->get_error_message() );
 		}
 
-		// 回應跟建單同樣是 `<0|1>|<payload>` 管線格式，不是 JSON。查無資料時綠界回
-		// HTTP 500 + `0|找不到訂單`，所以不能只看狀態碼，要看 body 開頭。
+		// 成功時是不帶前綴的 `key=value&...`；查無資料時是 HTTP 500 + `0|找不到訂單`，
+		// 所以不能只看狀態碼，要看 body 開頭。
 		$body = trim( (string) wp_remote_retrieve_body( $response ) );
 		if ( '' === $body ) {
 			return $fail( 'empty response' );
 		}
-		if ( ! str_starts_with( $body, '1|' ) ) {
+		if ( str_starts_with( $body, '1|' ) ) {
+			$body = substr( $body, 2 );
+		} elseif ( preg_match( '/^\d\|/', $body ) ) {
 			[ , $msg ] = array_pad( explode( '|', $body, 2 ), 2, '' );
 			self::log(
 				'query trade info rejected',
@@ -150,7 +152,7 @@ final class Helper extends AbstractCredentialHelper {
 			return $fail( sanitize_text_field( $msg ) );
 		}
 
-		parse_str( substr( $body, 2 ), $parsed );
+		parse_str( $body, $parsed );
 		if ( ! is_array( $parsed ) || empty( $parsed ) ) {
 			return $fail( 'unparseable response' );
 		}

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.11.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.11.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-11T03:00:25+00:00\n"
+"POT-Creation-Date: 2026-10-06T16:34:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -265,8 +265,8 @@ msgstr ""
 
 #: src/Modules/Address/BlockField.php:251
 #: src/Modules/Address/BlockField.php:328
-#: src/Modules/Address/TwAddress.php:211
-#: src/Modules/Address/TwAddress.php:260
+#: src/Modules/Address/TwAddress.php:213
+#: src/Modules/Address/TwAddress.php:262
 msgid "Select…"
 msgstr ""
 
@@ -2208,7 +2208,7 @@ msgstr ""
 msgid "Lienchiang County"
 msgstr ""
 
-#: src/Modules/Address/PhoneRule.php:76
+#: src/Modules/Address/PhoneRule.php:75
 msgid "Enter a Taiwanese mobile number: 10 digits starting with 09 (for example 0912345678)."
 msgstr ""
 
@@ -2681,7 +2681,7 @@ msgstr ""
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:147
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:244
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:212
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:247
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:248
 #: src/Modules/Tappay/Gateways/Credit.php:282
 msgid "No reason given"
 msgstr ""
@@ -3149,7 +3149,7 @@ msgstr ""
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:578
+#: src/Settings/SettingsPage.php:580
 msgid "ATM virtual account"
 msgstr ""
 
@@ -3160,7 +3160,7 @@ msgstr ""
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
 #: src/Modules/Shared/Email/PersonalizationTags.php:79
-#: src/Settings/SettingsPage.php:585
+#: src/Settings/SettingsPage.php:587
 msgid "Convenience store payment code"
 msgstr ""
 
@@ -3180,7 +3180,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
 #: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:557
+#: src/Settings/SettingsPage.php:559
 msgid "Tracking number"
 msgstr ""
 
@@ -3557,24 +3557,36 @@ msgstr ""
 msgid "ECPay returned HTTP %d. Please try again later."
 msgstr ""
 
+#. translators: 1: rtn message, 2: rtn code
+#: src/Modules/Ecpay/Api/IpnHandler.php:65
+#, php-format
+msgid "ECPay sent a notice (%1$s, status code %2$s) for this already paid order. The order was not changed."
+msgstr ""
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Ecpay/Api/IpnHandler.php:97
+#, php-format
+msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr ""
+
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
-#: src/Modules/Ecpay/Api/IpnHandler.php:79
-#: src/Modules/Smilepay/Api/IpnHandler.php:168
-#: src/Modules/Smilepay/Api/IpnHandler.php:188
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:175
+#: src/Modules/Ecpay/Api/IpnHandler.php:107
+#: src/Modules/Smilepay/Api/IpnHandler.php:174
+#: src/Modules/Smilepay/Api/IpnHandler.php:203
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:176
 #, php-format
 msgid "Payment method: %s"
 msgstr ""
 
 #. translators: 1: 中文化的付款方式名稱, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:88
+#: src/Modules/Ecpay/Api/IpnHandler.php:116
 #, php-format
 msgid "ECPay issued a payment code (%1$s, awaiting payment. Status code %2$s)"
 msgstr ""
 
 #. translators: 1: rtn message, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:104
+#: src/Modules/Ecpay/Api/IpnHandler.php:132
 #, php-format
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr ""
@@ -4799,18 +4811,18 @@ msgid "ECPay invoice %1$s was voided — reason: %2$s"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/EcpayInvoice/Operations/Issue.php:97
+#: src/Modules/EcpayInvoice/Operations/Issue.php:106
 #, php-format
 msgid "The ECPay invoice could not be issued: %s"
 msgstr ""
 
 #. translators: 1: invoice number, 2: random
-#: src/Modules/EcpayInvoice/Operations/Issue.php:119
+#: src/Modules/EcpayInvoice/Operations/Issue.php:128
 #, php-format
 msgid "ECPay invoice issued — number %1$s, random code %2$s"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:183
+#: src/Modules/EcpayInvoice/Operations/Issue.php:192
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:194
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:176
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
@@ -4850,7 +4862,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
 #: src/Modules/Shared/Email/PersonalizationTags.php:56
-#: src/Settings/SettingsPage.php:550
+#: src/Settings/SettingsPage.php:552
 msgid "Invoice number"
 msgstr ""
 
@@ -5248,9 +5260,15 @@ msgid "ECPay could not be reached for this shipment: %s"
 msgstr ""
 
 #. translators: 1: status message, 2: status code
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:528
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:532
 #, php-format
 msgid "ECPay shipping status looked up: %1$s (status code %2$s)"
+msgstr ""
+
+#. translators: %s: status code
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:540
+#, php-format
+msgid "ECPay shipping status looked up: status code %s"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:148
@@ -5340,15 +5358,15 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:90
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:81
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:187
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:225
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:822
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:825
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Change store"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:226
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
 msgid "No store chosen yet"
 msgstr ""
 
@@ -5795,9 +5813,15 @@ msgid "ECPay shipping status: %2$s (status code %1$s)"
 msgstr ""
 
 #. translators: 1: status message, 2: status code
-#: src/Modules/EcpayShipping/Webhook/Reconciler.php:80
+#: src/Modules/EcpayShipping/Webhook/Reconciler.php:75
 #, php-format
 msgid "ECPay shipping status found by follow-up check: %1$s (status code %2$s)"
+msgstr ""
+
+#. translators: %s: status code
+#: src/Modules/EcpayShipping/Webhook/Reconciler.php:83
+#, php-format
+msgid "ECPay shipping status found by follow-up check: status code %s"
 msgstr ""
 
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:22
@@ -6367,20 +6391,32 @@ msgstr ""
 msgid "View logs"
 msgstr ""
 
+#. translators: 1: status, 2: message
+#: src/Modules/Newebpay/Api/IpnHandler.php:109
+#, php-format
+msgid "NewebPay sent a %1$s notice (%2$s) for this already paid order. The order was not changed."
+msgstr ""
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Newebpay/Api/IpnHandler.php:142
+#, php-format
+msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr ""
+
 #. translators: 1: payment type, 2: trade no
-#: src/Modules/Newebpay/Api/IpnHandler.php:125
+#: src/Modules/Newebpay/Api/IpnHandler.php:152
 #, php-format
 msgid "NewebPay payment completed — %1$s (transaction ID %2$s)"
 msgstr ""
 
 #. translators: 1: payment type, 2: status
-#: src/Modules/Newebpay/Api/IpnHandler.php:135
+#: src/Modules/Newebpay/Api/IpnHandler.php:162
 #, php-format
 msgid "NewebPay issued the %1$s payment details and is waiting for the customer to pay (status %2$s)"
 msgstr ""
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:144
+#: src/Modules/Newebpay/Api/IpnHandler.php:171
 #, php-format
 msgid "The NewebPay payment failed: %1$s (%2$s)"
 msgstr ""
@@ -6833,8 +6869,8 @@ msgid "Choose a convenience store:"
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:188
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:826
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:829
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "No pickup store chosen yet"
 msgstr ""
@@ -8042,7 +8078,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr ""
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:534
+#: src/Settings/SettingsPage.php:536
 msgid "Order number lookup"
 msgstr ""
 
@@ -8201,7 +8237,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:564
+#: src/Settings/SettingsPage.php:566
 msgid "Payment transaction ID"
 msgstr ""
 
@@ -8210,7 +8246,7 @@ msgstr ""
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:571
+#: src/Settings/SettingsPage.php:573
 msgid "Tax ID"
 msgstr ""
 
@@ -8223,13 +8259,13 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:592
+#: src/Settings/SettingsPage.php:594
 msgid "Last four card digits"
 msgstr ""
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:599
+#: src/Settings/SettingsPage.php:601
 msgid "T-Cat tracking number"
 msgstr ""
 
@@ -9103,8 +9139,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:781
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:790
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:793
 msgid "Convenience store"
 msgstr ""
 
@@ -9864,82 +9900,82 @@ msgstr ""
 msgid "The shipment could not be cancelled."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:186
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:224
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:227
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:827
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:230
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:830
 msgid "Choose a store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
 msgid "Open the store map"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
 msgid "Loading…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:194
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:232
 msgid "Loading failed. Please try again later"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:195
 msgid "Store chosen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:196
 msgid "Store number:"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:231
 msgid "Redirecting…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:244
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
 msgid "The cart is empty or the session has expired."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:249
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:252
 msgid "The chosen shipping method does not match the cart."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:253
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:305
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:308
 msgid "Please choose a convenience store pickup method"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:427
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:430
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:437
 msgid "Returning to checkout…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:428
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr ""
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
 #, php-format
 msgid "Store chosen: %s"
 msgstr ""
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:433
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:436
 #, php-format
 msgid "Store address: %s"
 msgstr ""
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:816
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:819
 #, php-format
 msgid "Store number: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:818
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
 msgid "Outlying islands"
 msgstr ""
 
@@ -10431,7 +10467,7 @@ msgid "Not COD"
 msgstr ""
 
 #. translators: 1: status description, 2: status code
-#: src/Modules/PayuniShipping/Webhook/Reconciler.php:80
+#: src/Modules/PayuniShipping/Webhook/Reconciler.php:74
 #, php-format
 msgid "PAYUNi shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr ""
@@ -11927,95 +11963,105 @@ msgstr ""
 msgid "Limits which methods are offered on the payment page. Leave blank for no limit. What actually appears depends on what Shopline Payments has activated for you."
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:30
+#: src/Modules/Smilepay/Api/IpnHandler.php:34
 msgid "No Classif value"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:33
+#: src/Modules/Smilepay/Api/IpnHandler.php:37
 msgid "Unexpected amount"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:36
+#: src/Modules/Smilepay/Api/IpnHandler.php:40
 msgid "Not paid, or the amount is 0"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:41
-#: src/Modules/Smilepay/Api/IpnHandler.php:128
+#: src/Modules/Smilepay/Api/IpnHandler.php:45
+#: src/Modules/Smilepay/Api/IpnHandler.php:131
 msgid "No such order"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:46
-#: src/Modules/Smilepay/Api/IpnHandler.php:133
+#: src/Modules/Smilepay/Api/IpnHandler.php:50
+#: src/Modules/Smilepay/Api/IpnHandler.php:136
 msgid "The order's payment method does not match"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:51
-#: src/Modules/Smilepay/Api/IpnHandler.php:138
+#: src/Modules/Smilepay/Api/IpnHandler.php:54
+#: src/Modules/Smilepay/Api/IpnHandler.php:140
 msgid "Mid_smilepay does not match"
 msgstr ""
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:66
+#: src/Modules/Smilepay/Api/IpnHandler.php:69
 #, php-format
 msgid "SmilePay reported %1$s, which does not match the order total of %2$s. The order was marked as failed for you to check."
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:73
+#: src/Modules/Smilepay/Api/IpnHandler.php:76
 msgid "Amount mismatch"
 msgstr ""
 
 #. translators: 1: date, 2: time
-#: src/Modules/Smilepay/Api/IpnHandler.php:87
+#: src/Modules/Smilepay/Api/IpnHandler.php:90
 #, php-format
 msgid "SmilePay received the payment (%1$s %2$s)"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:96
+#: src/Modules/Smilepay/Api/IpnHandler.php:99
 msgid "The SmilePay payment code has been settled."
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:123
+#: src/Modules/Smilepay/Api/IpnHandler.php:126
 msgid "Missing parameters"
 msgstr ""
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:155
+#: src/Modules/Smilepay/Api/IpnHandler.php:161
 #, php-format
 msgid "SmilePay authorized %1$s, which does not match the order total of %2$s. Please contact the store."
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:161
+#: src/Modules/Smilepay/Api/IpnHandler.php:167
 msgid "There is a problem with the order total. Please contact the store or place the order again."
 msgstr ""
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Api/IpnHandler.php:169
+#: src/Modules/Smilepay/Api/IpnHandler.php:175
 #, php-format
 msgid "Authorized amount: %s"
 msgstr ""
 
 #. translators: %s: datetime
-#: src/Modules/Smilepay/Api/IpnHandler.php:170
+#: src/Modules/Smilepay/Api/IpnHandler.php:176
 #, php-format
 msgid "Transaction time: %s"
 msgstr ""
 
 #. translators: %s: pay method
-#: src/Modules/Smilepay/Api/IpnHandler.php:178
+#: src/Modules/Smilepay/Api/IpnHandler.php:184
 #, php-format
 msgid "SmilePay authorized the card payment (%s)"
 msgstr ""
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:189
+#: src/Modules/Smilepay/Api/IpnHandler.php:196
+#, php-format
+msgid "SmilePay sent a failed-authorization notice for this already paid order. The order status was not changed; please check it in the SmilePay back office. Reason: %s"
+msgstr ""
+
+#. translators: %s: reason
+#: src/Modules/Smilepay/Api/IpnHandler.php:204
 #, php-format
 msgid "Authorization failed: %s"
 msgstr ""
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:195
+#: src/Modules/Smilepay/Api/IpnHandler.php:210
 #, php-format
 msgid "SmilePay could not authorize the card payment: %s"
+msgstr ""
+
+#: src/Modules/Smilepay/Api/IpnHandler.php:251
+msgid "Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually."
 msgstr ""
 
 #: src/Modules/Smilepay/Api/Request.php:52
@@ -12038,77 +12084,77 @@ msgstr ""
 msgid "An optional extra message shown on the thank you page after the order is placed."
 msgstr ""
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:85
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:86
 msgid "Waiting for the customer to complete the card authorization at SmilePay."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:133
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:134
 #, php-format
 msgid "The SmilePay payment could not be created: %s"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:141
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:142
 #, php-format
 msgid "SmilePay could not issue a payment code: %s"
 msgstr ""
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:154
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:155
 msgid "SmilePay issued the payment details and is waiting for the customer to pay."
 msgstr ""
 
 #. translators: %s: bank code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:186
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:187
 #, php-format
 msgid "Bank code: %s"
 msgstr ""
 
 #. translators: %s: virtual account
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:188
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:189
 #, php-format
 msgid "Virtual account: %s"
 msgstr ""
 
 #. translators: 1: barcode segment 1, 2: barcode segment 2, 3: barcode segment 3
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:199
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:200
 #, php-format
 msgid "Payment barcode: %1$s / %2$s / %3$s"
 msgstr ""
 
 #. translators: %s: ibon code
 #. translators: %s: famiport code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:205
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:211
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:206
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:212
 #, php-format
 msgid "Payment code: %s"
 msgstr ""
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:215
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:216
 #, php-format
 msgid "Amount due: NT$%s"
 msgstr ""
 
 #. translators: %s: deadline
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:217
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:218
 #, php-format
 msgid "Pay before: %s"
 msgstr ""
 
 #. translators: %s: tracking code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:232
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:233
 #, php-format
 msgid "SmilePay payment tracking code: %s"
 msgstr ""
 
 #. translators: 1: amount, 2: reason
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:245
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:246
 #, php-format
 msgid "SmilePay refunds are made in the SmilePay dashboard (NT$%1$s) — %2$s"
 msgstr ""
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:254
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
 msgid "SmilePay refunds are made in the SmilePay dashboard."
 msgstr ""
 
@@ -13197,101 +13243,101 @@ msgstr ""
 msgid "Hide the “Country / Region” field (for stores that only ship within Taiwan)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:492
-msgid "Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout."
-msgstr ""
-
-#: src/Settings/SettingsPage.php:499
+#: src/Settings/SettingsPage.php:496
 msgid "Phone number format"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:502
+#: src/Settings/SettingsPage.php:501
+msgid "Taiwanese mobile check"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:504
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:512
+#: src/Settings/SettingsPage.php:514
 msgid "Taiwan field order and widths"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:514
-msgid "Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page."
+#: src/Settings/SettingsPage.php:516
+msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:519
+#: src/Settings/SettingsPage.php:521
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:522
+#: src/Settings/SettingsPage.php:524
 msgid "Field order and width"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:524
+#: src/Settings/SettingsPage.php:526
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:536
+#: src/Settings/SettingsPage.php:538
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:540
+#: src/Settings/SettingsPage.php:542
 msgid "Enable order number lookup"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:544
+#: src/Settings/SettingsPage.php:546
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:549
+#: src/Settings/SettingsPage.php:551
 msgid "Number types to search"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:604
+#: src/Settings/SettingsPage.php:606
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:607
+#: src/Settings/SettingsPage.php:609
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:611
+#: src/Settings/SettingsPage.php:613
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:651
+#: src/Settings/SettingsPage.php:653
 msgid "Payment modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:652
+#: src/Settings/SettingsPage.php:654
 msgid "Shipping modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:655
 msgid "E-invoice modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:656
 msgid "Checkout tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:655
+#: src/Settings/SettingsPage.php:657
 msgid "Tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:662
+#: src/Settings/SettingsPage.php:664
 msgid "Moksa — Taiwan toolkit"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:663
+#: src/Settings/SettingsPage.php:665
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr ""
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:711
+#: src/Settings/SettingsPage.php:713
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:712
+#: src/Settings/SettingsPage.php:714
 msgid "Module overview"
 msgstr ""
 

@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.11.2
+Stable tag: 1.11.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,29 +136,30 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.11.3 - 2026-10-07 =
+Security
+* SmilePay payment notices could be forged. The only secret in SmilePay's check value is a 4-digit merchant code, leaving under a hundred values to try. Every new SmilePay order now carries its own signed key in the notification URL, failed checks stop automatic confirmation for that order after three attempts, and the check value is computed from the order total rather than the amount in the notice. Orders placed before this update keep the previous check.
+* A late failure or payment-code notice could switch an already paid ECPay, NewebPay or SmilePay order back to failed or on hold, and overwrote the transaction number used for refunds. Such notices are now only recorded as an order note.
+* An ECPay or NewebPay payment whose amount does not match the order total (for example an old payment tab completed after the cart changed) now puts the order on hold for review instead of marking it paid.
+
+Fixed
+* ECPay shipping status follow-up checks and the order screen's status lookup never worked: ECPay's successful reply was treated as an error.
+* PAYUNi store pickup on the block checkout: a first-time customer could not place an order, because the hidden address fields were still required.
+* ECPay paper invoices were issued to the ECPay member carrier instead of being printed.
+* ECPay tax-ID and paper invoices failed on store-pickup orders without a street address. The pickup store's address is now used.
+* PAYUNi "hide billing address for store pickup" on the classic checkout: switching back to home delivery left the address fields marked optional.
+* The AI assistant button appeared a second time inside the plugin-update screen.
+
+Changed
+* Shipping status follow-up checks no longer save the order on every check (so no hourly order-updated webhooks), also compare the status description, rotate through every eligible order, and no longer run 8 hours late.
+* The Taiwanese field layout is now switched on only from its own section. If the old "reorder fields" checkbox was off, the section starts off.
+* The Taiwanese mobile number check is now its own setting and works without the Taiwan address tools.
+
 = 1.11.2 - 2026-09-11 =
 Fixed
 * Half-width fields on the classic checkout could end up stranded at half width on their own — the phone field, for instance, whenever its neighbour had been hidden by store-pickup billing hiding, the country-hiding option, or a WooCommerce setting. Pairing was decided once on the server before any of that hiding happened. It is now re-checked in the browser from the fields actually on screen, every time the checkout refreshes, so a field whose partner disappears takes the full row.
 * The email field could not usefully be set to 50% width: pairing reserved a slot for it on the shipping address form, which has no email field, so its neighbour there fell out of step. Pairing is now worked out per form from the fields it actually contains.
 * NewebPay convenience-store pickup on the classic checkout never showed the store picker. The picker was drawn 200 ms after choosing the method, and WooCommerce's own refresh then replaced that part of the page and wiped it. It is now redrawn after every refresh, the same way the ECPay, PAYUNi and SmilePay pickers already were.
-
-= 1.11.1 - 2026-09-11 =
-Fixed
-* TapPay credit card on the classic (shortcode) checkout could not complete an order. The handler that fetches the card token before submitting was attached to the page body, but WooCommerce fires that event directly on the form without bubbling, so it never ran and every order was submitted with an empty token. It is now attached to the form itself. Thanks to Leo at ECLORE for the report, which traced this to the exact line in WooCommerce and confirmed the fix on a live site.
-* The TapPay card fields disappeared as soon as the checkout refreshed itself — switching shipping method, applying a coupon, or the refresh WooCommerce runs on load. The secure fields are now re-mounted whenever WooCommerce replaces that part of the page. Also reported by Leo.
-* The TapPay card number, expiry and CVC boxes had no size of their own, so on many themes they were invisible and could not be clicked. They now ship with their own styling, and the expiry / CVC row no longer spills over the next payment method. Also reported by Leo.
-* Stores using the Taiwanese city and district dropdowns could not complete a home-delivery order on the classic checkout: the district field was hidden, while the checkout still insisted it be filled in. The field was only meant to be hidden on the block checkout, where a separate district field takes its place.
-* Shipping methods vanished from the classic checkout right after it loaded, showing "Enter your address to view shipping options" instead, and came back on a page refresh. When PAYUNi convenience-store pickup was the first shipping method and "hide billing address fields for store pickup" was on, the country was being blanked along with the rest of the address — but the country is what picks the shipping zone, so every method disappeared, including the pickup option that triggered it. The country now stays put; only the street-level fields are cleared.
-* With "Hide the country field" on, the classic checkout's half-width fields fell out of step — a field would sit in the left column but be styled as the right one, showing up as an odd indent on the postcode. The hidden country field no longer counts toward pairing.
-
-= 1.11.0 - 2026-09-06 =
-New
-* Thirteen Taiwan-specific fields are now available as personalization tags in the block email editor, so you can write your own sentence around them instead of accepting a fixed paragraph and a table. Pickup store name, ID and address, tracking number, shipping provider, invoice number, bank code, ATM virtual account, convenience store payment code, the three barcode segments, and the payment deadline.
-* The payment tags read from this plugin's shared payment layer rather than from any one provider, so a store that switches between ECPay, NewebPay, PayNow, PChomePay and SmilePay keeps the same tags working without touching its emails.
-
-Fixed
-* SmilePay orders never showed the payment deadline to the customer, even though the date was recorded on the order. The other four payment providers all showed it.
-
 
 Older entries are available in the plugin's repository.
 

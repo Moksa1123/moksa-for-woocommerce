@@ -21,8 +21,7 @@ final class PhoneRule {
 	private const OPTION = 'moksafowo_tw_address_phone_validate';
 
 	public static function enabled(): bool {
-		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_ADDRESS )
-			&& 'yes' === get_option( self::OPTION, 'no' );
+		return 'yes' === get_option( self::OPTION, 'no' );
 	}
 
 	/**

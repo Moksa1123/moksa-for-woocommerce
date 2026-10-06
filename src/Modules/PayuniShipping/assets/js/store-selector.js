@@ -625,12 +625,15 @@
             fieldsToHide.forEach(field => {
                 const $field = $(field);
                 const $input = $field.find('input, select');
-                
-                // Store original required state
-                if (!$input.data('moksafowo-payuni-original-required')) {
-                    $input.data('moksafowo-payuni-original-required', $input.prop('required'));
+
+                // 傳統結帳的必填記在外層 class，不在 input 的 required 屬性上
+                if ($field.data('moksafowo-payuni-original-required') === undefined) {
+                    $field.data(
+                        'moksafowo-payuni-original-required',
+                        $field.hasClass('validate-required') || $field.hasClass('moksafowo-payuni-required-for-home')
+                    );
                 }
-                
+
                 // Remove required attribute and validation
                 $input.prop('required', false);
                 $field.removeClass('validate-required');
@@ -664,11 +667,14 @@
                 const $field = $(field);
                 const $input = $field.find('input, select');
 
-                const originalRequired = $input.data('moksafowo-payuni-original-required');
-                if (originalRequired !== undefined) {
-                    $input.prop('required', originalRequired);
-                    if (originalRequired) {
-                        $field.addClass('validate-required');
+                const originalRequired = $field.data('moksafowo-payuni-original-required')
+                    || $field.hasClass('moksafowo-payuni-required-for-home');
+                if (originalRequired) {
+                    $field.addClass('validate-required');
+                    const $label = $field.find('label').first();
+                    $label.find('.optional').remove();
+                    if (!$label.find('abbr.required').length) {
+                        $label.append(' <abbr class="required" title="required">*</abbr>');
                     }
                 }
 

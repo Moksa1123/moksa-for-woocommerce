@@ -108,6 +108,8 @@ final class Keys {
 	public const SMILEPAY_PAY_BARCODE_2    = '_moksafowo_smilepay_pay_barcode_2';
 	public const SMILEPAY_PAY_BARCODE_3    = '_moksafowo_smilepay_pay_barcode_3';
 	public const SMILEPAY_PAY_AMOUNT       = '_moksafowo_smilepay_pay_amount';       // SmilePay 回報金額.
+	public const SMILEPAY_CALLBACK_KEYED   = '_moksafowo_smilepay_callback_keyed';   // 回呼網址已帶訂單專屬 key.
+	public const SMILEPAY_MID_FAILS        = '_moksafowo_smilepay_mid_fails';        // Mid_smilepay 驗證失敗次數.
 	public const SMILEPAY_PAY_END_DATE     = '_moksafowo_smilepay_pay_end_date';     // 繳費期限.
 	public const SMILEPAY_PAY_INSTALLMENT  = '_moksafowo_smilepay_pay_installment';  // 信用卡分期期數.
 	public const SMILEPAY_PAY_PAID_AT      = '_moksafowo_smilepay_pay_paid_at';      // 入帳時間 (roturl 回報).

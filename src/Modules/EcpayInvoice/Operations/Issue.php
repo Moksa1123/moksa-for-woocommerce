@@ -46,6 +46,9 @@ final class Issue {
 		$love_code    = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
 		$is_b2b       = 'b2b' === $invoice_type && '' !== $buyer_ubn;
 		$is_donate    = 'b2c_donate' === $invoice_type && '' !== $love_code;
+		// 紙本是載具類型的一個選項；不分開處理會落到預設的會員載具，顧客拿不到紙本。
+		$is_paper = ! $is_b2b && ! $is_donate && 'paper' === $carrier_type;
+		$print    = $is_b2b || $is_paper;
 
 		$customer_name = $is_b2b ? $buyer_name : trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
 		if ( '' === $customer_name ) {
@@ -63,6 +66,12 @@ final class Issue {
 				]
 			)
 		);
+		// 超商單可能隱藏了帳單地址，但列印發票時綠界要求買受人地址必填。
+		// 區塊結帳會把鄉鎮同步進 city，只看整串是否為空會送出只有「中正區」的地址。
+		$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
+		if ( $print && '' === trim( $order->get_billing_address_1() ) && '' !== $store_addr ) {
+			$customer_addr = $store_addr;
+		}
 
 		$amount = (int) round( (float) $order->get_total() );
 		$items  = self::build_items( $order, $amount );
@@ -76,11 +85,11 @@ final class Issue {
 			'CustomerAddr'       => mb_substr( $customer_addr, 0, 100 ),
 			'CustomerPhone'      => $order->get_billing_phone(),
 			'CustomerEmail'      => $order->get_billing_email(),
-			'Print'              => $is_b2b ? '1' : '0',
+			'Print'              => $print ? '1' : '0',
 			'Donation'           => $is_donate ? '1' : '0',
 			'LoveCode'           => $is_donate ? $love_code : '',
-			'CarrierType'        => $is_b2b || $is_donate ? '' : self::carrier_type_code( $carrier_type ),
-			'CarrierNum'         => $is_b2b || $is_donate ? '' : $carrier_num,
+			'CarrierType'        => $print || $is_donate ? '' : self::carrier_type_code( $carrier_type ),
+			'CarrierNum'         => $print || $is_donate ? '' : $carrier_num,
 			'TaxType'            => '1',
 			'SalesAmount'        => $amount,
 			'InvoiceRemark'      => '',

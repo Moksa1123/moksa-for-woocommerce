@@ -520,16 +520,28 @@ final class OrderMetaBox {
 		$msg    = (string) $result['msg'];
 		$before = $order->get_status();
 
+		$prev_code = (string) $order->get_meta( Keys::ECPAY_LOGISTIC_RTN_CODE );
 		$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_CODE, $code );
-		$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, $msg );
-		$order->add_order_note(
-			sprintf(
+		if ( '' === $msg && $prev_code === $code ) {
+			$msg = (string) $order->get_meta( Keys::ECPAY_LOGISTIC_RTN_MSG );
+		}
+		if ( '' !== $msg ) {
+			$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, $msg );
+			$note = sprintf(
 				/* translators: 1: status message, 2: status code */
 				__( 'ECPay shipping status looked up: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),
 				$msg,
 				$code
-			)
-		);
+			);
+		} else {
+			$order->delete_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG );
+			$note = sprintf(
+				/* translators: %s: status code */
+				__( 'ECPay shipping status looked up: status code %s', 'moksa-for-woocommerce' ),
+				$code
+			);
+		}
+		$order->add_order_note( $note );
 		$order->save();
 
 		// 走跟 IPN / 補查排程完全相同的對應路徑。

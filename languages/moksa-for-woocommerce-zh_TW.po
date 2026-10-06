@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-09-11 00:00+0800\n"
+"PO-Revision-Date: 2026-10-06 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -266,8 +266,8 @@ msgstr "鄉鎮市區"
 
 #: src/Modules/Address/BlockField.php:251
 #: src/Modules/Address/BlockField.php:328
-#: src/Modules/Address/TwAddress.php:211
-#: src/Modules/Address/TwAddress.php:260
+#: src/Modules/Address/TwAddress.php:213
+#: src/Modules/Address/TwAddress.php:262
 msgid "Select…"
 msgstr "請選擇…"
 
@@ -2209,7 +2209,7 @@ msgstr "金門縣"
 msgid "Lienchiang County"
 msgstr "連江縣"
 
-#: src/Modules/Address/PhoneRule.php:76
+#: src/Modules/Address/PhoneRule.php:75
 msgid "Enter a Taiwanese mobile number: 10 digits starting with 09 (for example 0912345678)."
 msgstr "請輸入台灣手機號碼：09 開頭共 10 碼（例如 0912345678）。"
 
@@ -2682,7 +2682,7 @@ msgstr "Amego 發票已作廢 (#%1$s)：%2$s"
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:147
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:244
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:212
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:247
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:248
 #: src/Modules/Tappay/Gateways/Credit.php:282
 msgid "No reason given"
 msgstr "無原因"
@@ -3150,7 +3150,7 @@ msgstr "付款方式"
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:578
+#: src/Settings/SettingsPage.php:580
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
@@ -3161,7 +3161,7 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
 #: src/Modules/Shared/Email/PersonalizationTags.php:79
-#: src/Settings/SettingsPage.php:585
+#: src/Settings/SettingsPage.php:587
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
@@ -3181,7 +3181,7 @@ msgstr "運送方式"
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
 #: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:557
+#: src/Settings/SettingsPage.php:559
 msgid "Tracking number"
 msgstr "物流編號"
 
@@ -3558,24 +3558,36 @@ msgstr "找不到綠界交易編號，無法退款。請至綠界後台手動處
 msgid "ECPay returned HTTP %d. Please try again later."
 msgstr "綠界回傳 HTTP %d，請稍後再試。"
 
+#. translators: 1: rtn message, 2: rtn code
+#: src/Modules/Ecpay/Api/IpnHandler.php:65
+#, php-format
+msgid "ECPay sent a notice (%1$s, status code %2$s) for this already paid order. The order was not changed."
+msgstr "綠界對這張已付款的訂單送來通知（%1$s，狀態碼 %2$s），訂單未變更。"
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Ecpay/Api/IpnHandler.php:97
+#, php-format
+msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr "綠界回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
+
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
-#: src/Modules/Ecpay/Api/IpnHandler.php:79
-#: src/Modules/Smilepay/Api/IpnHandler.php:168
-#: src/Modules/Smilepay/Api/IpnHandler.php:188
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:175
+#: src/Modules/Ecpay/Api/IpnHandler.php:107
+#: src/Modules/Smilepay/Api/IpnHandler.php:174
+#: src/Modules/Smilepay/Api/IpnHandler.php:203
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:176
 #, php-format
 msgid "Payment method: %s"
 msgstr "付款方式：%s"
 
 #. translators: 1: 中文化的付款方式名稱, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:88
+#: src/Modules/Ecpay/Api/IpnHandler.php:116
 #, php-format
 msgid "ECPay issued a payment code (%1$s, awaiting payment. Status code %2$s)"
 msgstr "綠界取號完成（%1$s，等待付款。狀態代碼 %2$s）"
 
 #. translators: 1: rtn message, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:104
+#: src/Modules/Ecpay/Api/IpnHandler.php:132
 #, php-format
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr "綠界付款失敗：%1$s（狀態代碼 %2$s）"
@@ -4800,18 +4812,18 @@ msgid "ECPay invoice %1$s was voided — reason: %2$s"
 msgstr "綠界發票 %1$s 已作廢 — 原因：%2$s"
 
 #. translators: %s: error message
-#: src/Modules/EcpayInvoice/Operations/Issue.php:97
+#: src/Modules/EcpayInvoice/Operations/Issue.php:106
 #, php-format
 msgid "The ECPay invoice could not be issued: %s"
 msgstr "綠界發票開立失敗：%s"
 
 #. translators: 1: invoice number, 2: random
-#: src/Modules/EcpayInvoice/Operations/Issue.php:119
+#: src/Modules/EcpayInvoice/Operations/Issue.php:128
 #, php-format
 msgid "ECPay invoice issued — number %1$s, random code %2$s"
 msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:183
+#: src/Modules/EcpayInvoice/Operations/Issue.php:192
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:194
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:176
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
@@ -4851,7 +4863,7 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
 #: src/Modules/Payuni/Gateways/GatewayBase.php:97
 #: src/Modules/Shared/Email/PersonalizationTags.php:56
-#: src/Settings/SettingsPage.php:550
+#: src/Settings/SettingsPage.php:552
 msgid "Invoice number"
 msgstr "發票號碼"
 
@@ -5249,10 +5261,16 @@ msgid "ECPay could not be reached for this shipment: %s"
 msgstr "無法向綠界查詢這張物流單：%s"
 
 #. translators: 1: status message, 2: status code
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:528
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:532
 #, php-format
 msgid "ECPay shipping status looked up: %1$s (status code %2$s)"
 msgstr "查詢到的綠界物流狀態：%1$s（狀態碼 %2$s）"
+
+#. translators: %s: status code
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:540
+#, php-format
+msgid "ECPay shipping status looked up: status code %s"
+msgstr "查詢到的綠界物流狀態：狀態碼 %s"
 
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:148
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:87
@@ -5341,15 +5359,15 @@ msgstr "選擇取貨門市"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:90
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:81
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:187
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:225
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:822
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:825
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Change store"
 msgstr "更換門市"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:226
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
 msgid "No store chosen yet"
 msgstr "尚未選擇門市"
 
@@ -5796,10 +5814,16 @@ msgid "ECPay shipping status: %2$s (status code %1$s)"
 msgstr "綠界物流貨態：%2$s（狀態代碼 %1$s）"
 
 #. translators: 1: status message, 2: status code
-#: src/Modules/EcpayShipping/Webhook/Reconciler.php:80
+#: src/Modules/EcpayShipping/Webhook/Reconciler.php:75
 #, php-format
 msgid "ECPay shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr "綠界主動補查到的物流狀態：%1$s（狀態碼 %2$s）"
+
+#. translators: %s: status code
+#: src/Modules/EcpayShipping/Webhook/Reconciler.php:83
+#, php-format
+msgid "ECPay shipping status found by follow-up check: status code %s"
+msgstr "綠界主動補查到的物流狀態：狀態碼 %s"
 
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:22
 #: src/Modules/EzpayInvoice/Operations/AutoInvalid.php:20
@@ -6368,20 +6392,32 @@ msgstr "正式 Channel Secret"
 msgid "View logs"
 msgstr "檢視日誌"
 
+#. translators: 1: status, 2: message
+#: src/Modules/Newebpay/Api/IpnHandler.php:109
+#, php-format
+msgid "NewebPay sent a %1$s notice (%2$s) for this already paid order. The order was not changed."
+msgstr "藍新對這張已付款的訂單送來 %1$s 通知（%2$s），訂單未變更。"
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Newebpay/Api/IpnHandler.php:142
+#, php-format
+msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr "藍新回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
+
 #. translators: 1: payment type, 2: trade no
-#: src/Modules/Newebpay/Api/IpnHandler.php:125
+#: src/Modules/Newebpay/Api/IpnHandler.php:152
 #, php-format
 msgid "NewebPay payment completed — %1$s (transaction ID %2$s)"
 msgstr "藍新付款完成 — %1$s（交易編號 %2$s）"
 
 #. translators: 1: payment type, 2: status
-#: src/Modules/Newebpay/Api/IpnHandler.php:135
+#: src/Modules/Newebpay/Api/IpnHandler.php:162
 #, php-format
 msgid "NewebPay issued the %1$s payment details and is waiting for the customer to pay (status %2$s)"
 msgstr "藍新已產生 %1$s 付款資訊，等待顧客付款（狀態 %2$s）"
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:144
+#: src/Modules/Newebpay/Api/IpnHandler.php:171
 #, php-format
 msgid "The NewebPay payment failed: %1$s (%2$s)"
 msgstr "藍新付款失敗：%1$s（%2$s）"
@@ -6834,8 +6870,8 @@ msgid "Choose a convenience store:"
 msgstr "請選擇取貨超商："
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:188
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:826
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:829
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "No pickup store chosen yet"
 msgstr "尚未選擇取貨門市"
@@ -8042,7 +8078,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr "訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號"
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:534
+#: src/Settings/SettingsPage.php:536
 msgid "Order number lookup"
 msgstr "訂單查號搜尋"
 
@@ -8201,7 +8237,7 @@ msgstr "訂單 #%1$s · %2$s · %3$s · %4$s"
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:564
+#: src/Settings/SettingsPage.php:566
 msgid "Payment transaction ID"
 msgstr "金流交易序號"
 
@@ -8210,7 +8246,7 @@ msgstr "金流交易序號"
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:571
+#: src/Settings/SettingsPage.php:573
 msgid "Tax ID"
 msgstr "統一編號"
 
@@ -8223,13 +8259,13 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:592
+#: src/Settings/SettingsPage.php:594
 msgid "Last four card digits"
 msgstr "卡末四碼"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:599
+#: src/Settings/SettingsPage.php:601
 msgid "T-Cat tracking number"
 msgstr "黑貓追蹤號"
 
@@ -9103,8 +9139,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr "取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。"
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:781
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:790
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:793
 msgid "Convenience store"
 msgstr "超商門市"
 
@@ -9864,82 +9900,82 @@ msgstr "物流狀態更新失敗。"
 msgid "The shipment could not be cancelled."
 msgstr "取消物流單失敗。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:186
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:224
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:227
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:827
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:230
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:830
 msgid "Choose a store"
 msgstr "選擇門市"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
 msgid "Open the store map"
 msgstr "開啟超商地圖"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
 msgid "Loading…"
 msgstr "載入中…"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:194
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:232
 msgid "Loading failed. Please try again later"
 msgstr "載入失敗，請稍後再試"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:195
 msgid "Store chosen"
 msgstr "已選門市"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:196
 msgid "Store number:"
 msgstr "門市代號:"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:231
 msgid "Redirecting…"
 msgstr "跳轉中..."
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:244
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
 msgid "The cart is empty or the session has expired."
 msgstr "購物車為空或會話過期。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:249
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:252
 msgid "The chosen shipping method does not match the cart."
 msgstr "選取的運送方式與購物車不符。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:253
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:305
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:308
 msgid "Please choose a convenience store pickup method"
 msgstr "請選擇超商取貨運送方式"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:427
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:430
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:437
 msgid "Returning to checkout…"
 msgstr "正在返回結帳頁面..."
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:428
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr "門市選擇完成"
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
 #, php-format
 msgid "Store chosen: %s"
 msgstr "選擇的門市：%s"
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:433
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:436
 #, php-format
 msgid "Store address: %s"
 msgstr "門市地址：%s"
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:816
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:819
 #, php-format
 msgid "Store number: %s"
 msgstr "門市代號: %s"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:818
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
 msgid "Outlying islands"
 msgstr "離島地區"
 
@@ -10431,7 +10467,7 @@ msgid "Not COD"
 msgstr "非貨到付款"
 
 #. translators: 1: status description, 2: status code
-#: src/Modules/PayuniShipping/Webhook/Reconciler.php:80
+#: src/Modules/PayuniShipping/Webhook/Reconciler.php:74
 #, php-format
 msgid "PAYUNi shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr "PAYUNi 主動補查到的物流狀態：%1$s（狀態碼 %2$s）"
@@ -11923,96 +11959,106 @@ msgstr "中租零卡分期"
 msgid "Limits which methods are offered on the payment page. Leave blank for no limit. What actually appears depends on what Shopline Payments has activated for you."
 msgstr "轉跳到付款頁後限定可用的付款方式。留空 = 不限制。實際項目以 Shopline Payments 開通的為準。"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:30
+#: src/Modules/Smilepay/Api/IpnHandler.php:34
 msgid "No Classif value"
 msgstr "無 Classif"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:33
+#: src/Modules/Smilepay/Api/IpnHandler.php:37
 msgid "Unexpected amount"
 msgstr "金額異常"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:36
+#: src/Modules/Smilepay/Api/IpnHandler.php:40
 msgid "Not paid, or the amount is 0"
 msgstr "未付款或金額為 0"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:41
-#: src/Modules/Smilepay/Api/IpnHandler.php:128
+#: src/Modules/Smilepay/Api/IpnHandler.php:45
+#: src/Modules/Smilepay/Api/IpnHandler.php:131
 msgid "No such order"
 msgstr "查無訂單"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:46
-#: src/Modules/Smilepay/Api/IpnHandler.php:133
+#: src/Modules/Smilepay/Api/IpnHandler.php:50
+#: src/Modules/Smilepay/Api/IpnHandler.php:136
 msgid "The order's payment method does not match"
 msgstr "訂單付款方式不符"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:51
-#: src/Modules/Smilepay/Api/IpnHandler.php:138
+#: src/Modules/Smilepay/Api/IpnHandler.php:54
+#: src/Modules/Smilepay/Api/IpnHandler.php:140
 msgid "Mid_smilepay does not match"
 msgstr "Mid_smilepay 不符合"
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:66
+#: src/Modules/Smilepay/Api/IpnHandler.php:69
 #, php-format
 msgid "SmilePay reported %1$s, which does not match the order total of %2$s. The order was marked as failed for you to check."
 msgstr "SmilePay 回報金額 %1$s 與訂單金額 %2$s 不符，已標記失敗待商家確認。"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:73
+#: src/Modules/Smilepay/Api/IpnHandler.php:76
 msgid "Amount mismatch"
 msgstr "金額不符"
 
 #. translators: 1: date, 2: time
-#: src/Modules/Smilepay/Api/IpnHandler.php:87
+#: src/Modules/Smilepay/Api/IpnHandler.php:90
 #, php-format
 msgid "SmilePay received the payment (%1$s %2$s)"
 msgstr "SmilePay 已收到款項（%1$s %2$s）"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:96
+#: src/Modules/Smilepay/Api/IpnHandler.php:99
 msgid "The SmilePay payment code has been settled."
 msgstr "SmilePay 取號式付款已入帳。"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:123
+#: src/Modules/Smilepay/Api/IpnHandler.php:126
 msgid "Missing parameters"
 msgstr "缺乏參數"
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:155
+#: src/Modules/Smilepay/Api/IpnHandler.php:161
 #, php-format
 msgid "SmilePay authorized %1$s, which does not match the order total of %2$s. Please contact the store."
 msgstr "SmilePay 授權金額 %1$s 與訂單金額 %2$s 不符，請聯絡商家。"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:161
+#: src/Modules/Smilepay/Api/IpnHandler.php:167
 msgid "There is a problem with the order total. Please contact the store or place the order again."
 msgstr "訂單金額有誤，請聯絡商家或重新下單。"
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Api/IpnHandler.php:169
+#: src/Modules/Smilepay/Api/IpnHandler.php:175
 #, php-format
 msgid "Authorized amount: %s"
 msgstr "授權金額：%s"
 
 #. translators: %s: datetime
-#: src/Modules/Smilepay/Api/IpnHandler.php:170
+#: src/Modules/Smilepay/Api/IpnHandler.php:176
 #, php-format
 msgid "Transaction time: %s"
 msgstr "交易時間：%s"
 
 #. translators: %s: pay method
-#: src/Modules/Smilepay/Api/IpnHandler.php:178
+#: src/Modules/Smilepay/Api/IpnHandler.php:184
 #, php-format
 msgid "SmilePay authorized the card payment (%s)"
 msgstr "SmilePay 信用卡授權成功（%s）"
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:189
+#: src/Modules/Smilepay/Api/IpnHandler.php:196
+#, php-format
+msgid "SmilePay sent a failed-authorization notice for this already paid order. The order status was not changed; please check it in the SmilePay back office. Reason: %s"
+msgstr "速買配對這張已付款的訂單送來授權失敗通知。訂單狀態沒有變更，請到速買配後台核對。原因：%s"
+
+#. translators: %s: reason
+#: src/Modules/Smilepay/Api/IpnHandler.php:204
 #, php-format
 msgid "Authorization failed: %s"
 msgstr "授權失敗：%s"
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:195
+#: src/Modules/Smilepay/Api/IpnHandler.php:210
 #, php-format
 msgid "SmilePay could not authorize the card payment: %s"
 msgstr "SmilePay 信用卡授權失敗：%s"
+
+#: src/Modules/Smilepay/Api/IpnHandler.php:251
+msgid "Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually."
+msgstr "這張訂單有多筆速買配付款通知驗證失敗，已停止自動確認付款。請到速買配後台核對款項，再手動更新訂單狀態。"
 
 #: src/Modules/Smilepay/Api/Request.php:52
 msgid "The response from SmilePay could not be parsed, which usually means a connection problem"
@@ -12034,77 +12080,77 @@ msgstr "下單成功顯示訊息"
 msgid "An optional extra message shown on the thank you page after the order is placed."
 msgstr "顧客完成下單後在感謝頁額外顯示的訊息（選填）。"
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:85
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:86
 msgid "Waiting for the customer to complete the card authorization at SmilePay."
 msgstr "等待顧客於 SmilePay 完成信用卡授權。"
 
 #. translators: %s: error message
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:133
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:134
 #, php-format
 msgid "The SmilePay payment could not be created: %s"
 msgstr "無法建立 SmilePay 付款：%s"
 
 #. translators: %s: error message
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:141
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:142
 #, php-format
 msgid "SmilePay could not issue a payment code: %s"
 msgstr "SmilePay 取號失敗：%s"
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:154
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:155
 msgid "SmilePay issued the payment details and is waiting for the customer to pay."
 msgstr "SmilePay 已產生繳費資訊，等待顧客付款。"
 
 #. translators: %s: bank code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:186
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:187
 #, php-format
 msgid "Bank code: %s"
 msgstr "銀行代號：%s"
 
 #. translators: %s: virtual account
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:188
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:189
 #, php-format
 msgid "Virtual account: %s"
 msgstr "虛擬帳號：%s"
 
 #. translators: 1: barcode segment 1, 2: barcode segment 2, 3: barcode segment 3
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:199
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:200
 #, php-format
 msgid "Payment barcode: %1$s / %2$s / %3$s"
 msgstr "繳費條碼：%1$s / %2$s / %3$s"
 
 #. translators: %s: ibon code
 #. translators: %s: famiport code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:205
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:211
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:206
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:212
 #, php-format
 msgid "Payment code: %s"
 msgstr "繳費代碼：%s"
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:215
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:216
 #, php-format
 msgid "Amount due: NT$%s"
 msgstr "繳費金額：NT$%s"
 
 #. translators: %s: deadline
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:217
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:218
 #, php-format
 msgid "Pay before: %s"
 msgstr "繳費期限：%s"
 
 #. translators: %s: tracking code
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:232
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:233
 #, php-format
 msgid "SmilePay payment tracking code: %s"
 msgstr "SmilePay 金流追蹤碼：%s"
 
 #. translators: 1: amount, 2: reason
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:245
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:246
 #, php-format
 msgid "SmilePay refunds are made in the SmilePay dashboard (NT$%1$s) — %2$s"
 msgstr "SmilePay 退款請至 SmilePay 商家後台手動操作（金額 NT$%1$s）— %2$s"
 
-#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:254
+#: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
 msgid "SmilePay refunds are made in the SmilePay dashboard."
 msgstr "SmilePay 退款請至 SmilePay 商家後台手動操作。"
 
@@ -13193,101 +13239,101 @@ msgstr "姓名對調 — 把 WooCommerce 預設「名字 / 姓氏」順序改成
 msgid "Hide the “Country / Region” field (for stores that only ship within Taiwan)"
 msgstr "隱藏「國家 / 地區」欄位（單一台灣站適用）"
 
-#: src/Settings/SettingsPage.php:492
-msgid "Enable the Taiwanese field order and widths (drag to arrange below) — the order and the 50% / 100% widths apply to both classic and block checkout."
-msgstr "啟用台式欄位順序與寬度（下方拖拉設定）— 傳統結帳與區塊結帳都會套用順序與 50% / 100% 寬度。"
-
-#: src/Settings/SettingsPage.php:499
+#: src/Settings/SettingsPage.php:496
 msgid "Phone number format"
 msgstr "電話號碼格式"
 
-#: src/Settings/SettingsPage.php:502
+#: src/Settings/SettingsPage.php:501
+msgid "Taiwanese mobile check"
+msgstr "台灣手機格式檢查"
+
+#: src/Settings/SettingsPage.php:504
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr "檢查電話是否為台灣手機號碼 —— 09 開頭共 10 碼。檢查前會先清掉連字號、空白與 +886 國碼，所以顧客輸入 0912-345-678 或 +886912345678 都會通過，訂單裡統一存成 0912345678。市話不接受。"
 
-#: src/Settings/SettingsPage.php:512
+#: src/Settings/SettingsPage.php:514
 msgid "Taiwan field order and widths"
 msgstr "台灣欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:514
-msgid "Drag to reorder the fields and pick a 50% or 100% width. “Enable the Taiwanese field order” above must be ticked for this to reach the checkout page."
-msgstr "拖曳重排欄位、選 50% 或 100% 寬度。需勾選上方「啟用台式欄位順序」才會套用到結帳頁。"
+#: src/Settings/SettingsPage.php:516
+msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
+msgstr "拖曳重排欄位、選 50% 或 100% 寬度。這一區獨立運作，不需要開啟上方的台灣地址工具。"
 
-#: src/Settings/SettingsPage.php:519
+#: src/Settings/SettingsPage.php:521
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr "關掉後結帳欄位維持 WooCommerce 預設的順序與寬度。你排好的版面會保留，重新打開就回來。"
 
-#: src/Settings/SettingsPage.php:522
+#: src/Settings/SettingsPage.php:524
 msgid "Field order and width"
 msgstr "欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:524
+#: src/Settings/SettingsPage.php:526
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。（電子郵件例外：區塊結帳把它放在獨立的「聯絡資訊」步驟，移動它只會改到古典結帳。）"
 
-#: src/Settings/SettingsPage.php:536
+#: src/Settings/SettingsPage.php:538
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr "讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。"
 
-#: src/Settings/SettingsPage.php:540
+#: src/Settings/SettingsPage.php:542
 msgid "Enable order number lookup"
 msgstr "啟用訂單查號搜尋"
 
-#: src/Settings/SettingsPage.php:544
+#: src/Settings/SettingsPage.php:546
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr "開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。"
 
-#: src/Settings/SettingsPage.php:549
+#: src/Settings/SettingsPage.php:551
 msgid "Number types to search"
 msgstr "搜尋號碼類型"
 
-#: src/Settings/SettingsPage.php:604
+#: src/Settings/SettingsPage.php:606
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr "勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。"
 
-#: src/Settings/SettingsPage.php:607
+#: src/Settings/SettingsPage.php:609
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr "加速索引（大量訂單建議開啟）"
 
-#: src/Settings/SettingsPage.php:611
+#: src/Settings/SettingsPage.php:613
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:651
+#: src/Settings/SettingsPage.php:653
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:652
+#: src/Settings/SettingsPage.php:654
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:655
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:656
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:655
+#: src/Settings/SettingsPage.php:657
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:662
+#: src/Settings/SettingsPage.php:664
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:663
+#: src/Settings/SettingsPage.php:665
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:711
+#: src/Settings/SettingsPage.php:713
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:712
+#: src/Settings/SettingsPage.php:714
 msgid "Module overview"
 msgstr "模組總覽"
 

@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Reconciler {
 
-	private const LAST_QUERY = '_moksafowo_ecpay_reconcile_last';
 
 	public static function init(): void {
 		add_filter(
@@ -38,12 +37,7 @@ final class Reconciler {
 			return false;
 		}
 
-		// 同一筆訂單一小時內不重複查（排程每小時跑，訂單可能連續多輪都符合條件）。
-		$last = (int) $order->get_meta( self::LAST_QUERY );
-		if ( $last > 0 && ( time() - $last ) < HOUR_IN_SECONDS ) {
-			return true;
-		}
-
+		// 節流由 StatusReconciler 統一記在暫存；這裡沒變化就完全不碰訂單。
 		$queried = false;
 		foreach ( $records as $r ) {
 			$logistics_id = (string) ( $r['id'] ?? '' );
@@ -67,31 +61,36 @@ final class Reconciler {
 			}
 
 			$code = (string) $result['code'];
-			$seen = (string) $order->get_meta( Keys::ECPAY_LOGISTIC_RTN_CODE );
-			if ( $code === $seen ) {
+			$msg  = (string) $result['msg'];
+			// 查詢 API 不回說明文字，只能比碼。
+			if ( $code === (string) $order->get_meta( Keys::ECPAY_LOGISTIC_RTN_CODE ) ) {
 				continue; // 貨態沒變，不重複寫備註。
 			}
 
 			$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_CODE, $code );
-			$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, (string) $result['msg'] );
-			$order->add_order_note(
-				sprintf(
+			if ( '' !== $msg ) {
+				$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, $msg );
+				$note = sprintf(
 					/* translators: 1: status message, 2: status code */
 					__( 'ECPay shipping status found by follow-up check: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),
-					(string) $result['msg'],
+					$msg,
 					$code
-				)
-			);
+				);
+			} else {
+				$order->delete_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG );
+				$note = sprintf(
+					/* translators: %s: status code */
+					__( 'ECPay shipping status found by follow-up check: status code %s', 'moksa-for-woocommerce' ),
+					$code
+				);
+			}
+			$order->add_order_note( $note );
 			$order->save();
 
 			// 走跟 IPN 完全相同的對應與轉換路徑。
 			do_action( 'moksafowo_ecpay_shipping_status_received', $order, $code, (string) $result['msg'] );
 		}
 
-		if ( $queried ) {
-			$order->update_meta_data( self::LAST_QUERY, (string) time() );
-			$order->save();
-		}
 		return $queried;
 	}
 }

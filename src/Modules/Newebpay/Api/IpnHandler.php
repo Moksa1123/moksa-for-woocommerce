@@ -100,6 +100,22 @@ final class IpnHandler {
 			}
 		}
 
+		// 已付款的單只接受成功通知；晚到的失敗或取號通知若照常處理，會覆蓋交易編號
+		// （之後退款拿錯編號）並把訂單打回失敗或保留。
+		if ( $order->is_paid() && 'SUCCESS' !== $status ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: status, 2: message */
+					__( 'NewebPay sent a %1$s notice (%2$s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					$status,
+					$message
+				)
+			);
+			$order->save();
+			echo '1|OK';
+			exit;
+		}
+
 		if ( '' !== $trade_no ) {
 			$order->update_meta_data( Keys::NEWEBPAY_TRADE_NO, $trade_no );
 			$order->set_transaction_id( $trade_no );
@@ -117,7 +133,18 @@ final class IpnHandler {
 		self::write_extra_meta( $order, $payment_type, $result );
 		self::maybe_write_shipping_store_meta( $order, $result );
 
-		if ( 'SUCCESS' === $status ) {
+		if ( 'SUCCESS' === $status && ! self::amount_matches( $order, $amt ) ) {
+			// 待付款訂單被重新結帳改了金額，顧客卻在舊分頁用舊金額付款。
+			$order->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: paid amount, 2: order total */
+					__( 'NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+					$amt,
+					$order->get_total()
+				)
+			);
+		} elseif ( 'SUCCESS' === $status ) {
 			$order->payment_complete( $trade_no );
 			$order->add_order_note(
 				sprintf(
@@ -155,6 +182,11 @@ final class IpnHandler {
 
 		echo '1|OK';
 		exit;
+	}
+
+	private static function amount_matches( \WC_Order $order, int $amt ): bool {
+		$total = (float) $order->get_total();
+		return $amt === (int) ceil( $total ) || $amt === (int) floor( $total );
 	}
 
 	private static function write_extra_meta( \WC_Order $order, string $payment_type, array $result ): void {

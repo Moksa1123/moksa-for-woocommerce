@@ -18,8 +18,6 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Reconciler {
 
-	private const LAST_QUERY = '_moksafowo_payuni_reconcile_last';
-
 	public static function init(): void {
 		add_filter(
 			'moksafowo_shipping_reconcilers',
@@ -35,14 +33,8 @@ final class Reconciler {
 			return false;
 		}
 
-		$last = (int) $order->get_meta( self::LAST_QUERY );
-		if ( $last > 0 && ( time() - $last ) < HOUR_IN_SECONDS ) {
-			return true;
-		}
-
+		// 節流由 StatusReconciler 統一記在暫存；這裡沒變化就完全不碰訂單。
 		$response = ShippingRequest::query_order( $order );
-		$order->update_meta_data( self::LAST_QUERY, (string) time() );
-		$order->save();
 
 		if ( is_wp_error( $response ) ) {
 			PayuniShipping::log( 'reconcile query failed: ' . $response->get_error_message() );
@@ -64,12 +56,14 @@ final class Reconciler {
 			return true;
 		}
 
-		$seen = (string) $order->get_meta( OrderMeta::ShipStatus );
-		if ( $code === $seen ) {
+		// 碼跟說明一起比：PAYUNi 會沿用同一個碼、只換說明（例：92 從「等待寄貨」
+		// 變「門市已收件」），只比碼會整段漏掉。
+		$desc = (string) ( $info['ShipStatusDesc'] ?? '' );
+		if ( $code === (string) $order->get_meta( OrderMeta::ShipStatus )
+			&& $desc === (string) $order->get_meta( OrderMeta::ShipStatusDesc ) ) {
 			return true; // 貨態沒變。
 		}
 
-		$desc = (string) ( $info['ShipStatusDesc'] ?? '' );
 		$order->update_meta_data( OrderMeta::ShipStatus, $code );
 		if ( '' !== $desc ) {
 			$order->update_meta_data( OrderMeta::ShipStatusDesc, $desc );

@@ -11,6 +11,10 @@ final class IpnHandler {
 
 	public const ROTURL_OK = 'woook1.1.23'; // SmilePay expects this token in a successful Roturl response body.
 
+	private const MAX_ORDER_FAILS = 3;
+	private const MAX_SITE_FAILS  = 30;
+	private const SITE_FAILS      = 'moksafowo_smilepay_mid_fails';
+
 	public static function handle_roturl(): void {
 		// SmilePay Roturl webhook: no WP nonce possible (external server cannot send one).
 		// All fields are sanitized at extraction below. Source authenticity verified via Mid_smilepay
@@ -46,8 +50,7 @@ final class IpnHandler {
 			self::die_status( __( 'The order\'s payment method does not match', 'moksa-for-woocommerce' ) );
 		}
 
-		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
-			Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
+		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay ) ) {
 			self::die_status( __( 'Mid_smilepay does not match', 'moksa-for-woocommerce' ) );
 		}
 
@@ -133,9 +136,12 @@ final class IpnHandler {
 			self::die_status( __( 'The order\'s payment method does not match', 'moksa-for-woocommerce' ) );
 		}
 
-		if ( ! self::verify_mid( $order, $amount, $smseid, $mid_smilepay ) ) {
-			Helper::log( 'credit_roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
+		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay ) ) {
 			self::die_status( __( 'Mid_smilepay does not match', 'moksa-for-woocommerce' ) );
+		}
+		// 新單的回呼網址不再帶 Payment_title（Roturl 上限 200 字元），改讀訂單上的付款方式名稱。
+		if ( '' === $payment_title ) {
+			$payment_title = $order->get_payment_method_title();
 		}
 
 		$order->update_meta_data( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
@@ -182,6 +188,15 @@ final class IpnHandler {
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( $smseid );
 			}
+		} elseif ( $order->is_paid() ) {
+			// 已付款的單不因晚到或偽造的失敗通知被打回失敗，只留紀錄給商家核對。
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: reason */
+					__( 'SmilePay sent a failed-authorization notice for this already paid order. The order status was not changed; please check it in the SmilePay back office. Reason: %s', 'moksa-for-woocommerce' ),
+					$err_desc
+				)
+			);
 		} else {
 			$info = sprintf(
 				'<div><p>%1$s</p><p>%2$s</p></div>',
@@ -203,7 +218,43 @@ final class IpnHandler {
 		self::redirect_to_received( $order );
 	}
 
-	private static function verify_mid( \WC_Order $order, string $amount, string $smseid, string $mid_smilepay ): bool {
+	/**
+	 * 回呼是不是真的來自速買配。依序：訂單專屬 key → 失敗次數上限 → Mid_smilepay。
+	 * Mid_smilepay 能猜的值很少，所以猜錯要計數、到上限就停止自動入帳。
+	 */
+	private static function authentic( \WC_Order $order, array $req, string $smseid, string $mid_smilepay ): bool {
+		$order_id = $order->get_id();
+
+		// 更新前就送出的單，回呼網址沒有 key（例如已取號、幾天後才繳費的 ATM），只能沿用舊驗證。
+		if ( 'yes' === $order->get_meta( Keys::SMILEPAY_CALLBACK_KEYED ) ) {
+			$key = isset( $req['mfk'] ) ? sanitize_text_field( (string) $req['mfk'] ) : '';
+			if ( '' === $key || ! hash_equals( Helper::callback_key( $order ), $key ) ) {
+				Helper::log( 'roturl rejected — callback key missing or wrong', [ 'order_id' => $order_id ] );
+				return false;
+			}
+		}
+
+		$fails = (int) $order->get_meta( Keys::SMILEPAY_MID_FAILS );
+		if ( $fails >= self::MAX_ORDER_FAILS || (int) get_transient( self::SITE_FAILS ) >= self::MAX_SITE_FAILS ) {
+			Helper::log( 'roturl rejected — too many failed verifications', [ 'order_id' => $order_id ] );
+			return false;
+		}
+
+		if ( self::verify_mid( $order, $smseid, $mid_smilepay ) ) {
+			return true;
+		}
+
+		Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
+		set_transient( self::SITE_FAILS, (int) get_transient( self::SITE_FAILS ) + 1, HOUR_IN_SECONDS );
+		$order->update_meta_data( Keys::SMILEPAY_MID_FAILS, $fails + 1 );
+		if ( $fails + 1 === self::MAX_ORDER_FAILS ) {
+			$order->add_order_note( __( 'Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually.', 'moksa-for-woocommerce' ) );
+		}
+		$order->save();
+		return false;
+	}
+
+	private static function verify_mid( \WC_Order $order, string $smseid, string $mid_smilepay ): bool {
 		$mid = Helper::mid();
 		if ( '' === $mid ) {
 			// Fail closed:未設定參數碼就無法驗證回呼來源,一律拒絕(商家須在設定頁填入
@@ -211,7 +262,8 @@ final class IpnHandler {
 			Helper::log( 'roturl rejected — merchant Mid (參數碼) not configured; cannot verify callback origin' );
 			return false;
 		}
-		$expected = Helper::calc_mid_smilepay( $mid, $amount, $smseid );
+		// 速買配不論成功失敗都以訂單金額計算（失敗通知的 Amount 是 0），也讓偽造者不能自選金額。
+		$expected = Helper::calc_mid_smilepay( $mid, (string) (int) ceil( (float) $order->get_total() ), $smseid );
 		return hash_equals( $expected, $mid_smilepay );
 	}
 

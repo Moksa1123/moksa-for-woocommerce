@@ -9,7 +9,8 @@ defined( 'ABSPATH' ) || exit;
 final class FieldManager {
 
 	private const OPTION_LAYOUT = 'moksafowo_tw_address_field_layout';
-	private const OPTION_TOGGLE = 'moksafowo_tw_address_reorder_fields';
+	/** 舊的第二層開關（已廢除，只留給遷移讀）。 */
+	private const LEGACY_TOGGLE = 'moksafowo_tw_address_reorder_fields';
 
 	private const DEFAULT_LAYOUT = [
 		[
@@ -130,8 +131,8 @@ final class FieldManager {
 
 		// 上面兩個 hook 是設定頁的欄位渲染，不能被區塊開關關掉，否則那一區畫不出來也存不回去。
 		// 區塊開關只管「有沒有真的套用到結帳欄位」，且關掉時子項一律視為關閉。
-		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
-			&& 'yes' === get_option( self::OPTION_TOGGLE, 'no' ) ) {
+		self::migrate_legacy_toggle();
+		if ( self::layout_enabled() ) {
 			add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'apply_to_default_fields' ], 20 );
 			add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'apply_to_billing_fields' ], 20 );
 			add_filter( 'woocommerce_shipping_fields', [ __CLASS__, 'apply_to_shipping_fields' ], 20 );
@@ -141,6 +142,32 @@ final class FieldManager {
 			add_filter( 'option_woocommerce_checkout_address_2_field', [ __CLASS__, 'override_wc_address_2_visibility' ] );
 			add_filter( 'option_woocommerce_checkout_phone_field', [ __CLASS__, 'override_wc_phone_visibility' ] );
 		}
+	}
+
+	/**
+	 * 欄位順序與寬度只有一個開關：「台灣欄位順序與寬度」那一區的「啟用這個區塊」。
+	 *
+	 * 以前還要再勾地址工具那區裡的「啟用台式欄位順序」才會生效 —— 兩層開關，
+	 * 而且第二層放在另一個區塊裡，商家在下方拖到天荒地老都不會有反應（CLAUDE.md §11 #14）。
+	 */
+	public static function layout_enabled(): bool {
+		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT );
+	}
+
+	/**
+	 * 舊站升級：區塊開關預設是 yes，舊勾選預設是 no。直接廢掉舊勾選的話，
+	 * 從沒用過排序的站會突然被套上排序，所以把舊勾選的值搬到區塊開關上，行為不變。
+	 */
+	private static function migrate_legacy_toggle(): void {
+		$legacy = get_option( self::LEGACY_TOGGLE, null );
+		if ( null === $legacy ) {
+			return;
+		}
+		update_option(
+			\Moksafowo\Settings\AdvancedSections::option( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT ),
+			'yes' === $legacy ? 'yes' : 'no'
+		);
+		delete_option( self::LEGACY_TOGGLE );
 	}
 
 	public static function override_wc_company_visibility( $value ): string {
@@ -263,8 +290,7 @@ final class FieldManager {
 
 	/** 傳統結帳 / 我的帳號地址表單：依可見欄位重算半寬配對。區塊結帳不用（它走 CSS order）。 */
 	public static function enqueue_pairing_script(): void {
-		if ( ! \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT )
-			|| 'yes' !== get_option( self::OPTION_TOGGLE, 'no' ) ) {
+		if ( ! self::layout_enabled() ) {
 			return;
 		}
 		if ( ! is_checkout() && ! is_wc_endpoint_url( 'edit-address' ) ) {
@@ -394,7 +420,7 @@ final class FieldManager {
 			// 讓前端知道商家設的寬度。這裡算出的 first/last 只是初始值 —— 欄位會被各種機制
 			// 事後藏掉（隱藏國家、超商取貨隱藏帳單地址、WC 自己的設定），PHP 在渲染前
 			// 不可能全知道；moksafowo-tw-field-pairing.js 每次 WC 刷新後依「實際看得到的欄位」重算。
-			$existing[] = 50 === (int) ( $item['width'] ?? 100 ) ? 'moksafowo-w-50' : 'moksafowo-w-100';
+			$existing[]              = 50 === (int) ( $item['width'] ?? 100 ) ? 'moksafowo-w-50' : 'moksafowo-w-100';
 			$fields[ $key ]['class'] = array_values( $existing );
 		}
 

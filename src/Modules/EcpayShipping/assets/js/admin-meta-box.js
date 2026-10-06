@@ -127,7 +127,7 @@
 					location.reload();
 					return;
 				}
-				alert( cfg.i18n.query_ok + resp.data.message + ' (' + resp.data.code + ')' );
+				alert( cfg.i18n.query_ok + ( resp.data.message ? resp.data.message + ' (' + resp.data.code + ')' : resp.data.code ) );
 			} else {
 				alert( cfg.i18n.query_fail + ( ( resp && resp.data && resp.data.message ) || cfg.i18n.unknown_error ) );
 			}
