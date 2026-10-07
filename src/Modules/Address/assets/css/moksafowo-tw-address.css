@@ -136,3 +136,9 @@ form.woocommerce-checkout .moksafowo-invoice-section {
 	clear: both;
 	display: flow-root;
 }
+
+/* 每一對半寬欄位從新的一列開始。上一列左右兩格只要差幾 px 高（例如國家比縣市高 4px），
+   下一個左欄就會卡在較高那格的右緣，鄉鎮被擠到中間、郵遞區號掉到下一列。 */
+form.woocommerce-checkout .moksafowo-w-50.form-row-first {
+	clear: left;
+}
