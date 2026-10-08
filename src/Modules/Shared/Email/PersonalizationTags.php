@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Shared\Email;
 
 use Moksafowo\Modules\Shared\Frontend\PaymentInfoBox;
+use Moksafowo\Modules\Shared\Invoice\InvoiceNumber;
 use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
@@ -46,14 +47,13 @@ final class PersonalizationTags {
 		$payment  = __( 'Payment details', 'moksa-for-woocommerce' );
 		$invoice  = __( 'E-invoice', 'moksa-for-woocommerce' );
 
-		// 物流 / 發票：訂單 meta 本來就是跨供應商共用的。
+		// 物流：訂單 meta 本來就是跨供應商共用的。
 		$meta_tags = [
 			[ __( 'Pickup store name', 'moksa-for-woocommerce' ), 'moksafowo/cvs-store-name', $shipping, Keys::SHIPPING_CVS_STORE_NAME ],
 			[ __( 'Pickup store ID', 'moksa-for-woocommerce' ), 'moksafowo/cvs-store-id', $shipping, Keys::SHIPPING_CVS_STORE_ID ],
 			[ __( 'Pickup store address', 'moksa-for-woocommerce' ), 'moksafowo/cvs-store-address', $shipping, Keys::SHIPPING_CVS_STORE_ADDRESS ],
 			[ __( 'Tracking number', 'moksa-for-woocommerce' ), 'moksafowo/tracking-number', $shipping, Keys::SHIPPING_LABEL_NUMBER ],
 			[ __( 'Shipping provider', 'moksa-for-woocommerce' ), 'moksafowo/shipping-provider', $shipping, Keys::SHIPPING_LABEL_PROVIDER ],
-			[ __( 'Invoice number', 'moksa-for-woocommerce' ), 'moksafowo/invoice-number', $invoice, Keys::ECPAY_INVOICE_NUMBER ],
 		];
 		foreach ( $meta_tags as [ $label, $token, $category, $meta_key ] ) {
 			$registry->register(
@@ -71,6 +71,26 @@ final class PersonalizationTags {
 				)
 			);
 		}
+
+		// 發票號碼各家存在不同的 key，走共用讀取；作廢的不放進信裡。
+		$registry->register(
+			new $tag_class(
+				__( 'Invoice number', 'moksa-for-woocommerce' ),
+				'moksafowo/invoice-number',
+				$invoice,
+				static function ( array $context ): string {
+					$order = $context['order'] ?? null;
+					if ( ! $order instanceof \WC_Order ) {
+						return '';
+					}
+					$inv = InvoiceNumber::of( $order );
+					return $inv['voided'] ? '' : $inv['number'];
+				},
+				[],
+				null,
+				[ self::EMAIL_POST_TYPE ]
+			)
+		);
 
 		// 繳費資訊：走 PaymentInfoBox 的正規化列，五家金流共用同一組 key。
 		$payment_tags = [

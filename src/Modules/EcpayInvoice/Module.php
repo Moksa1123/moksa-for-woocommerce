@@ -53,6 +53,7 @@ final class Module extends AbstractModule {
 
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
+			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::init();
 		}
 
 		$when = (string) get_option( 'moksafowo_ecpay_invoice_issue_when', 'paid' );

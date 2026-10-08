@@ -53,6 +53,7 @@ final class Module extends AbstractModule {
 		Frontend\CheckoutFields::init();
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
+			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::init();
 		}
 
 		$when = (string) get_option( 'moksafowo_amego_invoice_issue_when', 'paid' );
