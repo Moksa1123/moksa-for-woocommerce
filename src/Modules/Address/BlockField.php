@@ -155,8 +155,7 @@ final class BlockField {
 	public static function enforce_district_block( \WC_Order $order, $request ): void {
 		$methods = ( function_exists( 'WC' ) && WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
 		foreach ( $order->get_shipping_methods() as $sm ) {
-			$inst = $methods[ $sm->get_method_id() ] ?? null;
-			if ( $inst instanceof \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
+			if ( self::is_cvs_method( (string) $sm->get_method_id(), $methods ) ) {
 				return; // CVS 取貨 → 免填
 			}
 		}
@@ -169,6 +168,20 @@ final class BlockField {
 		}
 	}
 
+	/**
+	 * 超商取貨的運送方式：繼承共用超商類別的，加上各物流模組自己登記的
+	 * （PAYUNi 依溫層分開的 7-11 方式沒有繼承共用類別）。
+	 *
+	 * @param string              $id      運送方式 ID（不含 instance 編號）。
+	 * @param array<string,mixed> $methods WC 已註冊的運送方式。
+	 */
+	private static function is_cvs_method( string $id, array $methods ): bool {
+		if ( ( $methods[ $id ] ?? null ) instanceof \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
+			return true;
+		}
+		return in_array( $id, (array) apply_filters( 'moksafowo_cvs_shipping_method_ids', [] ), true );
+	}
+
 	private static function chosen_shipping_is_cvs(): bool {
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			return false;
@@ -177,8 +190,7 @@ final class BlockField {
 		$methods = ( WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
 		foreach ( $chosen as $entry ) {
 			$id = ( false !== strpos( (string) $entry, ':' ) ) ? strstr( (string) $entry, ':', true ) : (string) $entry;
-			$m  = $methods[ $id ] ?? null;
-			if ( $m instanceof \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod ) {
+			if ( self::is_cvs_method( $id, $methods ) ) {
 				return true;
 			}
 		}
@@ -245,14 +257,46 @@ final class BlockField {
 				'label'       => __( 'District', 'moksa-for-woocommerce' ),
 				'location'    => 'address',
 				'type'        => 'select',
-				// 不全域 required — CVS 取貨送門市不需鄉鎮市區；只有宅配（HOME）才要，
-				// 由 validate_district_for_home() 條件式驗證。
-				'required'    => false,
+				// 宅配才必填：超商取貨送門市不需要鄉鎮。寫成條件式，標籤會跟著運送方式即時切換
+				// （固定 false 時宅配也標「選填」）；伺服器另由 enforce_district_block() 守門。
+				'required'    => self::required_for_home_delivery(),
 				'placeholder' => __( 'Select…', 'moksa-for-woocommerce' ),
 				'options'     => $options,
 			// additional checkout fields 沒有 priority option，順序與寬度走 CSS order property。
 			]
 		);
+	}
+
+	/**
+	 * 台灣地址、需要寄送、而且選的不是超商時才必填。
+	 *
+	 * @return array<string,mixed>
+	 */
+	private static function required_for_home_delivery(): array {
+		$cart = [ 'needs_shipping' => [ 'const' => true ] ];
+
+		$cvs_ids = [];
+		$methods = ( function_exists( 'WC' ) && WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
+		foreach ( array_keys( $methods ) as $id ) {
+			if ( self::is_cvs_method( (string) $id, $methods ) ) {
+				$cvs_ids[] = preg_quote( (string) $id, '/' );
+			}
+		}
+		if ( $cvs_ids ) {
+			$cart['shipping_rates'] = [ 'not' => [ 'contains' => [ 'pattern' => '^(' . implode( '|', $cvs_ids ) . '):' ] ] ];
+		}
+
+		return [
+			'type'       => 'object',
+			'properties' => [
+				'cart'     => [ 'properties' => $cart ],
+				'customer' => [
+					'properties' => [
+						'address' => [ 'properties' => [ 'country' => [ 'const' => 'TW' ] ] ],
+					],
+				],
+			],
+		];
 	}
 
 	public static function sync_to_core_city( string $key, $value, string $group, $object ): void {

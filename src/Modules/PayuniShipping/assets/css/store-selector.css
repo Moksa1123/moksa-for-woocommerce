@@ -100,8 +100,8 @@ body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-addres
 body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__state,
 body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__postcode,
 body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form__company,
-body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block .moksafowo-tw-district-wrapper,
-body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block .moksafowo-tw-district-wrapper {
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-shipping-address-block :is(.moksafowo-tw-district-wrapper,.wc-block-components-select-input-moksafowo-district),
+body.moksafowo-cvs-shipping-active .wp-block-woocommerce-checkout-billing-address-block :is(.moksafowo-tw-district-wrapper,.wc-block-components-select-input-moksafowo-district) {
 	display: none !important;
 }
 

@@ -302,7 +302,8 @@ final class TwAddress {
 			'address_1'  => '.wc-block-components-address-form__address_1',
 			'address_2'  => '.wc-block-components-address-form__address_2',
 			'state'      => '.wc-block-components-address-form__state',
-			'city'       => '.moksafowo-tw-district-wrapper',
+			// 鄉鎮是額外欄位。外層 class 由 JS 加上，React 重新渲染會洗掉，所以同時比對 WC 自己給的固定 class。
+			'city'       => ':is(.moksafowo-tw-district-wrapper,.wc-block-components-select-input-moksafowo-district)',
 			'postcode'   => '.wc-block-components-address-form__postcode',
 			'phone'      => '.wc-block-components-address-form__phone',
 		];
@@ -343,7 +344,7 @@ final class TwAddress {
 	/**
 	 * 補上 WooCommerce 在 400px 以下漏掉的 flex 宣告。
 	 *
-	 * WC 用三段 media query 把區塊地址表單設成 flex —— 400~519、520~699、700+ ——
+	 * WC 用三段 query 把區塊地址表單設成 flex（舊版看螢幕寬度，新版看結帳容器寬度）——
 	 * **400px 以下沒有任何一段涵蓋**。那個寬度區間表單不是 flex 容器，而 `order`
 	 * 只對 flex / grid 子元素有效，於是整份排序靜默失效，欄位照 DOM 原順序由上往下排。
 	 * 多數手機是 360~390px，全部落在這個斷層裡 —— 「電腦順序對、手機不對」就是這樣來的。
@@ -370,11 +371,10 @@ final class TwAddress {
 				array_unique( $selectors )
 			)
 		);
-		return sprintf(
-			'@media (max-width:399px){%s{display:flex;flex-wrap:wrap}%s{flex:0 0 100%% !important}}',
-			$form,
-			$full
-		);
+		// 新版 WC 改用 @container（看結帳容器寬度），舊版用 @media（看螢幕寬度），兩種都補。
+		// 只補 @media 時：手機螢幕 412px、容器扣掉留白只剩約 358px，WC 不給 flex、這裡也不出手。
+		$rule = sprintf( '{%s{display:flex;flex-wrap:wrap}%s{flex:0 0 100%% !important}}', $form, $full );
+		return '@media (max-width:399px)' . $rule . '@container (max-width:399px)' . $rule;
 	}
 
 	private static function init_hide_country(): void {

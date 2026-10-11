@@ -43,11 +43,11 @@
 
 /* district wrapper 寬度繼承 city 的 moksafowo-tw-w-city-* body class — 同步 FieldManager 設定。
    順序由 moksafowo-tw-district-block.js insertBefore 直接調整 DOM 位置（CSS order 不可靠）。*/
-body.moksafowo-tw-w-city-50 .moksafowo-tw-district-wrapper {
+body.moksafowo-tw-w-city-50 :is(.moksafowo-tw-district-wrapper,.wc-block-components-select-input-moksafowo-district) {
 	flex: 1 0 calc(50% - 12px) !important;
 }
 
-body.moksafowo-tw-w-city-100 .moksafowo-tw-district-wrapper {
+body.moksafowo-tw-w-city-100 :is(.moksafowo-tw-district-wrapper,.wc-block-components-select-input-moksafowo-district) {
 	flex: 0 0 100% !important;
 }
 

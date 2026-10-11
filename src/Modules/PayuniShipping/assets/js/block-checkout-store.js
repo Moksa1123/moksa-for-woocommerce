@@ -165,8 +165,33 @@
 			.catch( function () { cb( null ); } );
 	}
 
+	// 超商時地址欄只用 CSS 藏起來；結帳頁上它們仍是必填（頁面 locale 不放寬，切回宅配時標籤
+	// 才會正確），所以被藏起來那幾欄的前端驗證錯誤在這裡清掉。姓名電話照常驗證。
+	const HIDDEN_ADDRESS_ERROR = /^(shipping|billing)[_-](country|state|city|postcode|address_1|address_2|company)$/;
+	let cvsActive = false;
+
+	function clearHiddenAddressErrors() {
+		if ( ! cvsActive || ! window.wp || ! wp.data ) {
+			return;
+		}
+		try {
+			const store  = 'wc/store/validation';
+			const errors = wp.data.select( store ).getValidationErrors();
+			const keys   = Object.keys( errors || {} ).filter( function ( k ) { return HIDDEN_ADDRESS_ERROR.test( k ); } );
+			if ( keys.length ) {
+				wp.data.dispatch( store ).clearValidationErrors( keys );
+			}
+		} catch ( e ) {} // WC 的驗證 store 還沒註冊。
+	}
+
+	if ( window.wp && wp.data && wp.data.subscribe ) {
+		wp.data.subscribe( clearHiddenAddressErrors, 'wc/store/validation' );
+	}
+
 	function setBodyCvsFlag( on ) {
-		document.body.classList.toggle( 'moksafowo-cvs-shipping-active', !! on );
+		cvsActive = !! on;
+		document.body.classList.toggle( 'moksafowo-cvs-shipping-active', cvsActive );
+		clearHiddenAddressErrors();
 	}
 
 	let renderRequestId = 0;

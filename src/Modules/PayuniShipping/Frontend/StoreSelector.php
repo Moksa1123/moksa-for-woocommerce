@@ -882,9 +882,12 @@ JS
 	}
 
 	/**
-	 * 區塊結帳選了超商時，地址欄只用 CSS 藏起來，驗證照跑。回訪顧客有舊地址會過，
-	 * 第一次購買的顧客郵遞區號是空的，就卡在看不見的欄位上下不了單。
-	 * 區塊前端驗證與 Store API 都讀 country locale，從這裡放寬兩邊一起生效。
+	 * 區塊結帳選了超商時，地址欄只用 CSS 藏起來，驗證照跑。第一次購買的顧客郵遞區號是空的，
+	 * 就卡在看不見的欄位上下不了單。
+	 *
+	 * 只放寬 Store API 請求（伺服器依當下運送方式驗證）。結帳頁本身不放寬：頁面上的 locale
+	 * 載入後就固定，若在頁面放寬，顧客從超商改選宅配時欄位仍標「選填」、縣市還會換成
+	 * WC 的「州/郡 (選填)」。頁面上被藏起來的欄位，前端驗證由 block-checkout-store.js 清掉。
 	 */
 	public static function relax_tw_locale_for_cvs( $locale ) {
 		if ( ! is_array( $locale ) || ! WC()->session || ! self::is_block_checkout_context() ) {
@@ -902,14 +905,10 @@ JS
 		return $locale;
 	}
 
-	/** 傳統結帳的必填已由 modify_billing_fields_for_cvs + 前端腳本處理，這裡只管區塊結帳。 */
+	/** 傳統結帳的必填已由 modify_billing_fields_for_cvs + 前端腳本處理，這裡只管區塊結帳的 Store API。 */
 	private static function is_block_checkout_context(): bool {
 		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		if ( false !== strpos( rawurldecode( $uri ), '/wc/store/' ) ) {
-			return true;
-		}
-		$post = get_post();
-		return $post instanceof \WP_Post && has_block( 'woocommerce/checkout', $post );
+		return false !== strpos( rawurldecode( $uri ), '/wc/store/' );
 	}
 
 	public static function modify_billing_fields_for_cvs( $fields ) {

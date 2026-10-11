@@ -168,6 +168,11 @@ class PayuniShipping {
 		Operations\PrintProxy::init();
 
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
+		// 依溫層分開的 7-11 方式沒有繼承共用超商類別，登記給地址模組判斷「超商不需要鄉鎮」。
+		add_filter(
+			'moksafowo_cvs_shipping_method_ids',
+			static fn ( array $ids ): array => array_merge( $ids, array_keys( self::$cvs_methods ) )
+		);
 		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 		Emails\EmailTrackingProvider::init();
 	}

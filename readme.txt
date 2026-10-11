@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.12.0
+Stable tag: 1.12.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,14 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.12.1 - 2026-10-12 =
+Fixed
+* Block checkout: the custom field order was lost on many phones. Newer WooCommerce decides the address layout from the width of the checkout area rather than the screen, so on a 412px phone (about 358px of checkout area) neither WooCommerce nor this plugin applied the flexible layout. Both are now covered.
+* Block checkout: the district field always appeared first, ignoring the field order.
+* Block checkout: after switching from store pickup to home delivery, the address fields stayed marked "optional" and the county field showed WooCommerce's generic optional label. The fields now stay required on the page and are only relaxed for store pickup when the order is submitted.
+* Block checkout: the district field was always marked "optional". It is now required for home delivery to a Taiwanese address and optional for store pickup, and the label follows the chosen shipping method.
+* PAYUNi 7-ELEVEN pickup methods split by temperature were treated as home delivery when checking the district, so first-time customers were asked to choose a district.
+
 = 1.12.0 - 2026-10-09 =
 New
 * An "Invoice number" column on the WooCommerce orders list, shown whenever an e-invoice provider is enabled. It reads whichever provider actually issued the invoice — ECPay, ezPay, Amego, PayNow, SmilePay, or PAYUNi's built-in invoice — and marks voided invoices. Like any column, it can be hidden from Screen Options.
@@ -165,12 +173,6 @@ Changed
 * Shipping status follow-up checks no longer save the order on every check (so no hourly order-updated webhooks), also compare the status description, rotate through every eligible order, and no longer run 8 hours late.
 * The Taiwanese field layout is now switched on only from its own section. If the old "reorder fields" checkbox was off, the section starts off.
 * The Taiwanese mobile number check is now its own setting and works without the Taiwan address tools.
-
-= 1.11.2 - 2026-09-11 =
-Fixed
-* Half-width fields on the classic checkout could end up stranded at half width on their own — the phone field, for instance, whenever its neighbour had been hidden by store-pickup billing hiding, the country-hiding option, or a WooCommerce setting. Pairing was decided once on the server before any of that hiding happened. It is now re-checked in the browser from the fields actually on screen, every time the checkout refreshes, so a field whose partner disappears takes the full row.
-* The email field could not usefully be set to 50% width: pairing reserved a slot for it on the shipping address form, which has no email field, so its neighbour there fell out of step. Pairing is now worked out per form from the fields it actually contains.
-* NewebPay convenience-store pickup on the classic checkout never showed the store picker. The picker was drawn 200 ms after choosing the method, and WooCommerce's own refresh then replaced that part of the page and wiped it. It is now redrawn after every refresh, the same way the ECPay, PAYUNi and SmilePay pickers already were.
 
 Older entries are available in the plugin's repository.
 
