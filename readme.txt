@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.12.1
+Stable tag: 1.12.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.12.2 - 2026-10-12 =
+Fixed
+* Block checkout: choosing a district could be silently undone. It looked selected, but the next redraw of the form (typing an address, changing payment method) cleared it.
+* Block checkout: changing the county after a district was chosen could snap the county back to its previous value. Changing it now clears the district and the old postcode instead.
+* Block checkout: sites that previously used another PAYUNi shipping plugin had "N/A" saved in some customers' addresses, which then appeared in the address fields. Such values are now treated as empty.
 
 = 1.12.1 - 2026-10-12 =
 Fixed

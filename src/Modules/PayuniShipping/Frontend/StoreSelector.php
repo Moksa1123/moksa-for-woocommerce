@@ -78,6 +78,12 @@ class StoreSelector {
 		add_filter( 'woocommerce_checkout_posted_data', array( __CLASS__, 'set_default_billing_address_for_cvs' ), 10 );
 		// Block 不走 woocommerce_checkout_posted_data；pri 100 確保 WC core 處理完才清地址
 		add_filter( 'woocommerce_checkout_get_value', array( __CLASS__, 'strip_na_placeholder_for_home_delivery' ), 10, 2 );
+		// 舊 PAYUNi 物流外掛在會員資料存過 'N/A' 佔位；區塊結帳直接讀 customer，不經上面那條。
+		foreach ( array( 'billing', 'shipping' ) as $type ) {
+			foreach ( array( 'address_1', 'address_2', 'company', 'postcode', 'city', 'state' ) as $prop ) {
+				add_filter( "woocommerce_customer_get_{$type}_{$prop}", array( __CLASS__, 'strip_na_customer_prop' ) );
+			}
+		}
 		add_action( 'woocommerce_checkout_create_order', array( __CLASS__, 'clear_addresses_for_cvs_order' ), 100, 2 );
 	}
 
@@ -144,6 +150,10 @@ class StoreSelector {
 		}
 
 		return $value;
+	}
+
+	public static function strip_na_customer_prop( $value ) {
+		return 'N/A' === $value ? '' : $value;
 	}
 
 	public static function enqueue_scripts() {

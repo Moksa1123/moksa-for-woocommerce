@@ -6,7 +6,8 @@
  *   1. 監聽 country / state select 變更 → 隱藏不屬於該縣市的 options
  *   2. 監聽 moksafowo/district select 變更 → 自動帶 postcode
  *
- * 無 React state 注入，無 nativeInputValueSetter — 直接操作 native select.
+ * 寫值一律走 wc/store/cart 的 setShippingAddress / setBillingAddress，並延到 React 處理完
+ * 當下的 change 之後。直接改 DOM 再派事件時，React 會拿舊的地址物件存檔，把剛選的值蓋掉。
  */
 ( function () {
 	'use strict';
@@ -62,9 +63,27 @@
 
 		// 若目前 selected 不屬於新 state，重設成 placeholder
 		if ( select.value && allowed && ! allowed.has( select.value ) ) {
-			select.value = '';
-			select.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			const patch = {};
+			patch[ FIELD_ID ] = '';
+			if ( moksafowo_tw_district.autofill !== false ) {
+				patch.postcode = '';
+			}
+			setAddress( prefix, patch );
 		}
+	}
+
+	/** 局部更新 store 裡的地址；延到下一輪，避免跟 React 正在處理的 onChange 互蓋。 */
+	function setAddress( prefix, patch ) {
+		setTimeout( function () {
+			if ( ! window.wp || ! wp.data || ! wp.data.dispatch ) {
+				return;
+			}
+			const cart = wp.data.dispatch( 'wc/store/cart' );
+			const fn   = 'billing' === prefix ? cart && cart.setBillingAddress : cart && cart.setShippingAddress;
+			if ( typeof fn === 'function' ) {
+				fn( patch );
+			}
+		}, 0 );
 	}
 
 	/** district 變更 → 寫 postcode（設定頁可關） */
@@ -80,15 +99,7 @@
 		if ( ! postcode ) {
 			return;
 		}
-		const postcodeInput = document.getElementById( prefix + '-postcode' );
-		if ( ! postcodeInput ) {
-			return;
-		}
-		// React-managed input — 用 nativeInputValueSetter dispatch 同步 React state
-		const setter = Object.getOwnPropertyDescriptor( window.HTMLInputElement.prototype, 'value' ).set;
-		setter.call( postcodeInput, postcode );
-		postcodeInput.dispatchEvent( new Event( 'input',  { bubbles: true } ) );
-		postcodeInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		setAddress( prefix, { postcode: postcode } );
 	}
 
 	/** 給 moksafowo/district wrapper 加 class（CSS hook）。 */
