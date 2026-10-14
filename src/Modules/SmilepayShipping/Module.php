@@ -52,6 +52,7 @@ final class Module extends AbstractModule {
 		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 		Frontend\StoreSelector::init();
 		Frontend\CustomerOrderView::init();
+		add_filter( 'woocommerce_order_get_formatted_shipping_address', [ __CLASS__, 'store_as_shipping_address' ], 10, 3 );
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 			Operations\PrintProxy::init();
@@ -169,5 +170,24 @@ final class Module extends AbstractModule {
 		];
 
 		return $providers;
+	}
+
+	public static function store_as_shipping_address( string $address, $raw_address, \WC_Order $order ): string {
+		$store_id = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ID );
+		if ( '' === $store_id ) {
+			return $address;
+		}
+		foreach ( $order->get_shipping_methods() as $method ) {
+			if ( ! str_contains( (string) $method->get_method_id(), 'moksafowo_smilepay_shipping_cvs_' ) ) {
+				return $address;
+			}
+			break;
+		}
+		return \Moksafowo\Modules\Shipping\Frontend\CvsShippingAddress::render(
+			$order,
+			$store_id,
+			(string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_NAME ),
+			(string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SMILEPAY_SHIPPING_STORE_ADDR )
+		);
 	}
 }

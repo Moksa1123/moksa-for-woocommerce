@@ -55,6 +55,7 @@ final class Module extends AbstractModule {
 		add_action( 'wp_ajax_moksafowo_newebpay_shipping_trace', [ __CLASS__, 'ajax_trace_shipment' ] );
 		Frontend\StoreSelector::init();
 		Frontend\CustomerOrderView::init();
+		add_filter( 'woocommerce_order_get_formatted_shipping_address', [ __CLASS__, 'store_as_shipping_address' ], 10, 3 );
 		Emails\EmailTrackingProvider::init();
 		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
 
@@ -270,5 +271,24 @@ final class Module extends AbstractModule {
 			}
 		}
 		return $fields;
+	}
+
+	public static function store_as_shipping_address( string $address, $raw_address, \WC_Order $order ): string {
+		$store_id = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_ID );
+		if ( '' === $store_id ) {
+			return $address;
+		}
+		foreach ( $order->get_shipping_methods() as $method ) {
+			if ( ! str_starts_with( (string) $method->get_method_id(), 'moksafowo_newebpay_shipping_cvs' ) ) {
+				return $address;
+			}
+			break;
+		}
+		return \Moksafowo\Modules\Shipping\Frontend\CvsShippingAddress::render(
+			$order,
+			$store_id,
+			(string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_NAME ),
+			(string) $order->get_meta( \Moksafowo\Order\Meta\Keys::NEWEBPAY_SHIPPING_STORE_ADDR )
+		);
 	}
 }

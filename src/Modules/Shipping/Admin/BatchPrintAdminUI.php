@@ -130,8 +130,7 @@ final class BatchPrintAdminUI {
 		if ( '' === $no ) {
 			return '—';
 		}
-		$display = mb_strlen( $no ) > 16 ? mb_substr( $no, 0, 8 ) . '…' . mb_substr( $no, -4 ) : $no;
-		return '<span title="' . esc_attr( $no ) . '" style="font-family:monospace;">' . esc_html( $display ) . '</span>';
+		return '<span style="font-family:monospace;word-break:break-all;">' . esc_html( $no ) . '</span>';
 	}
 
 	private static function find_label_no( \WC_Order $order ): string {
@@ -150,10 +149,7 @@ final class BatchPrintAdminUI {
 		if ( '' !== $payuni_ship_no ) {
 			return $payuni_ship_no;
 		}
-		$payuni_trade_no = (string) $order->get_meta( Keys::PAYUNI_SHIPPING_TRADE_NO );
-		if ( '' !== $payuni_trade_no ) {
-			return $payuni_trade_no;
-		}
+		// PAYUNi 的物流交易序號（S00…）是 PAYUNi 內部編號，不是物流編號；還沒取得物流編號就留空。
 		return '';
 	}
 

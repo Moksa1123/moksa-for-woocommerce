@@ -146,6 +146,11 @@ class PayuniShipping {
 		// 未選門市的擋單改由共用的 Shipping\Frontend\CvsStoreRequired 處理（Classic + Block，四家一致）
 
 		add_action( 'woocommerce_checkout_create_order', array( self::get_instance(), 'moksafowo_payuni_save_order_hd_shipping_meta' ), 20, 2 );
+		// 區塊結帳不跑上面那個 hook；沒寫入物流類型，付款後就建不出黑貓物流單。
+		add_action(
+			'woocommerce_store_api_checkout_update_order_from_request',
+			static fn ( \WC_Order $order ) => SaveShippingMeta::save_hd_shipping_meta( $order, array() )
+		);
 		add_action( 'wp_enqueue_scripts', array( self::get_instance(), 'moksafowo_payuni_checkout_enqueue_scripts' ), 9 );
 		add_filter( 'woocommerce_order_formatted_shipping_address', array( self::get_instance(), 'moksafowo_payuni_raw_shipping_address' ), 10, 2 );
 		add_filter( 'woocommerce_localisation_address_formats', array( self::get_instance(), 'moksafowo_payuni_address_format' ) );

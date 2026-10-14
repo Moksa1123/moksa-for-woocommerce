@@ -76,6 +76,8 @@ final class StoreSelector {
 				'cvs_methods' => array_keys( Module::method_map() ),
 				'token_query' => self::TOKEN_QUERY,
 				'carriers'    => self::enabled_carriers(),
+				// 選店回來那一頁，token 已在 template_redirect 兌換進 session，前端要從這裡讀。
+				'store'       => self::session_store(),
 				'i18n'        => [
 					'select'        => __( 'Choose a pickup store', 'moksa-for-woocommerce' ),
 					'change'        => __( 'Change store', 'moksa-for-woocommerce' ),
@@ -375,6 +377,21 @@ final class StoreSelector {
 		}
 		delete_transient( self::TRANSIENT_PREFIX . $token );
 		wp_send_json_success( $store );
+	}
+
+	private static function session_store(): ?array {
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return null;
+		}
+		$store = WC()->session->get( self::SESSION_KEY );
+		if ( ! is_array( $store ) || empty( $store['id'] ) ) {
+			return null;
+		}
+		return array(
+			'id'      => sanitize_text_field( (string) $store['id'] ),
+			'name'    => sanitize_text_field( (string) ( $store['name'] ?? '' ) ),
+			'address' => sanitize_text_field( (string) ( $store['address'] ?? '' ) ),
+		);
 	}
 
 	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */

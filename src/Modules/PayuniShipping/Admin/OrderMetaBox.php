@@ -8,6 +8,7 @@ use Moksafowo\Modules\PayuniShipping\Utils\GoodsType;
 use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
 use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
 use Moksafowo\Modules\PayuniShipping\Utils\ServiceType;
+use Moksafowo\Order\Meta\Keys;
 
 
 
@@ -40,7 +41,6 @@ class OrderMetaBox {
 		$ship_type     = $order->get_meta( OrderMeta::ShipType );
 		$goods_type    = $order->get_meta( OrderMeta::GoodsType );
 		$lgs_type      = $order->get_meta( OrderMeta::LgsType );
-		$partner_id    = $order->get_meta( OrderMeta::PartnerId );
 		$odno          = $order->get_meta( OrderMeta::Odno );
 		$validation_no = $order->get_meta( OrderMeta::ValidationNo );
 		$shipping_no   = ( $ship_type === ShipType::SEVEN ) ? PayuniShipping::format_cvs_shipno( $order ) : $order->get_meta( OrderMeta::ShipNo );
@@ -66,10 +66,24 @@ class OrderMetaBox {
 		echo '<tr><th style="text-align:left;">' . esc_html__( 'Tracking number', 'moksa-for-woocommerce' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
 
 		if ( $ship_type === ShipType::SEVEN ) {
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Store number', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $partner_id ) . '</td></tr>';
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Order number', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
-
-			if ( $lgs_type === LgsType::C2C ) {
+			// 原本這列標「門市代號」卻印 PartnerId（B2C 的廠商代號，已含在物流編號裡），顧客選的門市反而沒顯示。
+			$store_id = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
+			if ( '' === $store_id ) {
+				$store_id = (string) $order->get_meta( OrderMeta::StoreId );
+			}
+			if ( '' !== $store_id ) {
+				$store_name = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_NAME );
+				$store_addr = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ADDRESS );
+				if ( '' === $store_name ) {
+					$store_name = (string) $order->get_meta( OrderMeta::StoreName );
+					$store_addr = (string) $order->get_meta( OrderMeta::StoreAddr );
+				}
+				echo '<tr><th style="text-align:left;">' . esc_html__( 'Pickup store', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( trim( $store_name . ' (' . $store_id . ')' ) ) . ( '' !== $store_addr ? '<br/>' . esc_html( $store_addr ) : '' ) . '</td></tr>';
+			}
+			if ( '' !== (string) $odno ) {
+				echo '<tr><th style="text-align:left;">' . esc_html__( 'Order number', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $odno ) . '</td></tr>';
+			}
+			if ( $lgs_type === LgsType::C2C && '' !== (string) $validation_no ) {
 				echo '<tr><th style="text-align:left;">' . esc_html__( 'Verification code', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( $validation_no ) . '</td></tr>';
 			}
 		}

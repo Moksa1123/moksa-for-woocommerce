@@ -63,8 +63,7 @@
 			clearHost();
 			return;
 		}
-		// Read store from session via AJAX (or local var)
-		renderHost( window.__moksafowoNewebpayStore || null );
+		renderHost( window.__moksafowoNewebpayStore || cfg.store || null );
 	}
 
 	function openMap( shipType ) {

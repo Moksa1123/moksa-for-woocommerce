@@ -54,6 +54,7 @@ final class Module extends AbstractModule {
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();
 			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::init();
+			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::register_manual_issuer( 'smilepay', 'moksafowo_smilepay_invoice_issue_when', [ Operations\Issue::class, 'run' ] );
 		}
 
 		$when = (string) get_option( 'moksafowo_smilepay_invoice_issue_when', 'paid' );

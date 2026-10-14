@@ -53,26 +53,55 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'moksafowo_payuni_thankyou_order_unpaid_message' ), 10, 2 );
 	}
 
+	/** 顧客端只看得懂、用得到的欄位；授權碼、發卡行、ECI、Token、請款資訊只留在後台。 */
+	private const CUSTOMER_FIELDS = array(
+		OrderMeta::TRADE_STATUS,
+		OrderMeta::PAID_AT,
+		OrderMeta::REFUND_AMT,
+		OrderMeta::REFUND_TIME,
+		OrderMeta::CREDIT_AUTH_TYPE,
+		OrderMeta::CREDIT_CARD_4NO,
+		OrderMeta::CREDIT_INSTALL,
+		OrderMeta::CREDIT_FIRST_AMT,
+		OrderMeta::CREDIT_EACH_AMT,
+		OrderMeta::AMT_PAY_NO,
+		OrderMeta::AMT_BANK_TYPE,
+		OrderMeta::AMT_EXPIRE_DATE,
+		OrderMeta::AMT_PAY_TIME,
+		OrderMeta::CVS_PAY_NO,
+		OrderMeta::CVS_STORE,
+		OrderMeta::CVS_EXPIRE_DATE,
+	);
+
 	public function moksafowo_payuni_payment_detail_after_order_table( $order ) {
 
 		if ( $order->get_payment_method() === $this->id ) {
 
+			$trade_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::UNI_NO );
+			$has_trade    = ! empty( $order->get_meta( $trade_no_key ) );
+			// 已付款卻沒有 PAYUNi 回傳（例如商家手動改狀態），叫顧客「稍候重新整理」只會一直等不到。
+			if ( ! $has_trade && $order->is_paid() ) {
+				return;
+			}
+
 			echo '<h2>' . esc_html__( 'PAYUNi payment details', 'moksa-for-woocommerce' ) . '</h2>';
 
-			$trade_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::UNI_NO );
-			if ( empty( $order->get_meta( $trade_no_key ) ) ) {
+			if ( ! $has_trade ) {
 				echo '<div class="moksafowo_payuni_payment_notify_not_received">' . esc_html__( 'The payment details are not available yet. Please refresh the page in a moment.', 'moksa-for-woocommerce' ) . '</div>';
 			}
 
 			echo '<table class="shop_table payuni_payment_details"><tbody>';
 
-			$order_metas = self::get_order_metas();
+			$order_metas = array_intersect_key( self::get_order_metas(), array_flip( self::CUSTOMER_FIELDS ) );
 
 			foreach ( $order_metas as $key => $value ) {
-				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td>';
 				$order_meta_key = PayuniPayment::get_order_meta_key( $order, $key );
+				if ( '' === (string) $order->get_meta( $order_meta_key ) ) {
+					continue;
+				}
+				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td>';
 				if ( $order_meta_key === OrderMeta::CREDIT_AUTH_TYPE ) {
-					echo '<td>' . esc_html( AuthType::get_type( $order->get_meta( $order_meta_key ) ) ) . ' (' . esc_html( $order->get_meta( $order_meta_key ) ) . ')</td></tr>';
+					echo '<td>' . esc_html( AuthType::get_type( $order->get_meta( $order_meta_key ) ) ) . '</td></tr>';
 				} elseif ( $order_meta_key === OrderMeta::AMT_BANK_TYPE ) {
 					echo '<td>' . esc_html( $order->get_meta( $order_meta_key ) ) . ' (' . esc_html( BankType::get_name( $order->get_meta( $order_meta_key ) ) ) . ')</td></tr>';
 				} elseif ( $order_meta_key === OrderMeta::TRADE_STATUS ) {
@@ -91,7 +120,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 
 			echo '</tbody></table>';
 
-			if ( PayuniPayment::$einvoice_enabled ) {
+			if ( PayuniPayment::$einvoice_enabled && '' !== (string) $order->get_meta( OrderMeta::EINVOICE_NO ) ) {
 				echo '<h2>' . esc_html__( 'E-invoice details', 'moksa-for-woocommerce' ) . '</h2>';
 				echo '<table class="shop_table payuni_payment_details"><tbody>';
 				echo '<tr><td><strong>' . esc_html__( 'Invoice number', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';

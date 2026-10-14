@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.12.3
+Stable tag: 1.12.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,18 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.12.4 - 2026-10-14 =
+Fixed
+* PAYUNi home delivery (T-Cat) on the block checkout: orders using the regular, frozen or refrigerated method did not record the shipping type, so no shipment was created after payment.
+* A shipping status update could switch a paid order back to "Pending payment" when the matching custom order status had been turned off. The order now keeps its status and the update is recorded as a note.
+* NewebPay store pickup: after choosing a store, the checkout still said no store had been chosen.
+* PAYUNi payment details shown to customers now list only what they need (status, payment type, last four digits, instalments, ATM or convenience-store payment codes). Empty rows are hidden for customers and in the admin.
+* PAYUNi orders marked as paid without PAYUNi payment data no longer ask the customer to refresh the page.
+* PAYUNi 7-ELEVEN orders: the admin shipping card now shows the chosen pickup store, and the orders list no longer shows PAYUNi's internal transaction number (cut short) in place of the tracking number.
+
+Changed
+* NewebPay and SmilePay store pickup orders now show the pickup store as the shipping address, matching ECPay and PAYUNi.
 
 = 1.12.3 - 2026-10-14 =
 Fixed

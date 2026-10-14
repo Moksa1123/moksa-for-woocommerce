@@ -29,16 +29,19 @@ abstract class AbstractStatusMapper {
 			'payuni' => __( 'PAYUNi', 'moksa-for-woocommerce' ),
 		];
 		$provider_label     = $provider_label_map[ $provider ] ?? strtoupper( $provider );
-		$order->update_status(
-			$slug,
-			sprintf(
-				/* translators: 1: provider label, 2: description, 3: code */
-				__( '%1$s shipping status: %2$s (status code %3$s)', 'moksa-for-woocommerce' ),
-				$provider_label,
-				$desc,
-				$code
-			)
+		$note               = sprintf(
+			/* translators: 1: provider label, 2: description, 3: code */
+			__( '%1$s shipping status: %2$s (status code %3$s)', 'moksa-for-woocommerce' ),
+			$provider_label,
+			$desc,
+			$code
 		);
+		// 目標狀態被商家關掉時只記備註；硬改的話 WC 會把訂單改成「等待付款中」。
+		if ( ! \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $slug ) ) {
+			$order->add_order_note( $note );
+			return;
+		}
+		$order->update_status( $slug, $note );
 
 		do_action( "moksafowo_shipping_status_changed_{$slug}", $order, $provider, $code );
 

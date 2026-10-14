@@ -200,6 +200,15 @@ JS;
 		}
 	}
 
+	/**
+	 * 物流通知要把訂單改到這個狀態之前先問這裡。WC 遇到沒註冊的狀態會改成「等待付款中」，
+	 * 自訂狀態被商家關掉時，已付款的訂單會因此被打回未付款。
+	 */
+	public static function is_usable( string $slug ): bool {
+		$slug = str_starts_with( $slug, 'wc-' ) ? substr( $slug, 3 ) : $slug;
+		return '' !== $slug && array_key_exists( 'wc-' . $slug, wc_get_order_statuses() );
+	}
+
 	public static function is_status_enabled( string $slug ): bool {
 		return 'yes' === get_option( 'moksafowo_shipping_status_' . str_replace( '-', '_', $slug ) . '_enabled', 'yes' );
 	}

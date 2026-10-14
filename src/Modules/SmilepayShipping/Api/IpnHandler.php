@@ -72,7 +72,7 @@ final class IpnHandler {
 		}
 		$order->save();
 
-		if ( '' !== $wc_status && $order->get_status() !== $wc_status ) {
+		if ( '' !== $wc_status && $order->get_status() !== $wc_status && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $wc_status ) ) {
 			$order->update_status(
 				$wc_status,
 				sprintf(

@@ -49,6 +49,9 @@ class OrderMetaBoxes {
 		foreach ( $gateway::get_order_metas() as $key => $value ) {
 			// for backward compatibility.
 			$key = PayuniPayment::get_order_meta_key( $order, $key );
+			if ( '' === (string) $order->get_meta( $key ) ) {
+				continue;
+			}
 			if ( $key === OrderMeta::CREDIT_AUTH_TYPE ) {
 				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td>' . esc_html( AuthType::get_type( $order->get_meta( $key ) ) ) . ' (' . esc_html( $order->get_meta( $key ) ) . ')</td></tr>';
 			} elseif ( $key === OrderMeta::AMT_BANK_TYPE ) {

@@ -108,7 +108,7 @@ final class IpnHandler {
 		}
 		$order->add_order_note( implode( '，', $parts ) );
 
-		if ( null !== $mapped && '' !== $mapped['wc_status'] ) {
+		if ( null !== $mapped && '' !== $mapped['wc_status'] && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $mapped['wc_status'] ) ) {
 			$current = $order->get_status();
 			if ( $current !== $mapped['wc_status'] ) {
 				$order->update_status(
