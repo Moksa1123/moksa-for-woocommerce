@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.12.2
+Stable tag: 1.12.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,11 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.12.3 - 2026-10-14 =
+Fixed
+* PAYUNi store pickup on the block checkout: the order kept the store's default county (for example "Taichung City") from the hidden address fields, so customers thought the parcel was going to the wrong place. The hidden address fields are now cleared for store pickup orders.
+* PAYUNi 7-ELEVEN pickup methods split by temperature showed "N/A" as the shipping address on the order, emails and My Account instead of the pickup store.
+
 = 1.12.2 - 2026-10-12 =
 Fixed
 * Block checkout: choosing a district could be silently undone. It looked selected, but the next redraw of the form (typing an address, changing payment method) cleared it.
@@ -160,25 +165,6 @@ Fixed
 = 1.11.4 - 2026-10-07 =
 Fixed
 * On the classic checkout, a half-width field could be pushed into the middle of the row and its partner dropped to the next line when the two fields above it differed in height by a few pixels (for example the country field being slightly taller than the state field). Each pair of half-width fields now starts on a new row.
-
-= 1.11.3 - 2026-10-07 =
-Security
-* SmilePay payment notices could be forged. The only secret in SmilePay's check value is a 4-digit merchant code, leaving under a hundred values to try. Every new SmilePay order now carries its own signed key in the notification URL, failed checks stop automatic confirmation for that order after three attempts, and the check value is computed from the order total rather than the amount in the notice. Orders placed before this update keep the previous check.
-* A late failure or payment-code notice could switch an already paid ECPay, NewebPay or SmilePay order back to failed or on hold, and overwrote the transaction number used for refunds. Such notices are now only recorded as an order note.
-* An ECPay or NewebPay payment whose amount does not match the order total (for example an old payment tab completed after the cart changed) now puts the order on hold for review instead of marking it paid.
-
-Fixed
-* ECPay shipping status follow-up checks and the order screen's status lookup never worked: ECPay's successful reply was treated as an error.
-* PAYUNi store pickup on the block checkout: a first-time customer could not place an order, because the hidden address fields were still required.
-* ECPay paper invoices were issued to the ECPay member carrier instead of being printed.
-* ECPay tax-ID and paper invoices failed on store-pickup orders without a street address. The pickup store's address is now used.
-* PAYUNi "hide billing address for store pickup" on the classic checkout: switching back to home delivery left the address fields marked optional.
-* The AI assistant button appeared a second time inside the plugin-update screen.
-
-Changed
-* Shipping status follow-up checks no longer save the order on every check (so no hourly order-updated webhooks), also compare the status description, rotate through every eligible order, and no longer run 8 hours late.
-* The Taiwanese field layout is now switched on only from its own section. If the old "reorder fields" checkbox was off, the section starts off.
-* The Taiwanese mobile number check is now its own setting and works without the Taiwan address tools.
 
 Older entries are available in the plugin's repository.
 

@@ -3,8 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\PayuniShipping\Admin;
 
-use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\B2CUnified;
-use Moksafowo\Modules\PayuniShipping\Providers\SevenEleven\C2CUnified;
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
 use Moksafowo\Modules\PayuniShipping\Providers\TCat\HDUnified;
 use Moksafowo\Order\Meta\Keys;
 
@@ -22,10 +21,11 @@ final class OrderListHelper {
 			$method_id = (string) $m->get_method_id();
 			break;
 		}
-		if ( ! in_array( $method_id, [ HDUnified::ID, C2CUnified::ID, B2CUnified::ID ], true ) ) {
+		// 依溫層分開的 7-11 方式（例 711_c2c_normal）也是超商，不能只認合併版的 ID。
+		$is_cvs = PayuniShipping::needs_cvs( $method_id );
+		if ( ! $is_cvs && HDUnified::ID !== $method_id ) {
 			return $address;
 		}
-		$is_cvs = in_array( $method_id, [ C2CUnified::ID, B2CUnified::ID ], true );
 
 		$method_title = '';
 		foreach ( $order->get_shipping_methods() as $m ) {

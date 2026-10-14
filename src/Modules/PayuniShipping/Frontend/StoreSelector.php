@@ -85,12 +85,22 @@ class StoreSelector {
 			}
 		}
 		add_action( 'woocommerce_checkout_create_order', array( __CLASS__, 'clear_addresses_for_cvs_order' ), 100, 2 );
+		// 區塊結帳選超商時地址欄一律藏起來，裡面只剩網站預設縣市之類的預填值，不是顧客填的。
+		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( __CLASS__, 'clear_addresses_for_cvs_block_order' ), 100 );
 	}
 
 	public static function clear_addresses_for_cvs_order( \WC_Order $order, array $data ): void {
 		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
 			return;
 		}
+		self::clear_cvs_order_addresses( $order );
+	}
+
+	public static function clear_addresses_for_cvs_block_order( \WC_Order $order ): void {
+		self::clear_cvs_order_addresses( $order );
+	}
+
+	private static function clear_cvs_order_addresses( \WC_Order $order ): void {
 		$is_cvs = false;
 		foreach ( $order->get_shipping_methods() as $method ) {
 			if ( PayuniShipping::needs_cvs( $method->get_method_id() ) ) {
@@ -116,7 +126,7 @@ class StoreSelector {
 		$order->set_shipping_postcode( '' );
 		$order->set_shipping_company( '' );
 
-		PayuniShipping::log( 'CVS order ' . $order->get_id() . ' addresses force-cleared at create_order hook (covers Block + Classic).' );
+		PayuniShipping::log( 'CVS order ' . $order->get_id() . ' addresses cleared.' );
 	}
 
 	public static function strip_na_placeholder_for_home_delivery( $value, $input ) {
