@@ -26,6 +26,13 @@ final class Reconciler {
 				return $r;
 			}
 		);
+		add_filter(
+			'moksafowo_shipping_reconcile_meta_keys',
+			static function ( array $keys ): array {
+				$keys[] = OrderMeta::ShipTradeNo;
+				return $keys;
+			}
+		);
 	}
 
 	public static function reconcile( \WC_Order $order ): bool {

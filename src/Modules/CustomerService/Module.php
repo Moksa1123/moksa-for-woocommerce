@@ -71,7 +71,6 @@ final class Module extends AbstractModule {
 			'moksafowoCs',
 			array(
 				'rest'  => esc_url_raw( rest_url( Rest::NS . '/cs' ) ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'title' => (string) get_option( 'moksafowo_customer_service_title', __( 'Order lookup', 'moksa-for-woocommerce' ) ),
 				'i18n'  => array(
 					'bubble'      => __( 'Order lookup', 'moksa-for-woocommerce' ),

@@ -171,6 +171,15 @@ final class StoreSelector {
 		$store_name    = isset( $_REQUEST['storename'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storename'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
 		$store_address = isset( $_REQUEST['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeaddress'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
 
+		// tempvar 是開地圖時發的 nonce，速買配會原樣帶回（實測確認）。驗不過代表不是本人開的地圖，
+		// 例如跨站連結想換掉顧客 session 裡的取貨門市。
+		$tempvar = isset( $_REQUEST['tempvar'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tempvar'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- this value is the nonce, verified on the next line.
+		if ( ! wp_verify_nonce( $tempvar, 'moksafowo_smilepay_emap_' . get_current_user_id() ) ) {
+			Helper::log( 'EMAP callback tempvar invalid — ignored' );
+			wp_safe_redirect( wc_get_checkout_url() );
+			exit;
+		}
+
 		if ( '' === $store_id ) {
 			Helper::log( 'EMAP callback missing storeid' );
 			wp_safe_redirect( wc_get_checkout_url() );

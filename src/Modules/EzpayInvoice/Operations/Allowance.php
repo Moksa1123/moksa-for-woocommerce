@@ -26,6 +26,15 @@ final class Allowance {
 			];
 		}
 
+		// 規格：折讓帶的是「開立發票時提供之自訂編號」，不是新的編號。
+		$merchant_order_no = (string) $order->get_meta( Keys::EZPAY_MERCHANT_ORDER_NO );
+		if ( '' === $merchant_order_no ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'The ezPay invoice reference for this order was not found, so an allowance cannot be raised here. Please raise it in the ezPay dashboard.', 'moksa-for-woocommerce' ),
+			];
+		}
+
 		$item_name = '其他';
 		foreach ( $order->get_items() as $i ) {
 			$item_name = (string) $i->get_name();
@@ -37,7 +46,7 @@ final class Allowance {
 			'Version'         => '1.3',
 			'TimeStamp'       => (string) time(),
 			'InvoiceNo'       => $inv,
-			'MerchantOrderNo' => Helper::generate_merchant_order_no( $order->get_id() ) . 'A',
+			'MerchantOrderNo' => $merchant_order_no,
 			'ItemName'        => mb_substr( $item_name, 0, 30 ),
 			'ItemCount'       => '1',
 			// 送給財政部的品項單位，不隨網站語系變動。

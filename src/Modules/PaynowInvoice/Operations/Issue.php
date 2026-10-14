@@ -158,12 +158,14 @@ final class Issue {
 			case 'b2c_carrier':
 				switch ( $carrier ) {
 					case 'mobile':  // 手機條碼
-						$carrier_t = 'BRING+';
+						$carrier_t = '3J0002';
 						$carrier_1 = $cnum;
+						$carrier_2 = $cnum;
 						break;
 					case 'cert':    // 自然人憑證
-						$carrier_t = 'BRING+';
+						$carrier_t = 'CQ0001';
 						$carrier_1 = $cnum;
+						$carrier_2 = $cnum;
 						break;
 					case 'member':  // 會員載具
 					case 'paper':
@@ -183,16 +185,25 @@ final class Issue {
 		$buyer_email = (string) $order->get_billing_email();
 		$buyer_phone = preg_replace( '/[^0-9]/', '', (string) $order->get_billing_phone() ) ?? '';
 		$buyer_add   = $order->get_billing_address_1() . $order->get_billing_address_2();
+		// buyer_add 有值 PayNow 就會寄紙本；只有紙本（沒有載具）與統編發票要寄。其餘加 BRING 前綴：留地址、不寄送。
+		if ( '' !== $buyer_add && ! ( 'b2b' === $type || ( 'b2c_carrier' === $type && '' === $carrier_t ) ) ) {
+			$buyer_add = 'BRING ' . $buyer_add;
+		}
 
 		if ( 'b2b' === $type ) {
 			$company    = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
 			$buyer_name = '' !== $company ? $company : $buyer_name;
 		}
 
+		// 明細要等於實際應開金額：各項扣掉已退的部分、加上費用項目，沒對應到項目的退款列成一筆負數。
+		$total_refunded = (float) $order->get_total_refunded();
+
 		$rows = [];
 		foreach ( $order->get_items( [ 'line_item' ] ) as $item ) {
-			$qty   = (int) $item->get_quantity();
-			$total = (float) $item->get_total();
+			$item_refunded   = (float) $order->get_total_refunded_for_item( $item->get_id(), 'line_item' );
+			$total_refunded -= $item_refunded;
+			$qty             = (int) $item->get_quantity() + (int) $order->get_qty_refunded_for_item( $item->get_id(), 'line_item' );
+			$total           = (float) $item->get_total() - $item_refunded;
 			if ( $qty <= 0 || 0.0 === $total ) {
 				continue;
 			}
@@ -220,9 +231,26 @@ final class Issue {
 			);
 		}
 
-		// 運費 — 視為獨立 line item
-		$shipping = (float) $order->get_shipping_total();
+		// 運費、費用項目、未對應到項目的退款 — 各列一筆數量 1
+		$extra           = [];
+		$shipping        = (float) $order->get_shipping_total() - (float) $order->get_total_shipping_refunded();
+		$total_refunded -= (float) $order->get_total_shipping_refunded();
 		if ( $shipping > 0 ) {
+			$extra[] = [ __( 'Shipping', 'moksa-for-woocommerce' ), $shipping ];
+		}
+		foreach ( $order->get_items( [ 'fee' ] ) as $fee ) {
+			$fee_refunded    = (float) $order->get_total_refunded_for_item( $fee->get_id(), 'fee' );
+			$total_refunded -= $fee_refunded;
+			$fee_total       = (float) $fee->get_total() - $fee_refunded;
+			if ( 0.0 !== $fee_total ) {
+				$extra[] = [ str_replace( [ "'", ',', "\n" ], '', (string) $fee->get_name() ), $fee_total ];
+			}
+		}
+		if ( round( $total_refunded, 0 ) > 0 ) {
+			$extra[] = [ __( 'Refund', 'moksa-for-woocommerce' ), -$total_refunded ];
+		}
+		foreach ( $extra as [ $name, $amount ] ) {
+			$amount = (string) (int) round( $amount, 0 );
 			$rows[] = self::format_csv_row(
 				[
 					$orderno,
@@ -235,10 +263,10 @@ final class Issue {
 					$carrier_1,
 					$carrier_2,
 					$love_param,
-					__( 'Shipping', 'moksa-for-woocommerce' ),
+					mb_substr( $name, 0, 50 ),
 					'1',
-					(string) (int) round( $shipping, 0 ),
-					(string) (int) round( $shipping, 0 ),
+					$amount,
+					$amount,
 					'',
 					'1',
 					'',

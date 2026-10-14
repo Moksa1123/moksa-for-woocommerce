@@ -116,8 +116,10 @@ final class Credit extends \WC_Payment_Gateway {
 
 		$use_3ds    = Helper::three_domain_secure_enabled();
 		$result_url = add_query_arg(
-			'order_number',
-			rawurlencode( $order_number ),
+			[
+				'order_number' => rawurlencode( $order_number ),
+				'k'            => Helper::result_token( $order ),
+			],
 			home_url( '/wc-api/moksafowo_tappay_result' )
 		);
 		$notify_url = home_url( '/wc-api/moksafowo_tappay_notify' );

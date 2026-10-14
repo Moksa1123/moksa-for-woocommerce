@@ -19,6 +19,15 @@ class ShippingResponse {
 
 		add_action( 'woocommerce_api_moksafowo_payuni_shipping_711_notify', array( self::get_instance(), 'moksafowo_payuni_711_receive_update' ) );
 		add_action( 'woocommerce_api_moksafowo_payuni_shipping_tcat_notify', array( self::get_instance(), 'moksafowo_payuni_tcat_receive_update' ) );
+		// 從 wpbr-payuni-shipping 換過來的商店，PAYUNi 後台的貨態通知網址多半還填著舊的端點；
+		// 那個外掛停用後就沒人接，新訂單一則貨態都收不到。舊外掛沒啟用時由這裡接手（同樣先驗 HashInfo，
+		// 只會找到本外掛建立的物流單）。
+		if ( ! has_action( 'woocommerce_api_payuni_shipping_711_notify' ) ) {
+			add_action( 'woocommerce_api_payuni_shipping_711_notify', array( self::get_instance(), 'moksafowo_payuni_711_receive_update' ) );
+		}
+		if ( ! has_action( 'woocommerce_api_payuni_shipping_tcat_notify' ) ) {
+			add_action( 'woocommerce_api_payuni_shipping_tcat_notify', array( self::get_instance(), 'moksafowo_payuni_tcat_receive_update' ) );
+		}
 		add_action( 'moksafowo_payuni_update_shipping_order_status', array( self::get_instance(), 'update_order_status_after_received_update' ), 10, 3 );
 	}
 
@@ -84,26 +93,10 @@ class ShippingResponse {
 					}
 				}
 			} elseif ( 'Print' === $decrypted_info['ApiType'] ) {
-				$orders = wc_get_orders(
-					array(
-						'limit'        => -1,
-						'orderby'      => 'date',
-						'order'        => 'DESC',
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_key'     => OrderMeta::ShipTradeNo,
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_value'   => $decrypted_info['ShipTradeNo'],
-						'meta_compare' => '=',
-					)
-				);
+				// 拆單時單一欄位只鏡射最後一包，其他包要從拆單紀錄找。
+				$order = self::find_order_by_ship_trade_no( (string) $decrypted_info['ShipTradeNo'] );
 
-				if ( ! empty( $orders ) ) {
-					$order = $orders[0];
-
-					if ( $order->get_meta( OrderMeta::ShipTradeNo ) !== $decrypted_info['ShipTradeNo'] ) {
-						PayuniShipping::log( 'ShipTradeNo mismatch. Order id:' . $order->get_id() . ', ShipTradeNo:' . $order->get_meta( OrderMeta::ShipTradeNo ) . ', received ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
-						return;
-					}
+				if ( $order instanceof \WC_Order ) {
 
 					if ( array_key_exists( 'Odno', $decrypted_info ) ) {
 						$validation_no = array_key_exists( 'ValidationNo', $decrypted_info ) ? $decrypted_info['ValidationNo'] : '';
@@ -214,22 +207,10 @@ class ShippingResponse {
 				$json_data    = map_deep( $json_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 				$print_result = $json_data[0];
 				if ( 'SUCCESS' === $print_result['Status'] ) {
-					$ship_trade_no = $print_result['ShipTradeNo'];
-					$orders        = wc_get_orders(
-						array(
-							'limit'        => -1,
-							'orderby'      => 'date',
-							'order'        => 'DESC',
-							// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-							'meta_key'     => OrderMeta::ShipTradeNo,
-							// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-							'meta_value'   => $ship_trade_no,
-							'meta_compare' => '=',
-						)
-					);
+					$ship_trade_no = (string) $print_result['ShipTradeNo'];
+					$order         = self::find_order_by_ship_trade_no( $ship_trade_no );
 
-					if ( ! empty( $orders ) ) {
-						$order = $orders[0];
+					if ( $order instanceof \WC_Order ) {
 						$order->update_meta_data( OrderMeta::FileNo, $print_result['FileNo'] );
 						$order->update_meta_data( OrderMeta::PrintDate, $print_result['PrintDate'] );
 						$order->save();
@@ -266,6 +247,8 @@ class ShippingResponse {
 				'limit'      => 1,
 				'return'     => 'ids',
 				'type'       => 'shop_order',
+				// 關掉自訂狀態區塊後，停在 moksa-* 的訂單不在預設 status 範圍內，通知會找不到單。
+				'status'     => 'all',
 				'meta_key'   => OrderMeta::ShipTradeNo, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
 				'meta_value' => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
 			]
@@ -276,6 +259,7 @@ class ShippingResponse {
 					'limit'        => 5,
 					'return'       => 'ids',
 					'type'         => 'shop_order',
+					'status'       => 'all',
 					'meta_key'     => \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
 					'meta_value'   => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
 					'meta_compare' => 'LIKE',

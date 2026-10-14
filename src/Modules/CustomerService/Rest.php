@@ -132,6 +132,20 @@ final class Rest {
 				200
 			);
 		}
+		// 每張訂單每小時留言上限：token 有效 30 分鐘，沒有上限就能無限寫入對話並觸發通知信。
+		$rate_key = 'moksafowo_cs_msg_rl_' . $order_id;
+		$sent     = (int) get_transient( $rate_key );
+		if ( $sent >= 30 ) {
+			return new \WP_REST_Response(
+				array(
+					'ok'      => false,
+					'message' => __( 'You have sent a lot of messages. Please wait a while before sending more.', 'moksa-for-woocommerce' ),
+				),
+				200
+			);
+		}
+		set_transient( $rate_key, $sent + 1, HOUR_IN_SECONDS );
+
 		$body      = mb_substr( $body, 0, 2000 );
 		$order     = wc_get_order( $order_id );
 		$ref       = $order instanceof \WC_Order ? '#' . $order->get_order_number() : '#' . $order_id;
@@ -141,14 +155,15 @@ final class Rest {
 		Threads::add_message( $thread_id, 'customer', $body );
 
 		$ai = null;
-		if ( AiReply::enabled() && AiReply::rate_ok( self::ip() ) ) {
+		if ( AiReply::enabled() && AiReply::rate_ok() ) {
 			$ai = AiReply::generate( $order_id, $history, $body );
 		}
 		if ( null !== $ai ) {
 			Threads::add_message( $thread_id, 'ai', $ai );
-		} else {
-			self::notify_staff( $order_id, $ref );
 		}
+		// AI 回覆後也要通知：它被要求在不確定時告訴顧客「已轉交專人」，沒通知就沒人會跟進。
+		// 同一訂單 15 分鐘內只寄一封。
+		self::notify_staff( $order_id, $ref );
 
 		return new \WP_REST_Response(
 			array(
@@ -186,6 +201,12 @@ final class Rest {
 		if ( '' === $to ) {
 			return;
 		}
+		// 同一張訂單連續留言只通知一次，15 分鐘內不重寄。
+		$sent_key = 'moksafowo_cs_notified_' . $order_id;
+		if ( get_transient( $sent_key ) ) {
+			return;
+		}
+		set_transient( $sent_key, 1, 15 * MINUTE_IN_SECONDS );
 		$subject = sprintf(
 			/* translators: %s: order ref */
 			__( '[Support] New message on order %s', 'moksa-for-woocommerce' ),

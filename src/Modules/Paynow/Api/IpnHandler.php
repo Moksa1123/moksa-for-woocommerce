@@ -82,6 +82,32 @@ final class IpnHandler {
 			}
 		}
 
+		// 已付款的訂單：晚到的取號／失敗通知只留備註，不改狀態也不覆寫交易資料（退款要用原本那筆）。
+		if ( $order->is_paid() && ! $is_success ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: PayNow transaction status */
+					__( 'A late PayNow notice (status %s) arrived for an order that is already paid. The order was left unchanged.', 'moksa-for-woocommerce' ),
+					'' !== $tran ? $tran : '-'
+				)
+			);
+			self::reply( 200, 'OK' );
+		}
+
+		// 成功通知的金額要跟訂單一致（取號後訂單被改過金額、顧客照舊金額繳費）。
+		if ( $is_success && ! $order->is_paid() && (int) $total !== (int) round( (float) $order->get_total() ) ) {
+			$order->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: paid amount, 2: order total */
+					__( 'PayNow reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+					(int) $total,
+					$order->get_total()
+				)
+			);
+			self::reply( 200, 'OK' );
+		}
+
 		self::write_common_meta( $order, $order_no, $pay_type, $tran, $buysafe_no, $posted );
 		self::write_paytype_meta( $order, $pay_type, $posted );
 		self::apply_status( $order, $pay_type, $is_success, $posted );
@@ -115,11 +141,11 @@ final class IpnHandler {
 			return Signature::verify( $expected, $actual );
 		}
 
+		// 規格：「成功交易回傳時才加上 TranStatus」，成功通知一定是五欄。四欄的值就是付款表單上
+		// 顧客看得到的 PassCode，成功通知若接受四欄，任何人都能自己送一則「付款成功」。
 		if ( $is_success ) {
 			$with_status = Signature::make( ...array_merge( $base, [ strtoupper( $tran ) ] ) );
-			if ( Signature::verify( $with_status, $actual ) ) {
-				return true;
-			}
+			return Signature::verify( $with_status, $actual );
 		}
 		$four = Signature::make( ...$base );
 		return Signature::verify( $four, $actual );

@@ -96,8 +96,20 @@ final class WebhookHandler {
 			self::reply( 200, 'duplicate' );
 		}
 
-		self::write_meta( $order, $data );
-		self::dispatch( $order, $type, $data );
+		// 已付款訂單收到另一筆付款嘗試的失敗／逾時通知：只留備註。照常處理會把訂單改成失敗，
+		// 並把 tradeOrderId 換成失敗那筆，之後退款就打到錯的交易。
+		if ( $order->is_paid() && in_array( $type, [ 'trade.failed', 'trade.expired', 'session.expired', 'session.created' ], true ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: event type */
+					__( 'Shopline Payments sent a %s notice for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					$type
+				)
+			);
+		} else {
+			self::write_meta( $order, $data );
+			self::dispatch( $order, $type, $data );
+		}
 
 		if ( '' !== $event_id ) {
 			self::mark_processed( $order, $event_id );

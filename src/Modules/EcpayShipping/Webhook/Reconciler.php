@@ -26,6 +26,14 @@ final class Reconciler {
 				return $r;
 			}
 		);
+		add_filter(
+			'moksafowo_shipping_reconcile_meta_keys',
+			static function ( array $keys ): array {
+				$keys[] = \Moksafowo\Order\Meta\Keys::ECPAY_LOGISTIC_RECORDS;
+				$keys[] = \Moksafowo\Order\Meta\Keys::ECPAY_LOGISTIC_ID;
+				return $keys;
+			}
+		);
 	}
 
 	/**

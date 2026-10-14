@@ -276,56 +276,66 @@ final class BatchPrintAdminUI {
 			]
 		);
 
-		$orders = wc_get_orders(
-			[
-				'status'  => $statuses,
-				'limit'   => 50,
-				'order'   => 'DESC',
-				'orderby' => 'date',
-			]
-		);
-
 		$method_ids     = $provider['method_ids'];
 		$method_titles  = $provider['method_titles'] ?? [];
 		$provider_modes = (array) ( $provider['paper_modes'] ?? [ '1', '2' ] );
 		$row_modes_fn   = $provider['row_paper_modes'] ?? null;
 		$temps_fn       = $provider['record_temps'] ?? null;
 		$rows           = [];
-		foreach ( $orders as $order ) {
-			$method_obj = self::detect_method( $order, $method_ids );
-			if ( null === $method_obj ) {
-				continue;
-			}
-			$mid          = (string) $method_obj->get_method_id();
-			$item_name    = (string) $method_obj->get_name();
-			$record_count = self::record_count( $order, $provider['record_counter'] ?? null );
-
-			$row_modes = $provider_modes;
-			if ( is_callable( $row_modes_fn ) ) {
-				$dynamic = (array) call_user_func( $row_modes_fn, $order );
-				// 取交集 — provider 未開的模式不會因 row fn 偷開
-				$row_modes = array_values( array_intersect( $provider_modes, $dynamic ) );
-				if ( empty( $row_modes ) ) {
-					$row_modes = $provider_modes;
+		// 物流方式沒辦法在查詢裡篩，只看最新 50 張的話，其他物流與未付款的保留中訂單會把
+		// 這家的較舊待出貨單擠掉。分頁往下掃，湊滿 200 筆或掃完 1000 張為止。
+		$page = 1;
+		do {
+			$orders  = wc_get_orders(
+				[
+					'status'  => $statuses,
+					'limit'   => 100,
+					'page'    => $page,
+					'order'   => 'DESC',
+					'orderby' => 'date',
+				]
+			);
+			$fetched = count( $orders );
+			foreach ( $orders as $order ) {
+				if ( count( $rows ) >= 200 ) {
+					break 2;
 				}
+				$method_obj = self::detect_method( $order, $method_ids );
+				if ( null === $method_obj ) {
+					continue;
+				}
+				$mid          = (string) $method_obj->get_method_id();
+				$item_name    = (string) $method_obj->get_name();
+				$record_count = self::record_count( $order, $provider['record_counter'] ?? null );
+
+				$row_modes = $provider_modes;
+				if ( is_callable( $row_modes_fn ) ) {
+					$dynamic = (array) call_user_func( $row_modes_fn, $order );
+					// 取交集 — provider 未開的模式不會因 row fn 偷開
+					$row_modes = array_values( array_intersect( $provider_modes, $dynamic ) );
+					if ( empty( $row_modes ) ) {
+						$row_modes = $provider_modes;
+					}
+				}
+
+				$temps = is_callable( $temps_fn )
+					? array_values( array_unique( array_map( 'intval', (array) call_user_func( $temps_fn, $order ) ) ) )
+					: [];
+				sort( $temps );
+
+				$rows[] = [
+					'id'          => $order->get_id(),
+					'name'        => trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() ) ?: trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() ),
+					'method'      => self::resolve_method_title( $mid, $item_name, $method_titles ),
+					'status'      => wc_get_order_status_name( $order->get_status() ),
+					'records'     => $record_count,
+					'printable'   => $record_count > 0,
+					'paper_modes' => $row_modes,
+					'temps'       => $temps,
+				];
 			}
-
-			$temps = is_callable( $temps_fn )
-				? array_values( array_unique( array_map( 'intval', (array) call_user_func( $temps_fn, $order ) ) ) )
-				: [];
-			sort( $temps );
-
-			$rows[] = [
-				'id'          => $order->get_id(),
-				'name'        => trim( $order->get_shipping_last_name() . ' ' . $order->get_shipping_first_name() ) ?: trim( $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() ),
-				'method'      => self::resolve_method_title( $mid, $item_name, $method_titles ),
-				'status'      => wc_get_order_status_name( $order->get_status() ),
-				'records'     => $record_count,
-				'printable'   => $record_count > 0,
-				'paper_modes' => $row_modes,
-				'temps'       => $temps,
-			];
-		}
+			++$page;
+		} while ( 100 === $fetched && $page <= 10 );
 		wp_send_json_success( [ 'rows' => $rows ] );
 	}
 

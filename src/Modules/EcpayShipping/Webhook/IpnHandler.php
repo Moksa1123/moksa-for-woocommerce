@@ -87,8 +87,8 @@ final class IpnHandler {
 			return null;
 		}
 
-		// MTN 格式：mowpL<6位訂單ID>R<hex>[T<temp>]
-		if ( preg_match( '/^[A-Za-z]+(\d{6})R[a-f0-9]+(?:T\d)?$/', $merchant_trade_no, $m ) ) {
+		// MTN 格式：前綴＋訂單 ID（補零至少 6 位，超過 999999 就是 7 位以上）＋R＋hex[＋T溫層]
+		if ( preg_match( '/^[A-Za-z]+(\d{6,})R[a-f0-9]+(?:T\d)?$/', $merchant_trade_no, $m ) ) {
 			$order_id = (int) ltrim( $m[1], '0' );
 			if ( $order_id > 0 && wc_get_order( $order_id ) ) {
 				return $order_id;
@@ -98,6 +98,7 @@ final class IpnHandler {
 		$found = wc_get_orders(
 			[
 				'limit'      => 1,
+				'status'     => 'all',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
 				'meta_key'   => Keys::ECPAY_LOGISTIC_MERCHANT_TRADE_NO,
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
@@ -109,16 +110,17 @@ final class IpnHandler {
 			return $order instanceof \WC_Order ? $order->get_id() : null;
 		}
 
-		// Fallback：拆單 T1/T2 IPN 對不到 mirror key，掃近 30 天 records 找 MTN
+		// Fallback：拆單 T1/T2 IPN 對不到單一欄位（只鏡射最後一包），直接在拆單紀錄裡找這個 MTN。
+		// 原本「最新 50 張有紀錄的訂單」會漏掉較舊的單（date_after 也不是 WC 支援的參數）。
 		$candidates = wc_get_orders(
 			[
-				'limit'        => 50,
-				'orderby'      => 'date',
-				'order'        => 'DESC',
-				'date_after'   => gmdate( 'Y-m-d', time() - 30 * DAY_IN_SECONDS ),
+				'limit'        => 5,
+				'status'       => 'all',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
 				'meta_key'     => Keys::ECPAY_LOGISTIC_RECORDS,
-				'meta_compare' => 'EXISTS',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
+				'meta_value'   => $merchant_trade_no,
+				'meta_compare' => 'LIKE',
 			]
 		);
 		foreach ( $candidates as $candidate ) {

@@ -34,29 +34,45 @@ final class Allowance {
 			break;
 		}
 
+		// 原發票日期：開立時存的是 UTC 時間，換成台灣日期。
+		$issued_at = (string) $order->get_meta( Keys::AMEGO_INVOICE_ISSUED_AT );
+		if ( '' === $issued_at ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'The Amego invoice date for this order was not found, so an allowance cannot be raised here. Please raise it in the Amego dashboard.', 'moksa-for-woocommerce' ),
+			];
+		}
+		$invoice_date = ( new \DateTimeImmutable( $issued_at, new \DateTimeZone( 'UTC' ) ) )
+			->setTimezone( new \DateTimeZone( 'Asia/Taipei' ) )
+			->format( 'Ymd' );
+
+		// g0401 的單價、小計、合計都是未稅，稅額另列（官方範例：含稅 4578 → 4360 + 218）。
+		$untaxed = (int) round( $amount / 1.05, 0 );
+		$tax     = $amount - $untaxed;
+
 		$allowance_number = 'A' . substr( (string) $order->get_id(), 0, 6 ) . substr( (string) time(), -6 );  // ≤16 chars
 		$args             = [
-			'AllowanceNumber'       => $allowance_number,
-			'OriginalInvoiceNumber' => $inv,
+			'AllowanceNumber'   => $allowance_number,
 			// 2025/1/1 起 AllowanceType=1（買方申請）已禁用，必為 2（賣方開立折讓通知單）
-			'AllowanceType'         => '2',
-			'AllowanceDate'         => current_time( 'Ymd' ),  // Amego spec: YYYYMMDD（站台時區當日）
-			'BuyerIdentifier'       => (string) ( $order->get_meta( Keys::INVOICE_BUYER_UBN ) ?: '0000000000' ),
-			'BuyerName'             => trim( $order->get_billing_last_name() . $order->get_billing_first_name() ) ?: '客人',
-			'NotifyMail'            => (string) $order->get_billing_email(),
-			'ProductItem'           => [
+			'AllowanceType'     => 2,
+			'AllowanceDate'     => current_time( 'Ymd' ),  // Amego spec: YYYYMMDD（站台時區當日）
+			'BuyerIdentifier'   => (string) ( $order->get_meta( Keys::INVOICE_BUYER_UBN ) ?: '0000000000' ),
+			'BuyerName'         => trim( $order->get_billing_last_name() . $order->get_billing_first_name() ) ?: '客人',
+			'BuyerEmailAddress' => (string) $order->get_billing_email(),
+			'ProductItem'       => [
 				[
-					'OriginalDescription' => mb_substr( $item_name, 0, 256 ),
-					'Description'         => mb_substr( $item_name, 0, 256 ),
-					'Quantity'            => '1',
-					'UnitPrice'           => (string) $amount,
-					'Amount'              => (string) $amount,
-					'Remark'              => '',
-					'TaxType'             => 1,
+					'OriginalInvoiceNumber' => $inv,
+					'OriginalInvoiceDate'   => (int) $invoice_date,
+					'OriginalDescription'   => mb_substr( $item_name, 0, 256 ),
+					'Quantity'              => 1,
+					'UnitPrice'             => $untaxed,
+					'Amount'                => $untaxed,
+					'Tax'                   => $tax,
+					'TaxType'               => 1,
 				],
 			],
-			'TaxAmount'             => 0,
-			'TotalAmount'           => $amount,
+			'TaxAmount'         => $tax,
+			'TotalAmount'       => $untaxed,
 		];
 
 		Helper::log(

@@ -112,6 +112,23 @@ final class IpnHandler {
 			exit;
 		}
 
+		// 已付款訂單（可能是重試後另一筆付款嘗試成功）收到舊嘗試的逾時／失敗／取號通知：只留備註，
+		// 不改狀態也不覆寫交易資料。
+		if ( $order->is_paid() && in_array( $notify_type, [ 'order_expired', 'order_failed', 'order_audit' ], true ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: notify type */
+					__( 'PChomePay sent a %s notice for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					$notify_type
+				)
+			);
+			$order->save();
+			status_header( 200 );
+			header( 'Content-Type: text/plain; charset=utf-8' );
+			echo 'success';
+			exit;
+		}
+
 		// meta 以 API 權威回應優先，notify payload 只補 API 未回的欄位。
 		$message = array_merge( $message, array_filter( $authoritative, static fn( $v ) => null !== $v && '' !== $v ) );
 

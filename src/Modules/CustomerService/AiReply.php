@@ -26,8 +26,11 @@ final class AiReply {
 		return max( 1, (int) get_option( 'moksafowo_cs_ai_rate', 20 ) );
 	}
 
-	public static function rate_ok( string $ip ): bool {
-		$key   = 'moksafowo_cs_ai_rl_' . md5( $ip );
+	/**
+	 * 全站每小時 AI 回覆上限（設定說明是控制用量與費用，不是每個訪客各自計算）。
+	 */
+	public static function rate_ok(): bool {
+		$key   = 'moksafowo_cs_ai_rl_site';
 		$count = (int) get_transient( $key );
 		if ( $count >= self::rate_limit() ) {
 			return false;

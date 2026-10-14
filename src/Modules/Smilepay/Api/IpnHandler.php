@@ -226,7 +226,8 @@ final class IpnHandler {
 		$order_id = $order->get_id();
 
 		// 更新前就送出的單，回呼網址沒有 key（例如已取號、幾天後才繳費的 ATM），只能沿用舊驗證。
-		if ( 'yes' === $order->get_meta( Keys::SMILEPAY_CALLBACK_KEYED ) ) {
+		$keyed = 'yes' === $order->get_meta( Keys::SMILEPAY_CALLBACK_KEYED );
+		if ( $keyed ) {
 			$key = isset( $req['mfk'] ) ? sanitize_text_field( (string) $req['mfk'] ) : '';
 			if ( '' === $key || ! hash_equals( Helper::callback_key( $order ), $key ) ) {
 				Helper::log( 'roturl rejected — callback key missing or wrong', [ 'order_id' => $order_id ] );
@@ -234,8 +235,10 @@ final class IpnHandler {
 			}
 		}
 
-		$fails = (int) $order->get_meta( Keys::SMILEPAY_MID_FAILS );
-		if ( $fails >= self::MAX_ORDER_FAILS || (int) get_transient( self::SITE_FAILS ) >= self::MAX_SITE_FAILS ) {
+		// 全站鎖只管沒有 key 的舊訂單：任何人都能拿舊單號亂送把它打滿，不能連帶擋掉已驗過 key 的通知。
+		$fails       = (int) $order->get_meta( Keys::SMILEPAY_MID_FAILS );
+		$site_locked = ! $keyed && (int) get_transient( self::SITE_FAILS ) >= self::MAX_SITE_FAILS;
+		if ( $fails >= self::MAX_ORDER_FAILS || $site_locked ) {
 			Helper::log( 'roturl rejected — too many failed verifications', [ 'order_id' => $order_id ] );
 			return false;
 		}
@@ -245,7 +248,9 @@ final class IpnHandler {
 		}
 
 		Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
-		set_transient( self::SITE_FAILS, (int) get_transient( self::SITE_FAILS ) + 1, HOUR_IN_SECONDS );
+		if ( ! $keyed ) {
+			set_transient( self::SITE_FAILS, (int) get_transient( self::SITE_FAILS ) + 1, HOUR_IN_SECONDS );
+		}
 		$order->update_meta_data( Keys::SMILEPAY_MID_FAILS, $fails + 1 );
 		if ( $fails + 1 === self::MAX_ORDER_FAILS ) {
 			$order->add_order_note( __( 'Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually.', 'moksa-for-woocommerce' ) );

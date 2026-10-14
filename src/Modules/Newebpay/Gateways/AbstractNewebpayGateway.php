@@ -62,10 +62,21 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	}
 
 	private static function do_card_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
-		// 用 B02 query 看 CloseStatus
-		$query              = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
-		$close_status       = $query['ok'] ? (string) ( $query['data']['CloseStatus'] ?? '0' ) : '0';
+		// 用 B02 query 看 CloseStatus（信用卡：0=未請款 1=等待提送請款 2=請款處理中 3=請款完成）。
+		// 未請款只能整筆取消授權（金額需與授權金額相同）；請款完成才能退款（同藍新官方外掛）。
+		$query = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
+		if ( ! $query['ok'] ) {
+			return new \WP_Error( 'moksafowo_newebpay_query_fail', __( 'Could not confirm the transaction status with NewebPay. Please try the refund again later.', 'moksa-for-woocommerce' ) );
+		}
+		$close_status       = (string) ( $query['data']['CloseStatus'] ?? '' );
+		$auth_amt           = (int) ( $query['data']['Amt'] ?? ceil( (float) $order->get_total() ) );
 		$is_authorized_only = '0' === $close_status;
+		if ( $is_authorized_only && $amt !== $auth_amt ) {
+			return new \WP_Error( 'moksafowo_newebpay_partial_before_capture', __( 'This NewebPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
+		}
+		if ( ! $is_authorized_only && '3' !== $close_status ) {
+			return new \WP_Error( 'moksafowo_newebpay_capture_in_progress', __( 'NewebPay is still capturing this card payment. Please refund it after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
+		}
 
 		$result = $is_authorized_only
 			? \Moksafowo\Modules\Newebpay\Api\PaymentRequest::cancel(
@@ -248,7 +259,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 				'ItemDesc'        => $item_name,
 				'ReturnURL'       => $order->get_checkout_order_received_url(),
 				'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_payment' ),
-				'CustomerURL'     => $order->get_checkout_order_received_url(),
+				'CustomerURL'     => home_url( '/wc-api/moksafowo_newebpay_customer' ),
 				'ClientBackURL'   => $order->get_cancel_order_url_raw(),
 				'Email'           => $order->get_billing_email(),
 				'EmailModify'     => 0,

@@ -149,19 +149,17 @@ final class SessionGateway extends \WC_Payment_Gateway {
 			return new \WP_Error( 'moksafowo_slp_missing_trade_order_id', __( 'The order has no Shopline Payments transaction ID (tradeOrderId).', 'moksa-for-woocommerce' ) );
 		}
 
-		$reference_order_id = (string) $order->get_meta( Keys::SLP_REFERENCE_ID );
-		if ( '' === $reference_order_id ) {
-			$reference_order_id = Helper::build_reference_id( (int) $order_id );
-		}
-
 		$value = (int) round( (float) $amount * 100 );
 		if ( $value <= 0 ) {
 			return new \WP_Error( 'moksafowo_slp_invalid_amount', __( 'The refund amount must be greater than 0.', 'moksa-for-woocommerce' ) );
 		}
 
-		// WC refund id（this request 的退款記錄）— 無法直接取得，用 time 後綴穩定識別。
-		$refund_id      = (string) ( $order->get_meta( Keys::SLP_REFUND_ORDER_ID ) ?: time() );
-		$idempotent_key = Helper::idempotent_key( sprintf( 'refund-%d-%s', $order_id, $refund_id ) );
+		// 退款單號規格要求特店端唯一。WC 呼叫這裡之前已建好這筆退款紀錄，用它的 ID：
+		// 每筆退款不同，同一筆網路重試則相同（冪等）。開頭保留訂單號，Webhook 靠它反查訂單。
+		$refunds            = $order->get_refunds();
+		$refund_id          = ! empty( $refunds ) ? (string) $refunds[0]->get_id() : (string) time();
+		$reference_order_id = $order_id . '-R' . $refund_id;
+		$idempotent_key     = Helper::idempotent_key( sprintf( 'refund-%d-%s', $order_id, $refund_id ) );
 
 		$payload = [
 			'referenceOrderId' => $reference_order_id,

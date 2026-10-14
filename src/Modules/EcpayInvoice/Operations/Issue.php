@@ -36,6 +36,8 @@ final class Issue {
 		if ( '' === $relate_no ) {
 			$relate_no = Helper::generate_relate_number( $order->get_id() );
 			$order->update_meta_data( Keys::ECPAY_INVOICE_RELATE_NUMBER, $relate_no );
+			// 送出前就存：逾時但綠界其實已開立時，重試沿用同一個自訂編號，不會重複開票。
+			$order->save();
 		}
 
 		$invoice_type = (string) $order->get_meta( Keys::INVOICE_TYPE );
@@ -73,7 +75,8 @@ final class Issue {
 			$customer_addr = $store_addr;
 		}
 
-		$amount = (int) round( (float) $order->get_total() );
+		// 延後開立或作廢後重開時，已退的部分不再開進發票。
+		$amount = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );
 		$items  = self::build_items( $order, $amount );
 
 		$data = [
@@ -119,7 +122,8 @@ final class Issue {
 
 		$order->update_meta_data( Keys::ECPAY_INVOICE_NUMBER, $inv );
 		$order->update_meta_data( Keys::ECPAY_INVOICE_RANDOM, $rand );
-		$order->update_meta_data( Keys::ECPAY_INVOICE_ISSUED_AT, current_time( 'mysql' ) );
+		// 作廢、折讓、查詢都要帶開立日期；用綠界回傳的，站台時區不是台灣時跨日會帶錯天。
+		$order->update_meta_data( Keys::ECPAY_INVOICE_ISSUED_AT, (string) ( $resp['InvoiceDate'] ?? '' ) ?: current_time( 'mysql' ) );
 		$order->update_meta_data( Keys::ECPAY_INVOICE_TAX_TYPE, '1' );
 		$order->update_meta_data( Keys::INVOICE_PROVIDER, 'ecpay' );
 		$order->add_order_note(

@@ -206,7 +206,13 @@ final class Helper extends AbstractCredentialHelper {
 		}
 		$signed = $posted;
 		unset( $signed['CheckMacValue'] );
-		$subtype  = (string) ( $posted['LogisticsSubType'] ?? 'UNIMARTC2C' );
+		$subtype = (string) ( $posted['LogisticsSubType'] ?? 'UNIMARTC2C' );
+		// 金鑰組由請求自帶的 LogisticsSubType 決定；沒設定的那組金鑰是空字串，任何人都能用空金鑰算出簽章。
+		// 該組沒有金鑰、或 MerchantID 不是該組的商店代號，一律拒絕。
+		if ( '' === self::hash_key( $subtype ) || '' === self::hash_iv( $subtype )
+			|| (string) ( $posted['MerchantID'] ?? '' ) !== self::merchant_id( $subtype ) ) {
+			return false;
+		}
 		$expected = self::generate_check_mac_value( $signed, $subtype );
 		return hash_equals( $expected, (string) $posted['CheckMacValue'] );
 	}

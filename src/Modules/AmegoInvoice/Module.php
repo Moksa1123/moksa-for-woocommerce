@@ -116,6 +116,12 @@ final class Module extends AbstractModule {
 		if ( $order->get_meta( Keys::AMEGO_INVOICE_NUMBER ) ) {
 			return;
 		}
+		// 排程執行前訂單可能已取消或退款，這時不該再開出發票。
+		if ( in_array( $order->get_status(), [ 'cancelled', 'refunded', 'failed' ], true ) ) {
+			$order->add_order_note( __( 'The invoice was not issued because the order was cancelled, refunded or failed before it was due.', 'moksa-for-woocommerce' ) );
+			$order->save();
+			return;
+		}
 		Issue::run( $order );
 	}
 }

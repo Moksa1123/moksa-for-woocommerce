@@ -50,7 +50,9 @@
 	function api( path, body, cb ) {
 		fetch( C.rest + path, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': C.nonce },
+			// 不帶 wp_rest nonce：頁面被快取超過 nonce 效期後，WP 會對帶著過期 nonce 的訪客回 403。
+			// 端點靠查單 token 驗證，不需要登入身分。
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify( body )
 		} ).then( function ( r ) {
 			return r.json();

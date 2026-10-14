@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.14.0
+Stable tag: 1.15.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,41 +136,26 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.15.0 - 2026-10-15 =
+Security
+* PayNow and TapPay payment notices are checked more strictly, so a payment can no longer be marked as paid from outside. The TapPay return page no longer reveals order links.
+* Storefront order lookup limits wrong phone-digit guesses per order, and messages are rate limited.
+* SmilePay store selection can no longer be changed by an outside link.
+* Deleting the plugin no longer removes data belonging to other plugins.
+* Moksa AI settings can only be changed by shop managers.
+
+Fixed
+* NewebPay ATM and convenience store codes are now saved and emailed; orders no longer get cancelled while waiting for payment. ECPay integrated payment and BNPL receive their payment details too.
+* ECPay convenience store codes stay valid for the days you set instead of a few minutes. ECPay test-dashboard "simulated payments" no longer mark live orders as paid.
+* Late failure notices from an earlier payment attempt no longer turn paid orders back to failed (PChomePay, Shopline, TapPay).
+* Shopline partial refunds after the first one are actually sent. NewebPay card refunds explain when the payment has not been captured yet.
+* Invoices: PayNow carriers and paper invoices, ezPay and Amego allowances, fees and refunds in invoice totals, ECPay re-issue after void, and scheduled invoices for cancelled orders.
+* PAYUNi status notices sent to the old notify address are accepted; the settings page shows the addresses to use.
+* Split shipments, status checks, bulk printing lists and number lookups find all the orders they should.
+* External AI over MCP is told plainly that change tools only preview the change.
+
 = 1.14.0 - 2026-10-15 =
-New
-* PAYUNi: card payments that have not been captured yet can be cancelled in full from the WooCommerce refund screen. Payment types PAYUNi cannot refund through the API now say so.
-
-Fixed
-* Orders paid with a payment method you later disabled can still be refunded through the provider from the order screen.
-* Shipping status follows the slowest parcel when an order is split by temperature, and no longer moves backwards. PAYUNi status notices for the first parcel of a split order were ignored.
-* PAYUNi bulk printing sent every order on the site instead of the selected ones, and now prints different shipping types and temperatures separately.
-* Cash on delivery is no longer offered when the order total is outside what the chosen carrier can collect; declared values are kept within the carrier limits. ECPay B2C no longer offers OK Mart pickup.
-* PAYUNi statuses 92 and 98 mean "processing" and no longer mark an order as shipped. A lowercase PAYUNi merchant ID no longer causes every payment notice to be ignored.
-* Phone numbers are checked on the block checkout for PAYUNi and NewebPay store pickup; NewebPay requires a 09 mobile number.
-* Block checkout now validates invoice fields and ECPay carriers; the classic checkout requires a company name for business invoices and no longer saves hidden invoice fields.
-* Virtual-only and overseas orders are no longer asked for a Taiwan district. With the country field hidden, the block checkout starts from Taiwan.
-* SmilePay: test mode now works, T-Cat statuses and exceptions are handled, and the payment details email is sent when the payment code is issued.
-* Emails show "Free!" for free store pickup instead of repeating the method name; the store-arrival email shows the store; the store-closed email no longer points to a page that does not exist.
-* Store cards no longer stay on screen after switching to local pickup, and the PAYUNi card no longer reloads on every click.
-* Smaller fixes to customer service lookups, invoice numbers, tracking numbers, labels and translations.
-
-= 1.13.0 - 2026-10-15 =
-New
-* Orders list: when an e-invoice provider is set to issue manually, paid orders without an invoice get an "Issue invoice" button in the invoice column.
-* Advanced settings: an option to hide "Downloads" from the customer's My Account menu.
-
-Fixed
-* PAYUNi ATM and convenience-store payment codes: the order is now put on hold when the code is issued, instead of staying "Pending payment" and being cancelled automatically while the code is still valid. A payment whose amount does not match the order total is put on hold for review.
-* PAYUNi: orders whose payment notice never arrived can now be looked up; a failed refund response no longer leaves a refund recorded in WooCommerce; an order returning to Processing no longer creates a second shipment.
-* NewebPay shipping status notices were never processed. SmilePay shipping status notices were always rejected; they are now verified with a per-order key.
-* SmilePay shipping now sends the cash-on-pickup and pickup-only codes defined by SmilePay. FamilyMart bulk (B2C) is reported as unavailable.
-* Cash on pickup now collects the full amount due, including fees and minus refunds. ECPay Chunghwa Post no longer accepts cash on delivery. PAYUNi mixed-temperature shipments keep the declared value within 30-20,000.
-* The shipping row in order details, My Account and emails showed only the method name and lost the shipping cost.
-* Payment codes are no longer shown on cancelled, failed or refunded orders, and no longer appear twice on the classic thank-you page.
-* ECPay and SmilePay: switching to another convenience store brand no longer reuses the store chosen for the previous one.
-* PAYUNi frozen 7-ELEVEN pickup opens the frozen store map. 7-ELEVEN tracking numbers include the verification code. PAYUNi status settings are no longer overwritten. NewebPay and SmilePay now send the shipping emails.
-
-Older entries are available in the plugin's repository.
+* PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
 

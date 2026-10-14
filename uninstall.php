@@ -19,43 +19,31 @@ global $wpdb;
  * prepare()'s %i identifier placeholder and every LIKE pattern through %s — nothing is interpolated.
  */
 
-// Remove all moksafowo_* options and transients (incl. legacy mo_* from pre-1.0 builds).
+// Only our own prefix. Short legacy prefixes (mo_, _mo_, _linepay_, payuni_payment_, woocommerce_payuni*)
+// are shared with other plugins — miniOrange uses mo_, the official LINE Pay / PAYUNi plugins use the rest —
+// and deleting them here wiped those plugins' settings and order data.
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	$wpdb->prepare(
 		'DELETE FROM %i WHERE option_name LIKE %s
-			OR option_name LIKE %s
-			OR option_name LIKE %s
-			OR option_name LIKE %s
 			OR option_name LIKE %s
 			OR option_name LIKE %s',
 		$wpdb->options,
 		$wpdb->esc_like( 'moksafowo_' ) . '%',
 		$wpdb->esc_like( '_transient_moksafowo_' ) . '%',
-		$wpdb->esc_like( '_transient_timeout_moksafowo_' ) . '%',
-		$wpdb->esc_like( 'mo_' ) . '%',
-		$wpdb->esc_like( '_transient_mo_' ) . '%',
-		$wpdb->esc_like( '_transient_timeout_mo_' ) . '%'
+		$wpdb->esc_like( '_transient_timeout_moksafowo_' ) . '%'
 	)
 );
 
-// Remove gateway settings stored under WC's own woocommerce_{gateway_id}_settings convention.
+// Remove gateway / shipping settings stored under WC's own woocommerce_{id}_settings convention.
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	$wpdb->prepare(
 		'DELETE FROM %i WHERE option_name LIKE %s
-			OR option_name LIKE %s
-			OR option_name LIKE %s
-			OR option_name = %s
-			OR option_name = %s
 			OR option_name LIKE %s',
 		$wpdb->options,
 		$wpdb->esc_like( 'woocommerce_moksafowo_' ) . '%' . $wpdb->esc_like( '_settings' ),
-		$wpdb->esc_like( 'woocommerce_moksafowo-' ) . '%' . $wpdb->esc_like( '_settings' ),
-		$wpdb->esc_like( 'woocommerce_mo_' ) . '%' . $wpdb->esc_like( '_settings' ),
-		'woocommerce_linepay-tw_settings',
-		'woocommerce_payuni_settings',
-		$wpdb->esc_like( 'woocommerce_payuni-' ) . '%' . $wpdb->esc_like( '_settings' )
+		$wpdb->esc_like( 'woocommerce_moksafowo-' ) . '%' . $wpdb->esc_like( '_settings' )
 	)
 );
 
@@ -79,26 +67,13 @@ foreach ( $moksafowo_fork_options as $moksafowo_opt ) {
 	delete_option( str_replace( 'Moksafowo_', 'Mo_', $moksafowo_opt ) ); // legacy
 }
 
-// Legacy payuni_* options from pre-1.0 builds.
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-$wpdb->query(
-	$wpdb->prepare(
-		'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s',
-		$wpdb->options,
-		$wpdb->esc_like( 'payuni_payment_' ) . '%',
-		$wpdb->esc_like( 'moksafowo_payuni_' ) . '%'
-	)
-);
-
 // Remove all plugin postmeta (legacy CPT orders).
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	$wpdb->prepare(
-		'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s OR meta_key LIKE %s',
+		'DELETE FROM %i WHERE meta_key LIKE %s',
 		$wpdb->postmeta,
-		$wpdb->esc_like( '_moksafowo_' ) . '%',
-		$wpdb->esc_like( '_mo_' ) . '%',
-		$wpdb->esc_like( '_linepay_' ) . '%'
+		$wpdb->esc_like( '_moksafowo_' ) . '%'
 	)
 );
 
@@ -110,11 +85,9 @@ if ( $moksafowo_hpos_meta_table === $moksafowo_table_exists ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$wpdb->query(
 		$wpdb->prepare(
-			'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s OR meta_key LIKE %s',
+			'DELETE FROM %i WHERE meta_key LIKE %s',
 			$moksafowo_hpos_meta_table,
-			$wpdb->esc_like( '_moksafowo_' ) . '%',
-			$wpdb->esc_like( '_mo_' ) . '%',
-			$wpdb->esc_like( '_linepay_' ) . '%'
+			$wpdb->esc_like( '_moksafowo_' ) . '%'
 		)
 	);
 }
@@ -123,10 +96,9 @@ if ( $moksafowo_hpos_meta_table === $moksafowo_table_exists ) {
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	$wpdb->prepare(
-		'DELETE FROM %i WHERE meta_key LIKE %s OR meta_key LIKE %s',
+		'DELETE FROM %i WHERE meta_key LIKE %s',
 		$wpdb->usermeta,
-		$wpdb->esc_like( 'moksafowo_' ) . '%',
-		$wpdb->esc_like( 'mo_' ) . '%'
+		$wpdb->esc_like( 'moksafowo_' ) . '%'
 	)
 );
 

@@ -128,6 +128,7 @@ final class Module extends AbstractGatewayModule {
 
 	protected function register_webhooks(): void {
 		add_action( 'woocommerce_api_moksafowo_newebpay_payment', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_newebpay_customer', [ Api\IpnHandler::class, 'handle_customer' ] );
 	}
 
 	protected function boot_extras(): void {

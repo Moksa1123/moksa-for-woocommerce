@@ -91,6 +91,7 @@ final class Helper extends AbstractCredentialHelper {
 				'limit'      => 1,
 				'return'     => 'ids',
 				'type'       => 'shop_order',
+				'status'     => 'all',
 				'meta_key'   => Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- one-off lookup per shipping notification.
 				'meta_value' => $merchant_order_no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
 			]

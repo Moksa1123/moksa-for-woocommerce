@@ -184,6 +184,90 @@ final class IpnHandler {
 		exit;
 	}
 
+	/**
+	 * CustomerURL：ATM／超商代碼／條碼／超商取貨付款取號後，藍新把顧客的瀏覽器 form post 回來（NDNF 4.2.3）。
+	 * 取號結果只會送到這裡，NotifyURL 只通知付款結果。這裡的 SUCCESS 是「取號成功」不是付款成功，
+	 * 所以只存繳費資訊並轉保留中，絕不標記已付款。
+	 */
+	public static function handle_customer(): void {
+		// Browser form post from NewebPay: no WP nonce possible. Authenticity verified via TradeSha (hash_equals)
+		// before decryption; the decoded payload is deep-sanitized right after.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above.
+		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeInfo'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above.
+		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
+
+		$decoded = ( '' !== $trade_info && Helper::verify_trade_sha( $trade_info, $trade_sha ) ) ? Helper::decrypt_trade_info( $trade_info ) : null;
+		if ( null === $decoded ) {
+			Helper::log( 'CustomerURL post missing or not verified' );
+			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+			exit;
+		}
+		$decoded = map_deep( $decoded, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+		Helper::log( 'CustomerURL decoded', [ 'data' => $decoded ] );
+
+		$status = (string) ( $decoded['Status'] ?? '' );
+		$result = isset( $decoded['Result'] ) ? (array) $decoded['Result'] : [];
+		$mtn    = (string) ( $result['MerchantOrderNo'] ?? '' );
+
+		$order_id = Helper::parse_order_id( $mtn );
+		if ( ! $order_id ) {
+			$order_id = Lookup::by_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO, $mtn );
+		}
+		$order = $order_id ? wc_get_order( $order_id ) : null;
+		if ( ! $order instanceof \WC_Order ) {
+			Helper::log( 'CustomerURL order not found', [ 'mtn' => $mtn ] );
+			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+			exit;
+		}
+
+		if ( 'SUCCESS' !== $status ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: status, 2: message */
+					__( 'NewebPay could not issue the payment details: %1$s (%2$s)', 'moksa-for-woocommerce' ),
+					$status,
+					(string) ( $decoded['Message'] ?? '' )
+				)
+			);
+			$order->save();
+			wp_safe_redirect( $order->get_checkout_payment_url() );
+			exit;
+		}
+
+		if ( ! $order->is_paid() ) {
+			$payment_type = (string) ( $result['PaymentType'] ?? '' );
+			$trade_no     = (string) ( $result['TradeNo'] ?? '' );
+			if ( '' !== $trade_no ) {
+				$order->update_meta_data( Keys::NEWEBPAY_TRADE_NO, $trade_no );
+				$order->set_transaction_id( $trade_no );
+			}
+			if ( '' !== $payment_type ) {
+				$order->update_meta_data( Keys::NEWEBPAY_PAYMENT_TYPE, $payment_type );
+			}
+			self::write_extra_meta( $order, $payment_type, $result );
+			self::maybe_write_shipping_store_meta( $order, $result );
+
+			$note = sprintf(
+				/* translators: 1: payment type, 2: status */
+				__( 'NewebPay issued the %1$s payment details and is waiting for the customer to pay (status %2$s)', 'moksa-for-woocommerce' ),
+				self::payment_type_label( $payment_type ),
+				$status
+			);
+			// 留在待付款會被 WC「保留庫存逾時」自動取消，顧客照代碼繳的卻是已取消的單。
+			if ( 'on-hold' !== $order->get_status() ) {
+				$order->update_status( 'on-hold', $note );
+			} else {
+				$order->add_order_note( $note );
+			}
+			$order->save();
+			\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		}
+
+		wp_safe_redirect( $order->get_checkout_order_received_url() );
+		exit;
+	}
+
 	private static function amount_matches( \WC_Order $order, int $amt ): bool {
 		$total = (float) $order->get_total();
 		return $amt === (int) ceil( $total ) || $amt === (int) floor( $total );

@@ -242,6 +242,19 @@ final class Issue {
 			$args['Amount'][]      = $shipping_fee;
 		}
 
+		// 費用項目（手續費等外掛加的 fee）；AllAmount 含它們，明細不列會驗算錯誤（-10066）。
+		foreach ( $order->get_items( [ 'fee' ] ) as $fee ) {
+			$fee_refunded    = (float) $order->get_total_refunded_for_item( $fee->get_id(), 'fee' );
+			$total_refunded -= $fee_refunded;
+			$fee_total       = (float) $fee->get_total() - $fee_refunded;
+			if ( 0.0 === $fee_total ) {
+				continue;
+			}
+			$args['Description'][] = mb_substr( str_replace( '|', '', (string) $fee->get_name() ), 0, 80 );
+			$args['Quantity'][]    = '1';
+			$args['Amount'][]      = $fee_total;
+		}
+
 		if ( 0.0 !== $total_refunded ) {
 			$args['Description'][] = __( 'Refund', 'moksa-for-woocommerce' );
 			$args['Quantity'][]    = '1';

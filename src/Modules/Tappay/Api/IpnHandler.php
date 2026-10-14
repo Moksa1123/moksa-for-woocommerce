@@ -48,8 +48,19 @@ final class IpnHandler {
 			exit;
 		}
 
-		self::write_transaction_meta( $order, $payload );
-		self::apply_status( $order, $payload );
+		// 已付款訂單收到另一筆嘗試的非成功通知：只留備註，不覆寫 rec_trade_id（退款要用付款成功那筆）。
+		if ( $order->is_paid() && 0 !== (int) ( $payload['status'] ?? -1 ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: TapPay status code */
+					__( 'TapPay sent a notice (status code %s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					(string) ( $payload['status'] ?? '-' )
+				)
+			);
+		} else {
+			self::write_transaction_meta( $order, $payload );
+			self::apply_status( $order, $payload );
+		}
 		$order->save();
 
 		status_header( 200 );
@@ -67,23 +78,50 @@ final class IpnHandler {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same as above.
 		$rec_trade_id = isset( $_GET['rec_trade_id'] ) ? sanitize_text_field( wp_unslash( $_GET['rec_trade_id'] ) ) : '';
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- result token, verified below with hash_equals.
+		$token = isset( $_GET['k'] ) ? sanitize_text_field( wp_unslash( $_GET['k'] ) ) : '';
+
 		$order = self::resolve_order( $order_number );
-		if ( ! $order instanceof \WC_Order ) {
-			Helper::log( '3DS result order not found', [ 'order_number' => $order_number ] );
+		if ( ! $order instanceof \WC_Order || ! hash_equals( Helper::result_token( $order ), $token ) ) {
+			// 驗證碼不符：不查詢、不導到含 order key 的網址。付款結果仍會由 notify 通知寫入。
+			Helper::log( '3DS result order not found or token invalid', [ 'order_number' => $order_number ] );
 			wp_safe_redirect( wc_get_checkout_url() );
 			exit;
 		}
 
-		if ( '' === $rec_trade_id ) {
-			$rec_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
+		// 網址上的 rec_trade_id 任何人都能改成自己另一筆成功交易的編號；訂單已存的優先。
+		$stored_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
+		if ( '' !== $stored_trade_id ) {
+			$rec_trade_id = $stored_trade_id;
+		}
+		$expected_number = (string) $order->get_meta( Keys::TAPPAY_ORDER_NUMBER );
+		if ( '' === $expected_number ) {
+			$expected_number = Helper::build_order_number( $order );
 		}
 
 		// Always server-query to confirm status; do not trust query-string params.
 		$query = '' !== $rec_trade_id
 			? Client::query_by_rec_trade_id( $rec_trade_id )
-			: Client::query_by_order_number( Helper::build_order_number( $order ) );
+			: Client::query_by_order_number( $expected_number );
 
 		$record = self::first_trade_record( $query['data'] );
+		// 查回來的交易必須是這張訂單的：商家訂單編號與金額都要對得上。
+		if ( null !== $record ) {
+			$record_number = (string) ( $record['order_number'] ?? '' );
+			$record_amount = isset( $record['amount'] ) ? (int) $record['amount'] : -1;
+			if ( $record_number !== $expected_number || $record_amount !== (int) round( (float) $order->get_total() ) ) {
+				Helper::log(
+					'3DS result record does not belong to this order — ignored',
+					[
+						'order_id'      => $order->get_id(),
+						'record_number' => $record_number,
+						'record_amount' => $record_amount,
+					]
+				);
+				$order->add_order_note( __( 'The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid.', 'moksa-for-woocommerce' ) );
+				$record = null;
+			}
+		}
 		Helper::log(
 			'3DS result query',
 			[
@@ -184,6 +222,10 @@ final class IpnHandler {
 		$paid = $has_status
 			? ( 0 === $status && ( null === $record_status || in_array( $record_status, [ 0, 4 ], true ) ) )
 			: ( 0 === $record_status );
+		// 已付款的訂單不會被晚到的等待驗證／失敗結果打回。
+		if ( ! $paid && $order->is_paid() ) {
+			return;
+		}
 		if ( $paid ) {
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( $rec_trade_id );

@@ -27,16 +27,19 @@ final class OrderNumberLookup {
 			return [];
 		}
 
-		// 純數字先精確比對訂單編號，命中即回，不混入模糊搜尋雜訊。
+		// 純數字先比對訂單編號放第一筆，但仍要搜號碼欄位：卡號末四碼、虛擬帳號、物流編號也是純數字，
+		// 命中訂單 ID 就直接回傳會把真正的那張單蓋掉。
+		$direct = [];
 		if ( ctype_digit( $term ) ) {
 			$order = wc_get_order( (int) $term );
 			if ( $order && 'shop_order' === $order->get_type() ) {
-				return [ self::format( $order, __( 'Order number', 'moksa-for-woocommerce' ) ) ];
+				$direct = [ self::format( $order, __( 'Order number', 'moksa-for-woocommerce' ) ) ];
 			}
 		}
 
-		if ( Table::is_ready() ) {
-			return self::resolve_via_index( $term, $limit );
+		// 回填進行中索引還不完整，改走一般搜尋。
+		if ( Table::is_ready() && empty( Index\Backfill::status()['running'] ) ) {
+			return self::merge( $direct, self::resolve_via_index( $term, $limit ), $limit );
 		}
 
 		$ids = wc_get_orders(
@@ -55,7 +58,26 @@ final class OrderNumberLookup {
 			}
 			$out[] = self::format( $order, SearchableKeys::matched_label( $order, $term ) );
 		}
-		return $out;
+		return self::merge( $direct, $out, $limit );
+	}
+
+	/**
+	 * 訂單 ID 命中的那筆放最前面，其餘去掉重複。
+	 *
+	 * @param array<int, array<string,mixed>> $direct 訂單 ID 命中結果。
+	 * @param array<int, array<string,mixed>> $found  號碼搜尋結果。
+	 * @param int                             $limit  最多幾筆。
+	 * @return array<int, array<string,mixed>>
+	 */
+	private static function merge( array $direct, array $found, int $limit ): array {
+		$ids = array_column( $direct, 'id' );
+		foreach ( $found as $row ) {
+			if ( ! in_array( $row['id'], $ids, true ) ) {
+				$direct[] = $row;
+				$ids[]    = $row['id'];
+			}
+		}
+		return array_slice( $direct, 0, max( 1, $limit ) );
 	}
 
 	/**

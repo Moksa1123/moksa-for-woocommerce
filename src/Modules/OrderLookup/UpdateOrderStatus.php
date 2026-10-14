@@ -33,7 +33,8 @@ final class UpdateOrderStatus {
 
 		$id    = absint( preg_replace( '/[^0-9]/', '', $ref ) );
 		$order = $id ? wc_get_order( $id ) : false;
-		if ( ! $order ) {
+		// 退款紀錄也是 wc_get_order 拿得到的物件，對它 update_status 會 fatal。
+		if ( ! $order instanceof \WC_Order || 'shop_order' !== $order->get_type() ) {
 			/* translators: %s: order reference the user gave */
 			return new \WP_Error( 'moksafowo_ai_no_order', sprintf( __( 'Order not found: %s.', 'moksa-for-woocommerce' ), $ref ) );
 		}
@@ -71,7 +72,7 @@ final class UpdateOrderStatus {
 		}
 
 		$order = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
-		if ( ! $order ) {
+		if ( ! $order instanceof \WC_Order || 'shop_order' !== $order->get_type() ) {
 			return new \WP_Error( 'moksafowo_ai_no_order', __( 'The order could not be found.', 'moksa-for-woocommerce' ) );
 		}
 

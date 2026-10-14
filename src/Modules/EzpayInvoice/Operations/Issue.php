@@ -231,6 +231,19 @@ final class Issue {
 			$args['ItemAmt'][]   = $shipping_fee;
 		}
 
+		// 費用項目（手續費等外掛加的 fee）；總額含它們，明細不列就對不上。
+		foreach ( $order->get_items( [ 'fee' ] ) as $fee ) {
+			$fee_refunded    = (float) $order->get_total_refunded_for_item( $fee->get_id(), 'fee' );
+			$total_refunded -= $fee_refunded;
+			$fee_total       = (float) $fee->get_total() - $fee_refunded;
+			if ( 0.0 === $fee_total ) {
+				continue;
+			}
+			$args['ItemName'][]  = mb_substr( str_replace( '|', '', (string) $fee->get_name() ), 0, 30 );
+			$args['ItemCount'][] = '1';
+			$args['ItemAmt'][]   = $fee_total;
+		}
+
 		// 額外退款（部分退款超過商品/運費的部份）
 		if ( 0.0 !== $total_refunded ) {
 			$args['ItemName'][]  = __( 'Refund', 'moksa-for-woocommerce' );

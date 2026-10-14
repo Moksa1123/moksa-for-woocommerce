@@ -80,7 +80,8 @@ final class Module extends AbstractModule {
 		if ( ! $order instanceof \WC_Order ) {
 			return;
 		}
-		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) ) {
+		// 已作廢的發票（例如自動作廢後訂單又恢復已付款）不擋重新開立。
+		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) && ! $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT ) ) {
 			return;
 		}
 		// Prevent double-issue: if another provider was selected at checkout, skip.
@@ -94,18 +95,21 @@ final class Module extends AbstractModule {
 
 		$delay_days = max( 0, min( 30, (int) get_option( 'moksafowo_ecpay_invoice_delay_days', 0 ) ) );
 
-		if ( $delay_days > 0 && $order->get_meta( Keys::ECPAY_INVOICE_SCHEDULED_AT ) ) {
-			return;
-		}
-
 		$run_at = time() + ( $delay_days * DAY_IN_SECONDS );
+		if ( $delay_days > 0 && $order->get_meta( Keys::ECPAY_INVOICE_SCHEDULED_AT ) ) {
+			// 排程早已建立卻已不在佇列（例如到期時外掛停用、排程被判失敗）：不再延一輪，直接補開。
+			if ( ! function_exists( 'as_next_scheduled_action' ) ) {
+				return;
+			}
+			$run_at = time();
+		}
 		if ( function_exists( 'as_schedule_single_action' ) ) {
 			as_schedule_single_action( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ], 'moksa-for-woocommerce' );
 		} else {
 			wp_schedule_single_event( $run_at, 'moksafowo_ecpay_invoice_deferred_issue', [ $order_id ] );
 		}
 
-		if ( $delay_days > 0 ) {
+		if ( $delay_days > 0 && ! $order->get_meta( Keys::ECPAY_INVOICE_SCHEDULED_AT ) ) {
 			$order->update_meta_data( Keys::ECPAY_INVOICE_SCHEDULED_AT, current_time( 'mysql' ) );
 			$order->add_order_note(
 				sprintf(
@@ -123,7 +127,7 @@ final class Module extends AbstractModule {
 		if ( ! $order instanceof \WC_Order ) {
 			return;
 		}
-		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) ) {
+		if ( $order->get_meta( Keys::ECPAY_INVOICE_NUMBER ) && ! $order->get_meta( Keys::ECPAY_INVOICE_INVALID_AT ) ) {
 			return;
 		}
 		if ( in_array( $order->get_status(), [ 'cancelled', 'refunded', 'failed' ], true ) ) {

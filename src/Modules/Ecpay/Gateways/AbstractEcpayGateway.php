@@ -166,6 +166,8 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			'TradeDesc'         => $item_name,
 			'ItemName'          => $item_name,
 			'ReturnURL'         => home_url( '/wc-api/moksafowo_ecpay_payment' ),
+			// 整合頁（ALL）讓顧客在綠界選 ATM／超商代碼，BNPL 建單後也會先通知；沒帶就收不到取號結果。
+			'PaymentInfoURL'    => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 			'ChoosePayment'     => $this->choose_payment(),
 			'EncryptType'       => 1,
 			'ClientBackURL'     => $order->get_checkout_order_received_url(),

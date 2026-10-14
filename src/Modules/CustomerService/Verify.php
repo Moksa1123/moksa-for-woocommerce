@@ -10,7 +10,8 @@ defined( 'ABSPATH' ) || exit;
  * 顧客身分二次驗證 —— 訂單編號 + 帳單電話末三碼。
  *
  * 敵意環境(未登入訪客)安全核心:
- * - 末三碼僅 1000 組 → 以「IP + 訂單號」雙鍵節流,達上限即鎖定。
+ * - 末三碼僅 1000 組 → 以「IP + 訂單號」雙鍵節流,達上限即鎖定;另有只看訂單的總上限,換 IP 也繞不過。
+ * - 同一張訂單的嘗試以資料庫鎖逐一處理,並發請求不會讀到同一個計數。
  * - 不論「訂單不存在 / 末三碼錯 / 已鎖定」一律回統一失敗(防 enumeration / oracle)。
  * - 驗證通過發短時效 token(transient,綁該訂單),後續查詢帶 token 免重驗。
  */
@@ -31,6 +32,13 @@ final class Verify {
 	 */
 	public static function max_ip_attempts(): int {
 		return max( self::max_attempts() * 4, 30 );
+	}
+
+	/**
+	 * 單一訂單在鎖定時段內的失敗總上限（不分 IP）。
+	 */
+	public static function max_order_attempts(): int {
+		return max( self::max_attempts() * 2, 10 );
 	}
 
 	/**
@@ -60,6 +68,15 @@ final class Verify {
 		$ok       = false;
 		$order_id = self::resolve_order_id( $order_ref );
 		if ( $order_id > 0 ) {
+			if ( ! self::lock( $order_id ) ) {
+				return $fail;
+			}
+			$order_bucket = self::order_bucket_key( $order_id );
+			$order_count  = (int) get_transient( $order_bucket );
+			if ( $order_count >= self::max_order_attempts() ) {
+				self::unlock( $order_id );
+				return $fail;
+			}
 			$order = wc_get_order( $order_id );
 			if ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() ) {
 				$phone = preg_replace( '/\D/', '', (string) $order->get_billing_phone() );
@@ -69,6 +86,10 @@ final class Verify {
 					$ok = true;
 				}
 			}
+			if ( ! $ok ) {
+				set_transient( $order_bucket, $order_count + 1, self::lockout_seconds() );
+			}
+			self::unlock( $order_id );
 		}
 
 		if ( ! $ok ) {
@@ -105,6 +126,40 @@ final class Verify {
 		}
 		$order = wc_get_order( $id );
 		return ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() ) ? $id : 0;
+	}
+
+	/**
+	 * 以訂單為單位的互斥鎖。INSERT IGNORE 在 option_name 唯一索引上是原子的；
+	 * add_option() 遇到重複會改成更新，不能拿來當鎖。超過 30 秒的鎖視為殘留，清掉後這次仍回失敗。
+	 */
+	private static function lock( int $order_id ): bool {
+		global $wpdb;
+		$name = self::lock_name( $order_id );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- atomic lock row; must bypass the options cache.
+		$got = $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (option_name, option_value, autoload) VALUES (%s, %s, %s)', $wpdb->options, $name, (string) time(), 'off' ) );
+		if ( 1 === $got ) {
+			return true;
+		}
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- reads the lock row written above.
+		$since = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name = %s', $wpdb->options, $name ) );
+		if ( $since > 0 && time() - $since > 30 ) {
+			self::unlock( $order_id );
+		}
+		return false;
+	}
+
+	private static function unlock( int $order_id ): void {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- releases the lock row written by lock().
+		$wpdb->delete( $wpdb->options, array( 'option_name' => self::lock_name( $order_id ) ) );
+	}
+
+	private static function lock_name( int $order_id ): string {
+		return 'moksafowo_cs_lock_' . $order_id;
+	}
+
+	private static function order_bucket_key( int $order_id ): string {
+		return 'moksafowo_cs_ordthr_' . $order_id;
 	}
 
 	private static function bucket_key( string $ip, string $ref ): string {

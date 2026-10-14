@@ -250,6 +250,10 @@ final class Server {
 		$meta  = (array) $ability->get_meta();
 		$ann   = isset( $meta['annotations'] ) && is_array( $meta['annotations'] ) ? $meta['annotations'] : array();
 		$input = $ability->get_input_schema();
+		$desc  = (string) $ability->get_description();
+		if ( ! empty( $ann['destructive'] ) ) {
+			$desc = __( 'Preview only: nothing is changed through this connection.', 'moksa-for-woocommerce' ) . ' ' . $desc;
+		}
 		$input = is_array( $input ) && ! empty( $input )
 			? self::for_client( $input )
 			: array(
@@ -259,7 +263,7 @@ final class Server {
 
 		$tool = array(
 			'name'        => self::tool_name( $name ),
-			'description' => (string) $ability->get_description(),
+			'description' => $desc,
 			'inputSchema' => $input,
 			'annotations' => array(
 				'title'           => (string) $ability->get_label(),
@@ -321,15 +325,29 @@ final class Server {
 		$wrap_key   = self::wrap_key( $ability->get_output_schema() );
 		$structured = null !== $wrap_key ? array( $wrap_key => $result ) : $result;
 
+		$content = array(
+			array(
+				'type' => 'text',
+				'text' => (string) wp_json_encode( $structured, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ),
+			),
+		);
+		// 破壞性 ability 的 execute 只做驗證＋描述（真正執行要在站內對話窗確認），MCP 沒有確認流程。
+		// 明講沒有變更，免得外部 AI 回報「已處理」。
+		$meta = (array) $ability->get_meta();
+		if ( ! empty( $meta['annotations']['destructive'] ) ) {
+			array_unshift(
+				$content,
+				array(
+					'type' => 'text',
+					'text' => __( 'Nothing was changed. Over MCP this tool only previews the change. To apply it, ask Moksa AI in the WordPress admin and confirm there.', 'moksa-for-woocommerce' ),
+				)
+			);
+		}
+
 		return self::rpc_result(
 			$id,
 			array(
-				'content'           => array(
-					array(
-						'type' => 'text',
-						'text' => (string) wp_json_encode( $structured, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ),
-					),
-				),
+				'content'           => $content,
 				'structuredContent' => $structured,
 				'isError'           => false,
 			)

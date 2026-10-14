@@ -48,6 +48,13 @@ class SettingsTab extends \WC_Settings_Page {
 				array(
 					'title' => __( 'General settings', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
+					// 貨態推播送到 PAYUNi 後台「物流設定」填的網址，不是建單時帶的網址；沒填對就收不到任何貨態。
+					'desc'  => sprintf(
+						/* translators: 1: 7-ELEVEN notify URL, 2: T-Cat notify URL */
+						__( 'Shipping status updates are sent to the notify URLs set in the PAYUNi merchant dashboard (Logistics settings), not to the URL sent with each shipment. Paste these there — 7-ELEVEN: %1$s — T-Cat: %2$s', 'moksa-for-woocommerce' ),
+						'<code>' . esc_html( WC()->api_request_url( 'moksafowo_payuni_shipping_711_notify' ) ) . '</code>',
+						'<code>' . esc_html( WC()->api_request_url( 'moksafowo_payuni_shipping_tcat_notify' ) ) . '</code>'
+					),
 					'id'    => 'shipping_general_setting',
 				),
 				array(

@@ -80,6 +80,8 @@ final class StatusReconciler {
 	 *   add_filter( 'moksafowo_shipping_reconcilers', fn( $r ) => $r + [ 'ecpay' => [ Foo::class, 'reconcile' ] ] );
 	 *
 	 * callable 簽章：( \WC_Order $order ): bool —— 有送出查詢就回 true。
+	 * 同時要把「有這個 meta 就代表建過物流單」的 key 掛進 moksafowo_shipping_reconcile_meta_keys，
+	 * 候選池只撈有這些 key 的訂單。
 	 *
 	 * @return array<string,callable>
 	 */
@@ -113,20 +115,32 @@ final class StatusReconciler {
 		}
 
 		$cutoff = time() - ( self::min_hours() * HOUR_IN_SECONDS );
-		$ids    = wc_get_orders(
-			[
-				'limit'         => self::POOL,
-				'type'          => 'shop_order',
-				'status'        => self::STUCK_STATUSES,
-				'orderby'       => 'modified',
-				'order'         => 'ASC',
-				// 一定要傳 Unix timestamp：傳 'Y-m-d H:i:s' 字串時 WC 會用網站時區解讀，
-				// 而這裡算的是 UTC，台灣站等於門檻被往前推 8 小時（6 小時變 14 小時）。
-				'date_modified' => '<' . $cutoff,
-				'date_created'  => '>' . ( time() - self::MAX_AGE_DAYS * DAY_IN_SECONDS ),
-				'return'        => 'ids',
-			]
-		);
+		$query  = [
+			'limit'         => self::POOL,
+			'type'          => 'shop_order',
+			'status'        => self::STUCK_STATUSES,
+			'orderby'       => 'modified',
+			'order'         => 'ASC',
+			// 一定要傳 Unix timestamp：傳 'Y-m-d H:i:s' 字串時 WC 會用網站時區解讀，
+			// 而這裡算的是 UTC，台灣站等於門檻被往前推 8 小時（6 小時變 14 小時）。
+			'date_modified' => '<' . $cutoff,
+			'date_created'  => '>' . ( time() - self::MAX_AGE_DAYS * DAY_IN_SECONDS ),
+			'return'        => 'ids',
+		];
+		// 只撈有物流單的訂單。沒出貨、或用其他物流的處理中訂單修改時間最舊，不排除的話
+		// 會長期佔滿候選池，真正卡住的已出貨單永遠輪不到。
+		$meta_keys = array_values( array_filter( (array) apply_filters( 'moksafowo_shipping_reconcile_meta_keys', [] ), 'is_string' ) );
+		if ( ! empty( $meta_keys ) ) {
+			$meta_query = [ 'relation' => 'OR' ];
+			foreach ( $meta_keys as $key ) {
+				$meta_query[] = [
+					'key'     => $key,
+					'compare' => 'EXISTS',
+				];
+			}
+			$query['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- hourly cron, bounded by POOL.
+		}
+		$ids = wc_get_orders( $query );
 		if ( empty( $ids ) ) {
 			return;
 		}
@@ -148,10 +162,12 @@ final class StatusReconciler {
 			if ( ! $order instanceof \WC_Order ) {
 				continue;
 			}
+			$handled = false;
 			foreach ( $reconcilers as $slug => $cb ) {
 				try {
 					if ( $cb( $order ) ) {
 						++$checked;
+						$handled = true;
 						set_transient( self::THROTTLE_PREFIX . $id, time(), $throttle );
 						break;
 					}
@@ -168,6 +184,10 @@ final class StatusReconciler {
 						]
 					);
 				}
+			}
+			// 沒有任何補查器接手的單也記節流，下一輪才會輪到後面的訂單。
+			if ( ! $handled ) {
+				set_transient( self::THROTTLE_PREFIX . $id, time(), $throttle );
 			}
 		}
 

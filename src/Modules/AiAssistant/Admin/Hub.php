@@ -112,25 +112,32 @@ final class Hub {
 			return;
 		}
 		Schema::maybe_install();
-		if ( isset( $_POST['moksafowo_ai_hub_save'] ) ) {
+		// 店員（edit_shop_orders）只處理客服訊息；MCP、破壞性工具、前台提示詞與防暴力參數只有店長能改。
+		$can_manage = current_user_can( 'manage_woocommerce' );
+		if ( $can_manage && isset( $_POST['moksafowo_ai_hub_save'] ) ) {
 			check_admin_referer( 'moksafowo_ai_hub_save' );
 			\WC_Admin_Settings::save_fields( self::fields() );
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'moksa-for-woocommerce' ) . '</p></div>';
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 唯讀的 tab 切換,無狀態變更。
-		$tab    = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'settings';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'settings';
+		if ( ! $can_manage ) {
+			$tab = 'inbox';
+		}
 		$unread = Threads::count_unread();
 		$base   = admin_url( 'admin.php?page=' . self::PAGE );
 
 		echo '<div class="wrap woocommerce moksafowo-ai-wrap"><h1>' . esc_html( Config::NAME ) . '</h1>';
 		echo '<h2 class="nav-tab-wrapper">';
-		printf(
-			'<a href="%s" class="nav-tab %s">%s</a>',
-			esc_url( $base . '&tab=settings' ),
-			'inbox' === $tab ? '' : 'nav-tab-active',
-			esc_html__( 'Settings', 'moksa-for-woocommerce' )
-		);
+		if ( $can_manage ) {
+			printf(
+				'<a href="%s" class="nav-tab %s">%s</a>',
+				esc_url( $base . '&tab=settings' ),
+				'inbox' === $tab ? '' : 'nav-tab-active',
+				esc_html__( 'Settings', 'moksa-for-woocommerce' )
+			);
+		}
 		printf(
 			'<a href="%s" class="nav-tab %s">%s%s</a>',
 			esc_url( $base . '&tab=inbox' ),
@@ -185,7 +192,7 @@ final class Hub {
 		echo '<li>' . wp_kses_post( __( 'Base64-encode “username:application password” with the spaces removed, and send it as an <code>Authorization: Basic &lt;base64&gt;</code> header.', 'moksa-for-woocommerce' ) ) . '</li>';
 		echo '<li>' . esc_html__( 'Enter that endpoint and header in the MCP client and the tools will be listed.', 'moksa-for-woocommerce' ) . '</li>';
 		echo '</ol>';
-		echo '<p class="moksafowo-ai-card-d" style="margin-top:8px;">' . wp_kses_post( __( 'Only <strong>read-only</strong> tools are exposed by default: order lookups, reports and a settings summary. To let an external AI change orders or issue invoices, turn on “Allow external AI to make changes” above — and every change still has to be confirmed in the admin.', 'moksa-for-woocommerce' ) ) . '</p>';
+		echo '<p class="moksafowo-ai-card-d" style="margin-top:8px;">' . wp_kses_post( __( 'Only <strong>read-only</strong> tools are exposed by default: order lookups, reports and a settings summary. Turning on “Allow external AI to make changes” above also lists tools such as changing an order status or issuing an invoice, but over MCP they only preview the change — nothing is applied. To make the change, ask Moksa AI in the admin and confirm it there.', 'moksa-for-woocommerce' ) ) . '</p>';
 		echo '</div>';
 	}
 
@@ -240,7 +247,7 @@ final class Hub {
 				'id'      => 'moksafowo_ai_mcp_expose_destructive',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( 'External AI can only read by default. Turn this on to allow actions such as changing an order status or issuing an invoice — and each one still has to be confirmed in the admin before it runs.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'External AI can only read by default. Turn this on to also list actions such as changing an order status or issuing an invoice. Over MCP these only preview the change; to apply it, ask Moksa AI in the admin and confirm there.', 'moksa-for-woocommerce' ),
 			),
 			array(
 				'type' => 'sectionend',

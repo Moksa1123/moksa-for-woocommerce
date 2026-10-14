@@ -139,6 +139,13 @@ final class Helper extends AbstractCredentialHelper {
 		return preg_replace( '/[^A-Za-z0-9_\-]/', '', $base ) ?? (string) $order->get_id();
 	}
 
+	/**
+	 * 3DS 回跳網址上的驗證碼：只有拿到這張訂單付款網址的人才知道，防止拿任意單號換到含 order key 的網址。
+	 */
+	public static function result_token( \WC_Order $order ): string {
+		return substr( hash_hmac( 'sha256', 'tappay-result|' . $order->get_id(), wp_salt( 'auth' ) . $order->get_order_key() ), 0, 24 );
+	}
+
 	public static function parse_order_id( string $order_number ): ?int {
 		if ( ! preg_match( '/^[#]?(\d+)/', $order_number, $m ) ) {
 			return null;
