@@ -29,12 +29,13 @@ final class Tcat extends AbstractHomeShippingMethod {
 		return 'TCAT';
 	}
 
-	public static function payzg_for_temp( int $temp ): string {
-		return match ( $temp ) {
-			ProductTemp::REFRIGERATED => '79',
-			ProductTemp::FROZEN       => '80',
-			default                   => '78',
-		};
+	/**
+	 * 速買配黑貓的 Pay_zg 只分「代收（81）／不代收（82）」，Pay_subzg 固定 TCAT；
+	 * 常溫／冷藏／冷凍靠 temperature 參數，不靠 Pay_zg。$temp 保留給呼叫端紀錄用。
+	 */
+	public static function payzg_for_temp( int $temp, bool $is_cod = false ): string {
+		unset( $temp );
+		return $is_cod ? '81' : '82';
 	}
 
 	public function supported_temperatures(): array {

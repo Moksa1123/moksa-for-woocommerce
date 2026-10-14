@@ -162,6 +162,14 @@ class StoreSelector {
 		return $value;
 	}
 
+	/**
+	 * 門市地圖的溫層：冷凍方式要列出收冷凍的門市（ship_map GoodsType 2），
+	 * 用常溫地圖可能選到不收冷凍的店，之後建冷凍物流單才被拒。
+	 */
+	private static function map_goods_type( string $method_id ): string {
+		return str_contains( $method_id, '_frozen' ) ? '2' : '1';
+	}
+
 	public static function strip_na_customer_prop( $value ) {
 		return 'N/A' === $value ? '' : $value;
 	}
@@ -285,7 +293,7 @@ JS
 			'MerID'        => Credentials::merchant_id(),
 			'Timestamp'    => time(),
 			'MerKeyNo'     => '1234567890',
-			'GoodsType'    => '1', // 1常溫, 2冷凍
+			'GoodsType'    => self::map_goods_type( $method_id ),
 			'LgsType'      => LgsType::get_lgs_type_by_shipping_method( $method_id ),
 			'ShipType'     => '1', // 1=Seven
 			'MapType'      => '2',
@@ -343,7 +351,7 @@ JS
 			'MerID'        => Credentials::merchant_id(),
 			'Timestamp'    => time(),
 			'MerKeyNo'     => '1234567890',
-			'GoodsType'    => '1',
+			'GoodsType'    => self::map_goods_type( $method_id ),
 			'LgsType'      => LgsType::get_lgs_type_by_shipping_method( $method_id ),
 			'ShipType'     => '1',
 			'MapType'      => '2',

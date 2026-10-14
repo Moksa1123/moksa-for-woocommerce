@@ -129,9 +129,9 @@ final class BatchPrint {
 		$is_b2c = 'B2C' === Helper::cvs_service_type();
 		switch ( $method_id ) {
 			case 'moksafowo_smilepay_shipping_cvs_711':
-				return $is_b2c ? 'SE2' : '71';
+				return '7NET';
 			case 'moksafowo_smilepay_shipping_cvs_fami':
-				return $is_b2c ? 'FM2' : '72';
+				return $is_b2c ? '' : 'FAMI';
 		}
 		return '';
 	}

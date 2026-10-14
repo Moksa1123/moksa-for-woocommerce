@@ -343,13 +343,34 @@ final class StoreSelector {
 		wp_send_json_success( $store );
 	}
 
+	private static function bare_method_id( string $method_id ): string {
+		return str_contains( $method_id, ':' ) ? (string) strstr( $method_id, ':', true ) : $method_id;
+	}
+
+	/**
+	 * 門市是在哪個運送方式下選的。換成別家超商（7-11 → 全家）時舊門市不能沿用，
+	 * 否則 7-11 的門市代號會被寫進全家的訂單、拿去建單。
+	 */
+	private static function store_matches( array $store, string $method_id ): bool {
+		$picked = self::bare_method_id( (string) ( $store['method_id'] ?? '' ) );
+		return '' === $picked || self::bare_method_id( $method_id ) === $picked;
+	}
+
+	private static function chosen_method_id(): string {
+		$chosen = WC()->session ? (array) WC()->session->get( 'chosen_shipping_methods', [] ) : [];
+		return (string) ( $chosen[0] ?? '' );
+	}
+
 	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */
 	public static function session_store_id(): string {
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			return '';
 		}
 		$store = WC()->session->get( self::SESSION_KEY );
-		return is_array( $store ) ? (string) ( $store['id'] ?? '' ) : '';
+		if ( ! is_array( $store ) || ! self::store_matches( $store, self::chosen_method_id() ) ) {
+			return '';
+		}
+		return (string) ( $store['id'] ?? '' );
 	}
 
 	public static function ajax_get_store(): void {
@@ -357,8 +378,9 @@ final class StoreSelector {
 		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
 			wp_send_json_error( [ 'message' => 'no session' ] );
 		}
-		$store = WC()->session->get( self::SESSION_KEY );
-		if ( ! is_array( $store ) || empty( $store['id'] ) ) {
+		$store  = WC()->session->get( self::SESSION_KEY );
+		$method = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : self::chosen_method_id();
+		if ( ! is_array( $store ) || empty( $store['id'] ) || ! self::store_matches( $store, $method ) ) {
 			wp_send_json_error( [ 'message' => 'no store' ] );
 		}
 		wp_send_json_success( $store );
@@ -379,7 +401,7 @@ final class StoreSelector {
 			if ( isset( Module::method_map()[ $mid ] ) ) {
 				$cls = Module::method_map()[ $mid ];
 				if ( is_subclass_of( $cls, \Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod::class ) ) {
-					$is_ecpay_cvs = true;
+					$is_ecpay_cvs = self::store_matches( $store, (string) $mid );
 					break;
 				}
 			}

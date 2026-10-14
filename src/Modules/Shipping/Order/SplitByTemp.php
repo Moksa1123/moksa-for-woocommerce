@@ -62,7 +62,7 @@ final class SplitByTemp {
 				$p['amount']      += $fee;
 			}
 			unset( $p );
-			return $packages;
+			return self::reconcile_with_order_total( $order, $packages );
 		}
 
 		// 整單運費塞給第一包（COD 第一張代收）
@@ -70,6 +70,24 @@ final class SplitByTemp {
 		if ( $shipping_fee > 0 ) {
 			$packages[0]['amount']      += $shipping_fee;
 			$packages[0]['shipping_fee'] = $shipping_fee;
+		}
+		return self::reconcile_with_order_total( $order, $packages );
+	}
+
+	/**
+	 * 各包金額加總要等於顧客實際應付（訂單總額扣掉已退款）。只加商品與運費會漏掉
+	 * 費用項目（貨到付款手續費、負數折抵）、逐行四捨五入的誤差，以及出貨前的部分退款；
+	 * 取貨付款時門市就會少收或多收。差額併進第一包（已含整單運費、代收主單）。
+	 *
+	 * @param array<int,array<string,mixed>> $packages 各溫層包裹。
+	 * @return array<int,array<string,mixed>>
+	 */
+	private static function reconcile_with_order_total( \WC_Order $order, array $packages ): array {
+		$target = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );
+		$sum    = (int) array_sum( array_column( $packages, 'amount' ) );
+		$diff   = $target - $sum;
+		if ( 0 !== $diff && $target > 0 ) {
+			$packages[0]['amount'] = max( 0, (int) $packages[0]['amount'] + $diff );
 		}
 		return $packages;
 	}

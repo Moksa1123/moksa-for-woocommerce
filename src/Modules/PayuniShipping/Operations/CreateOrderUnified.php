@@ -42,6 +42,17 @@ final class CreateOrderUnified {
 	}
 
 
+	/**
+	 * 預付訂單的 TradeAmt 只是報值，PAYUNi 只收 30~20000（SHIP02025／HOME01035），夾在範圍內；
+	 * 取貨付款是門市實收金額，原樣送出（超出範圍時讓 PAYUNi 回錯，不能改金額）。
+	 */
+	private static function trade_amt( \WC_Order $order, int $amount ): int {
+		if ( 'cod' === (string) $order->get_payment_method() ) {
+			return max( 1, $amount );
+		}
+		return min( 20000, max( 30, $amount ) );
+	}
+
 	public static function run( \WC_Order $order ): array {
 		$method = self::detect_method( $order );
 		if ( null === $method ) {
@@ -278,7 +289,7 @@ final class CreateOrderUnified {
 			'GoodsType'       => $goods_type,
 			'LgsType'         => $lgs_type,
 			'ShipType'        => $ship_type,
-			'TradeAmt'        => max( 1, (int) $pkg['amount'] ),
+			'TradeAmt'        => self::trade_amt( $order, (int) round( (float) $pkg['amount'] ) ),
 			'ServiceType'     => ( 'cod' === (string) $order->get_payment_method() ) ? '1' : '3',
 			'Consignee'       => mb_substr( $consignee_name, 0, 10 ),
 			'ConsigneeMail'   => $order->get_billing_email(),

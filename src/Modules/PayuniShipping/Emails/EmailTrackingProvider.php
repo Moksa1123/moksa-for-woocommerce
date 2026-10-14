@@ -27,6 +27,7 @@ final class EmailTrackingProvider {
 				[
 					'ship_type' => (string) $order->get_meta( OrderMeta::ShipType ),
 					'odno'      => (string) $order->get_meta( OrderMeta::Odno ),
+					'ship_no'   => (string) $order->get_meta( OrderMeta::ShipNo ),
 					'temp'      => '0',
 				],
 			];

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.11.2\n"
+"Project-Id-Version: Moksa for WooCommerce 1.12.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T16:34:25+00:00\n"
+"POT-Creation-Date: 2026-10-14T15:55:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -230,20 +230,21 @@ msgstr ""
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:149
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:224
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:146
-#: src/Modules/NewebpayShipping/Module.php:171
-#: src/Modules/NewebpayShipping/Module.php:215
+#: src/Modules/NewebpayShipping/Module.php:147
+#: src/Modules/NewebpayShipping/Module.php:172
+#: src/Modules/NewebpayShipping/Module.php:216
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:72
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:377
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:266
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:346
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:397
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:476
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:552
+#: src/Modules/Shared/Invoice/OrderListColumn.php:103
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:262
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:342
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:393
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:472
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:548
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:33
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -255,18 +256,18 @@ msgid "The tool failed to run. Please try again later."
 msgstr ""
 
 #: src/Modules/Address/BlockField.php:150
-#: src/Modules/Address/BlockField.php:166
+#: src/Modules/Address/BlockField.php:165
 msgid "Please select a district for home delivery orders."
 msgstr ""
 
-#: src/Modules/Address/BlockField.php:245
+#: src/Modules/Address/BlockField.php:257
 msgid "District"
 msgstr ""
 
-#: src/Modules/Address/BlockField.php:251
-#: src/Modules/Address/BlockField.php:328
-#: src/Modules/Address/TwAddress.php:213
-#: src/Modules/Address/TwAddress.php:262
+#: src/Modules/Address/BlockField.php:263
+#: src/Modules/Address/BlockField.php:372
+#: src/Modules/Address/TwAddress.php:212
+#: src/Modules/Address/TwAddress.php:261
 msgid "Select…"
 msgstr ""
 
@@ -2441,8 +2442,8 @@ msgstr ""
 
 #: src/Modules/AiAssistant/Module.php:103
 #: src/Modules/CustomerService/Module.php:98
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:411
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:466
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:412
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:467
 msgid "Send"
 msgstr ""
 
@@ -2496,7 +2497,7 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:116
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:178
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:185
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:205
 msgid "Cancel"
 msgstr ""
 
@@ -2567,7 +2568,7 @@ msgstr ""
 #: src/Modules/PaynowInvoice/Module.php:40
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:72
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:98
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:88
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:91
 #: src/Modules/Shared/Admin/CardRenderers.php:331
 #: src/Modules/Shared/Admin/CardRenderers.php:396
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:239
@@ -2592,8 +2593,8 @@ msgstr ""
 #: src/Modules/PaynowInvoice/Module.php:41
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:79
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:99
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:90
-#: src/Modules/Payuni/Gateways/GatewayBase.php:115
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:93
+#: src/Modules/Payuni/Gateways/GatewayBase.php:144
 #: src/Modules/Shared/Admin/CardRenderers.php:332
 #: src/Modules/Shared/Admin/CardRenderers.php:397
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:240
@@ -3072,7 +3073,7 @@ msgstr ""
 #: src/Modules/OrderLookup/Ability.php:840
 #: src/Modules/OrderLookup/Ability.php:1307
 #: src/Modules/OrderLookup/OrderNumberLookup.php:34
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:70
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:84
 msgid "Order number"
 msgstr ""
 
@@ -3083,8 +3084,8 @@ msgstr ""
 #: src/Modules/CustomerService/Module.php:80
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:105
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:286
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:122
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:118
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:136
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:171
 msgid "Look up"
 msgstr ""
@@ -3099,7 +3100,7 @@ msgid "Look up another order"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:83
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:244
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:240
 msgid "Close"
 msgstr ""
 
@@ -3112,7 +3113,7 @@ msgid "Unpaid"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:86
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:203
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:199
 #: src/Modules/Shipping/Statuses/Registrar.php:153
 msgid "Order status"
 msgstr ""
@@ -3146,10 +3147,10 @@ msgstr ""
 #: src/Modules/Pchomepay/Module.php:32
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:15
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
-#: src/Modules/Shared/Email/PersonalizationTags.php:78
+#: src/Modules/Shared/Email/PersonalizationTags.php:98
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:580
+#: src/Settings/SettingsPage.php:597
 msgid "ATM virtual account"
 msgstr ""
 
@@ -3159,15 +3160,15 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
-#: src/Modules/Shared/Email/PersonalizationTags.php:79
-#: src/Settings/SettingsPage.php:587
+#: src/Modules/Shared/Email/PersonalizationTags.php:99
+#: src/Settings/SettingsPage.php:604
 msgid "Convenience store payment code"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:91
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:61
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:66
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:202
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:198
 msgid "Shipping method"
 msgstr ""
 
@@ -3178,9 +3179,9 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
-#: src/Modules/Shared/Email/PersonalizationTags.php:54
+#: src/Modules/Shared/Email/PersonalizationTags.php:55
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:559
+#: src/Settings/SettingsPage.php:576
 msgid "Tracking number"
 msgstr ""
 
@@ -3596,7 +3597,7 @@ msgstr ""
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:36
 #: src/Modules/Payuni/Gateways/Atm.php:54
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:34
-#: src/Modules/Shared/Email/PersonalizationTags.php:77
+#: src/Modules/Shared/Email/PersonalizationTags.php:97
 #: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:35
 msgid "Bank code"
 msgstr ""
@@ -3667,6 +3668,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
 #: src/Modules/Shared/Admin/PaymentQuery.php:77
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:382
+#: src/Modules/Shared/Invoice/OrderListColumn.php:108
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
 msgid "The order could not be found."
 msgstr ""
@@ -4439,8 +4441,8 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:323
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
 #: src/Modules/OrderLookup/InvoiceOps.php:84
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:94
-#: src/Modules/Payuni/Gateways/GatewayBase.php:119
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:97
+#: src/Modules/Payuni/Gateways/GatewayBase.php:148
 #: src/Modules/Shared/Admin/CardRenderers.php:324
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:232
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:37
@@ -4537,6 +4539,7 @@ msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:147
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
+#: src/Modules/Shared/Invoice/OrderListColumn.php:158
 msgid "Issue invoice"
 msgstr ""
 
@@ -4547,7 +4550,7 @@ msgid "Individual"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:157
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:96
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:99
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:231
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:137
 msgid "Company"
@@ -4570,6 +4573,7 @@ msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:187
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:267
+#: src/Modules/Shared/Invoice/OrderListColumn.php:72
 msgid "Issuing…"
 msgstr ""
 
@@ -4767,12 +4771,12 @@ msgid "Allowance"
 msgstr ""
 
 #. translators: %d: delay days
-#: src/Modules/EcpayInvoice/Module.php:111
+#: src/Modules/EcpayInvoice/Module.php:113
 #, php-format
 msgid "The ECPay invoice is scheduled to be issued in %d days."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Module.php:128
+#: src/Modules/EcpayInvoice/Module.php:130
 msgid "The scheduled ECPay invoice was cancelled because the order was cancelled, refunded or failed."
 msgstr ""
 
@@ -4858,27 +4862,27 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:154
 #: src/Modules/OrderLookup/SearchableKeys.php:256
 #: src/Modules/PaynowInvoice/Operations/Query.php:51
-#: src/Modules/Payuni/Admin/OrderList.php:35
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
-#: src/Modules/Payuni/Gateways/GatewayBase.php:97
-#: src/Modules/Shared/Email/PersonalizationTags.php:56
-#: src/Settings/SettingsPage.php:552
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:75
+#: src/Modules/Payuni/Gateways/GatewayBase.php:126
+#: src/Modules/Shared/Email/PersonalizationTags.php:78
+#: src/Modules/Shared/Invoice/OrderListColumn.php:124
+#: src/Settings/SettingsPage.php:569
 msgid "Invoice number"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:67
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
 #: src/Modules/PaynowInvoice/Operations/Query.php:54
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:74
-#: src/Modules/Payuni/Gateways/GatewayBase.php:99
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:77
+#: src/Modules/Payuni/Gateways/GatewayBase.php:128
 msgid "Issued at"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:68
 #: src/Modules/EzpayInvoice/Operations/Query.php:75
 #: src/Modules/PaynowInvoice/Operations/Query.php:53
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:73
-#: src/Modules/Payuni/Gateways/GatewayBase.php:98
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:76
+#: src/Modules/Payuni/Gateways/GatewayBase.php:127
 msgid "Invoice amount"
 msgstr ""
 
@@ -5011,7 +5015,7 @@ msgid "No"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:215
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:222
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:201
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:122
 msgid "Shipping number:"
 msgstr ""
@@ -5111,13 +5115,13 @@ msgid "Recreate shipment"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:310
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:131
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:106
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:72
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:76
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:33
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:74
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:78
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:34
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:75
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:79
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:212
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:85
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:147
@@ -5271,78 +5275,79 @@ msgstr ""
 msgid "ECPay shipping status looked up: status code %s"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:148
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:87
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:109
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:81
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/moksa-cvs-arrived.php:35
 #: templates/emails/plain/moksa-cvs-arrived.php:21
 msgid "Pickup store"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:170
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:149
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:156
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:131
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:201
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:132
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:197
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:117
 msgid "Recipient"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:178
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:139
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:157
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:140
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:125
 msgid "Delivery address"
 msgstr ""
 
 #. translators: %d: package count
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:191
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:152
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:170
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:153
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:138
 #, php-format
 msgid "This order is split into %d shipments by temperature zone"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:210
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:189
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:102
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:169
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:170
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:62
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:67
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:156
 msgid "Shipping ID"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:245
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:224
 #: src/Modules/EcpayShipping/Methods/Cvs711.php:15
 msgid "ECPay — 7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:246
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:225
 #: src/Modules/EcpayShipping/Methods/CvsFamily.php:14
 msgid "ECPay — FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:247
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:226
 #: src/Modules/EcpayShipping/Methods/CvsHilife.php:14
 msgid "ECPay — Hi-Life pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:248
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:227
 #: src/Modules/EcpayShipping/Methods/CvsOkmart.php:14
 msgid "ECPay — OK Mart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:249
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:228
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:14
 msgid "ECPay — T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:250
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:229
 #: src/Modules/EcpayShipping/Methods/HomePost.php:14
 msgid "ECPay — Chunghwa Post"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:252
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:231
 #: src/Modules/EcpayShipping/Module.php:25
 #: src/Modules/OrderLookup/ChannelOps.php:63
 #: src/Settings/SettingsPage.php:128
@@ -5351,29 +5356,28 @@ msgid "ECPay shipping"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:89
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:80
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:82
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Choose a pickup store"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:90
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:81
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:825
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:218
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:853
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "Change store"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:257
 msgid "No store chosen yet"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:92
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:86
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:101
 #: templates/emails/moksa-cvs-arrived.php:38
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
@@ -5390,7 +5394,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:128
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:187
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:130
 msgid "This shipping method does not need a store."
 msgstr ""
 
@@ -5414,7 +5418,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:59
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:35
 #: src/Modules/Shipping/Temp/ProductTemp.php:104
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:42
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:36
 msgid "Ambient"
 msgstr ""
@@ -5426,7 +5430,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Providers/SevenEleven/C2CUnified.php:59
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:61
 #: src/Modules/Shipping/Temp/ProductTemp.php:103
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:44
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:45
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:36
 msgid "Frozen"
 msgstr ""
@@ -5444,7 +5448,7 @@ msgid "ECPay FamilyMart pickup."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/CvsFamily.php:24
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:101
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:103
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:108
 #: src/Modules/SmilepayShipping/Methods/CvsFami.php:24
 msgid "FamilyMart"
@@ -5455,7 +5459,7 @@ msgid "ECPay Hi-Life pickup."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/CvsHilife.php:24
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:102
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:104
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:109
 msgid "Hi-Life"
 msgstr ""
@@ -5480,14 +5484,14 @@ msgstr ""
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:34
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:60
 #: src/Modules/Shipping/Temp/ProductTemp.php:102
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:43
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:44
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:36
 msgid "Chilled"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:41
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:67
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:50
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:51
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:41
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:41
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:41
@@ -5496,7 +5500,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:42
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:68
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:51
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:52
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:42
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:42
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:42
@@ -5505,7 +5509,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:43
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:69
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:52
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:53
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:43
@@ -5520,43 +5524,43 @@ msgstr ""
 msgid "7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and post office delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:82
+#: src/Modules/EcpayShipping/Module.php:83
 msgid "ECPay convenience store pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:98
+#: src/Modules/EcpayShipping/Module.php:99
 msgid "ECPay 7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:99
+#: src/Modules/EcpayShipping/Module.php:100
 msgid "ECPay 7-ELEVEN B2C frozen"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:100
+#: src/Modules/EcpayShipping/Module.php:101
 msgid "ECPay FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:101
+#: src/Modules/EcpayShipping/Module.php:102
 msgid "ECPay Hi-Life pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:102
+#: src/Modules/EcpayShipping/Module.php:103
 msgid "ECPay OK Mart pickup"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:103
+#: src/Modules/EcpayShipping/Module.php:104
 msgid "ECPay T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:104
+#: src/Modules/EcpayShipping/Module.php:105
 msgid "ECPay Chunghwa Post"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:156
+#: src/Modules/EcpayShipping/Module.php:157
 msgid "ECPay convenience store labels"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Module.php:170
+#: src/Modules/EcpayShipping/Module.php:171
 msgid "ECPay home delivery labels"
 msgstr ""
 
@@ -5569,81 +5573,85 @@ msgid "Unsupported shipping type."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:51
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:70
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:92
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:81
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:97
 msgid "The order has no items to create a shipment from."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:60
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:60
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:157
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:71
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:158
 msgid "No pickup store has been chosen yet."
 msgstr ""
 
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:70
+msgid "Chunghwa Post cannot collect cash on delivery. Change the payment method or the shipping method before creating the shipment."
+msgstr ""
+
 #. translators: 1: temp label, 2: c2c|b2c
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:94
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:101
 #, php-format
 msgid "The %1$s zone (%2$s merchant account) has no credentials set."
 msgstr ""
 
 #. translators: 1: temp label, 2: error message
 #. translators: 1: temp label, 2: msg
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:133
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:98
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:140
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:109
 #, php-format
 msgid "The %1$s shipment could not be created: %2$s"
 msgstr ""
 
 #. translators: 1: temp label, 2: msg, 3: code
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:153
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:171
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:160
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:178
 #, php-format
 msgid "The %1$s shipment could not be created: %2$s (status code %3$s)"
 msgstr ""
 
 #. translators: %s: 溫層列表
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:200
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:207
 #, php-format
 msgid "The shipments for this order already exist (%s), so nothing was booked again. To rebuild them all, delete the existing records first."
 msgstr ""
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:207
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:214
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:66
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:124
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:166
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:135
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:171
 msgid "Could not create the shipment"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:208
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:215
 msgid "None of the ECPay shipments could be created:"
 msgstr ""
 
 #. translators: 1: count, 2: list of records
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:251
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:258
 #, php-format
 msgid "ECPay shipments created, split into %1$d parcels by temperature zone: %2$s"
 msgstr ""
 
 #. translators: 1: logistics id, 2: rtn_msg
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:261
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:268
 #, php-format
 msgid "ECPay shipment created — shipping ID %1$s (%2$s)"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:269
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:184
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:223
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:276
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:195
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:228
 msgid "Some temperature zones could not be created:"
 msgstr ""
 
 #. translators: %s: 溫層列表
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:276
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:283
 #, php-format
 msgid "Zones that already had shipments were skipped to avoid booking twice: %s"
 msgstr ""
 
 #. translators: %s: AllPayLogisticsID
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:458
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:465
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. ECPay is not notified."
 msgstr ""
@@ -5954,14 +5962,15 @@ msgid "ezPay could not be reached."
 msgstr ""
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:60
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
-#: src/Modules/Payuni/Gateways/GatewayBase.php:129
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:107
+#: src/Modules/Payuni/Gateways/GatewayBase.php:158
 msgid "Issued"
 msgstr ""
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:61
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
-#: src/Modules/Payuni/Gateways/GatewayBase.php:133
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:111
+#: src/Modules/Payuni/Gateways/GatewayBase.php:162
+#: src/Modules/Shared/Invoice/OrderListColumn.php:169
 msgid "Voided"
 msgstr ""
 
@@ -5978,8 +5987,8 @@ msgstr ""
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:73
 #: src/Modules/PaynowInvoice/Operations/Query.php:52
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
-#: src/Modules/Payuni/Gateways/GatewayBase.php:137
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
+#: src/Modules/Payuni/Gateways/GatewayBase.php:166
 msgid "Issuing status"
 msgstr ""
 
@@ -6426,9 +6435,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:151
-#: src/Modules/NewebpayShipping/Module.php:176
-#: src/Modules/NewebpayShipping/Module.php:220
+#: src/Modules/NewebpayShipping/Module.php:152
+#: src/Modules/NewebpayShipping/Module.php:177
+#: src/Modules/NewebpayShipping/Module.php:221
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6824,32 +6833,32 @@ msgstr ""
 msgid "Only the ticked payment methods appear at checkout. This has no effect in combined display mode. AFTEE, UnionPay and the cross-border methods also have to be activated in the NewebPay dashboard before they show up."
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:93
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:101
 msgid "NewebPay shipping status update"
 msgstr ""
 
 #. translators: %s: shipping tracking number
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:96
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:104
 #, php-format
 msgid "Tracking number %s"
 msgstr ""
 
 #. translators: %s: shipping status label
 #. translators: %s: shipping status code
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:100
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:103
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:108
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:111
 #, php-format
 msgid "Status %s"
 msgstr ""
 
 #. translators: %s: convenience store name
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:107
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:115
 #, php-format
 msgid "Store %s"
 msgstr ""
 
 #. translators: 1: from, 2: to, 3: retld
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:118
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:126
 #, php-format
 msgid "NewebPay shipping moved the order from %1$s to %2$s (Retld=%3$s)"
 msgstr ""
@@ -6859,36 +6868,36 @@ msgid "NewebPay shipping returned an unexpected format"
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:77
-#: src/Modules/NewebpayShipping/Module.php:72
-#: src/Modules/NewebpayShipping/Module.php:93
+#: src/Modules/NewebpayShipping/Module.php:73
+#: src/Modules/NewebpayShipping/Module.php:94
 msgid "NewebPay convenience store pickup"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:82
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
 msgid "Choose a convenience store:"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:829
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:85
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:857
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
 msgid "No pickup store chosen yet"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:85
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:87
 msgid "The NewebPay store picker could not be opened. Please try again later."
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:100
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:102
 msgid "7-ELEVEN"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:103
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:105
 msgid "OK mart"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:153
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:207
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:155
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:209
 msgid "This is not a NewebPay shipping method."
 msgstr ""
 
@@ -6918,46 +6927,46 @@ msgstr ""
 msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:130
+#: src/Modules/NewebpayShipping/Module.php:131
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr ""
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:159
+#: src/Modules/NewebpayShipping/Module.php:160
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:180
+#: src/Modules/NewebpayShipping/Module.php:181
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:185
+#: src/Modules/NewebpayShipping/Module.php:186
 #, php-format
 msgid "The lookup failed: %s"
 msgstr ""
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:195
+#: src/Modules/NewebpayShipping/Module.php:196
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr ""
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:205
+#: src/Modules/NewebpayShipping/Module.php:206
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Module.php:224
+#: src/Modules/NewebpayShipping/Module.php:225
 msgid "No shipment has been created for this order yet."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:229
+#: src/Modules/NewebpayShipping/Module.php:230
 #, php-format
 msgid "Tracking failed: %s"
 msgstr ""
@@ -7008,7 +7017,7 @@ msgstr ""
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:15
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:20
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:375
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:376
 msgid "Shipment created"
 msgstr ""
 
@@ -7031,7 +7040,7 @@ msgid "Arrived at the store, waiting for pickup"
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:45
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:115
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:126
 msgid "Collected by the customer"
 msgstr ""
 
@@ -7108,7 +7117,7 @@ msgid "When ticked, everything runs against the test environment and nothing is 
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:26
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:76
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:90
 msgid "Shipping type"
 msgstr ""
 
@@ -7764,7 +7773,7 @@ msgstr ""
 #: src/Modules/OrderLookup/ChannelOps.php:43
 #: src/Modules/OrderLookup/PaymentMethodOps.php:26
 #: src/Modules/OrderLookup/ShipmentOps.php:31
-#: src/Modules/Payuni/Gateways/GatewayBase.php:152
+#: src/Modules/Payuni/Gateways/GatewayBase.php:181
 #: src/Modules/Payuni/Gateways/Unified.php:58
 #: src/Modules/Payuni/Module.php:27
 #: src/Modules/Payuni/Settings/SettingsTab.php:23
@@ -7811,7 +7820,7 @@ msgid "Shopline Payments"
 msgstr ""
 
 #: src/Modules/OrderLookup/ChannelOps.php:71
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:211
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:212
 #: src/Modules/PayuniShipping/Module.php:26
 #: src/Settings/SettingsPage.php:202
 #: src/Settings/SettingsPage.php:203
@@ -8078,7 +8087,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr ""
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:536
+#: src/Settings/SettingsPage.php:553
 msgid "Order number lookup"
 msgstr ""
 
@@ -8237,7 +8246,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:566
+#: src/Settings/SettingsPage.php:583
 msgid "Payment transaction ID"
 msgstr ""
 
@@ -8246,7 +8255,7 @@ msgstr ""
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:573
+#: src/Settings/SettingsPage.php:590
 msgid "Tax ID"
 msgstr ""
 
@@ -8259,13 +8268,13 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:594
+#: src/Settings/SettingsPage.php:611
 msgid "Last four card digits"
 msgstr ""
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:601
+#: src/Settings/SettingsPage.php:618
 msgid "T-Cat tracking number"
 msgstr ""
 
@@ -8774,52 +8783,50 @@ msgstr ""
 msgid "Live member password (mem_password)"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderList.php:47
-msgid "Not issued"
-msgstr ""
-
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:78
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
 msgid "Issue"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:80
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 msgid "Void"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:82
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:85
 msgid "Unknown type"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:84
-#: src/Modules/Payuni/Gateways/GatewayBase.php:109
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:87
+#: src/Modules/Payuni/Gateways/GatewayBase.php:138
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:86
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:186
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:428
 msgid "Invoice type"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:92
-#: src/Modules/Payuni/Gateways/GatewayBase.php:117
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Payuni/Gateways/GatewayBase.php:146
 msgid "Amego member"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:98
-#: src/Modules/Payuni/Gateways/GatewayBase.php:123
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:101
+#: src/Modules/Payuni/Gateways/GatewayBase.php:152
 msgid "Unknown carrier"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:100
-#: src/Modules/Payuni/Gateways/GatewayBase.php:125
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:103
+#: src/Modules/Payuni/Gateways/GatewayBase.php:154
 msgid "Carrier details"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
-#: src/Modules/Payuni/Gateways/GatewayBase.php:131
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
+#: src/Modules/Payuni/Gateways/GatewayBase.php:160
+#: src/Modules/Shared/Invoice/OrderListColumn.php:112
+#: src/Modules/Shared/Invoice/OrderListColumn.php:120
 msgid "Issuing failed"
 msgstr ""
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
-#: src/Modules/Payuni/Gateways/GatewayBase.php:135
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:113
+#: src/Modules/Payuni/Gateways/GatewayBase.php:164
 msgid "Unknown status"
 msgstr ""
 
@@ -8864,29 +8871,29 @@ msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr ""
 
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:247
+#: src/Modules/Payuni/Api/PaymentRequest.php:252
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr ""
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:251
+#: src/Modules/Payuni/Api/PaymentRequest.php:256
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:311
+#: src/Modules/Payuni/Api/PaymentRequest.php:325
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr ""
 
 #. translators: %s: 查詢結果
-#: src/Modules/Payuni/Api/PaymentRequest.php:333
+#: src/Modules/Payuni/Api/PaymentRequest.php:347
 #, php-format
 msgid "The PAYUNi order lookup succeeded: %s"
 msgstr ""
 
 #. translators: %s: 查詢結果
-#: src/Modules/Payuni/Api/PaymentRequest.php:340
+#: src/Modules/Payuni/Api/PaymentRequest.php:354
 #, php-format
 msgid "The PAYUNi order lookup failed: %s"
 msgstr ""
@@ -8925,6 +8932,16 @@ msgstr ""
 
 #: src/Modules/Payuni/Api/PaymentResponse.php:135
 msgid "PAYUNi Return"
+msgstr ""
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Payuni/Api/PaymentResponse.php:240
+#, php-format
+msgid "PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentResponse.php:251
+msgid "PAYUNi issued the payment details and is waiting for the customer to pay."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Aftee.php:19
@@ -9139,8 +9156,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:793
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:812
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
 msgid "Convenience store"
 msgstr ""
 
@@ -9148,48 +9165,48 @@ msgstr ""
 msgid "Pay with PAYUNi"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:60
+#: src/Modules/Payuni/Gateways/GatewayBase.php:87
 msgid "PAYUNi payment details"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:64
+#: src/Modules/Payuni/Gateways/GatewayBase.php:90
 msgid "The payment details are not available yet. Please refresh the page in a moment."
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:95
+#: src/Modules/Payuni/Gateways/GatewayBase.php:124
 msgid "E-invoice details"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:103
+#: src/Modules/Payuni/Gateways/GatewayBase.php:132
 msgctxt "Issue Type"
 msgid "Issue"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:105
+#: src/Modules/Payuni/Gateways/GatewayBase.php:134
 msgctxt "Issue Type"
 msgid "Void"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:107
+#: src/Modules/Payuni/Gateways/GatewayBase.php:136
 msgctxt "Issue Type"
 msgid "Unknown type"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:113
+#: src/Modules/Payuni/Gateways/GatewayBase.php:142
 msgid "Mobile carrier"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:121
+#: src/Modules/Payuni/Gateways/GatewayBase.php:150
 msgid "Business"
 msgstr ""
 
 #. translators: 1: Payment method title 2: PAYUNi URL
-#: src/Modules/Payuni/Gateways/GatewayBase.php:147
+#: src/Modules/Payuni/Gateways/GatewayBase.php:176
 #, php-format
 msgid "%1$s payments are provided by %2$s"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:190
+#: src/Modules/Payuni/Gateways/GatewayBase.php:219
 msgid "We have received your order, but the payment is not complete yet."
 msgstr ""
 
@@ -9477,7 +9494,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr ""
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:80
-#: src/Modules/Shared/Email/PersonalizationTags.php:47
+#: src/Modules/Shared/Email/PersonalizationTags.php:48
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:180
 msgid "E-invoice"
 msgstr ""
@@ -9620,7 +9637,7 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:57
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:63
-#: src/Modules/PayuniShipping/PayuniShipping.php:361
+#: src/Modules/PayuniShipping/PayuniShipping.php:371
 msgid "Shipping Phone"
 msgstr ""
 
@@ -9636,55 +9653,55 @@ msgstr ""
 msgid "Shipping transaction ID"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:73
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:87
 msgid "Verification code"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:77
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:91
 msgid "Delivery method"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:78
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:92
 msgid "Product type"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:84
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:98
 msgid "Parcel size"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:95
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:109
 msgid "Service type"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:98
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:112
 msgid "Amount to collect"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:101
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:115
 msgid "Shipping status"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:102
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
 msgid "Status description"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:103
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:117
 msgid "Status updated"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:106
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:120
 msgid "Printed at"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:110
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:124
 msgid "Download label"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:112
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:126
 msgid "Print label"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:118
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:132
 msgid "Shipment actions"
 msgstr ""
 
@@ -9693,102 +9710,102 @@ msgid "The PAYUNi shipping type is not set"
 msgstr ""
 
 #. translators: 1: PAYUNi status code, 2: error message
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:128
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:129
 #, php-format
 msgid "PAYUNi could not create the shipment: %1$s (%2$s)"
 msgstr ""
 
 #. translators: %s: PAYUNi ship trade number
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:152
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:153
 #, php-format
 msgid "PAYUNi shipment created, tracking number %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:156
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:576
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:157
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:577
 msgid "PAYUNi could not create the shipment:"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:166
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:247
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:314
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:484
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:167
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:248
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:315
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:485
 msgid "Permission denied."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:172
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:253
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:173
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:254
 msgid "Invalid security token sent."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:179
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:260
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:320
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:491
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:180
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:261
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:321
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:492
 msgid "Missing Ajax Parameter."
 msgstr ""
 
 #. translators: 1: status, 2: lgs status code, 3: description
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:205
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:206
 #, php-format
 msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:269
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:270
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:320
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:353
 msgid "Order not found."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:282
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:283
 msgid "Invalid package spec for this goods type."
 msgstr ""
 
 #. translators: %s: package spec label (e.g. 60cm / 90cm)
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:299
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:300
 #, php-format
 msgid "The parcel size is now %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:303
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:304
 msgid "Package spec updated successfully."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:317
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:487
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:318
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:488
 msgid "Invalid security token."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:333
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:334
 msgid "Unsupported shipping service."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:348
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:349
 msgid "No such Orders"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:403
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:458
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:404
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:459
 msgid "Sending the print request…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:499
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:500
 msgid "Unsupported Ship Type"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:508
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:509
 msgid "Cant find Order."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:540
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:541
 msgid "Download shipping label"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:541
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:542
 msgid "Downloading the PAYUNi shipping label…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:611
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:612
 msgid "The PAYUNi shipment lookup failed:"
 msgstr ""
 
@@ -9840,55 +9857,55 @@ msgctxt "Shipping Note"
 msgid "Message: "
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:181
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:182
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:159
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:194
 msgid "Carrier shipment number:"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:200
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:201
 msgid "PAYUNi — T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:201
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:202
 #: src/Modules/PayuniShipping/Providers/TCat/HDNormal.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDNormal.php:26
 msgid "PAYUNi — T-Cat home delivery (ambient)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:202
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:203
 #: src/Modules/PayuniShipping/Providers/TCat/HDRefrigerated.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDRefrigerated.php:26
 msgid "PAYUNi — T-Cat home delivery (chilled)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:203
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:204
 #: src/Modules/PayuniShipping/Providers/TCat/HDFrozen.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDFrozen.php:26
 msgid "PAYUNi — T-Cat home delivery (frozen)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:204
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:205
 msgid "PAYUNi — 7-ELEVEN C2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:205
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:206
 msgid "PAYUNi — 7-ELEVEN B2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:206
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:207
 msgid "PAYUNi — 7-ELEVEN C2C ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:207
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:208
 msgid "PAYUNi — 7-ELEVEN C2C frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:208
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:209
 msgid "PAYUNi — 7-ELEVEN B2C ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:209
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:210
 msgid "PAYUNi — 7-ELEVEN B2C frozen"
 msgstr ""
 
@@ -9900,82 +9917,82 @@ msgstr ""
 msgid "The shipment could not be cancelled."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:227
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:230
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:830
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:217
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:255
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:258
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:858
 msgid "Choose a store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:220
 msgid "Open the store map"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:221
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:206
 msgid "Loading…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:194
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:232
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:222
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:260
 msgid "Loading failed. Please try again later"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:195
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:223
 msgid "Store chosen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:196
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:224
 msgid "Store number:"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:231
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:259
 msgid "Redirecting…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:275
 msgid "The cart is empty or the session has expired."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:252
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:280
 msgid "The chosen shipping method does not match the cart."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:308
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:284
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:336
 msgid "Please choose a convenience store pickup method"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:430
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:437
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:458
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:465
 msgid "Returning to checkout…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:459
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr ""
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:462
 #, php-format
 msgid "Store chosen: %s"
 msgstr ""
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:436
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:464
 #, php-format
 msgid "Store address: %s"
 msgstr ""
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:819
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:847
 #, php-format
 msgid "Store number: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:849
 msgid "Outlying islands"
 msgstr ""
 
@@ -10025,28 +10042,28 @@ msgstr ""
 msgid "T-Cat frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:50
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:61
 msgid "This is not a PAYUNi unified method order."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:125
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:136
 msgid "None of the PAYUNi shipments could be created:"
 msgstr ""
 
 #. translators: 1: count, 2: list
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:165
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:176
 #, php-format
 msgid "PAYUNi created the T-Cat shipments, split into %1$d parcels by temperature zone: %2$s"
 msgstr ""
 
 #. translators: 1: temp label, 2: PAYUNi ship trade no, 3: pickup no
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:175
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:186
 #, php-format
 msgid "PAYUNi created the T-Cat home delivery shipment — %1$s (shipping ID %2$s, pickup number %3$s)"
 msgstr ""
 
 #. translators: %s: PAYUNi shipment trade number
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:247
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:258
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. PAYUNi is not notified."
 msgstr ""
@@ -10066,63 +10083,63 @@ msgstr ""
 msgid "PAYUNi shipment created, number %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:188
+#: src/Modules/PayuniShipping/PayuniShipping.php:198
 msgid "PAYUNi convenience store pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:210
+#: src/Modules/PayuniShipping/PayuniShipping.php:220
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:221
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:212
+#: src/Modules/PayuniShipping/PayuniShipping.php:222
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:213
+#: src/Modules/PayuniShipping/PayuniShipping.php:223
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:214
+#: src/Modules/PayuniShipping/PayuniShipping.php:224
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:215
+#: src/Modules/PayuniShipping/PayuniShipping.php:225
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:218
+#: src/Modules/PayuniShipping/PayuniShipping.php:228
 msgid "PAYUNi T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:219
+#: src/Modules/PayuniShipping/PayuniShipping.php:229
 msgid "PAYUNi T-Cat ambient"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:220
+#: src/Modules/PayuniShipping/PayuniShipping.php:230
 msgid "PAYUNi T-Cat frozen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:221
+#: src/Modules/PayuniShipping/PayuniShipping.php:231
 msgid "PAYUNi T-Cat chilled"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:263
+#: src/Modules/PayuniShipping/PayuniShipping.php:273
 msgid "PAYUNi convenience store labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:281
+#: src/Modules/PayuniShipping/PayuniShipping.php:291
 msgid "PAYUNi home delivery labels"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:615
+#: src/Modules/PayuniShipping/PayuniShipping.php:625
 msgid "General Settings"
 msgstr ""
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:616
+#: src/Modules/PayuniShipping/PayuniShipping.php:626
 msgid "Shipping Settings"
 msgstr ""
 
@@ -10655,7 +10672,7 @@ msgid "Arrived at the drop-off store"
 msgstr ""
 
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:28
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:121
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:132
 msgid "Arrived at the return store"
 msgstr ""
 
@@ -10876,8 +10893,8 @@ msgstr ""
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:284
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:107
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:115
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:251
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:325
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:252
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:326
 msgid "Shipping method:"
 msgstr ""
 
@@ -10936,50 +10953,50 @@ msgstr ""
 msgid "Please pay before the deadline:"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:45
+#: src/Modules/Shared/Email/PersonalizationTags.php:46
 msgid "Shipping and pickup"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:46
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
+#: src/Modules/Shared/Email/PersonalizationTags.php:47
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:94
 msgid "Payment details"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:51
+#: src/Modules/Shared/Email/PersonalizationTags.php:52
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
 msgid "Pickup store name"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:52
+#: src/Modules/Shared/Email/PersonalizationTags.php:53
 msgid "Pickup store ID"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:53
+#: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
 msgid "Pickup store address"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:55
+#: src/Modules/Shared/Email/PersonalizationTags.php:56
 msgid "Shipping provider"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:80
+#: src/Modules/Shared/Email/PersonalizationTags.php:100
 msgid "Barcode segment 1"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:81
+#: src/Modules/Shared/Email/PersonalizationTags.php:101
 msgid "Barcode segment 2"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:82
+#: src/Modules/Shared/Email/PersonalizationTags.php:102
 msgid "Barcode segment 3"
 msgstr ""
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:83
+#: src/Modules/Shared/Email/PersonalizationTags.php:103
 msgid "Payment deadline"
 msgstr ""
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:95
 msgid "Please use the details below to pay before the deadline."
 msgstr ""
 
@@ -11133,120 +11150,120 @@ msgstr ""
 msgid "You do not have permission to do this"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:199
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:195
 msgid "Bulk print"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:200
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:196
 msgid "Orders"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:204
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:200
 msgid "Printable"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:205
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:201
 msgid "There are no printable orders."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:206
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:202
 msgid "Select at least one."
 msgstr ""
 
 #. translators: %d: number of selected orders to print
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:208
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:204
 #, php-format
 msgid "Print (%d)"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:211
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:207
 msgid "Loading failed."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:212
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:208
 msgid "✓"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:213
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
 msgid "—"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:214
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:249
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:245
 msgid "Paper:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:215
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:251
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:211
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:247
 msgid "A4 standard"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:216
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:252
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:212
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:248
 msgid "A6 label printer"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:271
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:351
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:267
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:347
 msgid "That shipping module could not be found."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:356
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:352
 msgid "Select at least one order."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:362
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:358
 msgid "There is nothing to print."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:404
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:400
 msgid "No order was specified."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:437
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:433
 msgid "The selected orders have no printable shipping labels — the shipments may not have been created yet."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:466
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:462
 msgid "Print shipping labels (carrier detected automatically)"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:538
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:534
 msgid "None of the selected orders has a printable label for this carrier, so all of them were skipped."
 msgstr ""
 
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:541
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:545
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:549
 msgid "The print link has expired. Please try again."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:557
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:553
 msgid "There is nothing to print, or the link has expired."
 msgstr ""
 
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:570
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:574
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:578
 msgid "Bulk print shipping labels"
 msgstr ""
 
 #. translators: 1: number of labels produced, 2: number of skipped orders
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:581
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:577
 #, php-format
 msgid "%1$d labels generated; %2$d orders skipped because they use another carrier."
 msgstr ""
 
 #. translators: %d: number of labels produced
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:584
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:580
 #, php-format
 msgid "%d labels generated."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:588
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:584
 msgid "Click the buttons below to open each label — this stops the browser from blocking pop-ups:"
 msgstr ""
 
 #. translators: %d: label sequence number
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:591
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:587
 #, php-format
 msgid "Print label %d"
 msgstr ""
@@ -11288,7 +11305,7 @@ msgstr ""
 
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:314
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:347
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:148
 msgid "You are not allowed to edit orders."
 msgstr ""
 
@@ -11333,63 +11350,63 @@ msgid "Shipment number:"
 msgstr ""
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:209
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:287
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:353
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:288
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:354
 msgid "Shipping status:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:255
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:256
 msgid "No NewebPay shipping details yet. The customer can pick a store at checkout, or you can create the shipment yourself."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:259
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:260
 msgid "NewebPay shipping ID:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:271
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:331
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:272
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:332
 msgid "Shipping type:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:274
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:334
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:275
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:335
 msgid "Pickup store:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:284
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:344
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:285
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:345
 msgid "Store address:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:292
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:293
 msgid "Create NewebPay shipment"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:295
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:296
 msgid "Check current status"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:296
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:297
 msgid "Shipment tracking"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:328
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:329
 msgid "SmilePay serial number:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:347
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:348
 msgid "Pickup code:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:350
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:351
 msgid "T-Cat waybill number:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:367
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:368
 msgid "No SmilePay shipment has been created yet."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:373
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:374
 msgid "Create SmilePay shipment"
 msgstr ""
 
@@ -11646,19 +11663,19 @@ msgid "Processing"
 msgstr ""
 
 #: src/Modules/Shipping/Statuses/Registrar.php:68
-#: src/Modules/Shipping/Statuses/Registrar.php:213
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:111
+#: src/Modules/Shipping/Statuses/Registrar.php:222
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:122
 #: src/Settings/SettingsPage.php:396
 msgid "Shipped"
 msgstr ""
 
 #: src/Modules/Shipping/Statuses/Registrar.php:70
-#: src/Modules/Shipping/Statuses/Registrar.php:217
+#: src/Modules/Shipping/Statuses/Registrar.php:226
 msgid "Store closed"
 msgstr ""
 
 #: src/Modules/Shipping/Statuses/Registrar.php:71
-#: src/Modules/Shipping/Statuses/Registrar.php:219
+#: src/Modules/Shipping/Statuses/Registrar.php:228
 msgid "Not collected"
 msgstr ""
 
@@ -11686,12 +11703,12 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: src/Modules/Shipping/Statuses/Registrar.php:215
+#: src/Modules/Shipping/Statuses/Registrar.php:224
 msgid "Arrived at store"
 msgstr ""
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:233
+#: src/Modules/Shipping/Statuses/Registrar.php:242
 #, php-format
 msgid "Arrived at store <span class=\"count\">(%s)</span>"
 msgid_plural "Arrived at store <span class=\"count\">(%s)</span>"
@@ -11699,7 +11716,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:236
+#: src/Modules/Shipping/Statuses/Registrar.php:245
 #, php-format
 msgid "Store closed <span class=\"count\">(%s)</span>"
 msgid_plural "Store closed <span class=\"count\">(%s)</span>"
@@ -11707,7 +11724,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:239
+#: src/Modules/Shipping/Statuses/Registrar.php:248
 #, php-format
 msgid "Not collected <span class=\"count\">(%s)</span>"
 msgid_plural "Not collected <span class=\"count\">(%s)</span>"
@@ -11715,7 +11732,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:243
+#: src/Modules/Shipping/Statuses/Registrar.php:252
 #, php-format
 msgid "Shipped <span class=\"count\">(%s)</span>"
 msgid_plural "Shipped <span class=\"count\">(%s)</span>"
@@ -11723,7 +11740,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: order status label
-#: src/Modules/Shipping/Statuses/Registrar.php:331
+#: src/Modules/Shipping/Statuses/Registrar.php:340
 #, php-format
 msgid "Change status to: %s"
 msgstr ""
@@ -11770,28 +11787,28 @@ msgstr ""
 msgid "Empty or Inherit means the parent product setting is used."
 msgstr ""
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:190
+#: src/Modules/Shipping/Tracking/TrackingLink.php:217
 msgid "Copy tracking number"
 msgstr ""
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:191
+#: src/Modules/Shipping/Tracking/TrackingLink.php:218
 msgid "Copy"
 msgstr ""
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:201
+#: src/Modules/Shipping/Tracking/TrackingLink.php:228
 #, php-format
 msgid "Track %s shipment"
 msgstr ""
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:204
+#: src/Modules/Shipping/Tracking/TrackingLink.php:231
 #, php-format
 msgid "Open %s tracking"
 msgstr ""
 
 #. translators: 1: provider label, 2: description, 3: code
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:36
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:34
 #, php-format
 msgid "%1$s shipping status: %2$s (status code %3$s)"
 msgstr ""
@@ -12401,30 +12418,30 @@ msgid "SmilePay shipment created (smseid=%1$s, number=%2$s)"
 msgstr ""
 
 #. translators: %s: SmilePay status label
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:80
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:88
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:87
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:99
 #, php-format
 msgid "SmilePay shipping status: %s"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:113
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:124
 msgid "Arrived at the store"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:119
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:130
 msgid "Returned by the customer"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:123
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:134
 msgid "Return collected"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:125
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:136
 msgid "Return arrived at the distribution center"
 msgstr ""
 
 #. translators: %d: SmilePay status code
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:128
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:139
 #, php-format
 msgid "Status code %d"
 msgstr ""
@@ -12503,128 +12520,132 @@ msgstr ""
 msgid "7-ELEVEN and FamilyMart pickup, plus T-Cat ambient, chilled and frozen"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:68
+#: src/Modules/SmilepayShipping/Module.php:69
 msgid "SmilePay convenience store pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:112
+#: src/Modules/SmilepayShipping/Module.php:113
 msgid "SmilePay 7-ELEVEN pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:113
+#: src/Modules/SmilepayShipping/Module.php:114
 msgid "SmilePay FamilyMart pickup"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:132
+#: src/Modules/SmilepayShipping/Module.php:133
 msgid "SmilePay convenience store labels"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:144
+#: src/Modules/SmilepayShipping/Module.php:145
 msgid "SmilePay T-Cat home delivery"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:145
+#: src/Modules/SmilepayShipping/Module.php:146
 msgid "SmilePay T-Cat ambient"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:146
+#: src/Modules/SmilepayShipping/Module.php:147
 msgid "SmilePay T-Cat chilled"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:147
+#: src/Modules/SmilepayShipping/Module.php:148
 msgid "SmilePay T-Cat frozen"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Module.php:160
+#: src/Modules/SmilepayShipping/Module.php:161
 msgid "SmilePay T-Cat labels"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:30
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:35
 msgid "This order has no SmilePay shipping method."
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:39
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:44
 msgid "First fill in a name and mobile number under WooCommerce → Moksa → SmilePay shipping → Sender details."
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:53
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:58
 msgid "That SmilePay shipping method is not recognized."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:63
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:68
 #, php-format
 msgid "The SmilePay shipment could not be created: %s"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:74
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:79
 msgid "The SmilePay shipment could not be created: no shipping serial number was returned."
 msgstr ""
 
 #. translators: 1: temp label, 2: msg
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:125
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:130
 #, php-format
 msgid "No serial number was returned for the %1$s zone: %2$s"
 msgstr ""
 
 #. translators: %s: temperature layer label
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:134
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:139
 #, php-format
 msgid "The %s shipment could not be created: no shipping serial number was returned."
 msgstr ""
 
 #. translators: 1: temp label, 2: msg
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:144
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:149
 #, php-format
 msgid "The waybill for the %1$s zone could not be fetched: %2$s"
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:167
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:172
 msgid "The SmilePay shipment could not be created:"
 msgstr ""
 
 #. translators: 1: count, 2: list
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:204
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:209
 #, php-format
 msgid "SmilePay created the T-Cat shipments, split into %1$d parcels by temperature zone: %2$s"
 msgstr ""
 
 #. translators: 1: temp label, 2: smilepay order no, 3: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:214
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:219
 #, php-format
 msgid "SmilePay created the T-Cat home delivery shipment — %1$s (serial number %2$s, waybill number %3$s)"
 msgstr ""
 
 #. translators: %s: SmilePay shipment number
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:281
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:286
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. SmilePay is not notified."
 msgstr ""
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:344
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:346
 msgid "This store pickup order has no store yet. Ask the customer to choose one at checkout, or set it yourself."
 msgstr ""
 
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:354
+msgid "SmilePay does not offer FamilyMart bulk (B2C) shipping. Switch the store pickup type to store-to-store (C2C)."
+msgstr ""
+
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:386
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:393
 #, php-format
 msgid "The SmilePay store pickup shipment could not be created: %s"
 msgstr ""
 
 #. translators: 1: smilepay order no, 2: pickup code
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:398
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:405
 #, php-format
 msgid "SmilePay store pickup shipment created (serial number %1$s, pickup code %2$s)"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:424
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:431
 #, php-format
 msgid "The SmilePay T-Cat home delivery shipment could not be created: %s"
 msgstr ""
 
 #. translators: 1: smilepay order no, 2: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:433
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:440
 #, php-format
 msgid "SmilePay T-Cat home delivery shipment created (serial number %1$s, waybill number %2$s)"
 msgstr ""
@@ -13255,89 +13276,101 @@ msgstr ""
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:514
-msgid "Taiwan field order and widths"
+#: src/Settings/SettingsPage.php:513
+msgid "My Account"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:516
-msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
+#: src/Settings/SettingsPage.php:518
+msgid "Hide Downloads"
 msgstr ""
 
 #: src/Settings/SettingsPage.php:521
-msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
+msgid "Remove \"Downloads\" from the My Account menu that customers see. Useful when you do not sell downloadable products."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:524
-msgid "Field order and width"
+#: src/Settings/SettingsPage.php:531
+msgid "Taiwan field order and widths"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:526
-msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
+#: src/Settings/SettingsPage.php:533
+msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
 msgstr ""
 
 #: src/Settings/SettingsPage.php:538
+msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:541
+msgid "Field order and width"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:543
+msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
+msgstr ""
+
+#: src/Settings/SettingsPage.php:555
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:542
+#: src/Settings/SettingsPage.php:559
 msgid "Enable order number lookup"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:546
+#: src/Settings/SettingsPage.php:563
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:551
+#: src/Settings/SettingsPage.php:568
 msgid "Number types to search"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:606
+#: src/Settings/SettingsPage.php:623
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:609
+#: src/Settings/SettingsPage.php:626
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:613
+#: src/Settings/SettingsPage.php:630
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:670
 msgid "Payment modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:671
 msgid "Shipping modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:655
+#: src/Settings/SettingsPage.php:672
 msgid "E-invoice modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:656
+#: src/Settings/SettingsPage.php:673
 msgid "Checkout tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:657
+#: src/Settings/SettingsPage.php:674
 msgid "Tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:664
+#: src/Settings/SettingsPage.php:681
 msgid "Moksa — Taiwan toolkit"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:665
+#: src/Settings/SettingsPage.php:682
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr ""
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:713
+#: src/Settings/SettingsPage.php:730
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:714
+#: src/Settings/SettingsPage.php:731
 msgid "Module overview"
 msgstr ""
 

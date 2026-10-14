@@ -39,10 +39,18 @@ final class PaymentInfoBox {
 		}
 
 		$render = static function ( $order ) use ( $resolver ): void {
-			if ( ! $order instanceof \WC_Order ) {
+			if ( ! $order instanceof \WC_Order || ! self::awaiting_payment( $order ) ) {
+				return;
+			}
+			// 傳統佈景的感謝頁兩個 hook 都會觸發，同一張訂單只畫一次。
+			static $rendered = [];
+			if ( isset( $rendered[ $order->get_id() ] ) ) {
 				return;
 			}
 			$rows = $resolver( $order );
+			if ( ! empty( $rows ) ) {
+				$rendered[ $order->get_id() ] = true;
+			}
 			if ( ! empty( $rows ) ) {
 				echo wp_kses( self::render_html( $rows ), self::kses_allowlist() );
 			}
@@ -61,7 +69,15 @@ final class PaymentInfoBox {
 	}
 
 
+	/** 已取消、失敗、已退款的訂單不該再叫顧客去繳費。 */
+	private static function awaiting_payment( \WC_Order $order ): bool {
+		return ! $order->has_status( [ 'cancelled', 'failed', 'refunded' ] );
+	}
+
 	public static function rows( \WC_Order $order ): array {
+		if ( ! self::awaiting_payment( $order ) ) {
+			return [];
+		}
 		foreach ( self::$resolvers as $resolver ) {
 			$rows = $resolver( $order );
 			if ( ! empty( $rows ) ) {

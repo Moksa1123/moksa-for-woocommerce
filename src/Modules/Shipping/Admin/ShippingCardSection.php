@@ -219,6 +219,7 @@ final class ShippingCardSection {
 			[
 				'ship_type' => (string) $order->get_meta( $mod_meta::ShipType ),
 				'odno'      => $odno,
+				'ship_no'   => (string) $order->get_meta( $mod_meta::ShipNo ),
 			]
 		);
 		if ( null !== $tracking_info ) {

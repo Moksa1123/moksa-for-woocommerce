@@ -64,6 +64,7 @@ final class CustomerOrderView {
 				[
 					'ship_trade_no' => (string) $order->get_meta( OrderMeta::ShipTradeNo ),
 					'odno'          => (string) $order->get_meta( OrderMeta::Odno ),
+					'ship_no'       => (string) $order->get_meta( OrderMeta::ShipNo ),
 					'ship_type'     => (string) $order->get_meta( OrderMeta::ShipType ),
 					'temp'          => '0',
 				],

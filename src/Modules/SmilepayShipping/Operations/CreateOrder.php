@@ -18,6 +18,11 @@ final class CreateOrder {
 
 
 	public static function run( \WC_Order $order ): array {
+		// 之後送出的回呼網址都帶每單 key；通知進來時據此驗證（這之前建的單沒有 key）。
+		if ( 'yes' !== $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) ) {
+			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_KEYED, 'yes' );
+			$order->save();
+		}
 		// 從訂單裡識別運送方式 → 決定走 CVS / TCAT / unified-TCat 路徑
 		$method_id = '';
 		foreach ( $order->get_shipping_methods() as $m ) {
@@ -156,7 +161,7 @@ final class CreateOrder {
 				'temp'       => (string) $temp,
 				'amount'     => (string) (int) $pkg['amount'],
 				'goods_name' => (string) $pkg['goods_name'],
-				'pay_zg'     => Tcat::payzg_for_temp( $temp ),
+				'pay_zg'     => Tcat::payzg_for_temp( $temp, $is_cod ),
 				'rtn_msg'    => 'OK',
 				'created_at' => $now,
 			];
@@ -310,8 +315,8 @@ final class CreateOrder {
 		}
 
 		return [
-			'Pay_zg'           => Tcat::payzg_for_temp( $temp ),
-			'Pay_subzg'        => '',
+			'Pay_zg'           => Tcat::payzg_for_temp( $temp, 'cod' === (string) $order->get_payment_method() ),
+			'Pay_subzg'        => 'TCAT',
 			'Pur_name'         => mb_substr( $pur_name, 0, 5 ),
 			'Tel_number'       => $phone,
 			'Mobile_number'    => $phone,
@@ -322,8 +327,8 @@ final class CreateOrder {
 			'od_sob'           => mb_strimwidth( (string) $pkg['goods_name'], 0, 60, '', 'UTF-8' ),
 			'Amount'           => max( 1, (int) $pkg['amount'] ),
 			'Logistics_store'  => '',
-			'Roturl'           => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
-			'Logistics_Roturl' => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
+			'Roturl'           => Helper::keyed_roturl( $order ),
+			'Logistics_Roturl' => Helper::keyed_roturl( $order ),
 			'Roturl_status'    => 'mowp1.0',
 			'Remark'           => $order->get_customer_note(),
 		];
@@ -331,9 +336,6 @@ final class CreateOrder {
 
 
 	private static function do_step1_request_smseid( \WC_Order $order, bool $is_cvs, string $method_id ): array {
-		// SmilePay 對應 Pay_zg：78=黑貓常溫 / 79=冷藏 / 80=冷凍 / CVS 是 91 + Pay_subzg
-		// 71/72/73/74 = 7-11/全家/萊爾富/OK C2C 純取貨；FM2/SE2 等是 B2C
-		// 簡化：CVS 用 91，Pay_subzg 由 method_id 決定；TCAT 用 78/79/80
 		$store_id   = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_ID );
 		$store_name = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_NAME );
 		$store_addr = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STORE_ADDR );
@@ -345,8 +347,13 @@ final class CreateOrder {
 			];
 		}
 
-		// 識別 Pay_zg + Pay_subzg
-		[ $pay_zg, $pay_subzg ] = self::resolve_pay_zg( $method_id );
+		[ $pay_zg, $pay_subzg ] = self::resolve_pay_zg( $method_id, 'cod' === (string) $order->get_payment_method() );
+		if ( '' === $pay_zg ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'SmilePay does not offer FamilyMart bulk (B2C) shipping. Switch the store pickup type to store-to-store (C2C).', 'moksa-for-woocommerce' ),
+			];
+		}
 
 		$products = self::build_product_list( $order );
 		$amount   = (int) ceil( (float) $order->get_total() );
@@ -365,8 +372,8 @@ final class CreateOrder {
 			'od_sob'           => $products,
 			'Amount'           => $amount,
 			'Logistics_store'  => $is_cvs ? "{$store_id}/{$store_name}/{$store_addr}" : '',
-			'Roturl'           => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
-			'Logistics_Roturl' => home_url( '/wc-api/moksafowo_smilepay_shipping_status' ),
+			'Roturl'           => Helper::keyed_roturl( $order ),
+			'Logistics_Roturl' => Helper::keyed_roturl( $order ),
 			'Roturl_status'    => 'mowp1.0',
 			'Remark'           => $order->get_customer_note(),
 		];
@@ -377,7 +384,7 @@ final class CreateOrder {
 
 	private static function do_step2_cvs( \WC_Order $order, string $smseid, string $method_id ): array {
 		$cvs_service_type = Helper::cvs_service_type();
-		[ , $pay_subzg ]  = self::resolve_pay_zg( $method_id );
+		[ , $pay_subzg ]  = self::resolve_pay_zg( $method_id, 'cod' === (string) $order->get_payment_method() );
 		$is_cod           = 'cod' === $order->get_payment_method();
 
 		$result = ShippingRequest::confirm_cvs( $smseid, $pay_subzg, $cvs_service_type, $is_cod );
@@ -463,20 +470,26 @@ final class CreateOrder {
 		return null;
 	}
 
-	private static function resolve_pay_zg( string $method_id ): array {
-		// CVS 是 Pay_zg=91，Pay_subzg 區分超商：71=7-11 C2C, 72=全家 C2C, FM2=全家 B2C 大宗
-		// TCAT: 78=常溫 / 79=冷藏 / 80=冷凍, Pay_subzg 空
+	/**
+	 * 速買配 SPPayment 的物流編碼（規格「Pay_zg / Pay_subzg 編碼矩陣」，官方外掛同）：
+	 * 超商 C2C 取貨付款 51／純取貨 52，7-11 B2C 55／56；黑貓 81／82。
+	 * 副分類 7-11 用 7NET（C2C、B2C 都是）、全家用 FAMI、黑貓用 TCAT。全家沒有 B2C。
+	 * 代收與否在這一步就定了，所以一定要依付款方式送。
+	 */
+	private static function resolve_pay_zg( string $method_id, bool $is_cod ): array {
+		$is_b2c = 'B2C' === Helper::cvs_service_type();
 		switch ( $method_id ) {
 			case 'moksafowo_smilepay_shipping_cvs_711':
-				return [ '91', 'B2C' === Helper::cvs_service_type() ? 'SE2' : '71' ];
+				if ( $is_b2c ) {
+					return [ $is_cod ? '55' : '56', '7NET' ];
+				}
+				return [ $is_cod ? '51' : '52', '7NET' ];
 			case 'moksafowo_smilepay_shipping_cvs_fami':
-				return [ '91', 'B2C' === Helper::cvs_service_type() ? 'FM2' : '72' ];
+				return $is_b2c ? [ '', '' ] : [ $is_cod ? '51' : '52', 'FAMI' ];
 			case 'moksafowo_smilepay_shipping_tcat_normal':
-				return [ '78', '' ];
 			case 'moksafowo_smilepay_shipping_tcat_refrige':
-				return [ '79', '' ];
 			case 'moksafowo_smilepay_shipping_tcat_freeze':
-				return [ '80', '' ];
+				return [ $is_cod ? '81' : '82', 'TCAT' ];
 		}
 		return [ '', '' ];
 	}

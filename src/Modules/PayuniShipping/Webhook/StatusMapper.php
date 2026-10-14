@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\PayuniShipping\Webhook;
 
+use Moksafowo\Modules\PayuniShipping\PayuniShipping;
+use Moksafowo\Modules\PayuniShipping\Utils\ShippingStatus;
 use Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper;
 
 defined( 'ABSPATH' ) || exit;
@@ -42,7 +44,26 @@ final class StatusMapper extends AbstractStatusMapper {
 		return 'payuni';
 	}
 
+	/**
+	 * 商家在 PAYUNi 物流設定裡為某個貨態指定了訂單狀態時，以商家的為準。
+	 * 否則 priority 10 先依設定改一次、這裡再依預設表改回去，商家設定等於無效，
+	 * 還可能先觸發一封「訂單完成」信。
+	 */
 	protected function code_map(): array {
-		return self::MAP;
+		$map       = self::MAP;
+		$overrides = [
+			ShippingStatus::AT_LOGISTIC_CENTER => PayuniShipping::$order_status_at_logistic_center,
+			ShippingStatus::AT_SENDER_CVS      => PayuniShipping::$order_status_at_sender_cvs,
+			ShippingStatus::DELIVERING         => PayuniShipping::$order_status_delivering,
+			ShippingStatus::AT_RECEIVER_CVS    => PayuniShipping::$order_status_at_receiver_cvs,
+			ShippingStatus::CUSTOMER_PICKUP    => PayuniShipping::$order_status_pickuped,
+		];
+		foreach ( $overrides as $code => $status ) {
+			$status = (string) $status;
+			if ( '' !== $status ) {
+				$map[ $code ] = str_starts_with( $status, 'wc-' ) ? substr( $status, 3 ) : $status;
+			}
+		}
+		return $map;
 	}
 }

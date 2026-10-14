@@ -29,9 +29,17 @@
 		}
 
 		// 速買配每方式對應一家超商,故只一顆選店鈕(不像藍新要先選超商)。
-		const store     = cfg.selected_store && cfg.selected_store.id ? cfg.selected_store : null;
+		const picked    = cfg.selected_store || {};
+		// 7-11 選的門市不能顯示在全家底下（反之亦然）。
+		const store     = picked.id && ( ! picked.method || picked.method === methodId ) ? picked : null;
 		const host      = M.ensureHost( HOST_ID );
 		host.classList.add( 'moksafowo-smilepay-shipping-store' );
+		// 內容沒變就不重畫：重畫會觸發下面的 MutationObserver，形成每 200ms 重建按鈕的迴圈。
+		const sig = methodId + '|' + ( store ? store.id : '' );
+		if ( host.getAttribute( 'data-sig' ) === sig && host.querySelector( '.moksafowo-cvs-store__btn' ) ) {
+			return;
+		}
+		host.setAttribute( 'data-sig', sig );
 		const rightHtml = '<button type="button" class="moksafowo-cvs-store__btn button">' + M.escapeHtml( store ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
 		host.innerHTML  = M.cardHtml( {
 			store: store,

@@ -84,6 +84,7 @@ final class StoreSelector {
 			'id'      => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_id', '' ),
 			'name'    => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_name', '' ),
 			'address' => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_address', '' ),
+			'method'  => (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_method', '' ),
 		] : [];
 
 		wp_localize_script(
@@ -183,6 +184,8 @@ final class StoreSelector {
 		WC()->session->set( 'moksafowo_smilepay_shipping_store_id', $store_id );
 		WC()->session->set( 'moksafowo_smilepay_shipping_store_name', $store_name );
 		WC()->session->set( 'moksafowo_smilepay_shipping_store_address', $store_address );
+		// 記下是在哪個方式（7-11／全家）下選的；換方式時舊門市不能沿用。
+		WC()->session->set( 'moksafowo_smilepay_shipping_store_method', self::chosen_method_id() );
 
 		Helper::log(
 			'EMAP callback ok',
@@ -196,9 +199,24 @@ final class StoreSelector {
 		exit;
 	}
 
+	private static function bare_method_id( string $method_id ): string {
+		return str_contains( $method_id, ':' ) ? (string) strstr( $method_id, ':', true ) : $method_id;
+	}
+
+	private static function chosen_method_id(): string {
+		$chosen = WC()->session ? (array) WC()->session->get( 'chosen_shipping_methods', [] ) : [];
+		return self::bare_method_id( (string) ( $chosen[0] ?? '' ) );
+	}
+
+	/** 舊 session 沒記方式時照舊放行。 */
+	private static function store_matches( string $method_id ): bool {
+		$picked = WC()->session ? (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_method', '' ) : '';
+		return '' === $picked || self::bare_method_id( $method_id ) === $picked;
+	}
+
 	/** 結帳驗證用：顧客這次 session 選了哪個門市（沒有就空字串）。 */
 	public static function session_store_id(): string {
-		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		if ( ! function_exists( 'WC' ) || ! WC()->session || ! self::store_matches( self::chosen_method_id() ) ) {
 			return '';
 		}
 		return (string) WC()->session->get( 'moksafowo_smilepay_shipping_store_id', '' );
@@ -213,7 +231,7 @@ final class StoreSelector {
 		foreach ( $order->get_shipping_methods() as $m ) {
 			$mid = (string) $m->get_method_id();
 			if ( str_contains( $mid, 'moksafowo_smilepay_shipping_cvs_' ) ) {
-				$is_smilepay_cvs = true;
+				$is_smilepay_cvs = self::store_matches( $mid );
 				break;
 			}
 		}
@@ -229,10 +247,16 @@ final class StoreSelector {
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STORE_ID, $store_id );
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STORE_NAME, $store_name );
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STORE_ADDR, $store_addr );
+		// 共用的門市欄位：到店／關店通知信、客服查單、AI 都讀這組（藍新、綠界也有寫）。
+		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_PROVIDER, 'smilepay' );
+		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_ID, $store_id );
+		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_NAME, $store_name );
+		$order->update_meta_data( Keys::SHIPPING_CVS_STORE_ADDRESS, $store_addr );
 
 		// 清掉 session（避免下一張訂單沿用）
 		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_id' );
 		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_name' );
 		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_address' );
+		WC()->session->__unset( 'moksafowo_smilepay_shipping_store_method' );
 	}
 }

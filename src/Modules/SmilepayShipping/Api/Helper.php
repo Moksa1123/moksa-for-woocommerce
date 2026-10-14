@@ -37,6 +37,17 @@ final class Helper extends AbstractCredentialHelper {
 		return (string) get_option( 'moksafowo_smilepay_shipping_rvg2c', '' );
 	}
 
+	/**
+	 * 速買配的貨態通知不帶任何密鑰（Verify_key 是我們送出去的），只能靠回呼網址上的每單 key 驗來源。
+	 */
+	public static function callback_key( \WC_Order $order ): string {
+		return substr( hash_hmac( 'sha256', 'smilepay-shipping-roturl|' . $order->get_id() . '|' . $order->get_order_key(), wp_salt( 'auth' ) ), 0, 32 );
+	}
+
+	public static function keyed_roturl( \WC_Order $order ): string {
+		return add_query_arg( 'mfk', self::callback_key( $order ), home_url( '/wc-api/moksafowo_smilepay_shipping_status' ) );
+	}
+
 	public static function verify_key(): string {
 		return (string) get_option( 'moksafowo_smilepay_shipping_verify_key', '' );
 	}

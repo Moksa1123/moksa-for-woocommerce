@@ -12,6 +12,10 @@ final class TrackingLink {
 		$subtype     = (string) ( $record['subtype'] ?? '' );
 		$booking     = (string) ( $record['booking_note'] ?? '' );
 		$pay         = (string) ( $record['cvs_payment_no'] ?? '' );
+		// 7-11 店到店的查詢號碼是寄件代碼加驗證碼（共 12 碼），只給寄件代碼查不到。
+		if ( 'UNIMARTC2C' === $subtype && '' !== $pay ) {
+			$pay .= (string) ( $record['cvs_validation_no'] ?? '' );
+		}
 		$tracking_no = '' !== $booking ? $booking : $pay;
 
 		return self::resolve_carrier_link( $subtype, $tracking_no );
@@ -19,7 +23,7 @@ final class TrackingLink {
 
 	public static function for_payuni_record( array $record ): ?array {
 		$ship_type   = (string) ( $record['ship_type'] ?? '' );
-		$tracking_no = (string) ( $record['odno'] ?? '' );
+		$tracking_no = self::payuni_tracking_no( $record );
 		switch ( $ship_type ) {
 			case '2':
 				return self::resolve_carrier_link( 'TCAT', $tracking_no );
@@ -27,6 +31,29 @@ final class TrackingLink {
 				return self::resolve_carrier_link( 'UNIMART', $tracking_no );
 		}
 		return null;
+	}
+
+	/**
+	 * PAYUNi 7-11 查詢號碼：店到店是 Odno＋驗證碼（12 碼）、大宗是 PartnerId＋Odno（11 碼）；
+	 * 黑貓是 Odno。單筆舊訂單直接帶已組好的 ship_no。
+	 */
+	private static function payuni_tracking_no( array $record ): string {
+		$ship_no = (string) ( $record['ship_no'] ?? '' );
+		if ( '' !== $ship_no ) {
+			return $ship_no;
+		}
+		$odno = (string) ( $record['odno'] ?? '' );
+		if ( '1' !== (string) ( $record['ship_type'] ?? '' ) || '' === $odno ) {
+			return $odno;
+		}
+		$lgs = (string) ( $record['lgs_type'] ?? '' );
+		if ( 'C2C' === $lgs ) {
+			return $odno . (string) ( $record['validation_no'] ?? '' );
+		}
+		if ( 'B2C' === $lgs ) {
+			return (string) ( $record['partner_id'] ?? '' ) . $odno;
+		}
+		return $odno;
 	}
 
 	public static function for_smilepay_record( array $record ): ?array {

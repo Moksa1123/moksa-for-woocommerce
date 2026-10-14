@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-10-06 00:00+0800\n"
+"PO-Revision-Date: 2026-10-14 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -231,20 +231,21 @@ msgstr "不存在的提示樣板：%s"
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:149
 #: src/Modules/EcpayShipping/Operations/PrintProxy.php:224
 #: src/Modules/Linepay/LinePay.php:73
-#: src/Modules/NewebpayShipping/Module.php:146
-#: src/Modules/NewebpayShipping/Module.php:171
-#: src/Modules/NewebpayShipping/Module.php:215
+#: src/Modules/NewebpayShipping/Module.php:147
+#: src/Modules/NewebpayShipping/Module.php:172
+#: src/Modules/NewebpayShipping/Module.php:216
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1352
 #: src/Modules/Payuni/PayuniPayment.php:215
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:72
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:377
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:266
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:346
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:397
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:476
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:552
+#: src/Modules/Shared/Invoice/OrderListColumn.php:103
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:262
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:342
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:393
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:472
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:548
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:33
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -256,18 +257,18 @@ msgid "The tool failed to run. Please try again later."
 msgstr "工具執行失敗,請稍後再試。"
 
 #: src/Modules/Address/BlockField.php:150
-#: src/Modules/Address/BlockField.php:166
+#: src/Modules/Address/BlockField.php:165
 msgid "Please select a district for home delivery orders."
 msgstr "宅配訂單請選擇鄉鎮市區。"
 
-#: src/Modules/Address/BlockField.php:245
+#: src/Modules/Address/BlockField.php:257
 msgid "District"
 msgstr "鄉鎮市區"
 
-#: src/Modules/Address/BlockField.php:251
-#: src/Modules/Address/BlockField.php:328
-#: src/Modules/Address/TwAddress.php:213
-#: src/Modules/Address/TwAddress.php:262
+#: src/Modules/Address/BlockField.php:263
+#: src/Modules/Address/BlockField.php:372
+#: src/Modules/Address/TwAddress.php:212
+#: src/Modules/Address/TwAddress.php:261
 msgid "Select…"
 msgstr "請選擇…"
 
@@ -2442,8 +2443,8 @@ msgstr "例如:待出貨有幾筆?"
 
 #: src/Modules/AiAssistant/Module.php:103
 #: src/Modules/CustomerService/Module.php:98
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:411
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:466
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:412
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:467
 msgid "Send"
 msgstr "送出"
 
@@ -2497,7 +2498,7 @@ msgstr "確認執行"
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:116
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:178
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:185
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:205
 msgid "Cancel"
 msgstr "取消"
 
@@ -2568,7 +2569,7 @@ msgstr "B2B 三聯式"
 #: src/Modules/PaynowInvoice/Module.php:40
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:72
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:98
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:88
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:91
 #: src/Modules/Shared/Admin/CardRenderers.php:331
 #: src/Modules/Shared/Admin/CardRenderers.php:396
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:239
@@ -2593,8 +2594,8 @@ msgstr "手機條碼"
 #: src/Modules/PaynowInvoice/Module.php:41
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:79
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:99
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:90
-#: src/Modules/Payuni/Gateways/GatewayBase.php:115
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:93
+#: src/Modules/Payuni/Gateways/GatewayBase.php:144
 #: src/Modules/Shared/Admin/CardRenderers.php:332
 #: src/Modules/Shared/Admin/CardRenderers.php:397
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:240
@@ -3073,7 +3074,7 @@ msgstr "顧客自助查訂單狀態 / 物流 / 發票(二次驗證)"
 #: src/Modules/OrderLookup/Ability.php:840
 #: src/Modules/OrderLookup/Ability.php:1307
 #: src/Modules/OrderLookup/OrderNumberLookup.php:34
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:70
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:84
 msgid "Order number"
 msgstr "訂單編號"
 
@@ -3084,8 +3085,8 @@ msgstr "帳單電話末三碼"
 #: src/Modules/CustomerService/Module.php:80
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:105
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:286
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:122
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:118
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:136
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:171
 msgid "Look up"
 msgstr "查詢"
@@ -3100,7 +3101,7 @@ msgid "Look up another order"
 msgstr "查其他訂單"
 
 #: src/Modules/CustomerService/Module.php:83
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:244
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:240
 msgid "Close"
 msgstr "關閉"
 
@@ -3113,7 +3114,7 @@ msgid "Unpaid"
 msgstr "未付款"
 
 #: src/Modules/CustomerService/Module.php:86
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:203
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:199
 #: src/Modules/Shipping/Statuses/Registrar.php:153
 msgid "Order status"
 msgstr "訂單狀態"
@@ -3147,10 +3148,10 @@ msgstr "付款方式"
 #: src/Modules/Pchomepay/Module.php:32
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:15
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:113
-#: src/Modules/Shared/Email/PersonalizationTags.php:78
+#: src/Modules/Shared/Email/PersonalizationTags.php:98
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:580
+#: src/Settings/SettingsPage.php:597
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
@@ -3160,15 +3161,15 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:70
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
-#: src/Modules/Shared/Email/PersonalizationTags.php:79
-#: src/Settings/SettingsPage.php:587
+#: src/Modules/Shared/Email/PersonalizationTags.php:99
+#: src/Settings/SettingsPage.php:604
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
 #: src/Modules/CustomerService/Module.php:91
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:61
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:66
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:202
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:198
 msgid "Shipping method"
 msgstr "運送方式"
 
@@ -3179,9 +3180,9 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:66
-#: src/Modules/Shared/Email/PersonalizationTags.php:54
+#: src/Modules/Shared/Email/PersonalizationTags.php:55
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:559
+#: src/Settings/SettingsPage.php:576
 msgid "Tracking number"
 msgstr "物流編號"
 
@@ -3597,7 +3598,7 @@ msgstr "綠界付款失敗：%1$s（狀態代碼 %2$s）"
 #: src/Modules/Paynow/Frontend/CustomerPaymentInfo.php:36
 #: src/Modules/Payuni/Gateways/Atm.php:54
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:34
-#: src/Modules/Shared/Email/PersonalizationTags.php:77
+#: src/Modules/Shared/Email/PersonalizationTags.php:97
 #: src/Modules/Smilepay/Frontend/CustomerPaymentInfo.php:35
 msgid "Bank code"
 msgstr "銀行代碼"
@@ -3668,6 +3669,7 @@ msgstr "條碼第 %d 段"
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
 #: src/Modules/Shared/Admin/PaymentQuery.php:77
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:382
+#: src/Modules/Shared/Invoice/OrderListColumn.php:108
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
 msgid "The order could not be found."
 msgstr "找不到訂單。"
@@ -4440,8 +4442,8 @@ msgstr "公司統編"
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:323
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
 #: src/Modules/OrderLookup/InvoiceOps.php:84
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:94
-#: src/Modules/Payuni/Gateways/GatewayBase.php:119
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:97
+#: src/Modules/Payuni/Gateways/GatewayBase.php:148
 #: src/Modules/Shared/Admin/CardRenderers.php:324
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:232
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:37
@@ -4538,6 +4540,7 @@ msgstr "更新"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:147
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
+#: src/Modules/Shared/Invoice/OrderListColumn.php:158
 msgid "Issue invoice"
 msgstr "開立發票"
 
@@ -4548,7 +4551,7 @@ msgid "Individual"
 msgstr "個人"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:157
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:96
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:99
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:231
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:137
 msgid "Company"
@@ -4571,6 +4574,7 @@ msgstr "更新失敗："
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:187
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:267
+#: src/Modules/Shared/Invoice/OrderListColumn.php:72
 msgid "Issuing…"
 msgstr "開立中…"
 
@@ -4768,12 +4772,12 @@ msgid "Allowance"
 msgstr "折讓單"
 
 #. translators: %d: delay days
-#: src/Modules/EcpayInvoice/Module.php:111
+#: src/Modules/EcpayInvoice/Module.php:113
 #, php-format
 msgid "The ECPay invoice is scheduled to be issued in %d days."
 msgstr "綠界發票排程於 %d 天後開立。"
 
-#: src/Modules/EcpayInvoice/Module.php:128
+#: src/Modules/EcpayInvoice/Module.php:130
 msgid "The scheduled ECPay invoice was cancelled because the order was cancelled, refunded or failed."
 msgstr "綠界發票排程取消（訂單已取消 / 退款 / 失敗）。"
 
@@ -4859,27 +4863,27 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/OrderLookup/SearchableKeys.php:154
 #: src/Modules/OrderLookup/SearchableKeys.php:256
 #: src/Modules/PaynowInvoice/Operations/Query.php:51
-#: src/Modules/Payuni/Admin/OrderList.php:35
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:72
-#: src/Modules/Payuni/Gateways/GatewayBase.php:97
-#: src/Modules/Shared/Email/PersonalizationTags.php:56
-#: src/Settings/SettingsPage.php:552
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:75
+#: src/Modules/Payuni/Gateways/GatewayBase.php:126
+#: src/Modules/Shared/Email/PersonalizationTags.php:78
+#: src/Modules/Shared/Invoice/OrderListColumn.php:124
+#: src/Settings/SettingsPage.php:569
 msgid "Invoice number"
 msgstr "發票號碼"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:67
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
 #: src/Modules/PaynowInvoice/Operations/Query.php:54
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:74
-#: src/Modules/Payuni/Gateways/GatewayBase.php:99
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:77
+#: src/Modules/Payuni/Gateways/GatewayBase.php:128
 msgid "Issued at"
 msgstr "開立時間"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:68
 #: src/Modules/EzpayInvoice/Operations/Query.php:75
 #: src/Modules/PaynowInvoice/Operations/Query.php:53
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:73
-#: src/Modules/Payuni/Gateways/GatewayBase.php:98
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:76
+#: src/Modules/Payuni/Gateways/GatewayBase.php:127
 msgid "Invoice amount"
 msgstr "發票金額"
 
@@ -5012,7 +5016,7 @@ msgid "No"
 msgstr "否"
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:215
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:222
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:201
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:122
 msgid "Shipping number:"
 msgstr "寄貨編號："
@@ -5112,13 +5116,13 @@ msgid "Recreate shipment"
 msgstr "重新建立物流單"
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:310
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:131
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:106
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:72
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:76
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:33
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:74
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:78
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:34
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:75
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:79
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:212
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:85
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:147
@@ -5272,78 +5276,79 @@ msgstr "查詢到的綠界物流狀態：%1$s（狀態碼 %2$s）"
 msgid "ECPay shipping status looked up: status code %s"
 msgstr "查詢到的綠界物流狀態：狀態碼 %s"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:148
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:127
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:87
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:109
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:81
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/moksa-cvs-arrived.php:35
 #: templates/emails/plain/moksa-cvs-arrived.php:21
 msgid "Pickup store"
 msgstr "取貨門市"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:170
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:149
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:156
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:131
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:201
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:132
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:197
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:117
 msgid "Recipient"
 msgstr "收件人"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:178
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:139
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:157
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:140
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:125
 msgid "Delivery address"
 msgstr "收件地址"
 
 #. translators: %d: package count
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:191
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:152
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:170
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:153
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:138
 #, php-format
 msgid "This order is split into %d shipments by temperature zone"
 msgstr "本訂單依商品溫層拆成 %d 張物流單"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:210
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:189
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:102
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:169
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:170
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:62
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:67
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:156
 msgid "Shipping ID"
 msgstr "物流編號"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:245
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:224
 #: src/Modules/EcpayShipping/Methods/Cvs711.php:15
 msgid "ECPay — 7-ELEVEN pickup"
 msgstr "綠界 — 7-11 取貨"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:246
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:225
 #: src/Modules/EcpayShipping/Methods/CvsFamily.php:14
 msgid "ECPay — FamilyMart pickup"
 msgstr "綠界 — 全家取貨"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:247
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:226
 #: src/Modules/EcpayShipping/Methods/CvsHilife.php:14
 msgid "ECPay — Hi-Life pickup"
 msgstr "綠界 — 萊爾富取貨"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:248
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:227
 #: src/Modules/EcpayShipping/Methods/CvsOkmart.php:14
 msgid "ECPay — OK Mart pickup"
 msgstr "綠界 — OK 取貨"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:249
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:228
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:14
 msgid "ECPay — T-Cat home delivery"
 msgstr "綠界 — 黑貓宅配"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:250
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:229
 #: src/Modules/EcpayShipping/Methods/HomePost.php:14
 msgid "ECPay — Chunghwa Post"
 msgstr "綠界 — 中華郵政"
 
-#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:252
+#: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:231
 #: src/Modules/EcpayShipping/Module.php:25
 #: src/Modules/OrderLookup/ChannelOps.php:63
 #: src/Settings/SettingsPage.php:128
@@ -5352,29 +5357,28 @@ msgid "ECPay shipping"
 msgstr "綠界物流"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:89
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:80
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:97
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:82
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
 msgid "Choose a pickup store"
 msgstr "選擇取貨門市"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:90
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:81
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:190
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:228
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:825
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:98
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:218
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:853
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
 msgid "Change store"
 msgstr "更換門市"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:229
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:257
 msgid "No store chosen yet"
 msgstr "尚未選擇門市"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:92
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:69
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:86
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:101
 #: templates/emails/moksa-cvs-arrived.php:38
 #: templates/emails/plain/moksa-cvs-arrived.php:24
 msgid "Store number"
@@ -5391,7 +5395,7 @@ msgstr "不是綠界物流方式。"
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:128
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:187
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:129
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:130
 msgid "This shipping method does not need a store."
 msgstr "此物流方式不需選店。"
 
@@ -5415,7 +5419,7 @@ msgstr "7-11"
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:59
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:35
 #: src/Modules/Shipping/Temp/ProductTemp.php:104
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:42
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:36
 msgid "Ambient"
 msgstr "常溫"
@@ -5427,7 +5431,7 @@ msgstr "常溫"
 #: src/Modules/PayuniShipping/Providers/SevenEleven/C2CUnified.php:59
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:61
 #: src/Modules/Shipping/Temp/ProductTemp.php:103
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:44
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:45
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:36
 msgid "Frozen"
 msgstr "冷凍"
@@ -5445,7 +5449,7 @@ msgid "ECPay FamilyMart pickup."
 msgstr "綠界全家取貨。"
 
 #: src/Modules/EcpayShipping/Methods/CvsFamily.php:24
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:101
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:103
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:108
 #: src/Modules/SmilepayShipping/Methods/CvsFami.php:24
 msgid "FamilyMart"
@@ -5456,7 +5460,7 @@ msgid "ECPay Hi-Life pickup."
 msgstr "綠界萊爾富取貨。"
 
 #: src/Modules/EcpayShipping/Methods/CvsHilife.php:24
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:102
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:104
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:109
 msgid "Hi-Life"
 msgstr "萊爾富"
@@ -5481,14 +5485,14 @@ msgstr "綠界黑貓宅急便。"
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:34
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:60
 #: src/Modules/Shipping/Temp/ProductTemp.php:102
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:43
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:44
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:36
 msgid "Chilled"
 msgstr "冷藏"
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:41
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:67
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:50
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:51
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:41
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:41
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:41
@@ -5497,7 +5501,7 @@ msgstr "60cm"
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:42
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:68
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:51
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:52
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:42
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:42
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:42
@@ -5506,7 +5510,7 @@ msgstr "90cm"
 
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:43
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:69
-#: src/Modules/SmilepayShipping/Methods/Tcat.php:52
+#: src/Modules/SmilepayShipping/Methods/Tcat.php:53
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatNormal.php:43
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:43
@@ -5521,43 +5525,43 @@ msgstr "綠界物流 — 7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 中華
 msgid "7-ELEVEN, FamilyMart, Hi-Life and OK Mart pickup, plus T-Cat and post office delivery"
 msgstr "7-11 / 全家 / 萊爾富 / OK 取貨 + 黑貓 / 郵局 宅配"
 
-#: src/Modules/EcpayShipping/Module.php:82
+#: src/Modules/EcpayShipping/Module.php:83
 msgid "ECPay convenience store pickup"
 msgstr "綠界超商取貨"
 
-#: src/Modules/EcpayShipping/Module.php:98
+#: src/Modules/EcpayShipping/Module.php:99
 msgid "ECPay 7-ELEVEN pickup"
 msgstr "綠界 7-11 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:99
+#: src/Modules/EcpayShipping/Module.php:100
 msgid "ECPay 7-ELEVEN B2C frozen"
 msgstr "綠界 7-11 B2C 冷凍"
 
-#: src/Modules/EcpayShipping/Module.php:100
+#: src/Modules/EcpayShipping/Module.php:101
 msgid "ECPay FamilyMart pickup"
 msgstr "綠界 全家取貨"
 
-#: src/Modules/EcpayShipping/Module.php:101
+#: src/Modules/EcpayShipping/Module.php:102
 msgid "ECPay Hi-Life pickup"
 msgstr "綠界 萊爾富取貨"
 
-#: src/Modules/EcpayShipping/Module.php:102
+#: src/Modules/EcpayShipping/Module.php:103
 msgid "ECPay OK Mart pickup"
 msgstr "綠界 OK 取貨"
 
-#: src/Modules/EcpayShipping/Module.php:103
+#: src/Modules/EcpayShipping/Module.php:104
 msgid "ECPay T-Cat home delivery"
 msgstr "綠界 黑貓宅配"
 
-#: src/Modules/EcpayShipping/Module.php:104
+#: src/Modules/EcpayShipping/Module.php:105
 msgid "ECPay Chunghwa Post"
 msgstr "綠界 中華郵政"
 
-#: src/Modules/EcpayShipping/Module.php:156
+#: src/Modules/EcpayShipping/Module.php:157
 msgid "ECPay convenience store labels"
 msgstr "綠界 超商標籤"
 
-#: src/Modules/EcpayShipping/Module.php:170
+#: src/Modules/EcpayShipping/Module.php:171
 msgid "ECPay home delivery labels"
 msgstr "綠界 宅配標籤"
 
@@ -5570,81 +5574,85 @@ msgid "Unsupported shipping type."
 msgstr "不支援的物流型別。"
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:51
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:70
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:92
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:81
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:97
 msgid "The order has no items to create a shipment from."
 msgstr "訂單沒有商品可建立物流單。"
 
 #: src/Modules/EcpayShipping/Operations/CreateOrder.php:60
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:60
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:157
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:71
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:158
 msgid "No pickup store has been chosen yet."
 msgstr "尚未選擇取貨門市。"
 
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:70
+msgid "Chunghwa Post cannot collect cash on delivery. Change the payment method or the shipping method before creating the shipment."
+msgstr "中華郵政不能代收貨款，請先更改付款方式或運送方式再建立物流單。"
+
 #. translators: 1: temp label, 2: c2c|b2c
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:94
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:101
 #, php-format
 msgid "The %1$s zone (%2$s merchant account) has no credentials set."
 msgstr "溫層 %1$s（%2$s 商號）尚未設定憑證。"
 
 #. translators: 1: temp label, 2: error message
 #. translators: 1: temp label, 2: msg
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:133
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:98
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:140
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:109
 #, php-format
 msgid "The %1$s shipment could not be created: %2$s"
 msgstr "溫層 %1$s 建立失敗：%2$s"
 
 #. translators: 1: temp label, 2: msg, 3: code
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:153
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:171
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:160
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:178
 #, php-format
 msgid "The %1$s shipment could not be created: %2$s (status code %3$s)"
 msgstr "溫層 %1$s 建立失敗：%2$s（狀態代碼 %3$s）"
 
 #. translators: %s: 溫層列表
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:200
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:207
 #, php-format
 msgid "The shipments for this order already exist (%s), so nothing was booked again. To rebuild them all, delete the existing records first."
 msgstr "此訂單物流單已建立（%s），未重複下單。如需整批重建，請先刪除既有記錄後再建立。"
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:207
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:214
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:66
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:124
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:166
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:135
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:171
 msgid "Could not create the shipment"
 msgstr "建單失敗"
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:208
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:215
 msgid "None of the ECPay shipments could be created:"
 msgstr "綠界物流單全數建立失敗："
 
 #. translators: 1: count, 2: list of records
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:251
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:258
 #, php-format
 msgid "ECPay shipments created, split into %1$d parcels by temperature zone: %2$s"
 msgstr "綠界物流單建立成功（多溫層拆 %1$d 包）：%2$s"
 
 #. translators: 1: logistics id, 2: rtn_msg
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:261
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:268
 #, php-format
 msgid "ECPay shipment created — shipping ID %1$s (%2$s)"
 msgstr "綠界物流單建立成功 — 物流編號 %1$s（%2$s）"
 
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:269
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:184
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:223
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:276
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:195
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:228
 msgid "Some temperature zones could not be created:"
 msgstr "部分溫層建單失敗："
 
 #. translators: %s: 溫層列表
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:276
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:283
 #, php-format
 msgid "Zones that already had shipments were skipped to avoid booking twice: %s"
 msgstr "已略過既有溫層避免重複下單：%s"
 
 #. translators: %s: AllPayLogisticsID
-#: src/Modules/EcpayShipping/Operations/CreateOrder.php:458
+#: src/Modules/EcpayShipping/Operations/CreateOrder.php:465
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. ECPay is not notified."
 msgstr "已從網站刪除物流單記錄 #%s（綠界端不會收到通知，僅刪除本地紀錄）"
@@ -5955,14 +5963,15 @@ msgid "ezPay could not be reached."
 msgstr "無法連線到 ezPay。"
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:60
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
-#: src/Modules/Payuni/Gateways/GatewayBase.php:129
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:107
+#: src/Modules/Payuni/Gateways/GatewayBase.php:158
 msgid "Issued"
 msgstr "已開立"
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:61
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
-#: src/Modules/Payuni/Gateways/GatewayBase.php:133
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:111
+#: src/Modules/Payuni/Gateways/GatewayBase.php:162
+#: src/Modules/Shared/Invoice/OrderListColumn.php:169
 msgid "Voided"
 msgstr "已作廢"
 
@@ -5979,8 +5988,8 @@ msgstr "待開立"
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:73
 #: src/Modules/PaynowInvoice/Operations/Query.php:52
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:112
-#: src/Modules/Payuni/Gateways/GatewayBase.php:137
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
+#: src/Modules/Payuni/Gateways/GatewayBase.php:166
 msgid "Issuing status"
 msgstr "開立狀態"
 
@@ -6427,9 +6436,9 @@ msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:25
-#: src/Modules/NewebpayShipping/Module.php:151
-#: src/Modules/NewebpayShipping/Module.php:176
-#: src/Modules/NewebpayShipping/Module.php:220
+#: src/Modules/NewebpayShipping/Module.php:152
+#: src/Modules/NewebpayShipping/Module.php:177
+#: src/Modules/NewebpayShipping/Module.php:221
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:38
@@ -6825,32 +6834,32 @@ msgstr "LINE Pay（透過藍新）"
 msgid "Only the ticked payment methods appear at checkout. This has no effect in combined display mode. AFTEE, UnionPay and the cross-border methods also have to be activated in the NewebPay dashboard before they show up."
 msgstr "勾選的付款方式才會出現在結帳頁，未勾選不會出現。「合併顯示」模式下此欄位無效。AFTEE / 銀聯 / 跨境支付需先到藍新後台開通才會在收銀台出現。"
 
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:93
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:101
 msgid "NewebPay shipping status update"
 msgstr "藍新物流貨態回傳"
 
 #. translators: %s: shipping tracking number
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:96
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:104
 #, php-format
 msgid "Tracking number %s"
 msgstr "物流單號 %s"
 
 #. translators: %s: shipping status label
 #. translators: %s: shipping status code
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:100
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:103
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:108
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:111
 #, php-format
 msgid "Status %s"
 msgstr "狀態 %s"
 
 #. translators: %s: convenience store name
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:107
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:115
 #, php-format
 msgid "Store %s"
 msgstr "門市 %s"
 
 #. translators: 1: from, 2: to, 3: retld
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:118
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:126
 #, php-format
 msgid "NewebPay shipping moved the order from %1$s to %2$s (Retld=%3$s)"
 msgstr "藍新物流自動更新狀態 %1$s → %2$s（Retld=%3$s）"
@@ -6860,36 +6869,36 @@ msgid "NewebPay shipping returned an unexpected format"
 msgstr "藍新物流回傳格式錯誤"
 
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:77
-#: src/Modules/NewebpayShipping/Module.php:72
-#: src/Modules/NewebpayShipping/Module.php:93
+#: src/Modules/NewebpayShipping/Module.php:73
+#: src/Modules/NewebpayShipping/Module.php:94
 msgid "NewebPay convenience store pickup"
 msgstr "藍新超商取貨"
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:82
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
 msgid "Choose a convenience store:"
 msgstr "請選擇取貨超商："
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:83
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:191
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:829
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:99
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:85
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:219
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:857
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:100
 msgid "No pickup store chosen yet"
 msgstr "尚未選擇取貨門市"
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:85
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:87
 msgid "The NewebPay store picker could not be opened. Please try again later."
 msgstr "無法開啟藍新選店畫面，請稍後再試。"
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:100
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:102
 msgid "7-ELEVEN"
 msgstr "7-11"
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:103
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:105
 msgid "OK mart"
 msgstr "OK 超商"
 
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:153
-#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:207
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:155
+#: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:209
 msgid "This is not a NewebPay shipping method."
 msgstr "不是藍新物流方式。"
 
@@ -6919,46 +6928,46 @@ msgstr "藍新物流"
 msgid "Convenience store pickup — 7-ELEVEN, FamilyMart, Hi-Life and OK Mart"
 msgstr "超商取貨 — 7-11 / 全家 / 萊爾富 / OK"
 
-#: src/Modules/NewebpayShipping/Module.php:130
+#: src/Modules/NewebpayShipping/Module.php:131
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:123
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:148
 msgid "NewebPay shipment"
 msgstr "藍新物流託運單"
 
 #. translators: %s: lgs_no
-#: src/Modules/NewebpayShipping/Module.php:159
+#: src/Modules/NewebpayShipping/Module.php:160
 #, php-format
 msgid "NewebPay shipment created, number %s"
 msgstr "藍新物流單建立成功（單號 %s）"
 
-#: src/Modules/NewebpayShipping/Module.php:180
+#: src/Modules/NewebpayShipping/Module.php:181
 msgid "No shipment has been created for this order yet, so there is no merchant order number to look up."
 msgstr "訂單尚未建單，無 MerchantOrderNo 可查詢。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:185
+#: src/Modules/NewebpayShipping/Module.php:186
 #, php-format
 msgid "The lookup failed: %s"
 msgstr "查詢失敗：%s"
 
 #. translators: %s: status label
-#: src/Modules/NewebpayShipping/Module.php:195
+#: src/Modules/NewebpayShipping/Module.php:196
 #, php-format
 msgid "NewebPay shipping lookup: %s"
 msgstr "查詢藍新物流：%s"
 
 #. translators: %s: status
-#: src/Modules/NewebpayShipping/Module.php:205
+#: src/Modules/NewebpayShipping/Module.php:206
 #, php-format
 msgid "Lookup succeeded — %s"
 msgstr "查詢成功 — %s"
 
-#: src/Modules/NewebpayShipping/Module.php:224
+#: src/Modules/NewebpayShipping/Module.php:225
 msgid "No shipment has been created for this order yet."
 msgstr "訂單尚未建單。"
 
 #. translators: %s: error message
-#: src/Modules/NewebpayShipping/Module.php:229
+#: src/Modules/NewebpayShipping/Module.php:230
 #, php-format
 msgid "Tracking failed: %s"
 msgstr "追蹤失敗：%s"
@@ -7009,7 +7018,7 @@ msgstr "數量"
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:15
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:20
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:375
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:376
 msgid "Shipment created"
 msgstr "已建單"
 
@@ -7032,7 +7041,7 @@ msgid "Arrived at the store, waiting for pickup"
 msgstr "已到店待取"
 
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:45
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:115
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:126
 msgid "Collected by the customer"
 msgstr "顧客已取貨"
 
@@ -7109,7 +7118,7 @@ msgid "When ticked, everything runs against the test environment and nothing is 
 msgstr "勾選後走測試環境，不會真出貨。預設關閉；留空時沿用藍新金流的測試模式設定。"
 
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:26
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:76
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:90
 msgid "Shipping type"
 msgstr "物流類型"
 
@@ -7764,7 +7773,7 @@ msgstr "速買配金流"
 #: src/Modules/OrderLookup/ChannelOps.php:43
 #: src/Modules/OrderLookup/PaymentMethodOps.php:26
 #: src/Modules/OrderLookup/ShipmentOps.php:31
-#: src/Modules/Payuni/Gateways/GatewayBase.php:152
+#: src/Modules/Payuni/Gateways/GatewayBase.php:181
 #: src/Modules/Payuni/Gateways/Unified.php:58
 #: src/Modules/Payuni/Module.php:27
 #: src/Modules/Payuni/Settings/SettingsTab.php:23
@@ -7811,7 +7820,7 @@ msgid "Shopline Payments"
 msgstr "Shopline Payments"
 
 #: src/Modules/OrderLookup/ChannelOps.php:71
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:211
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:212
 #: src/Modules/PayuniShipping/Module.php:26
 #: src/Settings/SettingsPage.php:202
 #: src/Settings/SettingsPage.php:203
@@ -8078,7 +8087,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr "訂單查號搜尋 — 發票號 / 物流單號 / 金流交易序號"
 
 #: src/Modules/OrderLookup/Module.php:36
-#: src/Settings/SettingsPage.php:536
+#: src/Settings/SettingsPage.php:553
 msgid "Order number lookup"
 msgstr "訂單查號搜尋"
 
@@ -8237,7 +8246,7 @@ msgstr "訂單 #%1$s · %2$s · %3$s · %4$s"
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:566
+#: src/Settings/SettingsPage.php:583
 msgid "Payment transaction ID"
 msgstr "金流交易序號"
 
@@ -8246,7 +8255,7 @@ msgstr "金流交易序號"
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:222
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:483
-#: src/Settings/SettingsPage.php:573
+#: src/Settings/SettingsPage.php:590
 msgid "Tax ID"
 msgstr "統一編號"
 
@@ -8259,13 +8268,13 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Settings/SettingsPage.php:594
+#: src/Settings/SettingsPage.php:611
 msgid "Last four card digits"
 msgstr "卡末四碼"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:601
+#: src/Settings/SettingsPage.php:618
 msgid "T-Cat tracking number"
 msgstr "黑貓追蹤號"
 
@@ -8774,52 +8783,50 @@ msgstr "正式會員帳號（mem_cid）"
 msgid "Live member password (mem_password)"
 msgstr "正式會員密碼（mem_password）"
 
-#: src/Modules/Payuni/Admin/OrderList.php:47
-msgid "Not issued"
-msgstr "未開立"
-
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:78
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
 msgid "Issue"
 msgstr "開立"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:80
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 msgid "Void"
 msgstr "作廢"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:82
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:85
 msgid "Unknown type"
 msgstr "未知類型"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:84
-#: src/Modules/Payuni/Gateways/GatewayBase.php:109
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:87
+#: src/Modules/Payuni/Gateways/GatewayBase.php:138
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:86
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:186
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:428
 msgid "Invoice type"
 msgstr "發票類型"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:92
-#: src/Modules/Payuni/Gateways/GatewayBase.php:117
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Payuni/Gateways/GatewayBase.php:146
 msgid "Amego member"
 msgstr "Amego 會員"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:98
-#: src/Modules/Payuni/Gateways/GatewayBase.php:123
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:101
+#: src/Modules/Payuni/Gateways/GatewayBase.php:152
 msgid "Unknown carrier"
 msgstr "未知載具"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:100
-#: src/Modules/Payuni/Gateways/GatewayBase.php:125
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:103
+#: src/Modules/Payuni/Gateways/GatewayBase.php:154
 msgid "Carrier details"
 msgstr "載具資訊"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
-#: src/Modules/Payuni/Gateways/GatewayBase.php:131
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
+#: src/Modules/Payuni/Gateways/GatewayBase.php:160
+#: src/Modules/Shared/Invoice/OrderListColumn.php:112
+#: src/Modules/Shared/Invoice/OrderListColumn.php:120
 msgid "Issuing failed"
 msgstr "開立失敗"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
-#: src/Modules/Payuni/Gateways/GatewayBase.php:135
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:113
+#: src/Modules/Payuni/Gateways/GatewayBase.php:164
 msgid "Unknown status"
 msgstr "未知狀態"
 
@@ -8864,29 +8871,29 @@ msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr "無法退款此訂單。TradeStatus：%s"
 
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:247
+#: src/Modules/Payuni/Api/PaymentRequest.php:252
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr "PAYUNi 退款成功（金額 %1$s）：%2$s"
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:251
+#: src/Modules/Payuni/Api/PaymentRequest.php:256
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr "PAYUNi 退款失敗：%1$s（狀態 %2$s）"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:311
+#: src/Modules/Payuni/Api/PaymentRequest.php:325
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr "PAYUNi 查詢回應成功，但查無訂單資料。"
 
 #. translators: %s: 查詢結果
-#: src/Modules/Payuni/Api/PaymentRequest.php:333
+#: src/Modules/Payuni/Api/PaymentRequest.php:347
 #, php-format
 msgid "The PAYUNi order lookup succeeded: %s"
 msgstr "PAYUNi 訂單查詢成功，結果：%s"
 
 #. translators: %s: 查詢結果
-#: src/Modules/Payuni/Api/PaymentRequest.php:340
+#: src/Modules/Payuni/Api/PaymentRequest.php:354
 #, php-format
 msgid "The PAYUNi order lookup failed: %s"
 msgstr "PAYUNi 訂單查詢失敗，結果：%s"
@@ -8926,6 +8933,16 @@ msgstr "付款類型："
 #: src/Modules/Payuni/Api/PaymentResponse.php:135
 msgid "PAYUNi Return"
 msgstr "PAYUNi 回傳"
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Payuni/Api/PaymentResponse.php:240
+#, php-format
+msgid "PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr "PAYUNi 回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
+
+#: src/Modules/Payuni/Api/PaymentResponse.php:251
+msgid "PAYUNi issued the payment details and is waiting for the customer to pay."
+msgstr "PAYUNi 已產生繳費資訊，等待顧客付款。"
 
 #: src/Modules/Payuni/Gateways/Aftee.php:19
 msgid "PAYUNi AFTEE buy now, pay later"
@@ -9139,8 +9156,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr "取得超商代碼後到 7-11 / 全家 / 萊爾富 / OK 任一門市繳費。"
 
 #: src/Modules/Payuni/Gateways/Cvs.php:54
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:784
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:793
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:812
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
 msgid "Convenience store"
 msgstr "超商門市"
 
@@ -9148,48 +9165,48 @@ msgstr "超商門市"
 msgid "Pay with PAYUNi"
 msgstr "前往 PAYUNi 付款"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:60
+#: src/Modules/Payuni/Gateways/GatewayBase.php:87
 msgid "PAYUNi payment details"
 msgstr "PAYUNi 付款明細"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:64
+#: src/Modules/Payuni/Gateways/GatewayBase.php:90
 msgid "The payment details are not available yet. Please refresh the page in a moment."
 msgstr "付款明細尚未顯示，請稍候後重新整理頁面。"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:95
+#: src/Modules/Payuni/Gateways/GatewayBase.php:124
 msgid "E-invoice details"
 msgstr "電子發票明細"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:103
+#: src/Modules/Payuni/Gateways/GatewayBase.php:132
 msgctxt "Issue Type"
 msgid "Issue"
 msgstr "開立"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:105
+#: src/Modules/Payuni/Gateways/GatewayBase.php:134
 msgctxt "Issue Type"
 msgid "Void"
 msgstr "作廢"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:107
+#: src/Modules/Payuni/Gateways/GatewayBase.php:136
 msgctxt "Issue Type"
 msgid "Unknown type"
 msgstr "未知類型"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:113
+#: src/Modules/Payuni/Gateways/GatewayBase.php:142
 msgid "Mobile carrier"
 msgstr "手機載具"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:121
+#: src/Modules/Payuni/Gateways/GatewayBase.php:150
 msgid "Business"
 msgstr "公司戶"
 
 #. translators: 1: Payment method title 2: PAYUNi URL
-#: src/Modules/Payuni/Gateways/GatewayBase.php:147
+#: src/Modules/Payuni/Gateways/GatewayBase.php:176
 #, php-format
 msgid "%1$s payments are provided by %2$s"
 msgstr "%1$s 金流服務由 %2$s 提供"
 
-#: src/Modules/Payuni/Gateways/GatewayBase.php:190
+#: src/Modules/Payuni/Gateways/GatewayBase.php:219
 msgid "We have received your order, but the payment is not complete yet."
 msgstr "已收到您的訂單，但付款尚未完成。"
 
@@ -9477,7 +9494,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr "PAYUNi 收銀台的顯示語言。"
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:80
-#: src/Modules/Shared/Email/PersonalizationTags.php:47
+#: src/Modules/Shared/Email/PersonalizationTags.php:48
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:180
 msgid "E-invoice"
 msgstr "電子發票"
@@ -9620,7 +9637,7 @@ msgstr "批次列印黑貓宅配標籤"
 
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:57
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:63
-#: src/Modules/PayuniShipping/PayuniShipping.php:361
+#: src/Modules/PayuniShipping/PayuniShipping.php:371
 msgid "Shipping Phone"
 msgstr "收件人電話"
 
@@ -9636,55 +9653,55 @@ msgstr "重新建立 PAYUNi 物流訂單"
 msgid "Shipping transaction ID"
 msgstr "物流交易序號"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:73
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:87
 msgid "Verification code"
 msgstr "驗證碼"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:77
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:91
 msgid "Delivery method"
 msgstr "配送方式"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:78
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:92
 msgid "Product type"
 msgstr "商品類型"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:84
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:98
 msgid "Parcel size"
 msgstr "包裹規格"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:95
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:109
 msgid "Service type"
 msgstr "服務類型"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:98
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:112
 msgid "Amount to collect"
 msgstr "代收金額"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:101
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:115
 msgid "Shipping status"
 msgstr "物流狀態"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:102
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:116
 msgid "Status description"
 msgstr "狀態說明"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:103
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:117
 msgid "Status updated"
 msgstr "狀態時間"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:106
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:120
 msgid "Printed at"
 msgstr "列印時間"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:110
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:124
 msgid "Download label"
 msgstr "下載標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:112
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:126
 msgid "Print label"
 msgstr "列印標籤"
 
-#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:118
+#: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:132
 msgid "Shipment actions"
 msgstr "物流單動作"
 
@@ -9693,102 +9710,102 @@ msgid "The PAYUNi shipping type is not set"
 msgstr "PAYUNi 物流類型未設定"
 
 #. translators: 1: PAYUNi status code, 2: error message
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:128
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:129
 #, php-format
 msgid "PAYUNi could not create the shipment: %1$s (%2$s)"
 msgstr "PAYUNi 建立物流單失敗：%1$s（%2$s）"
 
 #. translators: %s: PAYUNi ship trade number
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:152
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:153
 #, php-format
 msgid "PAYUNi shipment created, tracking number %s"
 msgstr "PAYUNi 物流單建立成功（物流單號 %s）"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:156
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:576
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:157
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:577
 msgid "PAYUNi could not create the shipment:"
 msgstr "PAYUNi 建立物流單失敗："
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:166
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:247
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:314
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:484
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:167
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:248
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:315
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:485
 msgid "Permission denied."
 msgstr "權限不足。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:172
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:253
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:173
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:254
 msgid "Invalid security token sent."
 msgstr "送出的安全權杖無效。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:179
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:260
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:320
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:491
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:180
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:261
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:321
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:492
 msgid "Missing Ajax Parameter."
 msgstr "缺少 AJAX 參數。"
 
 #. translators: 1: status, 2: lgs status code, 3: description
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:205
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:206
 #, php-format
 msgid "PAYUNi tracking result: %1$s — %2$s %3$s"
 msgstr "PAYUNi 物流貨態查詢結果：%1$s — %2$s %3$s"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:269
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:270
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:320
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:353
 msgid "Order not found."
 msgstr "找不到訂單。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:282
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:283
 msgid "Invalid package spec for this goods type."
 msgstr "此商品類型不支援此包裝規格。"
 
 #. translators: %s: package spec label (e.g. 60cm / 90cm)
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:299
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:300
 #, php-format
 msgid "The parcel size is now %s"
 msgstr "包裹規格已更新為：%s"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:303
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:304
 msgid "Package spec updated successfully."
 msgstr "包裝規格更新成功。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:317
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:487
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:318
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:488
 msgid "Invalid security token."
 msgstr "安全權杖無效。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:333
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:334
 msgid "Unsupported shipping service."
 msgstr "不支援的物流服務。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:348
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:349
 msgid "No such Orders"
 msgstr "找不到該訂單"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:403
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:458
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:404
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:459
 msgid "Sending the print request…"
 msgstr "正在送出列印請求…"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:499
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:500
 msgid "Unsupported Ship Type"
 msgstr "不支援的物流類型"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:508
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:509
 msgid "Cant find Order."
 msgstr "找不到訂單。"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:540
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:541
 msgid "Download shipping label"
 msgstr "下載物流標籤"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:541
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:542
 msgid "Downloading the PAYUNi shipping label…"
 msgstr "正在下載 PAYUNi 物流標籤…"
 
-#: src/Modules/PayuniShipping/Api/ShippingRequest.php:611
+#: src/Modules/PayuniShipping/Api/ShippingRequest.php:612
 msgid "The PAYUNi shipment lookup failed:"
 msgstr "PAYUNi 物流單查詢失敗："
 
@@ -9840,55 +9857,55 @@ msgctxt "Shipping Note"
 msgid "Message: "
 msgstr "訊息："
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:181
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:182
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:159
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:194
 msgid "Carrier shipment number:"
 msgstr "物流商出貨編號："
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:200
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:201
 msgid "PAYUNi — T-Cat home delivery"
 msgstr "PAYUNi — 黑貓宅配"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:201
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:202
 #: src/Modules/PayuniShipping/Providers/TCat/HDNormal.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDNormal.php:26
 msgid "PAYUNi — T-Cat home delivery (ambient)"
 msgstr "PAYUNi — 黑貓宅配（常溫）"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:202
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:203
 #: src/Modules/PayuniShipping/Providers/TCat/HDRefrigerated.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDRefrigerated.php:26
 msgid "PAYUNi — T-Cat home delivery (chilled)"
 msgstr "PAYUNi — 黑貓宅配（冷藏）"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:203
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:204
 #: src/Modules/PayuniShipping/Providers/TCat/HDFrozen.php:25
 #: src/Modules/PayuniShipping/Providers/TCat/HDFrozen.php:26
 msgid "PAYUNi — T-Cat home delivery (frozen)"
 msgstr "PAYUNi — 黑貓宅配（冷凍）"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:204
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:205
 msgid "PAYUNi — 7-ELEVEN C2C pickup"
 msgstr "PAYUNi — 7-11 C2C 取貨"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:205
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:206
 msgid "PAYUNi — 7-ELEVEN B2C pickup"
 msgstr "PAYUNi — 7-11 B2C 取貨"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:206
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:207
 msgid "PAYUNi — 7-ELEVEN C2C ambient"
 msgstr "PAYUNi — 7-11 C2C 常溫"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:207
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:208
 msgid "PAYUNi — 7-ELEVEN C2C frozen"
 msgstr "PAYUNi — 7-11 C2C 冷凍"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:208
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:209
 msgid "PAYUNi — 7-ELEVEN B2C ambient"
 msgstr "PAYUNi — 7-11 B2C 常溫"
 
-#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:209
+#: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:210
 msgid "PAYUNi — 7-ELEVEN B2C frozen"
 msgstr "PAYUNi — 7-11 B2C 冷凍"
 
@@ -9900,82 +9917,82 @@ msgstr "物流狀態更新失敗。"
 msgid "The shipment could not be cancelled."
 msgstr "取消物流單失敗。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:189
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:227
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:230
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:830
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:217
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:255
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:258
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:858
 msgid "Choose a store"
 msgstr "選擇門市"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:192
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:220
 msgid "Open the store map"
 msgstr "開啟超商地圖"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:193
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:221
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:206
 msgid "Loading…"
 msgstr "載入中…"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:194
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:232
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:222
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:260
 msgid "Loading failed. Please try again later"
 msgstr "載入失敗，請稍後再試"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:195
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:223
 msgid "Store chosen"
 msgstr "已選門市"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:196
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:224
 msgid "Store number:"
 msgstr "門市代號:"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:231
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:259
 msgid "Redirecting…"
 msgstr "跳轉中..."
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:247
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:275
 msgid "The cart is empty or the session has expired."
 msgstr "購物車為空或會話過期。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:252
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:280
 msgid "The chosen shipping method does not match the cart."
 msgstr "選取的運送方式與購物車不符。"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:256
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:308
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:284
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:336
 msgid "Please choose a convenience store pickup method"
 msgstr "請選擇超商取貨運送方式"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:430
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:437
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:458
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:465
 msgid "Returning to checkout…"
 msgstr "正在返回結帳頁面..."
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:431
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:459
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr "門市選擇完成"
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:434
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:462
 #, php-format
 msgid "Store chosen: %s"
 msgstr "選擇的門市：%s"
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:436
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:464
 #, php-format
 msgid "Store address: %s"
 msgstr "門市地址：%s"
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:819
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:847
 #, php-format
 msgid "Store number: %s"
 msgstr "門市代號: %s"
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:821
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:849
 msgid "Outlying islands"
 msgstr "離島地區"
 
@@ -10025,28 +10042,28 @@ msgstr "黑貓冷藏"
 msgid "T-Cat frozen"
 msgstr "黑貓冷凍"
 
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:50
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:61
 msgid "This is not a PAYUNi unified method order."
 msgstr "不是 PAYUNi unified method 訂單。"
 
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:125
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:136
 msgid "None of the PAYUNi shipments could be created:"
 msgstr "PAYUNi 物流單全數建立失敗："
 
 #. translators: 1: count, 2: list
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:165
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:176
 #, php-format
 msgid "PAYUNi created the T-Cat shipments, split into %1$d parcels by temperature zone: %2$s"
 msgstr "PAYUNi 黑貓建單成功（多溫層拆 %1$d 包）：%2$s"
 
 #. translators: 1: temp label, 2: PAYUNi ship trade no, 3: pickup no
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:175
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:186
 #, php-format
 msgid "PAYUNi created the T-Cat home delivery shipment — %1$s (shipping ID %2$s, pickup number %3$s)"
 msgstr "PAYUNi 黑貓宅配建單成功 — %1$s（物流序號 %2$s 取件編號 %3$s）"
 
 #. translators: %s: PAYUNi shipment trade number
-#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:247
+#: src/Modules/PayuniShipping/Operations/CreateOrderUnified.php:258
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. PAYUNi is not notified."
 msgstr "已刪除本站的物流單紀錄 #%s，不會通知 PAYUNi。"
@@ -10066,63 +10083,63 @@ msgstr "正在列印 PAYUNi 物流標籤…"
 msgid "PAYUNi shipment created, number %s"
 msgstr "PAYUNi 物流單建立成功（單號 %s）"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:188
+#: src/Modules/PayuniShipping/PayuniShipping.php:198
 msgid "PAYUNi convenience store pickup"
 msgstr "PAYUNi 超商取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:210
+#: src/Modules/PayuniShipping/PayuniShipping.php:220
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr "PAYUNi 7-11 C2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:211
+#: src/Modules/PayuniShipping/PayuniShipping.php:221
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr "PAYUNi 7-11 B2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:212
+#: src/Modules/PayuniShipping/PayuniShipping.php:222
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr "PAYUNi 7-11 店到店常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:213
+#: src/Modules/PayuniShipping/PayuniShipping.php:223
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr "PAYUNi 7-11 店到店冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:214
+#: src/Modules/PayuniShipping/PayuniShipping.php:224
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr "PAYUNi 7-11 大宗常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:215
+#: src/Modules/PayuniShipping/PayuniShipping.php:225
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr "PAYUNi 7-11 大宗冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:218
+#: src/Modules/PayuniShipping/PayuniShipping.php:228
 msgid "PAYUNi T-Cat home delivery"
 msgstr "PAYUNi 黑貓宅配"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:219
+#: src/Modules/PayuniShipping/PayuniShipping.php:229
 msgid "PAYUNi T-Cat ambient"
 msgstr "PAYUNi 黑貓常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:220
+#: src/Modules/PayuniShipping/PayuniShipping.php:230
 msgid "PAYUNi T-Cat frozen"
 msgstr "PAYUNi 黑貓冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:221
+#: src/Modules/PayuniShipping/PayuniShipping.php:231
 msgid "PAYUNi T-Cat chilled"
 msgstr "PAYUNi 黑貓冷藏"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:263
+#: src/Modules/PayuniShipping/PayuniShipping.php:273
 msgid "PAYUNi convenience store labels"
 msgstr "PAYUNi 超商標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:281
+#: src/Modules/PayuniShipping/PayuniShipping.php:291
 msgid "PAYUNi home delivery labels"
 msgstr "PAYUNi 宅配標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:615
+#: src/Modules/PayuniShipping/PayuniShipping.php:625
 msgid "General Settings"
 msgstr "一般設定"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:616
+#: src/Modules/PayuniShipping/PayuniShipping.php:626
 msgid "Shipping Settings"
 msgstr "運送設定"
 
@@ -10655,7 +10672,7 @@ msgid "Arrived at the drop-off store"
 msgstr "商品已至寄件門店"
 
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:28
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:121
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:132
 msgid "Arrived at the return store"
 msgstr "已到退貨門市"
 
@@ -10876,8 +10893,8 @@ msgstr "此運送方式非由本外掛的物流模組處理。"
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:284
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:107
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:115
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:251
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:325
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:252
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:326
 msgid "Shipping method:"
 msgstr "運送方式："
 
@@ -10936,50 +10953,50 @@ msgstr "您好，您的訂單已成立，請於期限內以下列資訊完成付
 msgid "Please pay before the deadline:"
 msgstr "請於期限內完成付款："
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:45
+#: src/Modules/Shared/Email/PersonalizationTags.php:46
 msgid "Shipping and pickup"
 msgstr "物流與取件"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:46
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:78
+#: src/Modules/Shared/Email/PersonalizationTags.php:47
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:94
 msgid "Payment details"
 msgstr "繳費資訊"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:51
+#: src/Modules/Shared/Email/PersonalizationTags.php:52
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:132
 msgid "Pickup store name"
 msgstr "取件門市名稱"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:52
+#: src/Modules/Shared/Email/PersonalizationTags.php:53
 msgid "Pickup store ID"
 msgstr "取件門市代號"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:53
+#: src/Modules/Shared/Email/PersonalizationTags.php:54
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:141
 msgid "Pickup store address"
 msgstr "取件門市地址"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:55
+#: src/Modules/Shared/Email/PersonalizationTags.php:56
 msgid "Shipping provider"
 msgstr "物流商"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:80
+#: src/Modules/Shared/Email/PersonalizationTags.php:100
 msgid "Barcode segment 1"
 msgstr "條碼第一段"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:81
+#: src/Modules/Shared/Email/PersonalizationTags.php:101
 msgid "Barcode segment 2"
 msgstr "條碼第二段"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:82
+#: src/Modules/Shared/Email/PersonalizationTags.php:102
 msgid "Barcode segment 3"
 msgstr "條碼第三段"
 
-#: src/Modules/Shared/Email/PersonalizationTags.php:83
+#: src/Modules/Shared/Email/PersonalizationTags.php:103
 msgid "Payment deadline"
 msgstr "繳費期限"
 
-#: src/Modules/Shared/Frontend/PaymentInfoBox.php:79
+#: src/Modules/Shared/Frontend/PaymentInfoBox.php:95
 msgid "Please use the details below to pay before the deadline."
 msgstr "請於期限內以下列資訊完成付款。"
 
@@ -11133,120 +11150,120 @@ msgstr "手機條碼（/ 開頭 + 7 碼大寫英數）"
 msgid "You do not have permission to do this"
 msgstr "權限不足"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:199
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:195
 msgid "Bulk print"
 msgstr "批次列印"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:200
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:196
 msgid "Orders"
 msgstr "訂單"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:204
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:200
 msgid "Printable"
 msgstr "可印"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:205
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:201
 msgid "There are no printable orders."
 msgstr "沒有可列印的訂單。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:206
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:202
 msgid "Select at least one."
 msgstr "請至少選擇一筆。"
 
 #. translators: %d: number of selected orders to print
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:208
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:204
 #, php-format
 msgid "Print (%d)"
 msgstr "列印 (%d)"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:211
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:207
 msgid "Loading failed."
 msgstr "載入失敗。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:212
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:208
 msgid "✓"
 msgstr "✓"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:213
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:209
 msgid "—"
 msgstr "—"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:214
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:249
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:210
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:245
 msgid "Paper:"
 msgstr "紙張："
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:215
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:251
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:211
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:247
 msgid "A4 standard"
 msgstr "A4 標準"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:216
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:252
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:212
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:248
 msgid "A6 label printer"
 msgstr "A6 標籤機"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:271
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:351
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:267
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:347
 msgid "That shipping module could not be found."
 msgstr "找不到此物流模組。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:356
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:352
 msgid "Select at least one order."
 msgstr "請至少選擇一筆訂單。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:362
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:358
 msgid "There is nothing to print."
 msgstr "沒有可列印的內容。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:404
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:400
 msgid "No order was specified."
 msgstr "沒有指定訂單。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:437
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:433
 msgid "The selected orders have no printable shipping labels — the shipments may not have been created yet."
 msgstr "所選訂單沒有可列印的物流標籤（可能尚未建立託運單）。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:466
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:462
 msgid "Print shipping labels (carrier detected automatically)"
 msgstr "列印物流單（自動判斷物流商）"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:538
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:534
 msgid "None of the selected orders has a printable label for this carrier, so all of them were skipped."
 msgstr "所選訂單沒有符合此物流的可列印標籤（已全部跳過）。"
 
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:541
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:545
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:549
 msgid "The print link has expired. Please try again."
 msgstr "列印連結已失效，請重試。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:557
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:553
 msgid "There is nothing to print, or the link has expired."
 msgstr "沒有可列印的內容，或連結已過期。"
 
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:570
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:574
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:578
 msgid "Bulk print shipping labels"
 msgstr "批次列印物流標籤"
 
 #. translators: 1: number of labels produced, 2: number of skipped orders
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:581
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:577
 #, php-format
 msgid "%1$d labels generated; %2$d orders skipped because they use another carrier."
 msgstr "已產生 %1$d 份標籤；略過 %2$d 筆（非此物流的訂單）。"
 
 #. translators: %d: number of labels produced
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:584
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:580
 #, php-format
 msgid "%d labels generated."
 msgstr "已產生 %d 份標籤。"
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:588
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:584
 msgid "Click the buttons below to open each label — this stops the browser from blocking pop-ups:"
 msgstr "請點擊下列按鈕開啟各份標籤（避免瀏覽器擋自動彈窗）："
 
 #. translators: %d: label sequence number
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:591
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:587
 #, php-format
 msgid "Print label %d"
 msgstr "列印第 %d 份"
@@ -11288,7 +11305,7 @@ msgstr "門市地圖無法開啟。"
 
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:314
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:347
-#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:147
+#: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:148
 msgid "You are not allowed to edit orders."
 msgstr "目前的登入身分沒有編輯訂單的權限。"
 
@@ -11333,63 +11350,63 @@ msgid "Shipment number:"
 msgstr "物流單號："
 
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:209
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:287
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:353
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:288
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:354
 msgid "Shipping status:"
 msgstr "物流狀態："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:255
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:256
 msgid "No NewebPay shipping details yet. The customer can pick a store at checkout, or you can create the shipment yourself."
 msgstr "尚未取得藍新物流資訊。顧客可在結帳頁選店，或商家自行建立物流單。"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:259
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:260
 msgid "NewebPay shipping ID:"
 msgstr "藍新物流編號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:271
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:331
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:272
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:332
 msgid "Shipping type:"
 msgstr "物流類型："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:274
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:334
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:275
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:335
 msgid "Pickup store:"
 msgstr "取貨門市："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:284
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:344
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:285
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:345
 msgid "Store address:"
 msgstr "門市地址："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:292
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:293
 msgid "Create NewebPay shipment"
 msgstr "建立藍新物流單"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:295
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:296
 msgid "Check current status"
 msgstr "查詢即時狀態"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:296
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:297
 msgid "Shipment tracking"
 msgstr "物流追蹤"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:328
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:329
 msgid "SmilePay serial number:"
 msgstr "速買配序號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:347
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:348
 msgid "Pickup code:"
 msgstr "取貨碼："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:350
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:351
 msgid "T-Cat waybill number:"
 msgstr "黑貓託運單號："
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:367
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:368
 msgid "No SmilePay shipment has been created yet."
 msgstr "尚未建立速買配物流單。"
 
-#: src/Modules/Shipping/Admin/ShippingCardSection.php:373
+#: src/Modules/Shipping/Admin/ShippingCardSection.php:374
 msgid "Create SmilePay shipment"
 msgstr "建立速買配物流單"
 
@@ -11646,19 +11663,19 @@ msgid "Processing"
 msgstr "處理中"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:68
-#: src/Modules/Shipping/Statuses/Registrar.php:213
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:111
+#: src/Modules/Shipping/Statuses/Registrar.php:222
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:122
 #: src/Settings/SettingsPage.php:396
 msgid "Shipped"
 msgstr "已出貨"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:70
-#: src/Modules/Shipping/Statuses/Registrar.php:217
+#: src/Modules/Shipping/Statuses/Registrar.php:226
 msgid "Store closed"
 msgstr "門市關轉"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:71
-#: src/Modules/Shipping/Statuses/Registrar.php:219
+#: src/Modules/Shipping/Statuses/Registrar.php:228
 msgid "Not collected"
 msgstr "未取件"
 
@@ -11686,40 +11703,40 @@ msgstr "文字"
 msgid "Preview"
 msgstr "預覽"
 
-#: src/Modules/Shipping/Statuses/Registrar.php:215
+#: src/Modules/Shipping/Statuses/Registrar.php:224
 msgid "Arrived at store"
 msgstr "已到店待取"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:233
+#: src/Modules/Shipping/Statuses/Registrar.php:242
 #, php-format
 msgid "Arrived at store <span class=\"count\">(%s)</span>"
 msgid_plural "Arrived at store <span class=\"count\">(%s)</span>"
 msgstr[0] "已到店待取 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:236
+#: src/Modules/Shipping/Statuses/Registrar.php:245
 #, php-format
 msgid "Store closed <span class=\"count\">(%s)</span>"
 msgid_plural "Store closed <span class=\"count\">(%s)</span>"
 msgstr[0] "門市關轉 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:239
+#: src/Modules/Shipping/Statuses/Registrar.php:248
 #, php-format
 msgid "Not collected <span class=\"count\">(%s)</span>"
 msgid_plural "Not collected <span class=\"count\">(%s)</span>"
 msgstr[0] "未取件 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders in this status
-#: src/Modules/Shipping/Statuses/Registrar.php:243
+#: src/Modules/Shipping/Statuses/Registrar.php:252
 #, php-format
 msgid "Shipped <span class=\"count\">(%s)</span>"
 msgid_plural "Shipped <span class=\"count\">(%s)</span>"
 msgstr[0] "已出貨 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: order status label
-#: src/Modules/Shipping/Statuses/Registrar.php:331
+#: src/Modules/Shipping/Statuses/Registrar.php:340
 #, php-format
 msgid "Change status to: %s"
 msgstr "變更狀態為：%s"
@@ -11766,28 +11783,28 @@ msgstr "此商品的物流溫層分艙。冷藏 / 冷凍商品在後台建立物
 msgid "Empty or Inherit means the parent product setting is used."
 msgstr "空 / 繼承 = 跟父商品設定走。"
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:190
+#: src/Modules/Shipping/Tracking/TrackingLink.php:217
 msgid "Copy tracking number"
 msgstr "複製貨號"
 
-#: src/Modules/Shipping/Tracking/TrackingLink.php:191
+#: src/Modules/Shipping/Tracking/TrackingLink.php:218
 msgid "Copy"
 msgstr "複製"
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:201
+#: src/Modules/Shipping/Tracking/TrackingLink.php:228
 #, php-format
 msgid "Track %s shipment"
 msgstr "查詢 %s 貨態"
 
 #. translators: %s: carrier name
-#: src/Modules/Shipping/Tracking/TrackingLink.php:204
+#: src/Modules/Shipping/Tracking/TrackingLink.php:231
 #, php-format
 msgid "Open %s tracking"
 msgstr "前往 %s 查詢"
 
 #. translators: 1: provider label, 2: description, 3: code
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:36
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:34
 #, php-format
 msgid "%1$s shipping status: %2$s (status code %3$s)"
 msgstr "%1$s 物流貨態：%2$s（狀態代碼 %3$s）"
@@ -12397,30 +12414,30 @@ msgid "SmilePay shipment created (smseid=%1$s, number=%2$s)"
 msgstr "速買配物流單建立成功（smseid=%1$s 編號=%2$s）"
 
 #. translators: %s: SmilePay status label
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:80
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:88
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:87
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:99
 #, php-format
 msgid "SmilePay shipping status: %s"
 msgstr "速買配物流狀態：%s"
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:113
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:124
 msgid "Arrived at the store"
 msgstr "已達門市"
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:119
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:130
 msgid "Returned by the customer"
 msgstr "消費者退貨"
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:123
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:134
 msgid "Return collected"
 msgstr "退貨已取貨"
 
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:125
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:136
 msgid "Return arrived at the distribution center"
 msgstr "退貨已至物流中心"
 
 #. translators: %d: SmilePay status code
-#: src/Modules/SmilepayShipping/Api/IpnHandler.php:128
+#: src/Modules/SmilepayShipping/Api/IpnHandler.php:139
 #, php-format
 msgid "Status code %d"
 msgstr "狀態代號 %d"
@@ -12499,128 +12516,132 @@ msgstr "SmilePay 物流 — 7-11 / 全家 / 黑貓 (常溫/冷藏/冷凍)"
 msgid "7-ELEVEN and FamilyMart pickup, plus T-Cat ambient, chilled and frozen"
 msgstr "7-11 / 全家 取貨 + 黑貓 常溫/冷藏/冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:68
+#: src/Modules/SmilepayShipping/Module.php:69
 msgid "SmilePay convenience store pickup"
 msgstr "速買配超商取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:112
+#: src/Modules/SmilepayShipping/Module.php:113
 msgid "SmilePay 7-ELEVEN pickup"
 msgstr "速買配 7-11 取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:113
+#: src/Modules/SmilepayShipping/Module.php:114
 msgid "SmilePay FamilyMart pickup"
 msgstr "速買配 全家取貨"
 
-#: src/Modules/SmilepayShipping/Module.php:132
+#: src/Modules/SmilepayShipping/Module.php:133
 msgid "SmilePay convenience store labels"
 msgstr "速買配 超商標籤"
 
-#: src/Modules/SmilepayShipping/Module.php:144
+#: src/Modules/SmilepayShipping/Module.php:145
 msgid "SmilePay T-Cat home delivery"
 msgstr "速買配 黑貓宅配"
 
-#: src/Modules/SmilepayShipping/Module.php:145
+#: src/Modules/SmilepayShipping/Module.php:146
 msgid "SmilePay T-Cat ambient"
 msgstr "速買配 黑貓常溫"
 
-#: src/Modules/SmilepayShipping/Module.php:146
+#: src/Modules/SmilepayShipping/Module.php:147
 msgid "SmilePay T-Cat chilled"
 msgstr "速買配 黑貓冷藏"
 
-#: src/Modules/SmilepayShipping/Module.php:147
+#: src/Modules/SmilepayShipping/Module.php:148
 msgid "SmilePay T-Cat frozen"
 msgstr "速買配 黑貓冷凍"
 
-#: src/Modules/SmilepayShipping/Module.php:160
+#: src/Modules/SmilepayShipping/Module.php:161
 msgid "SmilePay T-Cat labels"
 msgstr "速買配 黑貓標籤"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:30
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:35
 msgid "This order has no SmilePay shipping method."
 msgstr "訂單無速買配運送方式。"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:39
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:44
 msgid "First fill in a name and mobile number under WooCommerce → Moksa → SmilePay shipping → Sender details."
 msgstr "請先到「WooCommerce → Moksa → 速買配 物流 → 寄件人資料」填入姓名與手機。"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:53
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:58
 msgid "That SmilePay shipping method is not recognized."
 msgstr "不認得此速買配運送方式。"
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:63
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:68
 #, php-format
 msgid "The SmilePay shipment could not be created: %s"
 msgstr "速買配建單失敗：%s"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:74
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:79
 msgid "The SmilePay shipment could not be created: no shipping serial number was returned."
 msgstr "速買配建單失敗：未取得物流序號。"
 
 #. translators: 1: temp label, 2: msg
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:125
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:130
 #, php-format
 msgid "No serial number was returned for the %1$s zone: %2$s"
 msgstr "溫層 %1$s 取序號失敗：%2$s"
 
 #. translators: %s: temperature layer label
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:134
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:139
 #, php-format
 msgid "The %s shipment could not be created: no shipping serial number was returned."
 msgstr "溫層 %s 建單失敗：未取得物流序號。"
 
 #. translators: 1: temp label, 2: msg
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:144
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:149
 #, php-format
 msgid "The waybill for the %1$s zone could not be fetched: %2$s"
 msgstr "溫層 %1$s 取託運單失敗：%2$s"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:167
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:172
 msgid "The SmilePay shipment could not be created:"
 msgstr "速買配物流單建立失敗："
 
 #. translators: 1: count, 2: list
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:204
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:209
 #, php-format
 msgid "SmilePay created the T-Cat shipments, split into %1$d parcels by temperature zone: %2$s"
 msgstr "速買配 黑貓建單成功（多溫層拆 %1$d 包）：%2$s"
 
 #. translators: 1: temp label, 2: smilepay order no, 3: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:214
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:219
 #, php-format
 msgid "SmilePay created the T-Cat home delivery shipment — %1$s (serial number %2$s, waybill number %3$s)"
 msgstr "速買配黑貓宅配建單成功 — %1$s（物流序號 %2$s 託運單號 %3$s）"
 
 #. translators: %s: SmilePay shipment number
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:281
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:286
 #, php-format
 msgid "Shipment record #%s was deleted from this site only. SmilePay is not notified."
 msgstr "已刪除本站的物流單紀錄 #%s，不會通知速買配。"
 
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:344
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:346
 msgid "This store pickup order has no store yet. Ask the customer to choose one at checkout, or set it yourself."
 msgstr "此 CVS 訂單尚未選店。請顧客在結帳頁選店或商家手動指定。"
 
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:354
+msgid "SmilePay does not offer FamilyMart bulk (B2C) shipping. Switch the store pickup type to store-to-store (C2C)."
+msgstr "速買配沒有提供全家大宗寄倉（B2C），請把超商取貨類型改成店到店（C2C）。"
+
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:386
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:393
 #, php-format
 msgid "The SmilePay store pickup shipment could not be created: %s"
 msgstr "速買配超商建單失敗：%s"
 
 #. translators: 1: smilepay order no, 2: pickup code
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:398
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:405
 #, php-format
 msgid "SmilePay store pickup shipment created (serial number %1$s, pickup code %2$s)"
 msgstr "速買配超商建單成功（物流序號 %1$s 取貨碼 %2$s）"
 
 #. translators: %s: error message
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:424
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:431
 #, php-format
 msgid "The SmilePay T-Cat home delivery shipment could not be created: %s"
 msgstr "速買配黑貓宅配建單失敗：%s"
 
 #. translators: 1: smilepay order no, 2: tracking no
-#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:433
+#: src/Modules/SmilepayShipping/Operations/CreateOrder.php:440
 #, php-format
 msgid "SmilePay T-Cat home delivery shipment created (serial number %1$s, waybill number %2$s)"
 msgstr "速買配黑貓宅配建單成功（物流序號 %1$s 託運單號 %2$s）"
@@ -13251,89 +13272,101 @@ msgstr "台灣手機格式檢查"
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr "檢查電話是否為台灣手機號碼 —— 09 開頭共 10 碼。檢查前會先清掉連字號、空白與 +886 國碼，所以顧客輸入 0912-345-678 或 +886912345678 都會通過，訂單裡統一存成 0912345678。市話不接受。"
 
-#: src/Settings/SettingsPage.php:514
+#: src/Settings/SettingsPage.php:513
+msgid "My Account"
+msgstr "我的帳號"
+
+#: src/Settings/SettingsPage.php:518
+msgid "Hide Downloads"
+msgstr "隱藏「下載」"
+
+#: src/Settings/SettingsPage.php:521
+msgid "Remove \"Downloads\" from the My Account menu that customers see. Useful when you do not sell downloadable products."
+msgstr "把顧客「我的帳號」選單裡的「下載」拿掉。沒有販售可下載商品時適用。"
+
+#: src/Settings/SettingsPage.php:531
 msgid "Taiwan field order and widths"
 msgstr "台灣欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:516
+#: src/Settings/SettingsPage.php:533
 msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
 msgstr "拖曳重排欄位、選 50% 或 100% 寬度。這一區獨立運作，不需要開啟上方的台灣地址工具。"
 
-#: src/Settings/SettingsPage.php:521
+#: src/Settings/SettingsPage.php:538
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr "關掉後結帳欄位維持 WooCommerce 預設的順序與寬度。你排好的版面會保留，重新打開就回來。"
 
-#: src/Settings/SettingsPage.php:524
+#: src/Settings/SettingsPage.php:541
 msgid "Field order and width"
 msgstr "欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:526
+#: src/Settings/SettingsPage.php:543
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。（電子郵件例外：區塊結帳把它放在獨立的「聯絡資訊」步驟，移動它只會改到古典結帳。）"
 
-#: src/Settings/SettingsPage.php:538
+#: src/Settings/SettingsPage.php:555
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr "讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。"
 
-#: src/Settings/SettingsPage.php:542
+#: src/Settings/SettingsPage.php:559
 msgid "Enable order number lookup"
 msgstr "啟用訂單查號搜尋"
 
-#: src/Settings/SettingsPage.php:546
+#: src/Settings/SettingsPage.php:563
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr "開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。"
 
-#: src/Settings/SettingsPage.php:551
+#: src/Settings/SettingsPage.php:568
 msgid "Number types to search"
 msgstr "搜尋號碼類型"
 
-#: src/Settings/SettingsPage.php:606
+#: src/Settings/SettingsPage.php:623
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr "勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。"
 
-#: src/Settings/SettingsPage.php:609
+#: src/Settings/SettingsPage.php:626
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr "加速索引（大量訂單建議開啟）"
 
-#: src/Settings/SettingsPage.php:613
+#: src/Settings/SettingsPage.php:630
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:653
+#: src/Settings/SettingsPage.php:670
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:654
+#: src/Settings/SettingsPage.php:671
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:655
+#: src/Settings/SettingsPage.php:672
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:656
+#: src/Settings/SettingsPage.php:673
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:657
+#: src/Settings/SettingsPage.php:674
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:664
+#: src/Settings/SettingsPage.php:681
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:665
+#: src/Settings/SettingsPage.php:682
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:713
+#: src/Settings/SettingsPage.php:730
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:714
+#: src/Settings/SettingsPage.php:731
 msgid "Module overview"
 msgstr "模組總覽"
 

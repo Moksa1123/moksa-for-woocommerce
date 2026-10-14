@@ -321,6 +321,9 @@ class PayuniPayment {
 		}
 
 		$order->update_meta_data( OrderMeta::ORDER_SERIAL_NO, $order_serial_no );
+		// 送出當下就記下完整 MerTradeNo：通知沒送到的訂單最需要查詢，查詢時要用它。
+		$order->update_meta_data( OrderMeta::PAYUNI_ORDER_NO, $payuni_order_no );
+		$order->update_meta_data( OrderMeta::PLUGIN_VERSION, MOKSAFOWO_VERSION );
 		$order->save();
 
 		return $payuni_order_no;

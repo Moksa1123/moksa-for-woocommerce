@@ -509,6 +509,23 @@ final class SettingsPage extends \WC_Settings_Page {
 				'id'   => 'moksafowo_tw_phone_section',
 			],
 
+			[
+				'title' => __( 'My Account', 'moksa-for-woocommerce' ),
+				'type'  => 'title',
+				'id'    => 'moksafowo_myaccount_section',
+			],
+			[
+				'title'   => __( 'Hide Downloads', 'moksa-for-woocommerce' ),
+				'id'      => MyAccountMenu::HIDE_DOWNLOADS,
+				'type'    => 'checkbox',
+				'desc'    => __( 'Remove "Downloads" from the My Account menu that customers see. Useful when you do not sell downloadable products.', 'moksa-for-woocommerce' ),
+				'default' => 'no',
+			],
+			[
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_myaccount_section',
+			],
+
 			// 台灣欄位順序與寬度（field manager UI）
 			[
 				'title' => __( 'Taiwan field order and widths', 'moksa-for-woocommerce' ),

@@ -126,6 +126,7 @@ final class Keys {
 	public const SMILEPAY_SHIPPING_STATUS     = '_moksafowo_smilepay_shipping_status';      // 物流狀態 (送貨中 / 已抵店 / 已取件 / 退回等).
 	public const SMILEPAY_SHIPPING_PAY_NO     = '_moksafowo_smilepay_shipping_pay_no';      // CVS 取貨付款編號 (B2C / 貨到付款用).
 	public const SMILEPAY_SHIPPING_RECORDS    = '_moksafowo_smilepay_shipping_records';
+	public const SMILEPAY_SHIPPING_KEYED      = '_moksafowo_smilepay_shipping_keyed';     // 物流回呼網址帶每單簽章 key（舊單沒有）.
 
 	public const LINEPAY_TRANSACTION_ID        = '_moksafowo_linepay_transaction_id';
 	public const LINEPAY_ORDER_ID              = '_moksafowo_linepay_order_id';            // Merchant order id we sent to LINE Pay.

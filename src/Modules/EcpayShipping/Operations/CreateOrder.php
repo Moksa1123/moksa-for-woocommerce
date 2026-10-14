@@ -63,6 +63,13 @@ final class CreateOrder {
 		}
 
 		$is_cod = 'cod' === (string) $order->get_payment_method();
+		// 中華郵政不能代收（規格：IsCollection 僅黑貓，郵局勿填）。照送會被退件或寄出卻沒收到錢。
+		if ( $is_cod && 'POST' === $base_subtype ) {
+			return [
+				'ok'      => false,
+				'message' => __( 'Chunghwa Post cannot collect cash on delivery. Change the payment method or the shipping method before creating the shipment.', 'moksa-for-woocommerce' ),
+			];
+		}
 		$multi  = count( $packages ) > 1;
 		$now    = current_time( 'mysql' );
 		// 冪等：已建溫層不重建（刪除記錄後可重建）

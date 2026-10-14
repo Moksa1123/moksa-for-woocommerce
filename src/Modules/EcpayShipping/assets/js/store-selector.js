@@ -145,6 +145,7 @@
 		const fd = new FormData();
 		fd.append( 'action', 'moksafowo_ecpay_shipping_get_store' );
 		fd.append( 'nonce', cfg.nonce );
+		fd.append( 'shipping_method', chosenShippingMethod() || '' );
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( function ( r ) { return r.json(); } )
 			.then( function ( resp ) {
@@ -161,6 +162,11 @@
 			lastStore = null;
 			clear();
 			return;
+		}
+		// 換成別家超商時，前一家選的門市不能沿用。
+		const bare = function ( id ) { return String( id || '' ).split( ':' )[ 0 ]; };
+		if ( lastStore && lastStore.method_id && bare( lastStore.method_id ) !== bare( method ) ) {
+			lastStore = null;
 		}
 		fetchStore( function ( store ) {
 			// 已經有門市了就不要被之後回來的空結果蓋掉 —— 多個 render 併發時，

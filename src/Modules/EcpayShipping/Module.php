@@ -46,6 +46,7 @@ final class Module extends AbstractModule {
 
 	public function boot(): void {
 		add_filter( 'woocommerce_shipping_methods', [ __CLASS__, 'register_methods' ] );
+		add_filter( 'woocommerce_available_payment_gateways', [ __CLASS__, 'hide_cod_for_post' ] );
 
 		add_action( 'woocommerce_api_moksafowo_ecpay_shipping_status', [ Webhook\IpnHandler::class, 'handle' ] );
 		Webhook\StatusMapper::init();
@@ -200,5 +201,24 @@ final class Module extends AbstractModule {
 			$methods[ $id ] = $class;
 		}
 		return $methods;
+	}
+
+	/**
+	 * 中華郵政不能代收，選了綠界郵局就不提供貨到付款。只拿掉 cod 這一個，
+	 * 商家另有安排時可用 moksafowo_ecpay_post_hide_cod 關掉。
+	 *
+	 * @param array<string,\WC_Payment_Gateway> $gateways 可用付款方式。
+	 * @return array<string,\WC_Payment_Gateway>
+	 */
+	public static function hide_cod_for_post( $gateways ) {
+		if ( ! is_array( $gateways ) || ! isset( $gateways['cod'] ) || ( is_admin() && ! wp_doing_ajax() ) || ! WC()->session ) {
+			return $gateways;
+		}
+		$chosen = (array) WC()->session->get( 'chosen_shipping_methods', [] );
+		$method = (string) ( $chosen[0] ?? '' );
+		if ( str_starts_with( $method, 'moksafowo_ecpay_shipping_home_post' ) && apply_filters( 'moksafowo_ecpay_post_hide_cod', true ) ) {
+			unset( $gateways['cod'] );
+		}
+		return $gateways;
 	}
 }

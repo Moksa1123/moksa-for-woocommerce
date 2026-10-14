@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.12.4
+Stable tag: 1.13.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,22 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.13.0 - 2026-10-15 =
+New
+* Orders list: when an e-invoice provider is set to issue manually, paid orders without an invoice get an "Issue invoice" button in the invoice column.
+* Advanced settings: an option to hide "Downloads" from the customer's My Account menu.
+
+Fixed
+* PAYUNi ATM and convenience-store payment codes: the order is now put on hold when the code is issued, instead of staying "Pending payment" and being cancelled automatically while the code is still valid. A payment whose amount does not match the order total is put on hold for review.
+* PAYUNi: orders whose payment notice never arrived can now be looked up; a failed refund response no longer leaves a refund recorded in WooCommerce; an order returning to Processing no longer creates a second shipment.
+* NewebPay shipping status notices were never processed. SmilePay shipping status notices were always rejected; they are now verified with a per-order key.
+* SmilePay shipping now sends the cash-on-pickup and pickup-only codes defined by SmilePay. FamilyMart bulk (B2C) is reported as unavailable.
+* Cash on pickup now collects the full amount due, including fees and minus refunds. ECPay Chunghwa Post no longer accepts cash on delivery. PAYUNi mixed-temperature shipments keep the declared value within 30-20,000.
+* The shipping row in order details, My Account and emails showed only the method name and lost the shipping cost.
+* Payment codes are no longer shown on cancelled, failed or refunded orders, and no longer appear twice on the classic thank-you page.
+* ECPay and SmilePay: switching to another convenience store brand no longer reuses the store chosen for the previous one.
+* PAYUNi frozen 7-ELEVEN pickup opens the frozen store map. 7-ELEVEN tracking numbers include the verification code. PAYUNi status settings are no longer overwritten. NewebPay and SmilePay now send the shipping emails.
+
 = 1.12.4 - 2026-10-14 =
 Fixed
 * PAYUNi home delivery (T-Cat) on the block checkout: orders using the regular, frozen or refrigerated method did not record the shipping type, so no shipment was created after payment.
@@ -158,25 +174,6 @@ Fixed
 * Block checkout: choosing a district could be silently undone. It looked selected, but the next redraw of the form (typing an address, changing payment method) cleared it.
 * Block checkout: changing the county after a district was chosen could snap the county back to its previous value. Changing it now clears the district and the old postcode instead.
 * Block checkout: sites that previously used another PAYUNi shipping plugin had "N/A" saved in some customers' addresses, which then appeared in the address fields. Such values are now treated as empty.
-
-= 1.12.1 - 2026-10-12 =
-Fixed
-* Block checkout: the custom field order was lost on many phones. Newer WooCommerce decides the address layout from the width of the checkout area rather than the screen, so on a 412px phone (about 358px of checkout area) neither WooCommerce nor this plugin applied the flexible layout. Both are now covered.
-* Block checkout: the district field always appeared first, ignoring the field order.
-* Block checkout: after switching from store pickup to home delivery, the address fields stayed marked "optional" and the county field showed WooCommerce's generic optional label. The fields now stay required on the page and are only relaxed for store pickup when the order is submitted.
-* Block checkout: the district field was always marked "optional". It is now required for home delivery to a Taiwanese address and optional for store pickup, and the label follows the chosen shipping method.
-* PAYUNi 7-ELEVEN pickup methods split by temperature were treated as home delivery when checking the district, so first-time customers were asked to choose a district.
-
-= 1.12.0 - 2026-10-09 =
-New
-* An "Invoice number" column on the WooCommerce orders list, shown whenever an e-invoice provider is enabled. It reads whichever provider actually issued the invoice — ECPay, ezPay, Amego, PayNow, SmilePay, or PAYUNi's built-in invoice — and marks voided invoices. Like any column, it can be hidden from Screen Options.
-
-Fixed
-* The "Invoice number" personalization tag in the block email editor only read ECPay invoices, so it came out empty for invoices issued by the other providers. It now reads all of them, and leaves voided invoices out.
-
-= 1.11.4 - 2026-10-07 =
-Fixed
-* On the classic checkout, a half-width field could be pushed into the middle of the row and its partner dropped to the next line when the two fields above it differed in height by a few pixels (for example the country field being slightly taller than the state field). Each pair of half-width fields now starts on a new row.
 
 Older entries are available in the plugin's repository.
 

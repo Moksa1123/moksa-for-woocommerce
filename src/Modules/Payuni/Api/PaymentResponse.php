@@ -229,7 +229,26 @@ class PaymentResponse {
 		self::save_payuni_order_data( $order, $decrypted_info );
 
 		if ( TradeStatus::PAID === $trade_status ) {
+			$paid_amt = (int) ( $decrypted_info['TradeAmt'] ?? 0 );
+			$total    = (float) $order->get_total();
+			if ( $paid_amt !== (int) round( $total ) && $paid_amt !== (int) ceil( $total ) ) {
+				// 取號後商家改了訂單金額，顧客照舊金額繳費；HashInfo 只證明通知是 PAYUNi 發的。
+				$order->update_status(
+					'on-hold',
+					sprintf(
+						/* translators: 1: paid amount, 2: order total */
+						__( 'PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+						$paid_amt,
+						$order->get_total()
+					)
+				);
+				return;
+			}
 			$order->payment_complete( $decrypted_info['TradeNo'] );
+		} elseif ( TradeStatus::CREDIT_VALID_OR_GET_NUMBER_SUCCESS === $trade_status && $order->has_status( 'pending' ) ) {
+			// ATM／超商代碼取號成功、AFTEE 審查通過，都還沒付款。停在「等待付款」會被 WC 依保留庫存時間自動取消，
+			// 但繳費帳號還有效好幾天。
+			$order->update_status( 'on-hold', __( 'PAYUNi issued the payment details and is waiting for the customer to pay.', 'moksa-for-woocommerce' ) );
 		} elseif (
 			TradeStatus::EXPIRED === $trade_status
 			|| TradeStatus::CANCEL === $trade_status

@@ -103,9 +103,10 @@ class ShippingRequest {
 			return;
 		}
 
-		// 狀態自動觸發時不重複下單；手動仍可執行
+		// 狀態自動觸發時不重複下單；手動仍可執行。自動建單已改走非同步排程，
+		// 這時 current_action() 是排程的 hook，不是 order_status_processing，兩個都要擋。
 		$action = current_action();
-		if ( $action === 'woocommerce_order_status_processing' && ! empty( $order->get_meta( OrderMeta::ShipTradeNo ) ) ) {
+		if ( in_array( $action, [ 'woocommerce_order_status_processing', self::ASYNC_CREATE_HOOK ], true ) && ! empty( $order->get_meta( OrderMeta::ShipTradeNo ) ) ) {
 			PayuniShipping::log( 'PAYUNi shipping order ' . $order->get_id() . ' action:' . $action . ' shipping order already exists, not create again.', 'info' );
 			return;
 		}
@@ -743,7 +744,8 @@ class ShippingRequest {
 
 	public static function get_trade_amt( \WC_Order $order ) {
 		if ( $order->get_payment_method() === 'cod' ) {
-			$total = $order->get_total() - $order->get_total_refunded();
+			// PAYUNi 只收整數（SHIP02024／HOME01034）。
+			$total = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );
 		} else {
 			if ( (float) $order->get_total() === 0.0 ) {
 				$total = $order->get_subtotal() + $order->get_shipping_total() - $order->get_total_refunded();

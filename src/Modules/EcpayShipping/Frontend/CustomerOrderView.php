@@ -15,7 +15,8 @@ final class CustomerOrderView {
 
 	public static function init(): void {
 		add_action( 'woocommerce_order_details_before_order_table', [ __CLASS__, 'render' ], 5, 1 );
-		add_filter( 'woocommerce_get_order_item_totals', [ __CLASS__, 'filter_order_item_totals' ], 10, 3 );
+		// 不覆寫「運送」那一列：WC 用 get_shipping_method() 組「運費 透過 方式」，下面那個 filter 已換好方式名稱；
+		// 整列覆寫會把運費金額吃掉，而且連非綠界的訂單也受影響。
 		add_filter( 'woocommerce_order_item_name', [ __CLASS__, 'filter_item_name' ], 10, 2 );
 		add_filter( 'woocommerce_order_shipping_method', [ __CLASS__, 'filter_shipping_method_string' ], 10, 2 ); // HPOS 訂單列表「運送至」column
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_copy_script' ], 20 ); // priority 20 確保 register 先跑
@@ -46,28 +47,6 @@ final class CustomerOrderView {
 		}
 		return ! empty( $names ) ? implode( ', ', $names ) : $shipping_method;
 	}
-
-	public static function filter_order_item_totals( array $total_rows, $order, $tax_display ): array {
-		if ( ! $order instanceof \WC_Order || ! isset( $total_rows['shipping'] ) ) {
-			return $total_rows;
-		}
-		$map   = Module::method_map();
-		$names = [];
-		foreach ( $order->get_shipping_methods() as $m ) {
-			$mid  = (string) $m->get_method_id();
-			$name = (string) $m->get_name();
-			if ( isset( $map[ $mid ] ) ) {
-				$names[] = self::label_with_breakdown( $name, $mid );
-			} else {
-				$names[] = $name;
-			}
-		}
-		if ( ! empty( $names ) ) {
-			$total_rows['shipping']['value'] = implode( ', ', $names );
-		}
-		return $total_rows;
-	}
-
 
 	private static function label_with_breakdown( string $stored_name, string $method_id ): string {
 		if ( '' === $stored_name ) {

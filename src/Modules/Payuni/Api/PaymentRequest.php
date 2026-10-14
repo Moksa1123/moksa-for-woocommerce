@@ -240,8 +240,13 @@ class PaymentRequest {
 		$response_body = wp_remote_retrieve_body( $response );
 		PayuniPayment::log( 'refund response body:' . wc_print_r( $response_body, true ) );
 
-		$result    = json_decode( $response_body, true );
-		$decrypted = PayuniPayment::decrypt( $result['EncryptInfo'] );
+		// 502、HTML 錯誤頁或只帶 Status／Message 的錯誤回應都沒有 EncryptInfo；直接解密會丟 TypeError，
+		// WC 只接 Exception，結果退款紀錄留下、錢卻沒退。一律轉成 Exception 讓 WC 撤銷這筆退款。
+		$result     = json_decode( $response_body, true );
+		$result     = is_array( $result ) ? $result : [];
+		$decrypted  = is_string( $result['EncryptInfo'] ?? null ) ? (array) PayuniPayment::decrypt( $result['EncryptInfo'] ) : [];
+		$result    += [ 'Status' => '' ];
+		$decrypted += [ 'Message' => (string) ( $result['Message'] ?? '' ) ];
 		if ( 'SUCCESS' === $result['Status'] ) {
 			/* translators: 1: refund amount, 2: PAYUNi message */
 			$order->add_order_note( sprintf( __( 'PAYUNi refunded %1$s: %2$s', 'moksa-for-woocommerce' ), $amount, $decrypted['Message'] ) );
@@ -265,6 +270,11 @@ class PaymentRequest {
 
 		$payuni_order_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::PAYUNI_ORDER_NO );
 		$payuni_order_no     = $order->get_meta( $payuni_order_no_key );
+		if ( '' === (string) $payuni_order_no ) {
+			// 這版之前建立、又沒收到通知的訂單沒存 MerTradeNo，用序號還原（格式見 build_payuni_order_no）。
+			$serial          = (int) $order->get_meta( OrderMeta::ORDER_SERIAL_NO );
+			$payuni_order_no = $order->get_id() . '-' . max( 1, $serial );
+		}
 
 		$encrypt_info = array(
 			'MerID'      => $mer_id,
@@ -300,7 +310,11 @@ class PaymentRequest {
 		$response_body = wp_remote_retrieve_body( $response );
 		PayuniPayment::log( 'query response body:' . wc_print_r( $response_body, true ) );
 
-		$result    = json_decode( $response_body, true );
+		$result = json_decode( $response_body, true );
+		if ( ! is_array( $result ) || ! is_string( $result['EncryptInfo'] ?? null ) ) {
+			PayuniPayment::log( 'PAYUNi query: unexpected response.' );
+			return false;
+		}
 		$decrypted = PayuniPayment::decrypt( $result['EncryptInfo'] );
 		PayuniPayment::log( 'query decrypted info:' . wc_print_r( self::redact_for_log( $decrypted ), true ) );
 

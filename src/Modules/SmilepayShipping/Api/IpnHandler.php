@@ -13,7 +13,7 @@ final class IpnHandler {
 		// SmilePay shipping IPN: no WP nonce possible (external server cannot send one).
 		// Source authenticity verified via Verify_key (hash_equals on line ~25) before any order state change.
 		// All string fields sanitized at extraction after BIG5→UTF-8 conversion.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay shipping IPN; no WP nonce possible; Verify_key hash_equals verified before any state change; all fields sanitized at extraction.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay shipping IPN; no WP nonce possible; per-order callback key (mfk) hash_equals and Smseid match verified before any state change; all fields sanitized at extraction.
 		$payload = wp_unslash( $_REQUEST );
 
 		// SmilePay 回傳 BIG5 編碼，強制轉 UTF-8
@@ -23,16 +23,11 @@ final class IpnHandler {
 			}
 		}
 
-		$verify   = isset( $payload['Verify_key'] ) ? sanitize_text_field( (string) $payload['Verify_key'] ) : '';
-		$expected = Helper::verify_key();
-		if ( '' === $expected || ! hash_equals( $expected, $verify ) ) {
-			Helper::log( 'IPN verify_key mismatch', [ 'received' => substr( $verify, 0, 4 ) . '****' ] );
-			status_header( 403 );
-			exit( '<Roturlstatus>verify_key fail</Roturlstatus>' );
-		}
-
+		// 規格：通知只帶 Data_id／Smseid／Shipstatus 等，不帶 Verify_key，而且不論結果都要回 HTTP 200。
+		// 驗證改用回呼網址上的每單 key（mfk），再要求 Smseid 是這張訂單建過的物流單之一。
 		$order_id = isset( $payload['Data_id'] ) ? absint( $payload['Data_id'] ) : 0;
 		$smseid   = isset( $payload['Smseid'] ) ? sanitize_text_field( (string) $payload['Smseid'] ) : '';
+		$mfk      = isset( $payload['mfk'] ) ? sanitize_text_field( (string) $payload['mfk'] ) : '';
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 
 		if ( ! $order instanceof \WC_Order ) {
@@ -47,17 +42,29 @@ final class IpnHandler {
 			exit( '<Roturlstatus>order not found</Roturlstatus>' );
 		}
 
-		$order_smseid = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_NO );
-		if ( '' !== $order_smseid && '' !== $smseid && ! hash_equals( $order_smseid, $smseid ) ) {
+		if ( 'yes' === $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) && ! hash_equals( Helper::callback_key( $order ), $mfk ) ) {
+			Helper::log( 'IPN callback key mismatch', [ 'order_id' => $order_id ] );
+			status_header( 200 );
+			exit( '<Roturlstatus>key mismatch</Roturlstatus>' );
+		}
+
+		// 黑貓多溫層會拆成多件、各有自己的 Smseid，單一 meta 只存最後一件。
+		$known = [ (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_NO ) ];
+		foreach ( (array) $order->get_meta( Keys::SMILEPAY_SHIPPING_RECORDS ) as $record ) {
+			if ( is_array( $record ) && ! empty( $record['smseid'] ) ) {
+				$known[] = (string) $record['smseid'];
+			}
+		}
+		$known = array_values( array_filter( array_unique( $known ) ) );
+		if ( '' === $smseid || ! in_array( $smseid, $known, true ) ) {
 			Helper::log(
 				'IPN smseid mismatch',
 				[
 					'order_id' => $order_id,
-					'expected' => $order_smseid,
 					'got'      => $smseid,
 				]
 			);
-			status_header( 403 );
+			status_header( 200 );
 			exit( '<Roturlstatus>smseid mismatch</Roturlstatus>' );
 		}
 
@@ -81,6 +88,10 @@ final class IpnHandler {
 					$label
 				)
 			);
+			// 跟綠界／PAYUNi 一樣寄物流通知信（已出貨、已到店、門市關轉）。
+			if ( str_starts_with( $wc_status, 'moksa-' ) ) {
+				do_action( 'moksafowo_shipping_status_' . $wc_status . '_notification', $order->get_id(), $order );
+			}
 		} else {
 			$order->add_order_note(
 				sprintf(
