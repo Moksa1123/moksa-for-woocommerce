@@ -53,32 +53,23 @@ class ShippingResponse {
 			}
 
 			if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
-				$orders = wc_get_orders(
-					array(
-						'limit'        => -1,
-						'orderby'      => 'date',
-						'order'        => 'DESC',
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_key'     => OrderMeta::ShipTradeNo,
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_value'   => $decrypted_info['ShipTradeNo'],
-						'meta_compare' => '=',
-					)
-				);
+				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
-				if ( ! empty( $orders ) ) {
-
-					$order = $orders[0];
-
-					if ( $order->get_meta( OrderMeta::ShipTradeNo ) !== $decrypted_info['ShipTradeNo'] ) {
-						PayuniShipping::log( 'ShipTradeNo mismatch. Order id:' . $order->get_id() . ', ShipTradeNo:' . $order->get_meta( OrderMeta::ShipTradeNo ) . ', received ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
-						return;
-					}
+				if ( $order instanceof \WC_Order ) {
 
 					if ( array_key_exists( 'ShipStatus', $decrypted_info ) ) {
 						$order->update_meta_data( OrderMeta::ShipStatus, $decrypted_info['ShipStatus'] );
 						$order->update_meta_data( OrderMeta::ShipStatusDesc, $decrypted_info['ShipStatusDesc'] );
 						$order->update_meta_data( OrderMeta::ShipStatusTime, $decrypted_info['ShipStatusTime'] );
+						self::update_record(
+							$order,
+							(string) $decrypted_info['ShipTradeNo'],
+							[
+								'ship_status'      => (string) $decrypted_info['ShipStatus'],
+								'ship_status_desc' => (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ),
+								'ship_status_time' => (string) ( $decrypted_info['ShipStatusTime'] ?? '' ),
+							]
+						);
 						$order->save();
 
 						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'moksa-for-woocommerce' );
@@ -115,11 +106,23 @@ class ShippingResponse {
 					}
 
 					if ( array_key_exists( 'Odno', $decrypted_info ) ) {
-						$order->update_meta_data( OrderMeta::PartnerId, $decrypted_info['PartnerId'] );
 						$validation_no = array_key_exists( 'ValidationNo', $decrypted_info ) ? $decrypted_info['ValidationNo'] : '';
-						$order->update_meta_data( OrderMeta::ShipNo, self::build_ship_no( $decrypted_info['LgsType'], $decrypted_info['PartnerId'], $decrypted_info['Odno'], $validation_no ) );
-						$order->update_meta_data( OrderMeta::Odno, $decrypted_info['Odno'] );
-						$order->update_meta_data( OrderMeta::ValidationNo, $validation_no );
+						// 單一欄位只鏡射最新一包；拆單時其他包的號碼記在各自的紀錄裡。
+						if ( $order->get_meta( OrderMeta::ShipTradeNo ) === $decrypted_info['ShipTradeNo'] ) {
+							$order->update_meta_data( OrderMeta::PartnerId, $decrypted_info['PartnerId'] );
+							$order->update_meta_data( OrderMeta::ShipNo, self::build_ship_no( $decrypted_info['LgsType'], $decrypted_info['PartnerId'], $decrypted_info['Odno'], $validation_no ) );
+							$order->update_meta_data( OrderMeta::Odno, $decrypted_info['Odno'] );
+							$order->update_meta_data( OrderMeta::ValidationNo, $validation_no );
+						}
+						self::update_record(
+							$order,
+							(string) $decrypted_info['ShipTradeNo'],
+							[
+								'odno'          => (string) $decrypted_info['Odno'],
+								'partner_id'    => (string) ( $decrypted_info['PartnerId'] ?? '' ),
+								'validation_no' => (string) $validation_no,
+							]
+						);
 						$order->save();
 					}
 
@@ -169,27 +172,9 @@ class ShippingResponse {
 			}
 
 			if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
-				$orders = wc_get_orders(
-					array(
-						'limit'        => -1,
-						'orderby'      => 'date',
-						'order'        => 'DESC',
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_key'     => OrderMeta::ShipTradeNo,
-						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-						'meta_value'   => $decrypted_info['ShipTradeNo'],
-						'meta_compare' => '=',
-					)
-				);
+				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
-				if ( ! empty( $orders ) ) {
-
-					$order = $orders[0];
-
-					if ( $order->get_meta( OrderMeta::ShipTradeNo ) !== $decrypted_info['ShipTradeNo'] ) {
-						PayuniShipping::log( 'ShipTradeNo mismatch. Order id:' . $order->get_id() . ', ShipTradeNo:' . $order->get_meta( OrderMeta::ShipTradeNo ) . ', received ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
-						return;
-					}
+				if ( $order instanceof \WC_Order ) {
 
 					if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
 						$order->update_meta_data( OrderMeta::ShipNo, $decrypted_info['OBTNumber'] );
@@ -266,6 +251,69 @@ class ShippingResponse {
 			PayuniShipping::log( 'PAYUNi NotifyURL response fail:' . wc_print_r( $decrypted_info, true ) );
 		}
 		exit;
+	}
+
+	/**
+	 * 依物流交易序號找訂單。拆單時單一欄位只存最後一包，其他包要從拆單紀錄找；
+	 * 原本只比對單一欄位，第一包（含運費、代收主單）的通知全被丟掉。
+	 */
+	private static function find_order_by_ship_trade_no( string $no ): ?\WC_Order {
+		if ( '' === $no ) {
+			return null;
+		}
+		$ids = wc_get_orders(
+			[
+				'limit'      => 1,
+				'return'     => 'ids',
+				'type'       => 'shop_order',
+				'meta_key'   => OrderMeta::ShipTradeNo, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
+				'meta_value' => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
+			]
+		);
+		if ( empty( $ids ) ) {
+			$ids = wc_get_orders(
+				[
+					'limit'        => 5,
+					'return'       => 'ids',
+					'type'         => 'shop_order',
+					'meta_key'     => \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
+					'meta_value'   => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
+					'meta_compare' => 'LIKE',
+				]
+			);
+		}
+		foreach ( $ids as $id ) {
+			$order = wc_get_order( $id );
+			if ( ! $order instanceof \WC_Order ) {
+				continue;
+			}
+			if ( $order->get_meta( OrderMeta::ShipTradeNo ) === $no ) {
+				return $order;
+			}
+			foreach ( \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order ) as $r ) {
+				if ( ( $r['ship_trade_no'] ?? '' ) === $no ) {
+					return $order;
+				}
+			}
+		}
+		PayuniShipping::log( 'PAYUNi notify: no order for ShipTradeNo ' . $no );
+		return null;
+	}
+
+	/** 把通知內容記進對應那一包的紀錄（沒有拆單紀錄的舊訂單略過）。 */
+	private static function update_record( \WC_Order $order, string $no, array $fields ): void {
+		$records = \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order );
+		if ( empty( $records ) ) {
+			return;
+		}
+		foreach ( $records as &$r ) {
+			if ( ( $r['ship_trade_no'] ?? '' ) === $no ) {
+				$r = array_merge( $r, $fields );
+				break;
+			}
+		}
+		unset( $r );
+		$order->update_meta_data( \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS, $records );
 	}
 
 	public function update_order_status_after_received_update( \WC_Order $order, $ship_status, $ship_status_desc ) {

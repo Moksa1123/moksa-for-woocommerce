@@ -337,13 +337,8 @@ class ShippingRequest {
 
 		$order_ids = array_map( 'absint', array_filter( explode( ',', $order_ids ) ) );
 
-		// HPOS 不支援 post__in，改用 include
-		$orders = wc_get_orders(
-			array(
-				'include' => $order_ids,
-				'limit'   => -1,
-			)
-		);
+		// 逐張讀：HPOS 下 wc_get_orders 會忽略 include，回傳全站訂單，等於把所有物流單一起送去列印。
+		$orders = array_values( array_filter( array_map( 'wc_get_order', $order_ids ), static fn( $o ) => $o instanceof \WC_Order ) );
 
 		if ( empty( $orders ) ) {
 			esc_html_e( 'No such Orders', 'moksa-for-woocommerce' );

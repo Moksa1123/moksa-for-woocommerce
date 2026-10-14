@@ -10,7 +10,7 @@ final class EmailCvsArrived extends AbstractShippingEmail {
 
 	public function __construct() {
 		$this->title       = __( 'Shipping: parcel arrived at store', 'moksa-for-woocommerce' );
-		$this->description = __( 'Sent to the customer when the parcel reaches the convenience store, including the store name, store number and collection deadline.', 'moksa-for-woocommerce' );
+		$this->description = __( 'Sent to the customer when the parcel reaches the convenience store, with the store name, number and address and a reminder to collect it within 7 days.', 'moksa-for-woocommerce' );
 		parent::__construct();
 	}
 

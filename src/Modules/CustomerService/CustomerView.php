@@ -45,8 +45,19 @@ final class CustomerView {
 			'payment_method' => (string) $order->get_payment_method_title(),
 		);
 
-		// 未付款才回 ATM 虛擬帳號 / 超商繳費代碼(讓顧客去繳費)。
-		if ( ! $paid ) {
+		// 未付款、也還沒取消／失敗／退款時才回繳費資訊。優先用訂單頁同一份「付款資訊」（含銀行代碼、
+		// 繳費期限，各家金流都有）；沒有時才退回只給帳號／代碼。
+		$awaiting = ! $paid && ! $order->has_status( [ 'cancelled', 'failed', 'refunded' ] );
+		$pay_rows = $awaiting ? \Moksafowo\Modules\Shared\Frontend\PaymentInfoBox::rows( $order ) : [];
+		foreach ( $pay_rows as $pay_row ) {
+			if ( '' !== (string) ( $pay_row['value'] ?? '' ) ) {
+				$data['payment_info'][] = [
+					'label' => (string) ( $pay_row['label'] ?? '' ),
+					'value' => (string) $pay_row['value'],
+				];
+			}
+		}
+		if ( $awaiting && empty( $data['payment_info'] ) ) {
 			$atm = SearchableKeys::field_value( $order, 'atm' );
 			$cvs = SearchableKeys::field_value( $order, 'cvs' );
 			if ( '' !== $atm ) {
@@ -70,10 +81,10 @@ final class CustomerView {
 			$data['shipping_number'] = $ship_no;
 		}
 
-		// 發票號(有號碼即視為已開立);不回完整買受人 / 載具明細。
-		$inv = SearchableKeys::field_value( $order, 'invoice' );
-		if ( '' !== $inv ) {
-			$data['invoice_number'] = $inv;
+		// 發票號；不回完整買受人 / 載具明細。已作廢的不當成已開立（InvoiceNumber 也會略過內部標記）。
+		$inv = \Moksafowo\Modules\Shared\Invoice\InvoiceNumber::of( $order );
+		if ( '' !== $inv['number'] && ! $inv['voided'] ) {
+			$data['invoice_number'] = $inv['number'];
 			$data['invoice_issued'] = true;
 		}
 

@@ -148,7 +148,8 @@ final class StoreSelector {
 			WC()->session->set( self::SESSION_PENDING_KEY, $mtn );
 		}
 
-		$is_collection = self::is_cod_enabled();
+		$payment       = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : '';
+		$is_collection = self::is_cod_enabled( $payment );
 		// MerchantID 必須對應 subtype 的憑證組：B2C 方式配 C2C 商號會讓 ECPay 退「找不到加密金鑰」
 		$subtype                  = $method->logistics_sub_type();
 		$payload                  = [
@@ -427,7 +428,14 @@ final class StoreSelector {
 		return 0; // map 階段尚無 order_id；random_bytes 部分仍唯一
 	}
 
-	private static function is_cod_enabled(): bool {
-		return false; // 目前固定 N；未來視需求接設定
+	/**
+	 * 電子地圖的 IsCollection 決定列出哪些門市；貨到付款要用 Y，才不會挑到不收貨款的門市
+	 * （後台改門市本來就依付款方式送）。前端沒帶付款方式時退回 session。
+	 */
+	private static function is_cod_enabled( string $payment = '' ): bool {
+		if ( '' === $payment && function_exists( 'WC' ) && WC()->session ) {
+			$payment = (string) WC()->session->get( 'chosen_payment_method', '' );
+		}
+		return 'cod' === $payment;
 	}
 }

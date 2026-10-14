@@ -30,7 +30,8 @@ final class InvoiceNumber {
 		$voided = '';
 		foreach ( self::SOURCES as $number_key => $invalid_key ) {
 			$number = (string) $order->get_meta( $number_key );
-			if ( '' === $number ) {
+			// 0 元／負數訂單不開票，部分服務在號碼欄留 zero／negative 當內部標記。
+			if ( '' === $number || in_array( $number, [ 'zero', 'negative' ], true ) ) {
 				continue;
 			}
 			if ( '' === (string) $order->get_meta( $invalid_key ) ) {

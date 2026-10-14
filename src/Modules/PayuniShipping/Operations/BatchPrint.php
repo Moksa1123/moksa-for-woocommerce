@@ -22,57 +22,75 @@ final class BatchPrint {
 	}
 
 	private static function build( array $order_ids, string $service, array $options = [] ): array {
-		$orders = wc_get_orders(
-			[
-				'include' => $order_ids,
-				'limit'   => -1,
-			]
-		);
+		// 逐張讀：HPOS 下 wc_get_orders 會忽略 include，回傳全站訂單。
+		$orders = array_values( array_filter( array_map( 'wc_get_order', array_map( 'absint', $order_ids ) ), static fn( $o ) => $o instanceof \WC_Order ) );
 		if ( empty( $orders ) ) {
 			return [];
 		}
 
-		$ship_trade_nos = [];
+		// PAYUNi 一次 print_label 只能帶一組 LgsType／GoodsType（黑貓還有 Spec），混著送會有整批印不出來。
+		// 依這幾個值分組，每組一張表單；拆溫層的訂單每一包各自歸組。
+		$groups = [];
 		foreach ( $orders as $order ) {
 			if ( ! $order instanceof \WC_Order ) { // wc_get_orders 在有退款時可能回傳 OrderRefund
 				continue;
 			}
-			$records = CreateOrderUnified::get_records( $order );
-			if ( ! empty( $records ) ) {
-				foreach ( $records as $r ) {
-					$no = (string) ( $r['ship_trade_no'] ?? '' );
-					if ( '' !== $no ) {
-						$ship_trade_nos[] = $no;
-					}
-				}
-				continue;
+			$order_lgs  = (string) $order->get_meta( OrderMeta::LgsType );
+			$order_good = (string) $order->get_meta( OrderMeta::GoodsType );
+			$order_spec = (string) $order->get_meta( OrderMeta::PackageSpec );
+			$records    = CreateOrderUnified::get_records( $order );
+			if ( empty( $records ) ) {
+				$records = [
+					[
+						'ship_trade_no' => (string) $order->get_meta( OrderMeta::ShipTradeNo ),
+						'lgs_type'      => $order_lgs,
+						'goods_type'    => $order_good,
+					],
+				];
 			}
-			$no = (string) $order->get_meta( OrderMeta::ShipTradeNo );
-			if ( '' !== $no ) {
-				$ship_trade_nos[] = $no;
+			foreach ( $records as $r ) {
+				$no = (string) ( $r['ship_trade_no'] ?? '' );
+				if ( '' === $no ) {
+					continue;
+				}
+				$lgs                     = (string) ( $r['lgs_type'] ?? '' ) ?: $order_lgs;
+				$good                    = (string) ( $r['goods_type'] ?? '' ) ?: $order_good;
+				$spec                    = ShipType::TCAT === $service ? $order_spec : '';
+				$key                     = $lgs . '|' . $good . '|' . $spec;
+				$groups[ $key ]['lgs']   = $lgs;
+				$groups[ $key ]['goods'] = $good;
+				$groups[ $key ]['spec']  = $spec;
+				$groups[ $key ]['nos'][] = $no;
 			}
 		}
-		$ship_trade_nos = array_values( array_unique( $ship_trade_nos ) );
-		if ( empty( $ship_trade_nos ) ) {
+		if ( empty( $groups ) ) {
 			return [];
 		}
 
-		$reference = $orders[0];
+		$forms = [];
+		foreach ( $groups as $g ) {
+			$forms[] = self::form_for_group( $service, array_values( array_unique( $g['nos'] ) ), (string) $g['lgs'], (string) $g['goods'], (string) $g['spec'], $options );
+		}
+		return $forms;
+	}
 
+	private static function form_for_group( string $service, array $ship_trade_nos, string $lgs_type, string $goods_type, string $package_spec, array $options ): array {
 		if ( ShipType::SEVEN === $service ) {
 			$api_url   = PayuniShipping::$api_url . '/logistics/print_label';
-			$lgs_type  = (string) $reference->get_meta( OrderMeta::LgsType );
 			$ship_date = ( $lgs_type === LgsType::B2C )
 				? gmdate( 'Ymd', strtotime( '+1 day' ) )
 				: gmdate( 'Ymd' );
 			// LabelMode: 1=A4 / 2=直立式（僅 B2C）；C2C 禁 mode=2
 			$modal_mode = isset( $options['mode'] ) && '2' === (string) $options['mode'] ? '2' : '';
 			$label_mode = '' !== $modal_mode ? $modal_mode : (string) get_option( 'moksafowo_payuni_shipping_cvs_label_mode', '1' );
-			$args       = [
+			if ( LgsType::B2C !== $lgs_type ) {
+				$label_mode = '1';
+			}
+			$args = [
 				'MerID'       => PayuniShipping::get_mer_id(),
 				'Timestamp'   => time(),
 				'ShipTradeNo' => implode( ',', $ship_trade_nos ),
-				'GoodsType'   => (string) $reference->get_meta( OrderMeta::GoodsType ),
+				'GoodsType'   => $goods_type,
 				'LgsType'     => $lgs_type,
 				'ShipType'    => ShipType::SEVEN,
 				'ShipDate'    => $ship_date,
@@ -82,7 +100,6 @@ final class BatchPrint {
 			$api_url       = PayuniShipping::$api_url . '/home_delivery/get_obt_number_pdf';
 			$shipping_date = (int) get_option( 'moksafowo_payuni_shipping_tcat_estimate_shipping_date', '1' );
 			// Spec 未設時 PAYUNi HOME01077 拒收；訂單 meta > 設定預設 > '1'
-			$package_spec = (string) $reference->get_meta( OrderMeta::PackageSpec );
 			if ( '' === $package_spec ) {
 				$package_spec = (string) get_option( 'moksafowo_payuni_shipping_tcat_default_spec', '1' );
 			}
@@ -99,7 +116,7 @@ final class BatchPrint {
 				'PostType'     => '1',
 				'PrintType'    => '1',
 				'ShipTradeNo'  => implode( ',', $ship_trade_nos ),
-				'GoodsType'    => (string) $reference->get_meta( OrderMeta::GoodsType ),
+				'GoodsType'    => $goods_type,
 				'LgsType'      => LgsType::HOME,
 				'ShipType'     => ShipType::TCAT,
 				'ShipDate'     => $est_ship->format( 'Y-m-d' ),
@@ -109,17 +126,13 @@ final class BatchPrint {
 		}
 
 		$encrypted = PayuniShipping::encrypt( $args );
-		$form_data = [
-			'MerID'       => PayuniShipping::get_mer_id(),
-			'Version'     => '1.0',
-			'EncryptInfo' => $encrypted,
-			'HashInfo'    => PayuniShipping::hash_info( $encrypted ),
-		];
-
 		return [
-			[
-				'api_url'   => $api_url,
-				'form_data' => $form_data,
+			'api_url'   => $api_url,
+			'form_data' => [
+				'MerID'       => PayuniShipping::get_mer_id(),
+				'Version'     => '1.0',
+				'EncryptInfo' => $encrypted,
+				'HashInfo'    => PayuniShipping::hash_info( $encrypted ),
 			],
 		];
 	}

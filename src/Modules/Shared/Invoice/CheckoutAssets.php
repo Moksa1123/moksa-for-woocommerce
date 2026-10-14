@@ -30,6 +30,11 @@ final class CheckoutAssets {
 					$version,
 					true
 				);
+				wp_add_inline_script(
+					'moksafowo-invoice-checkout-fields',
+					'window.moksafowoInvoiceCheckout=' . wp_json_encode( [ 'heading' => __( 'E-invoice', 'moksa-for-woocommerce' ) ] ) . ';',
+					'before'
+				);
 			}
 		);
 	}

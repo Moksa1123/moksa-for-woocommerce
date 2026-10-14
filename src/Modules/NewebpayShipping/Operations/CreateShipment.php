@@ -52,10 +52,11 @@ final class CreateShipment {
 			'MerchantOrderNo' => $mtn,
 			'TradeType'       => $is_cod ? 1 : 3, // 1=取貨付款 / 3=取貨不付款
 			'UserName'        => mb_substr( $user_name, 0, 10 ),
-			'UserTel'         => $order->get_billing_phone(),
+			'UserTel'         => \Moksafowo\Modules\NewebpayShipping\Module::normalize_mobile( (string) $order->get_shipping_phone() ?: (string) $order->get_billing_phone() ),
 			'UserEmail'       => $order->get_billing_email(),
 			'StoreID'         => $store_id,
-			'Amt'             => (int) ceil( (float) $order->get_total() ),
+			// 取貨不付款時 Amt 只是報值，上限 20,000（2104）；取貨付款是實收金額不能改。
+			'Amt'             => $is_cod ? (int) ceil( (float) $order->get_total() ) : min( 20000, (int) ceil( (float) $order->get_total() ) ),
 			'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_shipping_status' ),
 			'ItemDesc'        => mb_substr( self::build_item_desc( $order ), 0, 50 ),
 			'LgsType'         => $lgs_type,

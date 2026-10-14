@@ -19,7 +19,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 printf( esc_html__( 'The pickup store you chose (%s) is temporarily closed for renovation, relocation or a change of store number. Please choose another pickup store as soon as possible.', 'moksa-for-woocommerce' ), esc_html( $mo_store_name ?: __( 'Unknown store', 'moksa-for-woocommerce' ) ) );
 ?></strong></p>
 
-<p><?php esc_html_e( 'If no new store is chosen in time, the parcel will be returned to the distribution center. Go to My account > Orders, open this order and choose another store, or contact us for help.', 'moksa-for-woocommerce' ); ?></p>
+<p><?php esc_html_e( 'If no new store is chosen in time, the parcel will be returned to the distribution center. Please reply to this email or contact us to choose another store.', 'moksa-for-woocommerce' ); ?></p>
 
 <?php
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );

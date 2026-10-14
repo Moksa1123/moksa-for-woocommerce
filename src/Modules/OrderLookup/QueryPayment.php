@@ -62,7 +62,8 @@ final class QueryPayment {
 
 		$gateway = (string) $order->get_payment_method();
 
-		if ( 'moksafowo_ecpay_credit' === $gateway ) {
+		// 綠界信用卡類（一次付清、分期、Apple Pay、單一入口刷卡）都用同一支信用卡查詢，只看交易編號。
+		if ( in_array( $gateway, [ 'moksafowo_ecpay_credit', 'moksafowo_ecpay_applepay', 'moksafowo_ecpay_unified' ], true ) || str_starts_with( $gateway, 'moksafowo_ecpay_credit_' ) ) {
 			return self::from_ecpay( $order, $gateway );
 		}
 		if ( str_starts_with( $gateway, 'moksafowo_payuni_' ) ) {

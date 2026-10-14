@@ -145,8 +145,9 @@ class PayuniPayment {
 			return $methods;
 		}
 
+		$all = \Moksafowo\Modules\Shared\Admin\RefundContext::needs_all_gateways();
 		foreach ( self::$allowed_payments as $id => $class ) {
-			if ( ! self::should_register_gateway( $id ) ) {
+			if ( ! $all && ! self::should_register_gateway( $id ) ) {
 				continue;
 			}
 			$methods[ $id ] = $class;

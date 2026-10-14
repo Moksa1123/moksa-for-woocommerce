@@ -19,7 +19,7 @@ final class CustomerOrderView {
 	}
 
 	public static function enqueue_copy_script(): void {
-		if ( ! function_exists( 'is_account_page' ) || ! is_account_page() ) {
+		if ( ! function_exists( 'is_account_page' ) || ! ( is_account_page() || is_order_received_page() ) ) { // 感謝頁也會顯示物流卡片
 			return;
 		}
 		wp_enqueue_style( 'moksafowo-shipping-card' );
@@ -199,7 +199,7 @@ final class CustomerOrderView {
 	}
 
 	private static function status_tone( string $status ): string {
-		$status = ltrim( $status, 'wc-' );
+		$status = str_starts_with( $status, 'wc-' ) ? substr( $status, 3 ) : $status; // ltrim 會削掉 completed／cancelled 的開頭字母。
 		switch ( $status ) {
 			case 'moksa-shipped':
 				return 'blue';

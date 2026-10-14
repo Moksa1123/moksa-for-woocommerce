@@ -29,7 +29,15 @@ defined( 'ABSPATH' ) || exit;
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p> <?php echo esc_html__( 'Your parcel has arrived at the convenience store. Please collect it before the deadline shown below.', 'moksa-for-woocommerce' ); ?> </p>
+<p> <?php echo esc_html__( 'Your parcel has arrived at the pickup store. Please bring your ID and collect it within 7 days.', 'moksa-for-woocommerce' ); ?> </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p> <?php echo esc_html__( 'Pickup store', 'moksa-for-woocommerce' ); ?>: <!--[moksafowo/cvs-store-name]--> (<!--[moksafowo/cvs-store-id]-->)<br><!--[moksafowo/cvs-store-address]--> </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p> <?php echo esc_html__( 'Parcels not collected in time are returned to the distribution center, and a return shipping fee may apply.', 'moksa-for-woocommerce' ); ?> </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->

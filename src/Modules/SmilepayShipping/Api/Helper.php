@@ -29,12 +29,22 @@ final class Helper extends AbstractCredentialHelper {
 		return 'smilepay-shipping';
 	}
 
+	// 速買配沒有獨立的測試網址：測試模式就是用官方公開測試帳號打同一組 API（不會真的出貨）。
+	public const SANDBOX_DCVC       = '107';
+	public const SANDBOX_RVG2C      = '1';
+	public const SANDBOX_VERIFY_KEY = '174A02F97A95F72CE301137B3F98D128';
+
+	/** 預設值跟設定頁一致（不勾）；共用基底預設是 yes，沒存過設定的站會被誤判成測試模式。 */
+	public static function is_sandbox(): bool {
+		return 'yes' === get_option( 'moksafowo_smilepay_shipping_sandbox_enabled', 'no' );
+	}
+
 	public static function dcvc(): string {
-		return (string) get_option( 'moksafowo_smilepay_shipping_dcvc', '' );
+		return self::is_sandbox() ? self::SANDBOX_DCVC : (string) get_option( 'moksafowo_smilepay_shipping_dcvc', '' );
 	}
 
 	public static function rvg2c(): string {
-		return (string) get_option( 'moksafowo_smilepay_shipping_rvg2c', '' );
+		return self::is_sandbox() ? self::SANDBOX_RVG2C : (string) get_option( 'moksafowo_smilepay_shipping_rvg2c', '' );
 	}
 
 	/**
@@ -49,7 +59,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_key(): string {
-		return (string) get_option( 'moksafowo_smilepay_shipping_verify_key', '' );
+		return self::is_sandbox() ? self::SANDBOX_VERIFY_KEY : (string) get_option( 'moksafowo_smilepay_shipping_verify_key', '' );
 	}
 
 	public static function smseid(): string {

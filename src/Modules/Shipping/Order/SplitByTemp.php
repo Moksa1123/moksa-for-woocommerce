@@ -79,6 +79,7 @@ final class SplitByTemp {
 	 * 費用項目（貨到付款手續費、負數折抵）、逐行四捨五入的誤差，以及出貨前的部分退款；
 	 * 取貨付款時門市就會少收或多收。差額併進第一包（已含整單運費、代收主單）。
 	 *
+	 * @param \WC_Order                       $order    訂單。
 	 * @param array<int,array<string,mixed>> $packages 各溫層包裹。
 	 * @return array<int,array<string,mixed>>
 	 */

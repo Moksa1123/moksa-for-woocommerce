@@ -104,6 +104,17 @@
 		fd.append( 'nonce', cfg.nonce );
 		// 帶當下頁面 URL，callback 後 redirect 回原頁（Block / Classic / 自訂頁皆可）
 		fd.append( 'referrer', window.location.href );
+		// 地圖要知道這張單要不要代收，才會只列出能收貨款的門市。區塊結帳換付款方式不會寫回 session，
+		// 所以由前端帶目前選的付款方式。
+		let payment = '';
+		try {
+			payment = window.wp && wp.data && wp.data.select( 'wc/store/payment' ) ? wp.data.select( 'wc/store/payment' ).getActivePaymentMethod() : '';
+		} catch ( e ) {} // 傳統結帳沒有這個 store。
+		if ( ! payment ) {
+			const classicPay = document.querySelector( 'input[name="payment_method"]:checked' );
+			payment = classicPay ? classicPay.value : '';
+		}
+		fd.append( 'payment_method', payment || '' );
 		fetch( cfg.ajax_url, { method: 'POST', body: fd, credentials: 'same-origin' } )
 			.then( function ( r ) { return r.json(); } )
 			.then( function ( resp ) {
@@ -205,6 +216,13 @@
 				t.matches( '.wc-block-components-shipping-rates-control input[type="radio"]' )
 			) {
 				scheduleRender();
+			}
+		} );
+		// 區塊結帳上方的「運送／取貨」切換是 div role=radio，不會觸發 change；切到取貨後
+		// 運費選項被藏起來，重畫時 chosenShippingMethod() 取不到值就會把卡片清掉。
+		document.addEventListener( 'click', function ( e ) {
+			if ( e.target && e.target.closest && e.target.closest( '.wc-block-checkout__shipping-method-option' ) ) {
+				setTimeout( render, 300 );
 			}
 		} );
 		// jQuery 事件（Classic）

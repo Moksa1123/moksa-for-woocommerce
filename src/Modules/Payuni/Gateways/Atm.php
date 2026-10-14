@@ -41,7 +41,8 @@ class Atm extends GatewayBase {
 		return array_merge(
 			$args,
 			array(
-				'ExpireDate' => gmdate( 'Y-m-d', strtotime( '+' . $this->expire_days . ' days' ) ),
+				// 用網站時區算日期：gmdate 在台灣凌晨 0~8 點會少一天。
+				'ExpireDate' => wp_date( 'Y-m-d', strtotime( '+' . $this->expire_days . ' days' ) ),
 				'ATM'        => '1',
 			)
 		);

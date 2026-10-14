@@ -71,7 +71,20 @@ final class IpnHandler {
 		$ship_status = isset( $payload['Shipstatus'] ) ? (int) $payload['Shipstatus'] : 0;
 		$paymentno   = isset( $payload['Payment_no'] ) ? sanitize_text_field( (string) $payload['Payment_no'] ) : '';
 
-		[ $label, $wc_status ] = self::map_status( $ship_status );
+		$is_tcat = false;
+		foreach ( $order->get_shipping_methods() as $m ) {
+			if ( str_contains( (string) $m->get_method_id(), 'smilepay_shipping_tcat' ) ) {
+				$is_tcat = true;
+				break;
+			}
+		}
+		// 黑貓的貨態碼跟超商不同（1/3/5/7/8），異常原因另外放在 DetailStatus。
+		[ $label, $wc_status ] = $is_tcat ? self::map_tcat_status( $ship_status ) : self::map_status( $ship_status );
+		$detail                = isset( $payload['DetailStatus'] ) ? sanitize_text_field( (string) $payload['DetailStatus'] ) : '';
+		if ( $is_tcat && '' !== $detail ) {
+			/* translators: 1: shipping status, 2: T-Cat exception */
+			$label = sprintf( __( '%1$s (exception: %2$s)', 'moksa-for-woocommerce' ), $label, self::tcat_detail_label( $detail ) );
+		}
 
 		$order->update_meta_data( Keys::SMILEPAY_SHIPPING_STATUS, $label );
 		if ( '' !== $paymentno ) {
@@ -115,6 +128,41 @@ final class IpnHandler {
 		exit( '<Roturlstatus>mowp1.0</Roturlstatus>' );
 	}
 
+
+	/**
+	 * 黑貓：1 配送中、3 已配達、5 退貨中、7 退完、8 集貨失敗。退貨與集貨失敗改成保留中讓商家處理；
+	 * 不轉取消，否則包裹還在路上 WC 就先把庫存加回去。
+	 */
+	private static function map_tcat_status( int $code ): array {
+		switch ( $code ) {
+			case 1:
+				return [ __( 'Shipped', 'moksa-for-woocommerce' ), 'moksa-shipped' ];
+			case 3:
+				return [ __( 'Delivered', 'moksa-for-woocommerce' ), 'completed' ];
+			case 5:
+				return [ __( 'Being returned to you', 'moksa-for-woocommerce' ), 'on-hold' ];
+			case 7:
+				return [ __( 'Returned to you', 'moksa-for-woocommerce' ), 'on-hold' ];
+			case 8:
+				return [ __( 'Pickup by T-Cat failed', 'moksa-for-woocommerce' ), 'on-hold' ];
+			default:
+				/* translators: %d: SmilePay status code */
+				return [ sprintf( __( 'Status code %d', 'moksa-for-woocommerce' ), $code ), '' ];
+		}
+	}
+
+	private static function tcat_detail_label( string $code ): string {
+		$map = [
+			'00002' => __( 'recipient not home', 'moksa-for-woocommerce' ),
+			'00007' => __( 'damaged', 'moksa-for-woocommerce' ),
+			'00009' => __( 'address unclear', 'moksa-for-woocommerce' ),
+			'00010' => __( 'recipient moved', 'moksa-for-woocommerce' ),
+			'00011' => __( 'refused by the recipient', 'moksa-for-woocommerce' ),
+			'00014' => __( 'lost', 'moksa-for-woocommerce' ),
+			'00023' => __( 'wrong address', 'moksa-for-woocommerce' ),
+		];
+		return $map[ $code ] ?? $code;
+	}
 
 	private static function map_status( int $code ): array {
 		switch ( $code ) {

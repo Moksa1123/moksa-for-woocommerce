@@ -76,6 +76,12 @@
 			return;
 		}
 		host.classList.toggle( 'is-selected', !! ( store && store.id ) );
+		// 內容沒變就不重建：顧客正要按「選擇門市」時按鈕被換掉，點擊會落空。
+		const sig = store && store.id ? String( store.id ) : '-';
+		if ( host.getAttribute( 'data-sig' ) === sig && host.querySelector( '.moksafowo-cvs-store__btn' ) ) {
+			return;
+		}
+		host.setAttribute( 'data-sig', sig );
 		const rightHtml = '<button type="button" class="moksafowo-cvs-store__btn button wp-element-button">'
 			+ M.escapeHtml( store && store.id ? cfg.i18n.change : cfg.i18n.select ) + '</button>';
 		host.innerHTML = M.cardHtml( {
@@ -262,9 +268,10 @@
 			if ( e.target.closest( '#' + HOST_ID ) ) {
 				return;
 			}
-			if ( e.target.closest( '.wp-block-woocommerce-checkout' ) ) {
+			// 只有點到「運送／取貨」切換或運費選項時才重畫；原本結帳區任何點擊都排三次重畫，
+			// 每次都打一個 admin-ajax。
+			if ( e.target.closest( '.wc-block-checkout__shipping-method-option, .wc-block-components-shipping-rates-control' ) ) {
 				scheduleRender( 30 );
-				setTimeout( render, 250 );
 				setTimeout( render, 600 );
 			}
 		} );

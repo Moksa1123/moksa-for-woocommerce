@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.13.0
+Stable tag: 1.14.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,6 +136,24 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
+= 1.14.0 - 2026-10-15 =
+New
+* PAYUNi: card payments that have not been captured yet can be cancelled in full from the WooCommerce refund screen. Payment types PAYUNi cannot refund through the API now say so.
+
+Fixed
+* Orders paid with a payment method you later disabled can still be refunded through the provider from the order screen.
+* Shipping status follows the slowest parcel when an order is split by temperature, and no longer moves backwards. PAYUNi status notices for the first parcel of a split order were ignored.
+* PAYUNi bulk printing sent every order on the site instead of the selected ones, and now prints different shipping types and temperatures separately.
+* Cash on delivery is no longer offered when the order total is outside what the chosen carrier can collect; declared values are kept within the carrier limits. ECPay B2C no longer offers OK Mart pickup.
+* PAYUNi statuses 92 and 98 mean "processing" and no longer mark an order as shipped. A lowercase PAYUNi merchant ID no longer causes every payment notice to be ignored.
+* Phone numbers are checked on the block checkout for PAYUNi and NewebPay store pickup; NewebPay requires a 09 mobile number.
+* Block checkout now validates invoice fields and ECPay carriers; the classic checkout requires a company name for business invoices and no longer saves hidden invoice fields.
+* Virtual-only and overseas orders are no longer asked for a Taiwan district. With the country field hidden, the block checkout starts from Taiwan.
+* SmilePay: test mode now works, T-Cat statuses and exceptions are handled, and the payment details email is sent when the payment code is issued.
+* Emails show "Free!" for free store pickup instead of repeating the method name; the store-arrival email shows the store; the store-closed email no longer points to a page that does not exist.
+* Store cards no longer stay on screen after switching to local pickup, and the PAYUNi card no longer reloads on every click.
+* Smaller fixes to customer service lookups, invoice numbers, tracking numbers, labels and translations.
+
 = 1.13.0 - 2026-10-15 =
 New
 * Orders list: when an e-invoice provider is set to issue manually, paid orders without an invoice get an "Issue invoice" button in the invoice column.
@@ -151,29 +169,6 @@ Fixed
 * Payment codes are no longer shown on cancelled, failed or refunded orders, and no longer appear twice on the classic thank-you page.
 * ECPay and SmilePay: switching to another convenience store brand no longer reuses the store chosen for the previous one.
 * PAYUNi frozen 7-ELEVEN pickup opens the frozen store map. 7-ELEVEN tracking numbers include the verification code. PAYUNi status settings are no longer overwritten. NewebPay and SmilePay now send the shipping emails.
-
-= 1.12.4 - 2026-10-14 =
-Fixed
-* PAYUNi home delivery (T-Cat) on the block checkout: orders using the regular, frozen or refrigerated method did not record the shipping type, so no shipment was created after payment.
-* A shipping status update could switch a paid order back to "Pending payment" when the matching custom order status had been turned off. The order now keeps its status and the update is recorded as a note.
-* NewebPay store pickup: after choosing a store, the checkout still said no store had been chosen.
-* PAYUNi payment details shown to customers now list only what they need (status, payment type, last four digits, instalments, ATM or convenience-store payment codes). Empty rows are hidden for customers and in the admin.
-* PAYUNi orders marked as paid without PAYUNi payment data no longer ask the customer to refresh the page.
-* PAYUNi 7-ELEVEN orders: the admin shipping card now shows the chosen pickup store, and the orders list no longer shows PAYUNi's internal transaction number (cut short) in place of the tracking number.
-
-Changed
-* NewebPay and SmilePay store pickup orders now show the pickup store as the shipping address, matching ECPay and PAYUNi.
-
-= 1.12.3 - 2026-10-14 =
-Fixed
-* PAYUNi store pickup on the block checkout: the order kept the store's default county (for example "Taichung City") from the hidden address fields, so customers thought the parcel was going to the wrong place. The hidden address fields are now cleared for store pickup orders.
-* PAYUNi 7-ELEVEN pickup methods split by temperature showed "N/A" as the shipping address on the order, emails and My Account instead of the pickup store.
-
-= 1.12.2 - 2026-10-12 =
-Fixed
-* Block checkout: choosing a district could be silently undone. It looked selected, but the next redraw of the form (typing an address, changing payment method) cleared it.
-* Block checkout: changing the county after a district was chosen could snap the county back to its previous value. Changing it now clears the district and the old postcode instead.
-* Block checkout: sites that previously used another PAYUNi shipping plugin had "N/A" saved in some customers' addresses, which then appeared in the address fields. Such values are now treated as empty.
 
 Older entries are available in the plugin's repository.
 

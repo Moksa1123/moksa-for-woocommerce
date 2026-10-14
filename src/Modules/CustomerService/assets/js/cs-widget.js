@@ -120,6 +120,11 @@
 		if ( s.payment_method ) {
 			card.appendChild( row( i.payment, s.payment_method + '（' + ( s.paid ? i.paid : i.unpaid ) + '）' ) );
 		}
+		if ( Array.isArray( s.payment_info ) ) {
+			s.payment_info.forEach( function ( p ) {
+				card.appendChild( row( p.label, p.value ) );
+			} );
+		}
 		if ( s.atm_code ) {
 			card.appendChild( row( i.atm, s.atm_code ) );
 		}

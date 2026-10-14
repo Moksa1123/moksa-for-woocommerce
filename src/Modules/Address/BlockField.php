@@ -145,6 +145,15 @@ final class BlockField {
 		if ( self::chosen_shipping_is_cvs() ) {
 			return;
 		}
+		// 不需運送或寄到國外 → 沒有台灣鄉鎮可選。
+		if ( function_exists( 'WC' ) && WC()->cart && ! WC()->cart->needs_shipping() ) {
+			return;
+		}
+		$data    = is_array( $data ) ? $data : [];
+		$country = (string) ( ! empty( $data['ship_to_different_address'] ) ? ( $data['shipping_country'] ?? '' ) : ( $data['billing_country'] ?? '' ) );
+		if ( '' !== $country && 'TW' !== $country ) {
+			return;
+		}
 		$district = self::posted_district( is_array( $data ) ? $data : [] );
 		if ( '' === $district ) {
 			$errors->add( 'moksafowo_district_required', __( 'Please select a district for home delivery orders.', 'moksa-for-woocommerce' ) );
@@ -153,6 +162,14 @@ final class BlockField {
 
 
 	public static function enforce_district_block( \WC_Order $order, $request ): void {
+		// 不需運送（虛擬、下載商品）或寄到國外的訂單沒有台灣鄉鎮可選；原本照樣擋下，買課程、禮物卡都結不了帳。
+		if ( empty( $order->get_shipping_methods() ) ) {
+			return;
+		}
+		$country = (string) ( $order->get_shipping_country() ?: $order->get_billing_country() );
+		if ( '' !== $country && 'TW' !== $country ) {
+			return;
+		}
 		$methods = ( function_exists( 'WC' ) && WC()->shipping() ) ? WC()->shipping()->get_shipping_methods() : [];
 		foreach ( $order->get_shipping_methods() as $sm ) {
 			if ( self::is_cvs_method( (string) $sm->get_method_id(), $methods ) ) {

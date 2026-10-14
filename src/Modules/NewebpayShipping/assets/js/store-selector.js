@@ -6,9 +6,13 @@
 	const HOST_ID = 'moksafowo-newebpay-shipping-store-host';
 
 	function chosenShippingMethod() {
-		const block = document.querySelector( 'input[type="radio"][name^="radio-control-"]:checked' );
-		if ( block && /^moksafowo_newebpay_shipping_/.test( block.value || '' ) ) {
-			return ( block.value.split( ':' )[0] || '' );
+		// 切到「取貨」分頁時運費選項被藏起來，但 radio 仍是 :checked，要排除看不見的。
+		const blocks = document.querySelectorAll( 'input[type="radio"][name^="radio-control-"]:checked' );
+		for ( let i = 0; i < blocks.length; i++ ) {
+			const block = blocks[ i ];
+			if ( block.offsetParent !== null && /^moksafowo_newebpay_shipping_/.test( block.value || '' ) ) {
+				return ( block.value.split( ':' )[0] || '' );
+			}
 		}
 		const classic = document.querySelector( 'input[name^="shipping_method"]:checked' );
 		if ( classic ) {
@@ -126,6 +130,12 @@
 	}
 
 	document.addEventListener( 'click', onClick );
+	// 「運送／取貨」切換是 div role=radio，不會觸發 change。
+	document.addEventListener( 'click', ( e ) => {
+		if ( e.target && e.target.closest && e.target.closest( '.wc-block-checkout__shipping-method-option' ) ) {
+			setTimeout( refresh, 300 );
+		}
+	} );
 	document.addEventListener( 'change', ( e ) => {
 		const t = e.target;
 		if ( t && (

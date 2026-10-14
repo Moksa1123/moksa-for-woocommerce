@@ -84,8 +84,9 @@ abstract class AbstractGatewayModule extends AbstractModule {
 		// register_gateways → foreach gateway × 2 get_option。ECPay 17 + PAYUNi 20 等
 		// gateway loop 變成數百次 get_option。entry 一次性 fetch 兩個 option 傳給 callee。
 		[ $mode, $allowlist ] = static::fetch_gateway_options();
+		$all                  = \Moksafowo\Modules\Shared\Admin\RefundContext::needs_all_gateways();
 		foreach ( static::gateway_map() as $id => $class ) {
-			if ( static::should_register_gateway( (string) $id, $mode, $allowlist ) ) {
+			if ( $all || static::should_register_gateway( (string) $id, $mode, $allowlist ) ) {
 				$gateways[] = $class;
 			}
 		}

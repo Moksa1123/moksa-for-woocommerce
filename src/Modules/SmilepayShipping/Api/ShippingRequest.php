@@ -153,7 +153,7 @@ final class ShippingRequest {
 	}
 
 
-	public static function confirm_tcat( string $smseid, string $temperature, string $package_size = '60' ): array {
+	public static function confirm_tcat( string $smseid, string $temperature, string $package_size = '0001' ): array {
 		$post = [
 			'Dcvc'         => Helper::dcvc(),
 			'Verify_key'   => Helper::verify_key(),

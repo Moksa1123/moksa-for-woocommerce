@@ -94,8 +94,10 @@ final class IpnHandler {
 		if ( '' !== $store_addr ) {
 			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_STORE_ADDR, $store_addr );
 		}
-		if ( '' !== $status ) {
-			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_STATUS, $status );
+		// Status 是這則通知本身的處理結果（SUCCESS），不是貨態；存貨態說明，跟後台「查詢」一致。
+		$status_label = null !== $mapped ? (string) $mapped['label'] : $ret_string;
+		if ( '' !== $status_label ) {
+			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_STATUS, $status_label );
 		}
 
 		$parts = [ __( 'NewebPay shipping status update', 'moksa-for-woocommerce' ) ];

@@ -82,6 +82,24 @@ final class CreateOrderUnified {
 			];
 		}
 
+		// 取貨付款每一包都是門市／司機實收，PAYUNi 只收 30~20000。只要有一包超出範圍就整單不建，
+		// 否則只建成一部分，那一包的貨款就沒人收。
+		if ( 'cod' === (string) $order->get_payment_method() ) {
+			foreach ( $packages as $pkg ) {
+				$amt = (int) round( (float) $pkg['amount'] );
+				if ( $amt < 30 || $amt > 20000 ) {
+					return [
+						'ok'      => false,
+						'message' => sprintf(
+							/* translators: %s: package amount */
+							__( 'Cash on pickup only works for parcels between NT$30 and NT$20,000, but one parcel of this order is NT$%s. Change the payment or shipping method, or create the shipment manually.', 'moksa-for-woocommerce' ),
+							number_format_i18n( $amt )
+						),
+					];
+				}
+			}
+		}
+
 		$existing       = self::get_records( $order );
 		$existing_temps = [];
 		foreach ( $existing as $r ) {

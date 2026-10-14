@@ -9,9 +9,9 @@ final class TrackingLink {
 
 
 	public static function for_ecpay_record( array $record ): ?array {
-		$subtype     = (string) ( $record['subtype'] ?? '' );
-		$booking     = (string) ( $record['booking_note'] ?? '' );
-		$pay         = (string) ( $record['cvs_payment_no'] ?? '' );
+		$subtype = (string) ( $record['subtype'] ?? '' );
+		$booking = (string) ( $record['booking_note'] ?? '' );
+		$pay     = (string) ( $record['cvs_payment_no'] ?? '' );
 		// 7-11 店到店的查詢號碼是寄件代碼加驗證碼（共 12 碼），只給寄件代碼查不到。
 		if ( 'UNIMARTC2C' === $subtype && '' !== $pay ) {
 			$pay .= (string) ( $record['cvs_validation_no'] ?? '' );
@@ -109,7 +109,7 @@ final class TrackingLink {
 				return [
 					'mode'        => 'direct',
 					'url'         => 'https://www.t-cat.com.tw/inquire/trace.aspx?method=result&billID=' . rawurlencode( $tracking_no ),
-					'carrier'     => '黑貓宅急便',
+					'carrier'     => __( 'T-Cat home delivery', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 			case 'UNIMART':
@@ -118,7 +118,7 @@ final class TrackingLink {
 				return [
 					'mode'        => 'prefill-needed',
 					'url'         => 'https://eservice.7-11.com.tw/E-Tracking/search.aspx',
-					'carrier'     => '7-11 統一超商',
+					'carrier'     => __( '7-ELEVEN', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 			case 'FAMI':
@@ -126,7 +126,7 @@ final class TrackingLink {
 				return [
 					'mode'        => 'prefill-needed',
 					'url'         => 'https://fmec.famiport.com.tw/FP_Entrance/QueryBox',
-					'carrier'     => '全家便利商店',
+					'carrier'     => __( 'FamilyMart', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 			case 'HILIFE':
@@ -134,7 +134,7 @@ final class TrackingLink {
 				return [
 					'mode'        => 'prefill-needed',
 					'url'         => 'https://www.hilife.com.tw/serviceInfo_search.aspx',
-					'carrier'     => '萊爾富',
+					'carrier'     => __( 'Hi-Life', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 			case 'OKMART':
@@ -142,14 +142,14 @@ final class TrackingLink {
 				return [
 					'mode'        => 'prefill-needed',
 					'url'         => 'https://ecservice.okmart.com.tw/Tracking/Search',
-					'carrier'     => 'OK 超商',
+					'carrier'     => __( 'OK Mart', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 			case 'POST':
 				return [
 					'mode'        => 'prefill-needed',
 					'url'         => 'https://postserv.post.gov.tw/pstmail/main_mail.html',
-					'carrier'     => '中華郵政',
+					'carrier'     => __( 'Chunghwa Post', 'moksa-for-woocommerce' ),
 					'tracking_no' => $tracking_no,
 				];
 		}

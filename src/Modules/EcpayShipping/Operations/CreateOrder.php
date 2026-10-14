@@ -70,8 +70,8 @@ final class CreateOrder {
 				'message' => __( 'Chunghwa Post cannot collect cash on delivery. Change the payment method or the shipping method before creating the shipment.', 'moksa-for-woocommerce' ),
 			];
 		}
-		$multi  = count( $packages ) > 1;
-		$now    = current_time( 'mysql' );
+		$multi = count( $packages ) > 1;
+		$now   = current_time( 'mysql' );
 		// 冪等：已建溫層不重建（刪除記錄後可重建）
 		$existing_temps = [];
 		foreach ( self::get_records( $order ) as $er ) {
@@ -317,8 +317,18 @@ final class CreateOrder {
 		bool $is_cvs,
 		bool $is_cod
 	): array {
-		$temp   = (int) $package['temp'];
-		$amount = max( 1, (int) $package['amount'] );
+		$temp       = (int) $package['temp'];
+		$raw_amount = (int) $package['amount'];
+		$amount     = max( 1, $raw_amount );
+		// 超商 GoodsAmount 只收 1–20,000（10500040）。預付時只是報值，夾在上限內；取貨付款不能改金額。
+		if ( $is_cvs && ! $is_cod ) {
+			$amount = min( 20000, $amount );
+		}
+		// 拆單後 0 元的包裹（贈品、全額折抵）沒有錢要收；GoodsAmount 最少 1 只是報值，不能拿來代收，
+		// 否則顧客取這包時被多收 1 元。
+		if ( $is_cod && $raw_amount <= 0 ) {
+			$is_cod = false;
+		}
 
 		$payload = [
 			'MerchantID'           => Helper::merchant_id( $subtype ),

@@ -35,9 +35,15 @@ final class Credentials {
 
 	public static function merchant_id(): string {
 		$test = self::test_mode_enabled();
-		return self::read_option(
-			$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id',
-			$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id'
+		// 一律大寫、去空白：付款請求送大寫，通知回來比對、退款與查詢也要用同一個值；
+		// 商家填成小寫時原本所有付款通知都被當成 MerID 不符丟掉。
+		return strtoupper(
+			trim(
+				self::read_option(
+					$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id',
+					$test ? 'moksafowo_payuni_payment_merchant_id_test' : 'moksafowo_payuni_payment_merchant_id'
+				)
+			)
 		);
 	}
 

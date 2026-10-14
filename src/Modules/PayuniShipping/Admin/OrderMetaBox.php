@@ -106,6 +106,16 @@ class OrderMetaBox {
 			echo '</td></tr>';
 		}
 
+		// 統一方法（混溫）建單時服務類型與金額記在每一包的紀錄裡，單一欄位是空的；依付款方式與各包金額補上。
+		if ( '' === (string) $service_type ) {
+			$service_type = 'cod' === $order->get_payment_method() ? ServiceType::COD : ServiceType::NOT_COD;
+		}
+		if ( '' === (string) $trade_amt ) {
+			$records = \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order );
+			if ( ! empty( $records ) ) {
+				$trade_amt = implode( ' + ', array_map( static fn( $r ) => (string) ( $r['amount'] ?? '' ), $records ) );
+			}
+		}
 		echo '<tr><th style="text-align:left;">' . esc_html__( 'Service type', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html( ServiceType::get_name( $service_type ) ) . '</td></tr>';
 
 		if ( $order->get_payment_method() === 'cod' || $service_type === ServiceType::COD ) {

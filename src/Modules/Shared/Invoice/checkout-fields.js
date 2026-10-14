@@ -76,14 +76,26 @@
 
 	/**
 	 * Block「其他訂單資訊」(WC core 對 location='order' fields 的預設標題) 改成「電子發票」。
+	 * 只在這一區全是發票欄位時才改；有別的外掛或商家自己的欄位就保留原標題，免得整區被說成發票。
+	 * 標題文字走翻譯，英文站顯示英文。
 	 */
 	function renameHeading() {
-		const headings = document.querySelectorAll( '.wp-block-woocommerce-checkout-additional-information-block h2, .wp-block-woocommerce-checkout-additional-information-block .wc-block-components-checkout-step__title' );
-		headings.forEach( function ( h ) {
-			const txt = ( h.innerText || '' ).trim();
-			if ( '其他訂單資訊' === txt || 'Additional order information' === txt ) {
-				h.innerText = '電子發票';
+		const label = ( window.moksafowoInvoiceCheckout && window.moksafowoInvoiceCheckout.heading ) || '';
+		document.querySelectorAll( '.wp-block-woocommerce-checkout-additional-information-block' ).forEach( function ( block ) {
+			const fields = block.querySelectorAll( 'input[id], select[id], textarea[id]' );
+			if ( ! label || ! fields.length ) {
+				return;
 			}
+			for ( let i = 0; i < fields.length; i++ ) {
+				if ( fields[ i ].id.indexOf( 'moksafowo' ) === -1 ) {
+					return;
+				}
+			}
+			block.querySelectorAll( 'h2, .wc-block-components-checkout-step__title' ).forEach( function ( h ) {
+				if ( h.innerText !== label ) {
+					h.innerText = label;
+				}
+			} );
 		} );
 	}
 

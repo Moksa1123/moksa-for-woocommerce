@@ -100,6 +100,15 @@ final class StatusMapper extends AbstractStatusMapper {
 		return 'ecpay';
 	}
 
+	protected function package_codes( \WC_Order $order ): array {
+		$records = $order->get_meta( \Moksafowo\Order\Meta\Keys::ECPAY_LOGISTIC_RECORDS );
+		$codes   = [];
+		foreach ( is_array( $records ) ? $records : [] as $r ) {
+			$codes[] = (string) ( $r['rtn_code'] ?? '' );
+		}
+		return $codes;
+	}
+
 	protected function code_map(): array {
 		return self::MAP;
 	}

@@ -146,6 +146,7 @@ class PayuniShipping {
 		// 未選門市的擋單改由共用的 Shipping\Frontend\CvsStoreRequired 處理（Classic + Block，四家一致）
 
 		add_action( 'woocommerce_checkout_create_order', array( self::get_instance(), 'moksafowo_payuni_save_order_hd_shipping_meta' ), 20, 2 );
+		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( Frontend\StoreValidation::class, 'validate_block_phone' ), 20 );
 		// 區塊結帳不跑上面那個 hook；沒寫入物流類型，付款後就建不出黑貓物流單。
 		add_action(
 			'woocommerce_store_api_checkout_update_order_from_request',
@@ -333,8 +334,8 @@ class PayuniShipping {
 	public function set_default_payment_gateway_over_20000( $available_gateways ) {
 		if ( ! is_admin() && is_checkout() && WC()->cart ) {
 			$cart_total          = WC()->cart->total;
-			$default_pro_gateway = 'moksafowo-payuni-pro-credit';
-			$default_upp_gateway = 'moksafowo-payuni-upp-credit';
+			$default_pro_gateway = 'moksafowo_payuni_credit';
+			$default_upp_gateway = 'moksafowo_payuni_unified';
 
 			if ( $cart_total > 20000 ) {
 				if ( isset( $available_gateways[ $default_pro_gateway ] ) ) {
@@ -587,7 +588,8 @@ class PayuniShipping {
 
 	public static function moksafowo_payuni_get_shipping_phone( $order ) {
 		if ( version_compare( Constants::get_constant( 'WC_VERSION' ), '5.6.0', '>=' ) ) {
-			return $order->get_shipping_phone();
+			// 區塊結帳常只填帳單電話；收件手機空的話 PAYUNi 會拒絕建單。
+			return $order->get_shipping_phone() ?: $order->get_billing_phone();
 		} else {
 			return $order->get_meta( '_shipping_phone' );
 		}

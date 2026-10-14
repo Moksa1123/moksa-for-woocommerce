@@ -29,7 +29,14 @@ defined( 'ABSPATH' ) || exit;
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p> <?php echo esc_html__( 'The store you chose was closed, so your parcel has been redirected. The new pickup location is below.', 'moksa-for-woocommerce' ); ?> </p>
+<p> <?php
+	/* translators: %s: pickup store name */
+	printf( esc_html__( 'The pickup store you chose (%s) is temporarily closed for renovation, relocation or a change of store number. Please choose another pickup store as soon as possible.', 'moksa-for-woocommerce' ), '<!--[moksafowo/cvs-store-name]-->' );
+?> </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p> <?php echo esc_html__( 'If no new store is chosen in time, the parcel will be returned to the distribution center. Please reply to this email or contact us to choose another store.', 'moksa-for-woocommerce' ); ?> </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:woocommerce/email-content {"lock":{"move":false,"remove":true}} -->

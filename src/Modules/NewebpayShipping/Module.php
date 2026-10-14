@@ -47,6 +47,8 @@ final class Module extends AbstractModule {
 
 		add_action( 'woocommerce_api_moksafowo_newebpay_shipping_status', [ Api\IpnHandler::class, 'handle' ] );
 		add_filter( 'woocommerce_default_address_fields', [ __CLASS__, 'relax_cvs_required_fields' ] );
+		add_action( 'woocommerce_after_checkout_validation', [ __CLASS__, 'validate_classic_phone' ], 10, 2 );
+		add_action( 'woocommerce_store_api_checkout_update_order_from_request', [ __CLASS__, 'validate_block_phone' ], 20 );
 		// 批次列印走 NPA-B54（PickupNotice 保留為無建單 fallback）
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 		Operations\PickupNotice::init();
@@ -198,6 +200,14 @@ final class Module extends AbstractModule {
 				)
 			);
 			$order->save();
+			// 通知漏送或晚到時，商家按「查詢」要讓訂單狀態跟查到的貨態一致（與貨態通知同一套規則）。
+			$target = (string) $mapped['wc_status'];
+			if ( '' !== $target && $order->get_status() !== $target && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $target ) ) {
+				$order->update_status( $target );
+				if ( str_starts_with( $target, 'moksa-' ) ) {
+					do_action( 'moksafowo_shipping_status_' . $target . '_notification', $order->get_id(), $order );
+				}
+			}
 		}
 		wp_send_json_success(
 			[
@@ -257,20 +267,62 @@ final class Module extends AbstractModule {
 		return $methods;
 	}
 
+	/**
+	 * 藍新超商取貨的到店簡訊靠收件人手機（UserTel 必填，09 開頭 10 碼）。原本這裡把電話改成選填，
+	 * 顧客不填也能結帳，到建單才被藍新拒絕。保留這個 filter 但不再放寬電話。
+	 */
 	public static function relax_cvs_required_fields( array $fields ): array {
-		if ( ! function_exists( 'wc_get_chosen_shipping_method_ids' ) ) {
-			return $fields;
+		return $fields;
+	}
+
+	/** +886 912-345-678 這類寫法轉成 0912345678。 */
+	public static function normalize_mobile( string $phone ): string {
+		$digits = (string) preg_replace( '/\D+/', '', $phone );
+		if ( str_starts_with( $digits, '886' ) ) {
+			$digits = '0' . substr( $digits, 3 );
 		}
-		$chosen = wc_get_chosen_shipping_method_ids();
-		foreach ( $chosen as $method ) {
-			if ( str_starts_with( (string) $method, 'moksafowo_newebpay_shipping_' ) ) {
-				if ( isset( $fields['phone'] ) ) {
-					$fields['phone']['required'] = false;
-				}
-				break;
+		return $digits;
+	}
+
+	private static function is_newebpay_cvs( array $method_ids ): bool {
+		foreach ( $method_ids as $id ) {
+			if ( str_starts_with( (string) $id, 'moksafowo_newebpay_shipping_cvs' ) ) {
+				return true;
 			}
 		}
-		return $fields;
+		return false;
+	}
+
+	private static function phone_message(): string {
+		return __( 'For convenience store pickup, please enter a mobile number starting with 09 (10 digits) so the store can text you when the parcel arrives.', 'moksa-for-woocommerce' );
+	}
+
+	/**
+	 * @param array<string,mixed> $data   結帳資料。
+	 * @param \WP_Error           $errors 錯誤。
+	 */
+	public static function validate_classic_phone( $data, $errors ): void {
+		if ( ! $errors instanceof \WP_Error || ! self::is_newebpay_cvs( (array) ( $data['shipping_method'] ?? [] ) ) ) {
+			return;
+		}
+		$phone = self::normalize_mobile( (string) ( $data['shipping_phone'] ?? '' ) ?: (string) ( $data['billing_phone'] ?? '' ) );
+		if ( ! preg_match( '/^09\d{8}$/', $phone ) ) {
+			$errors->add( 'moksafowo_newebpay_phone', self::phone_message() );
+		}
+	}
+
+	public static function validate_block_phone( \WC_Order $order ): void {
+		$ids = [];
+		foreach ( $order->get_shipping_methods() as $m ) {
+			$ids[] = (string) $m->get_method_id();
+		}
+		if ( ! self::is_newebpay_cvs( $ids ) ) {
+			return;
+		}
+		$phone = self::normalize_mobile( (string) $order->get_shipping_phone() ?: (string) $order->get_billing_phone() );
+		if ( ! preg_match( '/^09\d{8}$/', $phone ) ) {
+			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException( 'moksafowo_newebpay_phone', esc_html( self::phone_message() ), 400 );
+		}
 	}
 
 	public static function store_as_shipping_address( string $address, $raw_address, \WC_Order $order ): string {

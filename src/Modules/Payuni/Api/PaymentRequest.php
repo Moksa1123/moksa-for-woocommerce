@@ -177,8 +177,30 @@ class PaymentRequest {
 
 		if ( TradeStatus::PAID === $trade_status ) {
 
-			$close_status = $query_result['CloseStatus'];
-			if ( self::is_refundable( $close_status ) ) {
+			$close_status = (string) ( $query_result['CloseStatus'] ?? '' );
+			if ( '' === $close_status ) {
+				// 只有信用卡類才有請款狀態；LINE Pay、AFTEE、iCash、街口等由單一入口付的款，
+				// 原本只會看到空白的「請款狀態：」拒絕訊息。
+				return new \WP_Error(
+					'process_refund_request',
+					__( 'This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard.', 'moksa-for-woocommerce' )
+				);
+			}
+			if ( '9' === $close_status ) {
+				// 已授權、還沒申請請款：要用取消授權（/trade/cancel），而且只能整筆取消。
+				if ( abs( (float) $amount - (float) $order->get_total() ) > 0.001 ) {
+					return new \WP_Error(
+						'process_refund_request',
+						__( 'This card payment has not been captured yet, so it can only be cancelled in full. Refund the full amount, or wait until it is captured to make a partial refund.', 'moksa-for-woocommerce' )
+					);
+				}
+				$encrypt_info = array(
+					'MerID'     => $mer_id,
+					'TradeNo'   => $transaction_id,
+					'Timestamp' => time(),
+				);
+				$url          = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/trade/cancel' : 'https://api.payuni.com.tw/api/trade/cancel';
+			} elseif ( self::is_refundable( $close_status ) ) {
 				$encrypt_info = array(
 					'MerID'     => $mer_id,
 					'TradeNo'   => $transaction_id,

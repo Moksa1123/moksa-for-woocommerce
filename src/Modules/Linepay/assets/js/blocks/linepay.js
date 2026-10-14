@@ -1,4 +1,8 @@
-const linepay_settings = window.wc.wcSettings.getSetting( 'moksafowo-linepay_data', {} );
+// WC 11.1 起設定改放在單一 paymentMethodData（以 gateway id 為 key），舊的 `<id>_data` 已不存在；
+// 只讀舊 key 會讓商家設定的標題、說明在區塊結帳失效。兩種都吃：先新後舊。
+const linepay_bundle = window.wc.wcSettings.getSetting( 'paymentMethodData', null );
+const linepay_settings = ( linepay_bundle && linepay_bundle[ 'moksafowo-linepay' ] )
+	|| window.wc.wcSettings.getSetting( 'moksafowo-linepay_data', {} );
 const linepay_label = window.wp.htmlEntities.decodeEntities( linepay_settings.title )
 	|| window.wp.i18n.__( 'LINE Pay', 'moksa-for-woocommerce' );
 

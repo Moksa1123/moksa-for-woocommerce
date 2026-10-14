@@ -62,14 +62,14 @@ final class Reconciler {
 
 			$code = (string) $result['code'];
 			$msg  = (string) $result['msg'];
-			// 查詢 API 不回說明文字，只能比碼。
-			if ( $code === (string) $order->get_meta( Keys::ECPAY_LOGISTIC_RTN_CODE ) ) {
+			// 查詢 API 不回說明文字，只能比碼。拆單時每一包跟自己的上次貨態比，
+			// 不能比訂單上那一個欄位，否則兩包輪流覆蓋、每輪都觸發狀態轉換。
+			if ( $code === (string) ( $r['rtn_code'] ?? '' ) ) {
 				continue; // 貨態沒變，不重複寫備註。
 			}
 
-			$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_CODE, $code );
+			CreateOrder::update_record_status( $order, $logistics_id, $code, $msg );
 			if ( '' !== $msg ) {
-				$order->update_meta_data( Keys::ECPAY_LOGISTIC_RTN_MSG, $msg );
 				$note = sprintf(
 					/* translators: 1: status message, 2: status code */
 					__( 'ECPay shipping status found by follow-up check: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),

@@ -377,9 +377,25 @@ final class TwAddress {
 		return '@media (max-width:399px)' . $rule . '@container (max-width:399px)' . $rule;
 	}
 
+	/**
+	 * @param array<string,string> $location 預設位置。
+	 * @return array<string,string>
+	 */
+	public static function default_location_tw( $location ) {
+		$location = is_array( $location ) ? $location : [];
+		if ( 'TW' !== ( $location['country'] ?? '' ) ) {
+			$location['country'] = 'TW';
+			$location['state']   = '';
+		}
+		return $location;
+	}
+
 	private static function init_hide_country(): void {
 		add_filter( 'default_checkout_billing_country', [ __CLASS__, 'default_country_tw' ] );
 		add_filter( 'default_checkout_shipping_country', [ __CLASS__, 'default_country_tw' ] );
+		// 上面兩個只有傳統結帳會用。區塊結帳的國家欄也被藏起來，新訪客的國家來自「預設顧客位置」
+		// （不預設時是空的、地理定位時可能是別國），顧客又改不了，所以新顧客一律從台灣開始。
+		add_filter( 'woocommerce_customer_default_location_array', [ __CLASS__, 'default_location_tw' ] );
 		// 110：要跑在 tw_address_format_use_name_token(100) 之後。
 		add_filter( 'woocommerce_localisation_address_formats', [ __CLASS__, 'strip_country_from_tw_format' ], 110 );
 	}

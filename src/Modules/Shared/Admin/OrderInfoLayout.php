@@ -225,7 +225,9 @@ final class OrderInfoLayout {
 				$shipping = $order->get_shipping_methods();
 				$is_cvs   = false;
 				foreach ( $shipping as $sm ) {
-					if ( str_contains( (string) $sm->get_method_id(), '_cvs_' ) ) {
+					$mid = (string) $sm->get_method_id();
+					// 各家超商方式的命名不一：綠界／速買配 _cvs_、藍新 _cvs 結尾、PAYUNi 是 _711_。
+					if ( str_contains( $mid, '_cvs' ) || str_contains( $mid, 'payuni_shipping_711' ) ) {
 						$is_cvs = true;
 						break;
 					}

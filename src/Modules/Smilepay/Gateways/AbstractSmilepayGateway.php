@@ -225,7 +225,14 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 		$html .= '</div>';
 
 		$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $html );
-		$order->add_order_note( wp_kses_post( $html ), 1 );
+		$order->save();
+		// 速買配的繳費代碼在送單當下就拿到，跟其他四家一樣在這時寄「繳費資訊」信。原本只在付款完成時
+		// 才呼叫，那時已付款、信永遠寄不出去，顧客收到的是通用的「訂單新增備註」信。
+		// 商家關掉那封信時才退回用顧客備註通知，避免同一份代碼寄兩次。
+		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
+		$emails   = function_exists( 'WC' ) ? WC()->mailer()->get_emails() : [];
+		$email_on = isset( $emails['MO_Payment_Info'] ) && $emails['MO_Payment_Info']->is_enabled();
+		$order->add_order_note( wp_kses_post( $html ), $email_on ? 0 : 1 );
 		if ( '' !== $smilepay_no ) {
 			$order->add_order_note(
 				sprintf(

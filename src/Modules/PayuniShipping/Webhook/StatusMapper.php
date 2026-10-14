@@ -12,24 +12,25 @@ defined( 'ABSPATH' ) || exit;
 final class StatusMapper extends AbstractStatusMapper {
 
 	private const MAP = [
-		'92' => 'moksa-shipped',     // 出貨
-		'98' => 'moksa-shipped',
-		'22' => 'moksa-shipped',
-		'31' => 'moksa-shipped',
-		'32' => 'moksa-cvs-arrived', // 到店
-		'11' => 'completed',         // 取貨完成
-		'33' => 'failed',            // 配送異常
-		'43' => 'failed',
-		'44' => 'failed',
-		'46' => 'failed',
+		// 92／98 依 PAYUNi 文件是「處理中」（單號送上游確認、待送物流中心），還沒出貨，不轉狀態。
+		// 只有店到店的 92 且說明含 AOL 才是「門市已收件」，由 handle_legacy_action 轉成 92AOL。
+		'92AOL' => 'moksa-shipped',
+		'22'    => 'moksa-shipped',
+		'31'    => 'moksa-shipped',
+		'32'    => 'moksa-cvs-arrived', // 到店
+		'11'    => 'completed',         // 取貨完成
+		'33'    => 'failed',            // 配送異常
+		'43'    => 'failed',
+		'44'    => 'failed',
+		'46'    => 'failed',
 		// 退貨群組 —— 超商取件退回即「未取件」，不自動轉已退費（退款由商家決定）。
-		'51' => 'moksa-unclaimed',
-		'52' => 'moksa-unclaimed',
-		'53' => 'moksa-unclaimed',
-		'55' => 'moksa-unclaimed',
-		'56' => 'moksa-unclaimed',
-		'82' => 'moksa-unclaimed',
-		'81' => 'moksa-store-closed', // 門市暫歇
+		'51'    => 'moksa-unclaimed',
+		'52'    => 'moksa-unclaimed',
+		'53'    => 'moksa-unclaimed',
+		'55'    => 'moksa-unclaimed',
+		'56'    => 'moksa-unclaimed',
+		'82'    => 'moksa-unclaimed',
+		'81'    => 'moksa-store-closed', // 門市暫歇
 	];
 
 	public static function init(): void {
@@ -37,7 +38,18 @@ final class StatusMapper extends AbstractStatusMapper {
 	}
 
 	public static function handle_legacy_action( \WC_Order $order, string $code, string $desc ): void {
+		if ( '92' === (string) $code && str_contains( (string) $desc, 'AOL' ) ) {
+			$code = '92AOL';
+		}
 		( new self() )->handle_status_received( $order, (string) $code, (string) $desc );
+	}
+
+	protected function package_codes( \WC_Order $order ): array {
+		$codes = [];
+		foreach ( \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order ) as $r ) {
+			$codes[] = (string) ( $r['ship_status'] ?? '' );
+		}
+		return $codes;
 	}
 
 	protected function provider_slug(): string {
@@ -53,7 +65,7 @@ final class StatusMapper extends AbstractStatusMapper {
 		$map       = self::MAP;
 		$overrides = [
 			ShippingStatus::AT_LOGISTIC_CENTER => PayuniShipping::$order_status_at_logistic_center,
-			ShippingStatus::AT_SENDER_CVS      => PayuniShipping::$order_status_at_sender_cvs,
+			'92AOL'                            => PayuniShipping::$order_status_at_sender_cvs, // 門市已收件只在 92＋AOL 時成立
 			ShippingStatus::DELIVERING         => PayuniShipping::$order_status_delivering,
 			ShippingStatus::AT_RECEIVER_CVS    => PayuniShipping::$order_status_at_receiver_cvs,
 			ShippingStatus::CUSTOMER_PICKUP    => PayuniShipping::$order_status_pickuped,

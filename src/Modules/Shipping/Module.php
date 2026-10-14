@@ -36,8 +36,29 @@ final class Module {
 		add_filter( 'woocommerce_transactional_emails_for_block_editor', [ __CLASS__, 'register_block_editor_emails' ] );
 		Emails\EmailTrackingSection::init();
 		Frontend\CvsStoreRequired::init();
+		Frontend\CodAmountLimit::init();
+		add_filter( 'woocommerce_email_order_shipping_show_free_label', [ __CLASS__, 'free_label_for_zero_cost' ], 10, 2 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'register_frontend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'register_admin_assets' ] );
+	}
+
+	/**
+	 * WC 11.2 信件裡運費 0 元的那一列，標籤和金額欄都印方式名稱（「運送方式: 7-11 取貨｜7-11 取貨」）；
+	 * 核心只對 free_shipping 改顯示「免費！」。本外掛的物流方式運費 0 元時也比照。
+	 *
+	 * @param bool           $show  是否顯示「免費！」。
+	 * @param \WC_Order|mixed $order 訂單。
+	 */
+	public static function free_label_for_zero_cost( $show, $order ): bool {
+		if ( $show || ! $order instanceof \WC_Order || (float) $order->get_shipping_total() > 0 ) {
+			return (bool) $show;
+		}
+		foreach ( $order->get_shipping_methods() as $method ) {
+			if ( str_starts_with( (string) $method->get_method_id(), 'moksafowo_' ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static function register_frontend_assets(): void {

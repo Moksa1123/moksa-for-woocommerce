@@ -38,9 +38,9 @@ final class InvoiceCheckoutFields {
 		add_action( 'woocommerce_after_checkout_billing_form', [ self::class, 'render_classic' ] );
 		add_action( 'woocommerce_checkout_create_order', [ self::class, 'save_classic' ], 10, 2 );
 
-		// 格式驗證走 woocommerce_after_checkout_validation — Classic 與 Block (Store API) 都 fire，
-		// 單一 method 兩路徑等價，避免 Block 漏驗。
+		// 傳統結帳的格式驗證。Store API 不會觸發這個 hook，區塊結帳改由 validate_block() 跑同一套。
 		add_action( 'woocommerce_after_checkout_validation', [ self::class, 'validate_format' ], 10, 2 );
+		add_action( 'woocommerce_store_api_checkout_update_order_from_request', [ self::class, 'validate_block' ], 5, 2 );
 
 		// Block checkout — woocommerce_init 已 fire，直接呼叫（掛 add_action 會錯過時機）。
 		self::register_block_fields();
@@ -309,6 +309,11 @@ final class InvoiceCheckoutFields {
 			if ( ! Ubn::is_valid( $ubn ) ) {
 				$errors->add( 'moksafowo_invoice_ubn', __( 'The tax ID format or check digit is not valid.', 'moksa-for-woocommerce' ) );
 			}
+			// 區塊結帳由欄位 schema 擋；傳統結帳只有畫面上的星號，沒填會開出抬頭「消費者」的三聯式發票。
+			$name = self::field_value( $data, [ 'moksafowo_invoice_buyer_name', '_moksafowo/invoice-buyer-name', 'moksafowo/invoice-buyer-name' ] );
+			if ( '' === trim( $name ) ) {
+				$errors->add( 'moksafowo_invoice_buyer_name', __( 'Please enter the company name for the invoice.', 'moksa-for-woocommerce' ) );
+			}
 		}
 
 		if ( 'b2c_donate' === $type ) {
@@ -336,6 +341,33 @@ final class InvoiceCheckoutFields {
 			if ( 'cert' === $carrier && ! preg_match( '/^[A-Z]{2}\d{14}$/', $carrier_num ) ) {
 				$errors->add( 'moksafowo_invoice_carrier_cert', __( 'Invalid Citizen Digital Certificate (it must be 2 uppercase letters followed by 14 digits).', 'moksa-for-woocommerce' ) );
 			}
+		}
+	}
+
+	/**
+	 * 區塊結帳送單時跑和傳統結帳一樣的驗證（格式＋綠界載具真偽）。不通過就丟 RouteException，
+	 * Store API 會擋下訂單並把訊息顯示給顧客。
+	 *
+	 * @param \WC_Order        $order   訂單。
+	 * @param \WP_REST_Request $request Store API 請求。
+	 * @throws \Automattic\WooCommerce\StoreApi\Exceptions\RouteException When the invoice fields are not valid.
+	 */
+	public static function validate_block( $order, $request ): void {
+		if ( ! $request instanceof \WP_REST_Request ) {
+			return;
+		}
+		$fields = (array) $request->get_param( 'additional_fields' );
+		if ( '' === (string) ( $fields['moksafowo/invoice-type'] ?? '' ) ) {
+			return;
+		}
+		$fields = map_deep( $fields, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+		$errors = new \WP_Error();
+		self::validate_format( $fields, $errors );
+		if ( ! $errors->has_errors() && self::$config && null !== self::$config->carrier_api_validator ) {
+			call_user_func( self::$config->carrier_api_validator, $fields, $errors );
+		}
+		if ( $errors->has_errors() ) {
+			throw new \Automattic\WooCommerce\StoreApi\Exceptions\RouteException( 'moksafowo_invoice_invalid', esc_html( implode( ' ', $errors->get_error_messages() ) ), 400 );
 		}
 	}
 
@@ -376,7 +408,7 @@ final class InvoiceCheckoutFields {
 
 	public static function save_classic( \WC_Order $order, array $data ): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- WC checkout submit nonce 'woocommerce-process-checkout-nonce' verified by WC core in WC_Checkout::process_checkout() before this callback fires.
-		$keys = [
+		$keys   = [
 			'moksafowo_invoice_type'         => Keys::INVOICE_TYPE,
 			'moksafowo_invoice_carrier_type' => Keys::INVOICE_CARRIER_TYPE,
 			'moksafowo_invoice_carrier_num'  => Keys::INVOICE_CARRIER_NUM,
@@ -384,12 +416,29 @@ final class InvoiceCheckoutFields {
 			'moksafowo_invoice_buyer_name'   => Keys::INVOICE_BUYER_NAME,
 			'moksafowo_invoice_love_code'    => Keys::INVOICE_LOVE_CODE,
 		];
+		$values = [];
 		foreach ( $keys as $field => $meta_key ) {
 			if ( isset( $_POST[ $field ] ) ) {
-				$order->update_meta_data( $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
+				$values[ $field ] = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			}
 		}
 		// phpcs:enable
+		// 傳統結帳只用 display:none 藏欄位，值還在。顧客先填手機條碼再改會員載具、或先選公司再改個人，
+		// 舊值會一起存進訂單、開票時帶到。不屬於目前選擇的欄位一律存空值（區塊結帳由 WC 自己清）。
+		$type    = $values['moksafowo_invoice_type'] ?? '';
+		$carrier = $values['moksafowo_invoice_carrier_type'] ?? '';
+		if ( isset( $values['moksafowo_invoice_carrier_num'] ) && ! ( 'b2c_carrier' === $type && in_array( $carrier, [ 'mobile', 'cert' ], true ) ) ) {
+			$values['moksafowo_invoice_carrier_num'] = '';
+		}
+		if ( isset( $values['moksafowo_invoice_buyer_ubn'] ) && 'b2b' !== $type ) {
+			$values['moksafowo_invoice_buyer_ubn'] = '';
+		}
+		if ( isset( $values['moksafowo_invoice_love_code'] ) && 'b2c_donate' !== $type ) {
+			$values['moksafowo_invoice_love_code'] = '';
+		}
+		foreach ( $values as $field => $value ) {
+			$order->update_meta_data( $keys[ $field ], $value );
+		}
 		if ( null !== self::$config ) {
 			$order->update_meta_data( Keys::INVOICE_PROVIDER, self::$config->provider_slug );
 		}
