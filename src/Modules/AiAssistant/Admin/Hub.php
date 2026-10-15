@@ -30,6 +30,7 @@ final class Hub {
 		add_action( 'admin_menu', array( self::class, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
 		add_action( 'admin_post_moksafowo_cs_reply', array( Inbox::class, 'handle_reply' ) );
+		add_action( 'admin_post_moksafowo_cs_close', array( Inbox::class, 'handle_close' ) );
 	}
 
 	public static function enqueue_assets(): void {

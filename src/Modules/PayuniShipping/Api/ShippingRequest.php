@@ -415,7 +415,7 @@ class ShippingRequest {
 
 		} elseif ( $service === ShipType::TCAT ) {
 			$shipping_date          = get_option( 'moksafowo_payuni_shipping_tcat_estimate_shipping_date', '1' );
-			$current_date           = new \DateTime();
+			$current_date           = new \DateTime( 'now', new \DateTimeZone( 'Asia/Taipei' ) );
 			$estimate_shipping_date = self::get_next_business_day( $current_date, intval( $shipping_date ) );
 			$estimate_delivery_date = self::get_next_business_day( $estimate_shipping_date, 1 );
 
@@ -569,7 +569,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'PAYUNi could not create the shipment:', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'PAYUNi could not create the shipment: %s', 'moksa-for-woocommerce' ), $response->get_error_message() ) );
 			PayuniShipping::log( 'Create PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}
@@ -604,7 +604,7 @@ class ShippingRequest {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$order->add_order_note( __( 'The PAYUNi shipment lookup failed:', 'moksa-for-woocommerce' ) . ' ' . $response->get_error_message() );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'The PAYUNi shipment lookup failed: %s', 'moksa-for-woocommerce' ), $response->get_error_message() ) );
 			PayuniShipping::log( 'Query PAYUNi shipping order:' . wc_print_r( $response, true ), 'error' );
 			throw new \Exception( esc_html( $response->get_error_message() ), (int) $response->get_error_code() );
 		}

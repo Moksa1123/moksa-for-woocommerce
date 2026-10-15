@@ -35,12 +35,14 @@ final class CreditInstallment extends AbstractSmilepayGateway {
 	}
 
 	protected function mtmk_extra_params( \WC_Order $order ): array {
-		$raw = (string) get_option( 'moksafowo_smilepay_installment', '' );
+		// 跟設定欄位同一個預設；取清單裡第一個大於 0 的期數，都不合法時用 3 期。
+		$raw = (string) get_option( 'moksafowo_smilepay_installment', '3' );
 		$raw = preg_replace( '/[^0-9,]/', '', $raw ) ?? '';
-		if ( '' === $raw ) {
-			return [];
+		foreach ( explode( ',', $raw ) as $stage ) {
+			if ( (int) $stage > 0 ) {
+				return [ 'Stage' => (int) $stage ];
+			}
 		}
-		$first = (int) explode( ',', $raw )[0];
-		return $first > 0 ? [ 'Stage' => $first ] : [];
+		return [ 'Stage' => 3 ];
 	}
 }

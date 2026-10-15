@@ -21,7 +21,7 @@ final class IpnHandler {
 
 		$signature = self::header( 'X-Tappay-Signature' );
 		if ( ! Helper::verify_notify_signature( $raw_body, $signature ) ) {
-			Helper::log( 'notify signature mismatch — rejected' );
+			Helper::warn( 'notify signature mismatch — rejected' );
 			status_header( 401 );
 			echo 'invalid signature';
 			exit;
@@ -45,6 +45,45 @@ final class IpnHandler {
 			Helper::log( 'notify order not found', [ 'order_number' => $order_number ] );
 			status_header( 404 );
 			echo 'order not found';
+			exit;
+		}
+		// 只處理用 TapPay 付款的訂單（沙箱模式的通知金鑰可能是公開的測試值）。
+		if ( ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo_tappay' ) ) {
+			Helper::warn( 'notify rejected — order not paid via TapPay', [ 'order_id' => $order->get_id() ] );
+			status_header( 400 );
+			echo 'payment method mismatch';
+			exit;
+		}
+		// 成功通知的金額要跟訂單一致。
+		if ( 0 === (int) ( $payload['status'] ?? -1 ) && isset( $payload['amount'] ) && (int) $payload['amount'] !== (int) round( (float) $order->get_total() ) ) {
+			$order->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: paid amount, 2: order total */
+					__( 'TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+					(int) $payload['amount'],
+					$order->get_total()
+				)
+			);
+			status_header( 200 );
+			echo 'OK';
+			exit;
+		}
+
+		// 成功通知的交易編號要是這張訂單送出的那一筆（規格建議比對 pay-by-prime 取得的 rec_trade_id）。
+		$stored_trade = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
+		if ( 0 === (int) ( $payload['status'] ?? -1 ) && ! $order->is_paid() && '' !== $stored_trade && $stored_trade !== (string) ( $payload['rec_trade_id'] ?? '' ) ) {
+			$order->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: transaction id in the notice, 2: transaction id stored on the order */
+					__( 'TapPay sent a payment notice for transaction %1$s, but this order was charged as transaction %2$s. The order was not marked as paid; please check it in the TapPay portal.', 'moksa-for-woocommerce' ),
+					(string) ( $payload['rec_trade_id'] ?? '' ),
+					$stored_trade
+				)
+			);
+			status_header( 200 );
+			echo 'OK';
 			exit;
 		}
 
@@ -84,7 +123,7 @@ final class IpnHandler {
 		$order = self::resolve_order( $order_number );
 		if ( ! $order instanceof \WC_Order || ! hash_equals( Helper::result_token( $order ), $token ) ) {
 			// 驗證碼不符：不查詢、不導到含 order key 的網址。付款結果仍會由 notify 通知寫入。
-			Helper::log( '3DS result order not found or token invalid', [ 'order_number' => $order_number ] );
+			Helper::warn( '3DS result order not found or token invalid', [ 'order_number' => $order_number ] );
 			wp_safe_redirect( wc_get_checkout_url() );
 			exit;
 		}
@@ -229,12 +268,18 @@ final class IpnHandler {
 		if ( $paid ) {
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( $rec_trade_id );
+				// 同一個通知網址也收 LINE Pay、街口等錢包付款，不能寫死「信用卡」；錢包沒有卡號末四碼，空值不印。
 				$order->add_order_note(
-					sprintf(
-						/* translators: 1: rec_trade_id, 2: card last4 */
-						__( 'TapPay card payment completed — transaction ID %1$s (card ending %2$s)', 'moksa-for-woocommerce' ),
-						$rec_trade_id,
-						(string) $order->get_meta( Keys::TAPPAY_CARD_LAST4 )
+					\Moksafowo\Order\Note::build(
+						sprintf(
+							/* translators: %s: payment method title */
+							__( '%s payment completed', 'moksa-for-woocommerce' ),
+							$order->get_payment_method_title() ?: 'TapPay'
+						),
+						[
+							__( 'Transaction ID', 'moksa-for-woocommerce' ) => $rec_trade_id,
+							__( 'Last four card digits', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::TAPPAY_CARD_LAST4 ),
+						]
 					)
 				);
 			}

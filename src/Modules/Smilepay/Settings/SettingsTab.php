@@ -141,7 +141,7 @@ final class SettingsTab {
 					'moksafowo_smilepay_famiport' => __( 'FamiPort code', 'moksa-for-woocommerce' ),
 					'moksafowo_smilepay_unionpay' => __( 'UnionPay', 'moksa-for-woocommerce' ),
 				],
-				'desc'    => __( 'Only the ticked payment methods appear at checkout.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

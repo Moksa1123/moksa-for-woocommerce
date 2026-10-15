@@ -23,8 +23,11 @@ final class EmailTrackingProvider {
 		}
 		$records = CreateOrder::get_records( $order );
 		if ( empty( $records ) ) {
+			// 超商與單溫層黑貓只寫單鍵；LGS_TYPE 存的是 C2C／B2C，認不出是哪家，要從物流類型推。
+			$type    = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TYPE );
 			$records = [
 				[
+					'subtype'   => str_starts_with( $type, '711' ) ? 'UNIMART' : ( str_starts_with( $type, 'FAMI' ) ? 'FAMI' : ( 'TCAT' === $type ? 'TCAT' : '' ) ),
 					'lgs_type'  => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_LGS_TYPE ),
 					'pay_no'    => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_PAY_NO ),
 					'track_num' => (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TRACK_NO ),

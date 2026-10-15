@@ -84,14 +84,22 @@ final class Module extends AbstractGatewayModule {
 				'lines'   => [],
 			];
 		}
-		$d = (array) ( $res['data'] ?? [] );
+		$d      = (array) ( $res['data'] ?? [] );
+		$status = (string) ( $d['status'] ?? '' );
+		$label  = [
+			'S' => __( 'Payment completed', 'moksa-for-woocommerce' ),
+			'W' => __( 'Awaiting payment', 'moksa-for-woocommerce' ),
+			'F' => __( 'Payment failed', 'moksa-for-woocommerce' ),
+		][ $status ] ?? '';
+		$status = '' !== $label ? $label . ' (' . $status . ')' : $status;
+		$type   = (string) ( $d['payment_type'] ?? $d['pay_type'] ?? '' );
 		return [
 			'ok'      => true,
-			'message' => (string) ( $d['status'] ?? 'OK' ),
+			'message' => '' !== $status ? $status : 'OK',
 			'lines'   => array_filter(
 				[
-					__( 'Status', 'moksa-for-woocommerce' )         => (string) ( $d['status'] ?? '' ),
-					__( 'Payment type', 'moksa-for-woocommerce' )   => (string) ( $d['payment_type'] ?? '' ),
+					__( 'Status', 'moksa-for-woocommerce' )         => $status,
+					__( 'Payment type', 'moksa-for-woocommerce' )   => '' !== $type ? Api\IpnHandler::pay_type_label( $type ) : '',
 					__( 'Amount', 'moksa-for-woocommerce' )         => (string) ( $d['trade_amount'] ?? '' ),
 					__( 'Paid at', 'moksa-for-woocommerce' )        => (string) ( $d['pay_date'] ?? '' ),
 					__( 'Transaction ID', 'moksa-for-woocommerce' ) => $oid,

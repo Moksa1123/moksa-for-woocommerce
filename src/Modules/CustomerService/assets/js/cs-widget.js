@@ -80,12 +80,17 @@
 		var o = el( 'input', 'moksafowo-cs-input' );
 		o.type = 'text';
 		o.placeholder = i.order_label;
+		// placeholder 一輸入就消失，螢幕閱讀器也讀不到，欄位名稱另外放在 aria-label。
+		o.setAttribute( 'aria-label', i.order_label );
+		o.setAttribute( 'autocomplete', 'off' );
 		o.setAttribute( 'inputmode', 'numeric' );
 		var p = el( 'input', 'moksafowo-cs-input' );
 		p.type = 'text';
 		p.placeholder = i.phone_label;
+		p.setAttribute( 'aria-label', i.phone_label );
 		p.maxLength = 3;
 		p.setAttribute( 'inputmode', 'numeric' );
+		p.setAttribute( 'pattern', '[0-9]{3}' );
 		var btn = el( 'button', 'moksafowo-cs-btn', i.submit );
 		btn.type = 'submit';
 		f.appendChild( o );
@@ -137,7 +142,16 @@
 			card.appendChild( row( i.shipping, s.shipping_method ) );
 		}
 		if ( s.shipping_number ) {
-			card.appendChild( row( i.ship_no, s.shipping_number ) );
+			var shipRow = row( s.shipping_internal ? i.ship_ref : i.ship_no, s.shipping_carrier ? s.shipping_carrier + ' ' + s.shipping_number : s.shipping_number );
+			if ( s.tracking_url ) {
+				var a = el( 'a', 'moksafowo-cs-track', i.track );
+				a.href = s.tracking_url;
+				a.target = '_blank';
+				a.rel = 'noopener noreferrer';
+				shipRow.querySelector( '.moksafowo-cs-v' ).appendChild( document.createTextNode( ' ' ) );
+				shipRow.querySelector( '.moksafowo-cs-v' ).appendChild( a );
+			}
+			card.appendChild( shipRow );
 		}
 		if ( s.invoice_number ) {
 			card.appendChild( row( i.invoice, s.invoice_number ) );
@@ -263,6 +277,11 @@
 			} );
 		} else {
 			showForm();
+			// 開啟後把焦點移進面板，鍵盤與螢幕閱讀器使用者才不會停在原地。
+			var first = bodyEl.querySelector( 'input' );
+			if ( first ) {
+				first.focus();
+			}
 		}
 	}
 
@@ -272,9 +291,12 @@
 		bubble.querySelector( 'span' ).textContent = C.title || i.bubble;
 
 		var panel = el( 'div', 'moksafowo-cs-panel' );
+		panel.setAttribute( 'role', 'dialog' );
+		panel.setAttribute( 'aria-labelledby', 'moksafowo-cs-title' );
 		var head = el( 'div', 'moksafowo-cs-head' );
 		head.appendChild( el( 'span', 'moksafowo-cs-dot' ) );
 		var b = el( 'b' );
+		b.id = 'moksafowo-cs-title';
 		b.textContent = C.title || i.bubble;
 		head.appendChild( b );
 		var x = el( 'button', 'moksafowo-cs-x', '×' );

@@ -69,6 +69,8 @@ final class Keys {
 
 	public const NEWEBPAY_TRADE_NO          = '_moksafowo_newebpay_trade_no';
 	public const NEWEBPAY_MERCHANT_ORDER_NO = '_moksafowo_newebpay_merchant_order_no';
+	public const NEWEBPAY_MTN_HISTORY       = '_moksafowo_newebpay_mtn_history'; // 每次送出的 MerchantOrderNo（舊代碼的通知也查得到）.
+	public const NEWEBPAY_PAID_AMT          = '_moksafowo_newebpay_paid_amt';    // 藍新回報的實付金額.
 	public const NEWEBPAY_PAYMENT_TYPE      = '_moksafowo_newebpay_payment_type';
 	public const NEWEBPAY_PAY_TIME          = '_moksafowo_newebpay_pay_time';
 	public const NEWEBPAY_CARD_LAST4        = '_moksafowo_newebpay_card_last4';

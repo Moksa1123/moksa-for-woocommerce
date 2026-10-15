@@ -43,6 +43,8 @@ final class SettingsTab {
 				'title' => __( 'Live merchant transaction password', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_paynow_trade_password',
 				'type'  => 'text',
+				// 付款通知只靠這組密碼驗證，而它能從結帳頁的資料離線猜測，太短等於沒有防護。
+				'desc'  => __( 'Set this in the PayNow merchant dashboard to a random mix of at least 16 letters and numbers. Payment notifications are verified with it, so a short password is easy to guess.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',
@@ -136,7 +138,7 @@ final class SettingsTab {
 					'moksafowo_paynow_icash'              => __( 'iCash wallet', 'moksa-for-woocommerce' ),
 					'moksafowo_paynow_unionpay'           => __( 'UnionPay', 'moksa-for-woocommerce' ),
 				],
-				'desc'    => __( 'Only the ticked payment methods appear at checkout.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

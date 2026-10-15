@@ -14,7 +14,7 @@ final class Request {
 		if ( '' === $invoice_id ) {
 			return [
 				'ok'      => false,
-				'message' => 'invoice_id 未設定',
+				'message' => __( 'The Amego invoice ID is not set.', 'moksa-for-woocommerce' ),
 				'raw'     => '',
 				'data'    => [],
 				'code'    => -1,

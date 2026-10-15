@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.15.0
+Stable tag: 1.16.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -136,23 +136,12 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Changelog ==
 
-= 1.15.0 - 2026-10-15 =
-Security
-* PayNow and TapPay payment notices are checked more strictly, so a payment can no longer be marked as paid from outside. The TapPay return page no longer reveals order links.
-* Storefront order lookup limits wrong phone-digit guesses per order, and messages are rate limited.
-* SmilePay store selection can no longer be changed by an outside link.
-* Deleting the plugin no longer removes data belonging to other plugins.
-* Moksa AI settings can only be changed by shop managers.
+= 1.16.0 - 2026-10-15 =
+* New: scannable store barcodes, e-invoice details for customers, PAYUNi payment codes on the order page and in email, and PayNow / SmilePay payment cards.
+* Fixed: payment deadlines in Taiwan time, ECPay refunds before capture, shipping statuses no longer go backwards, and clearer order notes and settings.
 
-Fixed
-* NewebPay ATM and convenience store codes are now saved and emailed; orders no longer get cancelled while waiting for payment. ECPay integrated payment and BNPL receive their payment details too.
-* ECPay convenience store codes stay valid for the days you set instead of a few minutes. ECPay test-dashboard "simulated payments" no longer mark live orders as paid.
-* Late failure notices from an earlier payment attempt no longer turn paid orders back to failed (PChomePay, Shopline, TapPay).
-* Shopline partial refunds after the first one are actually sent. NewebPay card refunds explain when the payment has not been captured yet.
-* Invoices: PayNow carriers and paper invoices, ezPay and Amego allowances, fees and refunds in invoice totals, ECPay re-issue after void, and scheduled invoices for cancelled orders.
-* PAYUNi status notices sent to the old notify address are accepted; the settings page shows the addresses to use.
-* Split shipments, status checks, bulk printing lists and number lookups find all the orders they should.
-* External AI over MCP is told plainly that change tools only preview the change.
+= 1.15.0 - 2026-10-15 =
+* Stricter PayNow, TapPay and SmilePay checks, safer order lookup, NewebPay and ECPay payment codes saved and emailed, late failure notices no longer reopen paid orders, and invoice and refund fixes.
 
 = 1.14.0 - 2026-10-15 =
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.

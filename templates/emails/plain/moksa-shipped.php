@@ -8,7 +8,12 @@ defined( 'ABSPATH' ) || exit;
 echo "= " . esc_html( wp_strip_all_tags( $email_heading ) ) . " =\n\n";
 /* translators: %s: customer first name */
 echo sprintf( esc_html__( 'Hi %s,', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
-echo esc_html__( 'Your order has shipped and is on its way.', 'moksa-for-woocommerce' ) . "\n\n";
+echo esc_html__( 'Your order has shipped and is on its way. The tracking number and shipping status are below.', 'moksa-for-woocommerce' ) . "\n\n";
+// 訪客結帳沒有帳號，不提帳號頁。
+if ( $order->get_customer_id() > 0 ) {
+	/* translators: %s: link to the order in the customer account */
+	echo esc_html( sprintf( __( 'You can also check the shipping status in your account: %s', 'moksa-for-woocommerce' ), $order->get_view_order_url() ) ) . "\n\n";
+}
 
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 echo "\n----------------------------------------\n\n";

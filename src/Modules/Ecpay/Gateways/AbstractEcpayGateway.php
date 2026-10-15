@@ -11,6 +11,10 @@ defined( 'ABSPATH' ) || exit;
 
 abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 
+	protected function helper_has_credentials(): bool {
+		return \Moksafowo\Modules\Ecpay\Api\Helper::has_credentials();
+	}
+
 	abstract protected function choose_payment(): string;
 
 	protected function extra_aio_params( \WC_Order $order ): array {
@@ -69,7 +73,22 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			return new \WP_Error( 'moksafowo_ecpay_refund_amount', __( 'The refund amount must be greater than 0.', 'moksa-for-woocommerce' ) );
 		}
 
-		$result = Helper::credit_action( $order, 'R', $amount_int );
+		// 退刷（R）只能用在已關帳的交易；還沒關帳時只能整筆放棄授權（N），同 RY。
+		// 查不到狀態時照舊送 R，由綠界回錯誤訊息。
+		$action = 'R';
+		$query  = Helper::query_credit_trade( $order );
+		if ( ! is_wp_error( $query ) && 'Authorized' === (string) ( $query['RtnValue']['Status'] ?? '' ) ) {
+			$auth_amount = (int) ( $query['RtnValue']['Amount'] ?? 0 );
+			if ( $amount_int !== $auth_amount ) {
+				return new \WP_Error(
+					'moksafowo_ecpay_refund_before_capture',
+					__( 'This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' )
+				);
+			}
+			$action = 'N';
+		}
+
+		$result = Helper::credit_action( $order, $action, $amount_int );
 		if ( is_wp_error( $result ) ) {
 			$order->add_order_note(
 				sprintf(

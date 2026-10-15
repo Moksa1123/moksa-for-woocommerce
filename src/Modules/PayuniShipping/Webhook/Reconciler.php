@@ -75,18 +75,20 @@ final class Reconciler {
 		if ( '' !== $desc ) {
 			$order->update_meta_data( OrderMeta::ShipStatusDesc, $desc );
 		}
-		$order->add_order_note(
-			sprintf(
-				/* translators: 1: status description, 2: status code */
-				__( 'PAYUNi shipping status found by follow-up check: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),
-				$desc,
-				$code
-			)
-		);
 		$order->save();
 
-		// 走跟 IPN 完全相同的對應與轉換路徑。
+		// 走跟 IPN 完全相同的對應與轉換路徑；狀態有變時由 mapper 寫唯一一則備註。
 		do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $code, $desc );
+		if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: status description, 2: status code */
+					__( 'PAYUNi shipping status found by follow-up check: %1$s (status code %2$s)', 'moksa-for-woocommerce' ),
+					$desc,
+					$code
+				)
+			);
+		}
 		return true;
 	}
 }

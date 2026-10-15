@@ -16,11 +16,11 @@ class AuthType {
 	public static function get_type( $type ) {
 		switch ( $type ) {
 			case self::ONE:
-				return '一次支付';
+				return __( 'One-time payment', 'moksa-for-woocommerce' );
 			case self::INSTALLMENT:
-				return '分期付款';
+				return __( 'Instalments', 'moksa-for-woocommerce' );
 			case self::POINT:
-				return '紅利點數';
+				return __( 'Reward points', 'moksa-for-woocommerce' );
 			case self::APPLEPAY:
 				return 'Apple Pay';
 			case self::GOOGLEPAY:
@@ -28,9 +28,9 @@ class AuthType {
 			case self::SAMSUNGPAY:
 				return 'Samsung Pay';
 			case self::UNIPAY:
-				return '銀聯';
+				return __( 'UnionPay', 'moksa-for-woocommerce' );
 			default:
-				return '未知的授權類型';
+				return __( 'Unknown authorisation type', 'moksa-for-woocommerce' );
 		}
 	}
 }

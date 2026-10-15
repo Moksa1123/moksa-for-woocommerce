@@ -35,11 +35,15 @@ final class ShippingCardSection {
 		wp_enqueue_style( 'moksafowo-shipping-card' );
 		wp_add_inline_style( 'moksafowo-shipping-card', $css );
 
-		$js = 'jQuery(function($){'
-			. '$(".moksafowo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".moksafowo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".moksafowo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||"無追蹤紀錄");}else{alert(r.data.message);}}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
-			. '$(".moksafowo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert("AJAX 失敗");}).always(function(){b.prop("disabled",false);});});'
+		$strings = [
+			'fail'  => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
+			'empty' => __( 'No tracking history yet.', 'moksa-for-woocommerce' ),
+		];
+		$js      = 'var MKSC=' . wp_json_encode( $strings ) . ';jQuery(function($){'
+			. '$(".moksafowo-newebpay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert(MKSC.fail);}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-newebpay-shipping-query").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_query",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert(MKSC.fail);}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-newebpay-shipping-trace").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_newebpay_shipping_trace",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){if(r.success){alert(r.data.history.map(function(h){return h.event_time+" — "+h.label;}).join("\n")||MKSC.empty);}else{alert(r.data.message);}}).fail(function(){alert(MKSC.fail);}).always(function(){b.prop("disabled",false);});});'
+			. '$(".moksafowo-smilepay-shipping-create").not(".moksafowo-smilepay-shipping-meta .moksafowo-smilepay-shipping-create").on("click",function(){var b=$(this);b.prop("disabled",true);$.post(ajaxurl,{action:"moksafowo_smilepay_shipping_create",order_id:b.data("order"),_wpnonce:b.data("nonce")},function(r){alert(r.success?r.data.message:r.data.message);if(r.success)location.reload();}).fail(function(){alert(MKSC.fail);}).always(function(){b.prop("disabled",false);});});'
 			. '});';
 		wp_register_script( 'moksafowo-shipping-card', false, [ 'jquery' ], MOKSAFOWO_VERSION, true );
 		wp_enqueue_script( 'moksafowo-shipping-card' );
@@ -253,7 +257,7 @@ final class ShippingCardSection {
 		}
 		if ( '' === $lgs_no && '' === $store_id ) {
 			echo '<p style="color:#646970;font-size:12px;margin-bottom:10px;">';
-			echo esc_html__( 'No NewebPay shipping details yet. The customer can pick a store at checkout, or you can create the shipment yourself.', 'moksa-for-woocommerce' );
+			echo esc_html__( 'No pickup store has been chosen for this order yet. Set the store in the shipping details below first, then create the shipment here.', 'moksa-for-woocommerce' );
 			echo '</p>';
 		}
 		if ( '' !== $lgs_no ) {
@@ -268,8 +272,15 @@ final class ShippingCardSection {
 				echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
 			}
 		}
-		if ( '' !== $lgs_type ) {
-			echo '<p><strong>' . esc_html__( 'Shipping type:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $lgs_type ) . '</p>';
+		// 顯示是哪家超商；C2C／B2C 只當附註。
+		$ship_type_label = [
+			'1' => __( '7-ELEVEN', 'moksa-for-woocommerce' ),
+			'2' => __( 'FamilyMart', 'moksa-for-woocommerce' ),
+			'3' => __( 'Hi-Life', 'moksa-for-woocommerce' ),
+			'4' => __( 'OK Mart', 'moksa-for-woocommerce' ),
+		][ (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ) ] ?? '';
+		if ( '' !== $ship_type_label || '' !== $lgs_type ) {
+			echo '<p><strong>' . esc_html__( 'Shipping type:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( trim( $ship_type_label . ( '' !== $lgs_type ? ' (' . $lgs_type . ')' : '' ) ) ) . '</p>';
 		}
 		if ( '' !== $store_id || '' !== $store_name ) {
 			echo '<p><strong>' . esc_html__( 'Pickup store:', 'moksa-for-woocommerce' ) . '</strong>';

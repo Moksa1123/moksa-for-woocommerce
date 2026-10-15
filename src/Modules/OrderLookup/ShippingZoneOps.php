@@ -136,7 +136,7 @@ final class ShippingZoneOps {
 			'summary'      => sprintf(
 				/* translators: 1: enable/disable, 2: method titles */
 				__( '%1$s the shipping method: %2$s.', 'moksa-for-woocommerce' ),
-				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'Disable', 'moksa-for-woocommerce' ),
 				implode( '、', $titles )
 			),
 		);
@@ -173,7 +173,7 @@ final class ShippingZoneOps {
 		return sprintf(
 			/* translators: 1: enable/disable, 2: method titles */
 			__( '✅ The shipping method is now %1$s: %2$s.', 'moksa-for-woocommerce' ),
-			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+			$enable ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
 			implode( '、', $done )
 		);
 	}

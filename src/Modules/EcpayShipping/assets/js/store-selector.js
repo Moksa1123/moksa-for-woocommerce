@@ -24,17 +24,7 @@
 	}
 
 	function chosenShippingMethod() {
-		// Classic
-		const classic = document.querySelector( 'input[name^="shipping_method"]:checked' );
-		if ( classic ) {
-			return classic.value;
-		}
-		// Block
-		const blockRadio = document.querySelector( '.wc-block-components-shipping-rates-control input[type="radio"]:checked' );
-		if ( blockRadio && blockRadio.offsetParent !== null ) {
-			return blockRadio.value;
-		}
-		return '';
+		return window.moksafowoCvsStore.chosenMethod();
 	}
 
 	function findHost() {

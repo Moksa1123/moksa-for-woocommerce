@@ -45,7 +45,7 @@ final class EnqueueScripts {
 			return;
 		}
 		wp_enqueue_style( 'moksafowo-payuni-shipping-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/css/styles-admin.css', [], MOKSAFOWO_VERSION, 'all' );
-		wp_enqueue_script( 'moksafowo-payuni-shipping-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/js/scripts-admin.js', [ 'jquery' ], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-payuni-shipping-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/js/scripts-admin.js', [ 'jquery' ], (string) filemtime( MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/scripts-admin.js' ), true );
 		wp_localize_script(
 			'moksafowo-payuni-shipping-admin',
 			'moksafowo_payuni_shipping',
@@ -55,6 +55,10 @@ final class EnqueueScripts {
 				'translations' => [
 					'shipping_status_update_failed' => __( 'The shipping status could not be updated.', 'moksa-for-woocommerce' ),
 					'cancel_shipping_failed'        => __( 'The shipment could not be cancelled.', 'moksa-for-woocommerce' ),
+					'updating'                      => __( 'Updating…', 'moksa-for-woocommerce' ),
+					'updated'                       => __( 'Updated', 'moksa-for-woocommerce' ),
+					'update_failed'                 => __( 'Update failed', 'moksa-for-woocommerce' ),
+					'request_failed'                => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
 				],
 			]
 		);

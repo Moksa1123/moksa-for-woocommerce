@@ -32,12 +32,12 @@ final class WebhookHandler {
 		}
 
 		if ( ! self::verify_signature( $timestamp, $raw_body, $sign ) ) {
-			Helper::log( 'webhook signature mismatch — rejected' );
+			Helper::warn( 'webhook signature mismatch — rejected' );
 			self::reply( 401, 'invalid signature' );
 		}
 
 		if ( ! self::within_replay_window( $timestamp ) ) {
-			Helper::log( 'webhook replay window exceeded — rejected', [ 'timestamp' => $timestamp ] );
+			Helper::warn( 'webhook replay window exceeded — rejected', [ 'timestamp' => $timestamp ] );
 			self::reply( 401, 'stale timestamp' );
 		}
 
@@ -101,8 +101,14 @@ final class WebhookHandler {
 		if ( $order->is_paid() && in_array( $type, [ 'trade.failed', 'trade.expired', 'session.expired', 'session.created' ], true ) ) {
 			$order->add_order_note(
 				sprintf(
-					/* translators: %s: event type */
-					__( 'Shopline Payments sent a %s notice for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					/* translators: 1: notice type, 2: raw event type */
+					__( 'Shopline Payments sent a “%1$s” notice (%2$s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					[
+						'trade.failed'    => __( 'Payment failed', 'moksa-for-woocommerce' ),
+						'trade.expired'   => __( 'Expired', 'moksa-for-woocommerce' ),
+						'session.expired' => __( 'Expired', 'moksa-for-woocommerce' ),
+						'session.created' => __( 'Payment page created', 'moksa-for-woocommerce' ),
+					][ $type ] ?? $type,
 					$type
 				)
 			);
@@ -233,18 +239,40 @@ final class WebhookHandler {
 		switch ( $type ) {
 			case 'trade.succeeded':
 			case 'session.succeeded':
+				// session 和 trade 兩個成功事件會各來一次，只有真的把訂單標成已付款的那次寫備註。
 				if ( ! $order->is_paid() ) {
 					$payment = self::first_payment_detail( $data );
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
+					// 金額以「元 × 100」表示。建立付款頁後訂單被改了金額，顧客用舊頁面付的金額會對不上。
+					$paid     = (int) ( $payment['amount']['value'] ?? $data['amount']['value'] ?? 0 );
+					$expected = (int) round( (float) $order->get_total() * 100 );
+					if ( $paid > 0 && $paid !== $expected ) {
+						$order->update_status(
+							'on-hold',
+							sprintf(
+								/* translators: 1: paid amount, 2: order total */
+								__( 'Shopline Payments reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+								wc_format_decimal( $paid / 100, 0 ),
+								wc_format_decimal( $order->get_total(), 0 )
+							)
+						);
+						break;
+					}
+					if ( 0 === $paid ) {
+						Helper::log( 'success event without amount', [ 'order_id' => $order->get_id() ] );
+					}
 					$order->payment_complete( $txn );
+					$method = (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD );
+					$order->add_order_note(
+						'' !== $method
+							? sprintf(
+								/* translators: %s: payment method */
+								__( 'The Shopline Payments payment completed (%s).', 'moksa-for-woocommerce' ),
+								Helper::method_label( $method )
+							)
+							: __( 'The Shopline Payments payment completed.', 'moksa-for-woocommerce' )
+					);
 				}
-				$order->add_order_note(
-					sprintf(
-						/* translators: %s: payment method */
-						__( 'The Shopline Payments payment completed (%s).', 'moksa-for-woocommerce' ),
-						(string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ?: $type
-					)
-				);
 				break;
 
 			case 'trade.failed':
@@ -279,23 +307,20 @@ final class WebhookHandler {
 				$order->add_order_note( __( 'The Shopline Payments refund failed. Please check the Shopline Payments dashboard.', 'moksa-for-woocommerce' ) );
 				break;
 
-			case 'session.created':
-				$order->add_order_note(
-					sprintf(
-						/* translators: %s: event type */
-						__( 'Shopline Payments notification: %s', 'moksa-for-woocommerce' ),
-						$type
-					)
-				);
+			case 'trade.cancelled':
+				if ( ! $order->is_paid() ) {
+					$order->add_order_note( __( 'The Shopline Payments transaction was cancelled before payment.', 'moksa-for-woocommerce' ) );
+				}
 				break;
 
 			default:
-				$order->add_order_note(
-					sprintf(
-						/* translators: %s: event type */
-						__( 'Shopline Payments notification: %s', 'moksa-for-woocommerce' ),
-						$type
-					)
+				// 建立、處理中、等待顧客操作、已請款等過程事件對商家沒有動作意義，只留 log。
+				Helper::log(
+					'webhook event without order note',
+					[
+						'type'     => $type,
+						'order_id' => $order->get_id(),
+					]
 				);
 		}
 	}

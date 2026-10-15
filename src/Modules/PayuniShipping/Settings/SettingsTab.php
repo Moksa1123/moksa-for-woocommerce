@@ -199,9 +199,9 @@ class SettingsTab extends \WC_Settings_Page {
 				array(
 					'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
-					'default' => 'yes',
-					'desc'    => __( 'For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. Untick it once you go live.', 'moksa-for-woocommerce' ),
-					'id'      => 'moksafowo_payuni_shipping_testmode_enabled',
+					'default' => 'no',
+					'desc'    => __( 'For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. This is the same switch as PAYUNi payments, so both always use the same environment.', 'moksa-for-woocommerce' ),
+					'id'      => 'moksafowo_payuni_payment_testmode_enabled',
 				),
 				array(
 					'title' => __( 'Test merchant ID', 'moksa-for-woocommerce' ),

@@ -20,39 +20,45 @@ final class Helper extends AbstractCredentialHelper {
 		return 'newebpay-shipping';
 	}
 
+	/** 物流類型的預設值；設定欄位與所有讀取點共用，沒存過設定時兩邊才一致。 */
+	public const LGS_TYPE_DEFAULT = 'C2C';
+
+	public static function lgs_type(): string {
+		return 'B2C' === (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', self::LGS_TYPE_DEFAULT ) ? 'B2C' : 'C2C';
+	}
+
 	public static function is_sandbox(): bool {
 		$raw = get_option( 'moksafowo_newebpay_shipping_sandbox_enabled', null );
 		if ( null === $raw ) {
-			return (bool) apply_filters( 'moksafowo_newebpay_shipping_sandbox_fallback', false );
+			// 物流設定頁還沒存過：跟隨藍新金流的測試模式（直接讀設定，不需要金流模組有啟用）。
+			return 'yes' === get_option( 'moksafowo_newebpay_sandbox_enabled', 'no' );
 		}
 		return 'yes' === $raw;
 	}
 
 	public static function merchant_id(): string {
-		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_merchant_id' : 'moksafowo_newebpay_shipping_merchant_id';
-		$val = (string) get_option( $key, '' );
-		if ( '' !== $val ) {
-			return $val;
-		}
-		return (string) apply_filters( 'moksafowo_newebpay_shipping_merchant_id_fallback', '' );
+		return self::cred( 'merchant_id' );
 	}
 
 	public static function hash_key(): string {
-		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_hash_key' : 'moksafowo_newebpay_shipping_hash_key';
-		$val = (string) get_option( $key, '' );
-		if ( '' !== $val ) {
-			return $val;
-		}
-		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_key_fallback', '' );
+		return self::cred( 'hash_key' );
 	}
 
 	public static function hash_iv(): string {
-		$key = self::is_sandbox() ? 'moksafowo_newebpay_shipping_sandbox_hash_iv' : 'moksafowo_newebpay_shipping_hash_iv';
-		$val = (string) get_option( $key, '' );
+		return self::cred( 'hash_iv' );
+	}
+
+	/**
+	 * 物流自己的憑證沒填就沿用藍新金流的；兩邊都依物流的測試開關挑同一組（測試或正式），
+	 * 網址與憑證才會一致。
+	 */
+	private static function cred( string $field ): string {
+		$sandbox = self::is_sandbox() ? 'sandbox_' : '';
+		$val     = (string) get_option( 'moksafowo_newebpay_shipping_' . $sandbox . $field, '' );
 		if ( '' !== $val ) {
 			return $val;
 		}
-		return (string) apply_filters( 'moksafowo_newebpay_shipping_hash_iv_fallback', '' );
+		return (string) get_option( 'moksafowo_newebpay_' . $sandbox . $field, '' );
 	}
 
 	public static function verify_trade_sha( string $trade_info, string $trade_sha ): bool {

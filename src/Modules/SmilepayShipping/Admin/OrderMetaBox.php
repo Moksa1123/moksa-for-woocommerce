@@ -6,6 +6,8 @@ namespace Moksafowo\Modules\SmilepayShipping\Admin;
 use Moksafowo\Modules\Shared\Admin\OrderInfoLayout;
 use Moksafowo\Modules\SmilepayShipping\Module;
 use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder;
+use Moksafowo\Modules\Shipping\Tracking\TrackingLink;
+use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -56,9 +58,8 @@ final class OrderMetaBox {
 			wp_send_json_success(
 				[
 					'message' => sprintf(
-						/* translators: 1: smseid 2: paymentno or tracknum */
-						__( 'SmilePay shipment created (smseid=%1$s, number=%2$s)', 'moksa-for-woocommerce' ),
-						$result['smseid'] ?? '-',
+						/* translators: %s: sender code or waybill number */
+						__( 'SmilePay shipment created. Shipment number: %s', 'moksa-for-woocommerce' ),
 						$result['payment_no'] ?? $result['track_num'] ?? '-'
 					),
 				]
@@ -80,7 +81,21 @@ final class OrderMetaBox {
 		}
 
 		$records = CreateOrder::get_records( $order );
-		$nonce   = wp_create_nonce( self::NONCE_ACTION );
+		// 超商與單溫層黑貓只寫單鍵、不寫 records；沒有 records 時用單鍵組一筆，不然卡片一片空白。
+		$single_no = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_NO );
+		$single_pn = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_PAY_NO );
+		$single_tn = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TRACK_NO );
+		if ( empty( $records ) && ( '' !== $single_pn || '' !== $single_tn ) ) {
+			$type      = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_TYPE );
+			$records[] = [
+				'smseid'     => $single_no,
+				'payment_no' => $single_pn,
+				'track_num'  => $single_tn,
+				'subtype'    => str_starts_with( $type, '711' ) ? 'UNIMART' : ( str_starts_with( $type, 'FAMI' ) ? 'FAMI' : ( 'TCAT' === $type ? 'TCAT' : '' ) ),
+			];
+		}
+		$ship_status = (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_STATUS );
+		$nonce       = wp_create_nonce( self::NONCE_ACTION );
 
 		ob_start();
 		?>
@@ -88,6 +103,9 @@ final class OrderMetaBox {
 			data-order-id="<?php echo esc_attr( (string) $order->get_id() ); ?>"
 			data-nonce="<?php echo esc_attr( $nonce ); ?>">
 
+			<?php if ( '' !== $ship_status ) : ?>
+				<p style="margin:0 0 8px;"><strong><?php esc_html_e( 'Shipping status:', 'moksa-for-woocommerce' ); ?></strong><?php echo esc_html( $ship_status ); ?></p>
+			<?php endif; ?>
 			<?php if ( ! empty( $records ) ) : ?>
 				<div class="moksafowo-smilepay-records" style="display:flex;flex-direction:column;gap:8px;margin:0 0 8px;">
 					<?php
@@ -127,6 +145,18 @@ final class OrderMetaBox {
 						<?php if ( '' !== $created_at ) : ?>
 							<p style="margin:.2em 0;color:#64748b;font-size:11px;"><?php echo esc_html( $created_at ); ?></p>
 						<?php endif; ?>
+						<?php
+						$tracking_info = TrackingLink::for_smilepay_record(
+							[
+								'subtype'   => (string) ( $r['subtype'] ?? '' ),
+								'pay_no'    => $pay_no,
+								'track_num' => $track_num,
+							]
+						);
+						if ( null !== $tracking_info ) :
+							?>
+							<div style="margin-top:6px;"><?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?></div>
+						<?php endif; ?>
 					</div>
 					<?php endforeach; ?>
 				</div>
@@ -157,19 +187,28 @@ final class OrderMetaBox {
 		}
 		wp_register_script( 'moksafowo-smilepay-shipping-admin', false, [ 'jquery' ], MOKSAFOWO_VERSION, true );
 		wp_enqueue_script( 'moksafowo-smilepay-shipping-admin' );
-		wp_add_inline_script( 'moksafowo-smilepay-shipping-admin', self::inline_js() );
+		$strings = [
+			'missing'  => __( 'The page is missing order details. Please reload it.', 'moksa-for-woocommerce' ),
+			'created'  => __( 'Shipment created.', 'moksa-for-woocommerce' ),
+			'existing' => __( 'This order already has a shipment. Create another one?', 'moksa-for-woocommerce' ),
+			'failed'   => __( 'The shipment could not be created: ', 'moksa-for-woocommerce' ),
+			'unknown'  => __( 'unknown error', 'moksa-for-woocommerce' ),
+			'network'  => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
+		];
+		wp_add_inline_script( 'moksafowo-smilepay-shipping-admin', 'var MKSP=' . wp_json_encode( $strings ) . ';' . self::inline_js() );
 	}
 
 	private static function inline_js(): string {
 		return <<<'JS'
 (function($){
-  $(document).on('click', '.moksafowo-smilepay-shipping-create', function(e){
+  // 只處理本模組版面裡的按鈕；共用物流卡片的同名按鈕由 ShippingCardSection 處理，避免一次點擊送兩次。
+  $(document).on('click', '.moksafowo-smilepay-shipping-meta .moksafowo-smilepay-shipping-create', function(e){
     e.preventDefault();
     var $btn = $(this);
     var $wrap = $btn.closest('.moksafowo-smilepay-shipping-meta');
     var orderId = $wrap.data('order-id');
     var nonce   = $wrap.data('nonce');
-    if (!orderId || !nonce) { window.alert('缺少訂單 ID 或 nonce'); return; }
+    if (!orderId || !nonce) { window.alert(MKSP.missing); return; }
     function send(force){
       $btn.prop('disabled', true);
       $.post(ajaxurl, {
@@ -179,22 +218,22 @@ final class OrderMetaBox {
         force: force ? '1' : '0'
       }).done(function(resp){
         if (resp && resp.success) {
-          window.alert((resp.data && resp.data.message) || '建立成功');
+          window.alert((resp.data && resp.data.message) || MKSP.created);
           window.location.reload();
         } else {
           var d = resp && resp.data || {};
           if (d.code === 'existing') {
-            if (window.confirm(d.message || '此訂單已有物流單記錄，是否繼續？')) {
+            if (window.confirm(d.message || MKSP.existing)) {
               send(true);
               return;
             }
           } else {
-            window.alert('建立失敗：' + ((d.message) || '未知錯誤'));
+            window.alert(MKSP.failed + ((d.message) || MKSP.unknown));
           }
           $btn.prop('disabled', false);
         }
       }).fail(function(){
-        window.alert('連線錯誤');
+        window.alert(MKSP.network);
         $btn.prop('disabled', false);
       });
     }

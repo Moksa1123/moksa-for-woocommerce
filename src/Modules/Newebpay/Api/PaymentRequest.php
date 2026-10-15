@@ -105,15 +105,15 @@ final class PaymentRequest {
 			'MerchantOrderNo' => $merchant_order_no,
 			'Amt'             => $amt,
 		];
-		ksort( $args );
-		$check_str          = http_build_query( $args );
-		$args['CheckValue'] = strtoupper( hash( 'sha256', 'IV=' . Helper::hash_iv() . '&' . $check_str . '&Key=' . Helper::hash_key() ) );
+		// NDNF 4.1.6：CheckValue 只由 Amt、MerchantID、MerchantOrderNo 組成，其他欄位放進去藍新會判驗章失敗。
+		$args['CheckValue'] = Helper::generate_query_check_value( $args );
 
 		$resp = wp_remote_post(
 			Helper::base_url() . self::PATH_QUERY,
 			[
-				'body'    => $args,
-				'timeout' => 30,
+				'user-agent' => \Moksafowo\Http\Request::user_agent(),
+				'body'       => $args,
+				'timeout'    => 30,
 			]
 		);
 		if ( is_wp_error( $resp ) ) {
@@ -187,14 +187,15 @@ final class PaymentRequest {
 		$resp = wp_remote_post(
 			Helper::base_url() . $path,
 			[
-				'body'    => [
+				'user-agent' => \Moksafowo\Http\Request::user_agent(),
+				'body'       => [
 					'UID_'         => Helper::merchant_id(),
 					'EncryptData_' => $hex,
 					'HashData_'    => $hash,
 					'Version_'     => $version,
 					'RespondType_' => 'JSON',
 				],
-				'timeout' => 30,
+				'timeout'    => 30,
 			]
 		);
 		if ( is_wp_error( $resp ) ) {
@@ -240,11 +241,12 @@ final class PaymentRequest {
 		$resp = wp_remote_post(
 			Helper::base_url() . $path,
 			[
-				'body'    => [
+				'user-agent' => \Moksafowo\Http\Request::user_agent(),
+				'body'       => [
 					'MerchantID_' => Helper::merchant_id(),
 					'PostData_'   => $post_data,
 				],
-				'timeout' => 30,
+				'timeout'    => 30,
 			]
 		);
 		if ( is_wp_error( $resp ) ) {

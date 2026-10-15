@@ -61,13 +61,6 @@ class PaymentResponse {
 		$pay_type        = $decrypted_info['PaymentType'];
 		$trade_no        = $decrypted_info['TradeNo'];
 
-		$text_log        = __( 'PAYUNi Notify', 'moksa-for-woocommerce' );
-		$text_code       = __( 'Status code:', 'moksa-for-woocommerce' );
-		$text_message    = __( 'Transaction message:', 'moksa-for-woocommerce' );
-		$text_mertradeno = __( 'MerTradeNo:', 'moksa-for-woocommerce' );
-		$text_number     = __( 'UNi number:', 'moksa-for-woocommerce' );
-		$text_paytype    = __( 'Payment type:', 'moksa-for-woocommerce' );
-
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $payuni_order_no );
 		$order        = wc_get_order( $woo_order_id );
 		if ( ! $order ) {
@@ -77,14 +70,22 @@ class PaymentResponse {
 
 		if ( array_key_exists( 'InvoiceNo', $decrypted_info ) ) {
 			self::save_einvoice_data( $order, $decrypted_info );
-			$order->add_order_note( 'PAYUNi E-Invoice Notify. InvoiceStatus:' . $decrypted_info['InvoiceStatus'] . ', InvoiceNo:' . $decrypted_info['InvoiceNo'] );
+			$order->add_order_note(
+				\Moksafowo\Order\Note::build(
+					__( 'PAYUNi sent an e-invoice notice.', 'moksa-for-woocommerce' ),
+					[
+						__( 'Invoice number', 'moksa-for-woocommerce' ) => $decrypted_info['InvoiceNo'] ?? '',
+						__( 'Status code', 'moksa-for-woocommerce' )    => $decrypted_info['InvoiceStatus'] ?? '',
+					]
+				)
+			);
 			return;
 		}
 
 		if ( $order->is_paid() || $order->get_meta( OrderMeta::TRADE_STATUS ) === TradeStatus::PAID ) {
 			PayuniPayment::log( sprintf( 'PAYUNi Notify: Order %s already paid or transaction status has already set as success. Skip duplicate note.', $woo_order_id ) );
 		} else {
-			$order->add_order_note( "<strong>{$text_log}</strong><br>{$text_code} {$status}<br>{$text_message} {$message}<br>{$text_mertradeno} {$payuni_order_no}<br>{$text_number} {$trade_no}<br>{$text_paytype} " . PayType::get_name( $pay_type ) );
+			$order->add_order_note( self::payment_note( __( 'PAYUNi payment notice', 'moksa-for-woocommerce' ), $decrypted_info ) );
 			self::update_order_meta_and_order_status( $order, $decrypted_info );
 		}
 
@@ -132,13 +133,6 @@ class PaymentResponse {
 		$pay_type = $decrypted_info['PaymentType'];
 		$trade_no = $decrypted_info['TradeNo'];
 
-		$text_log        = __( 'PAYUNi Return', 'moksa-for-woocommerce' );
-		$text_code       = __( 'Status code:', 'moksa-for-woocommerce' );
-		$text_message    = __( 'Transaction message:', 'moksa-for-woocommerce' );
-		$text_mertradeno = __( 'MerTradeNo:', 'moksa-for-woocommerce' );
-		$text_number     = __( 'UNi number:', 'moksa-for-woocommerce' );
-		$text_paytype    = __( 'Payment type:', 'moksa-for-woocommerce' );
-
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $order_id );
 		$order        = wc_get_order( $woo_order_id );
 		if ( ! $order ) {
@@ -149,12 +143,31 @@ class PaymentResponse {
 		if ( $order->is_paid() || $order->get_meta( OrderMeta::TRADE_STATUS ) === TradeStatus::PAID ) {
 			PayuniPayment::log( sprintf( 'PAYUNi Return: Order %s already paid or transaction status has already set as success. Skip duplicate note.', $woo_order_id ) );
 		} else {
-			$order->add_order_note( "<strong>{$text_log}</strong><br>{$text_code} {$status}<br>{$text_message} {$message}<br>{$text_mertradeno} {$order_id}<br>{$text_number} {$trade_no}<br>{$text_paytype} " . PayType::get_name( $pay_type ) );
+			$order->add_order_note( self::payment_note( __( 'PAYUNi payment return', 'moksa-for-woocommerce' ), $decrypted_info ) );
 			self::update_order_meta_and_order_status( $order, $decrypted_info );
 		}
 
 		wp_safe_redirect( $order->get_checkout_order_received_url() );
 		exit;
+	}
+
+	/**
+	 * 付款通知備註：「PAYUNi 付款通知：付款成功」＋狀態碼、付款方式與兩邊的交易編號。
+	 *
+	 * @param string               $source 通知來源（背景通知／瀏覽器回傳）。
+	 * @param array<string, mixed> $info   解密後的回傳。
+	 */
+	private static function payment_note( string $source, array $info ): string {
+		return \Moksafowo\Order\Note::build(
+			/* translators: 1: notice source, 2: PAYUNi message */
+			sprintf( __( '%1$s: %2$s', 'moksa-for-woocommerce' ), $source, (string) ( $info['Message'] ?? '' ) ),
+			[
+				__( 'Payment type', 'moksa-for-woocommerce' )   => isset( $info['PaymentType'] ) ? PayType::get_name( $info['PaymentType'] ) : '',
+				__( 'Status code', 'moksa-for-woocommerce' )    => $info['Status'] ?? '',
+				__( 'PAYUNi transaction ID', 'moksa-for-woocommerce' ) => $info['TradeNo'] ?? '',
+				__( 'Store order number', 'moksa-for-woocommerce' )    => $info['MerTradeNo'] ?? '',
+			]
+		);
 	}
 
 	private static function save_payuni_order_data( $order, $decrypted_info ) {
@@ -249,6 +262,8 @@ class PaymentResponse {
 			// ATM／超商代碼取號成功、AFTEE 審查通過，都還沒付款。停在「等待付款」會被 WC 依保留庫存時間自動取消，
 			// 但繳費帳號還有效好幾天。
 			$order->update_status( 'on-hold', __( 'PAYUNi issued the payment details and is waiting for the customer to pay.', 'moksa-for-woocommerce' ) );
+			// 同其他金流：取號後寄繳費資訊信（AFTEE 沒有繳費資訊，dispatcher 會略過）。
+			\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
 		} elseif (
 			TradeStatus::EXPIRED === $trade_status
 			|| TradeStatus::CANCEL === $trade_status

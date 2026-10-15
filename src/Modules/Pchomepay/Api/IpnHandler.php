@@ -15,7 +15,7 @@ final class IpnHandler {
 		$ip      = self::client_ip();
 		$allowed = (array) apply_filters( 'moksafowo_pchomepay_notify_ips', [ Helper::NOTIFY_IP ] );
 		if ( ! in_array( $ip, $allowed, true ) ) {
-			Helper::log( 'webhook rejected — IP not allowed', [ 'ip' => $ip ] );
+			Helper::warn( 'webhook rejected — IP not allowed', [ 'ip' => $ip ] );
 			status_header( 403 );
 			echo 'forbidden';
 			exit;
@@ -90,7 +90,7 @@ final class IpnHandler {
 		// 且金額（若 API 有回）必須與訂單一致。
 		if ( 'order_confirm' === $notify_type ) {
 			$api_amount = (string) ( $authoritative['trade_amount'] ?? $authoritative['amount'] ?? '' );
-			if ( 'S' !== $api_status || ( '' !== $api_amount && (int) $api_amount !== (int) round( (float) $order->get_total() ) ) ) {
+			if ( 'S' !== $api_status || ( '' !== $api_amount && (int) $api_amount !== (int) ceil( (float) $order->get_total() ) ) ) {
 				Helper::log(
 					'webhook order_confirm rejected — API status/amount mismatch',
 					[
@@ -106,7 +106,7 @@ final class IpnHandler {
 		}
 		// 逾時 / 失敗通知不得打在 API 已確認完成付款的訂單上（防偽造取消已付款單）。
 		if ( in_array( $notify_type, [ 'order_expired', 'order_failed' ], true ) && 'S' === $api_status ) {
-			Helper::log( 'webhook expire/fail rejected — API says paid', [ 'order_id' => $pchome_order_id ] );
+			Helper::warn( 'webhook expire/fail rejected — API says paid', [ 'order_id' => $pchome_order_id ] );
 			status_header( 409 );
 			echo 'status mismatch';
 			exit;
@@ -117,8 +117,9 @@ final class IpnHandler {
 		if ( $order->is_paid() && in_array( $notify_type, [ 'order_expired', 'order_failed', 'order_audit' ], true ) ) {
 			$order->add_order_note(
 				sprintf(
-					/* translators: %s: notify type */
-					__( 'PChomePay sent a %s notice for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					/* translators: 1: notice type, 2: raw notify type */
+					__( 'PChomePay sent a “%1$s” notice (%2$s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					self::notify_label( $notify_type ),
 					$notify_type
 				)
 			);
@@ -148,17 +149,18 @@ final class IpnHandler {
 	private static function apply_notify( \WC_Order $order, string $notify_type, array $message ): void {
 		switch ( $notify_type ) {
 			case 'order_confirm':
+				// 重送的成功通知不再重複寫備註。
 				if ( ! $order->is_paid() ) {
 					$order->payment_complete( (string) ( $message['order_id'] ?? '' ) );
+					$order->add_order_note(
+						sprintf(
+						/* translators: 1: pay type, 2: amount */
+							__( 'PChomePay payment completed — %1$s (NT$%2$s)', 'moksa-for-woocommerce' ),
+							self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
+							(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
+						)
+					);
 				}
-				$order->add_order_note(
-					sprintf(
-					/* translators: 1: pay type, 2: amount */
-						__( 'PChomePay payment completed — %1$s (NT$%2$s)', 'moksa-for-woocommerce' ),
-						self::pay_type_label( (string) ( $message['pay_type'] ?? '' ) ),
-						(string) ( $message['trade_amount'] ?? $message['amount'] ?? '' )
-					)
-				);
 				break;
 
 			case 'order_audit':
@@ -223,6 +225,14 @@ final class IpnHandler {
 		}
 	}
 
+	private static function notify_label( string $notify_type ): string {
+		return [
+			'order_expired' => __( 'Payment deadline passed', 'moksa-for-woocommerce' ),
+			'order_failed'  => __( 'Payment failed', 'moksa-for-woocommerce' ),
+			'order_audit'   => __( 'Payment details issued', 'moksa-for-woocommerce' ),
+		][ $notify_type ] ?? $notify_type;
+	}
+
 	private static function write_common_meta( \WC_Order $order, array $message ): void {
 		$map = [
 			'pay_type'        => Keys::PCHOMEPAY_PAY_TYPE,
@@ -278,7 +288,7 @@ final class IpnHandler {
 		return isset( $_SERVER['REMOTE_ADDR'] ) ? (string) sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 	}
 
-	private static function pay_type_label( string $type ): string {
+	public static function pay_type_label( string $type ): string {
 		return \Moksafowo\Modules\Pchomepay\PaymentTypeCatalog::label( $type, $type );
 	}
 

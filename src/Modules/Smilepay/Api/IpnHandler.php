@@ -14,6 +14,9 @@ final class IpnHandler {
 	private const MAX_ORDER_FAILS = 3;
 	private const MAX_SITE_FAILS  = 30;
 	private const SITE_FAILS      = 'moksafowo_smilepay_mid_fails';
+	// 有 key 的訂單驗證失敗另外計：不擋通知（避免被人打滿後擋掉正常入帳），只讓信用卡授權改為待核對。
+	private const KEYED_FAILS = 'moksafowo_smilepay_keyed_mid_fails';
+	private const KEYED_ALERT = 10;
 
 	public static function handle_roturl(): void {
 		// SmilePay Roturl webhook: no WP nonce possible (external server cannot send one).
@@ -46,12 +49,15 @@ final class IpnHandler {
 		}
 
 		if ( ! self::order_uses_smilepay( $order ) ) {
-			Helper::log( 'roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
+			Helper::warn( 'roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
 			self::die_status( __( 'The order\'s payment method does not match', 'moksa-for-woocommerce' ) );
 		}
 
-		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay ) ) {
+		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay, [ 'roturl' ] ) ) {
 			self::die_status( __( 'Mid_smilepay does not match', 'moksa-for-woocommerce' ) );
+		}
+		if ( self::smseid_used_elsewhere( $order, $smseid ) ) {
+			self::die_status( __( 'This SmilePay transaction belongs to another order', 'moksa-for-woocommerce' ) );
 		}
 
 		if ( ! self::amount_matches( $order, $amount ) ) {
@@ -78,6 +84,22 @@ final class IpnHandler {
 
 		$state = $order->get_status();
 		if ( in_array( $state, [ 'processing', 'completed' ], true ) ) {
+			self::die_ok();
+		}
+
+		// 取號時速買配已回傳這筆的金流追蹤碼（SmilePayNO），入帳通知的 Smseid 是同一個追蹤碼。
+		// 對不上就不自動入帳，交給商家到速買配後台核對（Mid_smilepay 只有約 73 種值，擋不住猜測）。
+		$issued_no = (string) $order->get_meta( Keys::SMILEPAY_PAY_SMILEPAY_NO );
+		if ( '' !== $issued_no && $issued_no !== $smseid ) {
+			$order->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: tracking number in the notice, 2: tracking number issued with the payment code */
+					__( 'SmilePay sent a payment notice with tracking number %1$s, but the payment code for this order was issued with %2$s. The order was not marked as paid; please check it in the SmilePay back office.', 'moksa-for-woocommerce' ),
+					$smseid,
+					$issued_no
+				)
+			);
 			self::die_ok();
 		}
 
@@ -132,12 +154,16 @@ final class IpnHandler {
 		}
 
 		if ( ! self::order_uses_smilepay( $order ) ) {
-			Helper::log( 'credit_roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
+			Helper::warn( 'credit_roturl rejected — order not paid via SmilePay', [ 'order_id' => $order_id ] );
 			self::die_status( __( 'The order\'s payment method does not match', 'moksa-for-woocommerce' ) );
 		}
 
-		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay ) ) {
+		// 更新前已送出的信用卡單帶的是舊的（roturl）key，一併接受；反過來不行。
+		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay, [ 'credit', 'roturl' ] ) ) {
 			self::die_status( __( 'Mid_smilepay does not match', 'moksa-for-woocommerce' ) );
+		}
+		if ( self::smseid_used_elsewhere( $order, $smseid ) ) {
+			self::die_status( __( 'This SmilePay transaction belongs to another order', 'moksa-for-woocommerce' ) );
 		}
 		// 新單的回呼網址不再帶 Payment_title（Roturl 上限 200 字元），改讀訂單上的付款方式名稱。
 		if ( '' === $payment_title ) {
@@ -178,15 +204,21 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::SMILEPAY_PAY_AMOUNT, $amount );
 			$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $info );
 			$order->update_meta_data( Keys::SMILEPAY_PAY_PAID_AT, trim( $date . ' ' . $time ) );
-			$order->add_order_note(
-				sprintf(
-				/* translators: %s: pay method */
-					__( 'SmilePay authorized the card payment (%s)', 'moksa-for-woocommerce' ),
-					$payment_title
-				)
-			);
+			// 瀏覽器重新整理會重送同一個結果，已付款就不再重複寫備註。
 			if ( ! $order->is_paid() ) {
-				$order->payment_complete( $smseid );
+				$order->add_order_note(
+					sprintf(
+					/* translators: %s: pay method */
+						__( 'SmilePay authorized the card payment (%s)', 'moksa-for-woocommerce' ),
+						$payment_title
+					)
+				);
+				if ( (int) get_transient( self::KEYED_FAILS ) >= self::KEYED_ALERT ) {
+					// 最近一小時有大量驗證失敗，可能有人在猜驗證碼：授權先不自動入帳。
+					$order->update_status( 'on-hold', __( 'Many SmilePay notices failed verification in the last hour, so this card authorization was not marked as paid automatically. Please confirm it in the SmilePay back office.', 'moksa-for-woocommerce' ) );
+				} else {
+					$order->payment_complete( $smseid );
+				}
 			}
 		} elseif ( $order->is_paid() ) {
 			// 已付款的單不因晚到或偽造的失敗通知被打回失敗，只留紀錄給商家核對。
@@ -221,16 +253,28 @@ final class IpnHandler {
 	/**
 	 * 回呼是不是真的來自速買配。依序：訂單專屬 key → 失敗次數上限 → Mid_smilepay。
 	 * Mid_smilepay 能猜的值很少，所以猜錯要計數、到上限就停止自動入帳。
+	 *
+	 * @param \WC_Order $order        訂單。
+	 * @param array     $req          請求參數。
+	 * @param string    $smseid       速買配金流追蹤碼。
+	 * @param string    $mid_smilepay 通知帶的驗證碼。
+	 * @param string[]  $endpoints    這個端點接受哪些 key（見 Helper::callback_key）。
 	 */
-	private static function authentic( \WC_Order $order, array $req, string $smseid, string $mid_smilepay ): bool {
+	private static function authentic( \WC_Order $order, array $req, string $smseid, string $mid_smilepay, array $endpoints ): bool {
 		$order_id = $order->get_id();
 
 		// 更新前就送出的單，回呼網址沒有 key（例如已取號、幾天後才繳費的 ATM），只能沿用舊驗證。
 		$keyed = 'yes' === $order->get_meta( Keys::SMILEPAY_CALLBACK_KEYED );
 		if ( $keyed ) {
-			$key = isset( $req['mfk'] ) ? sanitize_text_field( (string) $req['mfk'] ) : '';
-			if ( '' === $key || ! hash_equals( Helper::callback_key( $order ), $key ) ) {
-				Helper::log( 'roturl rejected — callback key missing or wrong', [ 'order_id' => $order_id ] );
+			$key    = isset( $req['mfk'] ) ? sanitize_text_field( (string) $req['mfk'] ) : '';
+			$key_ok = false;
+			foreach ( $endpoints as $endpoint ) {
+				if ( '' !== $key && hash_equals( Helper::callback_key( $order, $endpoint ), $key ) ) {
+					$key_ok = true;
+				}
+			}
+			if ( ! $key_ok ) {
+				Helper::warn( 'roturl rejected — callback key missing or wrong', [ 'order_id' => $order_id ] );
 				return false;
 			}
 		}
@@ -239,7 +283,7 @@ final class IpnHandler {
 		$fails       = (int) $order->get_meta( Keys::SMILEPAY_MID_FAILS );
 		$site_locked = ! $keyed && (int) get_transient( self::SITE_FAILS ) >= self::MAX_SITE_FAILS;
 		if ( $fails >= self::MAX_ORDER_FAILS || $site_locked ) {
-			Helper::log( 'roturl rejected — too many failed verifications', [ 'order_id' => $order_id ] );
+			Helper::warn( 'roturl rejected — too many failed verifications', [ 'order_id' => $order_id ] );
 			return false;
 		}
 
@@ -247,9 +291,11 @@ final class IpnHandler {
 			return true;
 		}
 
-		Helper::log( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
+		Helper::warn( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
 		if ( ! $keyed ) {
 			set_transient( self::SITE_FAILS, (int) get_transient( self::SITE_FAILS ) + 1, HOUR_IN_SECONDS );
+		} else {
+			set_transient( self::KEYED_FAILS, (int) get_transient( self::KEYED_FAILS ) + 1, HOUR_IN_SECONDS );
 		}
 		$order->update_meta_data( Keys::SMILEPAY_MID_FAILS, $fails + 1 );
 		if ( $fails + 1 === self::MAX_ORDER_FAILS ) {
@@ -264,12 +310,31 @@ final class IpnHandler {
 		if ( '' === $mid ) {
 			// Fail closed:未設定參數碼就無法驗證回呼來源,一律拒絕(商家須在設定頁填入
 			// 與 SmilePay 後台一致的參數碼,否則收不到入帳通知)。
-			Helper::log( 'roturl rejected — merchant Mid (參數碼) not configured; cannot verify callback origin' );
+			Helper::warn( 'roturl rejected — merchant Mid (參數碼) not configured; cannot verify callback origin' );
 			return false;
 		}
 		// 速買配不論成功失敗都以訂單金額計算（失敗通知的 Amount 是 0），也讓偽造者不能自選金額。
 		$expected = Helper::calc_mid_smilepay( $mid, (string) (int) ceil( (float) $order->get_total() ), $smseid );
 		return hash_equals( $expected, $mid_smilepay );
+	}
+
+	/** 同一筆速買配交易（Smseid）只能入帳到一張訂單。 */
+	private static function smseid_used_elsewhere( \WC_Order $order, string $smseid ): bool {
+		if ( '' === $smseid ) {
+			return false;
+		}
+		$other = \Moksafowo\Order\Lookup::by_meta( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
+		if ( null !== $other && $other !== $order->get_id() ) {
+			Helper::log(
+				'roturl rejected — Smseid already used by another order',
+				[
+					'order_id' => $order->get_id(),
+					'other'    => $other,
+				]
+			);
+			return true;
+		}
+		return false;
 	}
 
 	/** 訂單必須是本模組的 SmilePay 付款方式,才接受 SmilePay 回呼改它的狀態。 */

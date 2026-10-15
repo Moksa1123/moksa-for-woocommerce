@@ -238,7 +238,7 @@ final class TrackingLink {
 	}
 
 	public static function copy_script(): string {
-		return <<<'JS'
+		return 'var MKS_COPIED=' . wp_json_encode( __( 'Copied', 'moksa-for-woocommerce' ) ) . ';' . <<<'JS'
 ( function () {
 	document.addEventListener( 'click', function ( e ) {
 	const btn = e.target.closest( '.moksafowo-tracking-copy' );
@@ -258,7 +258,7 @@ final class TrackingLink {
 		};
 	const flash = function () {
 	const orig = btn.textContent;
-			btn.textContent = '已複製';
+			btn.textContent = MKS_COPIED;
 			btn.style.background = '#dcfce7';
 			btn.style.borderColor = '#86efac';
 			btn.style.color = '#16a34a';

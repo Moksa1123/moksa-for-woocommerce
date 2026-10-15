@@ -142,7 +142,7 @@ final class SettingsTab {
 				'title' => __( 'Name', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ecpay_shipping_sender_name',
 				'type'  => 'text',
-				'desc'  => __( '1 to 10 Chinese characters, or 1 to 20 Latin characters.', 'moksa-for-woocommerce' ),
+				'desc'  => __( '2 to 5 Chinese characters, or 4 to 10 English letters, with no digits or symbols. For store-to-store shipping, use the real name on your ID: returned parcels are collected with it. Longer names are cut off.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title' => __( 'Phone', 'moksa-for-woocommerce' ),
@@ -154,12 +154,18 @@ final class SettingsTab {
 				'title' => __( 'Mobile', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ecpay_shipping_sender_cellphone',
 				'type'  => 'text',
-				'desc'  => __( 'Required for home delivery and T-Cat.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Required for home delivery and for 7-ELEVEN, Hi-Life and OK Mart store-to-store shipping. A 10-digit mobile number starting with 09.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title' => __( 'Email', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ecpay_shipping_sender_email',
 				'type'  => 'email',
+			],
+			[
+				'title' => __( 'Sender postcode', 'moksa-for-woocommerce' ),
+				'id'    => 'moksafowo_ecpay_shipping_sender_zipcode',
+				'type'  => 'text',
+				'desc'  => __( 'Used for home delivery.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title' => __( 'Sender address', 'moksa-for-woocommerce' ),

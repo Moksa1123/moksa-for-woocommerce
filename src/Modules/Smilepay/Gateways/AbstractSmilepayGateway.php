@@ -74,7 +74,7 @@ abstract class AbstractSmilepayGateway extends AbstractMowcGateway {
 				'Data_id'       => (string) $order->get_id(),
 				'od_sob'        => Helper::build_products_summary( $order, 49 ),
 				'Amount'        => (string) (int) ceil( (float) $order->get_total() ),
-				'Roturl'        => Helper::keyed_roturl( home_url( '/wc-api/moksafowo_smilepay_credit_roturl' ), $order ),
+				'Roturl'        => Helper::keyed_roturl( home_url( '/wc-api/moksafowo_smilepay_credit_roturl' ), $order, 'credit' ),
 				'Roturl_status' => IpnHandler::ROTURL_OK,
 				'Remark'        => (string) $order->get_customer_note(),
 			],

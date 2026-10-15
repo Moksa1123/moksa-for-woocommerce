@@ -64,13 +64,8 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 		OrderMeta::CREDIT_INSTALL,
 		OrderMeta::CREDIT_FIRST_AMT,
 		OrderMeta::CREDIT_EACH_AMT,
-		OrderMeta::AMT_PAY_NO,
-		OrderMeta::AMT_BANK_TYPE,
-		OrderMeta::AMT_EXPIRE_DATE,
 		OrderMeta::AMT_PAY_TIME,
-		OrderMeta::CVS_PAY_NO,
-		OrderMeta::CVS_STORE,
-		OrderMeta::CVS_EXPIRE_DATE,
+		// ATM 帳號、超商代碼與期限改由 Frontend\CustomerPaymentInfo 走共用繳費資訊區塊顯示。
 	);
 
 	public function moksafowo_payuni_payment_detail_after_order_table( $order ) {
@@ -127,16 +122,8 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 				echo '<tr><td><strong>' . esc_html__( 'Invoice amount', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
 				echo '<tr><td><strong>' . esc_html__( 'Issued at', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
 
-				$einvoice_type = $order->get_meta( OrderMeta::EINVOICE_TYPE );
-				if ( $einvoice_type === 'C0401' ) {
-					$einvoice_type_desc = _x( 'Issue', 'Issue Type', 'moksa-for-woocommerce' );
-				} elseif ( $einvoice_type === 'C0501' ) {
-					$einvoice_type_desc = _x( 'Void', 'Issue Type', 'moksa-for-woocommerce' );
-				} else {
-					$einvoice_type_desc = _x( 'Unknown type', 'Issue Type', 'moksa-for-woocommerce' );
-				}
-				echo '<tr><td><strong>' . esc_html__( 'Invoice type', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
-
+				// 顧客只看說明文字；財政部訊息代碼與載具類別代碼對顧客沒有意義，留在後台卡片。
+				// 作廢與否由下面的狀態列表達，不另列發票類型。
 				$einvoice_info = $order->get_meta( OrderMeta::EINVOICE_INFO );
 				if ( $einvoice_info === '3J0002' ) {
 					$einvoice_info_desc = __( 'Mobile carrier', 'moksa-for-woocommerce' );
@@ -151,7 +138,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 				} else {
 					$einvoice_info_desc = __( 'Unknown carrier', 'moksa-for-woocommerce' );
 				}
-				echo '<tr><td><strong>' . esc_html__( 'Carrier details', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Carrier details', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info_desc ) . '</td></tr>';
 
 				$einvoice_status = $order->get_meta( OrderMeta::EINVOICE_STATUS );
 				if ( $einvoice_status === '1' ) {
@@ -163,7 +150,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 				} else {
 					$einvoice_status_desc = __( 'Unknown status', 'moksa-for-woocommerce' );
 				}
-				echo '<tr><td><strong>' . esc_html__( 'Issuing status', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
+				echo '<tr><td><strong>' . esc_html__( 'Issuing status', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status_desc ) . '</td></tr>';
 				echo '</tbody></table>';
 			}// end einvoice enabled
 		}
@@ -227,7 +214,8 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 	}
 
 	public function is_available() {
-		$is_available = ( 'yes' === $this->enabled );
+		// 正式模式下憑證沒填時不顯示（否則顧客選了才失敗）。
+		$is_available = ( 'yes' === $this->enabled ) && \Moksafowo\Modules\Shared\Gateways\TwdOnly::ok() && '' !== \Moksafowo\Modules\Payuni\Credentials::merchant_id() && '' !== \Moksafowo\Modules\Payuni\Credentials::hashkey();
 
 		if ( WC()->cart && 0 < $this->get_order_total() && 0 < $this->max_amount && $this->max_amount < $this->get_order_total() ) {
 			$is_available = false;

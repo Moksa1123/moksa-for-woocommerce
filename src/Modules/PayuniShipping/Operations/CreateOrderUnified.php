@@ -151,7 +151,7 @@ final class CreateOrderUnified {
 
 		if ( empty( $created ) && empty( $existing ) ) {
 			$msg = $errors ? implode( ' / ', $errors ) : __( 'Could not create the shipment', 'moksa-for-woocommerce' );
-			$order->add_order_note( __( 'None of the PAYUNi shipments could be created:', 'moksa-for-woocommerce' ) . $msg );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'None of the PAYUNi shipments could be created: %s', 'moksa-for-woocommerce' ), $msg ) );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -182,7 +182,8 @@ final class CreateOrderUnified {
 			$lines = [];
 			foreach ( $created as $r ) {
 				$lines[] = sprintf(
-					'%s — 物流序號 %s 取件編號 %s',
+					/* translators: 1: temperature zone, 2: PAYUNi shipping ID, 3: sender code */
+					__( '%1$s — shipping ID %2$s, sender code %3$s', 'moksa-for-woocommerce' ),
 					ProductTemp::label( (int) $r['temp'] ),
 					(string) $r['ship_trade_no'],
 					(string) $r['odno']
@@ -210,7 +211,7 @@ final class CreateOrderUnified {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( 'Some temperature zones could not be created:', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( sprintf( /* translators: %s: error messages */ __( 'Some temperature zones could not be created: %s', 'moksa-for-woocommerce' ), implode( ' / ', $errors ) ) );
 		}
 
 		$order->save();

@@ -76,9 +76,27 @@ final class CustomerView {
 		if ( '' !== $ship_method ) {
 			$data['shipping_method'] = $ship_method;
 		}
-		$ship_no = SearchableKeys::field_value( $order, 'shipping' );
-		if ( '' !== $ship_no ) {
-			$data['shipping_number'] = $ship_no;
+		// 優先給顧客拿得去超商或黑貓官網查的號碼（跟物流通知信同一份資料）；
+		// 拿不到時才退回金物流商的內部編號，並標成參考編號，不冒充物流單號。
+		$method_id = '';
+		foreach ( $order->get_shipping_methods() as $method ) {
+			$method_id = (string) $method->get_method_id();
+			break;
+		}
+		$entries = '' !== $method_id ? (array) apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, $method_id ) : [];
+		$entry   = is_array( $entries[0] ?? null ) ? $entries[0] : [];
+		if ( '' !== (string) ( $entry['tracking_no'] ?? '' ) ) {
+			$data['shipping_number']  = (string) $entry['tracking_no'];
+			$data['shipping_carrier'] = (string) ( $entry['carrier'] ?? '' );
+			if ( str_starts_with( (string) ( $entry['url'] ?? '' ), 'https://' ) ) {
+				$data['tracking_url'] = (string) $entry['url'];
+			}
+		} else {
+			$ship_no = SearchableKeys::field_value( $order, 'shipping' );
+			if ( '' !== $ship_no ) {
+				$data['shipping_number']   = $ship_no;
+				$data['shipping_internal'] = true;
+			}
 		}
 
 		// 發票號；不回完整買受人 / 載具明細。已作廢的不當成已開立（InvoiceNumber 也會略過內部標記）。

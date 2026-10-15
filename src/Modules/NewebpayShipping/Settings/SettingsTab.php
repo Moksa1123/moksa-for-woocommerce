@@ -20,15 +20,15 @@ final class SettingsTab {
 				'id'      => 'moksafowo_newebpay_shipping_sandbox_enabled',
 				'type'    => 'checkbox',
 				'default' => 'no',
-				'desc'    => __( 'When ticked, everything runs against the test environment and nothing is really dispatched. Off by default; left blank it follows the NewebPay payments test mode setting.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'When ticked, everything runs against the test environment and nothing is really dispatched. Until this page is saved it follows the NewebPay payments test mode. Credentials left blank use the NewebPay payments ones for the same environment.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title'    => __( 'Shipping type', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_newebpay_shipping_lgs_type',
 				'type'     => 'select',
-				'default'  => 'B2C',
+				'default'  => \Moksafowo\Modules\NewebpayShipping\Api\Helper::LGS_TYPE_DEFAULT,
 				'options'  => [
-					'B2C' => __( 'Merchant shipping (the default; the shipping account must be activated in the NewebPay dashboard)', 'moksa-for-woocommerce' ),
+					'B2C' => __( 'Merchant shipping (the shipping account must be activated in the NewebPay dashboard)', 'moksa-for-woocommerce' ),
 					'C2C' => __( 'Personal shipping', 'moksa-for-woocommerce' ),
 				],
 				'desc'     => __( 'This depends on which shipping services are activated in the NewebPay dashboard.', 'moksa-for-woocommerce' ),

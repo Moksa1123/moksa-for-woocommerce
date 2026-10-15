@@ -105,7 +105,7 @@ final class StoreSelector {
 			'4' => __( 'OK mart', 'moksa-for-woocommerce' ),
 		];
 		// B2C 只支援 7-ELEVEN。
-		if ( 'B2C' === (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' ) ) {
+		if ( 'B2C' === \Moksafowo\Modules\NewebpayShipping\Api\Helper::lgs_type() ) {
 			return [
 				[
 					'ship_type' => '1',
@@ -162,11 +162,12 @@ final class StoreSelector {
 			[
 				'method_id' => $method_id,
 				'time'      => time(),
+				'owner'     => \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::current(),
 			],
 			30 * MINUTE_IN_SECONDS
 		);
 
-		$lgs_type  = (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
+		$lgs_type  = \Moksafowo\Modules\NewebpayShipping\Api\Helper::lgs_type();
 		$ship_type = isset( $_POST['ship_type'] ) ? sanitize_text_field( wp_unslash( $_POST['ship_type'] ) ) : '1';
 
 		// 過濾未啟用的超商品牌（per settings 的「啟用的超商」multiselect）
@@ -229,7 +230,7 @@ final class StoreSelector {
 		$result = ShippingRequest::open_store_map(
 			[
 				'MerchantOrderNo' => $mtn,
-				'LgsType'         => (string) get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' ),
+				'LgsType'         => \Moksafowo\Modules\NewebpayShipping\Api\Helper::lgs_type(),
 				'ShipType'        => $ship_type,
 				'ReturnURL'       => add_query_arg( 'wc-api', 'moksafowo_newebpay_shipping_map_callback', home_url( '/' ) ),
 			]
@@ -260,7 +261,7 @@ final class StoreSelector {
 		// 驗 HashData — 未帶或不符一律拒絕(fail-closed),不可因空值跳過。
 		$expected = strtoupper( hash( 'sha256', 'HashKey=' . Helper::hash_key() . '&' . $encrypted . '&HashIV=' . Helper::hash_iv() ) );
 		if ( ! hash_equals( $expected, strtoupper( $hash ) ) ) {
-			Helper::log( 'storeMap callback: HashData mismatch' );
+			Helper::warn( 'storeMap callback: HashData mismatch' );
 			status_header( 400 );
 			exit( 'Bad hash' );
 		}
@@ -276,7 +277,7 @@ final class StoreSelector {
 		// 驗 mtn 是我們開過的
 		$state = $mtn !== '' ? get_transient( self::STATE_PREFIX . $mtn ) : null;
 		if ( ! is_array( $state ) ) {
-			Helper::log( 'storeMap callback: unknown MTN', [ 'mtn' => $mtn ] );
+			Helper::warn( 'storeMap callback: unknown MTN', [ 'mtn' => $mtn ] );
 			status_header( 403 );
 			exit( 'Unknown trade' );
 		}
@@ -292,6 +293,7 @@ final class StoreSelector {
 			'ship_type' => $clean( 'ShipType' ),
 			'method_id' => sanitize_text_field( (string) ( $state['method_id'] ?? '' ) ),
 			'mtn'       => $mtn,
+			'owner'     => (string) ( $state['owner'] ?? '' ),
 		];
 		if ( '' === $store['id'] ) {
 			status_header( 400 );
@@ -305,15 +307,9 @@ final class StoreSelector {
 			\Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::render_return( $store );
 		}
 
-		// transient + session 雙寫
+		// 回呼是跨站導回，當下的 session 通常不是顧客的；門市只放在 token，回到商店頁再兌換。
 		$token = wp_generate_password( 24, false );
 		set_transient( self::TRANSIENT_PREFIX . $token, $store, 30 * MINUTE_IN_SECONDS );
-		if ( function_exists( 'WC' ) ) {
-			WC()->initialize_session();
-			if ( WC()->session ) {
-				WC()->session->set( self::SESSION_KEY, $store );
-			}
-		}
 
 		// 清掉 state transient
 		delete_transient( self::STATE_PREFIX . $mtn );
@@ -339,7 +335,7 @@ final class StoreSelector {
 		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token 本身即憑證，僅寫入請求者自己的 session。
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token，且只兌換給開地圖的同一個 session。
 		$token = isset( $_GET[ self::TOKEN_QUERY ] ) ? sanitize_text_field( wp_unslash( $_GET[ self::TOKEN_QUERY ] ) ) : '';
 		if ( '' === $token ) {
 			return;
@@ -348,6 +344,10 @@ final class StoreSelector {
 		$store = get_transient( self::TRANSIENT_PREFIX . $token );
 		if ( ! is_array( $store ) ) {
 			return; // 已被兌換或過期；前端會退回讀 session。
+		}
+		// 只兌換給開地圖的那個瀏覽器；別人拿到連結不能改掉他的門市。
+		if ( ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store['owner'] ?? '' ) ) {
+			return;
 		}
 
 		if ( function_exists( 'WC' ) ) {
@@ -366,7 +366,7 @@ final class StoreSelector {
 			wp_send_json_error( [ 'message' => 'missing token' ] );
 		}
 		$store = get_transient( self::TRANSIENT_PREFIX . $token );
-		if ( ! is_array( $store ) ) {
+		if ( ! is_array( $store ) || ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store['owner'] ?? '' ) ) {
 			wp_send_json_error( [ 'message' => 'expired' ] );
 		}
 		if ( function_exists( 'WC' ) ) {

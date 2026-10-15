@@ -17,6 +17,41 @@ final class PluginSettings {
 	const CAP = 'manage_woocommerce';
 
 	/**
+	 * 各模組實際用來判斷測試模式的函式。option 名稱與預設值各家不同
+	 * （PAYUNi、LINE Pay 名稱不一樣，綠界與 TapPay 沒存過設定時預設是測試模式），不能自己拼。
+	 */
+	private static function is_sandbox( string $slug ): bool {
+		$map = array(
+			'ecpay'             => \Moksafowo\Modules\Ecpay\Api\Helper::class,
+			'ecpay_shipping'    => \Moksafowo\Modules\EcpayShipping\Api\Helper::class,
+			'ecpay_invoice'     => \Moksafowo\Modules\EcpayInvoice\Api\Helper::class,
+			'ezpay_invoice'     => \Moksafowo\Modules\EzpayInvoice\Api\Helper::class,
+			'amego_invoice'     => \Moksafowo\Modules\AmegoInvoice\Api\Helper::class,
+			'newebpay'          => \Moksafowo\Modules\Newebpay\Api\Helper::class,
+			'newebpay_shipping' => \Moksafowo\Modules\NewebpayShipping\Api\Helper::class,
+			'paynow'            => \Moksafowo\Modules\Paynow\Api\Helper::class,
+			'paynow_invoice'    => \Moksafowo\Modules\PaynowInvoice\Api\Helper::class,
+			'pchomepay'         => \Moksafowo\Modules\Pchomepay\Api\Helper::class,
+			'shopline_payments' => \Moksafowo\Modules\ShoplinePayments\Api\Helper::class,
+			'smilepay'          => \Moksafowo\Modules\Smilepay\Api\Helper::class,
+			'smilepay_invoice'  => \Moksafowo\Modules\SmilepayInvoice\Api\Helper::class,
+			'smilepay_shipping' => \Moksafowo\Modules\SmilepayShipping\Api\Helper::class,
+			'tappay'            => \Moksafowo\Modules\Tappay\Api\Helper::class,
+		);
+		if ( isset( $map[ $slug ] ) && is_callable( array( $map[ $slug ], 'is_sandbox' ) ) ) {
+			return (bool) call_user_func( array( $map[ $slug ], 'is_sandbox' ) );
+		}
+		// PAYUNi 金流與物流共用同一個測試模式開關。
+		if ( 'payuni' === $slug || 'payuni_shipping' === $slug ) {
+			return \Moksafowo\Modules\Payuni\Credentials::test_mode_enabled();
+		}
+		if ( 'linepay' === $slug ) {
+			return wc_string_to_bool( get_option( 'moksafowo_linepay_sandboxmode_enabled', 'no' ) );
+		}
+		return 'yes' === get_option( 'moksafowo_' . $slug . '_sandbox_enabled', 'no' );
+	}
+
+	/**
 	 * @param mixed $input 未使用。
 	 * @return array<string,mixed>
 	 */
@@ -34,7 +69,7 @@ final class PluginSettings {
 				'name'     => (string) $c['name'],
 				'category' => (string) $c['category'],
 				'enabled'  => (bool) $c['enabled'],
-				'sandbox'  => 'yes' === get_option( 'moksafowo_' . $slug . '_sandbox_enabled', 'no' ),
+				'sandbox'  => self::is_sandbox( $slug ),
 			);
 		}
 

@@ -25,9 +25,14 @@ final class CreateShipment {
 			];
 		}
 
-		$lgs_type  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: get_option( 'moksafowo_newebpay_shipping_lgs_type', 'C2C' );
+		$lgs_type  = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: \Moksafowo\Modules\NewebpayShipping\Api\Helper::lgs_type();
 		$ship_type = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ) ?: '1'; // default 7-11
 		$is_cod    = 'cod' === $order->get_payment_method();
+		// 代收金額要扣掉已退款；沒有錢要收時不能用取貨付款（否則顧客取件時被多收）。
+		$due = (int) ceil( (float) $order->get_total() - (float) $order->get_total_refunded() );
+		if ( $is_cod && $due <= 0 ) {
+			$is_cod = false;
+		}
 		// 藍新規範：UserName 純中文 1-5 字、不可帶空格。WC 預設 last+first 拼接會夾空白，必移除。
 		$user_name = $order->get_shipping_last_name() . $order->get_shipping_first_name();
 		if ( '' === trim( $user_name ) ) {
@@ -56,7 +61,7 @@ final class CreateShipment {
 			'UserEmail'       => $order->get_billing_email(),
 			'StoreID'         => $store_id,
 			// 取貨不付款時 Amt 只是報值，上限 20,000（2104）；取貨付款是實收金額不能改。
-			'Amt'             => $is_cod ? (int) ceil( (float) $order->get_total() ) : min( 20000, (int) ceil( (float) $order->get_total() ) ),
+			'Amt'             => $is_cod ? $due : min( 20000, max( 1, $due ) ),
 			'NotifyURL'       => home_url( '/wc-api/moksafowo_newebpay_shipping_status' ),
 			'ItemDesc'        => mb_substr( self::build_item_desc( $order ), 0, 50 ),
 			'LgsType'         => $lgs_type,

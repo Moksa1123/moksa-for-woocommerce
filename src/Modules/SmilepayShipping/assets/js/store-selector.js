@@ -16,12 +16,8 @@
 	}
 
 	function injectButton() {
-		// Block 結帳的 shipping radio name 是 radio-control-0 / -1 / -N 動態。
-		// 直接找 value 開頭是 moksafowo_smilepay_shipping_ 且 checked 的 radio。
-		const $sel = $( 'input[type="radio"]:checked' ).filter( function () {
-			return /^moksafowo_smilepay_shipping_/.test( $( this ).val() || '' );
-		} ).first();
-		const methodId = ( $sel.val() || '' ).split( ':' )[ 0 ];
+		const chosen   = window.moksafowoCvsStore.chosenMethod();
+		const methodId = /^moksafowo_smilepay_shipping_/.test( chosen ) ? chosen.split( ':' )[ 0 ] : '';
 		const emapUrl  = cfg.cvs_methods.indexOf( methodId ) !== -1 ? cfg.emap_urls[ methodId ] : '';
 		if ( ! emapUrl ) {
 			removeHost();

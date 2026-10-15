@@ -212,7 +212,7 @@ final class CreateOrder {
 
 		if ( empty( $created ) ) {
 			$msg = $errors ? implode( ' / ', $errors ) : __( 'Could not create the shipment', 'moksa-for-woocommerce' );
-			$order->add_order_note( __( 'None of the ECPay shipments could be created:', 'moksa-for-woocommerce' ) . $msg );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'None of the ECPay shipments could be created: %s', 'moksa-for-woocommerce' ), $msg ) );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -273,7 +273,7 @@ final class CreateOrder {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( 'Some temperature zones could not be created:', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( sprintf( /* translators: %s: error messages */ __( 'Some temperature zones could not be created: %s', 'moksa-for-woocommerce' ), implode( ' / ', $errors ) ) );
 		}
 
 		if ( ! empty( $skipped ) ) {
@@ -529,7 +529,8 @@ final class CreateOrder {
 	}
 
 	private static function sender_name(): string {
-		return mb_substr( (string) get_option( 'moksafowo_ecpay_shipping_sender_name', '' ), 0, 10 );
+		// SenderName 是 String(10)：中文一字佔兩格，最多 5 個中文字或 10 個英文字母。
+		return trim( mb_strimwidth( (string) get_option( 'moksafowo_ecpay_shipping_sender_name', '' ), 0, 10, '', 'UTF-8' ) );
 	}
 
 	private static function sender_phone(): string {
@@ -541,8 +542,13 @@ final class CreateOrder {
 	}
 
 	private static function sender_zip(): string {
+		$zip = preg_replace( '/\D/', '', (string) get_option( 'moksafowo_ecpay_shipping_sender_zipcode', '' ) ) ?? '';
+		if ( '' !== $zip ) {
+			return $zip;
+		}
+		// 舊設定沒有郵遞區號欄位：只在地址開頭就是郵遞區號時採用，不再抓地址中間的門牌號碼。
 		$addr = (string) get_option( 'moksafowo_ecpay_shipping_sender_address', '' );
-		return preg_match( '/(\d{3,5})/', $addr, $m ) ? $m[1] : '';
+		return preg_match( '/^\s*(\d{3,6})/', $addr, $m ) ? $m[1] : '';
 	}
 
 	private static function sender_address(): string {

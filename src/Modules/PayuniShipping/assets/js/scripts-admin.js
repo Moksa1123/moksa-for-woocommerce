@@ -9,7 +9,8 @@
 		var newTab = window.open(ajaxurl + '?' + $.param({
 			action: $(this).data('action'),
 			orderids: $(this).data('id'),
-			service: $(this).data('service')
+			service: $(this).data('service'),
+			security: moksafowo_payuni_shipping.security
 		}), '_blank');
 		setTimeout(function(){ if (newTab) { newTab.location.reload(); } }, 5000);
 	});
@@ -85,7 +86,7 @@
 		
 		// Add loading indicator
 		$select.prop('disabled', true);
-		$cell.append('<span class="package-spec-loading" style="margin-left: 8px; color: #666;"><span class="spinner" style="visibility: visible; float: none; width: 16px; height: 16px; margin: 0;"></span> 更新中...</span>');
+		$cell.append('<span class="package-spec-loading" style="margin-left: 8px; color: #666;"><span class="spinner" style="visibility: visible; float: none; width: 16px; height: 16px; margin: 0;"></span> ' + moksafowo_payuni_shipping.translations.updating + '</span>');
 		
 		$.ajax({
 			url: moksafowo_payuni_shipping.ajax_url,
@@ -104,19 +105,19 @@
 					$select.data('original-value', package_spec);
 
 					// 顯示成功後強制重載整頁 — 保證備註 / meta / 狀態全部與後端一致（WC metabox 標準做法）。
-					$('.package-spec-loading').html('<span style="color: #46b450;">✓ 更新成功</span>');
+					$('.package-spec-loading').html('<span style="color: #46b450;">✓ ' + moksafowo_payuni_shipping.translations.updated + '</span>');
 					setTimeout(function() {
 						window.location.reload();
 					}, 600);
 				} else {
 					// Show error and revert selection
-					$('.package-spec-loading').html('<span style="color: #dc3232;">✗ 更新失敗</span>');
+					$('.package-spec-loading').html('<span style="color: #dc3232;">✗ ' + moksafowo_payuni_shipping.translations.update_failed + '</span>');
 					$select.val(original_value); // Revert to original value
 					
 					// Show error message
 					var error_msg = data.result || 'Unknown error';
 					setTimeout(function() {
-						$('.package-spec-loading').html('<span style="color: #dc3232;" title="' + error_msg + '">更新失敗</span>');
+						$('.package-spec-loading').html('<span style="color: #dc3232;" title="' + error_msg + '">' + moksafowo_payuni_shipping.translations.update_failed + '</span>');
 						setTimeout(function() {
 							$('.package-spec-loading').fadeOut(300, function() {
 								$(this).remove();
@@ -127,7 +128,7 @@
 			},
 			error: function() {
 				// Show error and revert selection
-				$('.package-spec-loading').html('<span style="color: #dc3232;">✗ 連線失敗</span>');
+				$('.package-spec-loading').html('<span style="color: #dc3232;">✗ ' + moksafowo_payuni_shipping.translations.request_failed + '</span>');
 				$select.val(original_value); // Revert to original value
 				
 				setTimeout(function() {

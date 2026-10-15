@@ -5,6 +5,7 @@ use Moksafowo\Modules\Payuni\Credentials;
 use Moksafowo\Modules\Payuni\PayuniPayment;
 use Moksafowo\Modules\Payuni\Utils\CloseStatus;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
+use Moksafowo\Modules\Payuni\Utils\PayType;
 use Moksafowo\Modules\Payuni\Utils\TradeStatus;
 
 defined( 'ABSPATH' ) || exit;
@@ -58,7 +59,8 @@ class PaymentRequest {
 			array(
 				'MerID'      => $this->gateway->get_merchant_id(),
 				'MerTradeNo' => PayuniPayment::build_payuni_order_no( $order->get_id() ),
-				'TradeAmt'   => (int) $order->get_total(),
+				// 與其他金流一致無條件進位；回呼比對（PaymentResponse）接受 round 或 ceil。
+				'TradeAmt'   => (int) ceil( (float) $order->get_total() ),
 				'ProdDesc'   => implode( ';', $prod_desc ),
 				'ReturnURL'  => $this->gateway->return_url, // 前景通知網址付款完成返回指定網址 (感謝頁面).
 				'NotifyURL'  => $this->gateway->notify_url, // 幕後.
@@ -365,15 +367,32 @@ class PaymentRequest {
 
 			if ( $add_note ) {
 				$order = wc_get_order( $woo_order_id );
-				/* translators: %s: 查詢結果 */
-				$order->add_order_note( sprintf( __( 'The PAYUNi order lookup succeeded: %s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				$row   = $decrypted['Result'][0];
+				$order->add_order_note(
+					\Moksafowo\Order\Note::build(
+						/* translators: %s: transaction status */
+						sprintf( __( 'PAYUNi transaction lookup: %s', 'moksa-for-woocommerce' ), TradeStatus::get_name( (string) $query_result['TradeStatus'], $order->get_payment_method() ) ),
+						[
+							__( 'Payment type', 'moksa-for-woocommerce' )          => PayType::get_name( $query_result['PaymentType'] ),
+							__( 'Amount', 'moksa-for-woocommerce' )                => $row['TradeAmt'] ?? '',
+							__( 'Paid at', 'moksa-for-woocommerce' )               => $query_result['PaymentDay'] ?? '',
+							__( 'Settlement status', 'moksa-for-woocommerce' )     => isset( $query_result['CloseStatus'] ) ? CloseStatus::get_name( (string) $query_result['CloseStatus'] ) : '',
+							__( 'PAYUNi transaction ID', 'moksa-for-woocommerce' ) => $query_result['TradeNo'] ?? '',
+						]
+					)
+				);
 			}
 			PayuniPayment::log( 'PAYUNi query success. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] . ', Trade Status:' . $query_result['TradeStatus'] );
 			return $query_result;
 		} else {
 			if ( $add_note ) {
-				/* translators: %s: 查詢結果 */
-				$order->add_order_note( sprintf( __( 'The PAYUNi order lookup failed: %s', 'moksa-for-woocommerce' ), wc_print_r( self::redact_for_log( $decrypted ), true ) ) );
+				$order->add_order_note(
+					\Moksafowo\Order\Note::build(
+						/* translators: %s: PAYUNi message */
+						sprintf( __( 'The PAYUNi transaction lookup failed: %s', 'moksa-for-woocommerce' ), (string) ( $decrypted['Message'] ?? '' ) ),
+						[ __( 'Status code', 'moksa-for-woocommerce' ) => $result['Status'] ?? '' ]
+					)
+				);
 			}
 			PayuniPayment::log( 'PAYUNi query failed. Status:' . $result['Status'] . ', Message:' . $decrypted['Message'] );
 			return false;

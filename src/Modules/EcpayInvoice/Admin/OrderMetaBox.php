@@ -68,8 +68,9 @@ final class OrderMetaBox {
 			if ( '' !== $issued_at ) {
 				echo '<p><strong>' . esc_html__( 'Issued at:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $issued_at ) . '</p>';
 			}
-			echo '<p><strong>' . esc_html__( 'Random code:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $rand ) . '</p>';
-			echo '<p><strong>' . esc_html__( 'Issued by:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html__( 'Issue immediately', 'moksa-for-woocommerce' ) . '</p>';
+			if ( '' !== $rand ) {
+				echo '<p><strong>' . esc_html__( 'Random code:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $rand ) . '</p>';
+			}
 			if ( '' !== $carrier_t && 'b2b' !== $type ) {
 				echo '<p><strong>' . esc_html__( 'Invoice type:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( self::carrier_label( $carrier_t ) ) . '</p>';
 			} elseif ( 'b2b' === $type ) {
@@ -122,6 +123,19 @@ final class OrderMetaBox {
 			}
 			echo '<p class="moksafowo-inv-msg" style="margin:.4em 0 0;"></p>';
 		} else {
+			// 延後開立排程中：讓商家知道哪天會自動開，不然只看到空白的手動開立表單。
+			$next = function_exists( 'as_next_scheduled_action' )
+				? as_next_scheduled_action( 'moksafowo_ecpay_invoice_deferred_issue', [ $order->get_id() ], 'moksa-for-woocommerce' )
+				: wp_next_scheduled( 'moksafowo_ecpay_invoice_deferred_issue', [ $order->get_id() ] );
+			if ( is_int( $next ) && $next > 0 ) {
+				echo '<p style="background:#f0f6fc;border-left:3px solid #2271b1;padding:6px 10px;">' . esc_html(
+					sprintf(
+						/* translators: %s: date and time */
+						__( 'Scheduled: the invoice will be issued automatically on %s. If you issue it manually now, the scheduled run is skipped.', 'moksa-for-woocommerce' ),
+						wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $next )
+					)
+				) . '</p>';
+			}
 			// 後台手動開立 — 可編輯欄位（選項受發票設定限制），預填顧客結帳值或設定預設
 			self::render_issue_controls( $order );
 			echo '<p class="moksafowo-inv-msg" style="margin:.4em 0 0;"></p>';
@@ -253,7 +267,7 @@ final class OrderMetaBox {
 
 	public static function ajax_invalid(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-		if ( ! current_user_can( self::CAPABILITY ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
@@ -269,7 +283,7 @@ final class OrderMetaBox {
 
 	public static function ajax_allowance(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-		if ( ! current_user_can( self::CAPABILITY ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_ALLOWANCE ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;

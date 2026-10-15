@@ -1368,7 +1368,17 @@ final class Ability {
 				'message' => __( 'The note cannot be empty.', 'moksa-for-woocommerce' ),
 			];
 		}
-		$order->add_order_note( $note );
+		// 記在呼叫者名下並標出來源，不然看起來跟金流、物流的系統備註一模一樣，
+		// 被訂單內容誘導的 AI 就能寫出「已收到款項」之類的假系統備註。
+		$note_id = $order->add_order_note(
+			/* translators: %s: note text written by the AI assistant */
+			sprintf( __( '[Moksa AI] %s', 'moksa-for-woocommerce' ), $note ),
+			0,
+			true
+		);
+		if ( $note_id ) {
+			add_comment_meta( $note_id, '_moksafowo_note_source', 'ai' );
+		}
 		return [
 			'ok'      => true,
 			/* translators: %s: order number */

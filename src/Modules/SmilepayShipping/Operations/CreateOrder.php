@@ -161,7 +161,7 @@ final class CreateOrder {
 				'temp'       => (string) $temp,
 				'amount'     => (string) (int) $pkg['amount'],
 				'goods_name' => (string) $pkg['goods_name'],
-				'pay_zg'     => Tcat::payzg_for_temp( $temp, $is_cod ),
+				'pay_zg'     => Tcat::payzg_for_temp( $temp, $is_cod && (int) $pkg['amount'] > 0 ),
 				'rtn_msg'    => 'OK',
 				'created_at' => $now,
 			];
@@ -169,7 +169,7 @@ final class CreateOrder {
 
 		if ( empty( $created ) && empty( $existing ) ) {
 			$msg = $errors ? implode( ' / ', $errors ) : __( 'Could not create the shipment', 'moksa-for-woocommerce' );
-			$order->add_order_note( __( 'The SmilePay shipment could not be created:', 'moksa-for-woocommerce' ) . $msg );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'The SmilePay shipment could not be created: %s', 'moksa-for-woocommerce' ), $msg ) );
 			$order->save();
 			return [
 				'ok'      => false,
@@ -225,7 +225,7 @@ final class CreateOrder {
 		}
 
 		if ( ! empty( $errors ) ) {
-			$order->add_order_note( __( 'Some temperature zones could not be created:', 'moksa-for-woocommerce' ) . implode( ' / ', $errors ) );
+			$order->add_order_note( sprintf( /* translators: %s: error messages */ __( 'Some temperature zones could not be created: %s', 'moksa-for-woocommerce' ), implode( ' / ', $errors ) ) );
 		}
 
 		$order->save();
@@ -315,7 +315,8 @@ final class CreateOrder {
 		}
 
 		return [
-			'Pay_zg'           => Tcat::payzg_for_temp( $temp, 'cod' === (string) $order->get_payment_method() ),
+			// 0 元的包裹（贈品、全額折抵）沒有錢要收，不能代收（Amount 最少 1 只是報值）。
+			'Pay_zg'           => Tcat::payzg_for_temp( $temp, 'cod' === (string) $order->get_payment_method() && (int) $pkg['amount'] > 0 ),
 			'Pay_subzg'        => 'TCAT',
 			'Pur_name'         => mb_substr( $pur_name, 0, 5 ),
 			'Tel_number'       => $phone,
@@ -356,7 +357,8 @@ final class CreateOrder {
 		}
 
 		$products = self::build_product_list( $order );
-		$amount   = (int) ceil( (float) $order->get_total() );
+		// 代收金額要扣掉已退款。
+		$amount   = max( 1, (int) ceil( (float) $order->get_total() - (float) $order->get_total_refunded() ) );
 		$pur_name = trim( $order->get_shipping_last_name() . $order->get_shipping_first_name() );
 		$phone    = $order->get_billing_phone();
 

@@ -16,6 +16,9 @@ final class LinePay {
 
 	private static $instance;
 
+	/** 付款失敗後可設定的訂單狀態（都是未付款狀態）。 */
+	public const FAIL_STATUSES = [ 'wc-failed', 'wc-cancelled', 'wc-pending', 'wc-on-hold' ];
+
 	public static $fail_order_status;
 	public static $detail_payment_status_note_enabled;
 	public static $log_enabled = false;
@@ -30,7 +33,10 @@ final class LinePay {
 
 		self::get_instance();
 
-		self::$fail_order_status                  = get_option( 'moksafowo_linepay_payment_fail_order_status', 'wc-failed' );
+		self::$fail_order_status = (string) get_option( 'moksafowo_linepay_payment_fail_order_status', 'wc-failed' );
+		if ( ! in_array( self::$fail_order_status, self::FAIL_STATUSES, true ) ) {
+			self::$fail_order_status = 'wc-failed';
+		}
 		self::$detail_payment_status_note_enabled = wc_string_to_bool( get_option( 'moksafowo_linepay_detail_status_note_enabled' ) );
 		self::$log_enabled                        = 'yes' === get_option( 'moksafowo_linepay_debug_log_enabled', 'no' );
 		self::$enable_sandbox                     = wc_string_to_bool( get_option( 'moksafowo_linepay_sandboxmode_enabled' ) );
@@ -95,7 +101,7 @@ final class LinePay {
 			}
 		} catch ( Exception $e ) {
 
-			$order->add_order_note( __( 'LINE Pay could not confirm the payment:', 'moksa-for-woocommerce' ) . $e->getMessage() );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'LINE Pay could not confirm the payment: %s', 'moksa-for-woocommerce' ), $e->getMessage() ) );
 			wp_send_json(
 				array(
 					'success' => false,

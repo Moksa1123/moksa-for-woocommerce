@@ -3,7 +3,6 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Newebpay\Api;
 
-use Moksafowo\Order\Lookup;
 use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
@@ -21,14 +20,14 @@ final class IpnHandler {
 		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
-			Helper::log( 'IPN missing TradeInfo / TradeSha — rejected' );
+			Helper::warn( 'IPN missing TradeInfo / TradeSha — rejected' );
 			status_header( 400 );
 			echo 'Missing';
 			exit;
 		}
 
 		if ( ! Helper::verify_trade_sha( $trade_info, $trade_sha ) ) {
-			Helper::log( 'IPN TradeSha mismatch — rejected' );
+			Helper::warn( 'IPN TradeSha mismatch — rejected' );
 			status_header( 400 );
 			echo 'Sha mismatch';
 			exit;
@@ -51,10 +50,7 @@ final class IpnHandler {
 		$result  = isset( $decoded['Result'] ) ? (array) $decoded['Result'] : [];
 		$mtn     = (string) ( $result['MerchantOrderNo'] ?? '' );
 
-		$order_id = Helper::parse_order_id( $mtn );
-		if ( ! $order_id ) {
-			$order_id = Lookup::by_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO, $mtn );
-		}
+		$order_id = Helper::resolve_order_id( $mtn );
 		if ( ! $order_id ) {
 			Helper::log( 'IPN order not found', [ 'mtn' => $mtn ] );
 			status_header( 404 );
@@ -66,6 +62,12 @@ final class IpnHandler {
 		if ( ! $order instanceof \WC_Order ) {
 			status_header( 404 );
 			echo 'Order not loadable';
+			exit;
+		}
+		if ( ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo_newebpay' ) ) {
+			Helper::warn( 'IPN rejected — order not paid via NewebPay', [ 'order_id' => $order_id ] );
+			status_header( 400 );
+			echo 'Payment method mismatch';
 			exit;
 		}
 
@@ -129,6 +131,9 @@ final class IpnHandler {
 		if ( '' !== $card4no ) {
 			$order->update_meta_data( Keys::NEWEBPAY_CARD_LAST4, $card4no );
 		}
+		if ( 'SUCCESS' === $status && '' !== $pay_time && $amt > 0 ) {
+			$order->update_meta_data( Keys::NEWEBPAY_PAID_AMT, $amt );
+		}
 
 		self::write_extra_meta( $order, $payment_type, $result );
 		self::maybe_write_shipping_store_meta( $order, $result );
@@ -144,26 +149,32 @@ final class IpnHandler {
 					$order->get_total()
 				)
 			);
+		} elseif ( 'SUCCESS' === $status && '' === $pay_time && 'CVSCOM' === $payment_type ) {
+			// 超商取貨付款：通知只代表訂單成立、門市已選，錢是顧客取貨時才付（PayTime 規格上就是空的）。
+			if ( $order->has_status( 'pending' ) ) {
+				$order->update_status( 'processing', __( 'NewebPay store pickup order confirmed. The customer pays when collecting the parcel.', 'moksa-for-woocommerce' ) );
+			}
+		} elseif ( 'SUCCESS' === $status && '' === $pay_time ) {
+			// 取號完成（4.2.3）也是 Status=SUCCESS，但沒有 PayTime；付款完成（4.2.2）才有。
+			// 顧客瀏覽器拿得到取號封包，原本重送到這裡就會被當成已付款（同 RY 以 PayTime 判斷）。
+			if ( 'on-hold' !== $order->get_status() ) {
+				$order->update_status( 'on-hold', self::issued_note( $order, $payment_type ) );
+			}
 		} elseif ( 'SUCCESS' === $status ) {
-			$order->payment_complete( $trade_no );
-			$order->add_order_note(
-				sprintf(
-				/* translators: 1: payment type, 2: trade no */
-					__( 'NewebPay payment completed — %1$s (transaction ID %2$s)', 'moksa-for-woocommerce' ),
-					self::payment_type_label( $payment_type ),
-					$trade_no
-				)
-			);
+			// 重送的成功通知不再重複寫備註（已付款的單也不能掉進下面的失敗分支）。
+			if ( ! $order->is_paid() ) {
+				$order->payment_complete( $trade_no );
+				$order->add_order_note(
+					sprintf(
+					/* translators: 1: payment type, 2: trade no */
+						__( 'NewebPay payment completed — %1$s (transaction ID %2$s)', 'moksa-for-woocommerce' ),
+						self::payment_type_label( $payment_type ),
+						$trade_no
+					)
+				);
+			}
 		} elseif ( in_array( $status, [ 'CUSTOM', 'GETTING' ], true ) ) {
-			$order->update_status(
-				'on-hold',
-				sprintf(
-				/* translators: 1: payment type, 2: status */
-					__( 'NewebPay issued the %1$s payment details and is waiting for the customer to pay (status %2$s)', 'moksa-for-woocommerce' ),
-					self::payment_type_label( $payment_type ),
-					$status
-				)
-			);
+			$order->update_status( 'on-hold', self::issued_note( $order, $payment_type ) );
 		} else {
 			$order->add_order_note(
 				sprintf(
@@ -199,7 +210,7 @@ final class IpnHandler {
 
 		$decoded = ( '' !== $trade_info && Helper::verify_trade_sha( $trade_info, $trade_sha ) ) ? Helper::decrypt_trade_info( $trade_info ) : null;
 		if ( null === $decoded ) {
-			Helper::log( 'CustomerURL post missing or not verified' );
+			Helper::warn( 'CustomerURL post missing or not verified' );
 			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
 			exit;
 		}
@@ -210,12 +221,9 @@ final class IpnHandler {
 		$result = isset( $decoded['Result'] ) ? (array) $decoded['Result'] : [];
 		$mtn    = (string) ( $result['MerchantOrderNo'] ?? '' );
 
-		$order_id = Helper::parse_order_id( $mtn );
-		if ( ! $order_id ) {
-			$order_id = Lookup::by_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO, $mtn );
-		}
-		$order = $order_id ? wc_get_order( $order_id ) : null;
-		if ( ! $order instanceof \WC_Order ) {
+		$order_id = Helper::resolve_order_id( $mtn );
+		$order    = $order_id ? wc_get_order( $order_id ) : null;
+		if ( ! $order instanceof \WC_Order || ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo_newebpay' ) ) {
 			Helper::log( 'CustomerURL order not found', [ 'mtn' => $mtn ] );
 			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
 			exit;
@@ -248,17 +256,10 @@ final class IpnHandler {
 			self::write_extra_meta( $order, $payment_type, $result );
 			self::maybe_write_shipping_store_meta( $order, $result );
 
-			$note = sprintf(
-				/* translators: 1: payment type, 2: status */
-				__( 'NewebPay issued the %1$s payment details and is waiting for the customer to pay (status %2$s)', 'moksa-for-woocommerce' ),
-				self::payment_type_label( $payment_type ),
-				$status
-			);
 			// 留在待付款會被 WC「保留庫存逾時」自動取消，顧客照代碼繳的卻是已取消的單。
+			// 已是保留中（顧客重新整理或按上一頁重送）就不再重複寫備註。
 			if ( 'on-hold' !== $order->get_status() ) {
-				$order->update_status( 'on-hold', $note );
-			} else {
-				$order->add_order_note( $note );
+				$order->update_status( 'on-hold', self::issued_note( $order, $payment_type ) );
 			}
 			$order->save();
 			\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
@@ -273,6 +274,32 @@ final class IpnHandler {
 		return $amt === (int) ceil( $total ) || $amt === (int) floor( $total );
 	}
 
+	/** 取號備註：列出跟顧客看到的同一份繳費資訊（帳號、代碼、期限），不寫內部狀態碼。 */
+	private static function issued_note( \WC_Order $order, string $payment_type ): string {
+		$details = [];
+		foreach ( \Moksafowo\Modules\Shared\Frontend\PaymentInfoBox::rows( $order ) as $row ) {
+			$details[ (string) ( $row['label'] ?? '' ) ] = (string) ( $row['value'] ?? '' );
+		}
+		return \Moksafowo\Order\Note::build(
+			sprintf(
+				/* translators: %s: payment type */
+				__( 'NewebPay issued the %s payment details and is waiting for the customer to pay.', 'moksa-for-woocommerce' ),
+				self::payment_type_label( $payment_type )
+			),
+			$details
+		);
+	}
+
+	/** ExpireDate 加上 ExpireTime（有給才加），顧客才知道當天幾點截止。 */
+	private static function expire_value( array $result ): string {
+		$date = (string) ( $result['ExpireDate'] ?? '' );
+		$time = (string) ( $result['ExpireTime'] ?? '' );
+		if ( 1 === preg_match( '/^(\d{2}):?(\d{2}):?(\d{2})$/', $time, $m ) ) {
+			return $date . ' ' . $m[1] . ':' . $m[2] . ':' . $m[3];
+		}
+		return $date;
+	}
+
 	private static function write_extra_meta( \WC_Order $order, string $payment_type, array $result ): void {
 		if ( 'VACC' === $payment_type ) {
 			if ( isset( $result['BankCode'] ) ) {
@@ -282,14 +309,14 @@ final class IpnHandler {
 				$order->update_meta_data( Keys::NEWEBPAY_ATM_CODE_NO, (string) $result['CodeNo'] );
 			}
 			if ( isset( $result['ExpireDate'] ) ) {
-				$order->update_meta_data( Keys::NEWEBPAY_ATM_EXPIRE_DATE, (string) $result['ExpireDate'] );
+				$order->update_meta_data( Keys::NEWEBPAY_ATM_EXPIRE_DATE, self::expire_value( $result ) );
 			}
 		} elseif ( 'CVS' === $payment_type ) {
 			if ( isset( $result['CodeNo'] ) ) {
 				$order->update_meta_data( Keys::NEWEBPAY_CVS_CODE_NO, (string) $result['CodeNo'] );
 			}
 			if ( isset( $result['ExpireDate'] ) ) {
-				$order->update_meta_data( Keys::NEWEBPAY_CVS_EXPIRE_DATE, (string) $result['ExpireDate'] );
+				$order->update_meta_data( Keys::NEWEBPAY_CVS_EXPIRE_DATE, self::expire_value( $result ) );
 			}
 		} elseif ( 'BARCODE' === $payment_type ) {
 			$barcode_keys = [ Keys::NEWEBPAY_BARCODE_1, Keys::NEWEBPAY_BARCODE_2, Keys::NEWEBPAY_BARCODE_3 ];
@@ -299,7 +326,7 @@ final class IpnHandler {
 				}
 			}
 			if ( isset( $result['ExpireDate'] ) ) {
-				$order->update_meta_data( Keys::NEWEBPAY_BARCODE_EXPIRE_DATE, (string) $result['ExpireDate'] );
+				$order->update_meta_data( Keys::NEWEBPAY_BARCODE_EXPIRE_DATE, self::expire_value( $result ) );
 			}
 		}
 	}
@@ -339,7 +366,7 @@ final class IpnHandler {
 		}
 	}
 
-	private static function payment_type_label( string $type ): string {
+	public static function payment_type_label( string $type ): string {
 		return \Moksafowo\Modules\Newebpay\PaymentTypeCatalog::label( $type, $type );
 	}
 }

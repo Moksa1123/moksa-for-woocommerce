@@ -61,18 +61,35 @@ final class CustomerPaymentInfo {
 			return self::append( $rows, (string) $order->get_meta( Keys::PAYNOW_BARCODE_DUE_DATE ) );
 		}
 
-		$code = '' !== $ibon ? $ibon : ( '' !== $fami ? $fami : $icash );
-		if ( '' !== $code ) {
-			return self::append(
+		// 依哪個代碼有值決定標籤，顧客才知道要去 7-11 還是全家；不單看 CodeType，通知可能沒帶。
+		if ( '' !== $ibon || '' !== $fami || '' !== $icash ) {
+			if ( '' !== $ibon ) {
+				$label = __( 'ibon payment code', 'moksa-for-woocommerce' );
+				$code  = $ibon;
+			} elseif ( '' !== $fami ) {
+				$label = __( 'FamiPort payment code', 'moksa-for-woocommerce' );
+				$code  = $fami;
+			} else {
+				$label = __( 'iCash payment code', 'moksa-for-woocommerce' );
+				$code  = $icash;
+			}
+			$rows = [
 				[
-					[
-						'key'   => 'cvs_code',
-						'label' => __( 'Convenience store payment code', 'moksa-for-woocommerce' ),
-						'value' => $code,
-					],
+					'key'   => 'cvs_code',
+					'label' => $label,
+					'value' => $code,
 				],
-				(string) $order->get_meta( Keys::PAYNOW_CODE_DUE_DATE )
-			);
+			];
+			$url  = (string) $order->get_meta( Keys::PAYNOW_ICASH_PAY_URL );
+			if ( '' === $ibon && '' === $fami && str_starts_with( $url, 'https://' ) ) {
+				$rows[] = [
+					'key'   => 'pay_url',
+					'label' => __( 'iCash payment link', 'moksa-for-woocommerce' ),
+					'value' => $url,
+					'url'   => $url,
+				];
+			}
+			return self::append( $rows, (string) $order->get_meta( Keys::PAYNOW_CODE_DUE_DATE ) );
 		}
 
 		return [];

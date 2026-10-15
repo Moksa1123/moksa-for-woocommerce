@@ -333,6 +333,7 @@ final class OrderMetaBox {
 			[
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'i18n'     => [
+					'popup_blocked'    => __( 'The browser blocked the new window. Please allow pop-ups for this site.', 'moksa-for-woocommerce' ),
 					'creating'         => __( 'Creating…', 'moksa-for-woocommerce' ),
 					'create_ok'        => __( 'The shipment was created. Refresh the page to see the full details.', 'moksa-for-woocommerce' ),
 					'create_fail'      => __( 'Could not create:', 'moksa-for-woocommerce' ),
@@ -456,7 +457,7 @@ final class OrderMetaBox {
 
 	public static function ajax_delete_record(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-		if ( ! current_user_can( self::CAPABILITY ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::SHIPMENT_DELETE ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
 		$order_id     = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
@@ -541,11 +542,15 @@ final class OrderMetaBox {
 				$code
 			);
 		}
-		$order->add_order_note( $note );
+		// 卡片上每一包讀的是 record 的狀態與更新時間，跟 IPN / 補查一樣要寫回去。
+		CreateOrder::update_record_status( $order, $logistics_id, $code, $msg );
 		$order->save();
 
-		// 走跟 IPN / 補查排程完全相同的對應路徑。
+		// 走跟 IPN / 補查排程完全相同的對應路徑；狀態有變時由 mapper 寫唯一一則備註。
 		do_action( 'moksafowo_ecpay_shipping_status_received', $order, $code, $msg );
+		if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+			$order->add_order_note( $note );
+		}
 
 		$after = wc_get_order( $order->get_id() )->get_status();
 		wp_send_json_success(

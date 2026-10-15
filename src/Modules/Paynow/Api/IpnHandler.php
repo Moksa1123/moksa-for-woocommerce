@@ -21,7 +21,7 @@ final class IpnHandler {
 		$source = ! empty( $_POST ) ? wp_unslash( $_POST ) : wp_unslash( $_GET );
 
 		if ( empty( $source ) || ! is_array( $source ) ) {
-			Helper::log( 'callback empty — rejected' );
+			Helper::warn( 'callback empty — rejected' );
 			self::reply( 400, 'EMPTY' );
 		}
 
@@ -40,7 +40,7 @@ final class IpnHandler {
 		$buysafe_no = self::pick( $posted, [ 'BuysafeNo', 'BuySafeNo' ] );
 
 		if ( '' === $order_no || '' === $pass_code || '' === $pay_type ) {
-			Helper::log( 'callback missing OrderNo / PassCode / PayType — rejected' );
+			Helper::warn( 'callback missing OrderNo / PassCode / PayType — rejected' );
 			self::reply( 400, 'MISSING' );
 		}
 
@@ -77,7 +77,7 @@ final class IpnHandler {
 			// PassCode2 為此付款方式的必要驗證,未帶或不符一律拒絕(fail-closed)。
 			if ( '' === $pass_code2 || '' === $email
 				|| ! Signature::verify( Signature::make_pass_code2( $pass_code, $email ), $pass_code2 ) ) {
-				Helper::log( 'callback PassCode2 mismatch — rejected', [ 'order_no' => $order_no ] );
+				Helper::warn( 'callback PassCode2 mismatch — rejected', [ 'order_no' => $order_no ] );
 				self::reply( 400, 'PASSCODE2_MISMATCH' );
 			}
 		}
@@ -95,7 +95,7 @@ final class IpnHandler {
 		}
 
 		// 成功通知的金額要跟訂單一致（取號後訂單被改過金額、顧客照舊金額繳費）。
-		if ( $is_success && ! $order->is_paid() && (int) $total !== (int) round( (float) $order->get_total() ) ) {
+		if ( $is_success && ! $order->is_paid() && (int) $total !== (int) ceil( (float) $order->get_total() ) ) {
 			$order->update_status(
 				'on-hold',
 				sprintf(
@@ -270,16 +270,17 @@ final class IpnHandler {
 		$label = self::pay_type_label( $pay_type );
 
 		if ( $is_success ) {
+			// 重送的成功通知不再重複寫備註。
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( (string) $order->get_meta( Keys::PAYNOW_BUYSAFE_NO ) );
+				$order->add_order_note(
+					sprintf(
+					/* translators: %s: payment type */
+						__( 'PayNow payment completed — %s', 'moksa-for-woocommerce' ),
+						$label
+					)
+				);
 			}
-			$order->add_order_note(
-				sprintf(
-				/* translators: %s: payment type */
-					__( 'PayNow payment completed — %s', 'moksa-for-woocommerce' ),
-					$label
-				)
-			);
 			return;
 		}
 

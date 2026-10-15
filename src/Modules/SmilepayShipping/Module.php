@@ -79,6 +79,13 @@ final class Module extends AbstractModule {
 			],
 			'open_map'         => [ Frontend\StoreSelector::class, 'admin_map_payload' ],
 			'session_store_id' => [ Frontend\StoreSelector::class, 'session_store_id' ],
+			// 到店／關轉通知信、客服查單讀的是共用鍵，換門市時一起寫，不然信裡還是舊門市
+			'sync'             => static function ( \WC_Order $order, array $store ): void {
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_PROVIDER, 'smilepay' );
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID, $store['id'] );
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME, $store['name'] );
+				$order->update_meta_data( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS, $store['address'] );
+			},
 		];
 		return $providers;
 	}

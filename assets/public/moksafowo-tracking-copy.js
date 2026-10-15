@@ -30,7 +30,7 @@
 		};
 		var flash = function () {
 			var orig = btn.textContent;
-			btn.textContent = '已複製';
+			btn.textContent = ( window.moksafowoTrackingCopy && window.moksafowoTrackingCopy.copied ) || 'Copied';
 			btn.style.background = '#dcfce7';
 			btn.style.borderColor = '#86efac';
 			btn.style.color = '#16a34a';

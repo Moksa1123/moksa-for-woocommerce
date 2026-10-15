@@ -30,8 +30,16 @@ final class CustomerOrderView {
 		wp_enqueue_script( 'moksafowo-tracking-copy' );
 	}
 
+	/**
+	 * 只在後台（訂單列表、編輯頁）換成物流商名稱方便辨識；顧客看到的頁面和信件保留商家在運送區域設定的標題。
+	 * 後台改狀態時寄出的信也在 is_admin() 底下產生，要另外排除。
+	 */
+	private static function should_relabel(): bool {
+		return is_admin() && ! doing_action( 'woocommerce_email_order_details' );
+	}
+
 	public static function filter_shipping_method_string( string $shipping_method, $order ): string {
-		if ( ! $order instanceof \WC_Order ) {
+		if ( ! $order instanceof \WC_Order || ! self::should_relabel() ) {
 			return $shipping_method;
 		}
 		$map   = Module::method_map();
@@ -66,7 +74,7 @@ final class CustomerOrderView {
 			return $name;
 		}
 		$method_id = (string) $item->get_method_id();
-		if ( ! isset( Module::method_map()[ $method_id ] ) ) {
+		if ( ! isset( Module::method_map()[ $method_id ] ) || ! self::should_relabel() ) {
 			return $name;
 		}
 		return self::carrier_title( $method_id );
@@ -186,17 +194,21 @@ final class CustomerOrderView {
 					<div class="moksafowo-shipping-card__row">
 						<span class="moksafowo-shipping-card__label">
 							<?php
-							echo esc_html__( 'Shipping ID', 'moksa-for-woocommerce' );
+							echo esc_html__( 'Tracking number', 'moksa-for-woocommerce' );
 							if ( $is_split && '' !== $temp_label ) {
 								echo '<br><span style="font-size:11px;color:#94a3b8;">' . esc_html( $temp_label ) . '</span>';
 							}
 							?>
 						</span>
 						<span class="moksafowo-shipping-card__value" style="display:flex;flex-direction:column;gap:6px;">
-							<?php if ( '' !== $rec_id ) : ?>
+							<?php
+							// 有可查詢的號碼時只印一次（追蹤按鈕本身就帶號碼與複製）；綠界內部物流編號顧客查不到，不顯示。
+							if ( null === $tracking_info ) :
+								?>
+								<?php if ( '' !== $rec_id ) : ?>
 								<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_id ); ?></span>
 							<?php endif; ?>
-							<?php if ( $is_cvs && '' !== $rec_pay ) : ?>
+								<?php if ( $is_cvs && '' !== $rec_pay ) : ?>
 								<span style="font-size:12px;color:#475569;">
 									<?php esc_html_e( 'Shipping number:', 'moksa-for-woocommerce' ); ?>
 									<span class="moksafowo-shipping-card__code"><?php echo esc_html( $rec_pay ); ?>
@@ -206,7 +218,7 @@ final class CustomerOrderView {
 										/ <?php echo esc_html( $rec_val ); ?><?php endif; ?></span>
 								</span>
 							<?php endif; ?>
-							<?php if ( null !== $tracking_info ) : ?>
+							<?php else : ?>
 								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?>
 							<?php endif; ?>
 						</span>
@@ -221,12 +233,13 @@ final class CustomerOrderView {
 
 	private static function carrier_title( string $method_id ): string {
 		$map = [
-			'moksafowo_ecpay_shipping_cvs_711'    => __( 'ECPay — 7-ELEVEN pickup', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_family' => __( 'ECPay — FamilyMart pickup', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_hilife' => __( 'ECPay — Hi-Life pickup', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_cvs_okmart' => __( 'ECPay — OK Mart pickup', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_home_tcat'  => __( 'ECPay — T-Cat home delivery', 'moksa-for-woocommerce' ),
-			'moksafowo_ecpay_shipping_home_post'  => __( 'ECPay — Chunghwa Post', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_711'            => __( 'ECPay — 7-ELEVEN pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_711_b2c_freeze' => __( 'ECPay — 7-ELEVEN frozen pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_family'         => __( 'ECPay — FamilyMart pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_hilife'         => __( 'ECPay — Hi-Life pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_cvs_okmart'         => __( 'ECPay — OK Mart pickup', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_tcat'          => __( 'ECPay — T-Cat home delivery', 'moksa-for-woocommerce' ),
+			'moksafowo_ecpay_shipping_home_post'          => __( 'ECPay — Chunghwa Post', 'moksa-for-woocommerce' ),
 		];
 		return $map[ $method_id ] ?? __( 'ECPay shipping', 'moksa-for-woocommerce' );
 	}

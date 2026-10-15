@@ -81,15 +81,11 @@ class ShippingResponse {
 						);
 						$order->save();
 
-						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'moksa-for-woocommerce' );
-						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'moksa-for-woocommerce' );
-
-						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
-
 						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						// 狀態有變時 mapper 已寫一則備註；沒變才補這則。
+						if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+							$order->add_order_note( self::status_note( $decrypted_info ) );
+						}
 					}
 				}
 			} elseif ( 'Print' === $decrypted_info['ApiType'] ) {
@@ -119,11 +115,9 @@ class ShippingResponse {
 						$order->save();
 					}
 
-					$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'moksa-for-woocommerce' );
-					$print_status  = _x( 'Print Status: ', 'Shipping Note', 'moksa-for-woocommerce' );
-					$print_message = _x( 'Message: ', 'Shipping Note', 'moksa-for-woocommerce' );
-
-					$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$print_status}{$decrypted_info['Status']}<br>{$print_message}{$decrypted_info['Message']}" );
+					$order->add_order_note(
+						self::print_note( $decrypted_info )
+					);
 
 				}
 			} else {
@@ -183,15 +177,11 @@ class ShippingResponse {
 
 					if ( array_key_exists( 'ShipStatus', $decrypted_info ) ) {
 
-						$shipping_log = _x( 'PAYUNi Shipping Notify', 'Shipping Note', 'moksa-for-woocommerce' );
-						$shiptrade_no = _x( 'ShipTradeNo: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_status  = _x( 'ShipStatus: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_desc    = _x( 'ShipStatusDesc: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$ship_time    = _x( 'ShipStatusTime: ', 'Shipping Note', 'moksa-for-woocommerce' );
-
-						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$shiptrade_no}{$decrypted_info['ShipTradeNo']}<br>{$ship_status}{$decrypted_info['ShipStatus']}<br>{$ship_desc}{$decrypted_info['ShipStatusDesc']}<br>{$ship_time}{$decrypted_info['ShipStatusTime']}" );
-
 						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						// 狀態有變時 mapper 已寫一則備註；沒變才補這則。
+						if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+							$order->add_order_note( self::status_note( $decrypted_info ) );
+						}
 					}
 				} else {
 					PayuniShipping::log( 'PAYUNi NotifyURL response fail: can not find order by ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
@@ -215,11 +205,9 @@ class ShippingResponse {
 						$order->update_meta_data( OrderMeta::PrintDate, $print_result['PrintDate'] );
 						$order->save();
 
-						$shipping_log  = _x( 'PAYUNi Shipping Print Notify', 'Shipping Note', 'moksa-for-woocommerce' );
-						$print_status  = _x( 'Print Status: ', 'Shipping Note', 'moksa-for-woocommerce' );
-						$print_message = _x( 'Message: ', 'Shipping Note', 'moksa-for-woocommerce' );
-
-						$order->add_order_note( "<strong>{$shipping_log}</strong><br>{$print_status}{$decrypted_info['Status']}<br>{$print_message}{$decrypted_info['Message']}" );
+						$order->add_order_note(
+							self::print_note( [ 'ShipTradeNo' => $ship_trade_no ] + $decrypted_info )
+						);
 
 					} else {
 						PayuniShipping::log( 'PAYUNi NotifyURL response tcat print fail: can not find order by ShipTradeNo:' . $ship_trade_no );
@@ -238,6 +226,48 @@ class ShippingResponse {
 	 * 依物流交易序號找訂單。拆單時單一欄位只存最後一包，其他包要從拆單紀錄找；
 	 * 原本只比對單一欄位，第一包（含運費、代收主單）的通知全被丟掉。
 	 */
+	/**
+	 * 貨態通知備註：「PAYUNi 貨態：門市已收件」＋交易編號、狀態碼、時間。
+	 *
+	 * @param array<string, mixed> $info 解密後的通知。
+	 */
+	private static function status_note( array $info ): string {
+		$desc  = (string) ( $info['ShipStatusDesc'] ?? '' );
+		$code  = (string) ( $info['ShipStatus'] ?? '' );
+		$label = '' !== $desc ? $desc : $code;
+		// 92 的說明是 GET-GETNO、AOL-AOL 這類代碼，商家看不懂；只有含 AOL 才是門市已收件。
+		if ( '92' === $code ) {
+			$label = str_contains( $desc, 'AOL' )
+				? __( 'Received at the drop-off store', 'moksa-for-woocommerce' )
+				: __( 'Waiting for the parcel to be dropped off', 'moksa-for-woocommerce' );
+		}
+		return \Moksafowo\Order\Note::build(
+			/* translators: %s: shipping status description */
+			sprintf( __( 'PAYUNi shipping status: %s', 'moksa-for-woocommerce' ), $label ),
+			[
+				__( 'Shipping transaction ID', 'moksa-for-woocommerce' ) => $info['ShipTradeNo'] ?? '',
+				__( 'Status code', 'moksa-for-woocommerce' )             => '' !== $desc && $desc !== $label ? $code . ' / ' . $desc : $code,
+				__( 'Status updated', 'moksa-for-woocommerce' )          => $info['ShipStatusTime'] ?? '',
+			]
+		);
+	}
+
+	/**
+	 * 列印通知備註。
+	 *
+	 * @param array<string, mixed> $info 解密後的通知。
+	 */
+	private static function print_note( array $info ): string {
+		return \Moksafowo\Order\Note::build(
+			/* translators: %s: PAYUNi message */
+			sprintf( __( 'PAYUNi label print notice: %s', 'moksa-for-woocommerce' ), (string) ( $info['Message'] ?? '' ) ),
+			[
+				__( 'Shipping transaction ID', 'moksa-for-woocommerce' ) => $info['ShipTradeNo'] ?? '',
+				__( 'Status code', 'moksa-for-woocommerce' )             => $info['Status'] ?? '',
+			]
+		);
+	}
+
 	private static function find_order_by_ship_trade_no( string $no ): ?\WC_Order {
 		if ( '' === $no ) {
 			return null;

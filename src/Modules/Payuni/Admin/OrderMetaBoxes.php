@@ -31,7 +31,8 @@ class OrderMetaBoxes {
 		$cards[] = [
 			'slot'  => 'payment',
 			'title' => __( 'Payment information', 'moksa-for-woocommerce' ),
-			'html'  => self::card_html( $order ),
+			// 退款紀錄跟其他金流卡片一樣接在後面。
+			'html'  => self::card_html( $order ) . \Moksafowo\Modules\Shared\Admin\CardRenderers::render_refund_block( $order ),
 		];
 		return $cards;
 	}
@@ -72,47 +73,55 @@ class OrderMetaBoxes {
 
 		if ( PayuniPayment::$einvoice_enabled ) {
 
-			echo '<tr><td><strong>' . esc_html__( 'Invoice number', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_NO ) ) . '</td></tr>';
-			echo '<tr><td><strong>' . esc_html__( 'Invoice amount', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_AMT ) ) . '</td></tr>';
-			echo '<tr><td><strong>' . esc_html__( 'Issued at', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $order->get_meta( OrderMeta::EINVOICE_TIME ) ) . '</td></tr>';
-
-			$einvoice_type = $order->get_meta( OrderMeta::EINVOICE_TYPE );
-			if ( $einvoice_type === 'C0401' ) {
-				$einvoice_type_desc = __( 'Issue', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_type === 'C0501' ) {
-				$einvoice_type_desc = __( 'Void', 'moksa-for-woocommerce' );
-			} else {
-				$einvoice_type_desc = __( 'Unknown type', 'moksa-for-woocommerce' );
+			$invoice_rows = [
+				__( 'Invoice number', 'moksa-for-woocommerce' ) => $order->get_meta( OrderMeta::EINVOICE_NO ),
+				__( 'Invoice amount', 'moksa-for-woocommerce' ) => $order->get_meta( OrderMeta::EINVOICE_AMT ),
+				__( 'Issued at', 'moksa-for-woocommerce' ) => $order->get_meta( OrderMeta::EINVOICE_TIME ),
+			];
+			foreach ( $invoice_rows as $label => $invoice_value ) {
+				if ( '' === (string) $invoice_value ) {
+					continue;
+				}
+				echo '<tr><td><strong>' . esc_html( $label ) . '</strong></td><td>' . esc_html( (string) $invoice_value ) . '</td></tr>';
 			}
-			echo '<tr><td><strong>' . esc_html__( 'Invoice type', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_type . ' (' . $einvoice_type_desc . ')' ) . '</td></tr>';
 
-			$einvoice_info = $order->get_meta( OrderMeta::EINVOICE_INFO );
-			if ( $einvoice_info === '3J0002' ) {
-				$einvoice_info_desc = __( 'Mobile barcode', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_info === 'CQ0001' ) {
-				$einvoice_info_desc = __( 'Citizen Digital Certificate', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_info === 'amego' ) {
-				$einvoice_info_desc = __( 'Amego member', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_info === 'Donate' ) {
-				$einvoice_info_desc = __( 'Donation', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_info === 'Company' ) {
-				$einvoice_info_desc = __( 'Company', 'moksa-for-woocommerce' );
-			} else {
-				$einvoice_info_desc = __( 'Unknown carrier', 'moksa-for-woocommerce' );
+			// 只印有值的列，顯示中文說明；對不到的代碼才原樣顯示。
+			$invoice_labels = [
+				[
+					__( 'Invoice type', 'moksa-for-woocommerce' ),
+					(string) $order->get_meta( OrderMeta::EINVOICE_TYPE ),
+					[
+						'C0401' => __( 'Issue', 'moksa-for-woocommerce' ),
+						'C0501' => __( 'Void', 'moksa-for-woocommerce' ),
+					],
+				],
+				[
+					__( 'Carrier details', 'moksa-for-woocommerce' ),
+					(string) $order->get_meta( OrderMeta::EINVOICE_INFO ),
+					[
+						'3J0002'  => __( 'Mobile barcode', 'moksa-for-woocommerce' ),
+						'CQ0001'  => __( 'Citizen Digital Certificate', 'moksa-for-woocommerce' ),
+						'amego'   => __( 'Amego member', 'moksa-for-woocommerce' ),
+						'Donate'  => __( 'Donation', 'moksa-for-woocommerce' ),
+						'Company' => __( 'Company', 'moksa-for-woocommerce' ),
+					],
+				],
+				[
+					__( 'Issuing status', 'moksa-for-woocommerce' ),
+					(string) $order->get_meta( OrderMeta::EINVOICE_STATUS ),
+					[
+						'1' => __( 'Issued', 'moksa-for-woocommerce' ),
+						'2' => __( 'Issuing failed', 'moksa-for-woocommerce' ),
+						'5' => __( 'Voided', 'moksa-for-woocommerce' ),
+					],
+				],
+			];
+			foreach ( $invoice_labels as [ $label, $code, $map ] ) {
+				if ( '' === $code ) {
+					continue;
+				}
+				echo '<tr><td><strong>' . esc_html( $label ) . '</strong></td><td>' . esc_html( $map[ $code ] ?? $code ) . '</td></tr>';
 			}
-			echo '<tr><td><strong>' . esc_html__( 'Carrier details', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_info . ' (' . $einvoice_info_desc . ')' ) . '</td></tr>';
-
-			$einvoice_status = $order->get_meta( OrderMeta::EINVOICE_STATUS );
-			if ( $einvoice_status === '1' ) {
-				$einvoice_status_desc = __( 'Issued', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_status === '2' ) {
-				$einvoice_status_desc = __( 'Issuing failed', 'moksa-for-woocommerce' );
-			} elseif ( $einvoice_status === '5' ) {
-				$einvoice_status_desc = __( 'Voided', 'moksa-for-woocommerce' );
-			} else {
-				$einvoice_status_desc = __( 'Unknown status', 'moksa-for-woocommerce' );
-			}
-			echo '<tr><td><strong>' . esc_html__( 'Issuing status', 'moksa-for-woocommerce' ) . '</strong></td><td>' . esc_html( $einvoice_status . ' (' . $einvoice_status_desc . ')' ) . '</td></tr>';
 		}// end einvoice enabled
 
 		echo '<tr id="moksafowo-payuni-action"><td colspan="2"><button id="moksafowo-payuni-query-btn" class="button" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button></td></tr>';

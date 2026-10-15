@@ -27,7 +27,7 @@ final class Cvs extends AbstractEcpayGateway {
 	protected function extra_aio_params( \WC_Order $order ): array {
 		return [
 			// 超商代碼的 StoreExpireDate 單位是分鐘（條碼才是天），設定值是天數要換算。
-			'StoreExpireDate' => max( 1, min( 7, (int) get_option( 'moksafowo_ecpay_cvs_expire_days', 7 ) ) ) * 1440,
+			'StoreExpireDate' => max( 1, min( 30, (int) get_option( 'moksafowo_ecpay_cvs_expire_days', 7 ) ) ) * 1440,
 			'PaymentInfoURL'  => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 		];
 	}

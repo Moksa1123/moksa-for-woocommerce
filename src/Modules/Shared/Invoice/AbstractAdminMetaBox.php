@@ -153,7 +153,8 @@ abstract class AbstractAdminMetaBox {
 				if ( '' === $value ) {
 					continue;
 				}
-				echo '<p><strong>' . esc_html( $label ) . '：</strong>' . esc_html( $value ) . '</p>';
+				/* translators: %s: field label */
+				echo '<p><strong>' . esc_html( sprintf( __( '%s:', 'moksa-for-woocommerce' ), $label ) ) . '</strong>' . esc_html( $value ) . '</p>';
 			}
 
 			if ( '' !== $invalid_at ) {
@@ -326,16 +327,24 @@ abstract class AbstractAdminMetaBox {
 	public static function ajax_invalid(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
 		[ $order ] = self::ajax_authenticate();
-		$reason    = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
-		$result    = call_user_func( static::invalid_callable(), $order, $reason );
+		// 不可逆：跟 AI／MCP 能力用同一個權限門檻。
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID ) ) {
+			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
+		}
+		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$result = call_user_func( static::invalid_callable(), $order, $reason );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 
 	public static function ajax_allowance(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
 		[ $order ] = self::ajax_authenticate();
-		$amount    = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
-		$callable  = static::allowance_callable();
+		// 不可逆：跟 AI／MCP 能力用同一個權限門檻。
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_ALLOWANCE ) ) {
+			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
+		}
+		$amount   = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
+		$callable = static::allowance_callable();
 		if ( null === $callable ) {
 			wp_send_json_error( [ 'message' => __( 'This service does not support allowances.', 'moksa-for-woocommerce' ) ] );
 		}

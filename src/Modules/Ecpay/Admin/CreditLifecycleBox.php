@@ -76,13 +76,38 @@ final class CreditLifecycleBox {
 		if ( ! in_array( $action, [ 'N', 'C', 'R' ], true ) ) {
 			wp_send_json_error( [ 'message' => __( 'Invalid action.', 'moksa-for-woocommerce' ) ] );
 		}
+		// 退刷與放棄授權不可逆：跟 AI／MCP 能力用同一個權限門檻。
+		if ( 'C' !== $action && ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::CARD_REFUND ) ) {
+			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
+		}
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || ! self::is_credit_order( $order ) ) {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found, or it was not paid by card.', 'moksa-for-woocommerce' ) ] );
 		}
 
-		$run_amount = ( 'R' === $action ) ? max( 1, $amount ) : (int) round( (float) $order->get_total() );
+		// 退刷走 WC 退款：WC 會檢查可退餘額、寫進退款紀錄，再經閘道的 process_refund 送綠界，
+		// 不然這裡退過的錢 WC 不知道，還能從 WC 的退款按鈕再退一次。
+		if ( 'R' === $action ) {
+			$refund = wc_create_refund(
+				[
+					'order_id'       => $order->get_id(),
+					'amount'         => max( 1, $amount ),
+					'reason'         => __( 'Refunded from the ECPay card panel', 'moksa-for-woocommerce' ),
+					'refund_payment' => true,
+				]
+			);
+			if ( is_wp_error( $refund ) ) {
+				wp_send_json_error( [ 'message' => $refund->get_error_message() ] );
+			}
+			$query = Helper::query_credit_trade( $order );
+			if ( is_wp_error( $query ) ) {
+				wp_send_json_success( [ 'html' => '<p style="color:#00a32a;">' . esc_html( __( 'The action succeeded, but the latest status could not be fetched. Please refresh the page.', 'moksa-for-woocommerce' ) ) . '</p>' ] );
+			}
+			wp_send_json_success( [ 'html' => self::build_panel_html( $order, $query ) ] );
+		}
+
+		$run_amount = (int) round( (float) $order->get_total() );
 		$result     = Helper::credit_action( $order, $action, $run_amount );
 
 		if ( is_wp_error( $result ) ) {
@@ -119,6 +144,17 @@ final class CreditLifecycleBox {
 				$run_amount
 			)
 		);
+		// 放棄授權等於整筆不收，WC 這邊也記一筆退款（不再呼叫綠界），訂單才不會還顯示已付款。
+		if ( 'N' === $action && $order->get_remaining_refund_amount() > 0 ) {
+			wc_create_refund(
+				[
+					'order_id'       => $order->get_id(),
+					'amount'         => $order->get_remaining_refund_amount(),
+					'reason'         => __( 'ECPay authorization cancelled', 'moksa-for-woocommerce' ),
+					'refund_payment' => false,
+				]
+			);
+		}
 
 		$query = Helper::query_credit_trade( $order );
 		if ( is_wp_error( $query ) ) {
@@ -289,6 +325,7 @@ final class CreditLifecycleBox {
 			'To be captured' => __( 'Capture in progress', 'moksa-for-woocommerce' ),
 			'Refunded'       => __( 'Refunded', 'moksa-for-woocommerce' ),
 			'Cancelled'      => __( 'Authorization cancelled', 'moksa-for-woocommerce' ),
+			'Canceled'       => __( 'Authorization cancelled', 'moksa-for-woocommerce' ),
 			'Failed'         => __( 'Failed', 'moksa-for-woocommerce' ),
 		];
 		return $map[ $raw ] ?? ( '' === $raw ? __( 'Unknown', 'moksa-for-woocommerce' ) : $raw );
@@ -301,6 +338,7 @@ final class CreditLifecycleBox {
 			'To be captured' => '#dba617',
 			'Refunded'       => '#646970',
 			'Cancelled'      => '#646970',
+			'Canceled'       => '#646970',
 			'Failed'         => '#d63638',
 		][ $raw ] ?? '#1d2327';
 	}

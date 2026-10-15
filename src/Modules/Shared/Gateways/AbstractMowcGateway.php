@@ -77,7 +77,7 @@ abstract class AbstractMowcGateway extends \WC_Payment_Gateway {
 	}
 
 	public function is_available(): bool {
-		if ( ! parent::is_available() ) {
+		if ( ! parent::is_available() || ! \Moksafowo\Modules\Shared\Gateways\TwdOnly::ok() ) {
 			return false;
 		}
 		if ( ! $this->helper_has_credentials() ) {
@@ -87,13 +87,16 @@ abstract class AbstractMowcGateway extends \WC_Payment_Gateway {
 	}
 
 	protected function amount_in_range(): bool {
-		$min  = $this->min_amount();
-		$max  = $this->max_amount();
-		$cart = WC()->cart ?? null;
-		if ( ! $cart || ( 0 === $min && 0 === $max ) ) {
+		$min = $this->min_amount();
+		$max = $this->max_amount();
+		if ( 0 === $min && 0 === $max ) {
 			return true;
 		}
-		$total = (float) $cart->get_total( 'edit' );
+		// 付款頁（失敗後重付）要看那張訂單的金額，購物車通常是空的；get_order_total() 兩種情況都會處理。
+		$total = (float) $this->get_order_total();
+		if ( 0.0 === $total && ! WC()->cart ) {
+			return true;
+		}
 		if ( $min > 0 && $total < $min ) {
 			return false;
 		}

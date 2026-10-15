@@ -25,7 +25,7 @@ final class IpnHandler {
 		}
 
 		if ( ! Helper::verify_check_mac_value( $raw ) ) {
-			Helper::log( 'shipping IPN CheckMacValue mismatch — rejected' );
+			Helper::warn( 'shipping IPN CheckMacValue mismatch — rejected' );
 			status_header( 400 );
 			echo 'CheckMacValue mismatch';
 			exit;
@@ -63,18 +63,36 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::ECPAY_LOGISTIC_ID, $logistics_id );
 		}
 
+		// 同一包同一個貨態被重送時不重寫備註、不重跑轉換（同補查）。
+		$previous = null;
+		foreach ( CreateOrder::get_records( $order ) as $r ) {
+			if ( '' !== $logistics_id && (string) ( $r['id'] ?? '' ) === $logistics_id ) {
+				$previous = (string) ( $r['rtn_code'] ?? '' );
+				break;
+			}
+		}
 		CreateOrder::update_record_status( $order, $logistics_id, $rtn_code, $rtn_msg );
-
-		$order->add_order_note(
-			sprintf(
-				/* translators: 1: status code, 2: status message */
-				__( 'ECPay shipping status: %2$s (status code %1$s)', 'moksa-for-woocommerce' ),
-				$rtn_code,
-				$rtn_msg
-			)
-		);
+		if ( $previous === $rtn_code ) {
+			$order->save();
+			echo '1|OK';
+			exit;
+		}
 
 		do_action( 'moksafowo_ecpay_shipping_status_received', $order, $rtn_code, $rtn_msg );
+
+		// 狀態有變時 mapper 已寫一則；沒變才補這則，並註明是哪一包。
+		if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+			$order->add_order_note(
+				\Moksafowo\Order\Note::build(
+					__( 'ECPay shipping status update', 'moksa-for-woocommerce' ),
+					[
+						__( 'Shipping status', 'moksa-for-woocommerce' ) => $rtn_msg,
+						__( 'ECPay shipping ID', 'moksa-for-woocommerce' ) => $logistics_id,
+						__( 'Status code', 'moksa-for-woocommerce' )     => $rtn_code,
+					]
+				)
+			);
+		}
 
 		$order->save();
 

@@ -26,7 +26,7 @@ final class Barcode extends AbstractEcpayGateway {
 
 	protected function extra_aio_params( \WC_Order $order ): array {
 		return [
-			'StoreExpireDate' => max( 1, min( 7, (int) get_option( 'moksafowo_ecpay_barcode_expire_days', 7 ) ) ),
+			'StoreExpireDate' => max( 1, min( 30, (int) get_option( 'moksafowo_ecpay_barcode_expire_days', 7 ) ) ),
 			'PaymentInfoURL'  => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 		];
 	}

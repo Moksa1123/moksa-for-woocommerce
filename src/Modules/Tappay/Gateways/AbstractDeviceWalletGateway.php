@@ -91,7 +91,7 @@ abstract class AbstractDeviceWalletGateway extends \WC_Payment_Gateway {
 	}
 
 	public function is_available(): bool {
-		if ( ! parent::is_available() ) {
+		if ( ! parent::is_available() || ! \Moksafowo\Modules\Shared\Gateways\TwdOnly::ok() ) {
 			return false;
 		}
 		if ( ! Helper::has_credentials() || ! $this->prerequisites_met() ) {

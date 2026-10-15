@@ -41,8 +41,8 @@ class Cvs extends GatewayBase {
 		return array_merge(
 			$args,
 			array(
-				// 用網站時區算日期：gmdate 在台灣凌晨 0~8 點會少一天。
-				'ExpireDate' => wp_date( 'Y-m-d', strtotime( '+' . $this->expire_days . ' days' ) ),
+				// 繳費期限是台灣日期，不看網站時區（網站常停在 WP 預設的 UTC）。
+				'ExpireDate' => ( new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) ) )->modify( '+' . (int) $this->expire_days . ' days' )->format( 'Y-m-d' ),
 				'CVS'        => '1',
 			)
 		);

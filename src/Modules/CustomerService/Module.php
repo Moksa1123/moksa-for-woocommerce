@@ -89,6 +89,8 @@ final class Module extends AbstractModule {
 					'cvs'         => __( 'Convenience store payment code', 'moksa-for-woocommerce' ),
 					'shipping'    => __( 'Shipping method', 'moksa-for-woocommerce' ),
 					'ship_no'     => __( 'Tracking number', 'moksa-for-woocommerce' ),
+					'ship_ref'    => __( 'Shipment reference', 'moksa-for-woocommerce' ),
+					'track'       => __( 'Track shipment', 'moksa-for-woocommerce' ),
 					'invoice'     => __( 'E-invoice number', 'moksa-for-woocommerce' ),
 					'items'       => __( 'Items', 'moksa-for-woocommerce' ),
 					'hint'        => __( 'Enter your order number and the last three digits of your billing phone to check on your order.', 'moksa-for-woocommerce' ),

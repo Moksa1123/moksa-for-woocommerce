@@ -63,7 +63,7 @@ final class ShipmentRecordOps {
 	 * @return array<string,mixed>|\WP_Error
 	 */
 	public static function prepare( $args ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::SHIPMENT_DELETE ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 
@@ -159,7 +159,7 @@ final class ShipmentRecordOps {
 	 * @return string|\WP_Error
 	 */
 	public static function apply( array $params ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::SHIPMENT_DELETE ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 

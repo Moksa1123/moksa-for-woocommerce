@@ -67,12 +67,19 @@ final class Helper extends AbstractCredentialHelper {
 	 * 回呼網址上的訂單專屬 key。Mid_smilepay 的秘密只有 4 位參數碼，可能值不到百種，
 	 * 光靠它擋不住偽造；key 用站台密鑰簽，顧客就算知道自己的 order_key 也算不出來。
 	 */
-	public static function callback_key( \WC_Order $order ): string {
-		return substr( hash_hmac( 'sha256', 'smilepay-roturl|' . $order->get_id() . '|' . $order->get_order_key(), wp_salt( 'auth' ) ), 0, 32 );
+	/**
+	 * 回呼網址上的訂單專屬 key。依端點分開簽：信用卡的 key 會出現在顧客看得到的轉址網址上，
+	 * 不能拿去打取號類的 roturl 端點。
+	 *
+	 * @param \WC_Order $order    訂單。
+	 * @param string    $endpoint 'roturl'（取號類，伺服器間）或 'credit'（信用卡瀏覽器返回）。
+	 */
+	public static function callback_key( \WC_Order $order, string $endpoint = 'roturl' ): string {
+		return substr( hash_hmac( 'sha256', 'smilepay-' . $endpoint . '|' . $order->get_id() . '|' . $order->get_order_key(), wp_salt( 'auth' ) ), 0, 32 );
 	}
 
-	public static function keyed_roturl( string $url, \WC_Order $order ): string {
-		return add_query_arg( 'mfk', self::callback_key( $order ), $url );
+	public static function keyed_roturl( string $url, \WC_Order $order, string $endpoint = 'roturl' ): string {
+		return add_query_arg( 'mfk', self::callback_key( $order, $endpoint ), $url );
 	}
 
 	public static function calc_mid_smilepay( string $mid, string $amount, string $smseid ): string {

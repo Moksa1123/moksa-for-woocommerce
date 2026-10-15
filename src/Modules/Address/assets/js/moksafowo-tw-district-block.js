@@ -19,7 +19,7 @@
 	const FIELD_ID    = moksafowo_tw_district.field_id;
 	const BY_STATE    = moksafowo_tw_district.by_state || {};
 	const POSTCODES   = moksafowo_tw_district.postcodes || {};
-	const PLACEHOLDER = moksafowo_tw_district.placeholder || '請選擇…';
+	const PLACEHOLDER = moksafowo_tw_district.placeholder || 'Select…';
 
 	function fieldKey( prefix ) {
 		// Block 把 moksafowo/district 渲染成 id="<group>-moksafowo-district"（slash 換 dash）

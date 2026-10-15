@@ -164,7 +164,7 @@ final class InvoiceOps {
 	 * @return array<string,mixed>|\WP_Error
 	 */
 	public static function void_prepare( $args ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
@@ -208,7 +208,7 @@ final class InvoiceOps {
 	 * @return string|\WP_Error
 	 */
 	public static function void_apply( array $params ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );
@@ -237,7 +237,7 @@ final class InvoiceOps {
 	 * @return array<string,mixed>|\WP_Error
 	 */
 	public static function allowance_prepare( $args ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_ALLOWANCE ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order = self::order_from( $args );
@@ -297,7 +297,7 @@ final class InvoiceOps {
 	 * @return string|\WP_Error
 	 */
 	public static function allowance_apply( array $params ) {
-		if ( ! current_user_can( self::CAP ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_ALLOWANCE ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
 		$order    = wc_get_order( (int) ( $params['order_id'] ?? 0 ) );

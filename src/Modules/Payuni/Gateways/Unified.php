@@ -96,9 +96,11 @@ final class Unified extends GatewayBase {
 	}
 
 	public function inject_enabled_methods( $args, $order ) {
+		// 整合模式下個別付款方式不會出現在 WC 付款設定，商家改不到它們的啟用狀態，
+		// 所以由設定頁的「啟用的付款方式」決定；沒勾任何一項時不帶旗標，交給 PAYUNi 後台決定。
+		$enabled = (array) get_option( 'moksafowo_payuni_enabled_methods', array() );
 		foreach ( self::METHOD_MAP as $moksafowo_id => $pay_flag ) {
-			$settings = (array) get_option( 'woocommerce_' . $moksafowo_id . '_settings', array() );
-			if ( 'yes' === ( $settings['enabled'] ?? 'no' ) ) {
+			if ( in_array( $moksafowo_id, $enabled, true ) ) {
 				$args[ $pay_flag ] = '1';
 			}
 		}

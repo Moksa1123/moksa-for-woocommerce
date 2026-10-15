@@ -87,42 +87,54 @@ final class FieldManager {
 		],
 	];
 
-	private const FIELD_LABELS = [
-		'first_name' => '名字',
-		'last_name'  => '姓氏',
-		'company'    => '公司',
-		'country'    => '國家 / 地區',
-		'address_1'  => '街道地址',
-		'address_2'  => '公寓 / 套房',
-		'state'      => '縣 / 市',
-		'city'       => '鄉 / 鎮 / 區',
-		'postcode'   => '郵遞區號',
-		'phone'      => '電話',
-		'email'      => '電子郵件（僅帳單；50% 需與另一個 50% 相鄰；僅古典結帳）',
-	];
+	/** 可排版的欄位鍵。驗證用，不經 gettext（get_layout() 可能在 init 之前就被呼叫）。 */
+	private const FIELD_KEYS = [ 'first_name', 'last_name', 'company', 'country', 'address_1', 'address_2', 'state', 'city', 'postcode', 'phone', 'email' ];
 
-	private const FIELD_REPOPULATE = [
-		'company'   => [
-			'label'        => '公司名稱',
-			'class'        => [ 'form-row-wide' ],
-			'autocomplete' => 'organization',
-			'required'     => false,
-		],
-		'address_2' => [
-			'label'        => '公寓 / 套房 / 單位等（選填）',
-			'class'        => [ 'form-row-wide' ],
-			'autocomplete' => 'address-line2',
-			'required'     => false,
-		],
-		'phone'     => [
-			'label'        => '電話',
-			'type'         => 'tel',
-			'class'        => [ 'form-row-wide' ],
-			'autocomplete' => 'tel',
-			'validate'     => [ 'phone' ],
-			'required'     => false,
-		],
-	];
+	/** 後台欄位管理介面的欄位名稱。要用 gettext，所以不能是常數。 */
+	private static function field_labels(): array {
+		return [
+			'first_name' => __( 'First name', 'moksa-for-woocommerce' ),
+			'last_name'  => __( 'Last name', 'moksa-for-woocommerce' ),
+			'company'    => __( 'Company', 'moksa-for-woocommerce' ),
+			'country'    => __( 'Country / Region', 'moksa-for-woocommerce' ),
+			'address_1'  => __( 'Street address', 'moksa-for-woocommerce' ),
+			'address_2'  => __( 'Apartment, suite', 'moksa-for-woocommerce' ),
+			'state'      => __( 'County / City', 'moksa-for-woocommerce' ),
+			'city'       => __( 'Township / District', 'moksa-for-woocommerce' ),
+			'postcode'   => __( 'Postcode', 'moksa-for-woocommerce' ),
+			'phone'      => __( 'Phone', 'moksa-for-woocommerce' ),
+			'email'      => __( 'Email (billing only; a half-width field must sit next to another half-width field; classic checkout only)', 'moksa-for-woocommerce' ),
+		];
+	}
+
+	/**
+	 * WC 設定把欄位藏起來、但商家在這裡打開時補回的欄位定義。
+	 * 選填標記交給 WC 自己加，label 不要再帶「（選填）」。
+	 */
+	private static function field_repopulate(): array {
+		return [
+			'company'   => [
+				'label'        => __( 'Company', 'moksa-for-woocommerce' ),
+				'class'        => [ 'form-row-wide' ],
+				'autocomplete' => 'organization',
+				'required'     => false,
+			],
+			'address_2' => [
+				'label'        => __( 'Apartment, suite, unit, etc.', 'moksa-for-woocommerce' ),
+				'class'        => [ 'form-row-wide' ],
+				'autocomplete' => 'address-line2',
+				'required'     => false,
+			],
+			'phone'     => [
+				'label'        => __( 'Phone', 'moksa-for-woocommerce' ),
+				'type'         => 'tel',
+				'class'        => [ 'form-row-wide' ],
+				'autocomplete' => 'tel',
+				'validate'     => [ 'phone' ],
+				'required'     => false,
+			],
+		];
+	}
 
 	public static function init(): void {
 		add_action( 'woocommerce_admin_field_moksafowo_field_manager', [ __CLASS__, 'render_field' ] );
@@ -212,7 +224,7 @@ final class FieldManager {
 		$seen  = [];
 		foreach ( $decoded as $item ) {
 			$key = isset( $item['key'] ) ? sanitize_key( (string) $item['key'] ) : '';
-			if ( ! isset( self::FIELD_LABELS[ $key ] ) || isset( $seen[ $key ] ) ) {
+			if ( ! in_array( $key, self::FIELD_KEYS, true ) || isset( $seen[ $key ] ) ) {
 				continue;
 			}
 			$seen[ $key ] = true;
@@ -256,7 +268,7 @@ final class FieldManager {
 						$width    = $item['width'];
 						$enabled  = ! empty( $item['enabled'] );
 						$required = ! empty( $item['required'] );
-						$label    = self::FIELD_LABELS[ $key ] ?? $key;
+						$label    = self::field_labels()[ $key ] ?? $key;
 						?>
 						<li data-key="<?php echo esc_attr( $key ); ?>" class="<?php echo $enabled ? '' : 'is-disabled'; ?>">
 							<span class="moksafowo-tw-drag" aria-hidden="true">&#x2630;</span>
@@ -355,7 +367,7 @@ final class FieldManager {
 		// 但它在 layout 裡仍是 enabled，若照樣佔一個配對位置，後面每一格的
 		// form-row-first / form-row-last 都會錯位：郵遞區號拿到 last 卻排在左邊，
 		// 佈景給 last 的左側間距就整個露出來（看起來像那格往右縮了一截）。
-		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
+		if ( TwAddress::hide_country_active() ) {
 			$enabled = array_values( array_filter( $enabled, static fn ( array $i ): bool => 'country' !== ( $i['key'] ?? '' ) ) );
 		}
 
@@ -367,10 +379,11 @@ final class FieldManager {
 		}
 
 		// re-add fields user enabled but WC removed (e.g. company=hidden in WC settings)
+		$repopulate = self::field_repopulate();
 		foreach ( $enabled as $item ) {
 			$key = $prefix . $item['key'];
-			if ( ! isset( $fields[ $key ] ) && isset( self::FIELD_REPOPULATE[ $item['key'] ] ) ) {
-				$fields[ $key ] = self::FIELD_REPOPULATE[ $item['key'] ];
+			if ( ! isset( $fields[ $key ] ) && isset( $repopulate[ $item['key'] ] ) ) {
+				$fields[ $key ] = $repopulate[ $item['key'] ];
 			}
 		}
 

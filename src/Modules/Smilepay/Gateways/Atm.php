@@ -41,6 +41,7 @@ final class Atm extends AbstractSmilepayGateway {
 	protected function extra_params( \WC_Order $order ): array {
 		$days = (int) get_option( 'moksafowo_smilepay_atm_deadline_days', 7 );
 		$days = max( 1, min( 720, $days ) );
-		return [ 'Deadline_date' => gmdate( 'Y/m/d', strtotime( "+{$days} days" ) ?: time() ) ];
+		// 繳費期限是台灣日期；用 UTC 算，台灣凌晨 0～8 點下單會少一天。
+		return [ 'Deadline_date' => ( new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) ) )->modify( "+{$days} days" )->format( 'Y/m/d' ) ];
 	}
 }

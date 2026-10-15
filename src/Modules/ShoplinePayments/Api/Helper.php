@@ -21,6 +21,31 @@ final class Helper extends AbstractCredentialHelper {
 		return 'moksafowo_shopline_payments';
 	}
 
+	/** 付款方式代碼轉成商家看得懂的名稱；對不到的原樣回傳。 */
+	public static function method_label( string $method ): string {
+		return [
+			'CreditCard'     => __( 'Credit card', 'moksa-for-woocommerce' ),
+			'VirtualAccount' => __( 'Virtual account (ATM)', 'moksa-for-woocommerce' ),
+			'ApplePay'       => __( 'Apple Pay', 'moksa-for-woocommerce' ),
+			'LinePay'        => __( 'LINE Pay', 'moksa-for-woocommerce' ),
+			'JKOPay'         => __( 'JKOPAY', 'moksa-for-woocommerce' ),
+			'ChaileaseBNPL'  => __( 'Zingala instalments', 'moksa-for-woocommerce' ),
+		][ $method ] ?? $method;
+	}
+
+	public static function status_label( string $status ): string {
+		return [
+			'CREATED'        => __( 'Awaiting payment', 'moksa-for-woocommerce' ),
+			'PROCESSING'     => __( 'Processing', 'moksa-for-woocommerce' ),
+			'SUCCEEDED'      => __( 'Paid', 'moksa-for-woocommerce' ),
+			'FAILED'         => __( 'Payment failed', 'moksa-for-woocommerce' ),
+			'EXPIRED'        => __( 'Expired', 'moksa-for-woocommerce' ),
+			'CANCELLED'      => __( 'Cancelled', 'moksa-for-woocommerce' ),
+			'PENDING_REFUND' => __( 'Refund in progress', 'moksa-for-woocommerce' ),
+			'REFUNDED'       => __( 'Refunded', 'moksa-for-woocommerce' ),
+		][ $status ] ?? $status;
+	}
+
 	protected static function log_source(): string {
 		return 'shopline-payments';
 	}

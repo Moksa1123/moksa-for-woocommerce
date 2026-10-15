@@ -63,7 +63,8 @@ class SettingsTab extends WC_Settings_Page {
 				array(
 					'title'   => __( 'Status after a failed payment', 'moksa-for-woocommerce' ),
 					'type'    => 'select',
-					'options' => wc_get_order_statuses(),
+					// 只給未付款的狀態可選；選到處理中、已完成，付款失敗的單會進出貨流程。
+					'options' => array_intersect_key( wc_get_order_statuses(), array_flip( \Moksafowo\Modules\Linepay\LinePay::FAIL_STATUSES ) ),
 					'desc'    => __( 'The order moves to this status when a LINE Pay payment fails.', 'moksa-for-woocommerce' ),
 					'default' => 'wc-failed',
 					'id'      => 'moksafowo_linepay_payment_fail_order_status',

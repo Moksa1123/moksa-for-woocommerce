@@ -31,10 +31,18 @@ final class Request {
 		return self::handle( $url, $resp );
 	}
 
+	/**
+	 * 對外 API 呼叫用的 User-Agent。藍新（ccore／core.newebpay.com）的 WAF 會把 WordPress 預設的
+	 * 「WordPress/x.y; 網址」擋成 403，直接用 wp_remote_* 的地方也要帶這個。
+	 */
+	public static function user_agent(): string {
+		return sprintf( 'Moksa/%s WordPress/%s', MOKSAFOWO_VERSION, get_bloginfo( 'version' ) );
+	}
+
 	private static function common_args( array $headers, string $content_type, int $timeout ): array {
 		$default_headers = [
 			'Accept'     => 'application/json',
-			'User-Agent' => sprintf( 'Moksa/%s WordPress/%s', MOKSAFOWO_VERSION, get_bloginfo( 'version' ) ),
+			'User-Agent' => self::user_agent(),
 		];
 		if ( 'json' === $content_type ) {
 			$default_headers['Content-Type'] = 'application/json; charset=utf-8';

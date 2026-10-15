@@ -44,8 +44,14 @@ final class OrderMetaBox {
 
 		ob_start();
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
-		echo '<tr><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( 'Transaction ID', 'moksa-for-woocommerce' ) . '</div></th><td style="word-break:break-all;">' . esc_html( (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) . '</td></tr>';
-		echo '<tr><th style="text-align:left;"><div>' . esc_html__( 'Transaction status', 'moksa-for-woocommerce' ) . '</div></th><td>' . esc_html( $status_label ) . '</td></tr>';
+		// 交易序號空的時候藏起那一列（#order-id 仍要留給 JS 讀），狀態空的時候說明還沒付款。
+		$txn = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
+		echo '<tr' . ( '' === $txn ? ' style="display:none;"' : '' ) . '><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( 'Transaction ID', 'moksa-for-woocommerce' ) . '</div></th><td style="word-break:break-all;">' . esc_html( $txn ) . '</td></tr>';
+		if ( '' !== $status_label ) {
+			echo '<tr><th style="text-align:left;"><div>' . esc_html__( 'Transaction status', 'moksa-for-woocommerce' ) . '</div></th><td>' . esc_html( $status_label ) . '</td></tr>';
+		} else {
+			echo '<tr><td colspan="2" style="color:#646970;">' . esc_html__( 'Not paid yet — waiting for the customer to finish paying with LINE Pay.', 'moksa-for-woocommerce' ) . '</td></tr>';
+		}
 
 		if ( Constants::PAYMENT_STATUS_AUTHED === $raw_status ) {
 			echo '<tr id="moksafowo-linepay-action"><th style="text-align:left;">' . esc_html__( 'Payment actions', 'moksa-for-woocommerce' ) . '</th><td><button class="button moksafowo-linepay-confirm-btn" data-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( 'Confirm capture', 'moksa-for-woocommerce' ) . '</button></td></tr>';
@@ -53,6 +59,7 @@ final class OrderMetaBox {
 
 		echo '</table>';
 
-		return (string) ob_get_clean();
+		// 退款紀錄跟其他金流卡片一樣接在後面。
+		return (string) ob_get_clean() . \Moksafowo\Modules\Shared\Admin\CardRenderers::render_refund_block( $order );
 	}
 }

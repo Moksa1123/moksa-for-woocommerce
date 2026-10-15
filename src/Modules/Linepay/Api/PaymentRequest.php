@@ -232,7 +232,13 @@ final class PaymentRequest {
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$check_info = sprintf( '[confirm][order_id:%s] Check payment status when confirm failed, return code:%s, return message:%s', $order->get_id(), $check_code, $check_msg );
 			LinePay::log( $check_info );
-			$order->add_order_note( $check_info );
+			$order->add_order_note(
+				\Moksafowo\Order\Note::build(
+					/* translators: %s: LINE Pay message */
+					sprintf( __( 'LINE Pay could not confirm the payment, so its status was checked: %s', 'moksa-for-woocommerce' ), (string) $check_msg ),
+					[ __( 'Status code', 'moksa-for-woocommerce' ) => $check_code ]
+				)
+			);
 
 			if ( StatusCode::COMPLETED === $check_code ) {
 				$url            = Url::request_url( Constants::REQUEST_TYPE_DETAILS, array( 'transaction_id' => $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) );
@@ -536,7 +542,22 @@ final class PaymentRequest {
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$check_info = sprintf( '[check][order_id:%s] %s, return code:%s, return message:%s', $order->get_id(), $context, $check_code, $check_msg );
 			LinePay::log( $check_info );
-			$order->add_order_note( $check_info );
+			$steps = [
+				'Check payment status after requested' => __( 'After the payment request', 'moksa-for-woocommerce' ),
+				'Check payment status before confirm'  => __( 'Before confirming the payment', 'moksa-for-woocommerce' ),
+				'Check payment status when confirmed'  => __( 'After confirming the payment', 'moksa-for-woocommerce' ),
+				'Check payment status after refunded'  => __( 'After the refund', 'moksa-for-woocommerce' ),
+			];
+			$order->add_order_note(
+				\Moksafowo\Order\Note::build(
+					/* translators: %s: LINE Pay message */
+					sprintf( __( 'LINE Pay payment status: %s', 'moksa-for-woocommerce' ), (string) $check_msg ),
+					[
+						__( 'Status code', 'moksa-for-woocommerce' ) => $check_code,
+						__( 'Checked', 'moksa-for-woocommerce' )     => $steps[ $context ] ?? $context,
+					]
+				)
+			);
 		}
 	}
 

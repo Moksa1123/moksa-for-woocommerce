@@ -34,6 +34,8 @@ final class BlockField {
 		// 渲染成獨立一行「鄉鎮市區：信義區」造成重複。訂單建立後清掉額外欄位儲存值
 		// （city 保留），WC 顯示時跳過空值 → 消除重複行。客戶儲存地址不受影響。
 		add_action( 'woocommerce_store_api_checkout_order_processed', [ __CLASS__, 'strip_district_additional_meta' ] );
+		// 清值之前的舊訂單：訂單頁地址區只跳過自己的鄉鎮區欄位，別的外掛登記的地址欄位照常顯示。
+		add_filter( 'woocommerce_filter_fields_for_order_confirmation', [ __CLASS__, 'hide_district_in_order_address' ], 10, 4 );
 
 		// Lazy register — 只在 Store API request 或 frontend cart/checkout/edit-address 頁攤平 370 鄉鎮。
 		add_action( 'rest_api_init', [ __CLASS__, 'maybe_register_field' ] );
@@ -122,6 +124,19 @@ final class BlockField {
 		}
 	}
 
+
+	/**
+	 * @param bool                $show    是否顯示。
+	 * @param array<string,mixed> $field   欄位定義。
+	 * @param array<string,mixed> $fields  所有欄位。
+	 * @param array<string,mixed> $context 呼叫情境。
+	 */
+	public static function hide_district_in_order_address( $show, $field, $fields, $context ): bool {
+		if ( self::FIELD_ID === ( $field['id'] ?? '' ) && 'CheckoutFieldsFrontend::render_order_address_fields' === ( $context['caller'] ?? '' ) ) {
+			return false;
+		}
+		return (bool) $show;
+	}
 
 	public static function strip_district_additional_meta( \WC_Order $order ): void {
 		$changed = false;

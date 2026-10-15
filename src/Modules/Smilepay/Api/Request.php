@@ -79,14 +79,16 @@ final class Request {
 	}
 
 	public static function build_mtmk_url( array $args ): string {
-		$query = array_merge(
-			[
-				'Dcvc'       => Helper::dcvc(),
-				'Rvg2c'      => Helper::rvg2c(),
-				'Verify_key' => Helper::verify_key(),
-			],
-			$args
-		);
+		$base = [
+			'Dcvc'  => Helper::dcvc(),
+			'Rvg2c' => Helper::rvg2c(),
+		];
+		// 這是顧客瀏覽器看得到的轉址網址。速買配客服回覆 mtmk 目前不需要 Verify_key（RY Tools 也不帶），
+		// 不放進網址；日後速買配要求時用 filter 打開。
+		if ( apply_filters( 'moksafowo_smilepay_mtmk_send_verify_key', false ) ) {
+			$base['Verify_key'] = Helper::verify_key();
+		}
+		$query = array_merge( $base, $args );
 
 		Helper::log(
 			'mtmk redirect',

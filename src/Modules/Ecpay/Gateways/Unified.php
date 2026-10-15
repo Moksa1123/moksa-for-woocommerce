@@ -30,4 +30,14 @@ final class Unified extends AbstractEcpayGateway {
 	protected function supports_credit_action(): bool {
 		return true;
 	}
+
+	/**
+	 * 合併模式也套用 ATM 繳費期限。超商代碼與條碼共用 StoreExpireDate，
+	 * 單位卻不同（代碼是分鐘、條碼是天），ALL 模式下無法同時正確，不帶，交給綠界預設。
+	 */
+	protected function extra_aio_params( \WC_Order $order ): array {
+		return [
+			'ExpireDate' => max( 1, min( 60, (int) get_option( 'moksafowo_ecpay_atm_expire_days', 3 ) ) ),
+		];
+	}
 }

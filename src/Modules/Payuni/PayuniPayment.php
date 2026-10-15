@@ -245,7 +245,7 @@ class PayuniPayment {
 			}
 		} catch ( \Exception $e ) {
 
-			$order->add_order_note( __( 'The PAYUNi order lookup failed:', 'moksa-for-woocommerce' ) . $e->getMessage() );
+			$order->add_order_note( sprintf( /* translators: %s: error message */ __( 'The PAYUNi order lookup failed: %s', 'moksa-for-woocommerce' ), $e->getMessage() ) );
 			$return = array(
 				'success' => false,
 				'message' => $e->getMessage(),
@@ -407,7 +407,7 @@ class PayuniPayment {
 		}
 		$msg    = is_string( $message ) ? $message : (string) wp_json_encode( $message );
 		$method = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
-		\Moksafowo\Logging\Logger::{$method}( 'moksafowo-payuni-payment', $msg );
+		\Moksafowo\Logging\Logger::{$method}( 'payuni-payment', $msg );
 	}
 
 

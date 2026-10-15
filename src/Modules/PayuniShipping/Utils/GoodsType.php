@@ -13,11 +13,11 @@ class GoodsType {
 	public static function get_name( $goods_type_id ) {
 		switch ( $goods_type_id ) {
 			case self::NORMAL:
-				return '常溫';
+				return __( 'Ambient', 'moksa-for-woocommerce' );
 			case self::FROZEN:
-				return '冷凍';
+				return __( 'Frozen', 'moksa-for-woocommerce' );
 			case self::REFRIGERATED:
-				return '冷藏';
+				return __( 'Chilled', 'moksa-for-woocommerce' );
 			default:
 				return (string) $goods_type_id; // 舊版存中文名稱時原樣回傳
 		}

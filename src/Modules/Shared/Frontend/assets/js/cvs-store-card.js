@@ -88,7 +88,42 @@
 		f.submit();
 	}
 
+	/**
+	 * 目前選的運送方式 ID（含 instance，例如 foo:3）；找不到回空字串。
+	 * 只有一種運送方式時 WC 不印 radio：傳統結帳是 hidden input，區塊結帳要從 store 讀。
+	 */
+	function chosenMethod() {
+		const radios = document.querySelectorAll( '.wc-block-components-shipping-rates-control input[type="radio"]:checked, input[type="radio"][name^="radio-control-"]:checked' );
+		for ( let i = 0; i < radios.length; i++ ) {
+			// 切到「取貨」分頁時運費選項被藏起來，但 radio 仍是 :checked，要排除看不見的。
+			if ( radios[ i ].offsetParent !== null ) {
+				return String( radios[ i ].value || '' );
+			}
+		}
+		const classic = document.querySelector( 'input[name^="shipping_method"]:checked' );
+		if ( classic ) {
+			return String( classic.value || '' );
+		}
+		const single = document.querySelector( 'input[type="hidden"][name^="shipping_method"]' );
+		if ( single ) {
+			return String( single.value || '' );
+		}
+		try {
+			const packages = window.wp && window.wp.data ? window.wp.data.select( 'wc/store/cart' ).getShippingRates() : [];
+			for ( let p = 0; p < packages.length; p++ ) {
+				const rates = packages[ p ].shipping_rates || [];
+				for ( let r = 0; r < rates.length; r++ ) {
+					if ( rates[ r ].selected ) {
+						return String( rates[ r ].rate_id || '' );
+					}
+				}
+			}
+		} catch ( e ) {}
+		return '';
+	}
+
 	window.moksafowoCvsStore = {
+		chosenMethod: chosenMethod,
 		escapeHtml: escapeHtml,
 		stepContainer: stepContainer,
 		ensureHost: ensureHost,

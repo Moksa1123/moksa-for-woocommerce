@@ -11,6 +11,18 @@ abstract class AbstractStatusMapper {
 
 	abstract protected function code_map(): array;
 
+	/**
+	 * 這次請求裡 mapper 已經替哪些訂單寫過貨態備註（呼叫端據此決定要不要自己補一則）。
+	 *
+	 * @var array<int, bool>
+	 */
+	private static array $noted = [];
+
+	/** mapper 剛才有沒有替這張訂單寫貨態備註；有的話呼叫端不要再寫，一次轉換只留一則。 */
+	public static function wrote_note( \WC_Order $order ): bool {
+		return isset( self::$noted[ $order->get_id() ] );
+	}
+
 	/** 出貨進度的先後；不在表內的（異常、未取、關轉）一律照通知處理。 */
 	private const PROGRESS = [
 		'moksa-shipped'     => 1,
@@ -51,8 +63,7 @@ abstract class AbstractStatusMapper {
 			}
 			$slug = $min;
 		}
-		$current = $order->get_status();
-		if ( isset( self::PROGRESS[ $current ] ) && self::PROGRESS[ $current ] > self::PROGRESS[ $slug ] ) {
+		if ( \Moksafowo\Modules\Shipping\Statuses\StatusGuard::is_regression( $order->get_status(), $slug ) ) {
 			return null;
 		}
 		return $slug;
@@ -60,6 +71,7 @@ abstract class AbstractStatusMapper {
 
 	public function handle_status_received( \WC_Order $order, string $code, string $desc = '' ): void {
 		$provider = $this->provider_slug();
+		unset( self::$noted[ $order->get_id() ] );
 
 		do_action( "moksafowo_shipping_status_received_{$provider}_{$code}", $order, $desc );
 		do_action( 'moksafowo_shipping_status_received', $order, $code, $desc, $provider );
@@ -78,15 +90,20 @@ abstract class AbstractStatusMapper {
 			'payuni' => __( 'PAYUNi', 'moksa-for-woocommerce' ),
 		];
 		$provider_label     = $provider_label_map[ $provider ] ?? strtoupper( $provider );
-		$note               = sprintf(
-			/* translators: 1: provider label, 2: description, 3: code */
-			__( '%1$s shipping status: %2$s (status code %3$s)', 'moksa-for-woocommerce' ),
-			$provider_label,
-			$desc,
-			$code
+		// 補查與手動查詢拿不到說明文字時，用目標狀態的名稱，不要印出空白。
+		$note = \Moksafowo\Order\Note::build(
+			/* translators: %s: provider label */
+			sprintf( __( '%s shipping status update', 'moksa-for-woocommerce' ), $provider_label ),
+			[
+				__( 'Shipping status', 'moksa-for-woocommerce' ) => '' !== $desc ? $desc : wc_get_order_status_name( $slug ),
+				__( 'Status code', 'moksa-for-woocommerce' )     => $code,
+			]
 		);
+		self::$noted[ $order->get_id() ] = true;
 		// 目標狀態被商家關掉時只記備註；硬改的話 WC 會把訂單改成「等待付款中」。
-		if ( ! \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $slug ) ) {
+		// 已退款、已取消、失敗的訂單只能人工改，物流通知也只記備註。
+		if ( ! \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $slug )
+			|| \Moksafowo\Modules\Shipping\Statuses\StatusGuard::is_terminal( $order->get_status() ) ) {
 			$order->add_order_note( $note );
 			return;
 		}

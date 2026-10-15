@@ -16,6 +16,12 @@ final class Helper extends AbstractCredentialHelper {
 		return 'moksafowo_paynow_invoice';
 	}
 
+	// 跟設定頁的預設一致（沒存過設定＝正式模式）。基底預設是測試模式，光貿會因此
+	// 套用內建的公開測試帳號，把真實訂單的發票開到測試帳號去。
+	public static function is_sandbox(): bool {
+		return 'yes' === get_option( 'moksafowo_paynow_invoice_sandbox_enabled', 'no' );
+	}
+
 	protected static function log_source(): string {
 		return 'paynow-invoice';
 	}

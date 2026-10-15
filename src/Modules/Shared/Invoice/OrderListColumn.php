@@ -70,6 +70,7 @@ final class OrderListColumn {
 					'action'  => self::AJAX_ACTION,
 					'nonce'   => wp_create_nonce( self::AJAX_ACTION ),
 					'issuing' => __( 'Issuing…', 'moksa-for-woocommerce' ),
+					'network' => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
 				]
 			) . ';' . self::inline_js()
 		);
@@ -92,7 +93,7 @@ document.addEventListener('click',function(e){
 		var m=cell.querySelector('.moksafowo-invoice-list-error')||document.createElement('small');
 		m.className='moksafowo-invoice-list-error';m.style.display='block';m.style.color='#b32d2e';
 		m.textContent=d.message||'';cell.appendChild(m);
-	}).catch(function(){b.disabled=false;b.textContent=label;});
+	}).catch(function(){b.disabled=false;b.textContent=label;var m=cell.querySelector('.moksafowo-invoice-list-error')||document.createElement('small');m.className='moksafowo-invoice-list-error';m.style.display='block';m.style.color='#b32d2e';m.textContent=c.network;cell.appendChild(m);});
 });
 JS;
 	}
@@ -107,9 +108,16 @@ JS;
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
+		// 三種擋下的原因分開說，商家才知道要做什麼。
 		$provider = self::manual_issuer();
-		if ( '' === $provider || '' !== InvoiceNumber::of( $order )['number'] || ! $order->is_paid() ) {
-			wp_send_json_error( [ 'message' => __( 'Issuing failed', 'moksa-for-woocommerce' ) ] );
+		if ( '' === $provider ) {
+			wp_send_json_error( [ 'message' => __( 'No e-invoice service that supports manual issuing is enabled.', 'moksa-for-woocommerce' ) ] );
+		}
+		if ( '' !== InvoiceNumber::of( $order )['number'] ) {
+			wp_send_json_error( [ 'message' => __( 'This order already has an invoice.', 'moksa-for-woocommerce' ) ] );
+		}
+		if ( ! $order->is_paid() ) {
+			wp_send_json_error( [ 'message' => __( 'This order has not been paid yet.', 'moksa-for-woocommerce' ) ] );
 		}
 		$result = (array) call_user_func( self::$issuers[ $provider ]['issue'], $order );
 		$fresh  = wc_get_order( $order->get_id() );
@@ -151,6 +159,11 @@ JS;
 			'voided' => false,
 		];
 		if ( '' === $inv['number'] ) {
+			// 0 元／負數訂單不開票，不給開立按鈕。
+			if ( $order instanceof \WC_Order && (float) $order->get_total() <= 0 ) {
+				echo '<small>' . esc_html__( 'Not required (zero total)', 'moksa-for-woocommerce' ) . '</small>';
+				return;
+			}
 			if ( $order instanceof \WC_Order && $order->is_paid() && '' !== self::manual_issuer() ) {
 				printf(
 					'<button type="button" class="button button-small moksafowo-invoice-list-issue" data-order-id="%1$d">%2$s</button>',

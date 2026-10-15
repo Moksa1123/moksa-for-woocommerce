@@ -111,6 +111,24 @@ final class SettingsPage extends \WC_Settings_Page {
 			$version,
 			true
 		);
+		wp_localize_script(
+			'moksafowo-ecpay-sandbox-toggle',
+			'moksafowoSandboxToggle',
+			[
+				'labels'       => [
+					'ecpay'          => __( 'ECPay payments', 'moksa-for-woocommerce' ),
+					'ecpay_shipping' => __( 'ECPay shipping', 'moksa-for-woocommerce' ),
+					'ecpay_invoice'  => __( 'ECPay e-invoices', 'moksa-for-woocommerce' ),
+					'payuni'         => __( 'PAYUNi shipping', 'moksa-for-woocommerce' ),
+				],
+				/* translators: %s: module name */
+				'sandbox_head' => __( '%s: using the test environment details', 'moksa-for-woocommerce' ),
+				'sandbox_note' => __( 'The production fields below are not read. You can keep them filled in for when you go live.', 'moksa-for-woocommerce' ),
+				/* translators: %s: module name */
+				'live_head'    => __( '%s: using the production details', 'moksa-for-woocommerce' ),
+				'live_note'    => __( 'The test fields below are not read.', 'moksa-for-woocommerce' ),
+			]
+		);
 	}
 
 	private static function module_descriptors(): array {
@@ -356,6 +374,17 @@ final class SettingsPage extends \WC_Settings_Page {
 				'class'         => 'moksafowo-bulk-print-mode',
 			],
 			[
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_shipping_common_section',
+			],
+
+			// 貨態補查：不受上面批次列印總開關影響，自成一區才不會被一起變灰。
+			[
+				'title' => __( 'Shipping status follow-up', 'moksa-for-woocommerce' ),
+				'type'  => 'title',
+				'id'    => 'moksafowo_shipping_reconcile_section',
+			],
+			[
 				'title'    => __( 'Follow-up status check', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shipping_reconcile_enabled',
 				'type'     => 'checkbox',
@@ -378,7 +407,7 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 			[
 				'type' => 'sectionend',
-				'id'   => 'moksafowo_shipping_common_section',
+				'id'   => 'moksafowo_shipping_reconcile_section',
 			],
 
 			// 自訂訂單狀態（可選擇性停用避免 status dropdown 過長）

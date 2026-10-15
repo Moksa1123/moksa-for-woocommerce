@@ -53,6 +53,9 @@ final class InvoiceCheckoutFields {
 
 		// 結帳頁互動 JS — 依發票類型 / 載具類型 hide/show。
 		CheckoutAssets::register();
+
+		// 顧客訂單頁與信件的發票資訊。
+		CustomerInvoiceInfo::boot( self::carrier_labels() );
 	}
 
 	/**

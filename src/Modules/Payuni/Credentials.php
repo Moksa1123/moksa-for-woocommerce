@@ -10,10 +10,6 @@ defined( 'ABSPATH' ) || exit;
 final class Credentials {
 
 	public static function test_mode_enabled(): bool {
-		$new = get_option( 'moksafowo_payuni_payment_testmode_enabled' );
-		if ( false !== $new ) {
-			return (bool) wc_string_to_bool( (string) $new );
-		}
 		return (bool) wc_string_to_bool( (string) get_option( 'moksafowo_payuni_payment_testmode_enabled', 'no' ) );
 	}
 

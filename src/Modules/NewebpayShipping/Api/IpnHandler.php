@@ -33,7 +33,7 @@ final class IpnHandler {
 		}
 
 		if ( ! Helper::verify_trade_sha( $trade_info, $trade_sha ) ) {
-			Helper::log( 'TradeSha mismatch' );
+			Helper::warn( 'TradeSha mismatch' );
 			status_header( 400 );
 			exit( '0|BadHash' );
 		}
@@ -100,42 +100,28 @@ final class IpnHandler {
 			$order->update_meta_data( Keys::NEWEBPAY_SHIPPING_STATUS, $status_label );
 		}
 
-		$parts = [ __( 'NewebPay shipping status update', 'moksa-for-woocommerce' ) ];
-		if ( '' !== $lgs_no ) {
-			/* translators: %s: shipping tracking number */
-			$parts[] = sprintf( __( 'Tracking number %s', 'moksa-for-woocommerce' ), $lgs_no );
-		}
-		if ( null !== $mapped ) {
-			/* translators: %s: shipping status label */
-			$parts[] = sprintf( __( 'Status %s', 'moksa-for-woocommerce' ), $mapped['label'] );
-		} elseif ( '' !== $status ) {
-			/* translators: %s: shipping status code */
-			$parts[] = sprintf( __( 'Status %s', 'moksa-for-woocommerce' ), $status );
-		}
-		if ( '' !== $store_name ) {
-			/* translators: %s: convenience store name */
-			$parts[] = sprintf( __( 'Store %s', 'moksa-for-woocommerce' ), $store_name );
-		}
-		$order->add_order_note( implode( '，', $parts ) );
-
-		if ( null !== $mapped && '' !== $mapped['wc_status'] && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $mapped['wc_status'] ) ) {
-			$current = $order->get_status();
-			if ( $current !== $mapped['wc_status'] ) {
-				$order->update_status(
-					$mapped['wc_status'],
-					sprintf(
-					/* translators: 1: from, 2: to, 3: retld */
-						__( 'NewebPay shipping moved the order from %1$s to %2$s (Retld=%3$s)', 'moksa-for-woocommerce' ),
-						$current,
-						$mapped['wc_status'],
-						$retld
-					)
-				);
-				// 跟綠界／PAYUNi 一樣寄物流通知信（已出貨、已到店、門市關轉）。
-				if ( str_starts_with( $mapped['wc_status'], 'moksa-' ) ) {
-					do_action( 'moksafowo_shipping_status_' . $mapped['wc_status'] . '_notification', $order->get_id(), $order );
-				}
+		// 一則通知一則備註：狀態有變就寫在狀態變更裡，沒變才單獨加備註。
+		$note    = \Moksafowo\Order\Note::build(
+			__( 'NewebPay shipping status update', 'moksa-for-woocommerce' ),
+			[
+				__( 'Shipping status', 'moksa-for-woocommerce' ) => '' !== $status_label ? $status_label : $retld,
+				__( 'Tracking number', 'moksa-for-woocommerce' ) => $lgs_no,
+				__( 'Pickup store', 'moksa-for-woocommerce' )    => $store_name,
+				__( 'Status code', 'moksa-for-woocommerce' )     => $retld,
+			]
+		);
+		$target  = null !== $mapped ? (string) $mapped['wc_status'] : '';
+		$current = $order->get_status();
+		if ( '' !== $target
+			&& \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $target )
+			&& \Moksafowo\Modules\Shipping\Statuses\StatusGuard::may_transition( $current, $target ) ) {
+			$order->update_status( $target, $note );
+			// 跟綠界／PAYUNi 一樣寄物流通知信（已出貨、已到店、門市關轉）。
+			if ( str_starts_with( $target, 'moksa-' ) ) {
+				do_action( 'moksafowo_shipping_status_' . $target . '_notification', $order->get_id(), $order );
 			}
+		} else {
+			$order->add_order_note( $note );
 		}
 		$order->save();
 

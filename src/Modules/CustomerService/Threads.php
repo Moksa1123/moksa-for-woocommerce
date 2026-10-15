@@ -55,13 +55,23 @@ final class Threads {
 		);
 		$mid = (int) $wpdb->insert_id;
 
-		$data = array( 'updated_at' => $now );
+		// 最後一則是顧客寫的就待回覆；店員或 AI 回了就是已回覆（結案的對話顧客再寫也會重新打開）。
+		$data = array(
+			'updated_at' => $now,
+			'status'     => 'customer' === $sender ? 'open' : 'answered',
+		);
 		if ( 'customer' === $sender ) {
 			$data['unread_staff'] = 1;
 		}
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表更新。
 		$wpdb->update( Schema::threads_table(), $data, array( 'id' => $thread_id ) );
 		return $mid;
+	}
+
+	public static function set_status( int $thread_id, string $status ): void {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表更新。
+		$wpdb->update( Schema::threads_table(), array( 'status' => $status ), array( 'id' => $thread_id ) );
 	}
 
 	/**

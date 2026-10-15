@@ -56,7 +56,7 @@ class SettingsTab extends \WC_Settings_Page {
 				array(
 					'title'   => __( 'Debug log', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
-					'default' => 'yes',
+					'default' => 'no',
 					'desc'    => sprintf(
 						/* translators: %s = view logs link */
 						__( 'Turn this on when investigating a problem order. The log lives under WooCommerce → Status → Logs. %s', 'moksa-for-woocommerce' ),
@@ -124,7 +124,7 @@ class SettingsTab extends \WC_Settings_Page {
 						'moksafowo_payuni_jkopay'     => __( 'JKOPAY', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_credit_red' => __( 'Credit card reward points', 'moksa-for-woocommerce' ),
 					),
-					'desc'    => __( 'Only the ticked payment methods appear at checkout. This has no effect in combined display mode.', 'moksa-for-woocommerce' ),
+					'desc'    => __( 'Only the ticked payment methods are offered. When they are listed separately, each one also has to be enabled under WooCommerce → Settings → Payments. In combined display mode this list decides which methods the PAYUNi payment page offers; leave it empty to let the PAYUNi dashboard decide.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_enabled_methods',
 				),
 				array(
@@ -162,7 +162,8 @@ class SettingsTab extends \WC_Settings_Page {
 				array(
 					'title'   => __( 'Enable test mode', 'moksa-for-woocommerce' ),
 					'type'    => 'checkbox',
-					'default' => 'yes',
+					// 與 Credentials::test_mode_enabled() 的讀取預設一致：沒存過設定的站照舊走正式環境。
+					'default' => 'no',
 					'desc'    => __( 'For use before going live. While this is ticked every transaction runs against the test environment and no money changes hands. Untick it once you go live.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_payment_testmode_enabled',
 				),

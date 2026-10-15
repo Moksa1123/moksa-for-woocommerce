@@ -11,6 +11,10 @@ defined( 'ABSPATH' ) || exit;
 
 abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 
+	protected function helper_has_credentials(): bool {
+		return \Moksafowo\Modules\Newebpay\Api\Helper::has_credentials();
+	}
+
 	protected function gateway_supports(): array {
 		return [ 'products', 'refunds' ];
 	}
@@ -64,12 +68,12 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 	private static function do_card_refund( \WC_Order $order, string $mtn, int $amt, string $reason ) {
 		// 用 B02 query 看 CloseStatus（信用卡：0=未請款 1=等待提送請款 2=請款處理中 3=請款完成）。
 		// 未請款只能整筆取消授權（金額需與授權金額相同）；請款完成才能退款（同藍新官方外掛）。
-		$query = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::query( $mtn, (int) ceil( (float) $order->get_total() ) );
+		$query = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::query( $mtn, \Moksafowo\Modules\Newebpay\Api\Helper::paid_amount( $order ) );
 		if ( ! $query['ok'] ) {
 			return new \WP_Error( 'moksafowo_newebpay_query_fail', __( 'Could not confirm the transaction status with NewebPay. Please try the refund again later.', 'moksa-for-woocommerce' ) );
 		}
 		$close_status       = (string) ( $query['data']['CloseStatus'] ?? '' );
-		$auth_amt           = (int) ( $query['data']['Amt'] ?? ceil( (float) $order->get_total() ) );
+		$auth_amt           = (int) ( $query['data']['Amt'] ?? \Moksafowo\Modules\Newebpay\Api\Helper::paid_amount( $order ) );
 		$is_authorized_only = '0' === $close_status;
 		if ( $is_authorized_only && $amt !== $auth_amt ) {
 			return new \WP_Error( 'moksafowo_newebpay_partial_before_capture', __( 'This NewebPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
@@ -223,7 +227,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		}
 
 		$mtn = Helper::generate_merchant_order_no( (int) $order_id );
-		$order->update_meta_data( Keys::NEWEBPAY_MERCHANT_ORDER_NO, $mtn );
+		Helper::remember_mtn( $order, $mtn );
 		$order->save();
 
 		return [
@@ -241,7 +245,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		$mtn = (string) $order->get_meta( Keys::NEWEBPAY_MERCHANT_ORDER_NO );
 		if ( '' === $mtn ) {
 			$mtn = Helper::generate_merchant_order_no( $order_id );
-			$order->update_meta_data( Keys::NEWEBPAY_MERCHANT_ORDER_NO, $mtn );
+			Helper::remember_mtn( $order, $mtn );
 			$order->save();
 		}
 

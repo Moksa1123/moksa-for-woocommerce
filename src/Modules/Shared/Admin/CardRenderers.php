@@ -57,6 +57,14 @@ final class CardRenderers {
 			$html = self::render_tappay( $order );
 		} elseif ( str_starts_with( $method, 'moksafowo_shopline' ) ) {
 			$html = self::render_shopline( $order );
+		} elseif ( str_starts_with( $method, 'moksafowo_paynow_' ) ) {
+			$html = self::render_paynow( $order );
+		} elseif ( str_starts_with( $method, 'moksafowo_smilepay_' ) ) {
+			$html = self::render_smilepay( $order );
+		}
+		// 待繳費的 ATM 帳號、超商代碼、條碼與期限：跟顧客看到的是同一份資料。
+		if ( '' !== $html ) {
+			$html .= self::pending_payment_rows( $order );
 		}
 
 		if ( '' !== $html ) {
@@ -131,7 +139,7 @@ final class CardRenderers {
 			echo '<p><strong>' . esc_html__( 'Authorization code:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $auth_code ) . '</p>';
 		}
 		if ( '' !== $inst && '0' !== $inst ) {
-			echo '<p><strong>' . esc_html__( 'Installments:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $inst ) . esc_html__( ' payments', 'moksa-for-woocommerce' ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Installments:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( sprintf( /* translators: %d: number of instalment payments */ _n( '%d payment', '%d payments', (int) $inst, 'moksa-for-woocommerce' ), (int) $inst ) ) . '</p>';
 		}
 		if ( '' !== $paid_at ) {
 			echo '<p><strong>' . esc_html__( 'Paid at:', 'moksa-for-woocommerce' ) . '</strong>' . esc_html( $paid_at ) . '</p>';
@@ -205,7 +213,8 @@ final class CardRenderers {
 			}
 		}
 
-		return (string) ob_get_clean() . self::render_refund_block( $order );
+		// 退款紀錄由 add_payment_card() 統一接在每張卡片後面，這裡不再加，否則藍新會出現兩份。
+		return (string) ob_get_clean();
 	}
 
 	private static function newebpay_pay_type_label( string $type ): string {
@@ -412,22 +421,110 @@ final class CardRenderers {
 		return (string) ob_get_clean();
 	}
 
+	private static function pending_payment_rows( \WC_Order $order ): string {
+		if ( $order->is_paid() ) {
+			return '';
+		}
+		$lines = [];
+		foreach ( \Moksafowo\Modules\Shared\Frontend\PaymentInfoBox::rows( $order ) as $row ) {
+			$lines[ (string) ( $row['label'] ?? '' ) . '：' ] = (string) ( $row['value'] ?? '' );
+		}
+		if ( empty( $lines ) ) {
+			return '';
+		}
+		ob_start();
+		foreach ( $lines as $label => $value ) {
+			if ( '' === $value ) {
+				continue;
+			}
+			echo '<p><strong>' . esc_html( (string) $label ) . '</strong>' . esc_html( $value ) . '</p>';
+		}
+		return (string) ob_get_clean();
+	}
+
+	private static function render_paynow( \WC_Order $order ): string {
+		$title   = $order->get_payment_method_title() ?: 'PayNow';
+		$buysafe = (string) $order->get_meta( Keys::PAYNOW_BUYSAFE_NO );
+		if ( '' === $buysafe ) {
+			return self::lines_html( $title, [] )
+				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
+		}
+		$type = (string) $order->get_meta( Keys::PAYNOW_PAY_TYPE );
+		$inst = (string) $order->get_meta( Keys::PAYNOW_INSTALLMENT );
+		return self::lines_html(
+			$title,
+			[
+				__( 'PayNow transaction ID:', 'moksa-for-woocommerce' ) => $buysafe,
+				__( 'Payment type:', 'moksa-for-woocommerce' ) => '' !== $type ? \Moksafowo\Modules\Paynow\PaymentTypeCatalog::label( $type ) : '',
+				__( 'Last four card digits:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PAYNOW_CARD_LAST4 ),
+				__( 'Instalments:', 'moksa-for-woocommerce' ) => '' !== $inst && '0' !== $inst ? $inst : '',
+				__( 'Paid at:', 'moksa-for-woocommerce' ) => $order->is_paid() ? (string) $order->get_meta( Keys::PAYNOW_NEW_DATE ) : '',
+			]
+		);
+	}
+
+	private static function render_smilepay( \WC_Order $order ): string {
+		$title = $order->get_payment_method_title() ?: 'SmilePay';
+		$no    = (string) $order->get_meta( Keys::SMILEPAY_PAY_SMILEPAY_NO );
+		if ( '' === $no ) {
+			return self::lines_html( $title, [] )
+				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
+		}
+		$amount = (string) $order->get_meta( Keys::SMILEPAY_PAY_AMOUNT );
+		$inst   = (string) $order->get_meta( Keys::SMILEPAY_PAY_INSTALLMENT );
+		return self::lines_html(
+			$title,
+			[
+				__( 'SmilePay tracking number:', 'moksa-for-woocommerce' ) => $no,
+				__( 'Amount:', 'moksa-for-woocommerce' )  => '' !== $amount && $order->is_paid() ? 'NT$' . $amount : '',
+				__( 'Instalments:', 'moksa-for-woocommerce' ) => '' !== $inst && '0' !== $inst ? $inst : '',
+				__( 'Paid at:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SMILEPAY_PAY_PAID_AT ),
+			]
+		);
+	}
+
+	private static function pchomepay_pay_type_label( string $type ): string {
+		$map = [
+			'CARD'  => __( 'Credit card', 'moksa-for-woocommerce' ),
+			'PI'    => __( 'PChomePay wallet', 'moksa-for-woocommerce' ),
+			'ATM'   => __( 'ATM virtual account', 'moksa-for-woocommerce' ),
+			'IPL7'  => __( '7-ELEVEN pay on pickup', 'moksa-for-woocommerce' ),
+			'IPLFM' => __( 'FamilyMart pay on pickup', 'moksa-for-woocommerce' ),
+			'IPLHL' => __( 'Hi-Life pay on pickup', 'moksa-for-woocommerce' ),
+			'BCODE' => __( 'Convenience store code', 'moksa-for-woocommerce' ),
+		];
+		// 下單時存的是 gateway 允許的清單（逗號分隔），付款後才換成實際那一種。
+		return implode( '、', array_map( static fn( string $t ): string => $map[ trim( $t ) ] ?? trim( $t ), explode( ',', $type ) ) );
+	}
+
 	private static function render_pchomepay( \WC_Order $order ): string {
 		$oid = (string) $order->get_meta( Keys::PCHOMEPAY_ORDER_ID );
 		if ( '' === $oid ) {
 			return self::lines_html( $order->get_payment_method_title() ?: 'PChomePay', [] )
 				. '<p style="color:#646970;font-size:12px;">' . esc_html__( 'Not paid yet — waiting for the customer to complete payment.', 'moksa-for-woocommerce' ) . '</p>';
 		}
+		$status       = (string) $order->get_meta( Keys::PCHOMEPAY_STATUS );
+		$status_label = [
+			'S' => __( 'Payment completed', 'moksa-for-woocommerce' ),
+			'W' => __( 'Awaiting payment', 'moksa-for-woocommerce' ),
+			'F' => __( 'Payment failed', 'moksa-for-woocommerce' ),
+		][ $status ] ?? $status;
+		$amount       = (string) $order->get_meta( Keys::PCHOMEPAY_TRADE_AMOUNT );
+		$pay_date     = (string) $order->get_meta( Keys::PCHOMEPAY_PAY_DATE );
+		$parsed       = '' !== $pay_date ? \DateTimeImmutable::createFromFormat( 'YmdHis', $pay_date, new \DateTimeZone( 'Asia/Taipei' ) ) : false;
+		if ( $parsed ) {
+			$pay_date = $parsed->format( 'Y-m-d H:i:s' );
+		}
 		return self::lines_html(
 			$order->get_payment_method_title() ?: 'PChomePay',
 			[
 				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => $oid,
-				__( 'Payment type:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_PAY_TYPE ),
-				__( 'Status:', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::PCHOMEPAY_STATUS ),
-				__( 'Amount:', 'moksa-for-woocommerce' )  => (string) $order->get_meta( Keys::PCHOMEPAY_TRADE_AMOUNT ),
-				__( 'Paid at:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_PAY_DATE ),
+				__( 'Payment type:', 'moksa-for-woocommerce' ) => self::pchomepay_pay_type_label( (string) $order->get_meta( Keys::PCHOMEPAY_PAY_TYPE ) ),
+				__( 'Status:', 'moksa-for-woocommerce' )  => $status_label,
+				__( 'Amount:', 'moksa-for-woocommerce' )  => '' !== $amount ? 'NT$' . $amount : '',
+				__( 'Paid at:', 'moksa-for-woocommerce' ) => $pay_date,
 				__( 'Last four card digits:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_CARD_LAST4 ),
-				__( 'Virtual account:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::PCHOMEPAY_VIRTUAL_ACCOUNT ),
+				__( 'Virtual account:', 'moksa-for-woocommerce' ) => $order->is_paid() ? (string) $order->get_meta( Keys::PCHOMEPAY_VIRTUAL_ACCOUNT ) : '',
 			]
 		);
 	}
@@ -466,14 +563,13 @@ final class CardRenderers {
 			$order->get_payment_method_title() ?: 'Shopline Payments',
 			[
 				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID ),
-				__( 'Session ID:', 'moksa-for-woocommerce' ) => $sid,
-				__( 'Status:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_STATUS ),
-				__( 'Payment type:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ),
+				__( 'Status:', 'moksa-for-woocommerce' ) => \Moksafowo\Modules\ShoplinePayments\Api\Helper::status_label( (string) $order->get_meta( Keys::SLP_STATUS ) ),
+				__( 'Payment type:', 'moksa-for-woocommerce' ) => \Moksafowo\Modules\ShoplinePayments\Api\Helper::method_label( (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ),
 			]
 		);
 	}
 
-	private static function render_refund_block( \WC_Order $order ): string {
+	public static function render_refund_block( \WC_Order $order ): string {
 		$refunds = $order->get_refunds();
 		if ( empty( $refunds ) ) {
 			return '';

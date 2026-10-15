@@ -21,12 +21,13 @@ final class Atm extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( 'Transfer at an ATM within 3 days of receiving the virtual account number.', 'moksa-for-woocommerce' );
+		return __( 'Transfer to the virtual account at an ATM before the payment deadline.', 'moksa-for-woocommerce' );
 	}
 
 	protected function extra_params( \WC_Order $order ): array {
 		$days = (int) get_option( 'moksafowo_newebpay_atm_expire_days', 3 );
 		$days = max( 1, min( 180, $days ) );
-		return [ 'ExpireDate' => gmdate( 'Ymd', time() + $days * DAY_IN_SECONDS ) ];
+		// 繳費期限是台灣日期；用 UTC 算，台灣凌晨 0～8 點下單會少一天。
+		return [ 'ExpireDate' => ( new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) ) )->modify( "+{$days} days" )->format( 'Ymd' ) ];
 	}
 }

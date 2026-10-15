@@ -13,8 +13,11 @@ defined( 'ABSPATH' ) || exit;
 final class AddressFormatter {
 
 	public static function raw_shipping_address( $raw_address, $order ) {
-		$is_payuni_cvs    = false;
-		$shipping_methods = $order->get_shipping_methods();
+		$raw_address['moksafowo_payuni_phone_line'] = '' === (string) $order->get_shipping_phone()
+			? (string) PayuniShipping::moksafowo_payuni_get_shipping_phone( $order )
+			: '';
+		$is_payuni_cvs                              = false;
+		$shipping_methods                           = $order->get_shipping_methods();
 
 		if ( ! empty( $shipping_methods ) ) {
 			foreach ( $shipping_methods as $shipping_method ) {
@@ -60,9 +63,9 @@ final class AddressFormatter {
 			$address_formats['PNHD']  = "{postcode}\n {state} {city}\n{address_1} {address_2}\n{company} {last_name} {first_name}\n";
 		} else {
 			$address_formats['PNCVS'] = "{payuni_storename} ({payuni_storeid})\n{payuni_storeaddress}\n{last_name} {first_name}\n"
-				. '<p class="woocommerce-customer-details--phone">{phone}</p>';
+				. '{payuni_phone_line}';
 			$address_formats['PNHD']  = "{postcode}\n {state} {city}\n{address_1} {address_2}\n{company} {last_name} {first_name}\n"
-				. '<p class="woocommerce-customer-details--phone">{phone}</p>';
+				. '{payuni_phone_line}';
 		}
 		return $address_formats;
 	}
@@ -82,6 +85,9 @@ final class AddressFormatter {
 		if ( isset( $args['phone'] ) ) {
 			$replacements['{phone}'] = $args['phone'];
 		}
+		// WC 自己會在運送地址下方印運送電話；只有運送電話是空的、改用帳單電話時才由這裡補一行。
+		$phone_line                          = (string) ( $args['moksafowo_payuni_phone_line'] ?? '' );
+		$replacements['{payuni_phone_line}'] = '' !== $phone_line ? '<p class="woocommerce-customer-details--phone">' . esc_html( $phone_line ) . '</p>' : '';
 		return $replacements;
 	}
 

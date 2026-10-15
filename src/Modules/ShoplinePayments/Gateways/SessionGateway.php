@@ -55,7 +55,7 @@ final class SessionGateway extends \WC_Payment_Gateway {
 	}
 
 	public function is_available(): bool {
-		if ( ! parent::is_available() ) {
+		if ( ! parent::is_available() || ! \Moksafowo\Modules\Shared\Gateways\TwdOnly::ok() ) {
 			return false;
 		}
 		return Helper::has_credentials();

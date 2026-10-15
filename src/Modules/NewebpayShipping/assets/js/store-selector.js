@@ -6,20 +6,8 @@
 	const HOST_ID = 'moksafowo-newebpay-shipping-store-host';
 
 	function chosenShippingMethod() {
-		// 切到「取貨」分頁時運費選項被藏起來，但 radio 仍是 :checked，要排除看不見的。
-		const blocks = document.querySelectorAll( 'input[type="radio"][name^="radio-control-"]:checked' );
-		for ( let i = 0; i < blocks.length; i++ ) {
-			const block = blocks[ i ];
-			if ( block.offsetParent !== null && /^moksafowo_newebpay_shipping_/.test( block.value || '' ) ) {
-				return ( block.value.split( ':' )[0] || '' );
-			}
-		}
-		const classic = document.querySelector( 'input[name^="shipping_method"]:checked' );
-		if ( classic ) {
-			const v = String( classic.value || '' );
-			if ( /^moksafowo_newebpay_shipping_/.test( v ) ) return v.split( ':' )[0];
-		}
-		return '';
+		const v = window.moksafowoCvsStore.chosenMethod();
+		return /^moksafowo_newebpay_shipping_/.test( v ) ? v.split( ':' )[0] : '';
 	}
 
 	function isNewebPayCvs( methodId ) {

@@ -38,15 +38,29 @@ final class CodAmountLimit {
 	 * @return array<string,\WC_Payment_Gateway>
 	 */
 	public static function filter( $gateways ) {
-		if ( ! is_array( $gateways ) || ! isset( $gateways['cod'] ) || ( is_admin() && ! wp_doing_ajax() ) || ! WC()->session || ! WC()->cart ) {
+		if ( ! is_array( $gateways ) || ! isset( $gateways['cod'] ) || ( is_admin() && ! wp_doing_ajax() ) ) {
 			return $gateways;
 		}
-		$chosen = (array) WC()->session->get( 'chosen_shipping_methods', [] );
-		$method = (string) ( $chosen[0] ?? '' );
+		// 付款頁（失敗後重付）用那張訂單的運送方式與金額，購物車是空的。
+		$pay_order = is_wc_endpoint_url( 'order-pay' ) ? wc_get_order( absint( get_query_var( 'order-pay' ) ) ) : null;
+		if ( $pay_order instanceof \WC_Order ) {
+			$method = '';
+			foreach ( $pay_order->get_shipping_methods() as $item ) {
+				$method = (string) $item->get_method_id();
+				break;
+			}
+			$total = (float) $pay_order->get_total();
+		} else {
+			if ( ! WC()->session || ! WC()->cart ) {
+				return $gateways;
+			}
+			$chosen = (array) WC()->session->get( 'chosen_shipping_methods', [] );
+			$method = (string) ( $chosen[0] ?? '' );
+			$total  = (float) WC()->cart->get_total( 'edit' );
+		}
 		if ( '' === $method ) {
 			return $gateways;
 		}
-		$total = (float) WC()->cart->get_total( 'edit' );
 		foreach ( self::limits() as $prefix => $range ) {
 			if ( str_starts_with( $method, (string) $prefix ) ) {
 				if ( $total < (float) $range[0] || $total > (float) $range[1] ) {

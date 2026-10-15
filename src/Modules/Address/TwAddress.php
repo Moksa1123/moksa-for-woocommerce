@@ -40,7 +40,7 @@ final class TwAddress {
 		if ( 'yes' === get_option( 'moksafowo_tw_address_name_swap', 'no' ) ) {
 			self::init_name_swap();
 		}
-		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
+		if ( self::hide_country_active() ) {
 			self::init_hide_country();
 		}
 
@@ -445,8 +445,17 @@ final class TwAddress {
 		return [ 'TW' => $tw ] + $countries;
 	}
 
+	/**
+	 * 國家欄是否真的隱藏：要台灣地址區塊開著才算。欄位排版（另一區）也靠這個判斷配對，
+	 * 兩邊不一致時國家欄明明還在，排版卻把它當成不存在而錯位。
+	 */
+	public static function hide_country_active(): bool {
+		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_ADDRESS )
+			&& 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' );
+	}
+
 	public static function add_body_classes( array $classes ): array {
-		if ( 'yes' === get_option( 'moksafowo_tw_address_hide_country', 'no' ) ) {
+		if ( self::hide_country_active() ) {
 			$classes[] = 'moksafowo-tw-hide-country';
 		}
 		if ( 'yes' === get_option( 'moksafowo_tw_address_name_swap', 'no' ) ) {

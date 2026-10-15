@@ -26,7 +26,9 @@ final class Server {
 	const PROTOCOL = '2025-06-18';
 
 	public static function enabled(): bool {
-		return 'yes' === get_option( 'moksafowo_ai_mcp_server_enabled', 'no' );
+		// AI 模組卡片是總開關：模組關掉後 MCP 的設定也看不到，端點不能還開著。
+		return 'yes' === get_option( 'moksafowo_ai_mcp_server_enabled', 'no' )
+			&& \Moksafowo\Plugin::instance()->modules()->is_enabled( 'ai_assistant' );
 	}
 
 	public static function endpoint_url(): string {
@@ -209,16 +211,21 @@ final class Server {
 	 * @return array<int, array<string,mixed>>
 	 */
 	private static function tools(): array {
-		$key    = 'moksafowo_mcp_tools_' . md5( MOKSAFOWO_VERSION . '|' . get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' ) );
-		$cached = get_transient( $key );
-		if ( is_array( $cached ) ) {
+		// 快取 key 帶上實際註冊的工具名單：模組開關會改變註冊了哪些工具，只看版本號會停在舊清單。
+		$abilities = self::abilities();
+		$key       = 'moksafowo_mcp_tools_' . md5( MOKSAFOWO_VERSION . '|' . get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' ) . '|' . implode( ',', array_keys( $abilities ) ) );
+		$cached    = get_transient( $key );
+		if ( is_array( $cached ) && ! empty( $cached ) ) {
 			return $cached;
 		}
 		$tools = array();
-		foreach ( self::abilities() as $ability ) {
+		foreach ( $abilities as $ability ) {
 			$tools[] = self::tool_schema( $ability );
 		}
-		set_transient( $key, $tools, DAY_IN_SECONDS );
+		// 空清單不快取，模組剛打開時不會卡一整天。
+		if ( ! empty( $tools ) ) {
+			set_transient( $key, $tools, DAY_IN_SECONDS );
+		}
 		return $tools;
 	}
 

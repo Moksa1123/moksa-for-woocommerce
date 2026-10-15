@@ -122,12 +122,15 @@
 			logistics_id: logisticsId,
 		} ).done( function ( resp ) {
 			if ( resp && resp.success && resp.data ) {
-				// 狀態有變就重載，讓訂單狀態與備註一起更新；沒變就只提示，不打斷操作。
+				// 狀態有變就直接重載，讓訂單狀態與備註一起更新。
 				if ( resp.data.status_changed ) {
 					location.reload();
 					return;
 				}
 				alert( cfg.i18n.query_ok + ( resp.data.message ? resp.data.message + ' (' + resp.data.code + ')' : resp.data.code ) );
+				// 卡片上那一包的狀態與更新時間已寫回，重載才看得到。
+				location.reload();
+				return;
 			} else {
 				alert( cfg.i18n.query_fail + ( ( resp && resp.data && resp.data.message ) || cfg.i18n.unknown_error ) );
 			}
@@ -142,7 +145,7 @@
 		// write form HTML 進預先 open 的 window，inline script auto-submit，只開一個 tab。
 		const w = window.open( '', '_blank' );
 		if ( ! w ) {
-			alert( '瀏覽器封鎖彈出視窗，請允許本站開啟新視窗。' );
+			alert( cfg.i18n.popup_blocked );
 			return;
 		}
 		let html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>printing…</title></head><body>';

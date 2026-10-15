@@ -92,11 +92,12 @@ final class Reconciler {
 					$code
 				);
 			}
-			$order->add_order_note( $note );
-			$order->save();
-
-			// 走跟 IPN 完全相同的對應與轉換路徑。
+			// 走跟 IPN 完全相同的對應與轉換路徑；狀態有變時由 mapper 寫唯一一則備註。
 			do_action( 'moksafowo_ecpay_shipping_status_received', $order, $code, (string) $result['msg'] );
+			if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
+				$order->add_order_note( $note );
+			}
+			$order->save();
 		}
 
 		return $queried;

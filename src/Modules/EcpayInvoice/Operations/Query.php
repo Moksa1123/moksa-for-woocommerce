@@ -54,10 +54,12 @@ final class Query {
 		}
 
 		$d = (array) ( $res['data'] ?? [] );
+		// 綠界每張發票都會回 IIS_Invalid_Status：1＝已作廢、0＝未作廢；IIS_Issue_Status 0＝已註銷。
+		$voided = '1' === (string) ( $d['IIS_Invalid_Status'] ?? '' ) || '0' === (string) ( $d['IIS_Issue_Status'] ?? '' );
 
 		return [
 			'ok'      => true,
-			'message' => (string) ( $d['IIS_Invalid_Status'] ?? '' ) !== ''
+			'message' => $voided
 				? __( 'This invoice has been voided at ECPay.', 'moksa-for-woocommerce' )
 				: __( 'This invoice is valid at ECPay.', 'moksa-for-woocommerce' ),
 			'data'    => $d,
@@ -67,7 +69,7 @@ final class Query {
 					__( 'Issued at', 'moksa-for-woocommerce' )      => (string) ( $d['IIS_Create_Date'] ?? '' ),
 					__( 'Invoice amount', 'moksa-for-woocommerce' ) => (string) ( $d['IIS_Sales_Amount'] ?? '' ),
 					__( 'Random code', 'moksa-for-woocommerce' )    => (string) ( $d['IIS_Random_Number'] ?? '' ),
-					__( 'Void status', 'moksa-for-woocommerce' )    => (string) ( $d['IIS_Invalid_Status'] ?? '' ),
+					__( 'Void status', 'moksa-for-woocommerce' )    => $voided ? __( 'Voided', 'moksa-for-woocommerce' ) : __( 'Not voided', 'moksa-for-woocommerce' ),
 				],
 				static fn( string $v ): bool => '' !== $v
 			),

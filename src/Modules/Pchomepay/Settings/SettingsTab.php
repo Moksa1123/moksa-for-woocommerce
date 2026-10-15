@@ -116,7 +116,7 @@ final class SettingsTab {
 					'moksafowo_pchomepay_cvsfamily' => __( 'FamilyMart pickup and pay', 'moksa-for-woocommerce' ),
 					'moksafowo_pchomepay_cvshilife' => __( 'Hi-Life pickup and pay', 'moksa-for-woocommerce' ),
 				],
-				'desc'    => __( 'Only the ticked payment methods appear at checkout.', 'moksa-for-woocommerce' ),
+				'desc'    => __( 'Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

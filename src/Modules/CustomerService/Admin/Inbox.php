@@ -55,8 +55,12 @@ final class Inbox {
 				admin_url( 'admin.php' )
 			);
 			$unread = ! empty( $t['unread_staff'] );
-			$open   = 'open' === (string) $t['status'];
-			$label  = $open ? __( 'Awaiting reply', 'moksa-for-woocommerce' ) : __( 'Closed', 'moksa-for-woocommerce' );
+			$status = (string) $t['status'];
+			$open   = 'open' === $status;
+			$label  = array(
+				'open'     => __( 'Awaiting reply', 'moksa-for-woocommerce' ),
+				'answered' => __( 'Replied', 'moksa-for-woocommerce' ),
+			)[ $status ] ?? __( 'Closed', 'moksa-for-woocommerce' );
 			echo '<div class="moksafowo-ai-trow">';
 			echo '<span class="moksafowo-ai-ord">' . esc_html( (string) $t['customer_ref'] ) . '</span>';
 			echo '<span class="moksafowo-ai-badge ' . ( $open ? 'open' : '' ) . '">' . esc_html( $label ) . '</span>';
@@ -85,6 +89,13 @@ final class Inbox {
 		);
 
 		echo '<div class="moksafowo-ai-inbox">';
+		$notice_key = 'moksafowo_cs_notice_' . get_current_user_id();
+		$notice     = (string) get_transient( $notice_key );
+		if ( '' !== $notice ) {
+			delete_transient( $notice_key );
+			$text = 'closed' === $notice ? __( 'The conversation was closed.', 'moksa-for-woocommerce' ) : __( 'Your reply was sent.', 'moksa-for-woocommerce' );
+			echo '<div class="notice notice-success inline"><p>' . esc_html( $text ) . '</p></div>';
+		}
 		echo '<a class="moksafowo-ai-back" href="' . esc_url( $back ) . '">&larr; ' . esc_html__( 'Back to the list', 'moksa-for-woocommerce' ) . '</a>';
 		echo '<div class="moksafowo-ai-thread">';
 
@@ -117,7 +128,16 @@ final class Inbox {
 		wp_nonce_field( 'moksafowo_cs_reply_' . $thread_id );
 		echo '<textarea name="body" rows="3" placeholder="' . esc_attr__( 'Write a reply…', 'moksa-for-woocommerce' ) . '" required></textarea>';
 		echo '<p><button type="submit" class="button button-primary">' . esc_html__( 'Send reply', 'moksa-for-woocommerce' ) . '</button></p>';
-		echo '</form></div>';
+		echo '</form>';
+		if ( 'closed' !== (string) $thread['status'] ) {
+			echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+			echo '<input type="hidden" name="action" value="moksafowo_cs_close">';
+			echo '<input type="hidden" name="thread" value="' . esc_attr( (string) $thread_id ) . '">';
+			wp_nonce_field( 'moksafowo_cs_close_' . $thread_id );
+			echo '<p><button type="submit" class="button">' . esc_html__( 'Close conversation', 'moksa-for-woocommerce' ) . '</button></p>';
+			echo '</form>';
+		}
+		echo '</div>';
 
 		echo '</div></div>';
 	}
@@ -131,6 +151,30 @@ final class Inbox {
 		$body = isset( $_POST['body'] ) ? trim( sanitize_textarea_field( wp_unslash( $_POST['body'] ) ) ) : '';
 		if ( $thread_id > 0 && '' !== $body ) {
 			Threads::add_message( $thread_id, 'staff', mb_substr( $body, 0, 5000 ) );
+			set_transient( 'moksafowo_cs_notice_' . get_current_user_id(), 'replied', MINUTE_IN_SECONDS );
+		}
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'   => self::PAGE,
+					'tab'    => 'inbox',
+					'thread' => $thread_id,
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	public static function handle_close(): void {
+		if ( ! current_user_can( self::CAP ) ) {
+			wp_die( esc_html__( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) );
+		}
+		$thread_id = isset( $_POST['thread'] ) ? absint( wp_unslash( $_POST['thread'] ) ) : 0;
+		check_admin_referer( 'moksafowo_cs_close_' . $thread_id );
+		if ( $thread_id > 0 ) {
+			Threads::set_status( $thread_id, 'closed' );
+			set_transient( 'moksafowo_cs_notice_' . get_current_user_id(), 'closed', MINUTE_IN_SECONDS );
 		}
 		wp_safe_redirect(
 			add_query_arg(

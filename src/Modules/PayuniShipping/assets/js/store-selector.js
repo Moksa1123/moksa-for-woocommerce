@@ -37,12 +37,12 @@
                     stored_store_data: null,
                     hide_billing_address_fields: false,
                     labels: {
-                        select_store: '選擇門市',
-                        change_store: '更換門市', 
-                        no_store_selected: '尚未選擇門市',
-                        open_map: '選擇門市',
-                        loading: '跳轉中...',
-                        error: '載入失敗，請稍後再試'
+                        select_store: 'Choose a store',
+                        change_store: 'Change store', 
+                        no_store_selected: 'No store chosen yet',
+                        open_map: 'Choose a store',
+                        loading: 'Redirecting…',
+                        error: 'Loading failed. Please try again later'
                     }
                 };
             }
@@ -227,10 +227,10 @@
                 // Check if PayUni 7-11 shipping is selected
                 if (shippingMethod && shippingMethod.indexOf(this.config.cvsMethodPrefix) !== -1) {
                     // Update label text for CVS shipping
-                    $labelSpan.text('不同的收件人資訊？');
+                    $labelSpan.text(( moksafowo_payuni_store_selector.labels.recipient_toggle || 'Different recipient?' ));
                 } else {
                     // Restore original label for other shipping methods
-                    const originalText = $labelSpan.data('original-text') || '運送到不同的地址？';
+                    const originalText = $labelSpan.data('original-text') || ( moksafowo_payuni_store_selector.labels.ship_to_different || 'Ship to a different address?' );
                     $labelSpan.text(originalText);
                 }
             }
@@ -444,7 +444,7 @@
             // Update UI
             $('.moksafowo-payuni-selected-store .store-name').text(storeData.name);
             $('.moksafowo-payuni-selected-store .store-address').text(storeData.address);
-            $('.moksafowo-payuni-selected-store .store-id').text('門市代號: ' + storeData.id);
+            $('.moksafowo-payuni-selected-store .store-id').text(( moksafowo_payuni_store_selector.labels.store_id || 'Store number: ' ) + storeData.id);
 
             // Show selected store, hide no-store message
             $('.moksafowo-payuni-no-store').hide();
@@ -485,14 +485,14 @@
             if (isCVS && isShipToDifferent) {
                 // Hide address fields except name and phone for CVS
                 this.hideAddressFields();
-                this.updateCheckboxLabel('不同的收件人資訊？');
+                this.updateCheckboxLabel(( moksafowo_payuni_store_selector.labels.recipient_toggle || 'Different recipient?' ));
             } else {
                 // Show all fields for regular shipping or when not shipping to different address
                 this.showAddressFields();
                 
                 // Only update checkbox label if CVS is selected
                 if (isCVS) {
-                    this.updateCheckboxLabel('不同的收件人資訊？');
+                    this.updateCheckboxLabel(( moksafowo_payuni_store_selector.labels.recipient_toggle || 'Different recipient?' ));
                 } else {
                     this.restoreCheckboxLabel();
                 }

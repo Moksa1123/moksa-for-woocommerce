@@ -59,13 +59,13 @@ final class SettingsTab {
 				'title' => __( 'Verify_key — verification key', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_shipping_verify_key',
 				'type'  => 'text',
-				'desc'  => __( 'Used to verify incoming shipping notifications so they cannot be forged.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'The merchant verification parameter issued by SmilePay. It is sent when shipments are created and looked up.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title' => __( 'SmseID — merchant number', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_smilepay_shipping_smseid',
 				'type'  => 'text',
-				'desc'  => __( 'Required by some shipping services.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'Not needed for the shipping services this plugin currently supports. You can leave it blank.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'type' => 'sectionend',

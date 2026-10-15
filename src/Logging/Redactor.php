@@ -62,6 +62,13 @@ final class Redactor {
 		'last5',
 		'last_four',
 		'bin_code',
+		'card4no',
+		'card6no',
+		'card_last',
+		'auth_code',
+		'authcode',
+		'payeraccount5code',
+		'consignee',
 		'bank_account',
 		'virtual_account',
 		'buyer_account',
@@ -75,6 +82,13 @@ final class Redactor {
 		'store_id',
 		'store_name',
 		'store_address',
+	];
+
+	/** 太短、用子字串比對會誤中其他欄位（zip、shipping 都含 ip）的鍵，整個鍵名相同才遮。 */
+	private const EXACT_PII_KEYS = [
+		'auth',
+		'ip',
+		'payerip',
 	];
 
 	public static function redact( array $context ): array {
@@ -92,12 +106,13 @@ final class Redactor {
 				continue;
 			}
 
-			if ( self::matches( $lower, self::PII_KEYS ) && is_string( $value ) ) {
+			if ( ( self::matches( $lower, self::PII_KEYS ) || in_array( $lower, self::EXACT_PII_KEYS, true ) ) && is_string( $value ) ) {
 				$out[ $key ] = self::mask( $value );
 				continue;
 			}
 
-			$out[ $key ] = $value;
+			// 欄位名稱沒問題，但值可能是整段 API 回應（例如 k=v|k=v 或 JSON），裡面的個資也要遮。
+			$out[ $key ] = is_string( $value ) ? self::redact_string( $value ) : $value;
 		}
 		return $out;
 	}
@@ -140,7 +155,7 @@ final class Redactor {
 		) ?? $message;
 
 		$message = preg_replace_callback(
-			'/(?P<k>[a-z][a-z0-9_\-]*)=(?P<v>[^&\s]+)/i',
+			'/(?P<k>[a-z][a-z0-9_\-]*)=(?P<v>[^&|\s]+)/i',
 			static function ( array $m ) use ( $secret, $pii ): string {
 				$key = strtolower( $m['k'] );
 				if ( preg_match( "/(?:{$secret})/i", $key ) ) {

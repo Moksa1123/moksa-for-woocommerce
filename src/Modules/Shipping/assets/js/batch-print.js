@@ -59,7 +59,7 @@
 		const meta = ( cfg.providers || [] ).find( function ( p ) { return p.key === provider; } );
 		const allowed = meta && meta.paper_modes ? meta.paper_modes : [ '1', '2' ];
 		const $sel = $modal.find( '.moksafowo-batch-mode__select' );
-		const unsupportedSuffix = '（此物流不支援）';
+		const unsupportedSuffix = cfg.i18n.unsupported;
 		$sel.find( 'option' ).each( function () {
 			const $opt = $( this );
 			const v = $opt.attr( 'value' );
@@ -109,7 +109,7 @@
 		html += '<th class="printable-col">' + escapeHtml( cfg.i18n.printable ) + '</th>';
 		html += '</tr></thead><tbody>';
 		// 溫層 pill 顏色（跟 OrderMetaBox UI 一致）
-		const TEMP_LABELS = { 1: '常溫', 2: '冷藏', 3: '冷凍' };
+		const TEMP_LABELS = { 1: cfg.i18n.ambient, 2: cfg.i18n.chilled, 3: cfg.i18n.frozen };
 		const TEMP_BG     = { 1: '#e5e7eb', 2: '#dbeafe', 3: '#ede9fe' };
 		const TEMP_FG     = { 1: '#374151', 2: '#1e40af', 3: '#6d28d9' };
 		const tempPill = function ( t ) {
@@ -127,7 +127,7 @@
 			const records       = r.records | 0;
 			// 「可印」column：拆單訂單顯示「✓ 3 件」一眼看出是多溫層
 			const mark = printable
-				? ( records > 1 ? cfg.i18n.yes + ' ' + records + ' 件' : cfg.i18n.yes )
+				? ( records > 1 ? cfg.i18n.yes + ' ' + cfg.i18n.parcels.replace( '%d', records ) : cfg.i18n.yes )
 				: cfg.i18n.no;
 			const markStyle = printable ? 'color:#00a32a;font-weight:600;' : 'color:#a7aaad;';
 			// 顯示原因：若是「紙張不相容」就提示，否則就一般 dim
@@ -138,7 +138,7 @@
 				methodCell += ' ' + temps.map( tempPill ).join( '' );
 			}
 			if ( r.printable && ! supportsPaper ) {
-				methodCell += ' <span style="color:#d63638;font-size:11px;">（不支援 ' + ( currentMode === '2' ? 'A6' : 'A4' ) + '）</span>';
+				methodCell += ' <span style="color:#d63638;font-size:11px;">' + escapeHtml( cfg.i18n.no_paper.replace( '%s', currentMode === '2' ? 'A6' : 'A4' ) ) + '</span>';
 			}
 			html += '<tr class="' + ( printable ? '' : 'moksafowo-batch-disabled' ) + '" data-paper-modes="' + escapeHtml( rowModes.join( ',' ) ) + '">';
 			html += '<td class="check-col"><input type="checkbox" class="moksafowo-batch-row" value="' + r.id + '" ' + disabled + '></td>';

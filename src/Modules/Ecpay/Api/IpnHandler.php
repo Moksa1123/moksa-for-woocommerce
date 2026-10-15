@@ -23,7 +23,7 @@ final class IpnHandler {
 		}
 
 		if ( ! Helper::verify_check_mac_value( $raw ) ) {
-			Helper::log( 'IPN CheckMacValue mismatch — rejected' );
+			Helper::warn( 'IPN CheckMacValue mismatch — rejected' );
 			status_header( 400 );
 			echo 'CheckMacValue mismatch';
 			exit;
@@ -50,6 +50,14 @@ final class IpnHandler {
 		if ( ! $order ) {
 			status_header( 404 );
 			echo 'Order not loadable';
+			exit;
+		}
+		// 只處理用綠界付款的訂單。沙箱模式驗章用的是公開測試金鑰，不擋的話任何人都能把
+		// 站上其他付款方式（轉帳、貨到付款…）的訂單標成已付款。
+		if ( ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo_ecpay' ) ) {
+			Helper::warn( 'IPN rejected — order not paid via ECPay', [ 'order_id' => $order_id ] );
+			status_header( 400 );
+			echo 'Payment method mismatch';
 			exit;
 		}
 

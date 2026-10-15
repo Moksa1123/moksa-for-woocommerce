@@ -180,7 +180,7 @@ final class ChannelOps {
 					/* translators: 1: channel label, 2: state */
 					__( '“%1$s” is already %2$s, so nothing was changed.', 'moksa-for-woocommerce' ),
 					$channels[ $slug ]['label'],
-					$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
+					$enable ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
 				)
 			);
 		}
@@ -191,7 +191,7 @@ final class ChannelOps {
 			'summary' => sprintf(
 				/* translators: 1: action, 2: channel label */
 				__( '%1$s the “%2$s” channel.', 'moksa-for-woocommerce' ),
-				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'Disable', 'moksa-for-woocommerce' ),
 				$channels[ $slug ]['label']
 			),
 		);
@@ -217,7 +217,7 @@ final class ChannelOps {
 			/* translators: 1: channel label, 2: state */
 			__( '✅ “%1$s” is now %2$s. The setting applies immediately, though some storefront changes may need the cache cleared.', 'moksa-for-woocommerce' ),
 			$channels[ $slug ]['label'],
-			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
+			$enable ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' )
 		);
 	}
 

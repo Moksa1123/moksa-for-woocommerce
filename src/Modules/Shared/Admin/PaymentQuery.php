@@ -99,15 +99,12 @@ final class PaymentQuery {
 
 		$lines = [];
 		foreach ( (array) ( $res['lines'] ?? [] ) as $k => $v ) {
-			$lines[] = sanitize_text_field( (string) $k ) . ': ' . sanitize_text_field( (string) $v );
+			$lines[ sanitize_text_field( (string) $k ) ] = sanitize_text_field( (string) $v );
 		}
-		$order->add_order_note(
-			sprintf(
-				/* translators: %s: the details returned by the payment provider */
-				__( 'Payment status looked up — %s', 'moksa-for-woocommerce' ),
-				$lines ? implode( ' / ', $lines ) : (string) ( $res['message'] ?? '' )
-			)
-		);
+		if ( empty( $lines ) && '' !== (string) ( $res['message'] ?? '' ) ) {
+			$lines[ __( 'Result', 'moksa-for-woocommerce' ) ] = sanitize_text_field( (string) $res['message'] );
+		}
+		$order->add_order_note( \Moksafowo\Order\Note::build( __( 'Payment status looked up', 'moksa-for-woocommerce' ), $lines ) );
 		$order->save();
 
 		wp_send_json_success(

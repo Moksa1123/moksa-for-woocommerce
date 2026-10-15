@@ -55,7 +55,8 @@ final class Allowance {
 			'AllowanceNumber'   => $allowance_number,
 			// 2025/1/1 起 AllowanceType=1（買方申請）已禁用，必為 2（賣方開立折讓通知單）
 			'AllowanceType'     => 2,
-			'AllowanceDate'     => current_time( 'Ymd' ),  // Amego spec: YYYYMMDD（站台時區當日）
+			// 台灣當日，且不早於原發票日（站台時區不是台北時可能差一天）。
+			'AllowanceDate'     => max( ( new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) ) )->format( 'Ymd' ), $invoice_date ),
 			'BuyerIdentifier'   => (string) ( $order->get_meta( Keys::INVOICE_BUYER_UBN ) ?: '0000000000' ),
 			'BuyerName'         => trim( $order->get_billing_last_name() . $order->get_billing_first_name() ) ?: '客人',
 			'BuyerEmailAddress' => (string) $order->get_billing_email(),

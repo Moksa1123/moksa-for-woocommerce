@@ -12,32 +12,35 @@
 ( function () {
 	'use strict';
 
+	const I18N = window.moksafowoSandboxToggle || {};
+	const L = I18N.labels || {};
+
 	// 每個 module 一筆：sandbox toggle id + 對應 sandbox / production 欄位 id
 	const MODULES = [
 		{
 			toggle:  'moksafowo_ecpay_sandbox_enabled',
 			sandbox: [ 'moksafowo_ecpay_sandbox_merchant_id', 'moksafowo_ecpay_sandbox_hash_key', 'moksafowo_ecpay_sandbox_hash_iv' ],
 			prod:    [ 'moksafowo_ecpay_merchant_id', 'moksafowo_ecpay_hash_key', 'moksafowo_ecpay_hash_iv' ],
-			label:   '綠界金流',
+			label:   L.ecpay || 'ECPay payments',
 		},
 		{
 			toggle:  'moksafowo_ecpay_shipping_sandbox_enabled',
 			sandbox: [ 'moksafowo_ecpay_shipping_sandbox_merchant_id', 'moksafowo_ecpay_shipping_sandbox_hash_key', 'moksafowo_ecpay_shipping_sandbox_hash_iv' ],
 			prod:    [ 'moksafowo_ecpay_shipping_merchant_id', 'moksafowo_ecpay_shipping_hash_key', 'moksafowo_ecpay_shipping_hash_iv' ],
-			label:   '綠界物流',
+			label:   L.ecpay_shipping || 'ECPay shipping',
 		},
 		{
 			toggle:  'moksafowo_ecpay_invoice_sandbox_enabled',
 			sandbox: [ 'moksafowo_ecpay_invoice_sandbox_merchant_id', 'moksafowo_ecpay_invoice_sandbox_hash_key', 'moksafowo_ecpay_invoice_sandbox_hash_iv' ],
 			prod:    [ 'moksafowo_ecpay_invoice_merchant_id', 'moksafowo_ecpay_invoice_hash_key', 'moksafowo_ecpay_invoice_hash_iv' ],
-			label:   '綠界電子發票',
+			label:   L.ecpay_invoice || 'ECPay e-invoices',
 		},
 		// PAYUNi 物流：同模式
 		{
 			toggle:  'moksafowo_payuni_shipping_testmode_enabled',
 			sandbox: [ 'moksafowo_payuni_payment_merchant_id_test', 'moksafowo_payuni_payment_hashkey_test', 'moksafowo_payuni_payment_hashiv_test' ],
 			prod:    [ 'moksafowo_payuni_payment_merchant_id', 'moksafowo_payuni_payment_hashkey', 'moksafowo_payuni_payment_hashiv' ],
-			label:   'PAYUNi 物流',
+			label:   L.payuni || 'PAYUNi shipping',
 		},
 	];
 
@@ -52,11 +55,9 @@
 	function ensureBanner( toggleId, label, isSandbox ) {
 		const id = 'moksafowo-sandbox-banner-' + toggleId;
 		let banner = document.getElementById( id );
-		const text = isSandbox
-			? '<strong>' + label + '：目前使用「測試環境」資料</strong>　' +
-			  '<span style="opacity:.85">下方「正式環境」欄位不會被讀取，可保留資料供未來上線使用。</span>'
-			: '<strong>' + label + '：目前使用「正式環境」資料</strong>　' +
-			  '<span style="opacity:.85">下方「測試環境」欄位不會被讀取。</span>';
+		const head = ( isSandbox ? I18N.sandbox_head || '%s: using the test environment details' : I18N.live_head || '%s: using the production details' ).replace( '%s', label );
+		const note = isSandbox ? I18N.sandbox_note || '' : I18N.live_note || '';
+		const text = '<strong>' + head + '</strong> <span style="opacity:.85">' + note + '</span>';
 		// 測試 = 紅色（警示，提醒這是測試模式）；正式 = 藍色（中性）
 		const bg = isSandbox ? '#ffebee' : '#e3f2fd';
 		const fg = isSandbox ? '#b71c1c' : '#0d47a1';

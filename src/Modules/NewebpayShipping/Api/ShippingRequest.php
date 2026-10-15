@@ -120,8 +120,9 @@ final class ShippingRequest {
 		$resp = wp_remote_post(
 			self::base() . $path,
 			[
-				'body'    => $post,
-				'timeout' => 30,
+				'user-agent' => \Moksafowo\Http\Request::user_agent(),
+				'body'       => $post,
+				'timeout'    => 30,
 			]
 		);
 		if ( is_wp_error( $resp ) ) {

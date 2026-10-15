@@ -98,7 +98,7 @@ final class Module extends AbstractGatewayModule {
 			];
 		}
 
-		$res = Api\PaymentRequest::query( $mtn, (int) round( (float) $order->get_total() ) );
+		$res = Api\PaymentRequest::query( $mtn, Api\Helper::paid_amount( $order ) );
 		if ( empty( $res['ok'] ) ) {
 			return [
 				'ok'      => false,
@@ -107,11 +107,22 @@ final class Module extends AbstractGatewayModule {
 			];
 		}
 
-		$d     = (array) ( $res['data'] ?? [] );
-		$lines = array_filter(
+		$d      = (array) ( $res['data'] ?? [] );
+		$status = (string) ( $d['TradeStatus'] ?? '' );
+		// 代碼轉成文字，原始代碼留在括號裡給查問題用。
+		$status_label = [
+			'0' => __( 'Unpaid', 'moksa-for-woocommerce' ),
+			'1' => __( 'Paid', 'moksa-for-woocommerce' ),
+			'2' => __( 'Payment failed', 'moksa-for-woocommerce' ),
+			'3' => __( 'Payment cancelled', 'moksa-for-woocommerce' ),
+			'6' => __( 'Refunded', 'moksa-for-woocommerce' ),
+		][ $status ] ?? '';
+		$status       = '' !== $status_label ? $status_label . ' (' . $status . ')' : $status;
+		$type         = (string) ( $d['PaymentType'] ?? '' );
+		$lines        = array_filter(
 			[
-				__( 'Trade status', 'moksa-for-woocommerce' ) => (string) ( $d['TradeStatus'] ?? '' ),
-				__( 'Payment type', 'moksa-for-woocommerce' ) => (string) ( $d['PaymentType'] ?? '' ),
+				__( 'Trade status', 'moksa-for-woocommerce' ) => $status,
+				__( 'Payment type', 'moksa-for-woocommerce' ) => '' !== $type ? Api\IpnHandler::payment_type_label( $type ) : '',
 				__( 'Amount', 'moksa-for-woocommerce' )  => (string) ( $d['Amt'] ?? '' ),
 				__( 'Paid at', 'moksa-for-woocommerce' ) => (string) ( $d['PayTime'] ?? '' ),
 				__( 'Transaction ID', 'moksa-for-woocommerce' ) => (string) ( $d['TradeNo'] ?? '' ),
@@ -121,7 +132,7 @@ final class Module extends AbstractGatewayModule {
 
 			return [
 				'ok'      => true,
-				'message' => (string) ( $d['TradeStatus'] ?? 'OK' ),
+				'message' => '' !== $status ? $status : 'OK',
 				'lines'   => $lines,
 			];
 	}
@@ -146,10 +157,6 @@ final class Module extends AbstractGatewayModule {
 		Frontend\CustomerPaymentInfo::init();
 
 		// NewebpayShipping fallback: shipping module uses payment credentials when no shipping-specific credentials set.
-		add_filter( 'moksafowo_newebpay_shipping_sandbox_fallback', static fn() => Api\Helper::is_sandbox() );
-		add_filter( 'moksafowo_newebpay_shipping_merchant_id_fallback', static fn() => Api\Helper::merchant_id() );
-		add_filter( 'moksafowo_newebpay_shipping_hash_key_fallback', static fn() => Api\Helper::hash_key() );
-		add_filter( 'moksafowo_newebpay_shipping_hash_iv_fallback', static fn() => Api\Helper::hash_iv() );
 		add_filter( 'moksafowo_newebpay_shipping_parse_order_id', [ Api\Helper::class, 'parse_order_id' ], 10, 2 );
 	}
 

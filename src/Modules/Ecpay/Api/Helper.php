@@ -29,6 +29,11 @@ final class Helper extends AbstractCredentialHelper {
 		return 'ecpay-payment';
 	}
 
+	/** 正式模式下憑證沒填時，付款方式不顯示（否則顧客選了才失敗）。 */
+	public static function has_credentials(): bool {
+		return '' !== self::merchant_id() && '' !== self::hash_key() && '' !== self::hash_iv();
+	}
+
 	public static function merchant_id(): string {
 		if ( self::is_sandbox() ) {
 			$v = (string) get_option( 'moksafowo_ecpay_sandbox_merchant_id', '' );
@@ -290,7 +295,8 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_check_mac_value( array $posted ): bool {
-		if ( empty( $posted['CheckMacValue'] ) ) {
+		// 金鑰沒填時用空字串也算得出簽章，任何人都能偽造。
+		if ( empty( $posted['CheckMacValue'] ) || '' === self::hash_key() || '' === self::hash_iv() ) {
 			return false;
 		}
 		$signed = $posted;

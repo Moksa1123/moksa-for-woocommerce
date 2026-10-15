@@ -23,7 +23,7 @@ class ShipType {
 			case self::SEVEN:
 				return '7-Eleven';
 			case self::TCAT:
-				return '黑貓宅配';
+				return __( 'T-Cat home delivery', 'moksa-for-woocommerce' );
 			default:
 				return '';
 		}

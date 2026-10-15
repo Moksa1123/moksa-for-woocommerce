@@ -134,6 +134,14 @@ final class BatchPrintAdminUI {
 	}
 
 	private static function find_label_no( \WC_Order $order ): string {
+		// 先用各家物流登記的追蹤資料（跟物流通知信同一份），四家都有，而且是拿得去查的號碼。
+		foreach ( $order->get_shipping_methods() as $method ) {
+			$entries = (array) apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, (string) $method->get_method_id() );
+			if ( '' !== (string) ( $entries[0]['tracking_no'] ?? '' ) ) {
+				return (string) $entries[0]['tracking_no'];
+			}
+			break;
+		}
 		$ecpay_records = $order->get_meta( Keys::ECPAY_LOGISTIC_RECORDS );
 		if ( is_array( $ecpay_records ) && ! empty( $ecpay_records ) ) {
 			$latest = end( $ecpay_records );
@@ -153,12 +161,22 @@ final class BatchPrintAdminUI {
 		return '';
 	}
 
-	private static function is_orders_screen( string $hook ): bool {
-		if ( 'woocommerce_page_wc-orders' === $hook ) {
+	/**
+	 * 只限訂單「列表」頁。HPOS 的列表與單一訂單編輯頁共用 woocommerce_page_wc-orders，
+	 * 要再看 action，否則批次列印按鈕會跑到單一訂單頁。
+	 */
+	private static function is_orders_screen( string $hook = '' ): bool {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$id     = '' !== $hook ? $hook : ( $screen ? $screen->id : '' );
+		if ( 'edit-shop_order' === ( $screen ? $screen->id : '' ) ) {
 			return true;
 		}
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		return $screen && 'edit-shop_order' === $screen->id;
+		if ( 'woocommerce_page_wc-orders' !== $id ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
+		return ! in_array( $action, [ 'edit', 'new' ], true );
 	}
 
 	public static function enqueue( string $hook ): void {
@@ -210,6 +228,14 @@ final class BatchPrintAdminUI {
 					'paper_size'  => __( 'Paper:', 'moksa-for-woocommerce' ),
 					'a4'          => __( 'A4 standard', 'moksa-for-woocommerce' ),
 					'a6'          => __( 'A6 label printer', 'moksa-for-woocommerce' ),
+					'unsupported' => __( '(not supported by this carrier)', 'moksa-for-woocommerce' ),
+					/* translators: %s: paper size such as A4 */
+					'no_paper'    => __( '(%s not supported)', 'moksa-for-woocommerce' ),
+					/* translators: %d: number of parcels */
+					'parcels'     => __( '%d parcels', 'moksa-for-woocommerce' ),
+					'ambient'     => __( 'Ambient', 'moksa-for-woocommerce' ),
+					'chilled'     => __( 'Chilled', 'moksa-for-woocommerce' ),
+					'frozen'      => __( 'Frozen', 'moksa-for-woocommerce' ),
 				],
 			]
 		);
@@ -222,11 +248,7 @@ final class BatchPrintAdminUI {
 	}
 
 	public static function render_modal(): void {
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen ) {
-			return;
-		}
-		if ( ! ( 'woocommerce_page_wc-orders' === $screen->id || 'edit-shop_order' === $screen->id ) ) {
+		if ( ! self::is_orders_screen() ) {
 			return;
 		}
 		if ( empty( BatchPrintRegistry::all() ) ) {
@@ -273,6 +295,8 @@ final class BatchPrintAdminUI {
 			[
 				'processing',
 				'on-hold',
+				// 已出貨也列入：標籤遺失或要補印時，不必先把訂單改回處理中。
+				'moksa-shipped',
 			]
 		);
 
@@ -413,33 +437,19 @@ final class BatchPrintAdminUI {
 		$mode     = '2' === $mode ? '2' : '1';
 		$registry = BatchPrintRegistry::all();
 
-		$by_provider = [];
-		foreach ( $ids as $oid ) {
-			$order = wc_get_order( $oid );
-			if ( ! $order instanceof \WC_Order ) {
-				continue;
-			}
-			foreach ( $registry as $key => $provider ) {
-				if ( null !== self::detect_method( $order, $provider['method_ids'] ) ) {
-					$by_provider[ $key ][] = $oid;
-					break;
-				}
-			}
-		}
+		[ $by_provider, $skipped, $unshipped ] = self::group_by_provider( $ids, $registry );
 
-		$matched = [];
 		$forms   = [];
+		$printed = 0;
 		foreach ( $by_provider as $key => $oids ) {
-			$oids    = array_values( array_unique( $oids ) );
-			$matched = array_merge( $matched, $oids );
-			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, $mode ) );
+			$printed += count( $oids );
+			$forms    = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, $mode ) );
 		}
-		$skipped = count( $ids ) - count( array_unique( $matched ) );
 
 		if ( empty( $forms ) ) {
 			return [
 				'ok'      => false,
-				'skipped' => $skipped,
+				'skipped' => $skipped + $unshipped,
 				'message' => __( 'The selected orders have no printable shipping labels — the shipments may not have been created yet.', 'moksa-for-woocommerce' ),
 			];
 		}
@@ -449,10 +459,12 @@ final class BatchPrintAdminUI {
 
 		$url = add_query_arg(
 			[
-				'action'   => 'moksafowo_shipping_batch_print_output',
-				'token'    => rawurlencode( $token ),
-				'skipped'  => $skipped,
-				'_wpnonce' => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
+				'action'    => 'moksafowo_shipping_batch_print_output',
+				'token'     => rawurlencode( $token ),
+				'skipped'   => $skipped,
+				'unshipped' => $unshipped,
+				'printed'   => $printed,
+				'_wpnonce'  => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
 			],
 			admin_url( 'admin-ajax.php' )
 		);
@@ -460,8 +472,8 @@ final class BatchPrintAdminUI {
 		return [
 			'ok'      => true,
 			'url'     => $url,
-			'count'   => count( $forms ),
-			'skipped' => $skipped,
+			'count'   => $printed,
+			'skipped' => $skipped + $unshipped,
 		];
 	}
 
@@ -485,32 +497,18 @@ final class BatchPrintAdminUI {
 		$ids      = array_values( array_filter( array_map( 'absint', (array) $ids ) ) );
 		$registry = BatchPrintRegistry::all();
 
-		$by_provider = [];
-		foreach ( $ids as $oid ) {
-			$order = wc_get_order( $oid );
-			if ( ! $order instanceof \WC_Order ) {
-				continue;
-			}
-			foreach ( $registry as $key => $provider ) {
-				if ( null !== self::detect_method( $order, $provider['method_ids'] ) ) {
-					$by_provider[ $key ][] = $oid;
-					break;
-				}
-			}
-		}
+		[ $by_provider, $skipped, $unshipped ] = self::group_by_provider( $ids, $registry );
 
-		$matched = [];
 		$forms   = [];
+		$printed = 0;
 		foreach ( $by_provider as $key => $oids ) {
-			$oids    = array_values( array_unique( $oids ) );
-			$matched = array_merge( $matched, $oids );
-			$forms   = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, '1' ) ); // 基本模式固定 A4
+			$printed += count( $oids );
+			$forms    = array_merge( $forms, self::run_provider( $registry[ $key ], $oids, '1' ) ); // 基本模式固定 A4
 		}
-		$skipped = count( $ids ) - count( array_unique( $matched ) );
 
 		if ( empty( $forms ) ) {
 			// transient 而非 URL 參數，避免重整訂單列表時一直跳
-			set_transient( 'moksafowo_bp_skipped_' . get_current_user_id(), max( 1, $skipped ), MINUTE_IN_SECONDS );
+			set_transient( 'moksafowo_bp_skipped_' . get_current_user_id(), max( 1, $skipped + $unshipped ), MINUTE_IN_SECONDS );
 			return $redirect_to;
 		}
 
@@ -519,10 +517,12 @@ final class BatchPrintAdminUI {
 
 		return add_query_arg(
 			[
-				'action'   => 'moksafowo_shipping_batch_print_output',
-				'token'    => rawurlencode( $token ),
-				'skipped'  => $skipped,
-				'_wpnonce' => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
+				'action'    => 'moksafowo_shipping_batch_print_output',
+				'token'     => rawurlencode( $token ),
+				'skipped'   => $skipped,
+				'unshipped' => $unshipped,
+				'printed'   => $printed,
+				'_wpnonce'  => wp_create_nonce( 'moksafowo_bp_print_' . $token ),
 			],
 			admin_url( 'admin-ajax.php' )
 		);
@@ -530,8 +530,7 @@ final class BatchPrintAdminUI {
 
 	public static function bulk_notices(): void {
 		// 只在訂單列表顯示，且讀完即刪（避免重整時重複跳通知）
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || ! in_array( $screen->id, [ 'woocommerce_page_wc-orders', 'edit-shop_order' ], true ) ) {
+		if ( ! self::is_orders_screen() ) {
 			return;
 		}
 		$key = 'moksafowo_bp_skipped_' . get_current_user_id();
@@ -562,9 +561,11 @@ final class BatchPrintAdminUI {
 		if ( ! is_array( $forms ) || empty( $forms ) ) {
 			wp_die( esc_html__( 'There is nothing to print, or the link has expired.', 'moksa-for-woocommerce' ) );
 		}
-		$skipped = isset( $_GET['skipped'] ) ? absint( wp_unslash( $_GET['skipped'] ) ) : 0;
-		$count   = count( $forms );
-		$single  = ( 1 === $count );
+		$skipped   = isset( $_GET['skipped'] ) ? absint( wp_unslash( $_GET['skipped'] ) ) : 0;
+		$unshipped = isset( $_GET['unshipped'] ) ? absint( wp_unslash( $_GET['unshipped'] ) ) : 0;
+		$count     = count( $forms );
+		$printed   = isset( $_GET['printed'] ) ? absint( wp_unslash( $_GET['printed'] ) ) : $count;
+		$single    = ( 1 === $count );
 
 		wp_register_style( 'moksafowo-bp-print', false, array(), MOKSAFOWO_VERSION );
 		wp_enqueue_style( 'moksafowo-bp-print' );
@@ -582,13 +583,22 @@ final class BatchPrintAdminUI {
 		</head>
 		<body>
 			<h2><?php esc_html_e( 'Bulk print shipping labels', 'moksa-for-woocommerce' ); ?></h2>
-			<?php if ( $skipped > 0 ) : ?>
-				<?php /* translators: 1: number of labels produced, 2: number of skipped orders */ ?>
-				<p><?php printf( esc_html__( '%1$d labels generated; %2$d orders skipped because they use another carrier.', 'moksa-for-woocommerce' ), (int) $count, (int) $skipped ); ?></p>
-			<?php else : ?>
-				<?php /* translators: %d: number of labels produced */ ?>
-				<p><?php printf( esc_html__( '%d labels generated.', 'moksa-for-woocommerce' ), (int) $count ); ?></p>
-			<?php endif; ?>
+			<p>
+				<?php
+				/* translators: 1: number of orders printed, 2: number of print pages */
+				printf( esc_html( _n( '%1$d order sent to print (%2$d print pages).', '%1$d orders sent to print (%2$d print pages).', $printed, 'moksa-for-woocommerce' ) ), (int) $printed, (int) $count );
+				if ( $unshipped > 0 ) {
+					echo ' ';
+					/* translators: %d: number of orders without a shipment */
+					printf( esc_html( _n( '%d order skipped because its shipment has not been created yet.', '%d orders skipped because their shipments have not been created yet.', $unshipped, 'moksa-for-woocommerce' ) ), (int) $unshipped );
+				}
+				if ( $skipped > 0 ) {
+					echo ' ';
+					/* translators: %d: number of orders shipped by another carrier */
+					printf( esc_html( _n( '%d order skipped because it uses another carrier.', '%d orders skipped because they use another carrier.', $skipped, 'moksa-for-woocommerce' ) ), (int) $skipped );
+				}
+				?>
+			</p>
 
 			<?php if ( ! $single ) : ?>
 				<p><?php esc_html_e( 'Click the buttons below to open each label — this stops the browser from blocking pop-ups:', 'moksa-for-woocommerce' ); ?></p>
@@ -624,6 +634,40 @@ final class BatchPrintAdminUI {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 依物流商分組；還沒建物流單的訂單不送去列印（handler 也印不出來），另外計數。
+	 *
+	 * @return array{0: array<string,int[]>, 1: int, 2: int} 分組、其他物流筆數、未建單筆數。
+	 */
+	private static function group_by_provider( array $ids, array $registry ): array {
+		$by_provider = [];
+		$other       = 0;
+		$unshipped   = 0;
+		foreach ( array_values( array_unique( $ids ) ) as $oid ) {
+			$order = wc_get_order( $oid );
+			if ( ! $order instanceof \WC_Order ) {
+				++$other;
+				continue;
+			}
+			$matched = false;
+			foreach ( $registry as $key => $provider ) {
+				if ( null !== self::detect_method( $order, $provider['method_ids'] ) ) {
+					$matched = true;
+					if ( 0 === self::record_count( $order, $provider['record_counter'] ?? null ) ) {
+						++$unshipped;
+					} else {
+						$by_provider[ $key ][] = $oid;
+					}
+					break;
+				}
+			}
+			if ( ! $matched ) {
+				++$other;
+			}
+		}
+		return [ $by_provider, $other, $unshipped ];
 	}
 
 	private static function record_count( \WC_Order $order, ?callable $counter ): int {

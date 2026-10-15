@@ -28,6 +28,3 @@
 	.moksafowo-shipping-card__row { grid-template-columns: 1fr; row-gap: 2px; }
 	.moksafowo-shipping-card__label { font-size: 12px; }
 }
-/* ECPay-only：壓掉 customer details 區的「鄉鎮市區」重複 row（formatted address 內已含 city） */
-.woocommerce-order-details address dl.wc-block-components-additional-fields-list,
-.woocommerce-customer-details address dl.wc-block-components-additional-fields-list { display: none !important; }

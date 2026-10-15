@@ -258,6 +258,9 @@ JS
 					'open_map'          => __( 'Choose a store', 'moksa-for-woocommerce' ),
 					'loading'           => __( 'Redirecting…', 'moksa-for-woocommerce' ),
 					'error'             => __( 'Loading failed. Please try again later', 'moksa-for-woocommerce' ),
+					'store_id'          => __( 'Store number: ', 'moksa-for-woocommerce' ),
+					'recipient_toggle'  => __( 'Different recipient?', 'moksa-for-woocommerce' ),
+					'ship_to_different' => __( 'Ship to a different address?', 'moksa-for-woocommerce' ),
 				),
 			)
 		);
@@ -286,7 +289,14 @@ JS
 
 		// 一次性 token：callback 憑此區分合法發起與隨機 ?moksafowo_token= 注入；30min TTL
 		$token = wp_generate_password( 24, false, false );
-		set_transient( 'moksafowo_payuni_store_' . $token, array( 'pending' => true ), 30 * MINUTE_IN_SECONDS );
+		set_transient(
+			'moksafowo_payuni_store_' . $token,
+			array(
+				'pending' => true,
+				'owner'   => \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::current(),
+			),
+			30 * MINUTE_IN_SECONDS
+		);
 		$callback_url = add_query_arg( 'moksafowo_token', $token, WC()->api_request_url( 'moksafowo_payuni_store_callback' ) );
 
 		$encrypt_info = array(
@@ -427,31 +437,18 @@ JS
 			CvsStoreEditor::render_return( $store_data );
 		}
 
-		if ( false !== $state ) {
-			set_transient( 'moksafowo_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
-			PayuniShipping::log( 'Store data saved to transient; token=' . substr( $incoming_token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
-		} else {
-			PayuniShipping::log( 'Store callback missing/invalid moksafowo_token (' . $incoming_token . ') — falling back to session only' );
+		// 只接受從我們開出去的地圖回來的請求（有效的 pending token），且門市只存在 token 裡，
+		// 等顧客回到結帳頁、確認是開地圖的同一個瀏覽器才寫入 session。
+		if ( ! is_array( $state ) ) {
+			PayuniShipping::log( 'Store callback missing/invalid moksafowo_token — rejected' );
+			wp_safe_redirect( wc_get_checkout_url() );
+			exit;
 		}
+		$store_data['owner'] = (string) ( $state['owner'] ?? '' );
+		set_transient( 'moksafowo_payuni_store_' . $incoming_token, $store_data, 30 * MINUTE_IN_SECONDS );
 
-		// SECONDARY: session best-effort（部分瀏覽器仍保留 cookie，classic checkout 受益）
-		$cid_before = WC()->session ? WC()->session->get_customer_id() : '(no session)';
-		if ( WC()->session ) {
-			WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
-		}
-		PayuniShipping::log( 'Store data saved to session (best-effort); customer_id=' . $cid_before );
-
-		$checkout_url = wc_get_checkout_url();
-		if ( $incoming_token !== '' ) {
-			$checkout_url = add_query_arg( 'moksafowo_store', $incoming_token, $checkout_url );
-		}
-
-		$forms_html = '<form method="post" id="moksafowo-payuni-store-redirect" action="' . esc_url( $checkout_url ) . '">'
-			. '<input type="hidden" name="moksafowo_payuni_selected_store_id" value="' . esc_attr( $store_data['id'] ) . '">'
-			. '<input type="hidden" name="moksafowo_payuni_selected_store_name" value="' . esc_attr( $store_data['name'] ) . '">'
-			. '<input type="hidden" name="moksafowo_payuni_selected_store_address" value="' . esc_attr( $store_data['address'] ) . '">'
-			. '<input type="hidden" name="moksafowo_payuni_selected_store_data" value="' . esc_attr( wp_json_encode( $store_data ) ) . '">'
-			. '<input type="hidden" name="moksafowo_payuni_store_nonce" value="' . esc_attr( wp_create_nonce( 'moksafowo_payuni_restore_store' ) ) . '">'
+		$forms_html = '<form method="get" id="moksafowo-payuni-store-redirect" action="' . esc_url( wc_get_checkout_url() ) . '">'
+			. '<input type="hidden" name="moksafowo_store" value="' . esc_attr( $incoming_token ) . '">'
 			. '</form>';
 
 		Interstitial::render(
@@ -490,7 +487,7 @@ JS
 		if ( $store_data ) {
 			wp_send_json_success( $store_data );
 		} else {
-			wp_send_json_error( array( 'message' => '沒有已選擇的門市' ) );
+			wp_send_json_error( array( 'message' => __( 'No store has been chosen yet.', 'moksa-for-woocommerce' ) ) );
 		}
 	}
 
@@ -503,7 +500,7 @@ JS
 		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token 本身即憑證，僅寫入請求者自己的 session。
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token，且只兌換給開地圖的同一個 session。
 		$token = isset( $_GET['moksafowo_store'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_store'] ) ) : '';
 		if ( strlen( $token ) < 16 ) {
 			return;
@@ -513,6 +510,11 @@ JS
 		if ( ! is_array( $store_data ) || empty( $store_data['id'] ) ) {
 			return; // 尚未寫入、已過期，或是還沒選店的 pending 佔位。
 		}
+		// 只兌換給開地圖的那個瀏覽器；別人拿到連結不能改掉他的門市。
+		if ( ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store_data['owner'] ?? '' ) ) {
+			return;
+		}
+		unset( $store_data['owner'] );
 
 		if ( function_exists( 'WC' ) ) {
 			WC()->initialize_session();
@@ -526,14 +528,18 @@ JS
 		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 		$token = isset( $_POST['token'] ) ? sanitize_key( wp_unslash( $_POST['token'] ) ) : '';
 		if ( strlen( $token ) < 16 ) {
-			wp_send_json_error( array( 'message' => '無效的 token' ), 400 );
+			wp_send_json_error( array( 'message' => __( 'This store selection link is no longer valid.', 'moksa-for-woocommerce' ) ), 400 );
 		}
 		$store_data = get_transient( 'moksafowo_payuni_store_' . $token );
 		PayuniShipping::log( 'ajax_resolve_store_token; token=' . substr( $token, 0, 8 ) . '…; data=' . wc_print_r( $store_data, true ) );
 
 		if ( ! is_array( $store_data ) || ! isset( $store_data['id'] ) || empty( $store_data['id'] ) ) {
-			wp_send_json_error( array( 'message' => '門市資料尚未準備好或已過期' ), 404 );
+			wp_send_json_error( array( 'message' => __( 'The store selection has expired. Please choose the store again.', 'moksa-for-woocommerce' ) ), 404 );
 		}
+		if ( ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store_data['owner'] ?? '' ) ) {
+			wp_send_json_error( array( 'message' => __( 'The store selection has expired. Please choose the store again.', 'moksa-for-woocommerce' ) ), 404 );
+		}
+		unset( $store_data['owner'] );
 
 		// mirror 進 session 供 order-create flow 使用，並刪除（one-shot）
 		if ( WC()->session ) {
@@ -549,7 +555,7 @@ JS
 
 		WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
 
-		wp_send_json_success( array( 'message' => '門市資料已清除' ) );
+		wp_send_json_success( array( 'message' => __( 'The store selection was cleared.', 'moksa-for-woocommerce' ) ) );
 	}
 
 	public static function save_store_selection( $order, $data ) {
@@ -613,10 +619,11 @@ JS
 		// save_store_selection runs on WC checkout save (woocommerce_checkout_create_order); WC core verified the checkout nonce upstream; values sanitized inline.
 		PayuniShipping::log( 'All POST data keys: ' . implode( ', ', array_map( 'sanitize_text_field', array_map( 'wp_unslash', array_keys( $_POST ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream; keys sanitized.
 
-		$selected_store_id   = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream.
-		$selected_store_data = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream.
+		// 門市只採用伺服器 session 裡、經 PAYUNi 簽章驗證後寫入的那一筆；表單送來的門市欄位不採信。
+		$selected_store_id   = '';
+		$selected_store_data = '';
 
-		if ( ( empty( $selected_store_id ) || empty( $selected_store_data ) ) && WC()->session ) {
+		if ( WC()->session ) {
 			try {
 				$stored_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', null );
 				if ( $stored_data && is_array( $stored_data ) ) {
@@ -802,7 +809,6 @@ JS
 		}
 		PayuniShipping::log( 'display_store_selector: rendering for method=' . $method_id );
 
-		self::restore_store_data_from_post();
 		$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 
 		?>
@@ -830,7 +836,6 @@ JS
 
 	private static function render_store_selector_content( $stored_store_data ) {
 		if ( empty( $stored_store_data ) ) {
-			self::restore_store_data_from_post();
 			$stored_store_data = WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
 		}
 
@@ -861,53 +866,6 @@ JS
 		endif;
 	}
 
-	private static function restore_store_data_from_post() {
-		// 先驗 nonce，其他任何事都在其後。三條合法進入路徑各驗各的 nonce，逐一判定，都沒過就拒。
-		$verified = false;
-		if ( isset( $_POST['moksafowo_payuni_store_nonce'] )
-			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['moksafowo_payuni_store_nonce'] ) ), 'moksafowo_payuni_restore_store' ) ) {
-			$verified = true; // 自家選店 interstitial。
-		} elseif ( isset( $_POST['woocommerce-process-checkout-nonce'] )
-			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['woocommerce-process-checkout-nonce'] ) ), 'woocommerce-process_checkout' ) ) {
-			$verified = true; // WC 原生結帳送單 — WC core process_checkout() 同一顆。
-		} elseif ( isset( $_POST['security'] )
-			&& wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['security'] ) ), 'update-order-review' ) ) {
-			$verified = true; // WC AJAX 更新訂單摘要 — WC core update_order_review() 同一顆。
-		}
-		if ( ! $verified ) {
-			return false;
-		}
-
-		if ( ! isset( $_POST['moksafowo_payuni_selected_store_id'], $_POST['moksafowo_payuni_selected_store_name'], $_POST['moksafowo_payuni_selected_store_address'] ) ) {
-			return false;
-		}
-
-		$store_id        = isset( $_POST['moksafowo_payuni_selected_store_id'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_id'] ) ) : '';
-		$store_name      = isset( $_POST['moksafowo_payuni_selected_store_name'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_name'] ) ) : '';
-		$store_address   = isset( $_POST['moksafowo_payuni_selected_store_address'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_address'] ) ) : '';
-		$store_data_json = isset( $_POST['moksafowo_payuni_selected_store_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['moksafowo_payuni_selected_store_data'] ) ) : '';
-
-		$store_data = array(
-			'id'      => $store_id,
-			'name'    => $store_name,
-			'address' => $store_address,
-		);
-
-		if ( ! empty( $store_data_json ) ) {
-			$parsed_data = json_decode( $store_data_json, true );
-			if ( json_last_error() === JSON_ERROR_NONE && $parsed_data ) {
-				// json_decode 不做消毒 — 逐欄 sanitize 後才放進 session / 寫 meta
-				$store_data = map_deep( $parsed_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
-				PayuniShipping::log( 'Successfully parsed store JSON data from POST' );
-			} else {
-				PayuniShipping::log( 'JSON decode error from POST: ' . json_last_error_msg() );
-			}
-		}
-
-		WC()->session->set( 'moksafowo_payuni_selected_store_data', $store_data );
-		PayuniShipping::log( 'Store data restored from POST to WC Session: ' . wc_print_r( $store_data, true ) );
-		return WC()->session->get( 'moksafowo_payuni_selected_store_data', array() );
-	}
 
 	/**
 	 * 區塊結帳選了超商時，地址欄只用 CSS 藏起來，驗證照跑。第一次購買的顧客郵遞區號是空的，

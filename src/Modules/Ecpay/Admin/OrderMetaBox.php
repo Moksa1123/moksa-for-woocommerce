@@ -87,7 +87,14 @@ final class OrderMetaBox {
 		}
 
 		if ( '' !== $rtn_code && '1' !== $rtn_code ) {
-			echo '<p style="color:#646970;font-size:11px;"><strong>狀態代碼：</strong>' . esc_html( $rtn_code ) . '</p>';
+			$rtn_label = in_array( $rtn_code, [ '2', '10100073' ], true )
+				? __( 'Payment code issued, awaiting payment', 'moksa-for-woocommerce' )
+				: sprintf(
+					/* translators: %s: ECPay status code */
+					__( 'Status code %s', 'moksa-for-woocommerce' ),
+					$rtn_code
+				);
+			echo '<p style="color:#646970;font-size:11px;">' . esc_html( $rtn_label ) . '</p>';
 		}
 
 		$refunds = $order->get_refunds();

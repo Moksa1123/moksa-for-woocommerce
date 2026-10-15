@@ -121,8 +121,10 @@ class PayuniShipping {
 		self::$hashiv  = Credentials::hashiv();
 
 		self::$log_enabled = wc_string_to_bool( get_option( 'moksafowo_payuni_shipping_debug_log_enabled', 'no' ) );
-		self::$testmode    = wc_string_to_bool( get_option( 'moksafowo_payuni_shipping_testmode_enabled' ) );
-		self::$api_url     = ( self::$testmode ) ? 'https://sandbox-api.payuni.com.tw/api' : 'https://api.payuni.com.tw/api';
+		// 跟憑證用同一個開關。原本物流另有開關只決定 API 網址，憑證卻跟著金流的開關走，
+		// 兩邊不一致時（例如測試憑證打正式網址）地圖與建單一律失敗。
+		self::$testmode = Credentials::test_mode_enabled();
+		self::$api_url  = ( self::$testmode ) ? 'https://sandbox-api.payuni.com.tw/api' : 'https://api.payuni.com.tw/api';
 
 		self::$shipping_status_url = add_query_arg( 'wc-api', 'shipping_status_callback', home_url( '/' ) );
 
@@ -637,11 +639,8 @@ class PayuniShipping {
 		}
 		$msg_str = is_string( $message ) ? $message : (string) wp_json_encode( $message );
 		$method  = in_array( $level, [ 'info', 'warning', 'error', 'debug' ], true ) ? $level : 'info';
-		\Moksafowo\Logging\Logger::{$method}( 'moksafowo-payuni-shipping', $msg_str );
-
-		$redacted = \Moksafowo\Logging\Redactor::redact_string( $msg_str );
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- belt-and-suspenders fallback when WC log dir not writable; plugin Logger does not propagate redacted result back.
-		error_log( '[moksa-for-woocommerce-payuni-shipping][' . $method . '] ' . $redacted );
+		// Logger 已處理 WC log 目錄不可寫的情況（退回 error_log），這裡不再另寫一份。
+		\Moksafowo\Logging\Logger::{$method}( 'payuni-shipping', $msg_str );
 	}
 
 

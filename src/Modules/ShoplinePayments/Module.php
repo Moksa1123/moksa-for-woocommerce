@@ -91,15 +91,18 @@ final class Module extends AbstractGatewayModule {
 			];
 		}
 
-		$d = (array) ( $res['data'] ?? [] );
+		$d      = (array) ( $res['data'] ?? [] );
+		$status = '' !== (string) ( $d['status'] ?? '' ) ? Api\Helper::status_label( (string) $d['status'] ) . ' (' . $d['status'] . ')' : '';
+		$amount = (string) ( $d['amount']['value'] ?? '' );
 		return [
 			'ok'      => true,
-			'message' => (string) ( $d['status'] ?? 'OK' ),
+			'message' => '' !== $status ? $status : 'OK',
 			'lines'   => array_filter(
 				[
-					__( 'Status', 'moksa-for-woocommerce' )         => (string) ( $d['status'] ?? '' ),
-					__( 'Amount', 'moksa-for-woocommerce' )         => (string) ( $d['amount']['value'] ?? '' ),
-					__( 'Payment type', 'moksa-for-woocommerce' )   => (string) ( $d['paymentMethod'] ?? '' ),
+					__( 'Status', 'moksa-for-woocommerce' )         => $status,
+					// 金額以「元 × 100」表示。
+					__( 'Amount', 'moksa-for-woocommerce' )         => '' !== $amount ? 'NT$' . wc_format_decimal( (int) $amount / 100, 0 ) : '',
+					__( 'Payment type', 'moksa-for-woocommerce' )   => Api\Helper::method_label( (string) ( $d['paymentMethod'] ?? '' ) ),
 					__( 'Transaction ID', 'moksa-for-woocommerce' ) => (string) ( $d['tradeOrderId'] ?? '' ),
 				],
 				static fn( string $v ): bool => '' !== $v

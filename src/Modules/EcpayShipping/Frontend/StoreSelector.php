@@ -140,6 +140,7 @@ final class StoreSelector {
 				'method_id'  => $method_id,
 				'pending_id' => $pending_id,
 				'referrer'   => $referrer,
+				'owner'      => \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::current(),
 			],
 			30 * MINUTE_IN_SECONDS
 		);
@@ -240,7 +241,7 @@ final class StoreSelector {
 
 		$state = get_transient( self::STATE_PREFIX . $mtn ); // anti-tamper：confirm 我們有開過此 MTN
 		if ( ! is_array( $state ) ) {
-			Helper::log( 'shipping map callback unknown MTN — rejected', [ 'mtn' => $mtn ] );
+			Helper::warn( 'shipping map callback unknown MTN — rejected', [ 'mtn' => $mtn ] );
 			status_header( 403 );
 			echo 'Unknown trade';
 			exit;
@@ -254,6 +255,7 @@ final class StoreSelector {
 			'outside'   => isset( $posted['CVSOutSide'] ) ? wc_clean( wp_unslash( $posted['CVSOutSide'] ) ) : '0',
 			'method_id' => $state['method_id'],
 			'mtn'       => $mtn,
+			'owner'     => (string) ( $state['owner'] ?? '' ),
 		];
 
 		if ( '' === $store['id'] ) {
@@ -271,13 +273,6 @@ final class StoreSelector {
 		$token = wp_generate_password( 24, false );
 		set_transient( self::TRANSIENT_PREFIX . $token, $store, 30 * MINUTE_IN_SECONDS );
 
-		if ( function_exists( 'WC' ) ) {
-			WC()->initialize_session();
-			if ( WC()->session ) {
-				WC()->session->set( self::SESSION_KEY, $store );
-			}
-		}
-
 		delete_transient( self::STATE_PREFIX . $mtn ); // one-shot
 		$base_url = ! empty( $state['referrer'] ) ? (string) $state['referrer'] : wc_get_checkout_url();
 		// referrer 必須是同站 URL
@@ -294,8 +289,7 @@ final class StoreSelector {
 	/**
 	 * 結帳頁帶著 ?moksafowo_ecpay_store=<token> 進來時，當場把門市寫進 session。
 	 *
-	 * token 是我們自己發的一次性亂數（24 字元、30 分鐘到期），本身就是憑證，
-	 * 而且只會影響請求者自己的 session，所以不另外要 nonce。
+	 * token 是我們自己發的一次性亂數（24 字元、30 分鐘到期），且只兌換給開地圖的那個 session。
 	 */
 	public static function consume_token_early(): void {
 		if ( is_admin() || wp_doing_ajax() ) {
@@ -310,6 +304,11 @@ final class StoreSelector {
 		$store = get_transient( self::TRANSIENT_PREFIX . $token );
 		if ( ! is_array( $store ) ) {
 			return; // 已被兌換或過期；前端會退回讀 session。
+		}
+		// 只兌換給開地圖的那個瀏覽器；別人拿到連結不能改掉他的門市。
+		if ( ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store['owner'] ?? '' ) ) {
+			Helper::warn( 'store token owner mismatch — ignored' );
+			return;
 		}
 
 		if ( function_exists( 'WC' ) ) {
@@ -330,6 +329,9 @@ final class StoreSelector {
 
 		$store = get_transient( self::TRANSIENT_PREFIX . $token );
 		if ( ! is_array( $store ) ) {
+			wp_send_json_error( [ 'message' => 'expired' ] );
+		}
+		if ( ! \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::matches( $store['owner'] ?? '' ) ) {
 			wp_send_json_error( [ 'message' => 'expired' ] );
 		}
 

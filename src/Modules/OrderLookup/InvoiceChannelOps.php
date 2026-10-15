@@ -185,7 +185,7 @@ final class InvoiceChannelOps {
 		$summary = sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: channel labels */
 			__( '%1$s the %2$s issuing options: %3$s.', 'moksa-for-woocommerce' ),
-			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'Disable', 'moksa-for-woocommerce' ),
 			self::providers()[ $provider ],
 			implode( '、', $labels )
 		);
@@ -233,7 +233,7 @@ final class InvoiceChannelOps {
 		return sprintf(
 			/* translators: 1: enable/disable, 2: provider, 3: channel labels */
 			__( '✅ The %2$s issuing options are now %1$s: %3$s.', 'moksa-for-woocommerce' ),
-			$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+			$enable ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
 			self::providers()[ $provider ] ?? $provider,
 			implode( '、', $labels )
 		);

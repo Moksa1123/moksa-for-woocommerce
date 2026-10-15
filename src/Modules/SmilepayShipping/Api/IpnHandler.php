@@ -43,7 +43,7 @@ final class IpnHandler {
 		}
 
 		if ( 'yes' === $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) && ! hash_equals( Helper::callback_key( $order ), $mfk ) ) {
-			Helper::log( 'IPN callback key mismatch', [ 'order_id' => $order_id ] );
+			Helper::warn( 'IPN callback key mismatch', [ 'order_id' => $order_id ] );
 			status_header( 200 );
 			exit( '<Roturlstatus>key mismatch</Roturlstatus>' );
 		}
@@ -92,7 +92,9 @@ final class IpnHandler {
 		}
 		$order->save();
 
-		if ( '' !== $wc_status && $order->get_status() !== $wc_status && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $wc_status ) ) {
+		if ( '' !== $wc_status
+			&& \Moksafowo\Modules\Shipping\Statuses\StatusGuard::may_transition( $order->get_status(), $wc_status )
+			&& \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $wc_status ) ) {
 			$order->update_status(
 				$wc_status,
 				sprintf(

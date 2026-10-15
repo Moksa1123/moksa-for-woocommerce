@@ -76,10 +76,12 @@ final class BatchPrint {
 
 	private static function form_for_group( string $service, array $ship_trade_nos, string $lgs_type, string $goods_type, string $package_spec, array $options ): array {
 		if ( ShipType::SEVEN === $service ) {
-			$api_url   = PayuniShipping::$api_url . '/logistics/print_label';
+			$api_url = PayuniShipping::$api_url . '/logistics/print_label';
+			// PAYUNi 要台灣日期；用 UTC 算的話台灣凌晨 0～8 點會送出前一天。
+			$tw_now    = new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) );
 			$ship_date = ( $lgs_type === LgsType::B2C )
-				? gmdate( 'Ymd', strtotime( '+1 day' ) )
-				: gmdate( 'Ymd' );
+				? $tw_now->modify( '+1 day' )->format( 'Ymd' )
+				: $tw_now->format( 'Ymd' );
 			// LabelMode: 1=A4 / 2=直立式（僅 B2C）；C2C 禁 mode=2
 			$modal_mode = isset( $options['mode'] ) && '2' === (string) $options['mode'] ? '2' : '';
 			$label_mode = '' !== $modal_mode ? $modal_mode : (string) get_option( 'moksafowo_payuni_shipping_cvs_label_mode', '1' );
@@ -107,7 +109,7 @@ final class BatchPrint {
 				$package_spec = '1';
 			}
 
-			$est_ship    = self::next_business_day( new \DateTime(), $shipping_date );
+			$est_ship    = self::next_business_day( new \DateTime( 'now', new \DateTimeZone( 'Asia/Taipei' ) ), $shipping_date );
 			$est_deliver = self::next_business_day( $est_ship, 1 );
 
 			$args = [
@@ -141,7 +143,8 @@ final class BatchPrint {
 		$d = ( $from instanceof \DateTime ) ? clone $from : new \DateTime( $from->format( 'Y-m-d H:i:s' ) );
 		while ( $days > 0 ) {
 			$d->modify( '+1 day' );
-			if ( '0' !== $d->format( 'w' ) ) {  // 跳過週日
+			// 跳過週日與週六（PAYUNi 對週六的出貨日會拒收，同單筆列印）。
+			if ( ! in_array( $d->format( 'w' ), [ '0', '6' ], true ) ) {
 				--$days;
 			}
 		}

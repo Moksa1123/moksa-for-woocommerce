@@ -75,6 +75,7 @@ final class Module {
 			MOKSAFOWO_VERSION,
 			true
 		);
+		wp_localize_script( 'moksafowo-tracking-copy', 'moksafowoTrackingCopy', [ 'copied' => __( 'Copied', 'moksa-for-woocommerce' ) ] );
 	}
 
 	public static function register_admin_assets(): void {
@@ -85,6 +86,7 @@ final class Module {
 			MOKSAFOWO_VERSION,
 			true
 		);
+		wp_localize_script( 'moksafowo-tracking-copy', 'moksafowoTrackingCopy', [ 'copied' => __( 'Copied', 'moksa-for-woocommerce' ) ] );
 	}
 
 	/**

@@ -13,14 +13,13 @@ class LgsType {
 	public static function get_name( $lgs_type ) {
 		switch ( $lgs_type ) {
 			case self::HOME:
-				return '宅配';
-			case self::B2C:
-				return '大宗寄倉';
-			case self::C2C:
-				return '店到店';
 			case '黑貓': // 舊版誤存通路名
 			case '宅配':
-				return '宅配';
+				return __( 'Home delivery', 'moksa-for-woocommerce' );
+			case self::B2C:
+				return __( 'Bulk via warehouse (B2C)', 'moksa-for-woocommerce' );
+			case self::C2C:
+				return __( 'Store to store (C2C)', 'moksa-for-woocommerce' );
 			default:
 				return (string) $lgs_type;
 		}

@@ -75,7 +75,7 @@ final class PaymentInfoEmail extends \WC_Email {
 			]
 		);
 		echo '<p>' . esc_html__( 'Hi, your order has been placed. Please use the details below to pay before the deadline:', 'moksa-for-woocommerce' ) . '</p>';
-		echo wp_kses( PaymentInfoBox::render_html( $rows ), PaymentInfoBox::kses_allowlist() );
+		echo wp_kses( PaymentInfoBox::render_html( $rows, false ), PaymentInfoBox::kses_allowlist() );
 		if ( $this->object instanceof \WC_Order ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
 			echo wc_get_template_html(
@@ -101,6 +101,13 @@ final class PaymentInfoEmail extends \WC_Email {
 			if ( '' !== ( $row['value'] ?? '' ) ) {
 				$lines[] = ( $row['label'] ?? '' ) . '：' . $row['value'];
 			}
+		}
+		// 跟 HTML 版一樣附上訂單明細（訂單編號、應付金額、商品），顧客才對得上是哪一張。
+		if ( $this->object instanceof \WC_Order ) {
+			ob_start();
+			do_action( 'woocommerce_email_order_details', $this->object, false, true, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core email hook.
+			$lines[] = '';
+			$lines[] = trim( wp_strip_all_tags( (string) ob_get_clean() ) );
 		}
 		$extra = (string) $this->get_additional_content();
 		if ( '' !== trim( $extra ) ) {
