@@ -154,12 +154,19 @@ final class ShippingRequest {
 
 
 	public static function confirm_tcat( string $smseid, string $temperature, string $package_size = '0001' ): array {
+		// 預定配達日不送會被拒（-1005 缺少資料）。同官方外掛：隔天，遇週日延到週一；時段不指定。
+		$delivery = ( new \DateTimeImmutable( 'tomorrow', new \DateTimeZone( 'Asia/Taipei' ) ) );
+		if ( '7' === $delivery->format( 'N' ) ) {
+			$delivery = $delivery->modify( '+1 day' );
+		}
 		$post = [
-			'Dcvc'         => Helper::dcvc(),
-			'Verify_key'   => Helper::verify_key(),
-			'smseid'       => $smseid,
-			'package_size' => $package_size,
-			'temperature'  => $temperature,
+			'Dcvc'              => Helper::dcvc(),
+			'Verify_key'        => Helper::verify_key(),
+			'smseid'            => $smseid,
+			'package_size'      => $package_size,
+			'temperature'       => $temperature,
+			'delivery_date'     => $delivery->format( 'Y-m-d' ),
+			'delivery_timezone' => '4',
 		];
 		Helper::log(
 			'confirm_tcat request',
