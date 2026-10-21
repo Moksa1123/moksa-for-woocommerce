@@ -212,6 +212,7 @@ abstract class AbstractWalletGateway extends \WC_Payment_Gateway {
 		}
 
 		$order->update_meta_data( Keys::TAPPAY_PAYMENT_URL, $payment_url );
+		\Moksafowo\Modules\Tappay\Api\IpnHandler::schedule_pending_check( $order );
 		$order->update_status(
 			'pending',
 			sprintf(

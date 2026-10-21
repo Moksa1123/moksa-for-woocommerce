@@ -197,6 +197,7 @@ final class Credit extends \WC_Payment_Gateway {
 		// 3DS challenge — 導去 TapPay payment_url，完成後回 result_url。
 		if ( $resp['needs_3ds'] ) {
 			$order->update_meta_data( Keys::TAPPAY_PAYMENT_URL, $resp['payment_url'] );
+			\Moksafowo\Modules\Tappay\Api\IpnHandler::schedule_pending_check( $order );
 			$order->update_status( 'pending', __( 'Waiting for the customer to finish the TapPay 3-D Secure check.', 'moksa-for-woocommerce' ) );
 			$order->save();
 			return [

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-10-15 00:00+0800\n"
+"PO-Revision-Date: 2026-10-21 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -2768,7 +2768,7 @@ msgstr "Amego 發票已作廢 (#%1$s)：%2$s"
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:284
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:210
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
-#: src/Modules/Tappay/Gateways/Credit.php:284
+#: src/Modules/Tappay/Gateways/Credit.php:285
 msgid "No reason given"
 msgstr "無原因"
 
@@ -3439,7 +3439,7 @@ msgstr "確定要退款？金額："
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:108
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:154
-#: src/Modules/Tappay/Gateways/Credit.php:251
+#: src/Modules/Tappay/Gateways/Credit.php:252
 msgid "The refund amount must be greater than 0."
 msgstr "退款金額需大於 0。"
 
@@ -3539,6 +3539,7 @@ msgstr "請款處理中"
 #: src/Modules/Newebpay/Module.php:118
 #: src/Modules/Shared/Admin/CardRenderers.php:651
 #: src/Modules/ShoplinePayments/Api/Helper.php:45
+#: src/Modules/Tappay/Api/Helper.php:49
 msgid "Refunded"
 msgstr "已退刷"
 
@@ -3879,7 +3880,7 @@ msgstr "無效訂單"
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:143
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:167
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:252
-#: src/Modules/Tappay/Gateways/Credit.php:299
+#: src/Modules/Tappay/Gateways/Credit.php:300
 #, php-format
 msgid "%s order"
 msgstr "%s 訂單"
@@ -6199,6 +6200,7 @@ msgstr "已開立"
 #: src/Modules/NewebpayShipping/Operations/StatusMapper.php:55
 #: src/Modules/Shared/Admin/CardRenderers.php:650
 #: src/Modules/ShoplinePayments/Api/Helper.php:43
+#: src/Modules/Tappay/Api/Helper.php:51
 msgid "Cancelled"
 msgstr "已取消"
 
@@ -6275,8 +6277,8 @@ msgstr "已授權（待請款）"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
 #: src/Modules/ShoplinePayments/Module.php:106
-#: src/Modules/Tappay/Api/IpnHandler.php:280
-#: src/Modules/Tappay/Module.php:101
+#: src/Modules/Tappay/Api/IpnHandler.php:342
+#: src/Modules/Tappay/Module.php:102
 msgid "Transaction ID"
 msgstr "交易編號"
 
@@ -6707,7 +6709,7 @@ msgstr "藍新查詢回傳格式錯誤"
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:40
-#: src/Modules/Tappay/Gateways/Credit.php:242
+#: src/Modules/Tappay/Gateways/Credit.php:243
 msgid "The order does not exist."
 msgstr "訂單不存在。"
 
@@ -6800,9 +6802,9 @@ msgstr "支付寶"
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:68
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:48
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:139
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:283
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:284
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:100
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:234
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:235
 #: src/Modules/Tappay/Gateways/Credit.php:95
 msgid "The order could not be found"
 msgstr "找不到訂單"
@@ -7076,7 +7078,7 @@ msgstr "付款方式"
 #: src/Modules/Payuni/Api/PaymentRequest.php:377
 #: src/Modules/Pchomepay/Module.php:103
 #: src/Modules/ShoplinePayments/Module.php:104
-#: src/Modules/Tappay/Module.php:100
+#: src/Modules/Tappay/Module.php:101
 msgid "Amount"
 msgstr "金額"
 
@@ -8574,7 +8576,7 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Modules/Tappay/Api/IpnHandler.php:281
+#: src/Modules/Tappay/Api/IpnHandler.php:343
 #: src/Settings/SettingsPage.php:640
 msgid "Last four card digits"
 msgstr "卡末四碼"
@@ -11104,12 +11106,13 @@ msgstr "付款完成"
 #: src/Modules/Pchomepay/Module.php:91
 #: src/Modules/Shared/Admin/CardRenderers.php:509
 #: src/Modules/ShoplinePayments/Api/Helper.php:38
+#: src/Modules/Tappay/Api/Helper.php:50
 msgid "Awaiting payment"
 msgstr "等待付款"
 
 #: src/Modules/Pchomepay/Module.php:101
 #: src/Modules/ShoplinePayments/Module.php:102
-#: src/Modules/Tappay/Module.php:99
+#: src/Modules/Tappay/Module.php:100
 msgid "Status"
 msgstr "狀態"
 
@@ -12246,6 +12249,7 @@ msgid "Not collected"
 msgstr "未取件"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:72
+#: src/Modules/Tappay/Api/Helper.php:47
 msgid "Completed"
 msgstr "完成"
 
@@ -13409,48 +13413,72 @@ msgstr "黑貓宅配寄件人地址。"
 msgid "The TapPay partner key is not set."
 msgstr "TapPay Partner Key 未設定。"
 
+#: src/Modules/Tappay/Api/Helper.php:45
+msgid "Error"
+msgstr "交易錯誤"
+
+#: src/Modules/Tappay/Api/Helper.php:46
+msgid "Authorized, not yet captured"
+msgstr "已授權，尚未請款"
+
+#: src/Modules/Tappay/Api/Helper.php:48
+msgid "Partially refunded"
+msgstr "部分退款"
+
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Tappay/Api/IpnHandler.php:63
+#: src/Modules/Tappay/Api/IpnHandler.php:66
 #, php-format
 msgid "TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "TapPay 回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
 #. translators: 1: transaction id in the notice, 2: transaction id stored on the order
-#: src/Modules/Tappay/Api/IpnHandler.php:80
+#: src/Modules/Tappay/Api/IpnHandler.php:83
 #, php-format
 msgid "TapPay sent a payment notice for transaction %1$s, but this order was charged as transaction %2$s. The order was not marked as paid; please check it in the TapPay portal."
 msgstr "TapPay 送來交易 %1$s 的付款通知，但這張訂單送出的交易是 %2$s。訂單未標為已付款，請到 TapPay 後台核對。"
 
 #. translators: %s: TapPay status code
-#: src/Modules/Tappay/Api/IpnHandler.php:95
+#: src/Modules/Tappay/Api/IpnHandler.php:98
 #, php-format
 msgid "TapPay sent a notice (status code %s) for this already paid order. The order was not changed."
 msgstr "已付款訂單收到 TapPay 通知（狀態碼 %s），訂單未變更。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:160
-msgid "The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid."
-msgstr "TapPay 回傳的交易與此訂單的訂單編號或金額不符，未據此將訂單標為已付款。"
+#: src/Modules/Tappay/Api/IpnHandler.php:144
+msgid "Your payment is still being confirmed. We will update the order as soon as TapPay confirms it, so there is no need to pay again."
+msgstr "付款確認中，TapPay 確認後會自動更新訂單，請不要重複付款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:184
+#: src/Modules/Tappay/Api/IpnHandler.php:154
 msgid "The 3-D Secure check did not finish, or the payment failed. Please try again."
 msgstr "TapPay 3D 驗證未完成或付款失敗，請重新嘗試。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:257
+#: src/Modules/Tappay/Api/IpnHandler.php:193
+msgid "The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid."
+msgstr "TapPay 回傳的交易與此訂單的訂單編號或金額不符，未據此將訂單標為已付款。"
+
+#: src/Modules/Tappay/Api/IpnHandler.php:319
+msgid "This transaction was partially refunded in the TapPay dashboard."
+msgstr "這筆交易已在 TapPay 後台部分退款。"
+
+#: src/Modules/Tappay/Api/IpnHandler.php:320
 msgid "This transaction was refunded in the TapPay dashboard."
 msgstr "TapPay 交易已於 TapPay 後台退款。"
 
 #. translators: %s: payment method title
-#: src/Modules/Tappay/Api/IpnHandler.php:276
+#: src/Modules/Tappay/Api/IpnHandler.php:338
 #, php-format
 msgid "%s payment completed"
 msgstr "%s 付款完成"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:290
-msgid "TapPay is waiting for the customer to finish the 3-D Secure check."
-msgstr "TapPay 等待顧客完成 3D 驗證。"
+#: src/Modules/Tappay/Api/IpnHandler.php:354
+msgid "TapPay is waiting for the payment to be confirmed."
+msgstr "TapPay 正在等待付款確認。"
+
+#: src/Modules/Tappay/Api/IpnHandler.php:359
+msgid "The TapPay transaction was cancelled."
+msgstr "TapPay 交易已取消。"
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Api/IpnHandler.php:300
+#: src/Modules/Tappay/Api/IpnHandler.php:369
 #: src/Modules/Tappay/Gateways/Credit.php:185
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
@@ -13476,45 +13504,45 @@ msgstr "%1$s 付款失敗（狀態碼 %2$d）：%3$s"
 msgid "The payment could not be completed: %s"
 msgstr "付款未能完成：%s"
 
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:245
-#: src/Modules/Tappay/Gateways/Credit.php:200
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:246
+#: src/Modules/Tappay/Gateways/Credit.php:201
 msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
 msgstr "等待顧客完成 TapPay 3D 驗證。"
 
 #. translators: 1: payment method name, 2: rec_trade_id
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:266
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:267
 #, php-format
 msgid "%1$s payment completed — transaction ID %2$s"
 msgstr "%1$s 付款完成 — 交易編號 %2$s"
 
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:287
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:238
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:288
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:239
 msgid "This order has no TapPay transaction to refund."
 msgstr "這筆訂單沒有可退款的 TapPay 交易。"
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:297
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:248
-#: src/Modules/Tappay/Gateways/Credit.php:271
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:298
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:249
+#: src/Modules/Tappay/Gateways/Credit.php:272
 #, php-format
 msgid "The TapPay refund failed (status code %1$d): %2$s"
 msgstr "TapPay 退款失敗（狀態碼 %1$d）：%2$s"
 
 #. translators: 1: amount, 2: reason
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:307
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:258
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:308
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:259
 #, php-format
 msgid "TapPay refunded %1$s. Reason: %2$s"
 msgstr "TapPay 已退款 %1$s，原因：%2$s"
 
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:309
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:260
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:310
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:261
 msgid "not given"
 msgstr "未填寫"
 
 #. translators: %s: order number
-#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:324
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:276
+#: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:325
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:277
 #, php-format
 msgid "Order %s"
 msgstr "訂單 %s"
@@ -13540,7 +13568,7 @@ msgid "The payment page could not be opened. Please choose another payment metho
 msgstr "無法開啟付款頁面，請改用其他付款方式。"
 
 #. translators: %s: wallet name
-#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:219
+#: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:220
 #, php-format
 msgid "Waiting for the customer to finish paying with %s."
 msgstr "等待顧客以 %s 完成付款。"
@@ -13593,17 +13621,17 @@ msgid "TapPay did not return a payment token. Please enter the card details agai
 msgstr "無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。"
 
 #. translators: 1: rec_trade_id, 2: card last4
-#: src/Modules/Tappay/Gateways/Credit.php:222
+#: src/Modules/Tappay/Gateways/Credit.php:223
 #, php-format
 msgid "TapPay card payment completed — transaction ID %1$s (card ending %2$s)"
 msgstr "TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）"
 
-#: src/Modules/Tappay/Gateways/Credit.php:246
+#: src/Modules/Tappay/Gateways/Credit.php:247
 msgid "The order has no TapPay transaction ID."
 msgstr "訂單缺少 TapPay 交易編號。"
 
 #. translators: 1: amount, 2: rec_trade_id, 3: reason
-#: src/Modules/Tappay/Gateways/Credit.php:281
+#: src/Modules/Tappay/Gateways/Credit.php:282
 #, php-format
 msgid "The TapPay refund of NT$%1$s was submitted (transaction ID %2$s) — %3$s"
 msgstr "TapPay 退款已送出（NT$%1$s，交易編號 %2$s）— %3$s"
@@ -13688,52 +13716,52 @@ msgstr "TapPay 拍付 — 信用卡直連（TapPay Fields iframe，支援 3D 驗
 msgid "Secure card payments without leaving your site"
 msgstr "信用卡直接在本站安全付款"
 
-#: src/Modules/Tappay/Module.php:83
+#: src/Modules/Tappay/Module.php:84
 msgid "TapPay could not be reached."
 msgstr "無法連線到 TapPay。"
 
-#: src/Modules/Tappay/Module.php:93
+#: src/Modules/Tappay/Module.php:94
 msgid "TapPay has no record of this transaction yet."
 msgstr "TapPay 查不到這筆交易的紀錄。"
 
-#: src/Modules/Tappay/Module.php:102
+#: src/Modules/Tappay/Module.php:103
 msgid "Bank transaction ID"
 msgstr "收單行交易編號"
 
-#: src/Modules/Tappay/Module.php:113
+#: src/Modules/Tappay/Module.php:114
 msgid "Bank settlement"
 msgstr "銀行對帳結果"
 
-#: src/Modules/Tappay/Module.php:171
+#: src/Modules/Tappay/Module.php:172
 msgid "Please fill in all the card details."
 msgstr "請完整填寫信用卡資訊。"
 
-#: src/Modules/Tappay/Module.php:172
+#: src/Modules/Tappay/Module.php:173
 msgid "No payment token was returned. Please check the card number."
 msgstr "無法取得付款憑證，請確認卡號是否正確。"
 
-#: src/Modules/Tappay/Module.php:204
+#: src/Modules/Tappay/Module.php:205
 msgid "Payment service is unavailable. Please try again later."
 msgstr "付款服務目前無法使用，請稍後再試。"
 
-#: src/Modules/Tappay/Module.php:205
+#: src/Modules/Tappay/Module.php:206
 msgid "This payment method is not available on this store."
 msgstr "本店尚未開通這個付款方式。"
 
-#: src/Modules/Tappay/Module.php:206
-#: src/Modules/Tappay/Module.php:242
+#: src/Modules/Tappay/Module.php:207
+#: src/Modules/Tappay/Module.php:243
 msgid "Could not start the payment. Please try again."
 msgstr "無法開始付款，請再試一次。"
 
-#: src/Modules/Tappay/Module.php:243
+#: src/Modules/Tappay/Module.php:244
 msgid "Please pay with the button above."
 msgstr "請使用上方的付款按鈕付款。"
 
-#: src/Modules/Tappay/Module.php:244
+#: src/Modules/Tappay/Module.php:245
 msgid "Pay with Apple Pay"
 msgstr "使用 Apple Pay 付款"
 
-#: src/Modules/Tappay/Module.php:245
+#: src/Modules/Tappay/Module.php:246
 msgid "Pay with Samsung Pay"
 msgstr "使用 Samsung Pay 付款"
 

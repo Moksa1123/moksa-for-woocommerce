@@ -63,6 +63,7 @@ final class Module extends AbstractGatewayModule {
 	protected function register_webhooks(): void {
 		add_action( 'woocommerce_api_moksafowo_tappay_notify', [ Api\IpnHandler::class, 'handle_notify' ] );
 		add_action( 'woocommerce_api_moksafowo_tappay_result', [ Api\IpnHandler::class, 'handle_result' ] );
+		add_action( Api\IpnHandler::PENDING_CHECK_HOOK, [ Api\IpnHandler::class, 'check_pending' ], 10, 2 );
 	}
 
 	/**
@@ -96,7 +97,7 @@ final class Module extends AbstractGatewayModule {
 		}
 
 		$lines = [
-			__( 'Status', 'moksa-for-woocommerce' ) => (string) ( $r['record_status'] ?? '' ),
+			__( 'Status', 'moksa-for-woocommerce' ) => Api\Helper::record_status_label( (string) ( $r['record_status'] ?? '' ) ),
 			__( 'Amount', 'moksa-for-woocommerce' ) => (string) ( $r['amount'] ?? '' ),
 			__( 'Transaction ID', 'moksa-for-woocommerce' ) => (string) ( $r['rec_trade_id'] ?? $rec ),
 			__( 'Bank transaction ID', 'moksa-for-woocommerce' ) => (string) ( $r['bank_transaction_id'] ?? '' ),
@@ -119,7 +120,7 @@ final class Module extends AbstractGatewayModule {
 
 		return [
 			'ok'      => true,
-			'message' => (string) ( $r['record_status'] ?? $r['status'] ?? 'OK' ),
+			'message' => isset( $r['record_status'] ) ? Api\Helper::record_status_label( (string) $r['record_status'] ) : 'OK',
 			'lines'   => array_filter( $lines, static fn( string $v ): bool => '' !== $v ),
 		];
 	}

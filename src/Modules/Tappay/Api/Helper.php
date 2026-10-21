@@ -36,6 +36,23 @@ final class Helper extends AbstractCredentialHelper {
 		return 'tappay-payment';
 	}
 
+	/** 交易紀錄的 record_status 轉成文字（依 TapPay 官方定義），原始代碼放括號。 */
+	public static function record_status_label( string $code ): string {
+		if ( '' === $code ) {
+			return '';
+		}
+		$label = [
+			'-1' => __( 'Error', 'moksa-for-woocommerce' ),
+			'0'  => __( 'Authorized, not yet captured', 'moksa-for-woocommerce' ),
+			'1'  => __( 'Completed', 'moksa-for-woocommerce' ),
+			'2'  => __( 'Partially refunded', 'moksa-for-woocommerce' ),
+			'3'  => __( 'Refunded', 'moksa-for-woocommerce' ),
+			'4'  => __( 'Awaiting payment', 'moksa-for-woocommerce' ),
+			'5'  => __( 'Cancelled', 'moksa-for-woocommerce' ),
+		][ $code ] ?? '';
+		return '' !== $label ? $label . ' (' . $code . ')' : $code;
+	}
+
 	public static function is_sandbox(): bool {
 		return 'yes' === get_option( 'moksafowo_tappay_sandbox_enabled', 'yes' );
 	}

@@ -242,6 +242,7 @@ abstract class AbstractDeviceWalletGateway extends \WC_Payment_Gateway {
 			$payment_url = (string) ( $resp['payment_url'] ?? '' );
 			if ( '' !== $payment_url ) {
 				$order->update_meta_data( Keys::TAPPAY_PAYMENT_URL, $payment_url );
+				\Moksafowo\Modules\Tappay\Api\IpnHandler::schedule_pending_check( $order );
 				$order->update_status( 'pending', __( 'Waiting for the customer to finish the TapPay 3-D Secure check.', 'moksa-for-woocommerce' ) );
 				$order->save();
 				return [

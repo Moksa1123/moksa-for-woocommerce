@@ -9,6 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 final class IpnHandler {
 
+	public const PENDING_CHECK_HOOK = 'moksafowo_tappay_pending_check';
+
+
 	public static function handle_notify(): void {
 		// Signature must be computed over raw bytes before any parsing.
 		$raw_body = file_get_contents( 'php://input' );
@@ -128,6 +131,36 @@ final class IpnHandler {
 			exit;
 		}
 
+		$record = self::query_verified_record( $order, $rec_trade_id );
+		if ( null !== $record ) {
+			self::write_transaction_meta( $order, $record );
+			self::apply_status( $order, $record );
+			$order->save();
+		}
+
+		// 待付款（例如銀行還在確認）：不要叫顧客重付，排補查，結果出來前先顯示訂單頁。
+		if ( null !== $record && 4 === (int) ( $record['record_status'] ?? -1 ) ) {
+			self::schedule_pending_check( $order );
+			wc_add_notice( __( 'Your payment is still being confirmed. We will update the order as soon as TapPay confirms it, so there is no need to pay again.', 'moksa-for-woocommerce' ), 'notice' );
+			wp_safe_redirect( $order->get_checkout_order_received_url() );
+			exit;
+		}
+
+		if ( $order->is_paid() || $order->has_status( [ 'processing', 'completed', 'on-hold' ] ) ) {
+			wp_safe_redirect( $order->get_checkout_order_received_url() );
+			exit;
+		}
+
+		wc_add_notice( __( 'The 3-D Secure check did not finish, or the payment failed. Please try again.', 'moksa-for-woocommerce' ), 'error' );
+		wp_safe_redirect( $order->get_checkout_payment_url( false ) );
+		exit;
+	}
+
+	/**
+	 * 向 TapPay 查這張訂單的交易紀錄（Record API），而且只採用訂單號與金額都對得上的那筆。
+	 * 返回頁與補查共用：前端跳轉的資料可能被改，狀態一律以伺服器查到的為準。
+	 */
+	private static function query_verified_record( \WC_Order $order, string $rec_trade_id = '' ): ?array {
 		// 網址上的 rec_trade_id 任何人都能改成自己另一筆成功交易的編號；訂單已存的優先。
 		$stored_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
 		if ( '' !== $stored_trade_id ) {
@@ -162,7 +195,7 @@ final class IpnHandler {
 			}
 		}
 		Helper::log(
-			'3DS result query',
+			'trade record query',
 			[
 				'order_id'     => $order->get_id(),
 				'rec_trade_id' => $rec_trade_id,
@@ -170,20 +203,41 @@ final class IpnHandler {
 			]
 		);
 
-		if ( null !== $record ) {
-			self::write_transaction_meta( $order, $record );
-			self::apply_status( $order, $record );
-			$order->save();
-		}
+		return $record;
+	}
 
-		if ( $order->is_paid() || $order->has_status( [ 'processing', 'completed', 'on-hold' ] ) ) {
-			wp_safe_redirect( $order->get_checkout_order_received_url() );
-			exit;
+	/** 3D 驗證與電子錢包付款時，TapPay 不會送付款通知給待付款的交易，要自己補查。 */
+	public static function schedule_pending_check( \WC_Order $order, int $attempt = 1 ): void {
+		if ( ! function_exists( 'as_schedule_single_action' ) ) {
+			return;
 		}
+		$args = [ $order->get_id(), $attempt ];
+		if ( function_exists( 'as_has_scheduled_action' ) && as_has_scheduled_action( self::PENDING_CHECK_HOOK, $args, 'moksa-for-woocommerce' ) ) {
+			return;
+		}
+		// TapPay 自己會在 10～20 分鐘內反查銀行，排在那之後。
+		as_schedule_single_action( time() + ( 1 === $attempt ? 25 : 60 ) * MINUTE_IN_SECONDS, self::PENDING_CHECK_HOOK, $args, 'moksa-for-woocommerce' );
+	}
 
-		wc_add_notice( __( 'The 3-D Secure check did not finish, or the payment failed. Please try again.', 'moksa-for-woocommerce' ), 'error' );
-		wp_safe_redirect( $order->get_checkout_payment_url( false ) );
-		exit;
+	public static function check_pending( $order_id, $attempt = 1 ): void {
+		$order = wc_get_order( (int) $order_id );
+		if ( ! $order instanceof \WC_Order || $order->is_paid() || ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo_tappay' ) ) {
+			return;
+		}
+		// 含已取消：待付款太久會被 WC 保留庫存逾時自動取消，但顧客其實可能已經付款。
+		if ( ! $order->has_status( [ 'pending', 'on-hold', 'failed', 'cancelled' ] ) ) {
+			return;
+		}
+		$record = self::query_verified_record( $order );
+		if ( null === $record ) {
+			return;
+		}
+		self::write_transaction_meta( $order, $record );
+		self::apply_status( $order, $record );
+		$order->save();
+		if ( 4 === (int) ( $record['record_status'] ?? -1 ) && (int) $attempt < 3 ) {
+			self::schedule_pending_check( $order, (int) $attempt + 1 );
+		}
 	}
 
 	private static function resolve_order( string $order_number ): ?\WC_Order {
@@ -247,20 +301,28 @@ final class IpnHandler {
 	}
 
 	private static function apply_status( \WC_Order $order, array $payload ): void {
-		// pay-by-prime has `status` (0=success); query trade_record has only `record_status` (0=authorized).
+		// 付款通知帶 `status`（0=成功）；從付款頁返回時查交易紀錄，只有 `record_status`。
+		// 付款通知與付款回應只看 status（官方欄位表沒有 record_status）；交易紀錄才用 record_status。
+		// record_status 依 TapPay 官方定義：-1 錯誤、0 已授權未請款、1 交易完成（已請款）、
+		// 2 部分退款、3 完全退款、4 待付款、5 取消交易。0 和 1 都算已付款。
 		$has_status    = array_key_exists( 'status', $payload );
 		$status        = $has_status ? (int) $payload['status'] : -1;
 		$record_status = isset( $payload['record_status'] ) ? (int) $payload['record_status'] : null;
 		$rec_trade_id  = (string) ( $payload['rec_trade_id'] ?? $order->get_meta( Keys::TAPPAY_REC_TRADE_ID ) );
+		if ( $has_status ) {
+			$record_status = null;
+		}
 
-		if ( 2 === $record_status ) {
-			$order->add_order_note( __( 'This transaction was refunded in the TapPay dashboard.', 'moksa-for-woocommerce' ) );
+		if ( 2 === $record_status || 3 === $record_status ) {
+			$order->add_order_note(
+				2 === $record_status
+					? __( 'This transaction was partially refunded in the TapPay dashboard.', 'moksa-for-woocommerce' )
+					: __( 'This transaction was refunded in the TapPay dashboard.', 'moksa-for-woocommerce' )
+			);
 			return;
 		}
 
-		$paid = $has_status
-			? ( 0 === $status && ( null === $record_status || in_array( $record_status, [ 0, 4 ], true ) ) )
-			: ( 0 === $record_status );
+		$paid = $has_status ? 0 === $status : in_array( $record_status, [ 0, 1 ], true );
 		// 已付款的訂單不會被晚到的等待驗證／失敗結果打回。
 		if ( ! $paid && $order->is_paid() ) {
 			return;
@@ -286,8 +348,15 @@ final class IpnHandler {
 			return;
 		}
 
-		if ( 1 === $record_status ) {
-			$order->update_status( 'pending', __( 'TapPay is waiting for the customer to finish the 3-D Secure check.', 'moksa-for-woocommerce' ) );
+		// 待付款（例如 3D 驗證或銀行尚未確認）：維持等待付款，結果由之後的付款通知決定。
+		if ( 4 === $record_status ) {
+			if ( ! $order->has_status( 'pending' ) ) {
+				$order->update_status( 'pending', __( 'TapPay is waiting for the payment to be confirmed.', 'moksa-for-woocommerce' ) );
+			}
+			return;
+		}
+		if ( 5 === $record_status ) {
+			$order->update_status( 'cancelled', __( 'The TapPay transaction was cancelled.', 'moksa-for-woocommerce' ) );
 			return;
 		}
 

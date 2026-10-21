@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.16.0
+Stable tag: 1.16.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.16.1 - 2026-10-21 =
+* Fixed: TapPay payments follow the official transaction statuses, and 3-D Secure or wallet payments still awaiting confirmation are checked again automatically instead of staying pending.
 
 = 1.16.0 - 2026-10-15 =
 * New: scannable store barcodes, e-invoice details for customers, PAYUNi payment codes on the order page and in email, and PayNow / SmilePay payment cards.
