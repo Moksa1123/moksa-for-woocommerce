@@ -125,6 +125,14 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 			}
 		}
 
+		// 信用卡分期只能一次全額退款（50007）。
+		if ( (int) $order->get_meta( Keys::PCHOMEPAY_INSTALLMENT ) > 1 && $amt < $order_total ) {
+			return new \WP_Error(
+				'moksafowo_pchomepay_full_refund_only',
+				__( 'Card instalment payments can only be refunded in full, in a single refund.', 'moksa-for-woocommerce' )
+			);
+		}
+
 		$refund_id = 'R' . $order_id . substr( (string) time(), -6 );
 		$result    = PaymentRequest::refund( $pchome_order_id, $refund_id, $amt );
 		if ( ! $result['ok'] ) {

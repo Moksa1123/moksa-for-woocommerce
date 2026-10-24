@@ -31,4 +31,8 @@ final class Cvs extends AbstractEcpayGateway {
 			'PaymentInfoURL'  => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 		];
 	}
+
+	protected function max_amount(): int {
+		return 20000;
+	}
 }

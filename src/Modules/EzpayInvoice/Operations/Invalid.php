@@ -46,7 +46,8 @@ final class Invalid {
 			'Version'       => '1.0',
 			'TimeStamp'     => (string) $now->getTimestamp(),
 			'InvoiceNumber' => $invoice_no,
-			'InvalidReason' => mb_substr( $reason, 0, 20 ),
+			// 上限 20 bytes（中文 6 字），依位元組切才不會被拒。
+			'InvalidReason' => mb_strcut( $reason, 0, 20, 'UTF-8' ),
 		];
 
 		Helper::log(

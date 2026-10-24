@@ -63,6 +63,7 @@ final class Keys {
 	public const ECPAY_INVOICE_INVALID_REASON     = '_moksafowo_ecpay_invoice_invalid_reason';
 	public const ECPAY_INVOICE_ALLOWANCE_NO       = '_moksafowo_ecpay_invoice_allowance_no';
 	public const ECPAY_INVOICE_ALLOWANCE_AMT      = '_moksafowo_ecpay_invoice_allowance_amt';
+	public const ECPAY_INVOICE_ALLOWANCES         = '_moksafowo_ecpay_invoice_allowances'; // 折讓清單 [{no, amount, voided}].
 	public const ECPAY_INVOICE_TAX_TYPE           = '_moksafowo_ecpay_invoice_tax_type';
 	public const ECPAY_INVOICE_DELAY_DAYS         = '_moksafowo_ecpay_invoice_delay_days';
 	public const ECPAY_INVOICE_SCHEDULED_AT       = '_moksafowo_ecpay_invoice_scheduled_at';
@@ -74,6 +75,7 @@ final class Keys {
 	public const NEWEBPAY_PAYMENT_TYPE      = '_moksafowo_newebpay_payment_type';
 	public const NEWEBPAY_PAY_TIME          = '_moksafowo_newebpay_pay_time';
 	public const NEWEBPAY_CARD_LAST4        = '_moksafowo_newebpay_card_last4';
+	public const NEWEBPAY_BNPL_SETTLED_AT   = '_moksafowo_newebpay_bnpl_settled_at'; // AFTEE 請款時間.
 
 	public const NEWEBPAY_ATM_BANK_CODE       = '_moksafowo_newebpay_atm_bank_code';
 	public const NEWEBPAY_ATM_CODE_NO         = '_moksafowo_newebpay_atm_code_no';
@@ -247,6 +249,7 @@ final class Keys {
 	public const AMEGO_INVOICE_STATUS         = '_moksafowo_amego_invoice_status';
 	public const AMEGO_INVOICE_ALLOWANCE_NO   = '_moksafowo_amego_invoice_allowance_no';
 	public const AMEGO_INVOICE_ALLOWANCE_AMT  = '_moksafowo_amego_invoice_allowance_amt';
+	public const AMEGO_INVOICE_ALLOWANCES     = '_moksafowo_amego_invoice_allowances'; // 折讓清單 [{no, amount, voided}].
 
 	public const EZPAY_INVOICE_ALLOWANCE_NO  = '_moksafowo_ezpay_invoice_allowance_no';
 	public const EZPAY_INVOICE_ALLOWANCE_AMT = '_moksafowo_ezpay_invoice_allowance_amt';
@@ -269,6 +272,7 @@ final class Keys {
 	public const PCHOMEPAY_PP_FEE          = '_moksafowo_pchomepay_pp_fee';
 	public const PCHOMEPAY_PAY_DATE        = '_moksafowo_pchomepay_pay_date';
 	public const PCHOMEPAY_CARD_LAST4      = '_moksafowo_pchomepay_card_last4';
+	public const PCHOMEPAY_INSTALLMENT     = '_moksafowo_pchomepay_installment';     // 信用卡分期期數（1＝一次付清）.
 	public const PCHOMEPAY_CARD_NO_TOKEN   = '_moksafowo_pchomepay_card_no_token';
 	public const PCHOMEPAY_VIRTUAL_ACCOUNT = '_moksafowo_pchomepay_virtual_account';
 	public const PCHOMEPAY_BANK_CODE       = '_moksafowo_pchomepay_bank_code';
@@ -290,6 +294,8 @@ final class Keys {
 	public const SLP_SUB_STATUS          = '_moksafowo_slp_sub_status';          // 細部原因（3DS pending / issuer decline 等）.
 	public const SLP_PAYMENT_METHOD      = '_moksafowo_slp_payment_method';      // 實際成交付款方式.
 	public const SLP_REFUND_ORDER_ID     = '_moksafowo_slp_refund_order_id';     // refund/create 回傳的 refundOrderId.
+	public const SLP_CARD_BRAND          = '_moksafowo_slp_card_brand';          // 卡別（Visa 等）.
+	public const SLP_CARD_LAST4          = '_moksafowo_slp_card_last4';          // 卡號末四碼.
 	public const SLP_PROCESSED_EVENT_IDS = '_moksafowo_slp_processed_event_ids'; // webhook event.id 去重清單（array）.
 
 	public const EZPAY_INVOICE_TRANS_NO  = '_moksafowo_ezpay_invoice_trans_no';

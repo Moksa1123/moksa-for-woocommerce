@@ -155,6 +155,7 @@ final class Module extends AbstractGatewayModule {
 		);
 
 		Frontend\CustomerPaymentInfo::init();
+		Admin\BnplSettle::init();
 
 		// NewebpayShipping fallback: shipping module uses payment credentials when no shipping-specific credentials set.
 		add_filter( 'moksafowo_newebpay_shipping_parse_order_id', [ Api\Helper::class, 'parse_order_id' ], 10, 2 );

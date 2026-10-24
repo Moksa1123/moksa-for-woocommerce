@@ -10,7 +10,7 @@ use Moksafowo\Order\Meta\Keys;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 向 PayNow 查這張發票目前的狀態（PayNow_EInvoice v1.5 的 Sel_Invoice）。
+ * 向 PayNow 查這張發票目前的狀態（PayNow_EInvoice v1.5 的 Invoice_Info）。
  *
  * 站上顯示的發票資料都是開立當下寫進去的；開立時逾時、或發票後來在 PayNow
  * 後台被作廢，站上都不會知道。發票要申報，這個落差不能靠猜。
@@ -38,10 +38,14 @@ final class Query {
 			];
 		}
 
-		// 回應是 `S|<欄位>|<欄位>…` 的管線格式，欄位順序依 PayNow 文件。
-		// 欄位數量可能隨版本增減，所以逐格取、缺的就不顯示，不硬套索引。
-		$parts = explode( '|', trim( (string) ( $resp['raw'] ?? '' ) ) );
-		$get   = static fn( int $i ): string => isset( $parts[ $i ] ) ? trim( (string) $parts[ $i ] ) : '';
+		// Invoice_Info：開立,總額／作廢／折讓,總額,未確認折讓,已確認折讓
+		$parts  = (array) ( $resp['parts'] ?? [] );
+		$get    = static fn( int $i ): string => isset( $parts[ $i ] ) ? (string) $parts[ $i ] : '';
+		$labels = [
+			'開立' => __( 'Issued', 'moksa-for-woocommerce' ),
+			'作廢' => __( 'Voided', 'moksa-for-woocommerce' ),
+			'折讓' => __( 'Allowance', 'moksa-for-woocommerce' ),
+		];
 
 		return [
 			'ok'      => true,
@@ -49,9 +53,10 @@ final class Query {
 			'lines'   => array_filter(
 				[
 					__( 'Invoice number', 'moksa-for-woocommerce' ) => $invoice_no,
-					__( 'Issuing status', 'moksa-for-woocommerce' ) => $get( 1 ),
-					__( 'Invoice amount', 'moksa-for-woocommerce' ) => $get( 2 ),
-					__( 'Issued at', 'moksa-for-woocommerce' )      => $get( 3 ),
+					__( 'Issuing status', 'moksa-for-woocommerce' ) => $labels[ $get( 0 ) ] ?? $get( 0 ),
+					__( 'Invoice amount', 'moksa-for-woocommerce' ) => $get( 1 ),
+					__( 'Unconfirmed allowance amount', 'moksa-for-woocommerce' ) => $get( 2 ),
+					__( 'Confirmed allowance amount', 'moksa-for-woocommerce' ) => $get( 3 ),
 				],
 				static fn( string $v ): bool => '' !== $v
 			),

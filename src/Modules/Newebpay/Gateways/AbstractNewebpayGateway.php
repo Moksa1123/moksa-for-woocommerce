@@ -191,8 +191,8 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			$items[]        = [
 				'ItemName'    => mb_substr( (string) $item->get_name(), 0, 20 ),
 				'ItemAmt'     => $amt,
-				'ItemType'    => 1, // 1=實體商品 / 2=虛擬 / 3=月租 / 4=出貨型
-				'ItemOrderNo' => mb_substr( (string) $order->get_id() . '-' . (string) $item->get_id(), 0, 30 ),
+				'ItemType'    => 1, // 1=一般商品 / 2=票券 / 3=儲值金 / 4=折扣
+				'ItemOrderNo' => mb_substr( (string) $order->get_id() . '-' . (string) $item->get_id(), 0, 20 ),
 			];
 		}
 		// 運費
@@ -212,7 +212,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			$items[] = [
 				'ItemName'    => __( 'Tax and discount adjustments', 'moksa-for-woocommerce' ),
 				'ItemAmt'     => $expected - $running_total,
-				'ItemType'    => 1,
+				'ItemType'    => $expected < $running_total ? 4 : 1, // 4=折扣
 				'ItemOrderNo' => $order->get_id() . '-adj',
 			];
 		}

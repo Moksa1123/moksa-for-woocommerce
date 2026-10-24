@@ -70,6 +70,13 @@ final class Allowance {
 
 		$resp         = $result['data'] ?? [];
 		$allowance_no = (string) ( $resp['IA_Allow_No'] ?? '' );
+		$list         = AllowanceInvalid::allowances( $order );
+		$list[]       = [
+			'no'     => $allowance_no,
+			'amount' => $amount,
+			'voided' => false,
+		];
+		$order->update_meta_data( Keys::ECPAY_INVOICE_ALLOWANCES, $list );
 		$order->update_meta_data( Keys::ECPAY_INVOICE_ALLOWANCE_NO, $allowance_no );
 		$order->update_meta_data( Keys::ECPAY_INVOICE_ALLOWANCE_AMT, $amount );
 		$order->add_order_note(

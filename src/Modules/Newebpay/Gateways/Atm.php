@@ -30,4 +30,9 @@ final class Atm extends AbstractNewebpayGateway {
 		// 繳費期限是台灣日期；用 UTC 算，台灣凌晨 0～8 點下單會少一天。
 		return [ 'ExpireDate' => ( new \DateTimeImmutable( 'now', new \DateTimeZone( 'Asia/Taipei' ) ) )->modify( "+{$days} days" )->format( 'Ymd' ) ];
 	}
+
+	// NDNF：限 49,999 元以下
+	protected function max_amount(): int {
+		return 49999;
+	}
 }

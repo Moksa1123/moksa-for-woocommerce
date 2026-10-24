@@ -193,7 +193,8 @@ final class PaymentRequest {
 					'EncryptData_' => $hex,
 					'HashData_'    => $hash,
 					'Version_'     => $version,
-					'RespondType_' => 'JSON',
+					// 規格：回傳格式要跟加密資料的格式一致（JSON 字串加密帶 JSON，query string 帶 String）。
+					'RespondType_' => $use_json ? 'JSON' : 'String',
 				],
 				'timeout'    => 30,
 			]

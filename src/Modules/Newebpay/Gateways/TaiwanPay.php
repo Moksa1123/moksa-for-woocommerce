@@ -23,4 +23,9 @@ final class TaiwanPay extends AbstractNewebpayGateway {
 	protected function build_method_description(): string {
 		return __( 'Scan to pay with Taiwan Pay. The customer is redirected to the NewebPay payment page.', 'moksa-for-woocommerce' );
 	}
+
+	// NDNF：限 49,999 元以下
+	protected function max_amount(): int {
+		return 49999;
+	}
 }

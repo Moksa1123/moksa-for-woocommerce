@@ -96,6 +96,35 @@ final class Helper extends AbstractCredentialHelper {
 		return (string) get_option( 'moksafowo_tappay_merchant_id', '' );
 	}
 
+	/**
+	 * 電子錢包、Apple／Google／Samsung Pay 在 TapPay Portal 各有自己的 Merchant ID，
+	 * 拿信用卡的去付會被拒（67）。沒填時才退回信用卡那組。
+	 */
+	public static function gateway_merchant_id( \WC_Payment_Gateway $gateway ): string {
+		$key = self::is_sandbox() ? 'tappay_sandbox_merchant_id' : 'tappay_merchant_id';
+		$id  = trim( (string) $gateway->get_option( $key, '' ) );
+		return '' !== $id ? $id : self::merchant_id();
+	}
+
+	public static function gateway_merchant_id_fields(): array {
+		return [
+			'tappay_merchant_id'         => [
+				'title'       => __( 'Merchant ID for this payment method', 'moksa-for-woocommerce' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( 'Each payment method has its own Merchant ID in the TapPay Portal. Leave blank to use the credit card Merchant ID.', 'moksa-for-woocommerce' ),
+				'desc_tip'    => false,
+			],
+			'tappay_sandbox_merchant_id' => [
+				'title'       => __( 'Test Merchant ID for this payment method', 'moksa-for-woocommerce' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( 'Used in test mode. Leave blank to use the test credit card Merchant ID.', 'moksa-for-woocommerce' ),
+				'desc_tip'    => false,
+			],
+		];
+	}
+
 	public static function notify_secret(): string {
 		if ( self::is_sandbox() ) {
 			$opt = trim( (string) get_option( 'moksafowo_tappay_sandbox_notify_secret', '' ) );

@@ -69,12 +69,13 @@ final class PaymentRequest {
 				),
 			);
 
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
+			$capture = (bool) apply_filters( 'moksafowo_linepay_payment_capture', true );
 			$options = array(
 				'options' => array(
 					'payment' => array(
 						'payType' => strtoupper( $this->gateway->payment_type ),
-						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
-						'capture' => apply_filters( 'moksafowo_linepay_payment_capture', true ),
+						'capture' => $capture,
 					),
 					'extra'   => array(
 						'branchName' => '',
@@ -99,6 +100,8 @@ final class PaymentRequest {
 
 			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_RESERVED );
 			$order->update_meta_data( '_moksafowo_linepay_reserved_transaction_id', $result->info->transactionId );
+			$order->update_meta_data( '_moksafowo_linepay_reserved_amount', (string) $std_amount );
+			$order->update_meta_data( '_moksafowo_linepay_capture', $capture ? 'yes' : 'no' );
 			$order->save();
 
 			$this->check_payment_and_update_order_note( $order, 'Check payment status after requested' );
@@ -145,13 +148,16 @@ final class PaymentRequest {
 				LinePay::log( sprintf( '[confirm][order_id:%s] Confirmation in progress, waiting...', $order_id ) );
 			}
 
-			$amount   = $order->get_total();
 			$currency = $order->get_currency();
 
-			$reserved_std_amount = Currency::get_standardized( $order->get_total(), $currency );
-			$std_amount          = Currency::get_standardized( $amount );
+			// 付款頁建立後訂單金額被改過，就不能拿新金額去 confirm 舊的預約交易。
+			$std_amount          = Currency::get_standardized( $order->get_total(), $currency );
+			$reserved_std_amount = (string) $order->get_meta( '_moksafowo_linepay_reserved_amount' );
+			if ( '' === $reserved_std_amount ) {
+				$reserved_std_amount = $std_amount;
+			}
 
-			if ( $std_amount !== $reserved_std_amount ) {
+			if ( (string) $std_amount !== (string) $reserved_std_amount ) {
 				throw new Exception( sprintf( Constants::LOG_TEMPLATE_CONFIRM_FAILURE_MISMATCH_ORDER_AMOUNT, $std_amount, $reserved_std_amount ) );
 			}
 
@@ -182,6 +188,19 @@ final class PaymentRequest {
 			$confirmed_amount = 0;
 			foreach ( $result->info->payInfo as $item ) {
 				$confirmed_amount += $item->amount;
+			}
+
+			// 先授權後請款：confirm 只完成授權，要等商家按「確認請款」呼叫 capture 才算入帳。
+			if ( 'no' === $order->get_meta( '_moksafowo_linepay_capture' ) ) {
+				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_AUTHED );
+				$order->save();
+				$order->update_status( 'on-hold', __( 'The LINE Pay payment is authorized and awaiting confirmation', 'moksa-for-woocommerce' ) );
+				if ( $is_checkout ) {
+					WC()->cart->empty_cart();
+					wp_safe_redirect( $this->get_return_url( $order ) );
+					exit;
+				}
+				return true;
 			}
 
 			$order->payment_complete( $result->info->transactionId );
@@ -331,6 +350,37 @@ final class PaymentRequest {
 		$is_partial_refund = ( $remaining_refund_amount > 0 ) ? true : false;
 
 		return $this->do_refund( $order, $transaction_id, $std_refund_amount, $is_partial_refund );
+	}
+
+	/**
+	 * 先授權後請款的請款（/v3/payments/authorizations/{transactionId}/capture）。
+	 *
+	 * @throws Exception When the capture request fails.
+	 */
+	public function capture( \WC_Order $order ): bool {
+		$transaction_id = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
+		$currency       = $order->get_currency();
+		$std_amount     = Currency::get_standardized( $order->get_total(), $currency );
+		$url            = Url::request_url( Constants::REQUEST_TYPE_CAPTURE, array( 'transaction_id' => $transaction_id ) );
+		$request_args   = $this->build_execute_request_args(
+			$url,
+			array(
+				'amount'   => $std_amount,
+				'currency' => $currency,
+			),
+			40
+		);
+		$result         = $this->execute( $url, $request_args, 40 );
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		if ( ! $result || '0000' !== $result->returnCode ) {
+			throw new Exception( esc_html( sprintf( 'Execute LINE Pay Capture API failed. Return code: %s. Return Message: %s', $result->returnCode ?? '', $result->returnMessage ?? '' ) ) );
+		}
+		$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $std_amount );
+		$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
+		$order->save();
+		$order->payment_complete( $result->info->transactionId ?? $transaction_id );
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		return true;
 	}
 
 	public function check( $order ) {

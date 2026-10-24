@@ -34,7 +34,8 @@ final class Unified extends AbstractNewebpayGateway {
 			'EZPWECHAT'  => 1,
 			'AFTEE'      => 1,
 			'UNIONPAY'   => 1,
-			'InstFlag'   => '0,3,6,12,18,24',
+			// 0 是「不開分期」，不能跟期別混用（MPG01008）。
+			'InstFlag'   => '3,6,12,18,24',
 		];
 	}
 

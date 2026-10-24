@@ -41,6 +41,9 @@ final class Url {
 			case Constants::REQUEST_TYPE_REFUND:
 				$uri = Constants::URI_REFUND;
 				break;
+			case Constants::REQUEST_TYPE_CAPTURE:
+				$uri = Constants::URI_CAPTURE;
+				break;
 		}
 		foreach ( $args as $key => $value ) {
 			$uri = str_replace( '{' . $key . '}', (string) $value, $uri );

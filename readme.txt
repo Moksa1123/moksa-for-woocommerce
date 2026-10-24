@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.16.2
+Stable tag: 1.17.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -135,6 +135,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.17.0 - 2026-10-24 =
+* New: TapPay wallets can use their own Merchant ID, T-Cat package size for ECPay, and AFTEE capture for NewebPay.
+* Fixed: NewebPay shipping statuses and labels, PayNow invoices, Shopline Payments amount checks, voiding ECPay and Amego invoices that have allowances, and other payment, shipping and invoice fixes from an API spec review.
 
 = 1.16.2 - 2026-10-22 =
 * Fixed: SmilePay T-Cat home delivery shipments can be created again; the expected delivery date is now sent.

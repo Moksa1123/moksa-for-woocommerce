@@ -59,15 +59,18 @@ final class IpnHandler {
 		}
 		// 成功通知的金額要跟訂單一致。
 		if ( 0 === (int) ( $payload['status'] ?? -1 ) && isset( $payload['amount'] ) && (int) $payload['amount'] !== (int) round( (float) $order->get_total() ) ) {
-			$order->update_status(
-				'on-hold',
-				sprintf(
-					/* translators: 1: paid amount, 2: order total */
-					__( 'TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
-					(int) $payload['amount'],
-					$order->get_total()
-				)
+			$note = sprintf(
+				/* translators: 1: paid amount, 2: order total */
+				__( 'TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+				(int) $payload['amount'],
+				$order->get_total()
 			);
+			// 已付款的訂單不被另一筆通知打回保留中，只留備註。
+			if ( $order->is_paid() ) {
+				$order->add_order_note( $note );
+			} else {
+				$order->update_status( 'on-hold', $note );
+			}
 			status_header( 200 );
 			echo 'OK';
 			exit;

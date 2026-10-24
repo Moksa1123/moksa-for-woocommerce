@@ -23,4 +23,13 @@ final class Weixin extends AbstractEcpayGateway {
 	protected function build_method_description(): string {
 		return __( 'Pay with the WeChat wallet.', 'moksa-for-woocommerce' );
 	}
+
+	// /56448
+	protected function min_amount(): int {
+		return 6;
+	}
+
+	protected function max_amount(): int {
+		return 500000;
+	}
 }

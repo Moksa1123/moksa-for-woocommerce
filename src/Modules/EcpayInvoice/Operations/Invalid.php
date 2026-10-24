@@ -33,6 +33,12 @@ final class Invalid {
 			];
 		}
 
+		// 有效的折讓還在時綠界不讓作廢發票（5070450），先把折讓作廢。
+		$voided = AllowanceInvalid::void_all( $order, $reason );
+		if ( ! $voided['ok'] ) {
+			return $voided;
+		}
+
 		$data = [
 			'MerchantID'  => Helper::merchant_id(),
 			'InvoiceNo'   => $inv,

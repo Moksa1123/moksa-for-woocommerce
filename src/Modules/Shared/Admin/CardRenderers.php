@@ -565,6 +565,8 @@ final class CardRenderers {
 				__( 'Transaction ID:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID ),
 				__( 'Status:', 'moksa-for-woocommerce' ) => \Moksafowo\Modules\ShoplinePayments\Api\Helper::status_label( (string) $order->get_meta( Keys::SLP_STATUS ) ),
 				__( 'Payment type:', 'moksa-for-woocommerce' ) => \Moksafowo\Modules\ShoplinePayments\Api\Helper::method_label( (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD ) ),
+				__( 'Card brand:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_CARD_BRAND ),
+				__( 'Last four card digits:', 'moksa-for-woocommerce' ) => (string) $order->get_meta( Keys::SLP_CARD_LAST4 ),
 			]
 		);
 	}

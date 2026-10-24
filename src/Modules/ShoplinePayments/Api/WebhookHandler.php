@@ -224,9 +224,19 @@ final class WebhookHandler {
 			$order->update_meta_data( Keys::SLP_SUB_STATUS, $sub_status );
 		}
 
-		$method = (string) ( $payment['paymentMethod'] ?? $data['paymentMethod'] ?? '' );
+		// trade.* 事件的付款資訊在 data.payment；session 事件在 paymentDetails[0]。
+		$trade_payment = is_array( $data['payment'] ?? null ) ? $data['payment'] : [];
+		$method        = (string) ( $trade_payment['paymentMethod'] ?? $payment['paymentMethod'] ?? $data['paymentMethod'] ?? '' );
 		if ( '' !== $method ) {
 			$order->update_meta_data( Keys::SLP_PAYMENT_METHOD, $method );
+		}
+
+		$card = is_array( $trade_payment['creditCard'] ?? null ) ? $trade_payment['creditCard'] : [];
+		if ( '' !== (string) ( $card['brand'] ?? '' ) ) {
+			$order->update_meta_data( Keys::SLP_CARD_BRAND, (string) $card['brand'] );
+		}
+		if ( '' !== (string) ( $card['last4'] ?? '' ) ) {
+			$order->update_meta_data( Keys::SLP_CARD_LAST4, (string) $card['last4'] );
 		}
 
 		$refund_order_id = (string) ( $data['refundOrderId'] ?? '' );
@@ -244,7 +254,7 @@ final class WebhookHandler {
 					$payment = self::first_payment_detail( $data );
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
 					// 金額以「元 × 100」表示。建立付款頁後訂單被改了金額，顧客用舊頁面付的金額會對不上。
-					$paid     = (int) ( $payment['amount']['value'] ?? $data['amount']['value'] ?? 0 );
+					$paid     = self::paid_amount( $data );
 					$expected = (int) round( (float) $order->get_total() * 100 );
 					if ( $paid > 0 && $paid !== $expected ) {
 						$order->update_status(
@@ -258,8 +268,11 @@ final class WebhookHandler {
 						);
 						break;
 					}
+					// 沒有金額就無從比對，不直接入帳，留給商家到 Shopline Payments 後台確認。
 					if ( 0 === $paid ) {
 						Helper::log( 'success event without amount', [ 'order_id' => $order->get_id() ] );
+						$order->update_status( 'on-hold', __( 'Shopline Payments reported a successful payment without an amount. Please check the payment in the Shopline Payments dashboard before fulfilling the order.', 'moksa-for-woocommerce' ) );
+						break;
 					}
 					$order->payment_complete( $txn );
 					$method = (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD );
@@ -323,6 +336,23 @@ final class WebhookHandler {
 					]
 				);
 		}
+	}
+
+	/**
+	 * 實付金額（元 × 100）。trade.succeeded 依規格在 data.payment.paidAmount，
+	 * 沒有時退回訂單金額 data.order.amount；session.succeeded 只有 data.amount。
+	 */
+	private static function paid_amount( array $data ): int {
+		$payment = self::first_payment_detail( $data );
+		return (int) (
+			$data['payment']['paidAmount']['value']
+			?? $data['paidAmount']['value']
+			?? $payment['paidAmount']['value']
+			?? $payment['amount']['value']
+			?? $data['order']['amount']['value']
+			?? $data['amount']['value']
+			?? 0
+		);
 	}
 
 	private static function first_payment_detail( array $data ): array {

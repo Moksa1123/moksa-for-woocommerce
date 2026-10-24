@@ -90,7 +90,10 @@ final class LinePay {
 		$request = new PaymentRequest( $gateway );
 
 		try {
-			if ( $request->confirm( $order->get_id(), false ) ) {
+			// confirm 已完成授權（先授權後請款）就改呼叫 capture；否則照舊 confirm。
+			$authorized = Constants::PAYMENT_STATUS_AUTHED === $order->get_meta( '_moksafowo_linepay_payment_status' )
+				&& wc_string_to_bool( $order->get_meta( '_moksafowo_linepay_confirmed' ) );
+			if ( $authorized ? $request->capture( $order ) : $request->confirm( $order->get_id(), false ) ) {
 				$order->add_order_note( __( 'LINE Pay confirmed the payment', 'moksa-for-woocommerce' ) );
 				wp_send_json(
 					array(

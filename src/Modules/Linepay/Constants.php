@@ -20,6 +20,7 @@ final class Constants {
 	const URI_DETAILS = '/v3/payments?transactionId={transaction_id}';
 	const URI_CHECK   = '/v3/payments/requests/{transaction_id}/check';
 	const URI_REFUND  = '/v3/payments/{transaction_id}/refund';
+	const URI_CAPTURE = '/v3/payments/authorizations/{transaction_id}/capture';
 
 	const URI_CALLBACK_HANDLER = '/wc-api/moksafowo_linepay_payment';
 
@@ -34,6 +35,7 @@ final class Constants {
 	const REQUEST_TYPE_CHECK   = 'check';
 	const REQUEST_TYPE_CANCEL  = 'cancel';
 	const REQUEST_TYPE_REFUND  = 'refund';
+	const REQUEST_TYPE_CAPTURE = 'capture';
 
 	// environment.
 	const ENV_SANDBOX = 'sandbox';

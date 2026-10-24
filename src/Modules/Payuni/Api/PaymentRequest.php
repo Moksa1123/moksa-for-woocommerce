@@ -135,7 +135,8 @@ class PaymentRequest {
 		$payment_method           = $order->get_payment_method();
 		$allowed_install_payments = PayuniPayment::get_allowed_install_payments( $order );
 		if ( array_key_exists( $payment_method, $allowed_install_payments ) ) {
-			if ( $order->get_total() !== $amount ) {
+			// get_total() 與退款金額可能是不同小數格式的字串（REST、其他外掛），以數值比較。
+			if ( abs( (float) $order->get_total() - (float) $amount ) >= 0.01 ) {
 				return new \WP_Error(
 					'process_refund_request',
 					/* translators:  %s is the order id */

@@ -161,7 +161,17 @@ final class ShippingRequest {
 			];
 		}
 
-		$inner = isset( $decoded['EncryptData'] ) ? Helper::decrypt_trade_info( (string) $decoded['EncryptData'] ) : null;
+		$inner = null;
+		if ( isset( $decoded['EncryptData'] ) && '' !== (string) $decoded['EncryptData'] ) {
+			if ( ! Helper::verify_trade_sha( (string) $decoded['EncryptData'], (string) ( $decoded['HashData'] ?? '' ) ) ) {
+				Helper::log( 'shipping API ' . $path . ' HashData mismatch' );
+				return [
+					'ok'      => false,
+					'message' => __( 'NewebPay shipping response failed verification', 'moksa-for-woocommerce' ),
+				];
+			}
+			$inner = Helper::decrypt_trade_info( (string) $decoded['EncryptData'] );
+		}
 		return [
 			'ok'      => true,
 			'message' => (string) ( $decoded['Message'] ?? 'OK' ),

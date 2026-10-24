@@ -74,6 +74,26 @@ final class Issue {
 		if ( $print && '' === trim( $order->get_billing_address_1() ) && '' !== $store_addr ) {
 			$customer_addr = $store_addr;
 		}
+		// 帳單、門市都沒有地址（例如虛擬商品）時退回運送地址；都沒有就不送出，免得綠界拒絕。
+		if ( $print && '' === trim( $order->get_billing_address_1() ) && '' === $store_addr ) {
+			$customer_addr = trim(
+				implode(
+					'',
+					[
+						$order->get_shipping_state(),
+						$order->get_shipping_city(),
+						$order->get_shipping_address_1(),
+						$order->get_shipping_address_2(),
+					]
+				)
+			);
+			if ( '' === trim( $order->get_shipping_address_1() ) ) {
+				return [
+					'ok'      => false,
+					'message' => __( 'A printed invoice needs the buyer’s address, but this order has no billing or shipping address. Add an address to the order and issue the invoice again.', 'moksa-for-woocommerce' ),
+				];
+			}
+		}
 
 		// 延後開立或作廢後重開時，已退的部分不再開進發票。
 		$amount = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );

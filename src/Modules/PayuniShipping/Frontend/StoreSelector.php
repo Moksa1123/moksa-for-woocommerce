@@ -165,9 +165,19 @@ class StoreSelector {
 	/**
 	 * 門市地圖的溫層：冷凍方式要列出收冷凍的門市（ship_map GoodsType 2），
 	 * 用常溫地圖可能選到不收冷凍的店，之後建冷凍物流單才被拒。
+	 * 混溫方式（id 不帶溫層後綴）只要有冷凍商品就會拆出冷凍包裹，同樣要選收冷凍的門市。
 	 */
-	private static function map_goods_type( string $method_id ): string {
-		return str_contains( $method_id, '_frozen' ) ? '2' : '1';
+	private static function map_goods_type( string $method_id, ?\WC_Order $order = null ): string {
+		if ( str_contains( $method_id, '_frozen' ) ) {
+			return '2';
+		}
+		if ( str_contains( $method_id, '_normal' ) ) {
+			return '1';
+		}
+		$temps = null !== $order
+			? array_keys( \Moksafowo\Modules\Shipping\Temp\ProductTemp::group_order_items( $order ) )
+			: \Moksafowo\Modules\Shipping\Temp\ProductTemp::temps_in_cart();
+		return in_array( \Moksafowo\Modules\Shipping\Temp\ProductTemp::FROZEN, array_map( 'intval', $temps ), true ) ? '2' : '1';
 	}
 
 	public static function strip_na_customer_prop( $value ) {
@@ -361,7 +371,7 @@ JS
 			'MerID'        => Credentials::merchant_id(),
 			'Timestamp'    => time(),
 			'MerKeyNo'     => '1234567890',
-			'GoodsType'    => self::map_goods_type( $method_id ),
+			'GoodsType'    => self::map_goods_type( $method_id, $order ),
 			'LgsType'      => LgsType::get_lgs_type_by_shipping_method( $method_id ),
 			'ShipType'     => '1',
 			'MapType'      => '2',

@@ -202,7 +202,9 @@ final class Module extends AbstractModule {
 			$order->save();
 			// 通知漏送或晚到時，商家按「查詢」要讓訂單狀態跟查到的貨態一致（與貨態通知同一套規則）。
 			$target = (string) $mapped['wc_status'];
-			if ( '' !== $target && $order->get_status() !== $target && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $target ) ) {
+			if ( '' !== $target
+				&& \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $target )
+				&& \Moksafowo\Modules\Shipping\Statuses\StatusGuard::may_transition( $order->get_status(), $target ) ) {
 				$order->update_status( $target );
 				if ( str_starts_with( $target, 'moksa-' ) ) {
 					do_action( 'moksafowo_shipping_status_' . $target . '_notification', $order->get_id(), $order );

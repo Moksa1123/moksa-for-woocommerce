@@ -68,8 +68,11 @@ final class BatchPrint {
 		}
 
 		$forms = [];
+		// PAYUNi 一次列印上限 50 張，超過整批被拒。
 		foreach ( $groups as $g ) {
-			$forms[] = self::form_for_group( $service, array_values( array_unique( $g['nos'] ) ), (string) $g['lgs'], (string) $g['goods'], (string) $g['spec'], $options );
+			foreach ( array_chunk( array_values( array_unique( $g['nos'] ) ), 50 ) as $chunk ) {
+				$forms[] = self::form_for_group( $service, $chunk, (string) $g['lgs'], (string) $g['goods'], (string) $g['spec'], $options );
+			}
 		}
 		return $forms;
 	}

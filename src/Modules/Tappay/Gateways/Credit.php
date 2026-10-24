@@ -264,6 +264,12 @@ final class Credit extends \WC_Payment_Gateway {
 			]
 		);
 
+		if ( ! $result['ok'] && 10024 === (int) $result['status'] && $amt < (int) round( (float) $order->get_total() ) ) {
+			return new \WP_Error(
+				'moksafowo_tappay_refund_fail',
+				__( 'This payment has not been captured yet, so TapPay can only refund the full amount. Refund the full amount, or wait until the payment is captured.', 'moksa-for-woocommerce' )
+			);
+		}
 		if ( ! $result['ok'] ) {
 			return new \WP_Error(
 				'moksafowo_tappay_refund_fail',

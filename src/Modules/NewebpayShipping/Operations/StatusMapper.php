@@ -5,141 +5,147 @@ namespace Moksafowo\Modules\NewebpayShipping\Operations;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * 依 NDNS 1.0.0 p.31-32 RetId 貨態表。
+ * 退貨中、異常、待商家處理的碼不轉訂單狀態（退款由商家決定）；買家未取的退回轉「未取件」，
+ * 包裹銷毀或判賠才轉失敗。
+ */
 final class StatusMapper {
 
 
 	public static function map( string $retld ): array {
 		$lookup = [
-			// Forward shipping (取貨流程)
+			// 待處理
 			'0_1' => [
-				'label'     => __( 'Shipment created', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Order not yet processed', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'shipping',
 			],
 			'0_2' => [
-				'label'     => __( 'Shipment created', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Shipping number expired, request a new one', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
-				'type'      => 'shipping',
+				'type'      => 'error',
 			],
 			'0_3' => [
-				'label'     => __( 'At the store, waiting to be dispatched', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Shipment cancelled', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
-				'type'      => 'shipping',
+				'type'      => 'error',
 			],
+			// 處理中／運送中
 			'1'   => [
-				'label'     => __( 'Handed to the carrier', 'moksa-for-woocommerce' ),
-				'wc_status' => 'moksa-shipped',
+				'label'     => __( 'Order being processed', 'moksa-for-woocommerce' ),
+				'wc_status' => '',
 				'type'      => 'shipping',
 			],
 			'2'   => [
-				'label'     => __( 'In transit', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Received by the store', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-shipped',
 				'type'      => 'shipping',
 			],
 			'3'   => [
+				'label'     => __( 'Store reselected, waiting to be shipped again', 'moksa-for-woocommerce' ),
+				'wc_status' => 'moksa-shipped',
+				'type'      => 'shipping',
+			],
+			'4'   => [
+				'label'     => __( 'Checked in at the distribution center', 'moksa-for-woocommerce' ),
+				'wc_status' => 'moksa-shipped',
+				'type'      => 'shipping',
+			],
+			'11'  => [
+				'label'     => __( 'Pickup store closed, choose another store', 'moksa-for-woocommerce' ),
+				'wc_status' => 'moksa-store-closed',
+				'type'      => 'error',
+			],
+			// 待取貨／已完成
+			'5'   => [
 				'label'     => __( 'Arrived at the store, waiting for pickup', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-cvs-arrived',
 				'type'      => 'shipping',
 			],
-			'4'   => [
+			'6'   => [
 				'label'     => __( 'Collected by the customer', 'moksa-for-woocommerce' ),
 				'wc_status' => 'completed',
 				'type'      => 'shipping',
 			],
-			'11'  => [
-				'label'     => __( 'Delivery problem', 'moksa-for-woocommerce' ),
-				'wc_status' => '',
-				'type'      => 'error',
-			],
-			'5'   => [
-				'label'     => __( 'Cancelled', 'moksa-for-woocommerce' ),
-				'wc_status' => 'cancelled',
-				'type'      => 'error',
-			],
-			'6'   => [
-				'label'     => __( 'Not collected in time', 'moksa-for-woocommerce' ),
-				'wc_status' => 'moksa-store-closed',
-				'type'      => 'error',
-			],
-			// Negative codes (錯誤 / 退貨)
 			'-1'  => [
-				'label'     => __( 'Could not create the shipment', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Returned to the seller', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
-				'type'      => 'error',
+				'type'      => 'returning',
 			],
 			'-6'  => [
-				'label'     => __( 'Return — rejected by the carrier', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
+				'label'     => __( 'Home delivery return requested', 'moksa-for-woocommerce' ),
+				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'-9'  => [
-				'label'     => __( 'Return — damaged goods', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
-				'type'      => 'returning',
+				'label'     => __( 'Problem found at the distribution center, waiting for a reply', 'moksa-for-woocommerce' ),
+				'wc_status' => '',
+				'type'      => 'error',
 			],
+			// 退貨／賠償
 			'-2'  => [
-				'label'     => __( 'Return — refused by the customer', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
+				'label'     => __( 'Return arrived at the original store', 'moksa-for-woocommerce' ),
+				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'-3'  => [
-				'label'     => __( 'Return — parcel problem', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
+				'label'     => __( 'Return checked in at the distribution center', 'moksa-for-woocommerce' ),
+				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'-4'  => [
-				'label'     => __( 'Return — not collected in time', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Not collected, returning to the distribution center', 'moksa-for-woocommerce' ),
 				'wc_status' => 'moksa-unclaimed',
 				'type'      => 'returning',
 			],
 			'-5'  => [
-				'label'     => __( 'Return — order cancelled by the customer', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
+				'label'     => __( 'Not collected, about to be returned', 'moksa-for-woocommerce' ),
+				'wc_status' => 'moksa-unclaimed',
 				'type'      => 'returning',
 			],
 			'-7'  => [
-				'label'     => __( 'Return in transit', 'moksa-for-woocommerce' ),
-				'wc_status' => '',
-				'type'      => 'returning',
+				'label'     => __( 'Compensation claim filed or approved', 'moksa-for-woocommerce' ),
+				'wc_status' => 'failed',
+				'type'      => 'error',
 			],
 			'-10' => [
-				'label'     => __( 'Return received by the store', 'moksa-for-woocommerce' ),
-				'wc_status' => '',
-				'type'      => 'returning',
+				'label'     => __( 'Parcel destroyed or discarded', 'moksa-for-woocommerce' ),
+				'wc_status' => 'failed',
+				'type'      => 'error',
 			],
 			'-11' => [
-				'label'     => __( 'Return completed', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
-				'type'      => 'returning',
+				'label'     => __( 'Parcel destroyed or discarded', 'moksa-for-woocommerce' ),
+				'wc_status' => 'failed',
+				'type'      => 'error',
 			],
-			// 退貨流程（Forward 進行中的退貨）
 			'10'  => [
-				'label'     => __( 'Return shipment created', 'moksa-for-woocommerce' ),
+				'label'     => __( 'About to be returned', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'12'  => [
-				'label'     => __( 'Return in transit', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Return store closed, choose another store', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
-				'type'      => 'returning',
+				'type'      => 'error',
 			],
 			'13'  => [
-				'label'     => __( 'Return arrived at the store', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Not collected by the seller, returning to the distribution center', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'returning',
 			],
 			'14'  => [
-				'label'     => __( 'Return sent back', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Request a home delivery return', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
-				'type'      => 'returning',
+				'type'      => 'error',
 			],
 			'15'  => [
-				'label'     => __( 'Return completed', 'moksa-for-woocommerce' ),
-				'wc_status' => 'refunded',
-				'type'      => 'returning',
+				'label'     => __( 'Parcel destroyed or discarded', 'moksa-for-woocommerce' ),
+				'wc_status' => 'failed',
+				'type'      => 'error',
 			],
 			'16'  => [
-				'label'     => __( 'Return problem or cancelled', 'moksa-for-woocommerce' ),
+				'label'     => __( 'Confirm the remittance account', 'moksa-for-woocommerce' ),
 				'wc_status' => '',
 				'type'      => 'error',
 			],

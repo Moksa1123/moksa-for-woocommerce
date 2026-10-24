@@ -86,7 +86,7 @@ final class Issue {
 			];
 		}
 
-		// returnStr 範例：S_1_20170630001_AA12345678
+		// returnStr 範例：S_1,20170630001_AA12345678
 		// items 內每筆 "orderno_invoiceNo"
 		$invoice_no = '';
 		foreach ( $resp['items'] as $item ) {

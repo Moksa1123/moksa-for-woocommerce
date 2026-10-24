@@ -87,10 +87,10 @@ final class IpnHandler {
 		$api_status    = (string) ( $authoritative['status'] ?? '' );
 
 		// order_confirm 是唯一會 payment_complete 的通知：API 權威狀態必須是 S（交易完成），
-		// 且金額（若 API 有回）必須與訂單一致。
+		// 且金額必須與訂單一致（trade_amount 是查詢 API 的必回欄位，沒有就不入帳）。
 		if ( 'order_confirm' === $notify_type ) {
 			$api_amount = (string) ( $authoritative['trade_amount'] ?? $authoritative['amount'] ?? '' );
-			if ( 'S' !== $api_status || ( '' !== $api_amount && (int) $api_amount !== (int) ceil( (float) $order->get_total() ) ) ) {
+			if ( 'S' !== $api_status || '' === $api_amount || (int) $api_amount !== (int) ceil( (float) $order->get_total() ) ) {
 				Helper::log(
 					'webhook order_confirm rejected — API status/amount mismatch',
 					[
@@ -253,8 +253,13 @@ final class IpnHandler {
 			? $message['payment_info']
 			: $message;
 
-		if ( isset( $info['card_last_no'] ) || isset( $info['card_last4'] ) ) {
-			$order->update_meta_data( Keys::PCHOMEPAY_CARD_LAST4, (string) ( $info['card_last_no'] ?? $info['card_last4'] ) );
+		// 規格欄位是 card_last_number；另兩個名稱保留給舊格式。
+		$card_last4 = (string) ( $info['card_last_number'] ?? $info['card_last_no'] ?? $info['card_last4'] ?? '' );
+		if ( '' !== $card_last4 ) {
+			$order->update_meta_data( Keys::PCHOMEPAY_CARD_LAST4, $card_last4 );
+		}
+		if ( isset( $info['installment'] ) && '' !== (string) $info['installment'] ) {
+			$order->update_meta_data( Keys::PCHOMEPAY_INSTALLMENT, (string) $info['installment'] );
 		}
 		if ( isset( $info['virtual_account'] ) ) {
 			$order->update_meta_data( Keys::PCHOMEPAY_VIRTUAL_ACCOUNT, (string) $info['virtual_account'] );

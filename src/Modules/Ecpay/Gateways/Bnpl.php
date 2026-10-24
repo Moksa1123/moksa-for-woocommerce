@@ -27,4 +27,13 @@ final class Bnpl extends AbstractEcpayGateway {
 	protected function supports_credit_action(): bool {
 		return true;
 	}
+
+	// 裕富 1,000 起、中租 50 起，上限皆 500,000（/36659）
+	protected function min_amount(): int {
+		return 50;
+	}
+
+	protected function max_amount(): int {
+		return 500000;
+	}
 }

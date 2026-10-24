@@ -23,4 +23,9 @@ final class Webatm extends AbstractNewebpayGateway {
 	protected function build_method_description(): string {
 		return __( 'Pay by instant transfer through WebATM, which needs a debit card and a card reader.', 'moksa-for-woocommerce' );
 	}
+
+	// NDNF：限 49,999 元以下
+	protected function max_amount(): int {
+		return 49999;
+	}
 }

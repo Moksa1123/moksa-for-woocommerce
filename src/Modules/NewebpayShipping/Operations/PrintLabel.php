@@ -18,10 +18,8 @@ final class PrintLabel {
 			if ( ! $o instanceof \WC_Order ) {
 				continue;
 			}
-			$mtn = (string) $o->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_NO );
-			if ( '' === $mtn ) {
-				$mtn = (string) $o->get_meta( Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
-			}
+			// NPA-B54 的 MerchantOrderNo 是建單時送的商店訂單編號，不是物流單號。
+			$mtn       = (string) $o->get_meta( Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 			$lgs_type  = (string) $o->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_TYPE ) ?: 'C2C';
 			$ship_type = (string) $o->get_meta( Keys::NEWEBPAY_SHIPPING_SHIP_TYPE ) ?: '1'; // default 7-11
 			if ( '' === $mtn ) {
@@ -50,18 +48,12 @@ final class PrintLabel {
 	}
 
 	public static function record_count( \WC_Order $order ): int {
-		$mtn = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_LGS_NO );
-		if ( '' === $mtn ) {
-			$mtn = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
-		}
+		$mtn = (string) $order->get_meta( Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO );
 		return '' !== $mtn ? 1 : 0;
 	}
 
 	private static function print_limit( string $lgs_type, string $ship_type ): int {
-		// 7-11 B2C 18 / C2C 8 / 全家/OK/萊爾富 18
-		if ( '1' === $ship_type && 'C2C' === $lgs_type ) {
-			return 8;
-		}
-		return 18;
+		// 錯誤碼 2106：全家一次 8 張，7-11／萊爾富／OK 18 張
+		return '2' === $ship_type ? 8 : 18;
 	}
 }

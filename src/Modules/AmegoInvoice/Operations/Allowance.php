@@ -105,6 +105,13 @@ final class Allowance {
 		$data         = $resp['data'];
 		$allowance_no = (string) ( $data['allowance_number'] ?? $args['AllowanceNumber'] );
 
+		$list   = AllowanceInvalid::allowances( $order );
+		$list[] = [
+			'no'     => $allowance_no,
+			'amount' => $amount,
+			'voided' => false,
+		];
+		$order->update_meta_data( Keys::AMEGO_INVOICE_ALLOWANCES, $list );
 		$order->update_meta_data( Keys::AMEGO_INVOICE_ALLOWANCE_NO, $allowance_no );
 		$order->update_meta_data( Keys::AMEGO_INVOICE_ALLOWANCE_AMT, (string) $amount );
 		$order->add_order_note(

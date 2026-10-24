@@ -73,6 +73,7 @@ final class Module extends AbstractModule {
 			add_action( 'woocommerce_order_status_failed', [ Operations\AutoInvalid::class, 'schedule' ] );
 		}
 		add_action( Operations\AutoInvalid::HOOK, [ Operations\AutoInvalid::class, 'run' ], 10, 1 );
+		add_action( Operations\Invalid::RETRY_HOOK, [ Operations\Invalid::class, 'retry' ], 10, 3 );
 	}
 
 	public static function maybe_issue( int $order_id ): void {

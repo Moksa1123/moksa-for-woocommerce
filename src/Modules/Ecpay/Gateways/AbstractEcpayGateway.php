@@ -38,7 +38,8 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			return true; // unknown — 讓後續 API 自己回 error
 		}
 		$prefix = strtolower( strtok( $payment_type, '_' ) );
-		return in_array( $prefix, [ 'credit', 'twqr', 'bnpl', 'applepay' ], true );
+		// TWQR 走歐付寶，要到歐付寶後台退款，DoAction 退不了（/36991）。
+		return in_array( $prefix, [ 'credit', 'bnpl', 'applepay' ], true );
 	}
 
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
@@ -189,6 +190,8 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			'PaymentInfoURL'    => home_url( '/wc-api/moksafowo_ecpay_payment' ),
 			'ChoosePayment'     => $this->choose_payment(),
 			'EncryptType'       => 1,
+			// 刷卡才會回卡號末四碼等付款資訊（/5675）。
+			'NeedExtraPaidInfo' => 'Y',
 			'ClientBackURL'     => $order->get_checkout_order_received_url(),
 		];
 

@@ -24,7 +24,12 @@ final class Twqr extends AbstractEcpayGateway {
 		return __( 'Scan to pay with a TWQR wallet such as Taiwan Pay or E.SUN Wallet.', 'moksa-for-woocommerce' );
 	}
 
-	protected function supports_credit_action(): bool {
-		return true;
+	// /36991
+	protected function min_amount(): int {
+		return 6;
+	}
+
+	protected function max_amount(): int {
+		return 49999;
 	}
 }

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\EcpayShipping\Operations;
 
 use Moksafowo\Modules\EcpayShipping\Api\Helper;
+use Moksafowo\Modules\EcpayShipping\Methods\HomeTcat;
 use Moksafowo\Modules\EcpayShipping\Module;
 use Moksafowo\Modules\Shipping\Methods\AbstractCvsShippingMethod;
 use Moksafowo\Modules\Shipping\Methods\AbstractHomeShippingMethod;
@@ -116,7 +117,8 @@ final class CreateOrder {
 				$mtn,
 				$subtype,
 				$is_cvs,
-				$is_cod
+				$is_cod,
+				$method_in_order instanceof HomeTcat ? $method_in_order->package_spec() : '1'
 			);
 
 			$response = wp_safe_remote_post(
@@ -315,7 +317,8 @@ final class CreateOrder {
 		string $mtn,
 		string $subtype,
 		bool $is_cvs,
-		bool $is_cod
+		bool $is_cod,
+		string $package_spec = '1'
 	): array {
 		$temp       = (int) $package['temp'];
 		$raw_amount = (int) $package['amount'];
@@ -366,7 +369,7 @@ final class CreateOrder {
 			$payload['ReceiverAddress']       = self::full_shipping_address( $order );
 				$payload['Temperature']       = '000' . $temp;
 			$payload['Distance']              = '00';
-			$payload['Specification']         = '0001';
+			$payload['Specification']         = '000' . $package_spec;
 			$payload['ScheduledPickupTime']   = '4';
 			$payload['ScheduledDeliveryTime'] = '4';
 			$pkg_weight                       = (float) $package['weight'];

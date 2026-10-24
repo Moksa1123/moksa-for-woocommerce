@@ -86,6 +86,7 @@ abstract class AbstractDeviceWalletGateway extends \WC_Payment_Gateway {
 					'desc_tip'    => true,
 				],
 			],
+			Helper::gateway_merchant_id_fields(),
 			$this->extra_form_fields()
 		);
 	}
@@ -173,7 +174,7 @@ abstract class AbstractDeviceWalletGateway extends \WC_Payment_Gateway {
 		$payload = [
 			'prime'        => $prime,
 			'partner_key'  => Helper::partner_key(),
-			'merchant_id'  => Helper::merchant_id(),
+			'merchant_id'  => Helper::gateway_merchant_id( $this ),
 			'amount'       => (int) round( (float) $order->get_total() ),
 			'currency'     => 'TWD',
 			'order_number' => $order_number,

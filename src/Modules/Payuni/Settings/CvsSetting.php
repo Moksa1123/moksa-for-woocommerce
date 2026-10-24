@@ -33,7 +33,7 @@ return array(
 		'custom_attributes' => array(
 			'step' => '1',
 			'max'  => '7',
-			'min'  => '0',
+			'min'  => '1',
 		),
 		'desc_tip'          => true,
 	),

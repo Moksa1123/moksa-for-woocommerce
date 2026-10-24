@@ -16,6 +16,23 @@ final class HomeTcat extends AbstractHomeShippingMethod {
 		parent::__construct( $instance_id );
 	}
 
+	public function init_form_fields(): void {
+		parent::init_form_fields();
+		$this->instance_form_fields['package_spec'] = [
+			'title'       => __( 'Package size', 'moksa-for-woocommerce' ),
+			'type'        => 'select',
+			'default'     => '1',
+			'options'     => $this->supported_package_specs(),
+			'description' => __( 'The package size declared to T-Cat. If the parcel is larger than declared, T-Cat may charge the difference.', 'moksa-for-woocommerce' ),
+			'desc_tip'    => true,
+		];
+	}
+
+	public function package_spec(): string {
+		$spec = (string) $this->get_option( 'package_spec', '1' );
+		return isset( $this->supported_package_specs()[ $spec ] ) ? $spec : '1';
+	}
+
 	public function carrier(): string {
 		return 'tcat';
 	}

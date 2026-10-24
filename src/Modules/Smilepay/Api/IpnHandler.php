@@ -60,6 +60,11 @@ final class IpnHandler {
 			self::die_status( __( 'This SmilePay transaction belongs to another order', 'moksa-for-woocommerce' ) );
 		}
 
+		// 已入帳的訂單不再處理（晚到或重送的通知不能把它改成失敗）。
+		if ( $order->is_paid() ) {
+			self::die_ok();
+		}
+
 		if ( ! self::amount_matches( $order, $amount ) ) {
 			Helper::log(
 				'roturl amount mismatch',
@@ -80,11 +85,6 @@ final class IpnHandler {
 			$order->update_status( 'failed' );
 			$order->save();
 			self::die_status( __( 'Amount mismatch', 'moksa-for-woocommerce' ) );
-		}
-
-		$state = $order->get_status();
-		if ( in_array( $state, [ 'processing', 'completed' ], true ) ) {
-			self::die_ok();
 		}
 
 		// 取號時速買配已回傳這筆的金流追蹤碼（SmilePayNO），入帳通知的 Smseid 是同一個追蹤碼。
@@ -115,11 +115,10 @@ final class IpnHandler {
 			)
 		);
 
-		if ( 'T' === $classif || 'O' === $classif ) {
-			$order->payment_complete( $smseid );
-		} else {
-			$order->update_status( 'processing', __( 'The SmilePay payment code has been settled.', 'moksa-for-woocommerce' ) );
+		if ( 'T' !== $classif && 'O' !== $classif ) {
+			$order->add_order_note( __( 'The SmilePay payment code has been settled.', 'moksa-for-woocommerce' ) );
 		}
+		$order->payment_complete( $smseid );
 		$order->save();
 
 		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );
@@ -173,7 +172,7 @@ final class IpnHandler {
 		$order->update_meta_data( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
 
 		if ( 'A' === $classif && '1' === $response_id ) {
-			if ( ! self::amount_matches( $order, $amount ) ) {
+			if ( ! $order->is_paid() && ! self::amount_matches( $order, $amount ) ) {
 				Helper::log(
 					'credit_roturl amount mismatch',
 					[
