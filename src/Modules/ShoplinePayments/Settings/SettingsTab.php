@@ -35,6 +35,12 @@ final class SettingsTab {
 				'type'  => 'text',
 			],
 			[
+				'title'    => __( 'Test clientKey', 'moksa-for-woocommerce' ),
+				'id'       => 'moksafowo_shopline_payments_sandbox_client_key',
+				'type'     => 'text',
+				'desc_tip' => __( 'Only needed for the on-page card payment method. Create it in the Shopline Payments dashboard under Settings → Developer.', 'moksa-for-woocommerce' ),
+			],
+			[
 				'title'    => __( 'Test signKey', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_shopline_payments_sandbox_sign_key',
 				'type'     => 'text',
@@ -55,6 +61,12 @@ final class SettingsTab {
 				'title' => __( 'Live apiKey', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_shopline_payments_api_key',
 				'type'  => 'text',
+			],
+			[
+				'title'    => __( 'Live clientKey', 'moksa-for-woocommerce' ),
+				'id'       => 'moksafowo_shopline_payments_client_key',
+				'type'     => 'text',
+				'desc_tip' => __( 'Only needed for the on-page card payment method. Create it in the Shopline Payments dashboard under Settings → Developer.', 'moksa-for-woocommerce' ),
 			],
 			[
 				'title'    => __( 'Live signKey', 'moksa-for-woocommerce' ),

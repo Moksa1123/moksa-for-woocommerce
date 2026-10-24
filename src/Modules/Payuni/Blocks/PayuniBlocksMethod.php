@@ -86,6 +86,12 @@ final class PayuniBlocksMethod extends AbstractPaymentMethodType {
 	}
 
 	public function get_supported_features(): array {
-		return [ 'products', 'refunds' ];
+		// 照 gateway 實際宣告：開啟訂閱的信用卡要帶 subscriptions，區塊結帳才會在訂閱購物車顯示。
+		$gateway = function_exists( 'WC' ) && WC()->payment_gateways
+			? ( WC()->payment_gateways()->payment_gateways()[ $this->name ] ?? null )
+			: null;
+		return $gateway instanceof \WC_Payment_Gateway && ! empty( $gateway->supports )
+			? array_values( $gateway->supports )
+			: [ 'products', 'refunds' ];
 	}
 }

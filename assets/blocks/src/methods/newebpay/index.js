@@ -30,6 +30,7 @@ const NEWEBPAY_IDS = [
 	'moksafowo_newebpay_wechatpay',
 	'moksafowo_newebpay_aftee',
 	'moksafowo_newebpay_unionpay',
+	'moksafowo_newebpay_credit_period', // 信用卡定期定額（訂閱）
 ];
 
 NEWEBPAY_IDS.forEach( ( id ) => {

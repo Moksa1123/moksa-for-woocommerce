@@ -126,6 +126,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function boot_extras(): void {
+		SubscriptionRenewal::boot();
 		add_filter(
 			'moksafowo_payment_query_handlers',
 			static function ( array $h ): array {
@@ -145,7 +146,8 @@ final class Module extends AbstractGatewayModule {
 		if ( ! Helper::has_credentials() ) {
 			return;
 		}
-		if ( function_exists( 'has_block' ) && has_block( 'woocommerce/checkout' ) ) {
+		// 區塊結帳頁的「付款」端點（重付、訂閱變更付款方式）仍是傳統表單，要照樣載入。
+		if ( function_exists( 'has_block' ) && has_block( 'woocommerce/checkout' ) && ! is_wc_endpoint_url( 'order-pay' ) ) {
 			return;
 		}
 

@@ -29,6 +29,7 @@ const ECPAY_IDS = [
 	'moksafowo_ecpay_weixin',
 	'moksafowo_ecpay_jkopay',
 	'moksafowo_ecpay_ipass',
+	'moksafowo_ecpay_credit_bind',       // 站內付 2.0 綁卡（訂閱續扣），送出後到付款頁輸入卡號
 ];
 
 ECPAY_IDS.forEach( ( id ) => {

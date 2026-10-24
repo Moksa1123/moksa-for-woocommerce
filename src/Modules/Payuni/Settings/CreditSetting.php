@@ -31,5 +31,12 @@ return array(
 		'description' => __( 'The message customers see on the order received page while the payment is still outstanding.', 'moksa-for-woocommerce' ),
 		'desc_tip'    => true,
 	),
+	'subscriptions'              => array(
+		'title'       => __( 'Subscriptions', 'moksa-for-woocommerce' ),
+		'type'        => 'checkbox',
+		'label'       => __( 'Charge WooCommerce Subscriptions renewals automatically with saved cards', 'moksa-for-woocommerce' ),
+		'description' => __( 'PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on.', 'moksa-for-woocommerce' ),
+		'default'     => 'no',
+	),
 
 );

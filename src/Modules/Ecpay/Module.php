@@ -66,6 +66,9 @@ final class Module extends AbstractGatewayModule {
 			'moksafowo_ecpay_weixin'     => Gateways\Weixin::class,
 			'moksafowo_ecpay_jkopay'     => Gateways\Jkopay::class,
 			'moksafowo_ecpay_ipass'      => Gateways\Ipass::class,
+		] + [
+			// 站內付 2.0 綁卡（訂閱續扣）。
+			Gateways\CreditBind::GATEWAY_ID => Gateways\CreditBind::class,
 		];
 	}
 
@@ -79,12 +82,26 @@ final class Module extends AbstractGatewayModule {
 
 	protected function register_webhooks(): void {
 		add_action( 'woocommerce_api_moksafowo_ecpay_payment', [ Api\IpnHandler::class, 'handle' ] );
+		add_action( 'woocommerce_api_moksafowo_ecpay_bind_create', [ Api\BindHandler::class, 'create' ] );
+		add_action( 'woocommerce_api_moksafowo_ecpay_bind_result', [ Api\BindHandler::class, 'result' ] );
+		add_action( 'woocommerce_api_moksafowo_ecpay_bind_notify', [ Api\BindHandler::class, 'notify' ] );
+	}
+
+	/**
+	 * 綁卡付款方式不屬於整合付款頁（Unified）能代替的範圍，單一入口模式下也要能勾選。
+	 */
+	public static function should_register_gateway( string $id, ?string $mode = null, ?array $allowlist = null ): bool {
+		if ( Gateways\CreditBind::GATEWAY_ID === $id ) {
+			return parent::should_register_gateway( $id, 'multi', $allowlist );
+		}
+		return parent::should_register_gateway( $id, $mode, $allowlist );
 	}
 
 	protected function boot_extras(): void {
 		add_filter( 'woocommerce_order_get_payment_method_title', [ __CLASS__, 'rebrand_legacy_payment_title' ], 10, 2 );
 
 		Frontend\CustomerPaymentInfo::init();
+		SubscriptionRenewal::boot();
 
 		if ( is_admin() ) {
 			Admin\OrderMetaBox::init();

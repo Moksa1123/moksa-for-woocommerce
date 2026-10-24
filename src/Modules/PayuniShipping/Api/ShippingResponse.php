@@ -8,7 +8,6 @@ use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 use Moksafowo\Modules\PayuniShipping\PayuniShipping;
 use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
 use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
-use Moksafowo\Modules\PayuniShipping\Utils\ShippingStatus;
 
 class ShippingResponse {
 
@@ -28,7 +27,6 @@ class ShippingResponse {
 		if ( ! has_action( 'woocommerce_api_payuni_shipping_tcat_notify' ) ) {
 			add_action( 'woocommerce_api_payuni_shipping_tcat_notify', array( self::get_instance(), 'moksafowo_payuni_tcat_receive_update' ) );
 		}
-		add_action( 'moksafowo_payuni_update_shipping_order_status', array( self::get_instance(), 'update_order_status_after_received_update' ), 10, 3 );
 	}
 
 	public static function moksafowo_payuni_711_receive_update() {
@@ -328,33 +326,6 @@ class ShippingResponse {
 		}
 		unset( $r );
 		$order->update_meta_data( \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS, $records );
-	}
-
-	public function update_order_status_after_received_update( \WC_Order $order, $ship_status, $ship_status_desc ) {
-
-		PayuniShipping::log( 'Update order stauts. Order id:' . $order->get_id() . ', ship_status:' . $ship_status );
-
-		if ( ShippingStatus::AT_LOGISTIC_CENTER === $ship_status && strpos( $ship_status_desc, 'EIN00' ) !== false && $order->get_meta( OrderMeta::LgsType ) === LgsType::B2C ) {
-			if ( ! empty( PayuniShipping::$order_status_at_logistic_center ) && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( (string) PayuniShipping::$order_status_at_logistic_center ) ) {
-					$order->update_status( PayuniShipping::$order_status_at_logistic_center );
-			}
-		} elseif ( ShippingStatus::AT_SENDER_CVS === $ship_status && strpos( $ship_status_desc, 'AOL' ) !== false && $order->get_meta( OrderMeta::LgsType ) === LgsType::C2C ) {
-			if ( ! empty( PayuniShipping::$order_status_at_sender_cvs ) && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( (string) PayuniShipping::$order_status_at_sender_cvs ) ) {
-				$order->update_status( PayuniShipping::$order_status_at_sender_cvs );
-			}
-		} elseif ( ShippingStatus::DELIVERING === $ship_status ) {
-			if ( ! empty( PayuniShipping::$order_status_delivering ) && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( (string) PayuniShipping::$order_status_delivering ) ) {
-				$order->update_status( PayuniShipping::$order_status_delivering );
-			}
-		} elseif ( ShippingStatus::AT_RECEIVER_CVS === $ship_status ) {
-			if ( ! empty( PayuniShipping::$order_status_at_receiver_cvs ) && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( (string) PayuniShipping::$order_status_at_receiver_cvs ) ) {
-				$order->update_status( PayuniShipping::$order_status_at_receiver_cvs );
-			}
-		} elseif ( ShippingStatus::CUSTOMER_PICKUP === $ship_status ) {
-			if ( ! empty( PayuniShipping::$order_status_pickuped ) && \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( (string) PayuniShipping::$order_status_pickuped ) ) {
-				$order->update_status( PayuniShipping::$order_status_pickuped );
-			}
-		}
 	}
 
 	public static function build_ship_no( $lgs_type, $partner_id = '', $odno = '', $validation_no = '' ) {

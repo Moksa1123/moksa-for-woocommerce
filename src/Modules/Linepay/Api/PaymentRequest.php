@@ -4,9 +4,11 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Linepay\Api;
 
 use Exception;
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Linepay\Constants;
 use Moksafowo\Modules\Linepay\LinePay;
 use Moksafowo\Modules\Linepay\StatusCode;
+use Moksafowo\Order\Meta\Keys;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -71,10 +73,14 @@ final class PaymentRequest {
 
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 			$capture = (bool) apply_filters( 'moksafowo_linepay_payment_capture', true );
-			$options = array(
+			// 訂閱訂單改走自動付款：顧客授權後 confirm 會回 regKey，之後續扣不用顧客在場。
+			$pay_type = $this->gateway->supports( 'subscriptions' ) && Subscriptions::order_has_subscription( $order )
+				? Constants::PAYMENT_TYPE_PREAPPROVED
+				: strtoupper( $this->gateway->payment_type );
+			$options  = array(
 				'options' => array(
 					'payment' => array(
-						'payType' => strtoupper( $this->gateway->payment_type ),
+						'payType' => $pay_type,
 						'capture' => $capture,
 					),
 					'extra'   => array(
@@ -188,6 +194,10 @@ final class PaymentRequest {
 			$confirmed_amount = 0;
 			foreach ( $result->info->payInfo as $item ) {
 				$confirmed_amount += $item->amount;
+			}
+
+			if ( ! empty( $result->info->regKey ) ) {
+				Subscriptions::store_payment_meta( $order, array( Keys::LINEPAY_REGKEY => (string) $result->info->regKey ) );
 			}
 
 			// 先授權後請款：confirm 只完成授權，要等商家按「確認請款」呼叫 capture 才算入帳。
@@ -383,6 +393,70 @@ final class PaymentRequest {
 		return true;
 	}
 
+	/**
+	 * 自動付款扣款（/v3/payments/preapprovedPay/{regKey}/payment），用於訂閱續扣。
+	 *
+	 * @throws Exception 連線失敗或 LINE Pay 回應非 200 時.
+	 */
+	public function preapproved_pay( \WC_Order $order, string $reg_key, string $order_ref ) {
+		$currency   = $order->get_currency();
+		$std_amount = Currency::get_standardized( $order->get_total(), $currency );
+		$names      = array();
+		foreach ( $order->get_items() as $item ) {
+			$names[] = $item->get_name();
+		}
+		$url          = Url::request_url( Constants::REQUEST_TYPE_PREAPPROVED_PAY, array( 'reg_key' => rawurlencode( $reg_key ) ) );
+		$request_args = $this->build_execute_request_args(
+			$url,
+			array(
+				'productName' => mb_substr( implode( ', ', $names ), 0, 4000 ),
+				'amount'      => $std_amount,
+				'currency'    => $currency,
+				'orderId'     => $order_ref,
+				'capture'     => true,
+			),
+			40
+		);
+		LinePay::log( sprintf( '[preapproved][order_id:%s] request', $order->get_id() ) );
+		return $this->execute( $url, $request_args, 40 );
+	}
+
+	/** 註銷自動付款金鑰（/v3/payments/preapprovedPay/{regKey}/expire）。 */
+	public function expire_regkey( string $reg_key ): bool {
+		$url          = Url::request_url( Constants::REQUEST_TYPE_PREAPPROVED_EXPIRE, array( 'reg_key' => rawurlencode( $reg_key ) ) );
+		$request_args = $this->build_execute_request_args( $url, null );
+		try {
+			$result = $this->execute( $url, $request_args );
+		} catch ( Exception $e ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
+		return isset( $result->returnCode ) && '0000' === $result->returnCode;
+	}
+
+	/**
+	 * 以 orderId 查付款明細（/v3/payments?orderId=，retrieve-payment-details）。
+	 *
+	 * @return object|null 找到已付款交易時回傳該筆 info；查不到回 null。
+	 * @throws Exception 連線失敗時.
+	 */
+	public function find_payment_by_order_ref( string $order_ref ) {
+		$url          = Url::request_url( Constants::REQUEST_TYPE_DETAILS_BY_ORDER, array( 'order_id' => rawurlencode( $order_ref ) ) );
+		$request_args = $this->build_execute_request_args( $url, null, 20, 'GET' );
+		$result       = $this->execute( $url, $request_args, 20 );
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
+		if ( ! isset( $result->returnCode ) || '0000' !== $result->returnCode || empty( $result->info ) || ! is_array( $result->info ) ) {
+			return null;
+		}
+		foreach ( $result->info as $row ) {
+			if ( isset( $row->transactionId, $row->transactionType ) && 'PAYMENT' === $row->transactionType && (string) ( $row->orderId ?? '' ) === $order_ref ) {
+				return $row;
+			}
+		}
+		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		return null;
+	}
+
 	public function check( $order ) {
 
 		$reserved_transaction_id = $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
@@ -517,10 +591,17 @@ final class PaymentRequest {
 		$return_code = $response_body->returnCode;
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
-		LinePay::log( '[execute] http response code: ' . $http_status . ', response body: ' . wc_print_r( $response_body, true ) );
+		// confirm 回應帶 regKey（自動付款金鑰），不寫進 log。
+		$logged = is_object( $response_body ) ? json_decode( (string) wp_json_encode( $response_body ) ) : $response_body;
+		if ( is_object( $logged ) && isset( $logged->info ) && is_object( $logged->info ) && isset( $logged->info->regKey ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
+			$logged->info->regKey = '[REDACTED]'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
+		}
+		LinePay::log( '[execute] http response code: ' . $http_status . ', response body: ' . wc_print_r( $logged, true ) );
 
 		if ( 200 !== $http_status ) {
-			throw new Exception( esc_html( sprintf( 'Execute API http response not success. http response code: %1$s. url: %2$s', $http_status, $url ) ) );
+			// 網址裡可能有 regKey（自動付款），錯誤訊息會寫進訂單備註，先遮掉。
+			$safe_url = (string) preg_replace( '#/preapprovedPay/[^/]+/#', '/preapprovedPay/***/', (string) $url );
+			throw new Exception( esc_html( sprintf( 'Execute API http response not success. http response code: %1$s. url: %2$s', $http_status, $safe_url ) ) );
 		}
 
 		return $response_body;

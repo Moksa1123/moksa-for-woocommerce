@@ -64,6 +64,10 @@ class OrderMetaBoxes {
 				} else {
 					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td></td></tr>';
 				}
+			} elseif ( $key === OrderMeta::CREDIT_TOKEN_ID ) {
+				// 續扣憑證只顯示頭尾，完整值不必出現在畫面（截圖、旁人）上。
+				$hash = (string) $order->get_meta( $key );
+				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td>' . esc_html( strlen( $hash ) > 12 ? substr( $hash, 0, 6 ) . '…' . substr( $hash, -4 ) : $hash ) . '</td></tr>';
 			} elseif ( $key === OrderMeta::MESSAGE ) {
 				echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td>' . esc_html( $order->get_meta( $key ) ) . ' (' . esc_html( $order->get_meta( OrderMeta::STATUS ) ) . ')</td></tr>';
 			} else {

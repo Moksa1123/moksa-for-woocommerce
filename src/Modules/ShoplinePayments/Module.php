@@ -42,6 +42,7 @@ final class Module extends AbstractGatewayModule {
 	public static function gateway_map(): array {
 		return [
 			Gateways\SessionGateway::GATEWAY_ID => Gateways\SessionGateway::class,
+			Gateways\CardGateway::GATEWAY_ID    => Gateways\CardGateway::class,
 		];
 	}
 
@@ -58,12 +59,55 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function boot_extras(): void {
+		SubscriptionRenewal::boot();
+		add_action( 'wp_enqueue_scripts', [ self::class, 'enqueue_card_assets' ], 20 );
 		add_filter(
 			'moksafowo_payment_query_handlers',
 			static function ( array $h ): array {
 				$h['moksafowo_shopline'] = [ __CLASS__, 'query_payment_status' ];
 				return $h;
 			}
+		);
+	}
+
+	/** 傳統結帳頁的內嵌式信用卡欄位（區塊結帳由 ShoplinePaymentsBlocksMethod 載入）。 */
+	public static function enqueue_card_assets(): void {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_wc_endpoint_url( 'order-pay' ) ) {
+			return;
+		}
+		if ( function_exists( 'has_block' ) && has_block( 'woocommerce/checkout' ) ) {
+			return;
+		}
+		$gateways = WC()->payment_gateways() ? WC()->payment_gateways()->payment_gateways() : [];
+		$gateway  = $gateways[ Gateways\CardGateway::GATEWAY_ID ] ?? null;
+		if ( ! $gateway instanceof Gateways\CardGateway || 'yes' !== $gateway->enabled || '' === Api\Helper::client_key() ) {
+			return;
+		}
+
+		wp_register_script( 'moksafowo-slp-sdk', Api\Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- 官方 CDN SDK，版本由路徑 /v1/ 決定。
+		$path = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-slp-card.js';
+		wp_enqueue_script(
+			'moksafowo-slp-card',
+			MOKSAFOWO_PLUGIN_URL . 'assets/public/moksafowo-slp-card.js',
+			[ 'jquery', 'moksafowo-slp-sdk' ],
+			file_exists( $path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $path ) : MOKSAFOWO_VERSION,
+			true
+		);
+		wp_localize_script(
+			'moksafowo-slp-card',
+			'moksafowoSlpCard',
+			[
+				'gatewayId'  => Gateways\CardGateway::GATEWAY_ID,
+				'clientKey'  => Api\Helper::client_key(),
+				'merchantId' => Api\Helper::merchant_id(),
+				'env'        => Api\Helper::sdk_env(),
+				'amount'     => (int) round( (float) ( WC()->cart ? WC()->cart->get_total( 'edit' ) : 0 ) * 100 ),
+				'bindCard'   => \Moksafowo\Compatibility\Subscriptions::active() && class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription(),
+				'i18n'       => [
+					'loadError' => __( 'The card form could not be loaded. Please refresh the page or choose another payment method.', 'moksa-for-woocommerce' ),
+					'payError'  => __( 'The card payment did not go through. Please check the card and try again.', 'moksa-for-woocommerce' ),
+				],
+			]
 		);
 	}
 

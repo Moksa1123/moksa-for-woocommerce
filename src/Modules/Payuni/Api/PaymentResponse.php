@@ -2,6 +2,7 @@
 
 namespace Moksafowo\Modules\Payuni\Api;
 
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Payuni\Credentials;
 use Moksafowo\Modules\Payuni\PayuniPayment;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
@@ -197,8 +198,9 @@ class PaymentResponse {
 			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_ECI, 'ECI' );
 			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_RED_AMT, 'RedAmt' );
 			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_RED_NO, 'RedNo' );
-			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_TOKEN_ID, 'TokenID' );
-			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_TOKEN_LIFE, 'TokenLife' );
+			// 官方回傳欄位是 CreditHash / CreditLife（帶 CreditToken 且授權成功才有）。
+			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_TOKEN_ID, 'CreditHash' );
+			self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_TOKEN_LIFE, 'CreditLife' );
 
 			if ( '2' === ( $decrypted_info['AuthType'] ?? '' ) ) {
 				self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_INSTALL, 'CardInst' );
@@ -234,6 +236,23 @@ class PaymentResponse {
 		$order->update_meta_data( OrderMeta::PLUGIN_VERSION, MOKSAFOWO_VERSION );
 
 		$order->save();
+
+		if ( ! empty( $decrypted_info['CreditHash'] ) && Subscriptions::order_has_subscription( $order ) ) {
+			Subscriptions::store_payment_meta(
+				$order,
+				[
+					OrderMeta::CREDIT_TOKEN_ID   => (string) $decrypted_info['CreditHash'],
+					OrderMeta::CREDIT_TOKEN_LIFE => (string) ( $decrypted_info['CreditLife'] ?? '' ),
+					OrderMeta::CREDIT_CARD_4NO   => (string) ( $decrypted_info['Card4No'] ?? '' ),
+				]
+			);
+		}
+	}
+
+	/** 幕後 API（訂閱續扣）同步回來的結果，照背景通知的方式寫進訂單。 */
+	public static function apply_backend_result( $order, array $decrypted_info ): void {
+		$order->add_order_note( self::payment_note( __( 'PAYUNi renewal charge', 'moksa-for-woocommerce' ), $decrypted_info ) );
+		self::update_order_meta_and_order_status( $order, $decrypted_info );
 	}
 
 	private static function update_order_meta_and_order_status( $order, $decrypted_info ) {

@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Linepay\Gateways;
 
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Linepay\Api\PaymentRequest;
 use Moksafowo\Modules\Linepay\Constants;
 use Moksafowo\Modules\Linepay\LinePay;
@@ -37,6 +38,24 @@ class Credit extends WC_Payment_Gateway {
 
 		$this->init_form_fields();
 		$this->init_settings();
+
+		// 自動付款（PREAPPROVED）要先經 LINE Pay 核准，商家打開設定才宣告支援訂閱。
+		// 換付款方式要顧客再授權一次，暫只開放後台改 regKey。
+		if ( Subscriptions::active() && 'yes' === $this->get_option( 'subscriptions', 'no' ) ) {
+			$this->supports = array_merge(
+				$this->supports,
+				array(
+					'subscriptions',
+					'subscription_cancellation',
+					'subscription_suspension',
+					'subscription_reactivation',
+					'subscription_amount_changes',
+					'subscription_date_changes',
+					'subscription_payment_method_change_admin',
+					'multiple_subscriptions',
+				)
+			);
+		}
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_order_on_hold_message' ), 10, 2 );
@@ -88,6 +107,11 @@ class Credit extends WC_Payment_Gateway {
 		}
 
 		if ( WC()->cart && 0 < $this->get_order_total() && 0 < $this->max_amount && $this->max_amount < $this->get_order_total() ) {
+			$is_available = false;
+		}
+
+		// 首期 0 元（試用期）沒有付款可以讓顧客授權自動付款。
+		if ( WC()->cart && 0 >= $this->get_order_total() && class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
 			$is_available = false;
 		}
 

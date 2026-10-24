@@ -1,6 +1,7 @@
 <?php
 namespace Moksafowo\Modules\Payuni\Gateways;
 
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Payuni\Api\PaymentRequest;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
@@ -21,9 +22,27 @@ class Credit extends GatewayBase {
 			'products',
 			'refunds',
 		);
-
 		$this->init_form_fields();
 		$this->init_settings();
+
+		// 續扣走信用卡幕後 Token 交易；首期必須經 UPP 實際刷卡才拿得到 CreditHash，
+		// 所以不支援顧客自行換卡（那要另一筆付款），只開放後台改 CreditHash。
+		// 信用卡 Token 與幕後授權要向 PAYUNi 申請並綁 IP，商家打開設定才宣告支援，否則首期收得到、續扣全失敗。
+		if ( Subscriptions::active() && 'yes' === $this->get_option( 'subscriptions', 'no' ) ) {
+			$this->supports = array_merge(
+				$this->supports,
+				array(
+					'subscriptions',
+					'subscription_cancellation',
+					'subscription_suspension',
+					'subscription_reactivation',
+					'subscription_amount_changes',
+					'subscription_date_changes',
+					'subscription_payment_method_change_admin',
+					'multiple_subscriptions',
+				)
+			);
+		}
 
 		$this->title                      = $this->get_option( 'title' );
 		$this->description                = $this->get_option( 'description' );
@@ -39,12 +58,34 @@ class Credit extends GatewayBase {
 	}
 
 	public function moksafowo_payuni_payment_credit_transaction_arrgs( $args, $order ) {
-		return array_merge(
+		$args = array_merge(
 			$args,
 			array(
 				'Credit' => '1',
 			)
 		);
+		// 訂閱：首期請持卡人約定信用卡（3=強制約定，顧客不能在付款頁取消），之後用 CreditHash 幕後續扣。
+		// CreditToken 用每位會員專屬的隨機識別碼：用可預測的會員編號，兩個站共用同一個 PAYUNi 商店時會對到別人約定的卡。
+		$member_id = Subscriptions::member_id( $order );
+		if ( $this->supports( 'subscriptions' ) && '' !== $member_id && Subscriptions::order_has_subscription( $order ) ) {
+			$args = array_merge(
+				$args,
+				array(
+					'CreditToken'     => $member_id,
+					'UseTokenType'    => 3,
+					'CreditTokenType' => 2,
+				)
+			);
+		}
+		return $args;
+	}
+
+	public function is_available() {
+		// 首期 0 元（試用期）沒有 UPP 交易可以約定信用卡，拿不到續扣用的 CreditHash。
+		if ( WC()->cart && 0 >= $this->get_order_total() && class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+			return false;
+		}
+		return parent::is_available();
 	}
 
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {

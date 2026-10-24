@@ -32,9 +32,9 @@ module.exports = {
 		...defaultConfig.output,
 		path: path.resolve( __dirname, 'assets/blocks/build' ),
 		filename: '[name].js',
-		// tappay 走 TapPay Fields SDK（client-side 卡片 tokenize），其 bundle 為
-		// 手維護產物、source 尚未進 repo — clean 時保留，避免重 build 把它清掉。
-		clean: { keep: /tappay[\\/]/ },
+		// tappay、shopline-card 掛金流商的卡片 SDK，bundle 是手寫維護、不經 webpack —
+		// clean 時保留，避免重 build 把它清掉。
+		clean: { keep: /(tappay|shopline-card)[\\/]/ },
 	},
 	plugins: [
 		// 換成 WC 版 DEWP：@woocommerce/* import 轉 wc.* 全域 + asset.php 自動列 wc-blocks-registry 等 dep

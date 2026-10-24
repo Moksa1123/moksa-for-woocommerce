@@ -16,6 +16,12 @@ final class Helper extends AbstractCredentialHelper {
 	public const PATH_SESSION_CREATE = '/api/v1/trade/sessions/create';
 	public const PATH_SESSION_QUERY  = '/api/v1/trade/sessions/query';
 	public const PATH_REFUND_CREATE  = '/api/v1/trade/refund/create';
+	public const PATH_PAYMENT_CREATE = '/api/v1/trade/payment/create';
+	public const PATH_PAYMENT_GET    = '/api/v1/trade/payment/get';
+	public const PATH_INSTRUMENTS    = '/api/v1/customer/paymentInstrument/query';
+
+	// 內嵌式付款 JS SDK（官方只提供 CDN，不可 vendoring）。
+	public const SDK_URL = 'https://cdn.shoplinepayments.com/sdk/v1/payment-web.js';
 
 	protected static function option_prefix(): string {
 		return 'moksafowo_shopline_payments';
@@ -68,6 +74,18 @@ final class Helper extends AbstractCredentialHelper {
 		return (string) get_option( 'moksafowo_shopline_payments_api_key', '' );
 	}
 
+	/** 內嵌式 SDK 用的 clientKey（後台「設定 → 開發者管理」產生）。 */
+	public static function client_key(): string {
+		if ( self::is_sandbox() ) {
+			return (string) get_option( 'moksafowo_shopline_payments_sandbox_client_key', '' );
+		}
+		return (string) get_option( 'moksafowo_shopline_payments_client_key', '' );
+	}
+
+	public static function sdk_env(): string {
+		return self::is_sandbox() ? 'sandbox' : 'production';
+	}
+
 	public static function sign_key(): string {
 		if ( self::is_sandbox() ) {
 			return (string) get_option( 'moksafowo_shopline_payments_sandbox_sign_key', '' );
@@ -104,6 +122,18 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function session_query_url(): string {
 		return self::base_url() . self::PATH_SESSION_QUERY;
+	}
+
+	public static function payment_create_url(): string {
+		return self::base_url() . self::PATH_PAYMENT_CREATE;
+	}
+
+	public static function payment_get_url(): string {
+		return self::base_url() . self::PATH_PAYMENT_GET;
+	}
+
+	public static function instruments_url(): string {
+		return self::base_url() . self::PATH_INSTRUMENTS;
 	}
 
 	public static function refund_create_url(): string {

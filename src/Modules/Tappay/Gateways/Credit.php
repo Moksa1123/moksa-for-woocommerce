@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Tappay\Gateways;
 
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Tappay\Api\Client;
 use Moksafowo\Modules\Tappay\Api\Helper;
 use Moksafowo\Order\Meta\Keys;
@@ -13,12 +14,32 @@ final class Credit extends \WC_Payment_Gateway {
 
 	public const GATEWAY_ID = 'moksafowo_tappay_credit';
 
+	private const SUBSCRIPTION_FEATURES = [
+		'subscriptions',
+		'subscription_cancellation',
+		'subscription_suspension',
+		'subscription_reactivation',
+		'subscription_amount_changes',
+		'subscription_date_changes',
+		'subscription_payment_method_change',
+		'subscription_payment_method_change_customer',
+		'subscription_payment_method_change_admin',
+		'multiple_subscriptions',
+	];
+
 	public function __construct() {
 		$this->id                 = self::GATEWAY_ID;
 		$this->has_fields         = true; // 結帳頁要渲染 TapPay Fields。
 		$this->method_title       = __( 'TapPay credit card', 'moksa-for-woocommerce' );
 		$this->method_description = __( 'Secure card payments with 3-D Secure. Card details never pass through this site.', 'moksa-for-woocommerce' );
 		$this->supports           = [ 'products', 'refunds' ];
+		if ( Subscriptions::active() ) {
+			$this->supports = array_merge( $this->supports, self::SUBSCRIPTION_FEATURES );
+			// 顧客換卡走 Bind Card（不經 3D 驗證）；商家要求 3D 驗證時不開放，只能後台換卡。
+			if ( Helper::three_domain_secure_enabled() ) {
+				$this->supports = array_values( array_diff( $this->supports, [ 'subscription_payment_method_change', 'subscription_payment_method_change_customer' ] ) );
+			}
+		}
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -56,6 +77,10 @@ final class Credit extends \WC_Payment_Gateway {
 
 	public function is_available(): bool {
 		if ( ! parent::is_available() || ! \Moksafowo\Modules\Shared\Gateways\TwdOnly::ok() ) {
+			return false;
+		}
+		// 首期 0 元只能用 Bind Card 綁卡，那條路沒有 3D 驗證；商家要求 3D 時不提供，免得變成免驗證試卡的入口。
+		if ( Helper::three_domain_secure_enabled() && WC()->cart && 0 >= $this->get_order_total() && class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
 			return false;
 		}
 		return Helper::has_credentials();
@@ -110,6 +135,19 @@ final class Credit extends \WC_Payment_Gateway {
 			];
 		}
 
+		$for_subscription = Subscriptions::order_has_subscription( $order );
+		// 變更付款方式、或首期 0 元（試用期）：只綁卡，不扣款。
+		if ( $for_subscription && ( Subscriptions::is_changing_payment_method( $order ) || (float) $order->get_total() <= 0 ) ) {
+			if ( Helper::three_domain_secure_enabled() ) {
+				wc_add_notice( __( 'This store requires 3-D Secure, so a card cannot be saved without a payment. Please choose another payment method.', 'moksa-for-woocommerce' ), 'error' );
+				return [
+					'result'   => 'failure',
+					'redirect' => '',
+				];
+			}
+			return $this->bind_card_only( $order, $prime, $last4 );
+		}
+
 		// 重試（曾送過 order_number）時加 T{time} 後綴避免 TapPay 拒重複。
 		$retry        = '' !== (string) $order->get_meta( Keys::TAPPAY_ORDER_NUMBER );
 		$order_number = Helper::build_order_number( $order, $retry );
@@ -131,7 +169,7 @@ final class Credit extends \WC_Payment_Gateway {
 			'amount'              => (int) round( (float) $order->get_total() ), // TWD = 整數元，不 ×100。
 			'currency'            => 'TWD',
 			'order_number'        => $order_number,
-			'details'             => $this->build_details( $order ),
+			'details'             => self::build_details( $order ),
 			'cardholder'          => [
 				'phone_number' => (string) $order->get_billing_phone(),
 				'name'         => trim( $order->get_formatted_billing_full_name() ),
@@ -146,6 +184,9 @@ final class Credit extends \WC_Payment_Gateway {
 			],
 			'notify_url'          => $notify_url,
 		];
+		if ( $for_subscription ) {
+			$payload['remember'] = true;
+		}
 
 		$resp = Client::pay_by_prime( $payload );
 
@@ -174,6 +215,18 @@ final class Credit extends \WC_Payment_Gateway {
 		$rec_trade_id = (string) ( $resp['data']['rec_trade_id'] ?? '' );
 		if ( '' !== $rec_trade_id ) {
 			$order->update_meta_data( Keys::TAPPAY_REC_TRADE_ID, $rec_trade_id );
+		}
+		// 記住的卡片在 3D 驗證之前就回傳了。先只存在這張訂單上，付款確認後才寫進訂閱
+		// （IpnHandler 付款成功時呼叫 SubscriptionRenewal::promote_pending_card）；
+		// 否則續訂單重付、換方案時 3D 沒過，訂閱的卡就已經被換成沒驗證過的卡。
+		if ( $for_subscription && $resp['ok'] ) {
+			$secret = (array) ( $resp['data']['card_secret'] ?? [] );
+			if ( $resp['needs_3ds'] ) {
+				$order->update_meta_data( Keys::TAPPAY_PENDING_CARD_KEY, (string) ( $secret['card_key'] ?? '' ) );
+				$order->update_meta_data( Keys::TAPPAY_PENDING_CARD_TOKEN, (string) ( $secret['card_token'] ?? '' ) );
+			} else {
+				$this->store_card_secret( $order, $secret, $last4 );
+			}
 		}
 
 		if ( ! $resp['ok'] ) {
@@ -295,7 +348,92 @@ final class Credit extends \WC_Payment_Gateway {
 		return true;
 	}
 
-	private function build_details( \WC_Order $order ): string {
+	private function bind_card_only( \WC_Order $order, string $prime, string $last4 ): array {
+		$resp = Client::bind_card(
+			[
+				'prime'               => $prime,
+				'partner_key'         => Helper::partner_key(),
+				'merchant_id'         => Helper::merchant_id(),
+				'currency'            => 'TWD',
+				'details'             => self::build_details( $order ),
+				'three_domain_secure' => false,
+				'cardholder'          => [
+					'phone_number' => (string) $order->get_billing_phone(),
+					'name'         => trim( $order->get_formatted_billing_full_name() ),
+					'email'        => (string) $order->get_billing_email(),
+				],
+			]
+		);
+		Helper::log(
+			'bind-card',
+			[
+				'order_id' => $order->get_id(),
+				'status'   => $resp['status'],
+				'msg'      => $resp['msg'],
+			]
+		);
+
+		$secret = (array) ( $resp['data']['card_secret'] ?? [] );
+		if ( ! $resp['ok'] || empty( $secret['card_key'] ) || empty( $secret['card_token'] ) ) {
+			wc_add_notice(
+				sprintf(
+					/* translators: 1: status code, 2: message */
+					__( 'The card could not be saved with TapPay (status code %1$d): %2$s', 'moksa-for-woocommerce' ),
+					$resp['status'],
+					$resp['msg']
+				),
+				'error'
+			);
+			return [
+				'result'   => 'failure',
+				'redirect' => '',
+			];
+		}
+
+		$last4 = (string) ( $resp['data']['card_info']['last_four'] ?? $last4 );
+		$this->store_card_secret( $order, $secret, $last4 );
+		$order->add_order_note(
+			sprintf(
+				/* translators: %s: card last four digits */
+				__( 'Card ending %s saved with TapPay for subscription renewals.', 'moksa-for-woocommerce' ),
+				$last4
+			)
+		);
+
+		if ( Subscriptions::is_changing_payment_method( $order ) ) {
+			return [
+				'result'   => 'success',
+				'redirect' => $order->get_view_order_url(),
+			];
+		}
+
+		$order->payment_complete();
+		if ( function_exists( 'WC' ) && WC()->cart ) {
+			WC()->cart->empty_cart();
+		}
+		return [
+			'result'   => 'success',
+			'redirect' => $this->get_return_url( $order ),
+		];
+	}
+
+	private function store_card_secret( \WC_Order $order, array $secret, string $last4 ): void {
+		$key   = (string) ( $secret['card_key'] ?? '' );
+		$token = (string) ( $secret['card_token'] ?? '' );
+		if ( '' === $key || '' === $token ) {
+			return;
+		}
+		$meta = [
+			Keys::TAPPAY_CARD_KEY   => $key,
+			Keys::TAPPAY_CARD_TOKEN => $token,
+		];
+		if ( '' !== $last4 ) {
+			$meta[ Keys::TAPPAY_CARD_LAST4 ] = $last4;
+		}
+		Subscriptions::store_payment_meta( $order, $meta );
+	}
+
+	public static function build_details( \WC_Order $order ): string {
 		$names = [];
 		foreach ( $order->get_items() as $item ) {
 			$names[] = (string) $item->get_name();

@@ -34,6 +34,27 @@ final class Client {
 	}
 
 
+	/** 用記住的卡片扣款（訂閱續扣，顧客不在場）。 */
+	public static function pay_by_token( array $payload ): array {
+		return self::request( Helper::pay_by_token_url(), $payload );
+	}
+
+	/** 只綁卡不扣款：TapPay 會刷 1 元驗卡後立即退回。 */
+	public static function bind_card( array $payload ): array {
+		return self::request( Helper::bind_card_url(), $payload );
+	}
+
+	public static function remove_card( string $card_key, string $card_token ): array {
+		return self::request(
+			Helper::remove_card_url(),
+			[
+				'partner_key' => Helper::partner_key(),
+				'card_key'    => $card_key,
+				'card_token'  => $card_token,
+			]
+		);
+	}
+
 	public static function refund( string $rec_trade_id, int $amount ): array {
 		return self::request(
 			Helper::refund_url(),

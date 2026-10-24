@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\ShoplinePayments\Api;
 
 use Moksafowo\Http\Response;
+use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Order\Meta\Keys;
 
 defined( 'ABSPATH' ) || exit;
@@ -112,6 +113,16 @@ final class WebhookHandler {
 					$type
 				)
 			);
+		} elseif ( $order->is_paid() && in_array( $type, [ 'trade.succeeded', 'session.succeeded' ], true ) && self::is_other_trade( $order, $data ) ) {
+			// 已付款的訂單又收到另一筆交易成功：可能是續扣結果不明時重送造成的重複扣款。
+			// 不覆寫原本的交易資料（退款要打原交易），只留醒目備註請商家處理。
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: Shopline Payments transaction ID */
+					__( 'Shopline Payments reported another successful payment (transaction %s) for this already paid order. This may be a duplicate charge — check it in the Shopline Payments dashboard and refund it if needed.', 'moksa-for-woocommerce' ),
+					(string) ( self::first_payment_detail( $data )['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' )
+				)
+			);
 		} else {
 			self::write_meta( $order, $data );
 			self::dispatch( $order, $type, $data );
@@ -200,6 +211,12 @@ final class WebhookHandler {
 		return null;
 	}
 
+	private static function is_other_trade( \WC_Order $order, array $data ): bool {
+		$incoming = (string) ( self::first_payment_detail( $data )['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
+		$stored   = (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID );
+		return '' !== $incoming && '' !== $stored && $incoming !== $stored;
+	}
+
 	private static function write_meta( \WC_Order $order, array $data ): void {
 		$payment = self::first_payment_detail( $data );
 
@@ -243,6 +260,24 @@ final class WebhookHandler {
 		if ( '' !== $refund_order_id ) {
 			$order->update_meta_data( Keys::SLP_REFUND_ORDER_ID, $refund_order_id );
 		}
+
+		// 訂閱首期綁卡成功：記下 SLP 會員與付款工具，續扣（Recurring）兩個都要帶。
+		// 官方事件範例的會員 ID 在 data.order.customer.customerId（event_model）；其他位置當備援。
+		$customer_id   = (string) ( $data['order']['customer']['customerId'] ?? $data['customer']['customerId'] ?? $trade_payment['paymentCustomerId'] ?? '' );
+		$instrument_id = (string) ( $trade_payment['paymentInstrument']['paymentInstrumentId'] ?? '' );
+		if ( ( '' !== $customer_id || '' !== $instrument_id ) && Subscriptions::order_has_subscription( $order ) ) {
+			Subscriptions::store_payment_meta(
+				$order,
+				array_filter(
+					[
+						Keys::SLP_CUSTOMER_ID   => $customer_id,
+						Keys::SLP_INSTRUMENT_ID => $instrument_id,
+						Keys::SLP_CARD_LAST4    => (string) ( $card['last4'] ?? '' ),
+					],
+					static fn( string $v ): bool => '' !== $v
+				)
+			);
+		}
 	}
 
 	private static function dispatch( \WC_Order $order, string $type, array $data ): void {
@@ -253,6 +288,12 @@ final class WebhookHandler {
 				if ( ! $order->is_paid() ) {
 					$payment = self::first_payment_detail( $data );
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
+					// 訂閱試用期首期 0 元只綁卡，SLP 以 1 元驗卡後自動取消，金額本來就對不上。
+					if ( 'CardBind' === (string) ( $data['payment']['paymentBehavior'] ?? '' ) && (float) $order->get_total() <= 0 ) {
+						$order->payment_complete( $txn );
+						$order->add_order_note( __( 'The card was saved with Shopline Payments for subscription renewals.', 'moksa-for-woocommerce' ) );
+						break;
+					}
 					// 金額以「元 × 100」表示。建立付款頁後訂單被改了金額，顧客用舊頁面付的金額會對不上。
 					$paid     = self::paid_amount( $data );
 					$expected = (int) round( (float) $order->get_total() * 100 );

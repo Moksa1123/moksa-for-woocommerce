@@ -22,6 +22,10 @@ final class Constants {
 	const URI_REFUND  = '/v3/payments/{transaction_id}/refund';
 	const URI_CAPTURE = '/v3/payments/authorizations/{transaction_id}/capture';
 
+	const URI_PREAPPROVED_PAY    = '/v3/payments/preapprovedPay/{reg_key}/payment';
+	const URI_PREAPPROVED_EXPIRE = '/v3/payments/preapprovedPay/{reg_key}/expire';
+	const URI_DETAILS_BY_ORDER   = '/v3/payments?orderId={order_id}';
+
 	const URI_CALLBACK_HANDLER = '/wc-api/moksafowo_linepay_payment';
 
 	// host.
@@ -36,6 +40,10 @@ final class Constants {
 	const REQUEST_TYPE_CANCEL  = 'cancel';
 	const REQUEST_TYPE_REFUND  = 'refund';
 	const REQUEST_TYPE_CAPTURE = 'capture';
+
+	const REQUEST_TYPE_PREAPPROVED_PAY    = 'preapproved_pay';
+	const REQUEST_TYPE_PREAPPROVED_EXPIRE = 'preapproved_expire';
+	const REQUEST_TYPE_DETAILS_BY_ORDER   = 'details_by_order';
 
 	// environment.
 	const ENV_SANDBOX = 'sandbox';

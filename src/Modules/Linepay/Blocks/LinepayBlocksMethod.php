@@ -46,9 +46,14 @@ final class LinepayBlocksMethod extends AbstractPaymentMethodType {
 	}
 
 	public function get_payment_method_data() {
+		// supports 要照 gateway 實際宣告：開啟訂閱時帶 subscriptions，區塊結帳才會在訂閱購物車顯示。
+		$gateway = function_exists( 'WC' ) && WC()->payment_gateways
+			? ( WC()->payment_gateways()->payment_gateways()[ $this->name ] ?? null )
+			: null;
 		return array(
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
+			'supports'    => $gateway instanceof \WC_Payment_Gateway && ! empty( $gateway->supports ) ? array_values( $gateway->supports ) : array( 'products' ),
 		);
 	}
 }

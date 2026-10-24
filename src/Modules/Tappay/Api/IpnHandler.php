@@ -233,6 +233,12 @@ final class IpnHandler {
 		}
 		$record = self::query_verified_record( $order );
 		if ( null === $record ) {
+			// 查不到交易或查詢失敗：再查幾次，最後留備註，不讓訂單無聲無息地停在保留。
+			if ( (int) $attempt < 3 ) {
+				self::schedule_pending_check( $order, (int) $attempt + 1 );
+			} elseif ( $order->has_status( 'on-hold' ) ) {
+				$order->add_order_note( __( 'TapPay still has no confirmed transaction for this order. Check it in the TapPay portal; if the customer was not charged, change this order to Failed so it can be paid again.', 'moksa-for-woocommerce' ) );
+			}
 			return;
 		}
 		self::write_transaction_meta( $order, $record );
@@ -333,6 +339,7 @@ final class IpnHandler {
 		if ( $paid ) {
 			if ( ! $order->is_paid() ) {
 				$order->payment_complete( $rec_trade_id );
+				\Moksafowo\Modules\Tappay\SubscriptionRenewal::promote_pending_card( $order );
 				// 同一個通知網址也收 LINE Pay、街口等錢包付款，不能寫死「信用卡」；錢包沒有卡號末四碼，空值不印。
 				$order->add_order_note(
 					\Moksafowo\Order\Note::build(

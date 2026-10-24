@@ -44,6 +44,15 @@ final class Url {
 			case Constants::REQUEST_TYPE_CAPTURE:
 				$uri = Constants::URI_CAPTURE;
 				break;
+			case Constants::REQUEST_TYPE_PREAPPROVED_PAY:
+				$uri = Constants::URI_PREAPPROVED_PAY;
+				break;
+			case Constants::REQUEST_TYPE_PREAPPROVED_EXPIRE:
+				$uri = Constants::URI_PREAPPROVED_EXPIRE;
+				break;
+			case Constants::REQUEST_TYPE_DETAILS_BY_ORDER:
+				$uri = Constants::URI_DETAILS_BY_ORDER;
+				break;
 		}
 		foreach ( $args as $key => $value ) {
 			$uri = str_replace( '{' . $key . '}', (string) $value, $uri );

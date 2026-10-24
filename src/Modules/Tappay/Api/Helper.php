@@ -17,6 +17,9 @@ final class Helper extends AbstractCredentialHelper {
 	public const SDK_URL = 'https://js.tappaysdk.com/sdk/tpdirect/v5';
 
 	public const PATH_PAY_BY_PRIME = '/tpc/payment/pay-by-prime';
+	public const PATH_PAY_BY_TOKEN = '/tpc/payment/pay-by-token';
+	public const PATH_BIND_CARD    = '/tpc/card/bind';
+	public const PATH_REMOVE_CARD  = '/tpc/card/remove';
 	public const PATH_REFUND       = '/tpc/transaction/refund';
 	public const PATH_QUERY        = '/tpc/transaction/query';
 	public const PATH_TRADE_HIST   = '/tpc/transaction/trade-history';
@@ -155,6 +158,18 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function pay_by_prime_url(): string {
 		return self::base_url() . self::PATH_PAY_BY_PRIME;
+	}
+
+	public static function pay_by_token_url(): string {
+		return self::base_url() . self::PATH_PAY_BY_TOKEN;
+	}
+
+	public static function bind_card_url(): string {
+		return self::base_url() . self::PATH_BIND_CARD;
+	}
+
+	public static function remove_card_url(): string {
+		return self::base_url() . self::PATH_REMOVE_CARD;
 	}
 
 	public static function refund_url(): string {

@@ -2233,7 +2233,7 @@ msgstr "姓氏"
 #: src/Modules/Address/FieldManager.php:98
 #: src/Modules/Address/FieldManager.php:117
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:171
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:232
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:98
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:140
@@ -2642,7 +2642,7 @@ msgstr "B2B 三聯式"
 #: src/Modules/PaynowInvoice/Module.php:40
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:72
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:98
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:102
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 #: src/Modules/Shared/Admin/CardRenderers.php:340
 #: src/Modules/Shared/Admin/CardRenderers.php:405
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:240
@@ -2667,7 +2667,7 @@ msgstr "手機條碼"
 #: src/Modules/PaynowInvoice/Module.php:41
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:79
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:99
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:103
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:107
 #: src/Modules/Payuni/Gateways/GatewayBase.php:131
 #: src/Modules/Shared/Admin/CardRenderers.php:341
 #: src/Modules/Shared/Admin/CardRenderers.php:406
@@ -2737,13 +2737,13 @@ msgid "This order has no allowance to void."
 msgstr "這張訂單沒有可作廢的折讓。"
 
 #. translators: 1: allowance number, 2: error message
-#: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:57
+#: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:66
 #, php-format
 msgid "Amego allowance %1$s could not be voided: %2$s"
 msgstr "光貿折讓 %1$s 作廢失敗：%2$s"
 
 #. translators: %s: allowance number
-#: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:80
+#: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:89
 #, php-format
 msgid "Amego allowance %s was voided"
 msgstr "光貿折讓 %s 已作廢"
@@ -2753,38 +2753,38 @@ msgstr "光貿折讓 %s 已作廢"
 msgid "Amego"
 msgstr "Amego"
 
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:34
-msgid "This order has no Amego invoice to void."
-msgstr "此訂單沒有可作廢的 Amego 發票。"
-
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:40
-#: src/Modules/PaynowInvoice/Operations/Invalid.php:26
-msgid "This invoice has already been voided."
-msgstr "此發票已作廢。"
-
 #. translators: %s: invoice number
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:79
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:39
 #, php-format
 msgid "The Amego allowance void is still being processed. Invoice #%s will be voided automatically once it finishes."
 msgstr "光貿還在處理折讓作廢，完成後會自動作廢發票 #%s。"
 
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:87
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:47
 msgid "The allowance void is still being processed by Amego. The invoice will be voided automatically shortly."
 msgstr "光貿還在處理折讓作廢，稍後會自動作廢發票。"
 
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:56
+msgid "This order has no Amego invoice to void."
+msgstr "此訂單沒有可作廢的 Amego 發票。"
+
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:62
+#: src/Modules/PaynowInvoice/Operations/Invalid.php:26
+msgid "This invoice has already been voided."
+msgstr "此發票已作廢。"
+
 #. translators: 1: invoice number, 2: error
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:94
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:103
 #, php-format
 msgid "The Amego invoice could not be voided (#%1$s): %2$s"
 msgstr "Amego 發票作廢失敗 (#%1$s)：%2$s"
 
 #. translators: 1: invoice number, 2: reason
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:111
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:120
 #, php-format
 msgid "Amego invoice #%1$s was voided: %2$s"
 msgstr "Amego 發票已作廢 (#%1$s)：%2$s"
 
-#: src/Modules/AmegoInvoice/Operations/Invalid.php:113
+#: src/Modules/AmegoInvoice/Operations/Invalid.php:122
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:110
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:135
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:160
@@ -2792,10 +2792,10 @@ msgstr "Amego 發票已作廢 (#%1$s)：%2$s"
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:154
 #: src/Modules/PaynowInvoice/Operations/Invalid.php:62
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:155
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:297
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:210
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:338
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:86
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
-#: src/Modules/Tappay/Gateways/Credit.php:291
+#: src/Modules/Tappay/Gateways/Credit.php:344
 msgid "No reason given"
 msgstr "無原因"
 
@@ -3059,7 +3059,7 @@ msgstr "輸入捐贈機構（每行一筆），格式為：社福團體名稱|�
 #: src/Modules/Payuni/Settings/SettingsTab.php:57
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:61
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:87
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:114
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:126
 #: src/Modules/Smilepay/Settings/SettingsTab.php:112
 #: src/Modules/SmilepayInvoice/Settings/SettingsTab.php:130
 #: src/Modules/SmilepayShipping/Settings/SettingsTab.php:115
@@ -3212,7 +3212,7 @@ msgstr "帳單電話末三碼"
 #: src/Modules/CustomerService/Module.php:79
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:106
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:286
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:127
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:131
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:184
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:172
 msgid "Look up"
@@ -3233,13 +3233,13 @@ msgid "Close"
 msgstr "關閉"
 
 #: src/Modules/CustomerService/Module.php:83
-#: src/Modules/Newebpay/Module.php:115
-#: src/Modules/ShoplinePayments/Api/Helper.php:40
+#: src/Modules/Newebpay/Module.php:126
+#: src/Modules/ShoplinePayments/Api/Helper.php:46
 msgid "Paid"
 msgstr "已付款"
 
 #: src/Modules/CustomerService/Module.php:84
-#: src/Modules/Newebpay/Module.php:114
+#: src/Modules/Newebpay/Module.php:125
 msgid "Unpaid"
 msgstr "未付款"
 
@@ -3463,10 +3463,11 @@ msgstr "確定要退款？金額："
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:190
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:74
+#: src/Modules/Ecpay/Gateways/CreditBind.php:213
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:108
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:154
-#: src/Modules/Tappay/Gateways/Credit.php:252
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:30
+#: src/Modules/Tappay/Gateways/Credit.php:305
 msgid "The refund amount must be greater than 0."
 msgstr "退款金額需大於 0。"
 
@@ -3489,7 +3490,7 @@ msgstr "已請款金額"
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:228
 #: src/Modules/Payuni/Gateways/ApplePay.php:61
-#: src/Modules/Payuni/Gateways/Credit.php:59
+#: src/Modules/Payuni/Gateways/Credit.php:100
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:60
 #: src/Modules/Payuni/Gateways/GooglePay.php:61
 #: src/Modules/Payuni/Gateways/SamsungPay.php:61
@@ -3563,10 +3564,10 @@ msgstr "請款處理中"
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:326
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:40
-#: src/Modules/Newebpay/Module.php:118
+#: src/Modules/Newebpay/Module.php:129
 #: src/Modules/Shared/Admin/CardRenderers.php:653
-#: src/Modules/ShoplinePayments/Api/Helper.php:45
-#: src/Modules/Tappay/Api/Helper.php:49
+#: src/Modules/ShoplinePayments/Api/Helper.php:51
+#: src/Modules/Tappay/Api/Helper.php:52
 msgid "Refunded"
 msgstr "已退刷"
 
@@ -3692,19 +3693,141 @@ msgstr "全額退款"
 msgid "Payment information"
 msgstr "金流資訊"
 
-#: src/Modules/Ecpay/Api/Helper.php:76
-msgid "The ECPay merchant trade number could not be found."
-msgstr "找不到綠界 MerchantTradeNo。"
+#. translators: %s: site name
+#: src/Modules/Ecpay/Api/BindHandler.php:74
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:175
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:332
+#: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:143
+#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:175
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:128
+#: src/Modules/Tappay/Gateways/Credit.php:444
+#, php-format
+msgid "%s order"
+msgstr "%s 訂單"
 
+#: src/Modules/Ecpay/Api/BindHandler.php:88
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
+#: src/Modules/Ecpay/Gateways/CreditBind.php:209
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:254
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:277
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:293
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:312
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:412
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:430
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:467
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:492
+#: src/Modules/EcpayShipping/Operations/PrintProxy.php:157
+#: src/Modules/OrderLookup/Ability.php:1362
+#: src/Modules/OrderLookup/ChangePickupStore.php:139
+#: src/Modules/OrderLookup/InvoiceOps.php:100
+#: src/Modules/OrderLookup/InvoiceOps.php:172
+#: src/Modules/OrderLookup/InvoiceOps.php:245
+#: src/Modules/OrderLookup/PaymentStatus.php:29
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:40
+#: src/Modules/OrderLookup/ResendPaymentEmail.php:73
+#: src/Modules/OrderLookup/ShipmentOps.php:105
+#: src/Modules/OrderLookup/ShipmentRecordOps.php:168
+#: src/Modules/OrderLookup/TrackingLookup.php:67
+#: src/Modules/OrderLookup/UpdateOrderStatus.php:76
+#: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
+#: src/Modules/Shared/Admin/PaymentQuery.php:77
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:391
+#: src/Modules/Shared/Invoice/OrderListColumn.php:109
+#: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
+msgid "The order could not be found."
+msgstr "找不到訂單。"
+
+#: src/Modules/Ecpay/Api/BindHandler.php:94
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:115
+msgid "The card details were not received. Please enter the card again."
+msgstr "沒有收到信用卡資料，請重新輸入卡號。"
+
+#. translators: %s: ECPay message
+#: src/Modules/Ecpay/Api/BindHandler.php:109
+#, php-format
+msgid "ECPay could not save the card: %s"
+msgstr "綠界綁卡失敗：%s"
+
+#: src/Modules/Ecpay/Api/BindHandler.php:113
+#: src/Modules/Ecpay/Api/BindHandler.php:147
+#: src/Modules/Ecpay/Gateways/CreditBind.php:192
+#: src/Modules/Newebpay/Api/PeriodHandler.php:76
+#: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:50
+#: src/Modules/ShoplinePayments/Module.php:108
+msgid "The card payment did not go through. Please check the card and try again."
+msgstr "刷卡沒有成功，請確認卡片資料後再試一次。"
+
+#: src/Modules/Ecpay/Api/BindHandler.php:200
+msgid "ECPay sent a simulated payment notice from its merchant dashboard. The order was not marked as paid."
+msgstr "綠界送來的是廠商後台「模擬付款」通知，訂單沒有標為已付款。"
+
+#: src/Modules/Ecpay/Api/BindHandler.php:212
+msgid "ECPay is still confirming this card payment. Check the payment in the ECPay dashboard before shipping."
+msgstr "綠界還在確認這筆刷卡結果，請先到綠界廠商後台確認付款再出貨。"
+
+#. translators: 1: ECPay message, 2: code
+#: src/Modules/Ecpay/Api/BindHandler.php:219
+#, php-format
+msgid "The ECPay card payment failed: %1$s (code %2$d)"
+msgstr "綠界刷卡失敗：%1$s（代碼 %2$d）"
+
+#. translators: 1: amount, 2: ECPay message
+#: src/Modules/Ecpay/Api/BindHandler.php:267
+#, php-format
+msgid "The card was saved, but the NT$%1$d card check could not be cancelled automatically: %2$s. Cancel it in the ECPay dashboard."
+msgstr "卡片已綁定，但 NT$%1$d 的驗卡授權無法自動取消：%2$s。請到綠界廠商後台放棄這筆授權。"
+
+#: src/Modules/Ecpay/Api/BindHandler.php:274
+msgid "The card was saved with ECPay for subscription renewals."
+msgstr "已在綠界綁定信用卡，供訂閱續扣使用。"
+
+#. translators: 1: paid amount, 2: order total
+#: src/Modules/Ecpay/Api/BindHandler.php:283
+#: src/Modules/Ecpay/Api/IpnHandler.php:117
+#, php-format
+msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
+msgstr "綠界回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
+
+#. translators: 1: ECPay trade number, 2: card last four digits
+#: src/Modules/Ecpay/Api/BindHandler.php:294
+#, php-format
+msgid "ECPay card payment completed — trade number %1$s (card ending %2$s)"
+msgstr "綠界刷卡成功，交易編號 %1$s（卡號末四碼 %2$s）"
+
+#. translators: %s: error message
+#: src/Modules/Ecpay/Api/BindHandler.php:309
+#, php-format
+msgid "ECPay reported a card payment, but it could not be confirmed with ECPay (%s). Check the payment in the ECPay dashboard before shipping."
+msgstr "綠界通知刷卡成功，但向綠界查詢時無法確認（%s）。請先到綠界廠商後台確認付款再出貨。"
+
+#. translators: 1: ECPay status, 2: amount
+#: src/Modules/Ecpay/Api/BindHandler.php:321
+#, php-format
+msgid "An ECPay payment notice did not match the transaction at ECPay (status %1$s, amount %2$d), so the order was not marked as paid."
+msgstr "綠界付款通知與綠界端的交易對不上（狀態 %1$s，金額 %2$d），訂單沒有標為已付款。"
+
+#: src/Modules/Ecpay/Api/Ecpg.php:107
 #: src/Modules/Ecpay/Api/Helper.php:89
 msgid "AES encryption failed."
 msgstr "AES 加密失敗。"
 
 #. translators: %d: HTTP response code
+#: src/Modules/Ecpay/Api/Ecpg.php:141
 #: src/Modules/Ecpay/Api/Helper.php:124
 #, php-format
 msgid "ECPay returned HTTP %d"
 msgstr "綠界回傳 HTTP %d"
+
+#: src/Modules/Ecpay/Api/Ecpg.php:156
+#: src/Modules/Ecpay/Api/Helper.php:149
+msgid "The ECPay data could not be decoded."
+msgstr "綠界 Data 解碼失敗。"
+
+#: src/Modules/Ecpay/Api/Helper.php:76
+msgid "The ECPay merchant trade number could not be found."
+msgstr "找不到綠界 MerchantTradeNo。"
 
 #: src/Modules/Ecpay/Api/Helper.php:129
 #: src/Modules/Ecpay/Api/Helper.php:232
@@ -3721,11 +3844,8 @@ msgstr "綠界查詢失敗：%s"
 msgid "AES decryption failed."
 msgstr "AES 解密失敗。"
 
-#: src/Modules/Ecpay/Api/Helper.php:149
-msgid "The ECPay data could not be decoded."
-msgstr "綠界 Data 解碼失敗。"
-
 #: src/Modules/Ecpay/Api/Helper.php:183
+#: src/Modules/Ecpay/Gateways/CreditBind.php:218
 msgid "No ECPay transaction ID was found, so the refund cannot be made here. Please refund it in the ECPay dashboard."
 msgstr "找不到綠界交易編號，無法退款。請至綠界後台手動處理。"
 
@@ -3748,12 +3868,6 @@ msgstr "綠界送來由廠商後台發出的模擬付款通知，並未實際收
 #: src/Modules/Ecpay/Api/IpnHandler.php:92
 msgid "This is a simulated ECPay payment (test mode). No money was received."
 msgstr "這是綠界模擬付款（測試模式），並未實際收到款項。"
-
-#. translators: 1: paid amount, 2: order total
-#: src/Modules/Ecpay/Api/IpnHandler.php:117
-#, php-format
-msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
-msgstr "綠界回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
@@ -3830,38 +3944,6 @@ msgstr "繳費代碼"
 msgid "Barcode segment %d"
 msgstr "條碼第 %d 段"
 
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:254
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:277
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:293
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:312
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:412
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:430
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:467
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:492
-#: src/Modules/EcpayShipping/Operations/PrintProxy.php:157
-#: src/Modules/OrderLookup/Ability.php:1362
-#: src/Modules/OrderLookup/ChangePickupStore.php:139
-#: src/Modules/OrderLookup/InvoiceOps.php:100
-#: src/Modules/OrderLookup/InvoiceOps.php:172
-#: src/Modules/OrderLookup/InvoiceOps.php:245
-#: src/Modules/OrderLookup/PaymentStatus.php:29
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:40
-#: src/Modules/OrderLookup/ResendPaymentEmail.php:73
-#: src/Modules/OrderLookup/ShipmentOps.php:105
-#: src/Modules/OrderLookup/ShipmentRecordOps.php:168
-#: src/Modules/OrderLookup/TrackingLookup.php:67
-#: src/Modules/OrderLookup/UpdateOrderStatus.php:76
-#: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
-#: src/Modules/Shared/Admin/PaymentQuery.php:77
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:391
-#: src/Modules/Shared/Invoice/OrderListColumn.php:109
-#: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
-msgid "The order could not be found."
-msgstr "找不到訂單。"
-
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:54
 msgid "This payment method cannot be refunded automatically. Please refund it in the ECPay dashboard."
 msgstr "此付款方式不支援自動退款，請至綠界後台手動操作。"
@@ -3873,6 +3955,7 @@ msgid "This order was paid offline (%s) and ECPay has no automatic refund for it
 msgstr "此訂單為線下付款（%s），綠界沒有自動退款 API，請至綠界後台手動退款。"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:86
+#: src/Modules/Ecpay/Gateways/CreditBind.php:227
 msgid "This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr "這筆綠界信用卡交易尚未請款，目前只能整筆退款（取消授權）。部分退款請等請款完成（通常為隔天）後再操作。"
 
@@ -3884,34 +3967,27 @@ msgstr "綠界退款失敗：%s"
 
 #. translators: 1: amount, 2: ECPay message, 3: code
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:111
+#: src/Modules/Ecpay/Gateways/CreditBind.php:241
 #, php-format
 msgid "The ECPay refund of NT$%1$d failed: %2$s (code %3$d)"
 msgstr "綠界退款失敗（金額 NT$%1$d）：%2$s（代碼 %3$d）"
 
 #. translators: 1: amount, 2: reason
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:123
+#: src/Modules/Ecpay/Gateways/CreditBind.php:254
 #, php-format
 msgid "ECPay refunded NT$%1$d. Reason: %2$s"
 msgstr "綠界退款成功（金額 NT$%1$d）。原因：%2$s"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:125
+#: src/Modules/Ecpay/Gateways/CreditBind.php:256
 msgid "(not given)"
 msgstr "（未填寫）"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:134
+#: src/Modules/Ecpay/Gateways/CreditBind.php:104
 msgid "Invalid order"
 msgstr "無效訂單"
-
-#. translators: %s: site name
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:175
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:332
-#: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:143
-#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:175
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:252
-#: src/Modules/Tappay/Gateways/Credit.php:306
-#, php-format
-msgid "%s order"
-msgstr "%s 訂單"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:214
 msgid "Pay with ECPay"
@@ -3956,6 +4032,47 @@ msgstr "綠界 信用卡"
 #: src/Modules/Ecpay/Gateways/Credit.php:24
 msgid "Pay in full by credit card. The customer is redirected to the ECPay payment page."
 msgstr "使用信用卡一次付清，跳轉至綠界支付頁完成付款。"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:32
+msgid "ECPay credit card (saved for subscriptions)"
+msgstr "綠界信用卡（訂閱綁卡）"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:36
+msgid "Customers enter their card on an ECPay card form on your site, and the card is saved so WooCommerce Subscriptions renewals are charged automatically. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
+msgstr "顧客在你網站上的綠界刷卡欄位輸入卡號，卡片會綁定起來，WooCommerce Subscriptions 續訂時自動扣款。需先請綠界為你的商店開通綁定信用卡，並在綠界廠商後台開啟「每日自動關帳」，否則款項不會請款。"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:72
+msgid "Card check amount"
+msgstr "驗卡金額"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:76
+msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
+msgstr "試用期首期 0 元時，用這個金額授權驗卡後再取消授權。金額不可低於你綠界合約的最低交易金額。"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:125
+msgid "Please log in to save a card for your subscription."
+msgstr "請先登入，才能為訂閱綁定信用卡。"
+
+#. translators: %s: error message
+#: src/Modules/Ecpay/Gateways/CreditBind.php:157
+#, php-format
+msgid "The ECPay card form could not be opened: %s"
+msgstr "綠界刷卡欄位無法開啟：%s"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:161
+#: src/Modules/Ecpay/Gateways/CreditBind.php:191
+#: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:49
+#: src/Modules/ShoplinePayments/Module.php:107
+msgid "The card form could not be loaded. Please refresh the page or choose another payment method."
+msgstr "信用卡欄位載入失敗，請重新整理頁面或改用其他付款方式。"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:198
+msgid "Enter your card below. It will be saved with ECPay so your subscription renews automatically."
+msgstr "請在下方輸入信用卡。卡片會綁定在綠界，之後訂閱會自動續扣。"
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:201
+msgid "Pay and save card"
+msgstr "付款並綁定卡片"
 
 #: src/Modules/Ecpay/Gateways/CreditInstallment3.php:20
 msgid "ECPay credit card, 3 instalments"
@@ -4090,9 +4207,11 @@ msgstr "信用卡 / ATM / 超商 / 條碼 / 網路 ATM"
 #: src/Modules/Pchomepay/Module.php:30
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:13
 #: src/Modules/Shared/Admin/CardRenderers.php:488
-#: src/Modules/ShoplinePayments/Api/Helper.php:27
+#: src/Modules/ShoplinePayments/Api/Helper.php:33
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:51
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:68
 #: src/Modules/ShoplinePayments/Module.php:30
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:104
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:116
 #: src/Modules/Smilepay/Module.php:30
 #: src/Modules/Smilepay/Settings/SettingsTab.php:136
 #: src/Modules/Tappay/Module.php:31
@@ -4158,9 +4277,9 @@ msgstr "網路 ATM"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:162
 #: src/Modules/Payuni/Module.php:44
 #: src/Modules/Payuni/Settings/SettingsTab.php:118
-#: src/Modules/ShoplinePayments/Api/Helper.php:29
+#: src/Modules/ShoplinePayments/Api/Helper.php:35
 #: src/Modules/ShoplinePayments/Module.php:31
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:106
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:118
 msgid "Apple Pay"
 msgstr "Apple Pay"
 
@@ -4190,9 +4309,9 @@ msgstr "微信支付"
 #: src/Modules/Payuni/Gateways/JKoPay.php:40
 #: src/Modules/Payuni/Module.php:40
 #: src/Modules/Payuni/Settings/SettingsTab.php:124
-#: src/Modules/ShoplinePayments/Api/Helper.php:31
+#: src/Modules/ShoplinePayments/Api/Helper.php:37
 #: src/Modules/ShoplinePayments/Module.php:34
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:108
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:120
 msgid "JKOPAY"
 msgstr "街口支付"
 
@@ -4518,7 +4637,7 @@ msgstr "顧客拿條碼到超商繳費的期限（綠界限制 1-30 天）。合
 #: src/Modules/Ecpay/Settings/SettingsTab.php:130
 #: src/Modules/Newebpay/Settings/SettingsTab.php:125
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:91
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:118
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:130
 #: src/Modules/Smilepay/Settings/SettingsTab.php:116
 #: src/Modules/Tappay/Settings/SettingsTab.php:103
 msgid "Turn this on when investigating a problem order. The log lives under WooCommerce → Status → Logs."
@@ -4592,6 +4711,54 @@ msgstr "行動支付（TWQR Pay）"
 msgid "Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode."
 msgstr "勾選的付款方式才會出現在結帳頁，未勾選不會出現。每個付款方式還要到「WooCommerce → 設定 → 付款」個別啟用。「合併顯示」模式下此欄位無效。"
 
+#: src/Modules/Ecpay/SubscriptionRenewal.php:61
+msgid "ECPay renewal failed: no saved card is linked to this subscription."
+msgstr "綠界續扣失敗：這個訂閱沒有綁定的信用卡。"
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:73
+msgid "ECPay renewal skipped: this saved card was declined before, and ECPay does not allow charging it again. Ask the customer to pay this order and save a new card."
+msgstr "綠界續扣略過：這張綁定卡先前扣款被拒，綠界規定不可再對同一張卡授權。請顧客付這張訂單並綁定新卡。"
+
+#. translators: 1: ECPay merchant trade number, 2: message
+#: src/Modules/Ecpay/SubscriptionRenewal.php:109
+#, php-format
+msgid "The ECPay renewal charge (trade number %1$s) is not confirmed yet: %2$s. Check it in the ECPay dashboard before charging again."
+msgstr "綠界續扣（交易編號 %1$s）尚未確認：%2$s。請先到綠界廠商後台確認，再決定是否重新扣款。"
+
+#. translators: 1: ECPay message, 2: code
+#: src/Modules/Ecpay/SubscriptionRenewal.php:127
+#, php-format
+msgid "The ECPay renewal charge failed: %1$s (code %2$d)."
+msgstr "綠界續扣失敗：%1$s（代碼 %2$d）。"
+
+#. translators: 1: ECPay message, 2: code
+#: src/Modules/Ecpay/SubscriptionRenewal.php:146
+#, php-format
+msgid "The ECPay renewal charge was declined: %1$s (code %2$d). This card will not be charged again; ask the customer to pay this order and save a new card."
+msgstr "綠界續扣被拒：%1$s（代碼 %2$d）。之後不會再對這張卡扣款，請顧客付這張訂單並綁定新卡。"
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:175
+msgid "The saved card was deleted from ECPay because no subscription uses it any more."
+msgstr "已沒有訂閱使用這張綁定卡，已向綠界刪除。"
+
+#. translators: %s: ECPay message
+#: src/Modules/Ecpay/SubscriptionRenewal.php:177
+#, php-format
+msgid "The saved card could not be deleted from ECPay: %s"
+msgstr "無法向綠界刪除這張綁定卡：%s"
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:186
+msgid "ECPay saved card ID (BindCardID)"
+msgstr "綠界綁卡代碼（BindCardID）"
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:190
+msgid "ECPay member ID (MerchantMemberID)"
+msgstr "綠界會員編號（MerchantMemberID）"
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:203
+msgid "Enter both the ECPay saved card ID and member ID."
+msgstr "請填寫綠界綁卡代碼與會員編號。"
+
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:67
 #: src/Modules/Shared/Admin/CardRenderers.php:295
 #: src/Modules/Shared/Admin/CardRenderers.php:369
@@ -4631,7 +4798,7 @@ msgstr "公司統編"
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:337
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
 #: src/Modules/OrderLookup/InvoiceOps.php:84
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:105
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 #: src/Modules/Shared/Admin/CardRenderers.php:333
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:233
@@ -5075,8 +5242,8 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/OrderLookup/SearchableKeys.php:154
 #: src/Modules/OrderLookup/SearchableKeys.php:256
 #: src/Modules/PaynowInvoice/Operations/Query.php:55
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:77
-#: src/Modules/Payuni/Api/PaymentResponse.php:77
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
+#: src/Modules/Payuni/Api/PaymentResponse.php:78
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
@@ -5087,7 +5254,7 @@ msgstr "發票號碼"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:69
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:79
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 #: src/Modules/Payuni/Gateways/GatewayBase.php:123
 msgid "Issued at"
 msgstr "開立時間"
@@ -5095,7 +5262,7 @@ msgstr "開立時間"
 #: src/Modules/EcpayInvoice/Operations/Query.php:70
 #: src/Modules/EzpayInvoice/Operations/Query.php:75
 #: src/Modules/PaynowInvoice/Operations/Query.php:57
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:78
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:82
 #: src/Modules/Payuni/Gateways/GatewayBase.php:122
 msgid "Invoice amount"
 msgstr "發票金額"
@@ -5107,7 +5274,7 @@ msgstr "作廢狀態"
 #: src/Modules/EcpayInvoice/Operations/Query.php:72
 #: src/Modules/EzpayInvoice/Operations/Query.php:61
 #: src/Modules/PaynowInvoice/Operations/Query.php:46
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:115
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:119
 #: src/Modules/Payuni/Gateways/GatewayBase.php:149
 #: src/Modules/Shared/Invoice/OrderListColumn.php:182
 msgid "Voided"
@@ -6084,12 +6251,12 @@ msgid "ECPay shipping ID"
 msgstr "綠界物流編號"
 
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:91
-#: src/Modules/Linepay/Api/PaymentRequest.php:258
-#: src/Modules/Linepay/Api/PaymentRequest.php:606
+#: src/Modules/Linepay/Api/PaymentRequest.php:268
+#: src/Modules/Linepay/Api/PaymentRequest.php:687
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:110
-#: src/Modules/Payuni/Api/PaymentRequest.php:394
-#: src/Modules/Payuni/Api/PaymentResponse.php:78
-#: src/Modules/Payuni/Api/PaymentResponse.php:166
+#: src/Modules/Payuni/Api/PaymentRequest.php:539
+#: src/Modules/Payuni/Api/PaymentResponse.php:79
+#: src/Modules/Payuni/Api/PaymentResponse.php:167
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:249
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:266
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:99
@@ -6243,7 +6410,7 @@ msgstr "無法連線到 ezPay。"
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:60
 #: src/Modules/PaynowInvoice/Operations/Query.php:45
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:113
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:117
 #: src/Modules/Payuni/Gateways/GatewayBase.php:145
 msgid "Issued"
 msgstr "已開立"
@@ -6251,8 +6418,8 @@ msgstr "已開立"
 #: src/Modules/EzpayInvoice/Operations/Query.php:62
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:39
 #: src/Modules/Shared/Admin/CardRenderers.php:652
-#: src/Modules/ShoplinePayments/Api/Helper.php:43
-#: src/Modules/Tappay/Api/Helper.php:51
+#: src/Modules/ShoplinePayments/Api/Helper.php:49
+#: src/Modules/Tappay/Api/Helper.php:54
 msgid "Cancelled"
 msgstr "已取消"
 
@@ -6262,7 +6429,7 @@ msgstr "待開立"
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:73
 #: src/Modules/PaynowInvoice/Operations/Query.php:56
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:114
 #: src/Modules/Payuni/Gateways/GatewayBase.php:153
 msgid "Issuing status"
 msgstr "開立狀態"
@@ -6325,11 +6492,11 @@ msgid "Authorized (awaiting capture)"
 msgstr "已授權（待請款）"
 
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:49
-#: src/Modules/Newebpay/Module.php:128
+#: src/Modules/Newebpay/Module.php:139
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
-#: src/Modules/ShoplinePayments/Module.php:106
-#: src/Modules/Tappay/Api/IpnHandler.php:345
+#: src/Modules/ShoplinePayments/Module.php:150
+#: src/Modules/Tappay/Api/IpnHandler.php:352
 #: src/Modules/Tappay/Module.php:102
 msgid "Transaction ID"
 msgstr "交易編號"
@@ -6346,88 +6513,88 @@ msgstr "付款動作"
 msgid "Confirm capture"
 msgstr "確認請款"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:119
+#: src/Modules/Linepay/Api/PaymentRequest.php:125
 msgid "[LINE Pay] We received your order, but the payment did not go through. Please try paying again."
 msgstr "[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:197
-#: src/Modules/Linepay/Api/PaymentRequest.php:281
+#: src/Modules/Linepay/Api/PaymentRequest.php:207
+#: src/Modules/Linepay/Api/PaymentRequest.php:291
 msgid "The LINE Pay payment is authorized and awaiting confirmation"
 msgstr "LINE Pay 付款已授權，等待確認"
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:257
+#: src/Modules/Linepay/Api/PaymentRequest.php:267
 #, php-format
 msgid "LINE Pay could not confirm the payment, so its status was checked: %s"
 msgstr "LINE Pay 付款確認未成功，已查詢付款狀態：%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:287
+#: src/Modules/Linepay/Api/PaymentRequest.php:297
 msgid "The LINE Pay payment was cancelled or has expired"
 msgstr "LINE Pay 付款已取消或過期"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:293
+#: src/Modules/Linepay/Api/PaymentRequest.php:303
 msgid "The LINE Pay transaction failed"
 msgstr "LINE Pay 交易失敗"
 
 #. translators: %s: LINE Pay check status return code
-#: src/Modules/Linepay/Api/PaymentRequest.php:300
+#: src/Modules/Linepay/Api/PaymentRequest.php:310
 #, php-format
 msgid "LINE Pay could not confirm the payment (status code %s)"
 msgstr "LINE Pay 確認付款失敗（狀態碼 %s）"
 
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
-#: src/Modules/Linepay/Api/PaymentRequest.php:336
-#: src/Modules/Payuni/Api/PaymentRequest.php:127
+#: src/Modules/Linepay/Api/PaymentRequest.php:346
+#: src/Modules/Payuni/Api/PaymentRequest.php:131
 #, php-format
 msgid "Unable to find order #%s"
 msgstr "找不到訂單 #%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:391
+#: src/Modules/Linepay/Api/PaymentRequest.php:465
 msgid "no transaction_id is found"
 msgstr "找不到 transaction_id"
 
 #. translators: 1: refund transaction id, 2: returnCode, 3: returnMessage
-#: src/Modules/Linepay/Api/PaymentRequest.php:468
+#: src/Modules/Linepay/Api/PaymentRequest.php:542
 #, php-format
 msgid "Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s"
 msgstr "透過 LINE Pay 退款失敗。退款交易編號：%1$s，returnCode：%2$s，returnMessage：%3$s"
 
 #. translators: %s: LINE Pay refund transaction id returned by API
-#: src/Modules/Linepay/Api/PaymentRequest.php:495
+#: src/Modules/Linepay/Api/PaymentRequest.php:569
 #, php-format
 msgid "LINE Pay refunded the payment (refund number %s)"
 msgstr "LINE Pay 退款成功（退款編號 %s）"
 
 #. translators:  %1$s is product name, %2$s is the order item count
-#: src/Modules/Linepay/Api/PaymentRequest.php:548
+#: src/Modules/Linepay/Api/PaymentRequest.php:629
 #, php-format
 msgid "%1$s and total %2$s products"
 msgstr "%1$s 等共 %2$s 項商品"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:596
+#: src/Modules/Linepay/Api/PaymentRequest.php:677
 msgid "After the payment request"
 msgstr "付款請求後"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:597
+#: src/Modules/Linepay/Api/PaymentRequest.php:678
 msgid "Before confirming the payment"
 msgstr "確認付款前"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:598
+#: src/Modules/Linepay/Api/PaymentRequest.php:679
 msgid "After confirming the payment"
 msgstr "確認付款後"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:599
+#: src/Modules/Linepay/Api/PaymentRequest.php:680
 msgid "After the refund"
 msgstr "退款後"
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:604
+#: src/Modules/Linepay/Api/PaymentRequest.php:685
 #, php-format
 msgid "LINE Pay payment status: %s"
 msgstr "LINE Pay 付款狀態：%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:607
+#: src/Modules/Linepay/Api/PaymentRequest.php:688
 msgid "Checked"
 msgstr "查詢時機"
 
@@ -6435,7 +6602,7 @@ msgstr "查詢時機"
 msgid "Unable to process callback."
 msgstr "無法處理 callback。"
 
-#: src/Modules/Linepay/Gateways/Credit.php:25
+#: src/Modules/Linepay/Gateways/Credit.php:26
 #: src/Modules/Linepay/Settings/settings-fields.php:17
 #: src/Modules/Linepay/Settings/SettingsTab.php:16
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
@@ -6449,32 +6616,32 @@ msgstr "無法處理 callback。"
 #: src/Modules/Payuni/Utils/PayType.php:33
 #: src/Modules/Shared/Admin/CardRenderers.php:238
 #: src/Modules/Shared/Admin/CardRenderers.php:246
-#: src/Modules/ShoplinePayments/Api/Helper.php:30
+#: src/Modules/ShoplinePayments/Api/Helper.php:36
 #: src/Modules/ShoplinePayments/Module.php:33
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:107
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:119
 #: src/Settings/SettingsPage.php:204
 #: assets/blocks/build/methods/linepay/index.js:1
 #: src/Modules/Linepay/assets/js/blocks/linepay.js:7
 msgid "LINE Pay"
 msgstr "LINE Pay"
 
-#: src/Modules/Linepay/Gateways/Credit.php:26
+#: src/Modules/Linepay/Gateways/Credit.php:27
 msgid "Check out with LINE Pay."
 msgstr "使用 LINE Pay 行動支付完成結帳。"
 
-#: src/Modules/Linepay/Gateways/Credit.php:53
+#: src/Modules/Linepay/Gateways/Credit.php:72
 #: src/Modules/Linepay/Module.php:28
 #: src/Settings/SettingsPage.php:205
 msgid "LINE Pay Taiwan"
 msgstr "LINE Pay 台灣"
 
-#: src/Modules/Linepay/Gateways/Credit.php:105
-#: src/Modules/Linepay/Gateways/Credit.php:123
+#: src/Modules/Linepay/Gateways/Credit.php:129
+#: src/Modules/Linepay/Gateways/Credit.php:147
 msgid "We have received your order, but the payment is still unconfirmed. Please get in touch with us."
 msgstr "已收到您的訂單，但付款狀態仍待確認，請聯繫客服。"
 
-#: src/Modules/Linepay/Gateways/Credit.php:109
-#: src/Modules/Linepay/Gateways/Credit.php:127
+#: src/Modules/Linepay/Gateways/Credit.php:133
+#: src/Modules/Linepay/Gateways/Credit.php:151
 msgid "We have received your order, but it has not been paid. Please try paying again."
 msgstr "已收到您的訂單，但尚未付款，請重新付款。"
 
@@ -6543,10 +6710,11 @@ msgstr "啟用"
 #: src/Modules/Payuni/Settings/LinePaySetting.php:12
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:12
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:46
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:36
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:61
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:38
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:70
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:54
-#: src/Modules/Tappay/Gateways/Credit.php:36
+#: src/Modules/Tappay/Gateways/Credit.php:57
 msgid "Enable this payment method"
 msgstr "啟用此付款方式"
 
@@ -6566,10 +6734,11 @@ msgstr "啟用此付款方式"
 #: src/Modules/Payuni/Settings/LinePaySetting.php:16
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:16
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:51
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:41
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:66
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:43
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:75
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:59
-#: src/Modules/Tappay/Gateways/Credit.php:41
+#: src/Modules/Tappay/Gateways/Credit.php:62
 msgid "Title"
 msgstr "結帳顯示名稱"
 
@@ -6592,10 +6761,11 @@ msgstr "結帳顯示名稱"
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:11
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:11
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:54
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:44
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:69
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:46
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:78
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:62
-#: src/Modules/Tappay/Gateways/Credit.php:44
+#: src/Modules/Tappay/Gateways/Credit.php:65
 msgid "The name customers see at checkout."
 msgstr "顧客在結帳頁看到的名稱。"
 
@@ -6615,10 +6785,11 @@ msgstr "顧客在結帳頁看到的名稱。"
 #: src/Modules/Payuni/Settings/LinePaySetting.php:23
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:23
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:58
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:48
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:73
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:50
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:82
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:66
-#: src/Modules/Tappay/Gateways/Credit.php:48
+#: src/Modules/Tappay/Gateways/Credit.php:69
 msgid "Description"
 msgstr "結帳顯示說明"
 
@@ -6636,10 +6807,23 @@ msgstr "結帳顯示說明"
 msgid "The description customers see at checkout, below the payment method name."
 msgstr "顧客在結帳頁看到的說明（顯示在付款方式名稱下方）。"
 
+#: src/Modules/Linepay/Settings/settings-fields.php:30
+#: src/Modules/Payuni/Settings/CreditSetting.php:35
+msgid "Subscriptions"
+msgstr "訂閱"
+
+#: src/Modules/Linepay/Settings/settings-fields.php:32
+msgid "Charge WooCommerce Subscriptions renewals automatically with LINE Pay"
+msgstr "以 LINE Pay 自動扣 WooCommerce Subscriptions 的續訂款項"
+
+#: src/Modules/Linepay/Settings/settings-fields.php:33
+msgid "LINE Pay must approve automatic payments for your store before you turn this on."
+msgstr "需先經 LINE Pay 核准你的商店使用自動付款，才能開啟。"
+
 #: src/Modules/Linepay/Settings/SettingsTab.php:28
 #: src/Modules/Paynow/Settings/SettingsTab.php:55
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:51
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:93
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:52
 #: src/Modules/Tappay/Settings/SettingsTab.php:87
 msgid "Payment settings"
@@ -6711,6 +6895,62 @@ msgstr "正式 Channel Secret"
 msgid "View logs"
 msgstr "檢視日誌"
 
+#: src/Modules/Linepay/SubscriptionRenewal.php:50
+msgid "LINE Pay renewal failed: no automatic payment key is linked to this subscription."
+msgstr "LINE Pay 續扣失敗：這個訂閱沒有自動付款金鑰。"
+
+#. translators: 1: LINE Pay return code, 2: message
+#: src/Modules/Linepay/SubscriptionRenewal.php:96
+#, php-format
+msgid "LINE Pay rejected the automatic payment key (return code %1$s): %2$s. Ask the customer to pay this order with LINE Pay again to authorize a new key."
+msgstr "LINE Pay 拒絕這組自動付款金鑰（回傳碼 %1$s）：%2$s。請顧客用 LINE Pay 付這張訂單，重新授權新的金鑰。"
+
+#. translators: 1: LINE Pay return code, 2: message
+#: src/Modules/Linepay/SubscriptionRenewal.php:108
+#, php-format
+msgid "The LINE Pay renewal charge failed (return code %1$s): %2$s"
+msgstr "LINE Pay 續扣失敗（回傳碼 %1$s）：%2$s"
+
+#. translators: %s: LINE Pay order ID
+#: src/Modules/Linepay/SubscriptionRenewal.php:144
+#, php-format
+msgid "LINE Pay could not be reached to check order ID %s. Check the payment in the LINE Pay merchant center before charging the customer again."
+msgstr "無法連線到 LINE Pay 查詢訂單編號 %s。請先到 LINE Pay 商家後台確認付款，再決定是否重新扣款。"
+
+#. translators: %s: LINE Pay order ID
+#: src/Modules/Linepay/SubscriptionRenewal.php:153
+#, php-format
+msgid "LINE Pay has no payment for order ID %s. If the customer was not charged, change this order to Failed so the subscription can retry."
+msgstr "LINE Pay 查不到訂單編號 %s 的付款。若確認顧客沒有被扣款，請把這張訂單改為「失敗」，訂閱才會重試。"
+
+#. translators: %s: LINE Pay transaction ID
+#: src/Modules/Linepay/SubscriptionRenewal.php:170
+#, php-format
+msgid "LINE Pay renewal charge completed — transaction ID %s"
+msgstr "LINE Pay 續扣成功，交易編號 %s"
+
+#. translators: %s: LINE Pay order ID
+#: src/Modules/Linepay/SubscriptionRenewal.php:181
+#, php-format
+msgid "The LINE Pay renewal charge (order ID %s) could not be confirmed. It will be checked again automatically; do not charge the customer again until then."
+msgstr "無法確認 LINE Pay 續扣結果（訂單編號 %s），稍後會自動再查詢；查到結果前請勿再向顧客扣款。"
+
+#: src/Modules/Linepay/SubscriptionRenewal.php:239
+msgid "The LINE Pay automatic payment key was discarded because no subscription uses it any more."
+msgstr "已沒有訂閱使用這組 LINE Pay 自動付款金鑰，已向 LINE Pay 註銷。"
+
+#: src/Modules/Linepay/SubscriptionRenewal.php:240
+msgid "The LINE Pay automatic payment key could not be discarded. It can be removed in the LINE Pay merchant center."
+msgstr "無法註銷這組 LINE Pay 自動付款金鑰，可到 LINE Pay 商家後台移除。"
+
+#: src/Modules/Linepay/SubscriptionRenewal.php:249
+msgid "LINE Pay automatic payment key (regKey)"
+msgstr "LINE Pay 自動付款金鑰（regKey）"
+
+#: src/Modules/Linepay/SubscriptionRenewal.php:261
+msgid "Enter the LINE Pay automatic payment key (regKey)."
+msgstr "請填寫 LINE Pay 自動付款金鑰（regKey）。"
+
 #: src/Modules/Newebpay/Admin/BnplSettle.php:26
 msgid "Request AFTEE capture from NewebPay"
 msgstr "向藍新請款（AFTEE）"
@@ -6735,6 +6975,7 @@ msgstr "藍新對這張已付款的訂單送來 %1$s 通知（%2$s），訂單�
 
 #. translators: 1: paid amount, 2: order total
 #: src/Modules/Newebpay/Api/IpnHandler.php:147
+#: src/Modules/Newebpay/Api/PeriodHandler.php:208
 #, php-format
 msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "藍新回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
@@ -6771,14 +7012,128 @@ msgstr "藍新已產生 %s 付款資訊，等待顧客付款。"
 msgid "The NewebPay lookup returned an unexpected format"
 msgstr "藍新查詢回傳格式錯誤"
 
+#: src/Modules/Newebpay/Api/Period.php:152
+msgid "The response from NewebPay could not be read."
+msgstr "無法讀取藍新的回應。"
+
+#. translators: %s: NewebPay message
+#: src/Modules/Newebpay/Api/PeriodHandler.php:75
+#, php-format
+msgid "The NewebPay recurring payment was not set up: %s"
+msgstr "藍新定期定額委託沒有建立：%s"
+
+#. translators: 1: NewebPay status, 2: message
+#: src/Modules/Newebpay/Api/PeriodHandler.php:144
+#, php-format
+msgid "The NewebPay recurring payment was not set up (%1$s): %2$s"
+msgstr "藍新定期定額委託沒有建立（%1$s）：%2$s"
+
+#. translators: %s: NewebPay mandate number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:175
+#, php-format
+msgid "A NewebPay recurring payment notice for mandate %s did not match the mandate status at NewebPay. Check it in the NewebPay dashboard before fulfilling the order."
+msgstr "委託單 %s 的藍新定期定額通知與藍新端的委託狀態對不上，請先到藍新後台確認再出貨。"
+
+#. translators: 1: NewebPay mandate number, 2: authorized periods
+#: src/Modules/Newebpay/Api/PeriodHandler.php:222
+#, php-format
+msgid "NewebPay recurring payment set up — mandate %1$s, %2$d payments scheduled. This order is the first payment."
+msgstr "藍新定期定額委託已建立，委託單號 %1$s，共排定 %2$d 期。這張訂單是第一期。"
+
+#. translators: %s: NewebPay order number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:285
+#, php-format
+msgid "A NewebPay renewal notice (%s) did not match the mandate status at NewebPay, so no renewal order was created. Check the mandate in the NewebPay dashboard."
+msgstr "藍新續扣通知（%s）與藍新的委託狀態對不上，沒有建立續訂單。請到藍新後台確認這筆委託。"
+
+#. translators: 1: payment number, 2: NewebPay trade number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:327
+#, php-format
+msgid "NewebPay charged payment %1$d (trade number %2$s) although this subscription was already cancelled. Refund this order and make sure the mandate is terminated in the NewebPay dashboard."
+msgstr "這個訂閱已取消，藍新仍扣了第 %1$d 期（交易序號 %2$s）。請退款這張訂單，並到藍新後台確認委託已終止。"
+
+#. translators: 1: payment number, 2: total payments, 3: NewebPay trade number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:343
+#, php-format
+msgid "NewebPay recurring payment %1$d of %2$d completed — trade number %3$s"
+msgstr "藍新定期定額第 %1$d／%2$d 期扣款成功，交易序號 %3$s"
+
+#. translators: 1: payment number, 2: NewebPay message
+#: src/Modules/Newebpay/Api/PeriodHandler.php:355
+#, php-format
+msgid "NewebPay recurring payment %1$d failed: %2$s. NewebPay will still try the next scheduled payment."
+msgstr "藍新定期定額第 %1$d 期扣款失敗：%2$s。藍新仍會依排程扣下一期。"
+
+#. translators: %d: number of payments
+#: src/Modules/Newebpay/Api/PeriodHandler.php:388
+#, php-format
+msgid "The NewebPay mandate has finished all %d payments, so nothing more will be charged. Ask the customer to subscribe again to continue."
+msgstr "藍新委託的 %d 期已全部扣完，之後不會再扣款。如要繼續，請顧客重新訂閱。"
+
+#: src/Modules/Newebpay/Api/PeriodHandler.php:400
+msgid "NewebPay updated the card expiry date for this subscription. Payments continue as scheduled."
+msgstr "藍新已更新這個訂閱的信用卡效期，之後照排程扣款。"
+
+#. translators: %s: NewebPay card status
+#: src/Modules/Newebpay/Api/PeriodHandler.php:410
+#, php-format
+msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). Ask the customer to subscribe again with another card."
+msgstr "這張卡已無法扣款（%s），藍新已停止定期定額。請顧客改用其他卡重新訂閱。"
+
+#. translators: 1: NewebPay mandate number, 2: result, 3: NewebPay trade number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:450
+#, php-format
+msgid "NewebPay created a second mandate (%1$s) for this order. Termination: %2$s. If it charged the card (trade number %3$s), refund that payment in the NewebPay dashboard."
+msgstr "這張訂單在藍新多建立了一張委託（%1$s）。終止結果：%2$s。如果它已扣款（交易序號 %3$s），請到藍新後台退款。"
+
+#: src/Modules/Newebpay/Api/PeriodHandler.php:452
+msgid "done"
+msgstr "完成"
+
+#: src/Modules/Newebpay/Api/PeriodHandler.php:452
+msgid "failed"
+msgstr "失敗"
+
+#. translators: %s: order number
+#: src/Modules/Newebpay/Api/PeriodHandler.php:465
+#, php-format
+msgid "[NewebPay] Order #%s needs a refund check"
+msgstr "【藍新】訂單 #%s 需要確認是否退款"
+
+#. translators: %s: order edit URL
+#: src/Modules/Newebpay/Api/PeriodHandler.php:470
+#, php-format
+msgid "NewebPay charged a recurring payment that should not have been charged. Open the order, read the latest note and refund the payment in the NewebPay dashboard if needed: %s"
+msgstr "藍新扣了一筆不該扣的定期定額款項。請開啟訂單查看最新備註，必要時到藍新後台退款：%s"
+
+#: src/Modules/Newebpay/Api/PeriodHandler.php:520
+msgid "This subscription cannot be reactivated because its NewebPay mandate has ended. Ask the customer to subscribe again."
+msgstr "這個訂閱的藍新委託已結束，無法重新啟用。請顧客重新訂閱。"
+
+#: src/Modules/Newebpay/Api/PeriodHandler.php:533
+msgid "The NewebPay mandate could not be restarted, so the subscription was put back on hold. Restart it in the NewebPay dashboard first."
+msgstr "藍新委託無法重新啟用，訂閱已轉回保留。請先到藍新後台啟用委託。"
+
+#. translators: 1: action, 2: NewebPay message
+#: src/Modules/Newebpay/Api/PeriodHandler.php:584
+#, php-format
+msgid "NewebPay mandate updated (%1$s): %2$s"
+msgstr "藍新委託已更新（%1$s）：%2$s"
+
+#. translators: 1: action, 2: NewebPay message
+#: src/Modules/Newebpay/Api/PeriodHandler.php:586
+#, php-format
+msgid "The NewebPay mandate could not be updated (%1$s): %2$s. Update it in the NewebPay dashboard so the customer is charged correctly."
+msgstr "藍新委託更新失敗（%1$s）：%2$s。請到藍新後台手動調整，以免扣錯款。"
+
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:29
 #: src/Modules/NewebpayShipping/Module.php:154
 #: src/Modules/NewebpayShipping/Module.php:179
 #: src/Modules/NewebpayShipping/Module.php:233
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:144
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:20
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:40
-#: src/Modules/Tappay/Gateways/Credit.php:243
+#: src/Modules/Tappay/Gateways/Credit.php:296
 msgid "The order does not exist."
 msgstr "訂單不存在。"
 
@@ -6866,19 +7221,22 @@ msgid "Alipay"
 msgstr "支付寶"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:226
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:89
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:68
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:109
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:70
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:48
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:140
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:285
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:100
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:235
-#: src/Modules/Tappay/Gateways/Credit.php:95
+#: src/Modules/Tappay/Gateways/Credit.php:120
 msgid "The order could not be found"
 msgstr "找不到訂單"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:317
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:163
 msgid "Pay with NewebPay"
 msgstr "前往藍新付款頁"
 
@@ -6975,6 +7333,30 @@ msgstr "30 期"
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:46
 msgid "Tick the instalment plans to offer. Each must be approved by the card issuer first."
 msgstr "勾選要開放的分期期數。需先向發卡銀行申請開通。"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:33
+msgid "NewebPay recurring credit card"
+msgstr "藍新信用卡定期定額"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:37
+msgid "For WooCommerce Subscriptions. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store."
+msgstr "給 WooCommerce Subscriptions 使用，藍新會在每個扣款日自動刷卡。限每張訂單一個訂閱、沒有試用期與開辦費，週期為每 N 天（2 天以上）、每週、每月或每年。需先請藍新為你的商店開通定期定額。"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:57
+msgid "Mandate status changes"
+msgstr "修改委託狀態"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:59
+msgid "NewebPay has enabled mandate status changes for my store"
+msgstr "藍新已為我的商店開通修改委託狀態"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:60
+msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
+msgstr "開啟後訂閱才能暫停與恢復。請在藍新審核通過後再勾選，否則暫停的訂閱藍新仍會照扣。取消訂閱時一律會嘗試終止委託；終止失敗時會寄信通知你，需到藍新後台手動終止。"
+
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:92
+msgid "NewebPay recurring payments only work for one subscription billed every N days (2 or more), weekly, monthly or yearly, with no free trial or sign-up fee. Please choose another payment method."
+msgstr "藍新定期定額只適用單一訂閱，週期為每 N 天（2 天以上）、每週、每月或每年，且沒有試用期與開辦費。請改用其他付款方式。"
 
 #: src/Modules/Newebpay/Gateways/Cvs.php:20
 msgid "NewebPay convenience store code"
@@ -7114,45 +7496,45 @@ msgstr "AFTEE 無卡分期"
 msgid "UnionPay"
 msgstr "銀聯卡"
 
-#: src/Modules/Newebpay/Module.php:96
+#: src/Modules/Newebpay/Module.php:107
 msgid "This order has no NewebPay transaction to look up yet."
 msgstr "這筆訂單還沒有可查詢的藍新交易。"
 
-#: src/Modules/Newebpay/Module.php:116
+#: src/Modules/Newebpay/Module.php:127
 #: src/Modules/Pchomepay/Api/IpnHandler.php:231
 #: src/Modules/Pchomepay/Module.php:92
 #: src/Modules/Shared/Admin/CardRenderers.php:510
-#: src/Modules/ShoplinePayments/Api/Helper.php:41
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:107
+#: src/Modules/ShoplinePayments/Api/Helper.php:47
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:108
 msgid "Payment failed"
 msgstr "付款失敗"
 
-#: src/Modules/Newebpay/Module.php:117
+#: src/Modules/Newebpay/Module.php:128
 msgid "Payment cancelled"
 msgstr "付款取消"
 
-#: src/Modules/Newebpay/Module.php:124
+#: src/Modules/Newebpay/Module.php:135
 msgid "Trade status"
 msgstr "交易狀態"
 
-#: src/Modules/Newebpay/Module.php:125
-#: src/Modules/Payuni/Api/PaymentRequest.php:377
-#: src/Modules/Payuni/Api/PaymentResponse.php:165
+#: src/Modules/Newebpay/Module.php:136
+#: src/Modules/Payuni/Api/PaymentRequest.php:522
+#: src/Modules/Payuni/Api/PaymentResponse.php:166
 #: src/Modules/Pchomepay/Module.php:102
-#: src/Modules/ShoplinePayments/Module.php:105
+#: src/Modules/ShoplinePayments/Module.php:149
 msgid "Payment type"
 msgstr "付款方式"
 
-#: src/Modules/Newebpay/Module.php:126
-#: src/Modules/Payuni/Api/PaymentRequest.php:378
+#: src/Modules/Newebpay/Module.php:137
+#: src/Modules/Payuni/Api/PaymentRequest.php:523
 #: src/Modules/Pchomepay/Module.php:103
-#: src/Modules/ShoplinePayments/Module.php:104
+#: src/Modules/ShoplinePayments/Module.php:148
 #: src/Modules/Tappay/Module.php:101
 msgid "Amount"
 msgstr "金額"
 
-#: src/Modules/Newebpay/Module.php:127
-#: src/Modules/Payuni/Api/PaymentRequest.php:379
+#: src/Modules/Newebpay/Module.php:138
+#: src/Modules/Payuni/Api/PaymentRequest.php:524
 #: src/Modules/Payuni/Gateways/Aftee.php:55
 #: src/Modules/Payuni/Gateways/Atm.php:57
 #: src/Modules/Pchomepay/Module.php:104
@@ -8189,7 +8571,7 @@ msgstr "TapPay 拍付"
 
 #: src/Modules/OrderLookup/ChannelOps.php:59
 #: src/Modules/OrderLookup/PaymentMethodOps.php:30
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:19
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:21
 #: src/Modules/ShoplinePayments/Module.php:21
 #: src/Settings/SettingsPage.php:263
 #: assets/blocks/build/methods/shopline-payments/index.js:1
@@ -8653,12 +9035,12 @@ msgstr "統一編號"
 #: src/Modules/OrderLookup/SearchableKeys.php:208
 #: src/Modules/OrderLookup/SearchableKeys.php:262
 #: src/Modules/Payuni/Gateways/ApplePay.php:63
-#: src/Modules/Payuni/Gateways/Credit.php:61
+#: src/Modules/Payuni/Gateways/Credit.php:102
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:62
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Modules/Tappay/Api/IpnHandler.php:346
+#: src/Modules/Tappay/Api/IpnHandler.php:353
 #: src/Settings/SettingsPage.php:640
 msgid "Last four card digits"
 msgstr "卡末四碼"
@@ -9216,7 +9598,7 @@ msgstr "正式會員帳號（mem_cid）"
 msgid "Live member password (mem_password)"
 msgstr "正式會員密碼（mem_password）"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:91
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:86
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:101
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:189
@@ -9224,146 +9606,150 @@ msgstr "正式會員密碼（mem_password）"
 msgid "Invoice type"
 msgstr "發票類型"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:94
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:98
 msgid "Issue"
 msgstr "開立"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:99
 msgid "Void"
 msgstr "作廢"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:99
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:103
 #: src/Modules/Payuni/Gateways/GatewayBase.php:141
 msgid "Carrier details"
 msgstr "載具資訊"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:104
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:108
 #: src/Modules/Payuni/Gateways/GatewayBase.php:133
 msgid "Amego member"
 msgstr "Amego 會員"
 
-#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:114
+#: src/Modules/Payuni/Admin/OrderMetaBoxes.php:118
 #: src/Modules/Payuni/Gateways/GatewayBase.php:147
 #: src/Modules/Shared/Invoice/OrderListColumn.php:128
 msgid "Issuing failed"
 msgstr "開立失敗"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:101
+#: src/Modules/Payuni/Api/PaymentRequest.php:105
 msgid "Redirecting..."
 msgstr "正在轉跳…"
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:143
+#: src/Modules/Payuni/Api/PaymentRequest.php:147
 #, php-format
 msgid "The refund amount for order #%s should be the same as the order total for installment payment."
 msgstr "分期付款訂單 #%s 的退款金額必須等於訂單總額。"
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:158
+#: src/Modules/Payuni/Api/PaymentRequest.php:162
 #, php-format
 msgid "Unable to find transaction id for order #%s"
 msgstr "找不到訂單 #%s 的交易編號"
 
 #. translators: %s: order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:171
+#: src/Modules/Payuni/Api/PaymentRequest.php:175
 #, php-format
 msgid "The order status could not be checked before refunding (order #%s)."
 msgstr "退款前查詢訂單狀態失敗(訂單 #%s)。"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:189
+#: src/Modules/Payuni/Api/PaymentRequest.php:193
 msgid "This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard."
 msgstr "這種付款方式無法從 WooCommerce 退款，請到 PAYUNi 商店後台處理。"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:197
+#: src/Modules/Payuni/Api/PaymentRequest.php:201
 msgid "This card payment has not been captured yet, so it can only be cancelled in full. Refund the full amount, or wait until it is captured to make a partial refund."
 msgstr "這筆刷卡還沒請款，只能整筆取消授權。請退全額，或等請款完成後再做部分退款。"
 
 #. translators: %s: PAYUNi settlement status
-#: src/Modules/Payuni/Api/PaymentRequest.php:217
+#: src/Modules/Payuni/Api/PaymentRequest.php:221
 #, php-format
 msgid "This order cannot be refunded in its current state (PAYUNi settlement status: %s)"
 msgstr "此訂單目前狀態無法退款（PAYUNi 結算狀態：%s）"
 
 #. translators: 1: trade status, 2: close status
-#: src/Modules/Payuni/Api/PaymentRequest.php:221
+#: src/Modules/Payuni/Api/PaymentRequest.php:225
 #, php-format
 msgid "This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)"
 msgstr "此訂單無法退款（交易狀態：%1$s／結算狀態：%2$s）"
 
 #. translators:  %s is the TradeStatus of the order
-#: src/Modules/Payuni/Api/PaymentRequest.php:234
+#: src/Modules/Payuni/Api/PaymentRequest.php:238
 #, php-format
 msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr "無法退款此訂單。TradeStatus：%s"
 
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:277
+#: src/Modules/Payuni/Api/PaymentRequest.php:281
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr "PAYUNi 退款成功（金額 %1$s）：%2$s"
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:281
+#: src/Modules/Payuni/Api/PaymentRequest.php:285
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr "PAYUNi 退款失敗：%1$s（狀態 %2$s）"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:350
+#: src/Modules/Payuni/Api/PaymentRequest.php:494
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr "PAYUNi 查詢回應成功，但查無訂單資料。"
 
 #. translators: %s: transaction status
-#: src/Modules/Payuni/Api/PaymentRequest.php:375
+#: src/Modules/Payuni/Api/PaymentRequest.php:520
 #, php-format
 msgid "PAYUNi transaction lookup: %s"
 msgstr "PAYUNi 交易查詢：%s"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:380
+#: src/Modules/Payuni/Api/PaymentRequest.php:525
 msgid "Settlement status"
 msgstr "請款狀態"
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:381
-#: src/Modules/Payuni/Api/PaymentResponse.php:167
+#: src/Modules/Payuni/Api/PaymentRequest.php:526
+#: src/Modules/Payuni/Api/PaymentResponse.php:168
 msgid "PAYUNi transaction ID"
 msgstr "PAYUNi 交易編號"
 
 #. translators: %s: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:393
+#: src/Modules/Payuni/Api/PaymentRequest.php:538
 #, php-format
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr "PAYUNi 交易查詢失敗：%s"
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:75
+#: src/Modules/Payuni/Api/PaymentResponse.php:76
 msgid "PAYUNi sent an e-invoice notice."
 msgstr "PAYUNi 送來電子發票通知。"
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:88
+#: src/Modules/Payuni/Api/PaymentResponse.php:89
 msgid "PAYUNi payment notice"
 msgstr "PAYUNi 付款通知"
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:146
+#: src/Modules/Payuni/Api/PaymentResponse.php:147
 msgid "PAYUNi payment return"
 msgstr "PAYUNi 付款返回"
 
 #. translators: 1: notice source, 2: PAYUNi message
 #. translators: 1: field label, 2: value
-#: src/Modules/Payuni/Api/PaymentResponse.php:163
+#: src/Modules/Payuni/Api/PaymentResponse.php:164
 #: src/Order/Note.php:29
 #, php-format
 msgid "%1$s: %2$s"
 msgstr "%1$s：%2$s"
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:168
+#: src/Modules/Payuni/Api/PaymentResponse.php:169
 msgid "Store order number"
 msgstr "商店訂單編號"
 
+#: src/Modules/Payuni/Api/PaymentResponse.php:254
+msgid "PAYUNi renewal charge"
+msgstr "PAYUNi 續扣"
+
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Payuni/Api/PaymentResponse.php:253
+#: src/Modules/Payuni/Api/PaymentResponse.php:272
 #, php-format
 msgid "PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "PAYUNi 回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:264
+#: src/Modules/Payuni/Api/PaymentResponse.php:283
 msgid "PAYUNi issued the payment details and is waiting for the customer to pay."
 msgstr "PAYUNi 已產生繳費資訊，等待顧客付款。"
 
@@ -9389,7 +9775,7 @@ msgid "Pay quickly with Apple Pay, which needs Safari or an iOS device. The cust
 msgstr "使用 Apple Pay 快速付款，需 Safari 或 iOS 裝置，跳轉至 PAYUNi 付款頁完成。"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:59
-#: src/Modules/Payuni/Gateways/Credit.php:57
+#: src/Modules/Payuni/Gateways/Credit.php:98
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:58
 #: src/Modules/Payuni/Gateways/GooglePay.php:59
 #: src/Modules/Payuni/Gateways/SamsungPay.php:59
@@ -9398,7 +9784,7 @@ msgid "Authorization method"
 msgstr "授權方式"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:60
-#: src/Modules/Payuni/Gateways/Credit.php:58
+#: src/Modules/Payuni/Gateways/Credit.php:99
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:59
 #: src/Modules/Payuni/Gateways/GooglePay.php:60
 #: src/Modules/Payuni/Gateways/SamsungPay.php:60
@@ -9407,7 +9793,7 @@ msgid "Authorization date"
 msgstr "授權日期"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:62
-#: src/Modules/Payuni/Gateways/Credit.php:60
+#: src/Modules/Payuni/Gateways/Credit.php:101
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:61
 #: src/Modules/Payuni/Gateways/GooglePay.php:62
 #: src/Modules/Payuni/Gateways/SamsungPay.php:62
@@ -9415,7 +9801,7 @@ msgid "Bank authorization code"
 msgstr "銀行授權碼"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:64
-#: src/Modules/Payuni/Gateways/Credit.php:62
+#: src/Modules/Payuni/Gateways/Credit.php:103
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:63
 #: src/Modules/Payuni/Gateways/GooglePay.php:64
 #: src/Modules/Payuni/Gateways/SamsungPay.php:64
@@ -9423,7 +9809,7 @@ msgid "Issuing bank"
 msgstr "發卡銀行"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:65
-#: src/Modules/Payuni/Gateways/Credit.php:63
+#: src/Modules/Payuni/Gateways/Credit.php:104
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:64
 #: src/Modules/Payuni/Gateways/GooglePay.php:65
 #: src/Modules/Payuni/Gateways/SamsungPay.php:65
@@ -9431,7 +9817,7 @@ msgid "Foreign card"
 msgstr "境外卡"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:66
-#: src/Modules/Payuni/Gateways/Credit.php:64
+#: src/Modules/Payuni/Gateways/Credit.php:105
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:65
 #: src/Modules/Payuni/Gateways/GooglePay.php:66
 #: src/Modules/Payuni/Gateways/SamsungPay.php:66
@@ -9439,7 +9825,7 @@ msgid "3-D Secure ECI"
 msgstr "3D 驗證 ECI"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:67
-#: src/Modules/Payuni/Gateways/Credit.php:65
+#: src/Modules/Payuni/Gateways/Credit.php:106
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:66
 #: src/Modules/Payuni/Gateways/GooglePay.php:67
 #: src/Modules/Payuni/Gateways/SamsungPay.php:67
@@ -9447,7 +9833,7 @@ msgid "Reward points redeemed"
 msgstr "紅利折抵金額"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:68
-#: src/Modules/Payuni/Gateways/Credit.php:66
+#: src/Modules/Payuni/Gateways/Credit.php:107
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:67
 #: src/Modules/Payuni/Gateways/GooglePay.php:68
 #: src/Modules/Payuni/Gateways/SamsungPay.php:68
@@ -9455,7 +9841,7 @@ msgid "Reward redemption ID"
 msgstr "紅利折抵序號"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:69
-#: src/Modules/Payuni/Gateways/Credit.php:67
+#: src/Modules/Payuni/Gateways/Credit.php:108
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:68
 #: src/Modules/Payuni/Gateways/GooglePay.php:69
 #: src/Modules/Payuni/Gateways/SamsungPay.php:69
@@ -9463,7 +9849,7 @@ msgid "Token ID"
 msgstr "Token 編號"
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:70
-#: src/Modules/Payuni/Gateways/Credit.php:68
+#: src/Modules/Payuni/Gateways/Credit.php:109
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:69
 #: src/Modules/Payuni/Gateways/GooglePay.php:70
 #: src/Modules/Payuni/Gateways/SamsungPay.php:70
@@ -9478,11 +9864,11 @@ msgstr "PAYUNi ATM 虛擬帳號"
 msgid "Last five account digits"
 msgstr "帳號末五碼"
 
-#: src/Modules/Payuni/Gateways/Credit.php:18
+#: src/Modules/Payuni/Gateways/Credit.php:19
 msgid "PAYUNi credit card"
 msgstr "PAYUNi 信用卡"
 
-#: src/Modules/Payuni/Gateways/Credit.php:19
+#: src/Modules/Payuni/Gateways/Credit.php:20
 msgid "Pay by credit card. The customer is redirected to the PAYUNi payment page."
 msgstr "使用信用卡付款，跳轉至 PAYUNi 付款頁完成。"
 
@@ -9879,6 +10265,14 @@ msgstr "PAYUNi 信用卡分期"
 msgid "PAYUNi Credit Card Payment"
 msgstr "PAYUNi 信用卡付款"
 
+#: src/Modules/Payuni/Settings/CreditSetting.php:37
+msgid "Charge WooCommerce Subscriptions renewals automatically with saved cards"
+msgstr "以約定的信用卡自動扣 WooCommerce Subscriptions 的續訂款項"
+
+#: src/Modules/Payuni/Settings/CreditSetting.php:38
+msgid "PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on."
+msgstr "需先請 PAYUNi 為你的商店開通「信用卡 Token」與「幕後授權」並登記主機 IP，才能開啟。"
+
 #: src/Modules/Payuni/Settings/GooglePaySetting.php:19
 msgid "PAYUNi Google Pay Payment"
 msgstr "PAYUNi Google Pay 付款"
@@ -9959,6 +10353,44 @@ msgstr "從 PAYUNi 後台「會員專區 → 整合設定」複製過來。"
 #: src/Modules/Payuni/Settings/SettingsTab.php:264
 msgid "Go to Payment Settings"
 msgstr "前往付款設定"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:50
+msgid "PAYUNi renewal failed: no agreed card is linked to this subscription."
+msgstr "PAYUNi 續扣失敗：這個訂閱沒有約定的信用卡。"
+
+#. translators: 1: PAYUNi status code, 2: message
+#: src/Modules/Payuni/SubscriptionRenewal.php:71
+#, php-format
+msgid "The PAYUNi renewal charge failed (%1$s): %2$s"
+msgstr "PAYUNi 續扣失敗（%1$s）：%2$s"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:83
+msgid "PAYUNi has not confirmed the renewal charge yet. It will be checked again automatically; do not charge the customer again until then."
+msgstr "PAYUNi 尚未確認續扣結果，稍後會自動再查詢；查到結果前請勿再向顧客扣款。"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:112
+msgid "Confirmed by transaction lookup"
+msgstr "由交易查詢確認"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:126
+msgid "PAYUNi still has not confirmed this renewal charge. Check it in the PAYUNi dashboard before charging the customer again."
+msgstr "PAYUNi 仍未確認這筆續扣，請先到 PAYUNi 後台確認，再決定是否重新扣款。"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:150
+msgid "The agreed card was cancelled at PAYUNi because no subscription uses it any more."
+msgstr "已沒有訂閱使用這張約定卡，已向 PAYUNi 取消約定。"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:151
+msgid "The agreed card could not be cancelled at PAYUNi. Cancel it in the PAYUNi dashboard."
+msgstr "無法向 PAYUNi 取消約定卡，請到 PAYUNi 後台取消。"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:160
+msgid "PAYUNi CreditHash"
+msgstr "PAYUNi 信用卡 Token（CreditHash）"
+
+#: src/Modules/Payuni/SubscriptionRenewal.php:172
+msgid "Enter the PAYUNi CreditHash."
+msgstr "請填寫 PAYUNi 信用卡 Token（CreditHash）。"
 
 #: src/Modules/Payuni/Utils/AuthType.php:19
 msgid "One-time payment"
@@ -11203,13 +11635,13 @@ msgstr "付款完成"
 
 #: src/Modules/Pchomepay/Module.php:91
 #: src/Modules/Shared/Admin/CardRenderers.php:509
-#: src/Modules/ShoplinePayments/Api/Helper.php:38
-#: src/Modules/Tappay/Api/Helper.php:50
+#: src/Modules/ShoplinePayments/Api/Helper.php:44
+#: src/Modules/Tappay/Api/Helper.php:53
 msgid "Awaiting payment"
 msgstr "等待付款"
 
 #: src/Modules/Pchomepay/Module.php:101
-#: src/Modules/ShoplinePayments/Module.php:102
+#: src/Modules/ShoplinePayments/Module.php:146
 #: src/Modules/Tappay/Module.php:100
 msgid "Status"
 msgstr "狀態"
@@ -11599,10 +12031,11 @@ msgid "Open the payment page"
 msgstr "前往付款頁"
 
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:61
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:51
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:76
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:53
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:85
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:69
-#: src/Modules/Tappay/Gateways/Credit.php:51
+#: src/Modules/Tappay/Gateways/Credit.php:72
 msgid "The payment method description shown at checkout."
 msgstr "結帳頁付款方式描述。"
 
@@ -12331,8 +12764,8 @@ msgid "Copied"
 msgstr "已複製"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:67
-#: src/Modules/ShoplinePayments/Api/Helper.php:39
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:209
+#: src/Modules/ShoplinePayments/Api/Helper.php:45
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:85
 msgid "Processing"
 msgstr "處理中"
 
@@ -12355,7 +12788,7 @@ msgid "Not collected"
 msgstr "未取件"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:72
-#: src/Modules/Tappay/Api/Helper.php:47
+#: src/Modules/Tappay/Api/Helper.php:50
 msgid "Completed"
 msgstr "完成"
 
@@ -12485,118 +12918,141 @@ msgstr "前往 %s 查詢"
 msgid "%s shipping status update"
 msgstr "%s物流貨態回傳"
 
-#: src/Modules/ShoplinePayments/Api/Client.php:35
+#: src/Modules/ShoplinePayments/Api/Client.php:59
 msgid "The Shopline Payments merchant credentials are not set."
 msgstr "尚未設定 Shopline Payments 商家憑證。"
 
-#: src/Modules/ShoplinePayments/Api/Client.php:104
+#: src/Modules/ShoplinePayments/Api/Client.php:131
 msgid "The Shopline Payments API call failed"
 msgstr "Shopline Payments API 失敗"
 
-#: src/Modules/ShoplinePayments/Api/Helper.php:28
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:105
+#: src/Modules/ShoplinePayments/Api/Helper.php:34
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:117
 msgid "Virtual account (ATM)"
 msgstr "虛擬帳號（ATM）"
 
-#: src/Modules/ShoplinePayments/Api/Helper.php:32
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:109
+#: src/Modules/ShoplinePayments/Api/Helper.php:38
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:121
 msgid "Zingala instalments"
 msgstr "中租零卡分期"
 
-#: src/Modules/ShoplinePayments/Api/Helper.php:42
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:108
+#: src/Modules/ShoplinePayments/Api/Helper.php:48
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:109
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:110
 msgid "Expired"
 msgstr "已逾期"
 
-#: src/Modules/ShoplinePayments/Api/Helper.php:44
+#: src/Modules/ShoplinePayments/Api/Helper.php:50
 msgid "Refund in progress"
 msgstr "退款處理中"
 
 #. translators: 1: notice type, 2: raw event type
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:105
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:106
 #, php-format
 msgid "Shopline Payments sent a “%1$s” notice (%2$s) for this already paid order. The order was not changed."
 msgstr "這張訂單已付款，Shopline Payments 又送來「%1$s」通知（%2$s），訂單未變更。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:110
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:111
 msgid "Payment page created"
 msgstr "已建立付款頁"
 
+#. translators: %s: Shopline Payments transaction ID
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:122
+#, php-format
+msgid "Shopline Payments reported another successful payment (transaction %s) for this already paid order. This may be a duplicate charge — check it in the Shopline Payments dashboard and refund it if needed."
+msgstr "這張已付款的訂單又收到一筆 Shopline Payments 付款成功（交易編號 %s），可能是重複扣款。請到 Shopline Payments 後台確認，必要時退款。"
+
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:294
+msgid "The card was saved with Shopline Payments for subscription renewals."
+msgstr "已在 Shopline Payments 綁定信用卡，供訂閱續扣使用。"
+
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:264
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:305
 #, php-format
 msgid "Shopline Payments reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "Shopline Payments 回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:274
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:315
 msgid "Shopline Payments reported a successful payment without an amount. Please check the payment in the Shopline Payments dashboard before fulfilling the order."
 msgstr "Shopline Payments 回報付款成功但沒有金額，請先到 Shopline Payments 後台確認付款再出貨。"
 
 #. translators: %s: payment method
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:283
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:324
 #, php-format
 msgid "The Shopline Payments payment completed (%s)."
 msgstr "Shopline Payments 付款完成（%s）。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:286
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:327
 msgid "The Shopline Payments payment completed."
 msgstr "Shopline Payments 付款完成。"
 
 #. translators: %s: sub status
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:296
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:337
 #, php-format
 msgid "The Shopline Payments payment failed (%s)."
 msgstr "Shopline Payments 付款失敗（%s）。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:305
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:346
 msgid "The Shopline Payments transaction expired before it completed."
 msgstr "Shopline Payments 交易逾時未完成。"
 
 #. translators: %s: refund order id
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:313
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:354
 #, php-format
 msgid "Shopline Payments refunded the payment (refund number %s)."
 msgstr "Shopline Payments 退款成功（退款編號 %s）。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:314
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:355
 msgid "No number"
 msgstr "無編號"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:320
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:361
 msgid "The Shopline Payments refund failed. Please check the Shopline Payments dashboard."
 msgstr "Shopline Payments 退款失敗 — 請至 SLP 後台確認。"
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:325
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:366
 msgid "The Shopline Payments transaction was cancelled before payment."
 msgstr "Shopline Payments 交易在付款前已取消。"
 
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:20
-msgid "Redirect to the hosted Shopline Payments checkout, which supports credit cards, Apple Pay, Google Pay, LINE Pay, JKOPAY and more."
-msgstr "跳轉至 Shopline Payments 託管結帳頁，支援信用卡 / Apple Pay / Google Pay / LINE Pay / 街口等。"
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:29
+msgid "Shopline Payments credit card (on-page)"
+msgstr "Shopline Payments 信用卡（頁內刷卡）"
+
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:30
+msgid "Customers enter their card on your checkout page without being redirected. Required for WooCommerce Subscriptions renewals."
+msgstr "顧客直接在結帳頁輸入卡號，不跳轉頁面。WooCommerce Subscriptions 自動續扣需使用這個付款方式。"
 
 #. translators: %s: error message
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:117
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:180
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:119
 #, php-format
 msgid "The Shopline Payments payment could not be created: %s"
 msgstr "無法建立 Shopline Payments 付款：%s"
 
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:132
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:195
+msgid "Waiting for the customer to finish the Shopline Payments card payment."
+msgstr "等待顧客完成 Shopline Payments 刷卡。"
+
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:22
+msgid "Redirect to the hosted Shopline Payments checkout, which supports credit cards, Apple Pay, Google Pay, LINE Pay, JKOPAY and more."
+msgstr "跳轉至 Shopline Payments 託管結帳頁，支援信用卡 / Apple Pay / Google Pay / LINE Pay / 街口等。"
+
+#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:134
 msgid "Waiting for the customer to pay at Shopline Payments."
 msgstr "等待顧客於 Shopline Payments 完成付款。"
 
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:149
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:25
 msgid "The order has no Shopline Payments transaction ID (tradeOrderId)."
 msgstr "訂單缺少 Shopline Payments 交易編號（tradeOrderId）。"
 
 #. translators: %s: error message
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:194
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:70
 #, php-format
 msgid "The Shopline Payments refund failed: %s"
 msgstr "Shopline Payments 退款失敗：%s"
 
 #. translators: 1: amount, 2: refund order id, 3: reason
-#: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:207
+#: src/Modules/ShoplinePayments/Gateways/TradePayload.php:83
 #, php-format
 msgid "The Shopline Payments refund of NT$%1$s was submitted (refund number %2$s) — %3$s"
 msgstr "Shopline Payments 退款已送出（NT$%1$s，退款編號 %2$s）— %3$s"
@@ -12609,11 +13065,11 @@ msgstr "Shopline Payments — 信用卡 / Apple Pay / Google Pay / LINE Pay / �
 msgid "Credit card and mobile payments, on a redirected payment page"
 msgstr "信用卡 / 行動支付（轉跳付款頁）"
 
-#: src/Modules/ShoplinePayments/Module.php:80
+#: src/Modules/ShoplinePayments/Module.php:124
 msgid "This order has no Shopline Payments session to look up yet."
 msgstr "這筆訂單還沒有可查詢的 Shopline Payments 交易。"
 
-#: src/Modules/ShoplinePayments/Module.php:89
+#: src/Modules/ShoplinePayments/Module.php:133
 msgid "Shopline Payments could not be reached."
 msgstr "無法連線到 Shopline Payments。"
 
@@ -12634,56 +13090,117 @@ msgid "Test apiKey"
 msgstr "測試 apiKey"
 
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:38
+msgid "Test clientKey"
+msgstr "測試 clientKey"
+
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:41
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:69
+msgid "Only needed for the on-page card payment method. Create it in the Shopline Payments dashboard under Settings → Developer."
+msgstr "只有「頁內刷卡」付款方式需要。請到 Shopline Payments 後台「設定 → 開發者管理」產生。"
+
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:44
 msgid "Test signKey"
 msgstr "測試 signKey"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:41
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:63
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:47
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:75
 msgid "Used to confirm that payment notifications are genuine."
 msgstr "用於驗證付款通知的合法性。"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:44
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:50
 msgid "Test platformId"
 msgstr "測試 platformId"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:47
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:69
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:53
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:81
 msgid "Only platform integrators need this. Leave it blank otherwise."
 msgstr "僅平台整合商需要，一般商家留空。"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:50
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:56
 msgid "Live merchantId"
 msgstr "正式 merchantId"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:55
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:61
 msgid "Live apiKey"
 msgstr "正式 apiKey"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:60
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:66
+msgid "Live clientKey"
+msgstr "正式 clientKey"
+
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:72
 msgid "Live signKey"
 msgstr "正式 signKey"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:66
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:78
 msgid "Live platformId"
 msgstr "正式 platformId"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:77
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:89
 msgid "Payment notifications"
 msgstr "付款通知設定"
 
 #. translators: %s: notification URL
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:82
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:94
 #, php-format
 msgid "Shopline Payments has to enable payment notifications by hand. Send them the address below, once for the test environment and once for the live one:<br><code>%s</code><br>Until that is done, orders will not update automatically when a payment completes."
 msgstr "Shopline Payments 需手動開通付款通知，請將下列網址提供給 Shopline Payments 設定（測試與正式環境須分別提交）：<br><code>%s</code><br>未設定時，付款結果不會自動更新訂單狀態。"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:98
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:110
 msgid "Allowed payment methods"
 msgstr "允許的付款方式"
 
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:111
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:123
 msgid "Limits which methods are offered on the payment page. Leave blank for no limit. What actually appears depends on what Shopline Payments has activated for you."
 msgstr "轉跳到付款頁後限定可用的付款方式。留空 = 不限制。實際項目以 Shopline Payments 開通的為準。"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:59
+msgid "The saved card was unbound from Shopline Payments because no subscription uses it any more."
+msgstr "已沒有訂閱使用這張綁定卡，已向 Shopline Payments 解綁。"
+
+#. translators: %s: error message
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:61
+#, php-format
+msgid "The saved card could not be unbound from Shopline Payments: %s"
+msgstr "無法向 Shopline Payments 解綁這張卡：%s"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:79
+msgid "Shopline Payments renewal failed: the saved card is missing, expired or no longer usable. Ask the customer to pay with a new card."
+msgstr "Shopline Payments 續扣失敗：綁定的卡片不存在、已過期或無法使用。請顧客改用新卡付款。"
+
+#. translators: 1: merchant order number, 2: error message
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:152
+#, php-format
+msgid "The Shopline Payments renewal charge (order number %1$s) could not be confirmed: %2$s. Wait for the payment notice or check the Shopline Payments dashboard before charging again."
+msgstr "無法確認 Shopline Payments 續扣結果（訂單編號 %1$s）：%2$s。請等待付款通知，或先到 Shopline Payments 後台確認，再決定是否重新扣款。"
+
+#. translators: %s: error message
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:165
+#, php-format
+msgid "The Shopline Payments renewal charge failed: %s"
+msgstr "Shopline Payments 續扣失敗：%s"
+
+#. translators: %s: Shopline Payments transaction ID
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:177
+#, php-format
+msgid "Shopline Payments renewal charge completed — transaction ID %s"
+msgstr "Shopline Payments 續扣成功，交易編號 %s"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:185
+msgid "Shopline Payments is still processing the renewal charge. The order will be updated when the result arrives."
+msgstr "Shopline Payments 還在處理續扣，收到結果後會自動更新訂單。"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:230
+msgid "Shopline Payments customer ID"
+msgstr "Shopline Payments 會員 ID"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:234
+msgid "Shopline Payments payment instrument ID"
+msgstr "Shopline Payments 付款工具 ID"
+
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:246
+msgid "Enter the Shopline Payments customer ID."
+msgstr "請填寫 Shopline Payments 會員 ID。"
 
 #: src/Modules/Smilepay/Api/IpnHandler.php:37
 msgid "No Classif value"
@@ -13519,35 +14036,35 @@ msgstr "10 碼 09 開頭。"
 msgid "The sender address used for T-Cat home delivery."
 msgstr "黑貓宅配寄件人地址。"
 
-#: src/Modules/Tappay/Api/Client.php:126
+#: src/Modules/Tappay/Api/Client.php:147
 msgid "The TapPay partner key is not set."
 msgstr "TapPay Partner Key 未設定。"
 
-#: src/Modules/Tappay/Api/Helper.php:45
+#: src/Modules/Tappay/Api/Helper.php:48
 msgid "Error"
 msgstr "交易錯誤"
 
-#: src/Modules/Tappay/Api/Helper.php:46
+#: src/Modules/Tappay/Api/Helper.php:49
 msgid "Authorized, not yet captured"
 msgstr "已授權，尚未請款"
 
-#: src/Modules/Tappay/Api/Helper.php:48
+#: src/Modules/Tappay/Api/Helper.php:51
 msgid "Partially refunded"
 msgstr "部分退款"
 
-#: src/Modules/Tappay/Api/Helper.php:112
+#: src/Modules/Tappay/Api/Helper.php:115
 msgid "Merchant ID for this payment method"
 msgstr "這個付款方式的 Merchant ID"
 
-#: src/Modules/Tappay/Api/Helper.php:115
+#: src/Modules/Tappay/Api/Helper.php:118
 msgid "Each payment method has its own Merchant ID in the TapPay Portal. Leave blank to use the credit card Merchant ID."
 msgstr "每個付款方式在 TapPay Portal 都有自己的 Merchant ID。留空則使用信用卡的 Merchant ID。"
 
-#: src/Modules/Tappay/Api/Helper.php:119
+#: src/Modules/Tappay/Api/Helper.php:122
 msgid "Test Merchant ID for this payment method"
 msgstr "這個付款方式的測試 Merchant ID"
 
-#: src/Modules/Tappay/Api/Helper.php:122
+#: src/Modules/Tappay/Api/Helper.php:125
 msgid "Used in test mode. Leave blank to use the test credit card Merchant ID."
 msgstr "測試模式使用。留空則使用信用卡的測試 Merchant ID。"
 
@@ -13581,31 +14098,35 @@ msgstr "TapPay 3D 驗證未完成或付款失敗，請重新嘗試。"
 msgid "The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid."
 msgstr "TapPay 回傳的交易與此訂單的訂單編號或金額不符，未據此將訂單標為已付款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:322
+#: src/Modules/Tappay/Api/IpnHandler.php:240
+msgid "TapPay still has no confirmed transaction for this order. Check it in the TapPay portal; if the customer was not charged, change this order to Failed so it can be paid again."
+msgstr "TapPay 仍查不到這張訂單已確認的交易。請到 TapPay 後台確認；若顧客沒有被扣款，請把訂單改為「失敗」以便重新付款。"
+
+#: src/Modules/Tappay/Api/IpnHandler.php:328
 msgid "This transaction was partially refunded in the TapPay dashboard."
 msgstr "這筆交易已在 TapPay 後台部分退款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:323
+#: src/Modules/Tappay/Api/IpnHandler.php:329
 msgid "This transaction was refunded in the TapPay dashboard."
 msgstr "TapPay 交易已於 TapPay 後台退款。"
 
 #. translators: %s: payment method title
-#: src/Modules/Tappay/Api/IpnHandler.php:341
+#: src/Modules/Tappay/Api/IpnHandler.php:348
 #, php-format
 msgid "%s payment completed"
 msgstr "%s 付款完成"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:357
+#: src/Modules/Tappay/Api/IpnHandler.php:364
 msgid "TapPay is waiting for the payment to be confirmed."
 msgstr "TapPay 正在等待付款確認。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:362
+#: src/Modules/Tappay/Api/IpnHandler.php:369
 msgid "The TapPay transaction was cancelled."
 msgstr "TapPay 交易已取消。"
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Api/IpnHandler.php:372
-#: src/Modules/Tappay/Gateways/Credit.php:185
+#: src/Modules/Tappay/Api/IpnHandler.php:379
+#: src/Modules/Tappay/Gateways/Credit.php:238
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
 msgstr "TapPay 付款失敗（狀態碼 %1$d）：%2$s"
@@ -13631,7 +14152,7 @@ msgid "The payment could not be completed: %s"
 msgstr "付款未能完成：%s"
 
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:247
-#: src/Modules/Tappay/Gateways/Credit.php:201
+#: src/Modules/Tappay/Gateways/Credit.php:254
 msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
 msgstr "等待顧客完成 TapPay 3D 驗證。"
 
@@ -13649,7 +14170,7 @@ msgstr "這筆訂單沒有可退款的 TapPay 交易。"
 #. translators: 1: status code, 2: message
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:299
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:249
-#: src/Modules/Tappay/Gateways/Credit.php:278
+#: src/Modules/Tappay/Gateways/Credit.php:331
 #, php-format
 msgid "The TapPay refund failed (status code %1$d): %2$s"
 msgstr "TapPay 退款失敗（狀態碼 %1$d）：%2$s"
@@ -13715,56 +14236,72 @@ msgstr "Apple 商家識別碼"
 msgid "From your Apple Developer account. You must also upload Apple's domain verification file to this site and enable Apple Pay in the TapPay Portal — without those the payment will fail."
 msgstr "來自您的 Apple Developer 帳號。另外必須把 Apple 的網域驗證檔上傳到本站，並在 TapPay 後台開通 Apple Pay，否則付款一定會失敗。"
 
-#: src/Modules/Tappay/Gateways/Credit.php:19
-#: src/Modules/Tappay/Gateways/Credit.php:26
-#: src/Modules/Tappay/Gateways/Credit.php:43
+#: src/Modules/Tappay/Gateways/Credit.php:33
+#: src/Modules/Tappay/Gateways/Credit.php:47
+#: src/Modules/Tappay/Gateways/Credit.php:64
 msgid "TapPay credit card"
 msgstr "TapPay 信用卡"
 
-#: src/Modules/Tappay/Gateways/Credit.php:20
+#: src/Modules/Tappay/Gateways/Credit.php:34
 msgid "Secure card payments with 3-D Secure. Card details never pass through this site."
 msgstr "安全信用卡付款，支援 3D 驗證。卡號資訊不流經本站。"
 
-#: src/Modules/Tappay/Gateways/Credit.php:27
-#: src/Modules/Tappay/Gateways/Credit.php:50
+#: src/Modules/Tappay/Gateways/Credit.php:48
+#: src/Modules/Tappay/Gateways/Credit.php:71
 msgid "Pay securely by card, handled by TapPay."
 msgstr "使用信用卡安全付款（由 TapPay 處理）。"
 
-#: src/Modules/Tappay/Gateways/Credit.php:71
+#: src/Modules/Tappay/Gateways/Credit.php:96
 msgid "Card number"
 msgstr "卡號"
 
-#: src/Modules/Tappay/Gateways/Credit.php:75
+#: src/Modules/Tappay/Gateways/Credit.php:100
 msgid "Expiry (MM / YY)"
 msgstr "有效期限（MM / YY）"
 
-#: src/Modules/Tappay/Gateways/Credit.php:79
+#: src/Modules/Tappay/Gateways/Credit.php:104
 msgid "CVC"
 msgstr "安全碼 CVC"
 
-#: src/Modules/Tappay/Gateways/Credit.php:106
+#: src/Modules/Tappay/Gateways/Credit.php:131
 msgid "TapPay did not return a payment token. Please enter the card details again."
 msgstr "無法取得 TapPay 付款憑證（prime），請重新輸入卡號後再試。"
 
+#: src/Modules/Tappay/Gateways/Credit.php:142
+msgid "This store requires 3-D Secure, so a card cannot be saved without a payment. Please choose another payment method."
+msgstr "本店要求 3D 驗證，不付款無法綁定信用卡，請改用其他付款方式。"
+
 #. translators: 1: rec_trade_id, 2: card last4
-#: src/Modules/Tappay/Gateways/Credit.php:223
+#: src/Modules/Tappay/Gateways/Credit.php:276
 #, php-format
 msgid "TapPay card payment completed — transaction ID %1$s (card ending %2$s)"
 msgstr "TapPay 信用卡付款完成 — 交易編號 %1$s（卡號末四碼 %2$s）"
 
-#: src/Modules/Tappay/Gateways/Credit.php:247
+#: src/Modules/Tappay/Gateways/Credit.php:300
 msgid "The order has no TapPay transaction ID."
 msgstr "訂單缺少 TapPay 交易編號。"
 
-#: src/Modules/Tappay/Gateways/Credit.php:270
+#: src/Modules/Tappay/Gateways/Credit.php:323
 msgid "This payment has not been captured yet, so TapPay can only refund the full amount. Refund the full amount, or wait until the payment is captured."
 msgstr "這筆付款還沒請款，TapPay 只能全額退款。請改為全額退款，或等請款後再退。"
 
 #. translators: 1: amount, 2: rec_trade_id, 3: reason
-#: src/Modules/Tappay/Gateways/Credit.php:288
+#: src/Modules/Tappay/Gateways/Credit.php:341
 #, php-format
 msgid "The TapPay refund of NT$%1$s was submitted (transaction ID %2$s) — %3$s"
 msgstr "TapPay 退款已送出（NT$%1$s，交易編號 %2$s）— %3$s"
+
+#. translators: 1: status code, 2: message
+#: src/Modules/Tappay/Gateways/Credit.php:381
+#, php-format
+msgid "The card could not be saved with TapPay (status code %1$d): %2$s"
+msgstr "TapPay 記住卡片失敗（狀態碼 %1$d）：%2$s"
+
+#. translators: %s: card last four digits
+#: src/Modules/Tappay/Gateways/Credit.php:398
+#, php-format
+msgid "Card ending %s saved with TapPay for subscription renewals."
+msgstr "已在 TapPay 記住末四碼 %s 的卡片，供訂閱續扣使用。"
 
 #: src/Modules/Tappay/Gateways/EasyWallet.php:22
 msgid "TapPay — Easy Wallet"
@@ -13862,36 +14399,36 @@ msgstr "收單行交易編號"
 msgid "Bank settlement"
 msgstr "銀行對帳結果"
 
-#: src/Modules/Tappay/Module.php:172
+#: src/Modules/Tappay/Module.php:174
 msgid "Please fill in all the card details."
 msgstr "請完整填寫信用卡資訊。"
 
-#: src/Modules/Tappay/Module.php:173
+#: src/Modules/Tappay/Module.php:175
 msgid "No payment token was returned. Please check the card number."
 msgstr "無法取得付款憑證，請確認卡號是否正確。"
 
-#: src/Modules/Tappay/Module.php:205
+#: src/Modules/Tappay/Module.php:207
 msgid "Payment service is unavailable. Please try again later."
 msgstr "付款服務目前無法使用，請稍後再試。"
 
-#: src/Modules/Tappay/Module.php:206
+#: src/Modules/Tappay/Module.php:208
 msgid "This payment method is not available on this store."
 msgstr "本店尚未開通這個付款方式。"
 
-#: src/Modules/Tappay/Module.php:207
-#: src/Modules/Tappay/Module.php:243
+#: src/Modules/Tappay/Module.php:209
+#: src/Modules/Tappay/Module.php:245
 msgid "Could not start the payment. Please try again."
 msgstr "無法開始付款，請再試一次。"
 
-#: src/Modules/Tappay/Module.php:244
+#: src/Modules/Tappay/Module.php:246
 msgid "Please pay with the button above."
 msgstr "請使用上方的付款按鈕付款。"
 
-#: src/Modules/Tappay/Module.php:245
+#: src/Modules/Tappay/Module.php:247
 msgid "Pay with Apple Pay"
 msgstr "使用 Apple Pay 付款"
 
-#: src/Modules/Tappay/Module.php:246
+#: src/Modules/Tappay/Module.php:248
 msgid "Pay with Samsung Pay"
 msgstr "使用 Samsung Pay 付款"
 
@@ -13950,6 +14487,50 @@ msgstr "啟用 3D 驗證（3DS）"
 #: src/Modules/Tappay/Settings/SettingsTab.php:96
 msgid "Worth turning on: it shifts liability and cuts down on chargeback disputes. Customers are sent to their bank's verification page and returned here once it is done."
 msgstr "建議開啟（責任轉移、降低盜刷爭議）。開啟後付款會跳轉至發卡行 3D 驗證頁，完成後自動導回。"
+
+#: src/Modules/Tappay/SubscriptionRenewal.php:82
+msgid "The saved TapPay card was removed from TapPay because no subscription uses it any more."
+msgstr "已沒有訂閱使用這張記住的卡，已向 TapPay 刪除。"
+
+#. translators: %s: TapPay message
+#: src/Modules/Tappay/SubscriptionRenewal.php:84
+#, php-format
+msgid "The saved TapPay card could not be removed from TapPay: %s"
+msgstr "無法向 TapPay 刪除記住的卡：%s"
+
+#: src/Modules/Tappay/SubscriptionRenewal.php:100
+msgid "TapPay renewal failed: no saved card is linked to this subscription."
+msgstr "TapPay 續扣失敗：這個訂閱沒有記住的卡片。"
+
+#. translators: %s: TapPay order number
+#: src/Modules/Tappay/SubscriptionRenewal.php:155
+#, php-format
+msgid "The TapPay renewal charge (order number %s) could not be confirmed. It will be checked again automatically; do not charge the customer again until then."
+msgstr "無法確認 TapPay 續扣結果（訂單編號 %s），稍後會自動再查詢；查到結果前請勿再向顧客扣款。"
+
+#. translators: 1: status code, 2: message
+#: src/Modules/Tappay/SubscriptionRenewal.php:169
+#, php-format
+msgid "The TapPay renewal charge failed (status code %1$d): %2$s"
+msgstr "TapPay 續扣失敗（狀態碼 %1$d）：%2$s"
+
+#. translators: 1: amount, 2: rec_trade_id
+#: src/Modules/Tappay/SubscriptionRenewal.php:196
+#, php-format
+msgid "TapPay renewal charge of NT$%1$s completed — transaction ID %2$s"
+msgstr "TapPay 續扣 NT$%1$s 成功，交易編號 %2$s"
+
+#: src/Modules/Tappay/SubscriptionRenewal.php:211
+msgid "TapPay card key"
+msgstr "TapPay 卡片金鑰"
+
+#: src/Modules/Tappay/SubscriptionRenewal.php:215
+msgid "TapPay card token"
+msgstr "TapPay 卡片代碼"
+
+#: src/Modules/Tappay/SubscriptionRenewal.php:229
+msgid "Enter both the TapPay card key and card token."
+msgstr "請填寫 TapPay 卡片金鑰與卡片代碼。"
 
 #: src/Plugin.php:86
 msgid "GitHub"

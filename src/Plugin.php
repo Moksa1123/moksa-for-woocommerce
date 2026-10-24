@@ -98,6 +98,7 @@ final class Plugin {
 		// 區塊信件編輯器的個人化標籤。無條件掛：它只註冊一個 filter，
 		// 對應模組沒開時各標籤自然回空字串。
 		Modules\Shared\Email\PersonalizationTags::init();
+		Compatibility\Subscriptions::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
 			Modules\Shared\Admin\PaymentQuery::boot();

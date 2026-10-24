@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.17.0
+Stable tag: 1.18.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -35,13 +35,13 @@ This plugin is a toolkit of optional integrations. Each integration only loads a
 
 For every integration below, requests are made server-to-server over HTTPS using your own merchant credentials, and typically include the order number, order amount, buyer name, e-mail, phone, shipping/billing address, item descriptions, and (for e-invoices) the buyer tax ID or carrier number that the customer enters at checkout.
 
-When a module is set to test/sandbox mode, requests go to the provider's corresponding staging hostname instead of the production one listed below (for example payment-stage.ecpay.com.tw, logistics-stage.ecpay.com.tw, einvoice-stage.ecpay.com.tw, ccore.newebpay.com, sandbox-api.payuni.com.tw, sandbox-api.pchomepay.com.tw, sandbox-api-pay.line.me, sandbox.tappaysdk.com, api-sandbox.shoplinepayments.com, cinv.ezpay.com.tw, test.paynow.com.tw, testinvoice.paynow.com.tw, ssl.smse.com.tw/api_test).
+When a module is set to test/sandbox mode, requests go to the provider's corresponding staging hostname instead of the production one listed below (for example payment-stage.ecpay.com.tw, logistics-stage.ecpay.com.tw, einvoice-stage.ecpay.com.tw, ecpg-stage.ecpay.com.tw, ccore.newebpay.com, sandbox-api.payuni.com.tw, sandbox-api.pchomepay.com.tw, sandbox-api-pay.line.me, sandbox.tappaysdk.com, api-sandbox.shoplinepayments.com, cinv.ezpay.com.tw, test.paynow.com.tw, testinvoice.paynow.com.tw, ssl.smse.com.tw/api_test).
 
 = Payment gateways =
 
 These run when a customer selects the gateway at checkout (to create the payment) and when you query, capture, refund or void the payment from the order screen.
 
-* **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw (test mode: payment-stage.ecpay.com.tw, ecpayment-stage.ecpay.com.tw). Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
+* **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw, ecpg.ecpay.com.tw (test mode: payment-stage.ecpay.com.tw, ecpayment-stage.ecpay.com.tw, ecpg-stage.ecpay.com.tw). The saved-card gateway for subscriptions loads ECPay's card form script from ecpg.ecpay.com.tw in the browser; card data goes straight to ECPay. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **NewebPay (藍新金流)** — credit card, ATM, CVS, barcode, wallets. Endpoints: core.newebpay.com (test mode: ccore.newebpay.com). Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
 * **PAYUNi (統一金流)** — credit card, ATM, CVS, wallets. Endpoints: api.payuni.com.tw (test mode: sandbox-api.payuni.com.tw). Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
 * **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname — smse.com.tw and smilepay.net are both operated by the same company, 訊航科技 Shinhang Technology; its policies are published on the smilepay.net brand site; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (SmilePay publishes a single combined service & personal-data-protection document, so both links point at that document)
@@ -49,7 +49,7 @@ These run when a customer selects the gateway at checkout (to create the payment
 * **PChomePay (支付連)** — credit card, ATM, CVS, barcode. Endpoints: api.pchomepay.com.tw (test mode: sandbox-api.pchomepay.com.tw). Terms: https://www.pchomepay.com.tw/other/service_treaty — Privacy: https://web.pchomepay.com.tw/introduction/privacy
 * **LINE Pay** — LINE Pay wallet. Endpoints: api-pay.line.me (test mode: sandbox-api-pay.line.me). Terms: https://terms2.line.me/linepay_TW_TermsofUse?lang=zh-Hant — Privacy: https://terms2.line.me/linepay_TW_PP
 * **TapPay** — credit card via the TapPay Fields SDK loaded in the browser (js.tappaysdk.com). Card data is tokenised client-side; only the token reaches your server. Endpoints: prod.tappaysdk.com, js.tappaysdk.com (test mode: sandbox.tappaysdk.com). Terms: https://www.tappaysdk.com/taiwan-en/privacy-term — Privacy: https://www.tappaysdk.com/taiwan-en/privacy-term (TapPay publishes a single combined terms & privacy document, so both links point at that document)
-* **Shopline Payments** — credit card, wallets. Endpoints: api.shoplinepayments.com (test mode: api-sandbox.shoplinepayments.com). Terms: https://book.shoplineapp.com/pages/shopline-payments-terms-and-conditions — Privacy: https://www.shopline.com/shopline-payments-privacy
+* **Shopline Payments** — credit card, wallets. Endpoints: api.shoplinepayments.com (test mode: api-sandbox.shoplinepayments.com). The on-page card gateway loads Shopline's card form script from cdn.shoplinepayments.com in the browser; card data goes straight to Shopline Payments. Terms: https://book.shoplineapp.com/pages/shopline-payments-terms-and-conditions — Privacy: https://www.shopline.com/shopline-payments-privacy
 
 = Shipping / logistics =
 
@@ -112,6 +112,10 @@ Yes. Every payment method ships an `AbstractPaymentMethodType` + React component
 
 Yes. All order meta uses `$order->update_meta_data()` / `$order->save()`, never `update_post_meta()`.
 
+= Does it work with WooCommerce Subscriptions? =
+
+Yes. TapPay, PAYUNi credit card, LINE Pay, Shopline Payments (card), ECPay (saved card) and NewebPay (recurring payments) can charge renewals automatically. PAYUNi and LINE Pay need the provider to enable the service for your store first, then the Subscriptions option in their settings. NewebPay recurring payments need one subscription schedule per order with the same amount every period.
+
 = Can I mix providers? =
 
 Yes. Payment, shipping and invoice modules are fully independent — any combination works.
@@ -135,6 +139,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.18.0 - 2026-10-24 =
+* New: WooCommerce Subscriptions renewals with TapPay, PAYUNi, LINE Pay, Shopline Payments, ECPay (saved cards) and NewebPay (recurring payments).
+* Fixed: PAYUNi shipping updates now send the shipped and arrived-at-store emails.
 
 = 1.17.0 - 2026-10-24 =
 * New: TapPay wallets can use their own Merchant ID, T-Cat package size for ECPay, and AFTEE capture for NewebPay.

@@ -20,6 +20,30 @@ final class Client {
 	}
 
 
+	/** 內嵌式（SDK）建立付款交易；定期扣款也走這支。 */
+	public static function create_payment( array $body, string $idempotent_key = '' ): array {
+		return self::post( Helper::payment_create_url(), $body, $idempotent_key );
+	}
+
+	public static function get_payment( string $trade_order_id ): array {
+		return self::post( Helper::payment_get_url(), [ 'tradeOrderId' => $trade_order_id ] );
+	}
+
+	public static function query_instruments( string $customer_id ): array {
+		return self::post( Helper::instruments_url(), [ 'customerId' => $customer_id ] );
+	}
+
+	/** 解綁付款工具（/api/v1/customer/paymentInstrument/unbind）。 */
+	public static function unbind_instrument( string $customer_id, string $instrument_id ): array {
+		return self::post(
+			Helper::base_url() . '/api/v1/customer/paymentInstrument/unbind',
+			[
+				'customerId'          => $customer_id,
+				'paymentInstrumentId' => $instrument_id,
+			]
+		);
+	}
+
 	public static function create_refund( array $body, string $idempotent_key ): array {
 		return self::post( Helper::refund_create_url(), $body, $idempotent_key );
 	}
@@ -34,6 +58,7 @@ final class Client {
 				'ok'      => false,
 				'message' => __( 'The Shopline Payments merchant credentials are not set.', 'moksa-for-woocommerce' ),
 				'code'    => 'NO_CREDENTIALS',
+				'http'    => 0,
 				'data'    => [],
 			];
 		}
@@ -65,6 +90,7 @@ final class Client {
 				'ok'      => false,
 				'message' => $e->getMessage(),
 				'code'    => 'TRANSPORT',
+				'http'    => 0,
 				'data'    => [],
 			];
 		}
@@ -86,6 +112,7 @@ final class Client {
 				'ok'      => false,
 				'message' => (string) ( $decoded['msg'] ?? $decoded['message'] ?? sprintf( 'HTTP %d', $resp->status ) ),
 				'code'    => '' !== $code ? $code : (string) $resp->status,
+				'http'    => (int) $resp->status,
 				'data'    => $decoded,
 			];
 		}
@@ -103,6 +130,7 @@ final class Client {
 				'ok'      => false,
 				'message' => (string) ( $decoded['msg'] ?? $decoded['message'] ?? __( 'The Shopline Payments API call failed', 'moksa-for-woocommerce' ) ),
 				'code'    => $code,
+				'http'    => (int) $resp->status,
 				'data'    => $decoded,
 			];
 		}
@@ -111,6 +139,7 @@ final class Client {
 			'ok'      => true,
 			'message' => 'OK',
 			'code'    => $code,
+			'http'    => (int) $resp->status,
 			'data'    => $decoded,
 		];
 	}

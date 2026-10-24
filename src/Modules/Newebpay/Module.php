@@ -71,7 +71,18 @@ final class Module extends AbstractGatewayModule {
 			'moksafowo_newebpay_wechatpay'          => Gateways\WeChatPay::class,
 			'moksafowo_newebpay_aftee'              => Gateways\Aftee::class,
 			'moksafowo_newebpay_unionpay'           => Gateways\UnionPay::class,
+		] + [
+			// 信用卡定期定額（訂閱，藍新排程扣款）。
+			Gateways\CreditPeriod::GATEWAY_ID => Gateways\CreditPeriod::class,
 		];
+	}
+
+	/** 定期定額不是整合付款頁（Unified）能代替的，單一入口模式下也要能勾選。 */
+	public static function should_register_gateway( string $id, ?string $mode = null, ?array $allowlist = null ): bool {
+		if ( Gateways\CreditPeriod::GATEWAY_ID === $id ) {
+			return parent::should_register_gateway( $id, 'multi', $allowlist );
+		}
+		return parent::should_register_gateway( $id, $mode, $allowlist );
 	}
 
 	protected static function blocks_method_class(): string {
@@ -143,6 +154,7 @@ final class Module extends AbstractGatewayModule {
 	}
 
 	protected function boot_extras(): void {
+		Api\PeriodHandler::boot();
 		add_filter( 'woocommerce_order_get_payment_method_title', [ __CLASS__, 'rebrand_legacy_payment_title' ], 10, 2 );
 
 		// 後台「查詢付款狀態」按鈕 —— 走共用層，UI 與權限只有一份。

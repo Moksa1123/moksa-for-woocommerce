@@ -33,6 +33,9 @@ class PaymentRequest {
 			'PayerEmail',
 			'PayerName',
 			'PayerTel',
+			'CreditHash',
+			'CreditLife',
+			'CreditToken',
 		];
 		$copy             = $data;
 		foreach ( $sensitive as $k ) {
@@ -84,7 +87,8 @@ class PaymentRequest {
 
 		$args = array(
 			'MerID'       => $this->gateway->get_merchant_id(),
-			'Version'     => '1.0',
+			// 信用卡 Token 參數是 UPP 2.0 的規格；其餘維持原本的 1.0。
+			'Version'     => isset( $encrypt_info['UseTokenType'] ) ? '2.0' : '1.0',
 			'EncryptInfo' => $encrypted_info,
 			'HashInfo'    => PayuniPayment::hash_info( $encrypted_info ),
 		);
@@ -283,6 +287,146 @@ class PaymentRequest {
 		}
 	}
 
+	/**
+	 * 信用卡幕後 Token 交易（/api/credit v1.3）：用首期取得的 CreditHash 扣款，顧客不在場。
+	 *
+	 * @return array{status:string,info:array<string,mixed>,message:string}
+	 */
+	public static function charge_token( \WC_Order $order, string $credit_hash, string $notify_url ): array {
+		$prod_desc = array();
+		foreach ( $order->get_items() as $item ) {
+			$prod_desc[] = $item->get_name() . ' * ' . $item->get_quantity();
+		}
+		$encrypt_info = array_merge(
+			array(
+				'MerID'      => Credentials::merchant_id(),
+				'MerTradeNo' => PayuniPayment::build_payuni_order_no( $order->get_id() ),
+				'TradeAmt'   => (int) ceil( (float) $order->get_total() ),
+				'Timestamp'  => time(),
+				'ProdDesc'   => mb_substr( implode( ';', $prod_desc ), 0, 550 ),
+				'UsrMail'    => $order->get_billing_email(),
+				'CreditHash' => $credit_hash,
+				'NotifyURL'  => $notify_url,
+			),
+			PayuniPayment::$einvoice_enabled ? self::renewal_invoice_args( $order ) : array()
+		);
+		PayuniPayment::log( 'credit token encrypt info:' . wc_print_r( self::redact_for_log( array_diff_key( $encrypt_info, array( 'CreditHash' => '' ) ) ), true ) );
+
+		$encrypted = PayuniPayment::encrypt( $encrypt_info );
+		$url       = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/credit' : 'https://api.payuni.com.tw/api/credit';
+		$response  = wp_remote_post(
+			$url,
+			array(
+				'httpversion' => '1.1',
+				'timeout'     => 70, // 官方：60 秒等不到銀行回應才回 UNKNOWN。
+				'headers'     => array( 'User-Agent' => 'payuni' ),
+				'body'        => array(
+					'MerID'       => Credentials::merchant_id(),
+					'Version'     => '1.3',
+					'EncryptInfo' => $encrypted,
+					'HashInfo'    => PayuniPayment::hash_info( $encrypted ),
+				),
+			)
+		);
+		if ( is_wp_error( $response ) ) {
+			PayuniPayment::log( 'credit token error:' . $response->get_error_message() );
+			return array(
+				'status'   => 'UNKNOWN',
+				'info'     => array(),
+				'verified' => false,
+				'message'  => $response->get_error_message(),
+			);
+		}
+
+		$http     = (int) wp_remote_retrieve_response_code( $response );
+		$result   = json_decode( wp_remote_retrieve_body( $response ), true );
+		$result   = is_array( $result ) ? $result : array();
+		$info     = array();
+		$verified = false;
+		if ( 200 === $http && is_string( $result['EncryptInfo'] ?? null ) && isset( $result['HashInfo'] ) && hash_equals( PayuniPayment::hash_info( $result['EncryptInfo'] ), strtoupper( (string) $result['HashInfo'] ) ) ) {
+			$info     = (array) PayuniPayment::decrypt( $result['EncryptInfo'] );
+			$info     = map_deep( $info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+			$verified = ! empty( $info );
+		}
+		PayuniPayment::log( 'credit token response:' . wc_print_r( self::redact_for_log( array_diff_key( $info, array( 'CreditHash' => '' ) ) ), true ) );
+
+		return array(
+			'status'   => (string) ( $result['Status'] ?? '' ),
+			'info'     => $info,
+			// 回應有驗章、解得開，內容才可信；否則（502、HTML 錯誤頁、驗章失敗）結果不明。
+			'verified' => $verified,
+			'message'  => (string) ( $info['Message'] ?? ( $result['Message'] ?? '' ) ),
+		);
+	}
+
+	/**
+	 * 續扣也要開 PAYUNi 發票（p522 CarrierType／CarrierInfo／InvBuyerName）。首期在 UPP 頁由顧客填，
+	 * 續扣沒有顧客在場：有本外掛結帳發票欄位的資料就照用，否則開到 PAYUNi 會員載具（amego，以 UsrMail 為載具）。
+	 *
+	 * @return array<string,string>
+	 */
+	private static function renewal_invoice_args( \WC_Order $order ): array {
+		$type    = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_TYPE );
+		$carrier = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_CARRIER_TYPE );
+		$number  = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_CARRIER_NUM );
+		$name    = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
+		$args    = array( 'InvBuyerName' => '' !== $name ? $name : (string) $order->get_billing_email() );
+		$ubn     = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_BUYER_UBN );
+		$love    = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_LOVE_CODE );
+		if ( 'b2b' === $type && '' !== $ubn ) {
+			$args['CarrierType'] = 'Company';
+			$args['CarrierInfo'] = $ubn;
+			$buyer               = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_BUYER_NAME );
+			if ( '' !== $buyer ) {
+				$args['InvBuyerName'] = $buyer;
+			}
+		} elseif ( 'b2c_donate' === $type && '' !== $love ) {
+			$args['CarrierType'] = 'Donate';
+			$args['CarrierInfo'] = $love;
+		} elseif ( in_array( $carrier, array( 'mobile', '3' ), true ) && '' !== $number ) {
+			$args['CarrierType'] = '3J0002';
+			$args['CarrierInfo'] = $number;
+		} elseif ( in_array( $carrier, array( 'cert', '2' ), true ) && '' !== $number ) {
+			$args['CarrierType'] = 'CQ0001';
+			$args['CarrierInfo'] = $number;
+		} else {
+			$args['CarrierType'] = 'amego';
+		}
+		return $args;
+	}
+
+	/** 信用卡 Token 取消（p41 /api/credit_bind/cancel，UseTokenType=1 綁定、BindVal=CreditHash）。 */
+	public static function cancel_token( string $credit_hash ): bool {
+		$encrypt_info = array(
+			'MerID'           => Credentials::merchant_id(),
+			'UseTokenType'    => 1,
+			'BindVal'         => $credit_hash,
+			'CreditTokenType' => 2,
+			'Timestamp'       => time(),
+		);
+		$encrypted    = PayuniPayment::encrypt( $encrypt_info );
+		$url          = Credentials::test_mode_enabled() ? 'https://sandbox-api.payuni.com.tw/api/credit_bind/cancel' : 'https://api.payuni.com.tw/api/credit_bind/cancel';
+		$response     = wp_remote_post(
+			$url,
+			array(
+				'timeout' => 30,
+				'headers' => array( 'User-Agent' => 'payuni' ),
+				'body'    => array(
+					'MerID'       => Credentials::merchant_id(),
+					'Version'     => '1.0',
+					'EncryptInfo' => $encrypted,
+					'HashInfo'    => PayuniPayment::hash_info( $encrypted ),
+				),
+			)
+		);
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+		$result = json_decode( wp_remote_retrieve_body( $response ), true );
+		PayuniPayment::log( 'credit token cancel status:' . ( is_array( $result ) ? (string) ( $result['Status'] ?? '' ) : '' ) );
+		return is_array( $result ) && 'SUCCESS' === ( $result['Status'] ?? '' );
+	}
+
 	public static function query( $order_id, $add_note = true ) {
 
 		$order = wc_get_order( $order_id );
@@ -359,6 +503,7 @@ class PaymentRequest {
 			$query_result['PaymentDay']  = $decrypted['Result'][0]['PaymentDay'];
 			$query_result['CreateDay']   = $decrypted['Result'][0]['CreateDay'];
 			$query_result['PaymentType'] = $decrypted['Result'][0]['PaymentType'];
+			$query_result['TradeAmt']    = $decrypted['Result'][0]['TradeAmt'] ?? '';
 
 			if ( '1' === $query_result['PaymentType'] ) {
 				$query_result['CloseStatus'] = $decrypted['Result'][0]['CloseStatus'];

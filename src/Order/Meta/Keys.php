@@ -34,6 +34,10 @@ final class Keys {
 	public const ECPAY_RTN_CODE          = '_moksafowo_ecpay_rtn_code';
 	public const ECPAY_PAYMENT_DATE      = '_moksafowo_ecpay_payment_date';
 	public const ECPAY_CARD_LAST4        = '_moksafowo_ecpay_card_last4';
+	public const ECPAY_BIND_CARD_ID      = '_moksafowo_ecpay_bind_card_id';      // 站內付 2.0 綁定信用卡代碼（訂閱續扣用）.
+	public const ECPAY_BIND_MEMBER_ID    = '_moksafowo_ecpay_bind_member_id';    // 綁卡時的 MerchantMemberID（續扣必須相同）.
+	public const ECPAY_BIND_DECLINED     = '_moksafowo_ecpay_bind_declined';     // 這張綁定卡扣款被拒的時間；官方規定不可再授權同一 BindCardID.
+	public const ECPAY_BIND_MTN_HISTORY  = '_moksafowo_ecpay_bind_mtn_history';  // 綁卡付款頁送出過的 MerchantTradeNo（舊分頁完成付款時對得回訂單）.
 	// 取號類付款資訊（ATM 虛擬帳號 / CVS 繳費代碼 / 條碼）— 顧客需這些才能完成付款。
 	public const ECPAY_ATM_BANK_CODE              = '_moksafowo_ecpay_atm_bank_code';
 	public const ECPAY_ATM_V_ACCOUNT              = '_moksafowo_ecpay_atm_v_account';
@@ -76,6 +80,11 @@ final class Keys {
 	public const NEWEBPAY_PAY_TIME          = '_moksafowo_newebpay_pay_time';
 	public const NEWEBPAY_CARD_LAST4        = '_moksafowo_newebpay_card_last4';
 	public const NEWEBPAY_BNPL_SETTLED_AT   = '_moksafowo_newebpay_bnpl_settled_at'; // AFTEE 請款時間.
+	public const NEWEBPAY_PERIOD_NO         = '_moksafowo_newebpay_period_no';         // 定期定額委託單號（PeriodNo）.
+	public const NEWEBPAY_PERIOD_ORDER_NO   = '_moksafowo_newebpay_period_order_no';   // 建立委託時的 MerOrderNo（改委託狀態要帶）.
+	public const NEWEBPAY_PERIOD_TRADE_NOS  = '_moksafowo_newebpay_period_trade_nos';  // 已建續訂單的每期 TradeNo（通知去重）.
+	public const NEWEBPAY_PERIOD_ENDED      = '_moksafowo_newebpay_period_ended';      // 委託已終止或期數扣完的時間（之後不能再啟用）.
+	public const NEWEBPAY_PERIOD_SUSPENDED  = '_moksafowo_newebpay_period_suspended';  // 由本外掛暫停委託的時間（恢復時才需要送 restart）.
 
 	public const NEWEBPAY_ATM_BANK_CODE       = '_moksafowo_newebpay_atm_bank_code';
 	public const NEWEBPAY_ATM_CODE_NO         = '_moksafowo_newebpay_atm_code_no';
@@ -142,6 +151,9 @@ final class Keys {
 	public const LINEPAY_AUTHORIZATION_AMOUNT  = '_moksafowo_linepay_authorization_amount';
 	public const LINEPAY_AUTHORIZED_AT         = '_moksafowo_linepay_authorized_at';       // ISO-8601.
 	public const LINEPAY_REGKEY                = '_moksafowo_linepay_regkey';              // PREAPPROVED token for subscriptions.
+	public const LINEPAY_RENEWAL_ATTEMPT       = '_moksafowo_linepay_renewal_attempt';     // 續扣送出次數（orderId 後綴，重試不重複）.
+	public const LINEPAY_RESERVED_TXN_ID       = '_moksafowo_linepay_reserved_transaction_id';
+	public const LINEPAY_BALANCED_AMOUNT       = '_moksafowo_linepay_transaction_balanced_amount';
 	public const LINEPAY_REFUND_TRANSACTION_ID = '_moksafowo_linepay_refund_transaction_id';
 	public const LINEPAY_LAST_ERROR_CODE       = '_moksafowo_linepay_last_error_code';
 
@@ -297,6 +309,8 @@ final class Keys {
 	public const SLP_CARD_BRAND          = '_moksafowo_slp_card_brand';          // 卡別（Visa 等）.
 	public const SLP_CARD_LAST4          = '_moksafowo_slp_card_last4';          // 卡號末四碼.
 	public const SLP_PROCESSED_EVENT_IDS = '_moksafowo_slp_processed_event_ids'; // webhook event.id 去重清單（array）.
+	public const SLP_CUSTOMER_ID         = '_moksafowo_slp_customer_id';         // SLP 會員 ID（快捷付款／定期扣款的 paymentCustomerId）.
+	public const SLP_INSTRUMENT_ID       = '_moksafowo_slp_instrument_id';       // 綁定的付款工具 ID（定期扣款用）.
 
 	public const EZPAY_INVOICE_TRANS_NO  = '_moksafowo_ezpay_invoice_trans_no';
 	public const EZPAY_INVOICE_NUMBER    = '_moksafowo_ezpay_invoice_number';
@@ -335,6 +349,10 @@ final class Keys {
 	public const TAPPAY_PAYMENT_URL         = '_moksafowo_tappay_payment_url';         // 3DS 驗證跳轉 URL.
 	public const TAPPAY_THREE_DOMAIN_SECURE = '_moksafowo_tappay_three_domain_secure'; // 是否走 3DS（yes|no）.
 	public const TAPPAY_PAID_AT             = '_moksafowo_tappay_paid_at';             // 入帳時間（毫秒 epoch）.
+	public const TAPPAY_CARD_KEY            = '_moksafowo_tappay_card_key';            // 記住的卡片金鑰（訂閱續扣用）.
+	public const TAPPAY_CARD_TOKEN          = '_moksafowo_tappay_card_token';          // 記住的卡片代碼（訂閱續扣用）.
+	public const TAPPAY_PENDING_CARD_KEY    = '_moksafowo_tappay_pending_card_key';    // 3D 驗證完成前暫存的卡片金鑰.
+	public const TAPPAY_PENDING_CARD_TOKEN  = '_moksafowo_tappay_pending_card_token';  // 3D 驗證完成前暫存的卡片代碼.
 
 	private function __construct() {}
 }

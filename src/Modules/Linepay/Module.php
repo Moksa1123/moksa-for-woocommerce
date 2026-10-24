@@ -46,6 +46,7 @@ final class Module extends AbstractModule {
 		Vault::wrap_option( 'moksafowo_linepay_sandbox_channel_secret' );
 
 		LinePay::init();
+		SubscriptionRenewal::boot();
 
 		add_action(
 			'woocommerce_blocks_payment_method_type_registration',

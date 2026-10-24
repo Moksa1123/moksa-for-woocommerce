@@ -208,6 +208,60 @@
 			.on( evt + '.moksafowoTappay', onPlaceOrder );
 	}
 
+	// 「付款」頁與訂閱「變更付款方式」頁是 form#order_review，WC 不會觸發
+	// checkout_place_order_<id>，直接原生送出。用 capture 先攔下來取 prime，
+	// 拿到後 requestSubmit 再送一次（這次 prime 已有值就放行）。
+	function bindOrderReview() {
+		var form = document.getElementById( 'order_review' );
+		if ( ! form || form.getAttribute( 'data-moksafowo-tappay' ) ) {
+			return;
+		}
+		form.setAttribute( 'data-moksafowo-tappay', '1' );
+		form.addEventListener(
+			'submit',
+			function ( e ) {
+				if ( ! selectedGateway() ) {
+					return;
+				}
+				if ( $container().find( '.moksafowo-tappay-prime' ).val() ) {
+					return;
+				}
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				if ( submitting || ! window.TPDirect || ! window.TPDirect.card ) {
+					return;
+				}
+				var status = window.TPDirect.card.getTappayFieldsStatus();
+				if ( status && status.canGetPrime === false ) {
+					setError( I18N.incomplete || '請完整填寫信用卡資訊。' );
+					return;
+				}
+				submitting = true;
+				setError( '' );
+				window.TPDirect.card.getPrime( function ( result ) {
+					submitting = false;
+					if ( result.status !== 0 ) {
+						setError( result.msg || I18N.primeError || '無法取得付款憑證，請確認卡號。' );
+						return;
+					}
+					var card = result.card || {};
+					var $c = $container();
+					$c.find( '.moksafowo-tappay-prime' ).val( card.prime || '' );
+					$c.find( '.moksafowo-tappay-bin' ).val( card.bincode || card.bin_code || '' );
+					$c.find( '.moksafowo-tappay-last-four' ).val( card.lastfour || card.last_four || '' );
+					$c.find( '.moksafowo-tappay-issuer' ).val( card.issuer || '' );
+					var btn = document.getElementById( 'place_order' );
+					if ( form.requestSubmit ) {
+						form.requestSubmit( btn || undefined );
+					} else {
+						form.submit();
+					}
+				} );
+			},
+			true
+		);
+	}
+
 	// updated_checkout / payment_method 變更後重新 mount + gate。
 	$( document.body ).on( 'updated_checkout', function () {
 		bindPlaceOrder();
@@ -223,6 +277,7 @@
 
 	$( function () {
 		bindPlaceOrder();
+		bindOrderReview();
 		mountFields();
 		togglePlaceOrder();
 	} );
