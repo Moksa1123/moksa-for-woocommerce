@@ -201,6 +201,25 @@ class SettingsTab extends \WC_Settings_Page {
 					'type' => 'sectionend',
 					'id'   => 'moksafowo_payuni_payment_api_settings',
 				),
+				...( \Moksafowo\Compatibility\Subscriptions::active() ? array(
+					array(
+						'title' => __( 'Subscriptions', 'moksa-for-woocommerce' ),
+						'type'  => 'title',
+						'desc'  => __( 'PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on.', 'moksa-for-woocommerce' ),
+						'id'    => 'moksafowo_payuni_subscription_settings',
+					),
+					array(
+						'title'   => __( 'Automatic renewals', 'moksa-for-woocommerce' ),
+						'type'    => 'checkbox',
+						'default' => 'no',
+						'desc'    => __( 'Charge WooCommerce Subscriptions renewals automatically with saved cards', 'moksa-for-woocommerce' ),
+						'id'      => 'moksafowo_payuni_payment_subscriptions_enabled',
+					),
+					array(
+						'type' => 'sectionend',
+						'id'   => 'moksafowo_payuni_subscription_settings',
+					),
+				) : array() ),
 			)
 		);
 

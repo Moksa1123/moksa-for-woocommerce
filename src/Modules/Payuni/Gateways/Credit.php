@@ -28,7 +28,7 @@ class Credit extends GatewayBase {
 		// 續扣走信用卡幕後 Token 交易；首期必須經 UPP 實際刷卡才拿得到 CreditHash，
 		// 所以不支援顧客自行換卡（那要另一筆付款），只開放後台改 CreditHash。
 		// 信用卡 Token 與幕後授權要向 PAYUNi 申請並綁 IP，商家打開設定才宣告支援，否則首期收得到、續扣全失敗。
-		if ( Subscriptions::active() && 'yes' === $this->get_option( 'subscriptions', 'no' ) ) {
+		if ( Subscriptions::active() && 'yes' === get_option( 'moksafowo_payuni_payment_subscriptions_enabled', 'no' ) ) {
 			$this->supports = array_merge(
 				$this->supports,
 				array(

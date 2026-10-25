@@ -41,7 +41,7 @@ class Credit extends WC_Payment_Gateway {
 
 		// 自動付款（PREAPPROVED）要先經 LINE Pay 核准，商家打開設定才宣告支援訂閱。
 		// 換付款方式要顧客再授權一次，暫只開放後台改 regKey。
-		if ( Subscriptions::active() && 'yes' === $this->get_option( 'subscriptions', 'no' ) ) {
+		if ( Subscriptions::active() && 'yes' === get_option( 'moksafowo_linepay_subscriptions_enabled', 'no' ) ) {
 			$this->supports = array_merge(
 				$this->supports,
 				array(

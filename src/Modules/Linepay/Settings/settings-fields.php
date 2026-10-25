@@ -25,14 +25,4 @@ $moksafowo_fields = array(
 	),
 );
 
-if ( \Moksafowo\Compatibility\Subscriptions::active() ) {
-	$moksafowo_fields['subscriptions'] = array(
-		'title'       => __( 'Subscriptions', 'moksa-for-woocommerce' ),
-		'type'        => 'checkbox',
-		'label'       => __( 'Charge WooCommerce Subscriptions renewals automatically with LINE Pay', 'moksa-for-woocommerce' ),
-		'description' => __( 'LINE Pay must approve automatic payments for your store before you turn this on.', 'moksa-for-woocommerce' ),
-		'default'     => 'no',
-	);
-}
-
 return $moksafowo_fields;

@@ -121,6 +121,25 @@ class SettingsTab extends WC_Settings_Page {
 					'type' => 'sectionend',
 					'id'   => 'moksafowo_linepay_api_settings',
 				),
+				...( \Moksafowo\Compatibility\Subscriptions::active() ? array(
+					array(
+						'title' => __( 'Subscriptions', 'moksa-for-woocommerce' ),
+						'type'  => 'title',
+						'desc'  => __( 'LINE Pay must approve automatic payments for your store before you turn this on.', 'moksa-for-woocommerce' ),
+						'id'    => 'moksafowo_linepay_subscription_settings',
+					),
+					array(
+						'title'   => __( 'Automatic renewals', 'moksa-for-woocommerce' ),
+						'type'    => 'checkbox',
+						'default' => 'no',
+						'desc'    => __( 'Charge WooCommerce Subscriptions renewals automatically with LINE Pay', 'moksa-for-woocommerce' ),
+						'id'      => 'moksafowo_linepay_subscriptions_enabled',
+					),
+					array(
+						'type' => 'sectionend',
+						'id'   => 'moksafowo_linepay_subscription_settings',
+					),
+				) : array() ),
 			)
 		);
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-10-24 00:00+0800\n"
+"PO-Revision-Date: 2026-10-25 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -6257,8 +6257,8 @@ msgstr "綠界物流編號"
 #: src/Modules/Payuni/Api/PaymentRequest.php:539
 #: src/Modules/Payuni/Api/PaymentResponse.php:79
 #: src/Modules/Payuni/Api/PaymentResponse.php:167
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:249
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:266
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:247
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:264
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:99
 msgid "Status code"
 msgstr "狀態碼"
@@ -6807,19 +6807,6 @@ msgstr "結帳顯示說明"
 msgid "The description customers see at checkout, below the payment method name."
 msgstr "顧客在結帳頁看到的說明（顯示在付款方式名稱下方）。"
 
-#: src/Modules/Linepay/Settings/settings-fields.php:30
-#: src/Modules/Payuni/Settings/CreditSetting.php:35
-msgid "Subscriptions"
-msgstr "訂閱"
-
-#: src/Modules/Linepay/Settings/settings-fields.php:32
-msgid "Charge WooCommerce Subscriptions renewals automatically with LINE Pay"
-msgstr "以 LINE Pay 自動扣 WooCommerce Subscriptions 的續訂款項"
-
-#: src/Modules/Linepay/Settings/settings-fields.php:33
-msgid "LINE Pay must approve automatic payments for your store before you turn this on."
-msgstr "需先經 LINE Pay 核准你的商店使用自動付款，才能開啟。"
-
 #: src/Modules/Linepay/Settings/SettingsTab.php:28
 #: src/Modules/Paynow/Settings/SettingsTab.php:55
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:51
@@ -6889,8 +6876,26 @@ msgstr "正式 Channel ID"
 msgid "Live channel secret"
 msgstr "正式 Channel Secret"
 
-#: src/Modules/Linepay/Settings/SettingsTab.php:143
-#: src/Modules/Payuni/Settings/SettingsTab.php:259
+#: src/Modules/Linepay/Settings/SettingsTab.php:126
+#: src/Modules/Payuni/Settings/SettingsTab.php:206
+msgid "Subscriptions"
+msgstr "訂閱"
+
+#: src/Modules/Linepay/Settings/SettingsTab.php:128
+msgid "LINE Pay must approve automatic payments for your store before you turn this on."
+msgstr "需先經 LINE Pay 核准你的商店使用自動付款，才能開啟。"
+
+#: src/Modules/Linepay/Settings/SettingsTab.php:132
+#: src/Modules/Payuni/Settings/SettingsTab.php:212
+msgid "Automatic renewals"
+msgstr "自動續扣"
+
+#: src/Modules/Linepay/Settings/SettingsTab.php:135
+msgid "Charge WooCommerce Subscriptions renewals automatically with LINE Pay"
+msgstr "以 LINE Pay 自動扣 WooCommerce Subscriptions 的續訂款項"
+
+#: src/Modules/Linepay/Settings/SettingsTab.php:162
+#: src/Modules/Payuni/Settings/SettingsTab.php:278
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:313
 msgid "View logs"
 msgstr "檢視日誌"
@@ -6975,7 +6980,7 @@ msgstr "藍新對這張已付款的訂單送來 %1$s 通知（%2$s），訂單�
 
 #. translators: 1: paid amount, 2: order total
 #: src/Modules/Newebpay/Api/IpnHandler.php:147
-#: src/Modules/Newebpay/Api/PeriodHandler.php:208
+#: src/Modules/Newebpay/Api/PeriodHandler.php:247
 #, php-format
 msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "藍新回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
@@ -7023,105 +7028,105 @@ msgid "The NewebPay recurring payment was not set up: %s"
 msgstr "藍新定期定額委託沒有建立：%s"
 
 #. translators: 1: NewebPay status, 2: message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:144
+#: src/Modules/Newebpay/Api/PeriodHandler.php:176
 #, php-format
 msgid "The NewebPay recurring payment was not set up (%1$s): %2$s"
 msgstr "藍新定期定額委託沒有建立（%1$s）：%2$s"
 
 #. translators: %s: NewebPay mandate number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:175
+#: src/Modules/Newebpay/Api/PeriodHandler.php:207
 #, php-format
 msgid "A NewebPay recurring payment notice for mandate %s did not match the mandate status at NewebPay. Check it in the NewebPay dashboard before fulfilling the order."
 msgstr "委託單 %s 的藍新定期定額通知與藍新端的委託狀態對不上，請先到藍新後台確認再出貨。"
 
 #. translators: 1: NewebPay mandate number, 2: authorized periods
-#: src/Modules/Newebpay/Api/PeriodHandler.php:222
+#: src/Modules/Newebpay/Api/PeriodHandler.php:261
 #, php-format
 msgid "NewebPay recurring payment set up — mandate %1$s, %2$d payments scheduled. This order is the first payment."
 msgstr "藍新定期定額委託已建立，委託單號 %1$s，共排定 %2$d 期。這張訂單是第一期。"
 
 #. translators: %s: NewebPay order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:285
+#: src/Modules/Newebpay/Api/PeriodHandler.php:324
 #, php-format
 msgid "A NewebPay renewal notice (%s) did not match the mandate status at NewebPay, so no renewal order was created. Check the mandate in the NewebPay dashboard."
 msgstr "藍新續扣通知（%s）與藍新的委託狀態對不上，沒有建立續訂單。請到藍新後台確認這筆委託。"
 
 #. translators: 1: payment number, 2: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:327
+#: src/Modules/Newebpay/Api/PeriodHandler.php:366
 #, php-format
 msgid "NewebPay charged payment %1$d (trade number %2$s) although this subscription was already cancelled. Refund this order and make sure the mandate is terminated in the NewebPay dashboard."
 msgstr "這個訂閱已取消，藍新仍扣了第 %1$d 期（交易序號 %2$s）。請退款這張訂單，並到藍新後台確認委託已終止。"
 
 #. translators: 1: payment number, 2: total payments, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:343
+#: src/Modules/Newebpay/Api/PeriodHandler.php:382
 #, php-format
 msgid "NewebPay recurring payment %1$d of %2$d completed — trade number %3$s"
 msgstr "藍新定期定額第 %1$d／%2$d 期扣款成功，交易序號 %3$s"
 
 #. translators: 1: payment number, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:355
+#: src/Modules/Newebpay/Api/PeriodHandler.php:394
 #, php-format
 msgid "NewebPay recurring payment %1$d failed: %2$s. NewebPay will still try the next scheduled payment."
 msgstr "藍新定期定額第 %1$d 期扣款失敗：%2$s。藍新仍會依排程扣下一期。"
 
 #. translators: %d: number of payments
-#: src/Modules/Newebpay/Api/PeriodHandler.php:388
+#: src/Modules/Newebpay/Api/PeriodHandler.php:427
 #, php-format
 msgid "The NewebPay mandate has finished all %d payments, so nothing more will be charged. Ask the customer to subscribe again to continue."
 msgstr "藍新委託的 %d 期已全部扣完，之後不會再扣款。如要繼續，請顧客重新訂閱。"
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:400
+#: src/Modules/Newebpay/Api/PeriodHandler.php:439
 msgid "NewebPay updated the card expiry date for this subscription. Payments continue as scheduled."
 msgstr "藍新已更新這個訂閱的信用卡效期，之後照排程扣款。"
 
 #. translators: %s: NewebPay card status
-#: src/Modules/Newebpay/Api/PeriodHandler.php:410
+#: src/Modules/Newebpay/Api/PeriodHandler.php:449
 #, php-format
 msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). Ask the customer to subscribe again with another card."
 msgstr "這張卡已無法扣款（%s），藍新已停止定期定額。請顧客改用其他卡重新訂閱。"
 
 #. translators: 1: NewebPay mandate number, 2: result, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:450
+#: src/Modules/Newebpay/Api/PeriodHandler.php:489
 #, php-format
 msgid "NewebPay created a second mandate (%1$s) for this order. Termination: %2$s. If it charged the card (trade number %3$s), refund that payment in the NewebPay dashboard."
 msgstr "這張訂單在藍新多建立了一張委託（%1$s）。終止結果：%2$s。如果它已扣款（交易序號 %3$s），請到藍新後台退款。"
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:452
+#: src/Modules/Newebpay/Api/PeriodHandler.php:491
 msgid "done"
 msgstr "完成"
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:452
+#: src/Modules/Newebpay/Api/PeriodHandler.php:491
 msgid "failed"
 msgstr "失敗"
 
 #. translators: %s: order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:465
+#: src/Modules/Newebpay/Api/PeriodHandler.php:504
 #, php-format
 msgid "[NewebPay] Order #%s needs a refund check"
 msgstr "【藍新】訂單 #%s 需要確認是否退款"
 
 #. translators: %s: order edit URL
-#: src/Modules/Newebpay/Api/PeriodHandler.php:470
+#: src/Modules/Newebpay/Api/PeriodHandler.php:509
 #, php-format
 msgid "NewebPay charged a recurring payment that should not have been charged. Open the order, read the latest note and refund the payment in the NewebPay dashboard if needed: %s"
 msgstr "藍新扣了一筆不該扣的定期定額款項。請開啟訂單查看最新備註，必要時到藍新後台退款：%s"
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:520
+#: src/Modules/Newebpay/Api/PeriodHandler.php:559
 msgid "This subscription cannot be reactivated because its NewebPay mandate has ended. Ask the customer to subscribe again."
 msgstr "這個訂閱的藍新委託已結束，無法重新啟用。請顧客重新訂閱。"
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:533
+#: src/Modules/Newebpay/Api/PeriodHandler.php:572
 msgid "The NewebPay mandate could not be restarted, so the subscription was put back on hold. Restart it in the NewebPay dashboard first."
 msgstr "藍新委託無法重新啟用，訂閱已轉回保留。請先到藍新後台啟用委託。"
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:584
+#: src/Modules/Newebpay/Api/PeriodHandler.php:623
 #, php-format
 msgid "NewebPay mandate updated (%1$s): %2$s"
 msgstr "藍新委託已更新（%1$s）：%2$s"
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:586
+#: src/Modules/Newebpay/Api/PeriodHandler.php:625
 #, php-format
 msgid "The NewebPay mandate could not be updated (%1$s): %2$s. Update it in the NewebPay dashboard so the customer is charged correctly."
 msgstr "藍新委託更新失敗（%1$s）：%2$s。請到藍新後台手動調整，以免扣錯款。"
@@ -10265,14 +10270,6 @@ msgstr "PAYUNi 信用卡分期"
 msgid "PAYUNi Credit Card Payment"
 msgstr "PAYUNi 信用卡付款"
 
-#: src/Modules/Payuni/Settings/CreditSetting.php:37
-msgid "Charge WooCommerce Subscriptions renewals automatically with saved cards"
-msgstr "以約定的信用卡自動扣 WooCommerce Subscriptions 的續訂款項"
-
-#: src/Modules/Payuni/Settings/CreditSetting.php:38
-msgid "PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on."
-msgstr "需先請 PAYUNi 為你的商店開通「信用卡 Token」與「幕後授權」並登記主機 IP，才能開啟。"
-
 #: src/Modules/Payuni/Settings/GooglePaySetting.php:19
 msgid "PAYUNi Google Pay Payment"
 msgstr "PAYUNi Google Pay 付款"
@@ -10350,7 +10347,15 @@ msgstr "勾選的分期數會各自獨立成一個付款方式，仍需到付款
 msgid "Copy these from the PAYUNi dashboard under Member area → Integration settings."
 msgstr "從 PAYUNi 後台「會員專區 → 整合設定」複製過來。"
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:264
+#: src/Modules/Payuni/Settings/SettingsTab.php:208
+msgid "PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on."
+msgstr "需先請 PAYUNi 為你的商店開通「信用卡 Token」與「幕後授權」並登記主機 IP，才能開啟。"
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:215
+msgid "Charge WooCommerce Subscriptions renewals automatically with saved cards"
+msgstr "以約定的信用卡自動扣 WooCommerce Subscriptions 的續訂款項"
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:283
 msgid "Go to Payment Settings"
 msgstr "前往付款設定"
 
@@ -10533,8 +10538,8 @@ msgid "Re-Create PAYUNi Shipping Order"
 msgstr "重新建立 PAYUNi 物流訂單"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:73
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:248
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:265
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:246
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:263
 msgid "Shipping transaction ID"
 msgstr "物流交易編號"
 
@@ -10567,7 +10572,7 @@ msgid "Amount to collect"
 msgstr "代收金額"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:139
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:250
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:248
 msgid "Status updated"
 msgstr "狀態時間"
 
@@ -10702,22 +10707,22 @@ msgstr "PAYUNi 建立物流單失敗：%s"
 msgid "The PAYUNi shipment lookup failed: %s"
 msgstr "PAYUNi 物流單查詢失敗：%s"
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:241
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:239
 msgid "Received at the drop-off store"
 msgstr "門市已收件"
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:242
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:240
 msgid "Waiting for the parcel to be dropped off"
 msgstr "等待商店寄貨"
 
 #. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:246
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:244
 #, php-format
 msgid "PAYUNi shipping status: %s"
 msgstr "PAYUNi 貨態：%s"
 
 #. translators: %s: PAYUNi message
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:263
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:261
 #, php-format
 msgid "PAYUNi label print notice: %s"
 msgstr "PAYUNi 列印通知：%s"

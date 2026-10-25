@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.18.0
+Stable tag: 1.18.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -24,6 +24,19 @@ HPOS-native, Block Checkout-native, PHP 8.2+ strict-typed, GPLv3, no premium gat
 = Moksa AI assistant (new in 1.3.0) =
 
 Built on the WordPress 7.0 AI Client, Moksa AI is an optional in-admin chat assistant that lets you run common store tasks in natural language: find orders by invoice / shipping / payment number, look up order details and counts, change order status (single or batch), add order notes, issue / void / allowance e-invoices, create and print shipping labels, and enable or disable modules, individual payment methods and invoice issuing methods. Every action that changes data first shows a summary and waits for your explicit confirmation before it runs. The assistant uses whichever AI provider you connect under Settings → Connectors — the plugin never handles your AI keys, refunds, or credentials.
+
+= WooCommerce Subscriptions (new in 1.18.0) =
+
+With [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/) installed, six payment methods can charge renewals automatically. Renewals need no extra setup once the method below is ready; what each one needs first:
+
+* **TapPay credit card** — No extra setting. With 3D Secure on, free trials are not offered and customers cannot change their card themselves.
+* **PAYUNi credit card** — Ask PAYUNi to enable the card token and background authorization services and register your server IP. Then tick Automatic renewals under Subscriptions in the PAYUNi settings (Payment section).
+* **LINE Pay** — Ask LINE Pay to approve automatic payments for your store. Then tick Automatic renewals under Subscriptions in the LINE Pay settings.
+* **Shopline Payments** — Enable Shopline Payments credit card (on-page). Shopline has to turn on payment notifications for your store; the address to send them is shown in the Shopline Payments settings.
+* **ECPay saved card** — ECPay has to enable card binding (on-site payment 2.0) for your store. Turn on daily automatic capture in the ECPay dashboard, otherwise renewal payments are never captured. Enable ECPay credit card (saved for subscriptions).
+* **NewebPay recurring payments** — Ask NewebPay to enable credit card recurring payments (定期定額) for your store, then enable NewebPay recurring credit card. NewebPay charges on its own schedule and notifies your store after each charge, so there is no notification address to set. One subscription schedule per order, with the same amount every period; mixing one-time products or different schedules in the cart hides this method. Tick Mandate status changes only if NewebPay has enabled mandate changes for your store; it adds pausing and resuming. Cancelling always works.
+
+Customers need an account to subscribe. Payment results reach your store at /wc-api/ addresses, so make sure a firewall or security plugin does not block them.
 
 = Source =
 
@@ -114,7 +127,7 @@ Yes. All order meta uses `$order->update_meta_data()` / `$order->save()`, never 
 
 = Does it work with WooCommerce Subscriptions? =
 
-Yes. TapPay, PAYUNi credit card, LINE Pay, Shopline Payments (card), ECPay (saved card) and NewebPay (recurring payments) can charge renewals automatically. PAYUNi and LINE Pay need the provider to enable the service for your store first, then the Subscriptions option in their settings. NewebPay recurring payments need one subscription schedule per order with the same amount every period.
+Yes. TapPay, PAYUNi credit card, LINE Pay, Shopline Payments (card), ECPay (saved card) and NewebPay (recurring payments) can charge renewals automatically. See "WooCommerce Subscriptions" in the description for what each one needs.
 
 = Can I mix providers? =
 
@@ -139,6 +152,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.18.1 - 2026-10-25 =
+* Fixed: The subscriptions switch for LINE Pay and PAYUNi moved to their own settings pages, where it is easier to find.
 
 = 1.18.0 - 2026-10-24 =
 * New: WooCommerce Subscriptions renewals with TapPay, PAYUNi, LINE Pay, Shopline Payments, ECPay (saved cards) and NewebPay (recurring payments).
