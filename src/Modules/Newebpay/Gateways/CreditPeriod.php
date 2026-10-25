@@ -42,27 +42,13 @@ final class CreditPeriod extends AbstractNewebpayGateway {
 		if ( Subscriptions::active() ) {
 			$supports = array_merge( $supports, [ 'subscriptions', 'gateway_scheduled_payments', 'subscription_cancellation' ] );
 			// 暫停／恢復要呼叫修改委託狀態（NPA-B051），藍新審核開通後才能用；沒開通時暫停了藍新照扣，所以不開放。
-			if ( 'yes' === $this->get_option( 'mandate_changes', 'no' ) ) {
+			if ( 'yes' === get_option( 'moksafowo_newebpay_mandate_changes', 'no' ) ) {
 				$supports = array_merge( $supports, [ 'subscription_suspension', 'subscription_reactivation' ] );
 			}
 		}
 		return $supports;
 	}
 
-	protected function build_form_fields(): array {
-		return array_merge(
-			parent::build_form_fields(),
-			[
-				'mandate_changes' => [
-					'title'       => __( 'Mandate status changes', 'moksa-for-woocommerce' ),
-					'type'        => 'checkbox',
-					'label'       => __( 'NewebPay has enabled mandate status changes for my store', 'moksa-for-woocommerce' ),
-					'description' => __( 'Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard.', 'moksa-for-woocommerce' ),
-					'default'     => 'no',
-				],
-			]
-		);
-	}
 
 	protected function register_receipt_action(): void {
 		add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'render_period_form' ] );

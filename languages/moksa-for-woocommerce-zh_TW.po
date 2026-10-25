@@ -3463,7 +3463,7 @@ msgstr "確定要退款？金額："
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:190
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:74
-#: src/Modules/Ecpay/Gateways/CreditBind.php:213
+#: src/Modules/Ecpay/Gateways/CreditBind.php:198
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:108
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:30
@@ -3707,7 +3707,7 @@ msgstr "%s 訂單"
 
 #: src/Modules/Ecpay/Api/BindHandler.php:88
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
-#: src/Modules/Ecpay/Gateways/CreditBind.php:209
+#: src/Modules/Ecpay/Gateways/CreditBind.php:194
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:254
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:277
@@ -3752,7 +3752,7 @@ msgstr "綠界綁卡失敗：%s"
 
 #: src/Modules/Ecpay/Api/BindHandler.php:113
 #: src/Modules/Ecpay/Api/BindHandler.php:147
-#: src/Modules/Ecpay/Gateways/CreditBind.php:192
+#: src/Modules/Ecpay/Gateways/CreditBind.php:177
 #: src/Modules/Newebpay/Api/PeriodHandler.php:76
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:50
 #: src/Modules/ShoplinePayments/Module.php:108
@@ -3845,7 +3845,7 @@ msgid "AES decryption failed."
 msgstr "AES 解密失敗。"
 
 #: src/Modules/Ecpay/Api/Helper.php:183
-#: src/Modules/Ecpay/Gateways/CreditBind.php:218
+#: src/Modules/Ecpay/Gateways/CreditBind.php:203
 msgid "No ECPay transaction ID was found, so the refund cannot be made here. Please refund it in the ECPay dashboard."
 msgstr "找不到綠界交易編號，無法退款。請至綠界後台手動處理。"
 
@@ -3955,7 +3955,7 @@ msgid "This order was paid offline (%s) and ECPay has no automatic refund for it
 msgstr "此訂單為線下付款（%s），綠界沒有自動退款 API，請至綠界後台手動退款。"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:86
-#: src/Modules/Ecpay/Gateways/CreditBind.php:227
+#: src/Modules/Ecpay/Gateways/CreditBind.php:212
 msgid "This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr "這筆綠界信用卡交易尚未請款，目前只能整筆退款（取消授權）。部分退款請等請款完成（通常為隔天）後再操作。"
 
@@ -3967,25 +3967,25 @@ msgstr "綠界退款失敗：%s"
 
 #. translators: 1: amount, 2: ECPay message, 3: code
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:111
-#: src/Modules/Ecpay/Gateways/CreditBind.php:241
+#: src/Modules/Ecpay/Gateways/CreditBind.php:226
 #, php-format
 msgid "The ECPay refund of NT$%1$d failed: %2$s (code %3$d)"
 msgstr "綠界退款失敗（金額 NT$%1$d）：%2$s（代碼 %3$d）"
 
 #. translators: 1: amount, 2: reason
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:123
-#: src/Modules/Ecpay/Gateways/CreditBind.php:254
+#: src/Modules/Ecpay/Gateways/CreditBind.php:239
 #, php-format
 msgid "ECPay refunded NT$%1$d. Reason: %2$s"
 msgstr "綠界退款成功（金額 NT$%1$d）。原因：%2$s"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:125
-#: src/Modules/Ecpay/Gateways/CreditBind.php:256
+#: src/Modules/Ecpay/Gateways/CreditBind.php:241
 msgid "(not given)"
 msgstr "（未填寫）"
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:134
-#: src/Modules/Ecpay/Gateways/CreditBind.php:104
+#: src/Modules/Ecpay/Gateways/CreditBind.php:89
 msgid "Invalid order"
 msgstr "無效訂單"
 
@@ -4034,6 +4034,7 @@ msgid "Pay in full by credit card. The customer is redirected to the ECPay payme
 msgstr "使用信用卡一次付清，跳轉至綠界支付頁完成付款。"
 
 #: src/Modules/Ecpay/Gateways/CreditBind.php:32
+#: src/Modules/Ecpay/Settings/SettingsTab.php:177
 msgid "ECPay credit card (saved for subscriptions)"
 msgstr "綠界信用卡（訂閱綁卡）"
 
@@ -4041,36 +4042,28 @@ msgstr "綠界信用卡（訂閱綁卡）"
 msgid "Customers enter their card on an ECPay card form on your site, and the card is saved so WooCommerce Subscriptions renewals are charged automatically. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
 msgstr "顧客在你網站上的綠界刷卡欄位輸入卡號，卡片會綁定起來，WooCommerce Subscriptions 續訂時自動扣款。需先請綠界為你的商店開通綁定信用卡，並在綠界廠商後台開啟「每日自動關帳」，否則款項不會請款。"
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:72
-msgid "Card check amount"
-msgstr "驗卡金額"
-
-#: src/Modules/Ecpay/Gateways/CreditBind.php:76
-msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
-msgstr "試用期首期 0 元時，用這個金額授權驗卡後再取消授權。金額不可低於你綠界合約的最低交易金額。"
-
-#: src/Modules/Ecpay/Gateways/CreditBind.php:125
+#: src/Modules/Ecpay/Gateways/CreditBind.php:110
 msgid "Please log in to save a card for your subscription."
 msgstr "請先登入，才能為訂閱綁定信用卡。"
 
 #. translators: %s: error message
-#: src/Modules/Ecpay/Gateways/CreditBind.php:157
+#: src/Modules/Ecpay/Gateways/CreditBind.php:142
 #, php-format
 msgid "The ECPay card form could not be opened: %s"
 msgstr "綠界刷卡欄位無法開啟：%s"
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:161
-#: src/Modules/Ecpay/Gateways/CreditBind.php:191
+#: src/Modules/Ecpay/Gateways/CreditBind.php:146
+#: src/Modules/Ecpay/Gateways/CreditBind.php:176
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:49
 #: src/Modules/ShoplinePayments/Module.php:107
 msgid "The card form could not be loaded. Please refresh the page or choose another payment method."
 msgstr "信用卡欄位載入失敗，請重新整理頁面或改用其他付款方式。"
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:198
+#: src/Modules/Ecpay/Gateways/CreditBind.php:183
 msgid "Enter your card below. It will be saved with ECPay so your subscription renews automatically."
 msgstr "請在下方輸入信用卡。卡片會綁定在綠界，之後訂閱會自動續扣。"
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:201
+#: src/Modules/Ecpay/Gateways/CreditBind.php:186
 msgid "Pay and save card"
 msgstr "付款並綁定卡片"
 
@@ -4707,9 +4700,28 @@ msgstr "信用卡分期 24 期"
 msgid "Mobile payment (TWQR Pay)"
 msgstr "行動支付（TWQR Pay）"
 
-#: src/Modules/Ecpay/Settings/SettingsTab.php:178
+#: src/Modules/Ecpay/Settings/SettingsTab.php:179
 msgid "Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode."
 msgstr "勾選的付款方式才會出現在結帳頁，未勾選不會出現。每個付款方式還要到「WooCommerce → 設定 → 付款」個別啟用。「合併顯示」模式下此欄位無效。"
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:187
+#: src/Modules/Linepay/Settings/SettingsTab.php:126
+#: src/Modules/Newebpay/Settings/SettingsTab.php:183
+#: src/Modules/Payuni/Settings/SettingsTab.php:206
+msgid "Subscriptions"
+msgstr "訂閱"
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:189
+msgid "To charge WooCommerce Subscriptions renewals, tick \"ECPay credit card (saved for subscriptions)\" above. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
+msgstr "要自動扣 WooCommerce Subscriptions 的續訂款項，請在上方勾選「綠界信用卡（訂閱綁卡）」。需先請綠界為你的商店開通綁卡功能，並在綠界後台開啟「每日自動關帳」，否則款項永遠不會請款。"
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:193
+msgid "Card check amount"
+msgstr "驗卡金額"
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:198
+msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
+msgstr "試用期首期 0 元時，用這個金額授權驗卡後再取消授權。金額不可低於你綠界合約的最低交易金額。"
 
 #: src/Modules/Ecpay/SubscriptionRenewal.php:61
 msgid "ECPay renewal failed: no saved card is linked to this subscription."
@@ -6876,11 +6888,6 @@ msgstr "正式 Channel ID"
 msgid "Live channel secret"
 msgstr "正式 Channel Secret"
 
-#: src/Modules/Linepay/Settings/SettingsTab.php:126
-#: src/Modules/Payuni/Settings/SettingsTab.php:206
-msgid "Subscriptions"
-msgstr "訂閱"
-
 #: src/Modules/Linepay/Settings/SettingsTab.php:128
 msgid "LINE Pay must approve automatic payments for your store before you turn this on."
 msgstr "需先經 LINE Pay 核准你的商店使用自動付款，才能開啟。"
@@ -7226,7 +7233,7 @@ msgid "Alipay"
 msgstr "支付寶"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:226
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:89
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:75
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/CardGateway.php:109
@@ -7241,7 +7248,7 @@ msgid "The order could not be found"
 msgstr "找不到訂單"
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:317
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:163
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:149
 msgid "Pay with NewebPay"
 msgstr "前往藍新付款頁"
 
@@ -7340,6 +7347,7 @@ msgid "Tick the instalment plans to offer. Each must be approved by the card iss
 msgstr "勾選要開放的分期期數。需先向發卡銀行申請開通。"
 
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:33
+#: src/Modules/Newebpay/Settings/SettingsTab.php:173
 msgid "NewebPay recurring credit card"
 msgstr "藍新信用卡定期定額"
 
@@ -7347,19 +7355,7 @@ msgstr "藍新信用卡定期定額"
 msgid "For WooCommerce Subscriptions. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store."
 msgstr "給 WooCommerce Subscriptions 使用，藍新會在每個扣款日自動刷卡。限每張訂單一個訂閱、沒有試用期與開辦費，週期為每 N 天（2 天以上）、每週、每月或每年。需先請藍新為你的商店開通定期定額。"
 
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:57
-msgid "Mandate status changes"
-msgstr "修改委託狀態"
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:59
-msgid "NewebPay has enabled mandate status changes for my store"
-msgstr "藍新已為我的商店開通修改委託狀態"
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:60
-msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
-msgstr "開啟後訂閱才能暫停與恢復。請在藍新審核通過後再勾選，否則暫停的訂閱藍新仍會照扣。取消訂閱時一律會嘗試終止委託；終止失敗時會寄信通知你，需到藍新後台手動終止。"
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:92
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:78
 msgid "NewebPay recurring payments only work for one subscription billed every N days (2 or more), weekly, monthly or yearly, with no free trial or sign-up fee. Please choose another payment method."
 msgstr "藍新定期定額只適用單一訂閱，週期為每 N 天（2 天以上）、每週、每月或每年，且沒有試用期與開辦費。請改用其他付款方式。"
 
@@ -7583,9 +7579,25 @@ msgstr "信用卡分期（3/6/12/18/24 期）"
 msgid "LINE Pay (through NewebPay)"
 msgstr "LINE Pay（透過藍新）"
 
-#: src/Modules/Newebpay/Settings/SettingsTab.php:174
+#: src/Modules/Newebpay/Settings/SettingsTab.php:175
 msgid "Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode. AFTEE, UnionPay and the cross-border methods also have to be activated in the NewebPay dashboard before they show up."
 msgstr "勾選的付款方式才會出現在結帳頁，未勾選不會出現。每個付款方式還要到「WooCommerce → 設定 → 付款」個別啟用。「合併顯示」模式下此欄位無效。AFTEE / 銀聯 / 跨境支付需先到藍新後台開通才會在收銀台出現。"
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:185
+msgid "To charge WooCommerce Subscriptions renewals, tick \"NewebPay recurring credit card\" above. NewebPay must enable credit card recurring payments for your store first."
+msgstr "要自動扣 WooCommerce Subscriptions 的續訂款項，請在上方勾選「藍新信用卡定期定額」。需先請藍新為你的商店開通信用卡定期定額。"
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:189
+msgid "Mandate status changes"
+msgstr "修改委託狀態"
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:193
+msgid "NewebPay has enabled mandate status changes for my store"
+msgstr "藍新已為我的商店開通修改委託狀態"
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:197
+msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
+msgstr "開啟後訂閱才能暫停與恢復。請在藍新審核通過後再勾選，否則暫停的訂閱藍新仍會照扣。取消訂閱時一律會嘗試終止委託；終止失敗時會寄信通知你，需到藍新後台手動終止。"
 
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:105
 msgid "NewebPay shipping status update"

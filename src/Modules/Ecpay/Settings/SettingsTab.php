@@ -174,6 +174,7 @@ final class SettingsTab {
 					'moksafowo_ecpay_weixin'    => __( 'WeChat Pay', 'moksa-for-woocommerce' ),
 					'moksafowo_ecpay_jkopay'    => __( 'JKOPAY', 'moksa-for-woocommerce' ),
 					'moksafowo_ecpay_ipass'     => __( 'iPASS Money', 'moksa-for-woocommerce' ),
+					...( \Moksafowo\Compatibility\Subscriptions::active() ? [ 'moksafowo_ecpay_credit_bind' => __( 'ECPay credit card (saved for subscriptions)', 'moksa-for-woocommerce' ) ] : [] ),
 				],
 				'desc'    => __( 'Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode.', 'moksa-for-woocommerce' ),
 			],
@@ -181,6 +182,26 @@ final class SettingsTab {
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_ecpay_display_setting',
 			],
+			...( \Moksafowo\Compatibility\Subscriptions::active() ? [
+				[
+					'title' => __( 'Subscriptions', 'moksa-for-woocommerce' ),
+					'type'  => 'title',
+					'desc'  => __( 'To charge WooCommerce Subscriptions renewals, tick "ECPay credit card (saved for subscriptions)" above. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured.', 'moksa-for-woocommerce' ),
+					'id'    => 'moksafowo_ecpay_subscription_settings',
+				],
+				[
+					'title'             => __( 'Card check amount', 'moksa-for-woocommerce' ),
+					'id'                => 'moksafowo_ecpay_bind_amount',
+					'type'              => 'number',
+					'default'           => '1',
+					'custom_attributes' => [ 'min' => '1' ],
+					'desc'              => __( 'For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract.', 'moksa-for-woocommerce' ),
+				],
+				[
+					'type' => 'sectionend',
+					'id'   => 'moksafowo_ecpay_subscription_settings',
+				],
+			] : [] ),
 		];
 	}
 }

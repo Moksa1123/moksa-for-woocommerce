@@ -64,21 +64,6 @@ final class CreditBind extends AbstractMowcGateway {
 		add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'render_bind_form' ] );
 	}
 
-	protected function build_form_fields(): array {
-		return array_merge(
-			parent::build_form_fields(),
-			[
-				'bind_amount' => [
-					'title'             => __( 'Card check amount', 'moksa-for-woocommerce' ),
-					'type'              => 'number',
-					'default'           => '1',
-					'custom_attributes' => [ 'min' => '1' ],
-					'description'       => __( 'For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract.', 'moksa-for-woocommerce' ),
-					'desc_tip'          => true,
-				],
-			]
-		);
-	}
 
 	/**
 	 * 只在要綁卡的情境出現：購物車有訂閱、續訂購物車（顧客重付失敗的續訂單時 WCS 會把它放進結帳頁），
@@ -135,7 +120,7 @@ final class CreditBind extends AbstractMowcGateway {
 					'MerchantTradeDate' => current_time( 'Y/m/d H:i:s' ),
 					'MerchantTradeNo'   => $merchant_trade_no,
 					// 這筆授權就是首期款；試用期 0 元時以「驗卡金額」授權綁卡，成功後放棄授權（BindHandler）。
-					'TotalAmount'       => $total > 0 ? $total : max( 1, (int) $this->get_option( 'bind_amount', '1' ) ),
+					'TotalAmount'       => $total > 0 ? $total : max( 1, (int) get_option( 'moksafowo_ecpay_bind_amount', '1' ) ),
 					'TradeDesc'         => BindHandler::item_name( $order ),
 					'ItemName'          => BindHandler::item_name( $order ),
 					'ReturnURL'         => home_url( '/wc-api/moksafowo_ecpay_bind_notify' ),

@@ -170,6 +170,7 @@ final class SettingsTab {
 					'moksafowo_newebpay_wechatpay'  => __( 'WeChat Pay', 'moksa-for-woocommerce' ),
 					'moksafowo_newebpay_aftee'      => __( 'AFTEE buy now, pay later', 'moksa-for-woocommerce' ),
 					'moksafowo_newebpay_unionpay'   => __( 'UnionPay', 'moksa-for-woocommerce' ),
+					...( \Moksafowo\Compatibility\Subscriptions::active() ? [ 'moksafowo_newebpay_credit_period' => __( 'NewebPay recurring credit card', 'moksa-for-woocommerce' ) ] : [] ),
 				],
 				'desc'    => __( 'Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode. AFTEE, UnionPay and the cross-border methods also have to be activated in the NewebPay dashboard before they show up.', 'moksa-for-woocommerce' ),
 			],
@@ -177,6 +178,29 @@ final class SettingsTab {
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_newebpay_display_setting',
 			],
+			...( \Moksafowo\Compatibility\Subscriptions::active() ? [
+				[
+					'title' => __( 'Subscriptions', 'moksa-for-woocommerce' ),
+					'type'  => 'title',
+					'desc'  => __( 'To charge WooCommerce Subscriptions renewals, tick "NewebPay recurring credit card" above. NewebPay must enable credit card recurring payments for your store first.', 'moksa-for-woocommerce' ),
+					'id'    => 'moksafowo_newebpay_subscription_settings',
+				],
+				[
+					'title'   => __( 'Mandate status changes', 'moksa-for-woocommerce' ),
+					'id'      => 'moksafowo_newebpay_mandate_changes',
+					'type'    => 'checkbox',
+					'default' => 'no',
+					'desc'    => __( 'NewebPay has enabled mandate status changes for my store', 'moksa-for-woocommerce' ),
+				],
+				[
+					'type' => 'info',
+					'text' => __( 'Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard.', 'moksa-for-woocommerce' ),
+				],
+				[
+					'type' => 'sectionend',
+					'id'   => 'moksafowo_newebpay_subscription_settings',
+				],
+			] : [] ),
 		];
 	}
 }

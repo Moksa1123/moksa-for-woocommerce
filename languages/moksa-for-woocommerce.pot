@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.18.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.18.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-25T04:28:32+00:00\n"
+"POT-Creation-Date: 2026-10-25T05:38:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -3462,7 +3462,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:190
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:74
-#: src/Modules/Ecpay/Gateways/CreditBind.php:213
+#: src/Modules/Ecpay/Gateways/CreditBind.php:198
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:108
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:30
@@ -3706,7 +3706,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Api/BindHandler.php:88
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
-#: src/Modules/Ecpay/Gateways/CreditBind.php:209
+#: src/Modules/Ecpay/Gateways/CreditBind.php:194
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:254
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:277
@@ -3751,7 +3751,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Api/BindHandler.php:113
 #: src/Modules/Ecpay/Api/BindHandler.php:147
-#: src/Modules/Ecpay/Gateways/CreditBind.php:192
+#: src/Modules/Ecpay/Gateways/CreditBind.php:177
 #: src/Modules/Newebpay/Api/PeriodHandler.php:76
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:50
 #: src/Modules/ShoplinePayments/Module.php:108
@@ -3844,7 +3844,7 @@ msgid "AES decryption failed."
 msgstr ""
 
 #: src/Modules/Ecpay/Api/Helper.php:183
-#: src/Modules/Ecpay/Gateways/CreditBind.php:218
+#: src/Modules/Ecpay/Gateways/CreditBind.php:203
 msgid "No ECPay transaction ID was found, so the refund cannot be made here. Please refund it in the ECPay dashboard."
 msgstr ""
 
@@ -3954,7 +3954,7 @@ msgid "This order was paid offline (%s) and ECPay has no automatic refund for it
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:86
-#: src/Modules/Ecpay/Gateways/CreditBind.php:227
+#: src/Modules/Ecpay/Gateways/CreditBind.php:212
 msgid "This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr ""
 
@@ -3966,25 +3966,25 @@ msgstr ""
 
 #. translators: 1: amount, 2: ECPay message, 3: code
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:111
-#: src/Modules/Ecpay/Gateways/CreditBind.php:241
+#: src/Modules/Ecpay/Gateways/CreditBind.php:226
 #, php-format
 msgid "The ECPay refund of NT$%1$d failed: %2$s (code %3$d)"
 msgstr ""
 
 #. translators: 1: amount, 2: reason
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:123
-#: src/Modules/Ecpay/Gateways/CreditBind.php:254
+#: src/Modules/Ecpay/Gateways/CreditBind.php:239
 #, php-format
 msgid "ECPay refunded NT$%1$d. Reason: %2$s"
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:125
-#: src/Modules/Ecpay/Gateways/CreditBind.php:256
+#: src/Modules/Ecpay/Gateways/CreditBind.php:241
 msgid "(not given)"
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:134
-#: src/Modules/Ecpay/Gateways/CreditBind.php:104
+#: src/Modules/Ecpay/Gateways/CreditBind.php:89
 msgid "Invalid order"
 msgstr ""
 
@@ -4033,6 +4033,7 @@ msgid "Pay in full by credit card. The customer is redirected to the ECPay payme
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/CreditBind.php:32
+#: src/Modules/Ecpay/Settings/SettingsTab.php:177
 msgid "ECPay credit card (saved for subscriptions)"
 msgstr ""
 
@@ -4040,36 +4041,28 @@ msgstr ""
 msgid "Customers enter their card on an ECPay card form on your site, and the card is saved so WooCommerce Subscriptions renewals are charged automatically. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:72
-msgid "Card check amount"
-msgstr ""
-
-#: src/Modules/Ecpay/Gateways/CreditBind.php:76
-msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
-msgstr ""
-
-#: src/Modules/Ecpay/Gateways/CreditBind.php:125
+#: src/Modules/Ecpay/Gateways/CreditBind.php:110
 msgid "Please log in to save a card for your subscription."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Ecpay/Gateways/CreditBind.php:157
+#: src/Modules/Ecpay/Gateways/CreditBind.php:142
 #, php-format
 msgid "The ECPay card form could not be opened: %s"
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:161
-#: src/Modules/Ecpay/Gateways/CreditBind.php:191
+#: src/Modules/Ecpay/Gateways/CreditBind.php:146
+#: src/Modules/Ecpay/Gateways/CreditBind.php:176
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:49
 #: src/Modules/ShoplinePayments/Module.php:107
 msgid "The card form could not be loaded. Please refresh the page or choose another payment method."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:198
+#: src/Modules/Ecpay/Gateways/CreditBind.php:183
 msgid "Enter your card below. It will be saved with ECPay so your subscription renews automatically."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:201
+#: src/Modules/Ecpay/Gateways/CreditBind.php:186
 msgid "Pay and save card"
 msgstr ""
 
@@ -4706,8 +4699,27 @@ msgstr ""
 msgid "Mobile payment (TWQR Pay)"
 msgstr ""
 
-#: src/Modules/Ecpay/Settings/SettingsTab.php:178
+#: src/Modules/Ecpay/Settings/SettingsTab.php:179
 msgid "Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode."
+msgstr ""
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:187
+#: src/Modules/Linepay/Settings/SettingsTab.php:126
+#: src/Modules/Newebpay/Settings/SettingsTab.php:183
+#: src/Modules/Payuni/Settings/SettingsTab.php:206
+msgid "Subscriptions"
+msgstr ""
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:189
+msgid "To charge WooCommerce Subscriptions renewals, tick \"ECPay credit card (saved for subscriptions)\" above. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
+msgstr ""
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:193
+msgid "Card check amount"
+msgstr ""
+
+#: src/Modules/Ecpay/Settings/SettingsTab.php:198
+msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
 msgstr ""
 
 #: src/Modules/Ecpay/SubscriptionRenewal.php:61
@@ -6875,11 +6887,6 @@ msgstr ""
 msgid "Live channel secret"
 msgstr ""
 
-#: src/Modules/Linepay/Settings/SettingsTab.php:126
-#: src/Modules/Payuni/Settings/SettingsTab.php:206
-msgid "Subscriptions"
-msgstr ""
-
 #: src/Modules/Linepay/Settings/SettingsTab.php:128
 msgid "LINE Pay must approve automatic payments for your store before you turn this on."
 msgstr ""
@@ -7225,7 +7232,7 @@ msgid "Alipay"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:226
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:89
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:75
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/CardGateway.php:109
@@ -7240,7 +7247,7 @@ msgid "The order could not be found"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:317
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:163
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:149
 msgid "Pay with NewebPay"
 msgstr ""
 
@@ -7339,6 +7346,7 @@ msgid "Tick the instalment plans to offer. Each must be approved by the card iss
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:33
+#: src/Modules/Newebpay/Settings/SettingsTab.php:173
 msgid "NewebPay recurring credit card"
 msgstr ""
 
@@ -7346,19 +7354,7 @@ msgstr ""
 msgid "For WooCommerce Subscriptions. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store."
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:57
-msgid "Mandate status changes"
-msgstr ""
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:59
-msgid "NewebPay has enabled mandate status changes for my store"
-msgstr ""
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:60
-msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
-msgstr ""
-
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:92
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:78
 msgid "NewebPay recurring payments only work for one subscription billed every N days (2 or more), weekly, monthly or yearly, with no free trial or sign-up fee. Please choose another payment method."
 msgstr ""
 
@@ -7582,8 +7578,24 @@ msgstr ""
 msgid "LINE Pay (through NewebPay)"
 msgstr ""
 
-#: src/Modules/Newebpay/Settings/SettingsTab.php:174
+#: src/Modules/Newebpay/Settings/SettingsTab.php:175
 msgid "Only the ticked payment methods appear at checkout. Each one also has to be enabled under WooCommerce → Settings → Payments. This has no effect in combined display mode. AFTEE, UnionPay and the cross-border methods also have to be activated in the NewebPay dashboard before they show up."
+msgstr ""
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:185
+msgid "To charge WooCommerce Subscriptions renewals, tick \"NewebPay recurring credit card\" above. NewebPay must enable credit card recurring payments for your store first."
+msgstr ""
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:189
+msgid "Mandate status changes"
+msgstr ""
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:193
+msgid "NewebPay has enabled mandate status changes for my store"
+msgstr ""
+
+#: src/Modules/Newebpay/Settings/SettingsTab.php:197
+msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:105

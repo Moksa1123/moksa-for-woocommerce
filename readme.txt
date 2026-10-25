@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.18.1
+Stable tag: 1.18.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -33,8 +33,8 @@ With [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-su
 * **PAYUNi credit card** — Ask PAYUNi to enable the card token and background authorization services and register your server IP. Then tick Automatic renewals under Subscriptions in the PAYUNi settings (Payment section).
 * **LINE Pay** — Ask LINE Pay to approve automatic payments for your store. Then tick Automatic renewals under Subscriptions in the LINE Pay settings.
 * **Shopline Payments** — Enable Shopline Payments credit card (on-page). Shopline has to turn on payment notifications for your store; the address to send them is shown in the Shopline Payments settings.
-* **ECPay saved card** — ECPay has to enable card binding (on-site payment 2.0) for your store. Turn on daily automatic capture in the ECPay dashboard, otherwise renewal payments are never captured. Enable ECPay credit card (saved for subscriptions).
-* **NewebPay recurring payments** — Ask NewebPay to enable credit card recurring payments (定期定額) for your store, then enable NewebPay recurring credit card. NewebPay charges on its own schedule and notifies your store after each charge, so there is no notification address to set. One subscription schedule per order, with the same amount every period; mixing one-time products or different schedules in the cart hides this method. Tick Mandate status changes only if NewebPay has enabled mandate changes for your store; it adds pausing and resuming. Cancelling always works.
+* **ECPay saved card** — ECPay has to enable card binding (on-site payment 2.0) for your store. Turn on daily automatic capture in the ECPay dashboard, otherwise renewal payments are never captured. In the ECPay settings, tick ECPay credit card (saved for subscriptions) under Enabled payment methods, then enable it under WooCommerce → Settings → Payments. The card check amount for free trials is under Subscriptions in the ECPay settings.
+* **NewebPay recurring payments** — Ask NewebPay to enable credit card recurring payments (定期定額) for your store. In the NewebPay settings, tick NewebPay recurring credit card under Enabled payment methods, then enable it under WooCommerce → Settings → Payments. NewebPay charges on its own schedule and notifies your store after each charge, so there is no notification address to set. One subscription schedule per order, with the same amount every period; mixing one-time products or different schedules in the cart hides this method. Under Subscriptions in the NewebPay settings, tick Mandate status changes only if NewebPay has enabled mandate changes for your store; it adds pausing and resuming. Cancelling always works.
 
 Customers need an account to subscribe. Payment results reach your store at /wc-api/ addresses, so make sure a firewall or security plugin does not block them.
 
@@ -152,6 +152,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.18.2 - 2026-10-25 =
+* Fixed: ECPay saved card and NewebPay recurring credit card can now be turned on from their settings pages, and their subscription options moved there too.
 
 = 1.18.1 - 2026-10-25 =
 * Fixed: The subscriptions switch for LINE Pay and PAYUNi moved to their own settings pages, where it is easier to find.
