@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.18.2
+Stable tag: 1.18.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -152,6 +152,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.18.3 - 2026-10-26 =
+* Fixed: A PAYUNi 7-ELEVEN or T-Cat shipment number that missed its print notice is now picked up by the hourly status check and the Query button.
 
 = 1.18.2 - 2026-10-25 =
 * Fixed: ECPay saved card and NewebPay recurring credit card can now be turned on from their settings pages, and their subscription options moved there too.

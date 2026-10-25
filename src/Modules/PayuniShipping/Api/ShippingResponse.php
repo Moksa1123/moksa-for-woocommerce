@@ -55,7 +55,9 @@ class ShippingResponse {
 		if ( 'SUCCESS' === $decrypted_info['Status'] ) {
 
 			if ( ! array_key_exists( 'ApiType', $decrypted_info ) ) {
-				PayuniShipping::log( 'PAYUNi NotifyURL response ApiType not found in response:' . wc_print_r( $decrypted_info, true ) );
+				// 建單成功後 PAYUNi 會先送一則不帶 ApiType 的建單確認，建單當下已處理過。
+				// 不印整包內容：裡面有收件人姓名、電話、地址。
+				PayuniShipping::log( 'PAYUNi shipment creation notice received: ShipTradeNo=' . ( $decrypted_info['ShipTradeNo'] ?? '?' ) );
 				return;
 			}
 
@@ -152,7 +154,9 @@ class ShippingResponse {
 		if ( 'SUCCESS' === $decrypted_info['Status'] ) {
 
 			if ( ! array_key_exists( 'ApiType', $decrypted_info ) ) {
-				PayuniShipping::log( 'PAYUNi NotifyURL response ApiType not found in response:' . wc_print_r( $decrypted_info, true ) );
+				// 建單成功後 PAYUNi 會先送一則不帶 ApiType 的建單確認，建單當下已處理過。
+				// 不印整包內容：裡面有收件人姓名、電話、地址。
+				PayuniShipping::log( 'PAYUNi shipment creation notice received: ShipTradeNo=' . ( $decrypted_info['ShipTradeNo'] ?? '?' ) );
 				return;
 			}
 
@@ -335,5 +339,63 @@ class ShippingResponse {
 			return $partner_id . $odno;
 		}
 		return '';
+	}
+
+	/**
+	 * 把物流單查詢回來的配送編號存進訂單。列印通知沒送到時，補查和「查詢」鈕靠這裡補回編號。
+	 * 7-11 要湊齊才寫：店到店缺驗證碼、大宗缺母代碼都查不到件。
+	 *
+	 * @param \WC_Order            $order 訂單。
+	 * @param array<string, mixed> $info  解密後的查詢結果。
+	 * @return bool 是否有寫入新的編號（呼叫端負責 save）。
+	 */
+	public static function store_numbers( \WC_Order $order, array $info ): bool {
+		$no   = (string) ( $info['ShipTradeNo'] ?? '' );
+		$odno = (string) ( $info['Odno'] ?? '' );
+		if ( '' === $no || '' === $odno || '-' === $odno ) {
+			return false;
+		}
+		$lgs_type      = (string) ( $info['LgsType'] ?? '' );
+		$partner_id    = '-' === (string) ( $info['PartnerId'] ?? '' ) ? '' : (string) ( $info['PartnerId'] ?? '' );
+		$validation_no = '-' === (string) ( $info['ValidationNo'] ?? '' ) ? '' : (string) ( $info['ValidationNo'] ?? '' );
+
+		if ( LgsType::HOME === $lgs_type ) {
+			$ship_no = $odno;
+		} else {
+			$ship_no = self::build_ship_no( $lgs_type, $partner_id, $odno, $validation_no );
+			if ( strlen( $ship_no ) !== ( LgsType::C2C === $lgs_type ? 12 : 11 ) ) {
+				return false;
+			}
+		}
+
+		$changed = false;
+		if ( $order->get_meta( OrderMeta::ShipTradeNo ) === $no && (string) $order->get_meta( OrderMeta::ShipNo ) !== $ship_no ) {
+			if ( LgsType::HOME !== $lgs_type ) {
+				$order->update_meta_data( OrderMeta::PartnerId, $partner_id );
+				$order->update_meta_data( OrderMeta::ValidationNo, $validation_no );
+			}
+			$order->update_meta_data( OrderMeta::Odno, $odno );
+			$order->update_meta_data( OrderMeta::ShipNo, $ship_no );
+			$changed = true;
+		}
+		foreach ( \Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified::get_records( $order ) as $r ) {
+			if ( ( $r['ship_trade_no'] ?? '' ) !== $no ) {
+				continue;
+			}
+			if ( (string) ( $r['odno'] ?? '' ) !== $odno || (string) ( $r['validation_no'] ?? '' ) !== $validation_no ) {
+				self::update_record(
+					$order,
+					$no,
+					[
+						'odno'          => $odno,
+						'partner_id'    => $partner_id,
+						'validation_no' => $validation_no,
+					]
+				);
+				$changed = true;
+			}
+			break;
+		}
+		return $changed;
 	}
 }

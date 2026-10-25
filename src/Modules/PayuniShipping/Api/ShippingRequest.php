@@ -698,6 +698,9 @@ class ShippingRequest {
 			$order->update_meta_data( OrderMeta::ShipStatusTime, $resp_obj['ShipStatusTime'] );
 		}
 
+		// 拆單紀錄是列表與通知信讀的那份，上面只寫了單一欄位。
+		ShippingResponse::store_numbers( $order, (array) $resp_obj );
+
 		$order->save();
 		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 	}

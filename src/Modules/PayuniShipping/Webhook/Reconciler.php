@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\PayuniShipping\Webhook;
 
 use Moksafowo\Modules\PayuniShipping\Api\ShippingRequest;
+use Moksafowo\Modules\PayuniShipping\Api\ShippingResponse;
 use Moksafowo\Modules\PayuniShipping\PayuniShipping;
 use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
 
@@ -56,6 +57,11 @@ final class Reconciler {
 		$info = PayuniShipping::decrypt( $body->EncryptInfo );
 		if ( ! is_array( $info ) || 'SUCCESS' !== ( $info['Status'] ?? '' ) ) {
 			return true;
+		}
+
+		// 列印通知沒送到時，配送編號只能靠這裡補回。
+		if ( ShippingResponse::store_numbers( $order, $info ) ) {
+			$order->save();
 		}
 
 		$code = (string) ( $info['ShipStatus'] ?? '' );
