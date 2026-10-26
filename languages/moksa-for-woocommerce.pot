@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.18.1\n"
+"Project-Id-Version: Moksa for WooCommerce 1.18.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-25T05:38:03+00:00\n"
+"POT-Creation-Date: 2026-10-26T08:29:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -64,6 +64,10 @@ msgstr ""
 #: src/Compatibility/Requirements.php:40
 #, php-format
 msgid "Moksa requires WooCommerce %1$s or higher. You are running %2$s."
+msgstr ""
+
+#: src/Compatibility/WpSubscription.php:285
+msgid "No renewal order could be created because this subscription has no paid order to copy from."
 msgstr ""
 
 #: src/Mcp/Catalog.php:32
@@ -3489,7 +3493,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:228
 #: src/Modules/Payuni/Gateways/ApplePay.php:61
-#: src/Modules/Payuni/Gateways/Credit.php:100
+#: src/Modules/Payuni/Gateways/Credit.php:124
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:60
 #: src/Modules/Payuni/Gateways/GooglePay.php:61
 #: src/Modules/Payuni/Gateways/SamsungPay.php:61
@@ -3752,7 +3756,7 @@ msgstr ""
 #: src/Modules/Ecpay/Api/BindHandler.php:113
 #: src/Modules/Ecpay/Api/BindHandler.php:147
 #: src/Modules/Ecpay/Gateways/CreditBind.php:177
-#: src/Modules/Newebpay/Api/PeriodHandler.php:76
+#: src/Modules/Newebpay/Api/PeriodHandler.php:77
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:50
 #: src/Modules/ShoplinePayments/Module.php:108
 msgid "The card payment did not go through. Please check the card and try again."
@@ -5254,7 +5258,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:256
 #: src/Modules/PaynowInvoice/Operations/Query.php:55
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
-#: src/Modules/Payuni/Api/PaymentResponse.php:78
+#: src/Modules/Payuni/Api/PaymentResponse.php:80
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
@@ -6266,10 +6270,10 @@ msgstr ""
 #: src/Modules/Linepay/Api/PaymentRequest.php:687
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:110
 #: src/Modules/Payuni/Api/PaymentRequest.php:539
-#: src/Modules/Payuni/Api/PaymentResponse.php:79
-#: src/Modules/Payuni/Api/PaymentResponse.php:167
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:247
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:264
+#: src/Modules/Payuni/Api/PaymentResponse.php:81
+#: src/Modules/Payuni/Api/PaymentResponse.php:169
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:251
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:268
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:99
 msgid "Status code"
 msgstr ""
@@ -6986,7 +6990,8 @@ msgstr ""
 
 #. translators: 1: paid amount, 2: order total
 #: src/Modules/Newebpay/Api/IpnHandler.php:147
-#: src/Modules/Newebpay/Api/PeriodHandler.php:247
+#: src/Modules/Newebpay/Api/PeriodHandler.php:249
+#: src/Modules/Newebpay/Api/WpsPeriod.php:161
 #, php-format
 msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
@@ -7028,113 +7033,150 @@ msgid "The response from NewebPay could not be read."
 msgstr ""
 
 #. translators: %s: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:75
+#: src/Modules/Newebpay/Api/PeriodHandler.php:76
 #, php-format
 msgid "The NewebPay recurring payment was not set up: %s"
 msgstr ""
 
 #. translators: 1: NewebPay status, 2: message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:176
+#: src/Modules/Newebpay/Api/PeriodHandler.php:177
 #, php-format
 msgid "The NewebPay recurring payment was not set up (%1$s): %2$s"
 msgstr ""
 
 #. translators: %s: NewebPay mandate number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:207
+#: src/Modules/Newebpay/Api/PeriodHandler.php:208
 #, php-format
 msgid "A NewebPay recurring payment notice for mandate %s did not match the mandate status at NewebPay. Check it in the NewebPay dashboard before fulfilling the order."
 msgstr ""
 
 #. translators: 1: NewebPay mandate number, 2: authorized periods
-#: src/Modules/Newebpay/Api/PeriodHandler.php:261
+#: src/Modules/Newebpay/Api/PeriodHandler.php:263
 #, php-format
 msgid "NewebPay recurring payment set up — mandate %1$s, %2$d payments scheduled. This order is the first payment."
 msgstr ""
 
 #. translators: %s: NewebPay order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:324
+#: src/Modules/Newebpay/Api/PeriodHandler.php:331
+#: src/Modules/Newebpay/Api/WpsPeriod.php:96
 #, php-format
 msgid "A NewebPay renewal notice (%s) did not match the mandate status at NewebPay, so no renewal order was created. Check the mandate in the NewebPay dashboard."
 msgstr ""
 
 #. translators: 1: payment number, 2: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:366
+#: src/Modules/Newebpay/Api/PeriodHandler.php:373
+#: src/Modules/Newebpay/Api/WpsPeriod.php:148
 #, php-format
 msgid "NewebPay charged payment %1$d (trade number %2$s) although this subscription was already cancelled. Refund this order and make sure the mandate is terminated in the NewebPay dashboard."
 msgstr ""
 
 #. translators: 1: payment number, 2: total payments, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:382
+#: src/Modules/Newebpay/Api/PeriodHandler.php:389
+#: src/Modules/Newebpay/Api/WpsPeriod.php:171
 #, php-format
 msgid "NewebPay recurring payment %1$d of %2$d completed — trade number %3$s"
 msgstr ""
 
 #. translators: 1: payment number, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:394
+#: src/Modules/Newebpay/Api/PeriodHandler.php:401
+#: src/Modules/Newebpay/Api/WpsPeriod.php:138
 #, php-format
 msgid "NewebPay recurring payment %1$d failed: %2$s. NewebPay will still try the next scheduled payment."
 msgstr ""
 
 #. translators: %d: number of payments
-#: src/Modules/Newebpay/Api/PeriodHandler.php:427
+#: src/Modules/Newebpay/Api/PeriodHandler.php:434
+#: src/Modules/Newebpay/Api/WpsPeriod.php:187
 #, php-format
 msgid "The NewebPay mandate has finished all %d payments, so nothing more will be charged. Ask the customer to subscribe again to continue."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:439
+#: src/Modules/Newebpay/Api/PeriodHandler.php:447
+#: src/Modules/Newebpay/Api/WpsPeriod.php:197
 msgid "NewebPay updated the card expiry date for this subscription. Payments continue as scheduled."
 msgstr ""
 
 #. translators: %s: NewebPay card status
-#: src/Modules/Newebpay/Api/PeriodHandler.php:449
+#: src/Modules/Newebpay/Api/PeriodHandler.php:457
 #, php-format
 msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). Ask the customer to subscribe again with another card."
 msgstr ""
 
 #. translators: 1: NewebPay mandate number, 2: result, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:489
+#: src/Modules/Newebpay/Api/PeriodHandler.php:497
 #, php-format
 msgid "NewebPay created a second mandate (%1$s) for this order. Termination: %2$s. If it charged the card (trade number %3$s), refund that payment in the NewebPay dashboard."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:491
+#: src/Modules/Newebpay/Api/PeriodHandler.php:499
 msgid "done"
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:491
+#: src/Modules/Newebpay/Api/PeriodHandler.php:499
 msgid "failed"
 msgstr ""
 
 #. translators: %s: order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:504
+#: src/Modules/Newebpay/Api/PeriodHandler.php:512
 #, php-format
 msgid "[NewebPay] Order #%s needs a refund check"
 msgstr ""
 
 #. translators: %s: order edit URL
-#: src/Modules/Newebpay/Api/PeriodHandler.php:509
+#: src/Modules/Newebpay/Api/PeriodHandler.php:517
 #, php-format
 msgid "NewebPay charged a recurring payment that should not have been charged. Open the order, read the latest note and refund the payment in the NewebPay dashboard if needed: %s"
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:559
+#: src/Modules/Newebpay/Api/PeriodHandler.php:567
 msgid "This subscription cannot be reactivated because its NewebPay mandate has ended. Ask the customer to subscribe again."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:572
+#: src/Modules/Newebpay/Api/PeriodHandler.php:580
+#: src/Modules/Newebpay/Api/WpsPeriod.php:302
 msgid "The NewebPay mandate could not be restarted, so the subscription was put back on hold. Restart it in the NewebPay dashboard first."
 msgstr ""
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:623
+#: src/Modules/Newebpay/Api/PeriodHandler.php:631
+#: src/Modules/Newebpay/Api/WpsPeriod.php:326
 #, php-format
 msgid "NewebPay mandate updated (%1$s): %2$s"
 msgstr ""
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:625
+#: src/Modules/Newebpay/Api/PeriodHandler.php:633
+#: src/Modules/Newebpay/Api/WpsPeriod.php:328
 #, php-format
 msgid "The NewebPay mandate could not be updated (%1$s): %2$s. Update it in the NewebPay dashboard so the customer is charged correctly."
+msgstr ""
+
+#. translators: 1: payment number, 2: NewebPay trade number
+#: src/Modules/Newebpay/Api/WpsPeriod.php:114
+#, php-format
+msgid "NewebPay charged payment %1$d (trade number %2$s), but no renewal order could be created because the subscription has no paid order to copy from. Record this payment manually."
+msgstr ""
+
+#. translators: %s: NewebPay card status
+#: src/Modules/Newebpay/Api/WpsPeriod.php:204
+#, php-format
+msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). The subscription ends after the current period; ask the customer to subscribe again with another card."
+msgstr ""
+
+#: src/Modules/Newebpay/Api/WpsPeriod.php:223
+msgid "The NewebPay mandate for this subscription has ended, so NewebPay will not charge this order. Ask the customer to pay it or to subscribe again."
+msgstr ""
+
+#: src/Modules/Newebpay/Api/WpsPeriod.php:224
+msgid "NewebPay charges this renewal on its own schedule. The order is updated when NewebPay sends the payment notice."
+msgstr ""
+
+#: src/Modules/Newebpay/Api/WpsPeriod.php:271
+msgid "This subscription is on hold, but NewebPay keeps charging the card because mandate status changes are not enabled. Cancel the subscription instead if the customer should not be charged."
+msgstr ""
+
+#: src/Modules/Newebpay/Api/WpsPeriod.php:289
+msgid "This subscription cannot be reactivated because its NewebPay mandate has ended, so it was set back to pending cancellation. Ask the customer to subscribe again."
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:29
@@ -7232,7 +7274,7 @@ msgid "Alipay"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:226
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:75
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:76
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/CardGateway.php:109
@@ -7247,7 +7289,7 @@ msgid "The order could not be found"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:317
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:149
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:150
 msgid "Pay with NewebPay"
 msgstr ""
 
@@ -7345,16 +7387,16 @@ msgstr ""
 msgid "Tick the instalment plans to offer. Each must be approved by the card issuer first."
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:33
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:34
 #: src/Modules/Newebpay/Settings/SettingsTab.php:173
 msgid "NewebPay recurring credit card"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:37
-msgid "For WooCommerce Subscriptions. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store."
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:38
+msgid "For WooCommerce Subscriptions or WPSubscription. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store."
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/CreditPeriod.php:78
+#: src/Modules/Newebpay/Gateways/CreditPeriod.php:79
 msgid "NewebPay recurring payments only work for one subscription billed every N days (2 or more), weekly, monthly or yearly, with no free trial or sign-up fee. Please choose another payment method."
 msgstr ""
 
@@ -7519,7 +7561,7 @@ msgstr ""
 
 #: src/Modules/Newebpay/Module.php:136
 #: src/Modules/Payuni/Api/PaymentRequest.php:522
-#: src/Modules/Payuni/Api/PaymentResponse.php:166
+#: src/Modules/Payuni/Api/PaymentResponse.php:168
 #: src/Modules/Pchomepay/Module.php:102
 #: src/Modules/ShoplinePayments/Module.php:149
 msgid "Payment type"
@@ -7583,7 +7625,7 @@ msgid "Only the ticked payment methods appear at checkout. Each one also has to 
 msgstr ""
 
 #: src/Modules/Newebpay/Settings/SettingsTab.php:185
-msgid "To charge WooCommerce Subscriptions renewals, tick \"NewebPay recurring credit card\" above. NewebPay must enable credit card recurring payments for your store first."
+msgid "To charge subscription renewals (WooCommerce Subscriptions or WPSubscription), tick \"NewebPay recurring credit card\" above. NewebPay must enable credit card recurring payments for your store first."
 msgstr ""
 
 #: src/Modules/Newebpay/Settings/SettingsTab.php:189
@@ -9052,7 +9094,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:208
 #: src/Modules/OrderLookup/SearchableKeys.php:262
 #: src/Modules/Payuni/Gateways/ApplePay.php:63
-#: src/Modules/Payuni/Gateways/Credit.php:102
+#: src/Modules/Payuni/Gateways/Credit.php:126
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:62
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
@@ -9722,7 +9764,7 @@ msgid "Settlement status"
 msgstr ""
 
 #: src/Modules/Payuni/Api/PaymentRequest.php:526
-#: src/Modules/Payuni/Api/PaymentResponse.php:168
+#: src/Modules/Payuni/Api/PaymentResponse.php:170
 msgid "PAYUNi transaction ID"
 msgstr ""
 
@@ -9732,41 +9774,41 @@ msgstr ""
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:76
+#: src/Modules/Payuni/Api/PaymentResponse.php:78
 msgid "PAYUNi sent an e-invoice notice."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:89
+#: src/Modules/Payuni/Api/PaymentResponse.php:91
 msgid "PAYUNi payment notice"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:147
+#: src/Modules/Payuni/Api/PaymentResponse.php:149
 msgid "PAYUNi payment return"
 msgstr ""
 
 #. translators: 1: notice source, 2: PAYUNi message
 #. translators: 1: field label, 2: value
-#: src/Modules/Payuni/Api/PaymentResponse.php:164
+#: src/Modules/Payuni/Api/PaymentResponse.php:166
 #: src/Order/Note.php:29
 #, php-format
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:169
+#: src/Modules/Payuni/Api/PaymentResponse.php:171
 msgid "Store order number"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:254
+#: src/Modules/Payuni/Api/PaymentResponse.php:259
 msgid "PAYUNi renewal charge"
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Payuni/Api/PaymentResponse.php:272
+#: src/Modules/Payuni/Api/PaymentResponse.php:277
 #, php-format
 msgid "PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:283
+#: src/Modules/Payuni/Api/PaymentResponse.php:288
 msgid "PAYUNi issued the payment details and is waiting for the customer to pay."
 msgstr ""
 
@@ -9792,7 +9834,7 @@ msgid "Pay quickly with Apple Pay, which needs Safari or an iOS device. The cust
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:59
-#: src/Modules/Payuni/Gateways/Credit.php:98
+#: src/Modules/Payuni/Gateways/Credit.php:122
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:58
 #: src/Modules/Payuni/Gateways/GooglePay.php:59
 #: src/Modules/Payuni/Gateways/SamsungPay.php:59
@@ -9801,7 +9843,7 @@ msgid "Authorization method"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:60
-#: src/Modules/Payuni/Gateways/Credit.php:99
+#: src/Modules/Payuni/Gateways/Credit.php:123
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:59
 #: src/Modules/Payuni/Gateways/GooglePay.php:60
 #: src/Modules/Payuni/Gateways/SamsungPay.php:60
@@ -9810,7 +9852,7 @@ msgid "Authorization date"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:62
-#: src/Modules/Payuni/Gateways/Credit.php:101
+#: src/Modules/Payuni/Gateways/Credit.php:125
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:61
 #: src/Modules/Payuni/Gateways/GooglePay.php:62
 #: src/Modules/Payuni/Gateways/SamsungPay.php:62
@@ -9818,7 +9860,7 @@ msgid "Bank authorization code"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:64
-#: src/Modules/Payuni/Gateways/Credit.php:103
+#: src/Modules/Payuni/Gateways/Credit.php:127
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:63
 #: src/Modules/Payuni/Gateways/GooglePay.php:64
 #: src/Modules/Payuni/Gateways/SamsungPay.php:64
@@ -9826,7 +9868,7 @@ msgid "Issuing bank"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:65
-#: src/Modules/Payuni/Gateways/Credit.php:104
+#: src/Modules/Payuni/Gateways/Credit.php:128
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:64
 #: src/Modules/Payuni/Gateways/GooglePay.php:65
 #: src/Modules/Payuni/Gateways/SamsungPay.php:65
@@ -9834,7 +9876,7 @@ msgid "Foreign card"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:66
-#: src/Modules/Payuni/Gateways/Credit.php:105
+#: src/Modules/Payuni/Gateways/Credit.php:129
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:65
 #: src/Modules/Payuni/Gateways/GooglePay.php:66
 #: src/Modules/Payuni/Gateways/SamsungPay.php:66
@@ -9842,7 +9884,7 @@ msgid "3-D Secure ECI"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:67
-#: src/Modules/Payuni/Gateways/Credit.php:106
+#: src/Modules/Payuni/Gateways/Credit.php:130
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:66
 #: src/Modules/Payuni/Gateways/GooglePay.php:67
 #: src/Modules/Payuni/Gateways/SamsungPay.php:67
@@ -9850,7 +9892,7 @@ msgid "Reward points redeemed"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:68
-#: src/Modules/Payuni/Gateways/Credit.php:107
+#: src/Modules/Payuni/Gateways/Credit.php:131
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:67
 #: src/Modules/Payuni/Gateways/GooglePay.php:68
 #: src/Modules/Payuni/Gateways/SamsungPay.php:68
@@ -9858,7 +9900,7 @@ msgid "Reward redemption ID"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:69
-#: src/Modules/Payuni/Gateways/Credit.php:108
+#: src/Modules/Payuni/Gateways/Credit.php:132
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:68
 #: src/Modules/Payuni/Gateways/GooglePay.php:69
 #: src/Modules/Payuni/Gateways/SamsungPay.php:69
@@ -9866,7 +9908,7 @@ msgid "Token ID"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:70
-#: src/Modules/Payuni/Gateways/Credit.php:109
+#: src/Modules/Payuni/Gateways/Credit.php:133
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:69
 #: src/Modules/Payuni/Gateways/GooglePay.php:70
 #: src/Modules/Payuni/Gateways/SamsungPay.php:70
@@ -9881,11 +9923,11 @@ msgstr ""
 msgid "Last five account digits"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/Credit.php:19
+#: src/Modules/Payuni/Gateways/Credit.php:20
 msgid "PAYUNi credit card"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/Credit.php:20
+#: src/Modules/Payuni/Gateways/Credit.php:21
 msgid "Pay by credit card. The customer is redirected to the PAYUNi payment page."
 msgstr ""
 
@@ -10364,48 +10406,50 @@ msgid "PAYUNi must enable the card token and background authorization services f
 msgstr ""
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:215
-msgid "Charge WooCommerce Subscriptions renewals automatically with saved cards"
+msgid "Charge subscription renewals (WooCommerce Subscriptions or WPSubscription) automatically with saved cards"
 msgstr ""
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:283
 msgid "Go to Payment Settings"
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:50
+#: src/Modules/Payuni/SubscriptionRenewal.php:67
 msgid "PAYUNi renewal failed: no agreed card is linked to this subscription."
 msgstr ""
 
 #. translators: 1: PAYUNi status code, 2: message
-#: src/Modules/Payuni/SubscriptionRenewal.php:71
+#: src/Modules/Payuni/SubscriptionRenewal.php:88
 #, php-format
 msgid "The PAYUNi renewal charge failed (%1$s): %2$s"
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:83
+#: src/Modules/Payuni/SubscriptionRenewal.php:100
 msgid "PAYUNi has not confirmed the renewal charge yet. It will be checked again automatically; do not charge the customer again until then."
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:112
+#: src/Modules/Payuni/SubscriptionRenewal.php:129
 msgid "Confirmed by transaction lookup"
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:126
+#: src/Modules/Payuni/SubscriptionRenewal.php:143
 msgid "PAYUNi still has not confirmed this renewal charge. Check it in the PAYUNi dashboard before charging the customer again."
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:150
+#: src/Modules/Payuni/SubscriptionRenewal.php:167
+#: src/Modules/Payuni/SubscriptionRenewal.php:194
 msgid "The agreed card was cancelled at PAYUNi because no subscription uses it any more."
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:151
+#: src/Modules/Payuni/SubscriptionRenewal.php:168
+#: src/Modules/Payuni/SubscriptionRenewal.php:195
 msgid "The agreed card could not be cancelled at PAYUNi. Cancel it in the PAYUNi dashboard."
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:160
+#: src/Modules/Payuni/SubscriptionRenewal.php:204
 msgid "PAYUNi CreditHash"
 msgstr ""
 
-#: src/Modules/Payuni/SubscriptionRenewal.php:172
+#: src/Modules/Payuni/SubscriptionRenewal.php:216
 msgid "Enter the PAYUNi CreditHash."
 msgstr ""
 
@@ -10550,8 +10594,8 @@ msgid "Re-Create PAYUNi Shipping Order"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:73
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:246
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:263
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:250
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:267
 msgid "Shipping transaction ID"
 msgstr ""
 
@@ -10584,7 +10628,7 @@ msgid "Amount to collect"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:139
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:248
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:252
 msgid "Status updated"
 msgstr ""
 
@@ -10719,22 +10763,22 @@ msgstr ""
 msgid "The PAYUNi shipment lookup failed: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:239
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:243
 msgid "Received at the drop-off store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:240
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:244
 msgid "Waiting for the parcel to be dropped off"
 msgstr ""
 
 #. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:244
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:248
 #, php-format
 msgid "PAYUNi shipping status: %s"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:261
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:265
 #, php-format
 msgid "PAYUNi label print notice: %s"
 msgstr ""
@@ -11450,7 +11494,7 @@ msgid "Not COD"
 msgstr ""
 
 #. translators: 1: status description, 2: status code
-#: src/Modules/PayuniShipping/Webhook/Reconciler.php:86
+#: src/Modules/PayuniShipping/Webhook/Reconciler.php:92
 #, php-format
 msgid "PAYUNi shipping status found by follow-up check: %1$s (status code %2$s)"
 msgstr ""

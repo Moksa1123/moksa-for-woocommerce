@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Newebpay\Gateways;
 
 use Moksafowo\Compatibility\Subscriptions;
+use Moksafowo\Compatibility\WpSubscription;
 use Moksafowo\Modules\Newebpay\Api\Helper;
 use Moksafowo\Modules\Newebpay\Api\Period;
 use Moksafowo\Order\Meta\Keys;
@@ -34,7 +35,7 @@ final class CreditPeriod extends AbstractNewebpayGateway {
 	}
 
 	protected function build_method_description(): string {
-		return __( 'For WooCommerce Subscriptions. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store.', 'moksa-for-woocommerce' );
+		return __( 'For WooCommerce Subscriptions or WPSubscription. NewebPay charges the card automatically on each billing date. Works for one subscription per order with no free trial or sign-up fee, billed every N days (2 or more), weekly, monthly or yearly. NewebPay must enable recurring payments for your store.', 'moksa-for-woocommerce' );
 	}
 
 	protected function gateway_supports(): array {
@@ -59,14 +60,14 @@ final class CreditPeriod extends AbstractNewebpayGateway {
 	}
 
 	public function is_available(): bool {
-		if ( ! Subscriptions::active() || ! parent::is_available() ) {
+		if ( ( ! Subscriptions::active() && ! WpSubscription::active() ) || ! parent::is_available() ) {
 			return false;
 		}
 		if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-pay' ) ) {
 			$order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
 			return $order instanceof \WC_Order && null !== self::schedule_for_order( $order );
 		}
-		return self::cart_is_eligible();
+		return self::cart_is_eligible() || self::wps_cart_is_eligible();
 	}
 
 	public function process_payment( $order_id ): array {
@@ -158,6 +159,9 @@ final class CreditPeriod extends AbstractNewebpayGateway {
 	 * @return array{type:string,point:string,times:int}|null
 	 */
 	public static function schedule_for_order( \WC_Order $order ): ?array {
+		if ( [] !== WpSubscription::subscription_ids( $order->get_id() ) ) {
+			return self::wps_schedule_for_order( $order );
+		}
 		$subscriptions = Subscriptions::subscriptions_for( $order );
 		if ( 1 !== count( $subscriptions ) ) {
 			return null;
@@ -274,6 +278,57 @@ final class CreditPeriod extends AbstractNewebpayGateway {
 		$start  = time();
 		$end    = $length > 0 ? (int) strtotime( '+' . $length . ' ' . $period, $start ) : 0;
 		return null !== self::map_schedule( $period, (int) \WC_Subscriptions_Product::get_interval( $first ), $start, $end );
+	}
+
+	/**
+	 * WPSubscription 的訂單：只接受建立訂閱的那張（續訂單由藍新照委託扣），一個訂閱、
+	 * 沒有試用期、運費與手續費（續訂單只有商品金額，首期必須等於每期）。
+	 *
+	 * @return array{type:string,point:string,times:int}|null
+	 */
+	private static function wps_schedule_for_order( \WC_Order $order ): ?array {
+		$ids = WpSubscription::subscription_ids( $order->get_id() );
+		if ( 1 !== count( $ids ) || 1 !== count( $order->get_items() ) || (float) $order->get_shipping_total() > 0 || ! empty( $order->get_fees() ) ) {
+			return null;
+		}
+		$schedule = WpSubscription::schedule( $ids[0] );
+		if ( null === $schedule || $schedule['trial'] ) {
+			return null;
+		}
+		$created = $order->get_date_created();
+		return self::wps_map( $schedule['period'], $schedule['interval'], $created ? $created->getTimestamp() : time(), WpSubscription::max_payments( $ids[0] ) );
+	}
+
+	/** 購物車只有一個 WPSubscription 訂閱品項、沒有試用期，而且本次金額等於每期金額（沒有開辦費、運費、只折首期的優惠）。 */
+	private static function wps_cart_is_eligible(): bool {
+		$recurrings = WpSubscription::cart_recurrings();
+		$cart       = WC()->cart;
+		if ( ! $cart || 1 !== count( $recurrings ) || 1 !== count( $cart->get_cart() ) ) {
+			return false;
+		}
+		$recurring = reset( $recurrings );
+		if ( ! empty( $recurring['trial_status'] ) || abs( (float) $recurring['total'] - (float) $cart->get_total( 'edit' ) ) > 0.01 ) {
+			return false;
+		}
+		return null !== self::wps_map( (string) $recurring['type'], (int) $recurring['time'], time(), (int) ( $recurring['max_no_payment'] ?? 0 ) );
+	}
+
+	/**
+	 * WPSubscription 沒有結束日，只有「總共付幾次」；不限次數時以上限 99 期建立。
+	 *
+	 * @return array{type:string,point:string,times:int}|null
+	 */
+	private static function wps_map( string $period, int $interval, int $start, int $max_payments ): ?array {
+		$mapped = self::map_schedule( $period, $interval, $start, 0 );
+		if ( null === $mapped || $max_payments <= 0 ) {
+			return $mapped;
+		}
+		// 只付一次不需要委託；超過 99 期藍新不收（PER10024）。
+		if ( $max_payments < 2 || $max_payments > self::MAX_TIMES ) {
+			return null;
+		}
+		$mapped['times'] = $max_payments;
+		return $mapped;
 	}
 
 	/** 產品名稱只能有中英數、空格、底線，其餘符號轉成空格（4.3.1、PER10029）。 */

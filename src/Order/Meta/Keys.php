@@ -85,6 +85,8 @@ final class Keys {
 	public const NEWEBPAY_PERIOD_TRADE_NOS  = '_moksafowo_newebpay_period_trade_nos';  // 已建續訂單的每期 TradeNo（通知去重）.
 	public const NEWEBPAY_PERIOD_ENDED      = '_moksafowo_newebpay_period_ended';      // 委託已終止或期數扣完的時間（之後不能再啟用）.
 	public const NEWEBPAY_PERIOD_SUSPENDED  = '_moksafowo_newebpay_period_suspended';  // 由本外掛暫停委託的時間（恢復時才需要送 restart）.
+	public const NEWEBPAY_PERIOD_NEXT_TS    = '_moksafowo_newebpay_period_next_ts';    // WPSubscription 訂閱：藍新下一期扣款日（timestamp）.
+	public const NEWEBPAY_PERIOD_FOREIGN    = '_moksafowo_newebpay_period_foreign';    // 已終止過的重複委託單號（導回與幕後通知都會送，只處理一次）.
 
 	public const NEWEBPAY_ATM_BANK_CODE       = '_moksafowo_newebpay_atm_bank_code';
 	public const NEWEBPAY_ATM_CODE_NO         = '_moksafowo_newebpay_atm_code_no';
@@ -353,6 +355,9 @@ final class Keys {
 	public const TAPPAY_CARD_TOKEN          = '_moksafowo_tappay_card_token';          // 記住的卡片代碼（訂閱續扣用）.
 	public const TAPPAY_PENDING_CARD_KEY    = '_moksafowo_tappay_pending_card_key';    // 3D 驗證完成前暫存的卡片金鑰.
 	public const TAPPAY_PENDING_CARD_TOKEN  = '_moksafowo_tappay_pending_card_token';  // 3D 驗證完成前暫存的卡片代碼.
+
+	// WPSubscription 訂閱（subscrpt_order 文章的 post meta）：由哪個付款方式續扣.
+	public const WPS_GATEWAY = '_moksafowo_wps_gateway';
 
 	private function __construct() {}
 }

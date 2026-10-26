@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Payuni;
 
 use Moksafowo\Compatibility\Subscriptions;
+use Moksafowo\Compatibility\WpSubscription;
 use Moksafowo\Modules\Payuni\Api\PaymentRequest;
 use Moksafowo\Modules\Payuni\Api\PaymentResponse;
 use Moksafowo\Modules\Payuni\Gateways\Credit;
@@ -22,15 +23,24 @@ final class SubscriptionRenewal {
 	public const CHECK_HOOK = 'moksafowo_payuni_renewal_check';
 
 	public static function boot(): void {
+		if ( Credit::wps_enabled() ) {
+			add_filter( 'moksafowo_subscription_copied_meta_keys', [ self::class, 'copied_meta_keys' ] );
+			add_action( 'moksafowo_wps_scheduled_payment_' . Credit::GATEWAY_ID, [ self::class, 'charge_wps' ] );
+			add_action( self::CHECK_HOOK, [ self::class, 'check' ], 10, 2 );
+			add_action( 'subscrpt_subscription_cancelled', [ self::class, 'revoke_on_wps_end' ] );
+			add_action( 'moksafowo_wps_credentials_replaced', [ self::class, 'revoke_wps_replaced' ], 10, 2 );
+		}
 		if ( ! Subscriptions::active() ) {
 			return;
 		}
 		add_action( 'woocommerce_scheduled_subscription_payment_' . Credit::GATEWAY_ID, [ self::class, 'charge' ], 10, 2 );
-		add_filter( 'moksafowo_subscription_copied_meta_keys', [ self::class, 'copied_meta_keys' ] );
+		if ( ! Credit::wps_enabled() ) {
+			add_filter( 'moksafowo_subscription_copied_meta_keys', [ self::class, 'copied_meta_keys' ] );
+			add_action( self::CHECK_HOOK, [ self::class, 'check' ], 10, 2 );
+		}
 		add_filter( 'woocommerce_subscription_payment_meta', [ self::class, 'payment_meta' ], 10, 2 );
 		add_action( 'woocommerce_subscription_validate_payment_meta_' . Credit::GATEWAY_ID, [ self::class, 'validate_payment_meta' ], 10, 2 );
 		add_action( 'woocommerce_subscription_failing_payment_method_updated_' . Credit::GATEWAY_ID, [ self::class, 'update_failing_payment_method' ], 10, 2 );
-		add_action( self::CHECK_HOOK, [ self::class, 'check' ], 10, 2 );
 		add_action( 'woocommerce_subscription_status_cancelled', [ self::class, 'revoke_on_end' ] );
 		add_action( 'woocommerce_subscription_status_expired', [ self::class, 'revoke_on_end' ] );
 		add_action( 'moksafowo_subscription_credentials_replaced', [ self::class, 'revoke_replaced' ], 10, 2 );
@@ -38,6 +48,13 @@ final class SubscriptionRenewal {
 
 	public static function copied_meta_keys( $keys ): array {
 		return array_merge( (array) $keys, self::CARD_META );
+	}
+
+	/** WPSubscription 到期建的續訂單：同樣用約定的卡幕後扣款。 */
+	public static function charge_wps( $renewal ): void {
+		if ( $renewal instanceof \WC_Order ) {
+			self::charge( $renewal->get_total(), $renewal );
+		}
 	}
 
 	public static function charge( $amount, $renewal ): void {
@@ -132,6 +149,33 @@ final class SubscriptionRenewal {
 			return;
 		}
 		self::revoke( (string) $subscription->get_meta( OrderMeta::CREDIT_TOKEN_ID ), $subscription, $subscription->get_id() );
+	}
+
+	/** WPSubscription 訂閱取消後，約定的卡沒有其他訂閱在用就取消 Token。 */
+	public static function revoke_on_wps_end( $subscription_id ): void {
+		$subscription_id = (int) $subscription_id;
+		if ( Credit::GATEWAY_ID !== WpSubscription::gateway_of( $subscription_id ) || WpSubscription::cancelled_by_failed_payment( $subscription_id ) ) {
+			return;
+		}
+		$credit_hash = (string) get_post_meta( $subscription_id, OrderMeta::CREDIT_TOKEN_ID, true );
+		if ( '' === $credit_hash || WpSubscription::credential_in_use( OrderMeta::CREDIT_TOKEN_ID, $credit_hash, $subscription_id ) || Subscriptions::credential_in_use( OrderMeta::CREDIT_TOKEN_ID, $credit_hash ) ) {
+			return;
+		}
+		WpSubscription::note(
+			$subscription_id,
+			PaymentRequest::cancel_token( $credit_hash )
+				? __( 'The agreed card was cancelled at PAYUNi because no subscription uses it any more.', 'moksa-for-woocommerce' )
+				: __( 'The agreed card could not be cancelled at PAYUNi. Cancel it in the PAYUNi dashboard.', 'moksa-for-woocommerce' )
+		);
+	}
+
+	public static function revoke_wps_replaced( $subscription_id, $old ): void {
+		$old         = (array) $old;
+		$credit_hash = (string) ( $old[ OrderMeta::CREDIT_TOKEN_ID ] ?? '' );
+		if ( '' === $credit_hash || WpSubscription::credential_in_use( OrderMeta::CREDIT_TOKEN_ID, $credit_hash ) || Subscriptions::credential_in_use( OrderMeta::CREDIT_TOKEN_ID, $credit_hash ) ) {
+			return;
+		}
+		PaymentRequest::cancel_token( $credit_hash );
 	}
 
 	public static function revoke_replaced( $subscription, $old ): void {

@@ -2,6 +2,7 @@
 namespace Moksafowo\Modules\Payuni\Gateways;
 
 use Moksafowo\Compatibility\Subscriptions;
+use Moksafowo\Compatibility\WpSubscription;
 use Moksafowo\Modules\Payuni\Api\PaymentRequest;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
@@ -67,7 +68,11 @@ class Credit extends GatewayBase {
 		// 訂閱：首期請持卡人約定信用卡（3=強制約定，顧客不能在付款頁取消），之後用 CreditHash 幕後續扣。
 		// CreditToken 用每位會員專屬的隨機識別碼：用可預測的會員編號，兩個站共用同一個 PAYUNi 商店時會對到別人約定的卡。
 		$member_id = Subscriptions::member_id( $order );
-		if ( $this->supports( 'subscriptions' ) && '' !== $member_id && Subscriptions::order_has_subscription( $order ) ) {
+		// WPSubscription 允許訪客買訂閱：沒有會員帳號時每張訂單一組隨機識別碼，續扣只靠回傳的 CreditHash。
+		if ( '' === $member_id && self::wps_enabled() && WpSubscription::order_has_subscription( $order ) ) {
+			$member_id = 'mowp' . bin2hex( random_bytes( 12 ) );
+		}
+		if ( '' !== $member_id && self::renews_subscription( $order ) ) {
 			$args = array_merge(
 				$args,
 				array(
@@ -82,10 +87,29 @@ class Credit extends GatewayBase {
 
 	public function is_available() {
 		// 首期 0 元（試用期）沒有 UPP 交易可以約定信用卡，拿不到續扣用的 CreditHash。
-		if ( WC()->cart && 0 >= $this->get_order_total() && class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
-			return false;
+		if ( WC()->cart && 0 >= $this->get_order_total() ) {
+			if ( class_exists( 'WC_Subscriptions_Cart' ) && \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+				return false;
+			}
+			if ( self::wps_enabled() && [] !== WpSubscription::cart_recurrings() ) {
+				return false;
+			}
 		}
 		return parent::is_available();
+	}
+
+	/** 這張訂單要約定信用卡、之後幕後續扣（WooCommerce Subscriptions 或 WPSubscription）。 */
+	public static function renews_subscription( \WC_Order $order ): bool {
+		if ( self::wps_enabled() && WpSubscription::order_has_subscription( $order ) ) {
+			return true;
+		}
+		$gateway = WC()->payment_gateways() ? ( WC()->payment_gateways()->payment_gateways()[ self::GATEWAY_ID ] ?? null ) : null;
+		return $gateway instanceof self && $gateway->supports( 'subscriptions' ) && Subscriptions::order_has_subscription( $order );
+	}
+
+	/** WPSubscription 的續扣跟 WooCommerce Subscriptions 共用同一個開關。 */
+	public static function wps_enabled(): bool {
+		return WpSubscription::active() && 'yes' === get_option( 'moksafowo_payuni_payment_subscriptions_enabled', 'no' );
 	}
 
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {

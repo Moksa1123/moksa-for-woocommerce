@@ -3,6 +3,8 @@
 namespace Moksafowo\Modules\Payuni\Api;
 
 use Moksafowo\Compatibility\Subscriptions;
+use Moksafowo\Compatibility\WpSubscription;
+use Moksafowo\Modules\Payuni\Gateways\Credit;
 use Moksafowo\Modules\Payuni\Credentials;
 use Moksafowo\Modules\Payuni\PayuniPayment;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
@@ -237,15 +239,18 @@ class PaymentResponse {
 
 		$order->save();
 
-		if ( ! empty( $decrypted_info['CreditHash'] ) && Subscriptions::order_has_subscription( $order ) ) {
-			Subscriptions::store_payment_meta(
-				$order,
-				[
-					OrderMeta::CREDIT_TOKEN_ID   => (string) $decrypted_info['CreditHash'],
-					OrderMeta::CREDIT_TOKEN_LIFE => (string) ( $decrypted_info['CreditLife'] ?? '' ),
-					OrderMeta::CREDIT_CARD_4NO   => (string) ( $decrypted_info['Card4No'] ?? '' ),
-				]
-			);
+		if ( ! empty( $decrypted_info['CreditHash'] ) ) {
+			$card = [
+				OrderMeta::CREDIT_TOKEN_ID   => (string) $decrypted_info['CreditHash'],
+				OrderMeta::CREDIT_TOKEN_LIFE => (string) ( $decrypted_info['CreditLife'] ?? '' ),
+				OrderMeta::CREDIT_CARD_4NO   => (string) ( $decrypted_info['Card4No'] ?? '' ),
+			];
+			if ( Subscriptions::order_has_subscription( $order ) ) {
+				Subscriptions::store_payment_meta( $order, $card );
+			}
+			if ( Credit::wps_enabled() && WpSubscription::order_has_subscription( $order ) ) {
+				WpSubscription::store_payment_meta( $order, Credit::GATEWAY_ID, $card );
+			}
 		}
 	}
 

@@ -34,6 +34,7 @@ final class PeriodHandler {
 	public static function boot(): void {
 		add_action( 'woocommerce_api_moksafowo_newebpay_period_return', [ self::class, 'handle_return' ] );
 		add_action( 'woocommerce_api_moksafowo_newebpay_period_notify', [ self::class, 'handle_notify' ] );
+		WpsPeriod::boot();
 		if ( ! Subscriptions::active() ) {
 			return;
 		}
@@ -229,6 +230,7 @@ final class PeriodHandler {
 				Keys::NEWEBPAY_PERIOD_ENDED    => '',
 			]
 		);
+		WpsPeriod::on_creation( $order, $period_no, $mer_order_no, (string) ( $result['DateArray'] ?? '' ) );
 		// 委託已在藍新扣款中，訂閱必須是自動續訂，取消時才會觸發終止委託。
 		foreach ( Subscriptions::subscriptions_for( $order ) as $subscription ) {
 			if ( CreditPeriod::GATEWAY_ID !== $subscription->get_payment_method() ) {
@@ -300,6 +302,11 @@ final class PeriodHandler {
 				$order->payment_complete( $trade_no );
 				self::$syncing = false;
 			}
+			return;
+		}
+
+		if ( WpsPeriod::owns( $order ) ) {
+			WpsPeriod::apply_period( $order, $payload );
 			return;
 		}
 
@@ -434,6 +441,7 @@ final class PeriodHandler {
 	private static function apply_card_update( \WC_Order $order, array $payload ): void {
 		$result = $payload['Result'];
 		$status = (string) ( $result['cardStatus'] ?? '' );
+		WpsPeriod::apply_card_update( $order, $status );
 		foreach ( Subscriptions::subscriptions_for( $order ) as $subscription ) {
 			if ( 'ACTIVE' === $status ) {
 				$subscription->add_order_note( __( 'NewebPay updated the card expiry date for this subscription. Payments continue as scheduled.', 'moksa-for-woocommerce' ) );
@@ -479,6 +487,15 @@ final class PeriodHandler {
 
 	/** 終止一張不屬於這個訂閱的委託（重複建立），並請商家退掉它已扣的款。 */
 	private static function terminate_foreign( \WC_Order $order, string $mer_order_no, string $period_no, string $trade_no ): void {
+		// 同一張委託的建立結果會由瀏覽器導回與幕後通知各送一次，終止與通知只做一次。
+		$handled = $order->get_meta( Keys::NEWEBPAY_PERIOD_FOREIGN );
+		$handled = is_array( $handled ) ? $handled : [];
+		if ( in_array( $period_no, $handled, true ) ) {
+			return;
+		}
+		$handled[] = $period_no;
+		$order->update_meta_data( Keys::NEWEBPAY_PERIOD_FOREIGN, array_slice( $handled, -20 ) );
+		$order->save();
 		$resp = '' !== $mer_order_no ? Period::alter_status( $mer_order_no, $period_no, 'terminate' ) : [
 			'ok'      => false,
 			'message' => '',
@@ -496,7 +513,7 @@ final class PeriodHandler {
 	}
 
 	/** 需要商家立刻處理（多扣款、取消後仍扣款）時寄信給網站管理員，免得只埋在備註裡。 */
-	private static function notify_admin( \WC_Order $order ): void {
+	public static function notify_admin( \WC_Order $order ): void {
 		wp_mail(
 			(string) get_option( 'admin_email' ),
 			sprintf(

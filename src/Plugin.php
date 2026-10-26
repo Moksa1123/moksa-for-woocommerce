@@ -99,6 +99,7 @@ final class Plugin {
 		// 對應模組沒開時各標籤自然回空字串。
 		Modules\Shared\Email\PersonalizationTags::init();
 		Compatibility\Subscriptions::init();
+		Compatibility\WpSubscription::init();
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
 			Modules\Shared\Admin\PaymentQuery::boot();

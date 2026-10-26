@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.18.3
+Stable tag: 1.19.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -37,6 +37,10 @@ With [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-su
 * **NewebPay recurring payments** — Ask NewebPay to enable credit card recurring payments (定期定額) for your store. In the NewebPay settings, tick NewebPay recurring credit card under Enabled payment methods, then enable it under WooCommerce → Settings → Payments. NewebPay charges on its own schedule and notifies your store after each charge, so there is no notification address to set. One subscription schedule per order, with the same amount every period; mixing one-time products or different schedules in the cart hides this method. Under Subscriptions in the NewebPay settings, tick Mandate status changes only if NewebPay has enabled mandate changes for your store; it adds pausing and resuming. Cancelling always works.
 
 Customers need an account to subscribe. Payment results reach your store at /wc-api/ addresses, so make sure a firewall or security plugin does not block them.
+
+= WPSubscription (new in 1.19.0) =
+
+With [WPSubscription](https://wordpress.org/plugins/subscription/) installed, PAYUNi credit card and NewebPay recurring payments can charge its renewals too, using the same settings as above. NewebPay recurring payments work for one subscription per order with no free trial, sign-up fee or shipping fee. A paid renewal reactivates the subscription straight away, so you can keep the order in Processing until it ships.
 
 = Source =
 
@@ -129,6 +133,10 @@ Yes. All order meta uses `$order->update_meta_data()` / `$order->save()`, never 
 
 Yes. TapPay, PAYUNi credit card, LINE Pay, Shopline Payments (card), ECPay (saved card) and NewebPay (recurring payments) can charge renewals automatically. See "WooCommerce Subscriptions" in the description for what each one needs.
 
+= Does it work with WPSubscription? =
+
+Yes, with PAYUNi credit card and NewebPay recurring payments. See "WPSubscription" in the description.
+
 = Can I mix providers? =
 
 Yes. Payment, shipping and invoice modules are fully independent — any combination works.
@@ -152,6 +160,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.19.0 - 2026-10-26 =
+* New: WPSubscription renewals with PAYUNi credit card and NewebPay recurring payments.
+* Fixed: When NewebPay sends the same duplicate mandate twice, it is now cancelled and reported only once.
 
 = 1.18.3 - 2026-10-26 =
 * Fixed: A PAYUNi 7-ELEVEN or T-Cat shipment number that missed its print notice is now picked up by the hourly status check and the Query button.

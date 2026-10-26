@@ -201,7 +201,7 @@ class SettingsTab extends \WC_Settings_Page {
 					'type' => 'sectionend',
 					'id'   => 'moksafowo_payuni_payment_api_settings',
 				),
-				...( \Moksafowo\Compatibility\Subscriptions::active() ? array(
+				...( ( \Moksafowo\Compatibility\Subscriptions::active() || \Moksafowo\Compatibility\WpSubscription::active() ) ? array(
 					array(
 						'title' => __( 'Subscriptions', 'moksa-for-woocommerce' ),
 						'type'  => 'title',
@@ -212,7 +212,7 @@ class SettingsTab extends \WC_Settings_Page {
 						'title'   => __( 'Automatic renewals', 'moksa-for-woocommerce' ),
 						'type'    => 'checkbox',
 						'default' => 'no',
-						'desc'    => __( 'Charge WooCommerce Subscriptions renewals automatically with saved cards', 'moksa-for-woocommerce' ),
+						'desc'    => __( 'Charge subscription renewals (WooCommerce Subscriptions or WPSubscription) automatically with saved cards', 'moksa-for-woocommerce' ),
 						'id'      => 'moksafowo_payuni_payment_subscriptions_enabled',
 					),
 					array(
