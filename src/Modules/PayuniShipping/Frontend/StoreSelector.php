@@ -399,7 +399,8 @@ JS
 		// All fields sanitized via wc_clean + wp_unslash at capture; MapJson content deep-sanitized via map_deep after json_decode.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi store-map callback; no WP nonce possible; source verified via HashInfo hash_equals before any data use; all fields sanitized via wc_clean and map_deep.
 		$posted = wc_clean( wp_unslash( $_POST ) );
-		PayuniShipping::log( 'PAYUNi Store Map Return Data: ' . wc_print_r( $posted, true ) );
+		// 驗章前只記欄位名稱：任何人都能打這個網址，內容不可信也可能夾帶偽造的 log 行。
+		PayuniShipping::log( 'PAYUNi store map return, fields: ' . implode( ',', array_map( 'sanitize_key', array_keys( (array) $posted ) ) ) );
 
 		$store_data = array();
 

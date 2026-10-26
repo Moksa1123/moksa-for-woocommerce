@@ -54,6 +54,17 @@ final class IpnHandler {
 			exit( '0|BadResult' );
 		}
 
+		// 只收貨態通知：顧客瀏覽器拿得到自己的金流付款結果封包（同一組金鑰簽的），沒有貨態碼的一律不處理。
+		if ( '' === (string) ( $data['Retld'] ?? $data['RetId'] ?? '' ) ) {
+			Helper::log( 'notice without a shipping status ignored' );
+			exit( '1|Ignored' );
+		}
+		if ( isset( $data['MerchantID'] ) && (string) $data['MerchantID'] !== Helper::merchant_id() ) {
+			Helper::warn( 'notice for another merchant rejected' );
+			status_header( 400 );
+			exit( '0|MerchantMismatch' );
+		}
+
 		$merchant_order_no = (string) ( $data['MerchantOrderNo'] ?? '' );
 		if ( '' === $merchant_order_no ) {
 			status_header( 400 );

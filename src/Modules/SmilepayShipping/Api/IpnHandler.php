@@ -47,6 +47,13 @@ final class IpnHandler {
 			status_header( 200 );
 			exit( '<Roturlstatus>key mismatch</Roturlstatus>' );
 		}
+		// 加上回呼 key 之前建立的物流單只能靠 Smseid 辨識；物流早就走完的舊單不再接受沒有 key 的通知。
+		$created = $order->get_date_created();
+		if ( 'yes' !== $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) && ( ! $created || $created->getTimestamp() < time() - 60 * DAY_IN_SECONDS ) ) {
+			Helper::warn( 'IPN without callback key for an old order — rejected', [ 'order_id' => $order_id ] );
+			status_header( 200 );
+			exit( '<Roturlstatus>key mismatch</Roturlstatus>' );
+		}
 
 		// 黑貓多溫層會拆成多件、各有自己的 Smseid，單一 meta 只存最後一件。
 		$known = [ (string) $order->get_meta( Keys::SMILEPAY_SHIPPING_NO ) ];

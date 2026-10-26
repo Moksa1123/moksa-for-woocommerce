@@ -171,7 +171,8 @@ final class InvoiceOps {
 		if ( ! $order ) {
 			return new \WP_Error( 'moksafowo_ai_no_order', __( 'The order could not be found.', 'moksa-for-woocommerce' ) );
 		}
-		$reason = is_array( $args ) && isset( $args['reason'] ) ? trim( (string) $args['reason'] ) : '';
+		// 原因由模型提供、會原樣送到發票商並顯示在確認視窗：去掉換行與標籤，限制長度。
+		$reason = is_array( $args ) && isset( $args['reason'] ) ? mb_substr( sanitize_text_field( (string) $args['reason'] ), 0, 100 ) : '';
 		if ( '' === $reason ) {
 			return new \WP_Error( 'moksafowo_ai_no_reason', __( 'Please provide a reason for voiding.', 'moksa-for-woocommerce' ) );
 		}

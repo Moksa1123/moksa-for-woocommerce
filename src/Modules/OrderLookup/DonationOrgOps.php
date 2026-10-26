@@ -41,7 +41,7 @@ final class DonationOrgOps {
 		if ( ! current_user_can( self::CAP ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
-		$name = is_array( $args ) && isset( $args['name'] ) ? trim( (string) $args['name'] ) : '';
+		$name = is_array( $args ) && isset( $args['name'] ) ? sanitize_text_field( (string) $args['name'] ) : '';
 		$code = is_array( $args ) && isset( $args['code'] ) ? trim( (string) $args['code'] ) : '';
 		$code = (string) preg_replace( '/[^0-9xX]/', '', $code );
 

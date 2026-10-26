@@ -163,6 +163,10 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function decrypt_trade_info( string $hex ): ?array {
+		// 定期定額通知只靠加密證明來源；金鑰沒填時用空字串也解得開，任何人都能偽造。
+		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
+			return null;
+		}
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (TradeInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$bin = @hex2bin( $hex );
 		if ( false === $bin ) {

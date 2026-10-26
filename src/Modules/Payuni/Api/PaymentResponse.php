@@ -65,7 +65,7 @@ class PaymentResponse {
 		$trade_no        = $decrypted_info['TradeNo'];
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $payuni_order_no );
-		$order        = wc_get_order( $woo_order_id );
+		$order        = PayuniPayment::order_for_trade_no( (string) $payuni_order_no );
 		if ( ! $order ) {
 			PayuniPayment::log( 'Cant find order by id:' . $woo_order_id );
 			return;
@@ -137,7 +137,7 @@ class PaymentResponse {
 		$trade_no = $decrypted_info['TradeNo'];
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $order_id );
-		$order        = wc_get_order( $woo_order_id );
+		$order        = PayuniPayment::order_for_trade_no( (string) $order_id );
 		if ( ! $order ) {
 			PayuniPayment::log( 'Cant find order by id:' . $woo_order_id );
 			return;

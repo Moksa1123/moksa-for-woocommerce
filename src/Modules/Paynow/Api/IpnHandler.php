@@ -11,6 +11,19 @@ defined( 'ABSPATH' ) || exit;
 
 final class IpnHandler {
 
+	/** 各付款方式在 PayNow 的 PayType（見各 Gateway 的 pay_type()）。 */
+	private const PAY_TYPES = [
+		'moksafowo_paynow_credit'             => '01',
+		'moksafowo_paynow_webatm'             => '02',
+		'moksafowo_paynow_atm'                => '03',
+		'moksafowo_paynow_ibon'               => '05',
+		'moksafowo_paynow_famiport'           => '05',
+		'moksafowo_paynow_icash'              => '05',
+		'moksafowo_paynow_unionpay'           => '09',
+		'moksafowo_paynow_cvs'                => '10',
+		'moksafowo_paynow_credit_installment' => '11',
+	];
+
 	private const IMMEDIATE_TYPES = [ '01', '02', '09', '11' ];
 
 	public static function handle(): void {
@@ -30,7 +43,8 @@ final class IpnHandler {
 			$source
 		);
 
-		Helper::log( 'callback received', [ 'data' => $posted ] );
+		// 驗 PassCode 前只記欄位名稱：任何人都能打這個網址，內容不可信。
+		Helper::log( 'callback received', [ 'fields' => array_map( 'sanitize_key', array_keys( $posted ) ) ] );
 
 		$order_no   = self::pick( $posted, [ 'OrderNo' ] );
 		$total      = self::pick( $posted, [ 'TotalPrice' ] );
@@ -56,6 +70,20 @@ final class IpnHandler {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
 			self::reply( 404, 'ORDER_NOT_LOADABLE' );
+		}
+
+		// PayType 不在簽章範圍內：取號／失敗通知用的四欄 PassCode 就是付款表單上顧客看得到的值，
+		// 不檢查的話下單的人能自己送一則別種付款方式的取號通知，塞入假的繳費帳號或連結。
+		$expected_type = self::PAY_TYPES[ $order->get_payment_method() ] ?? '';
+		if ( '' === $expected_type || $expected_type !== $pay_type ) {
+			Helper::warn(
+				'callback PayType does not match the order payment method — rejected',
+				[
+					'order_no' => $order_no,
+					'pay_type' => $pay_type,
+				]
+			);
+			self::reply( 400, 'PAYTYPE_MISMATCH' );
 		}
 
 		$is_success = 'S' === strtoupper( $tran );
@@ -202,15 +230,15 @@ final class IpnHandler {
 				break;
 
 			case '03':
-				$atm = self::pick( $posted, [ 'ATMNo' ] );
+				$atm = self::code( self::pick( $posted, [ 'ATMNo' ] ) );
 				if ( '' !== $atm ) {
 					$order->update_meta_data( Keys::PAYNOW_ATM_NO, $atm );
 				}
-				$bank = self::pick( $posted, [ 'BankCode' ] );
+				$bank = self::code( self::pick( $posted, [ 'BankCode' ] ) );
 				if ( '' !== $bank ) {
 					$order->update_meta_data( Keys::PAYNOW_ATM_BANK_CODE, $bank );
 				}
-				$branch = self::pick( $posted, [ 'BranchCode' ] );
+				$branch = self::code( self::pick( $posted, [ 'BranchCode' ] ) );
 				if ( '' !== $branch ) {
 					$order->update_meta_data( Keys::PAYNOW_ATM_BRANCH_CODE, $branch );
 				}
@@ -226,7 +254,7 @@ final class IpnHandler {
 					'BarCode2' => Keys::PAYNOW_BARCODE_2,
 					'BarCode3' => Keys::PAYNOW_BARCODE_3,
 				] as $f => $k ) {
-					$v = self::pick( $posted, [ $f ] );
+					$v = self::code( self::pick( $posted, [ $f ] ) );
 					if ( '' !== $v ) {
 						$order->update_meta_data( $k, $v );
 					}
@@ -238,19 +266,19 @@ final class IpnHandler {
 				break;
 
 			case '05':
-				$ibon = self::pick( $posted, [ 'IBONNO' ] );
+				$ibon = self::code( self::pick( $posted, [ 'IBONNO' ] ) );
 				if ( '' !== $ibon ) {
 					$order->update_meta_data( Keys::PAYNOW_IBON_NO, $ibon );
 				}
-				$fami = self::pick( $posted, [ 'FamiPortNo' ] );
+				$fami = self::code( self::pick( $posted, [ 'FamiPortNo' ] ) );
 				if ( '' !== $fami ) {
 					$order->update_meta_data( Keys::PAYNOW_FAMIPORT_NO, $fami );
 				}
-				$icash = self::pick( $posted, [ 'icashpayno' ] );
+				$icash = self::code( self::pick( $posted, [ 'icashpayno' ] ) );
 				if ( '' !== $icash ) {
 					$order->update_meta_data( Keys::PAYNOW_ICASH_NO, $icash );
 				}
-				$icash_url = esc_url_raw( self::pick( $posted, [ 'icashpayurl' ] ) );
+				$icash_url = esc_url_raw( self::pick( $posted, [ 'icashpayurl' ] ), [ 'https' ] );
 				if ( '' !== $icash_url ) {
 					$order->update_meta_data( Keys::PAYNOW_ICASH_PAY_URL, $icash_url );
 				}
@@ -264,6 +292,14 @@ final class IpnHandler {
 				}
 				break;
 		}
+	}
+
+	/**
+	 * 繳費帳號、條碼、代碼只能是英數字：取號通知只驗四欄 PassCode（付款表單上顧客看得到），
+	 * 不合格式的值不寫進訂單，也就不會出現在繳費資訊信裡。
+	 */
+	private static function code( string $value ): string {
+		return 1 === preg_match( '/^[A-Za-z0-9-]{1,30}$/', $value ) ? $value : '';
 	}
 
 	private static function apply_status( \WC_Order $order, string $pay_type, bool $is_success, array $posted ): void {

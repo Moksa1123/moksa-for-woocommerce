@@ -113,6 +113,14 @@ final class BindHandler {
 			wp_send_json_error( [ 'message' => '' !== $resp['message'] ? $resp['message'] : __( 'The card payment did not go through. Please check the card and try again.', 'moksa-for-woocommerce' ) ] );
 		}
 
+		// 付款 token 綁的是取 token 時的那筆交易：用別張訂單的 token 送來，綠界回的是那張的交易，
+		// 不能拿來把這張標成已付款（一次扣款付兩張單）。
+		$claims_trade = '' !== (string) ( $data['OrderInfo']['MerchantTradeNo'] ?? '' ) || 1 === (int) ( $data['RtnCode'] ?? 0 );
+		if ( $claims_trade && ! self::matches_order( $order, $data ) ) {
+			$order->add_order_note( __( 'ECPay returned a payment that belongs to another order, so this order was not marked as paid.', 'moksa-for-woocommerce' ) );
+			wp_send_json_error( [ 'message' => __( 'The card payment did not go through. Please check the card and try again.', 'moksa-for-woocommerce' ) ], 409 );
+		}
+
 		self::apply_result( $order, $data );
 		wp_send_json_success( [ 'redirect' => $order->get_checkout_order_received_url() ] );
 	}

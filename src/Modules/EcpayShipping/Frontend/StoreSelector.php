@@ -134,6 +134,9 @@ final class StoreSelector {
 		$mtn        = Helper::generate_merchant_trade_no( $pending_id );
 
 		$referrer = isset( $_POST['referrer'] ) ? esc_url_raw( wp_unslash( $_POST['referrer'] ) ) : '';
+		// 選店回呼沒有簽章，只靠這次開地圖的一次性值辨識：MerchantTradeNo 只有 24 位元亂數，
+		// 另帶一組 ExtraData（綠界原樣回傳）讓回呼猜不到。
+		$extra = wp_generate_password( 20, false );
 		set_transient(
 			self::STATE_PREFIX . $mtn,
 			[
@@ -141,6 +144,7 @@ final class StoreSelector {
 				'pending_id' => $pending_id,
 				'referrer'   => $referrer,
 				'owner'      => \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::current(),
+				'extra'      => $extra,
 			],
 			30 * MINUTE_IN_SECONDS
 		);
@@ -160,7 +164,7 @@ final class StoreSelector {
 			'LogisticsSubType' => $subtype,
 			'IsCollection'     => $is_collection ? 'Y' : 'N',
 			'ServerReplyURL'   => add_query_arg( 'wc-api', 'moksafowo_ecpay_shipping_map_callback', home_url( '/' ) ),
-			'ExtraData'        => '',
+			'ExtraData'        => $extra,
 			'Device'           => wp_is_mobile() ? '1' : '0',
 		];
 		$payload['CheckMacValue'] = Helper::generate_check_mac_value( $payload, $subtype );
@@ -193,6 +197,7 @@ final class StoreSelector {
 		$subtype = $method->logistics_sub_type();
 		$mtn     = Helper::generate_merchant_trade_no( $order->get_id() );
 
+		$extra = wp_generate_password( 20, false );
 		set_transient(
 			self::STATE_PREFIX . $mtn,
 			[
@@ -200,6 +205,7 @@ final class StoreSelector {
 				'pending_id' => $order->get_id(),
 				'referrer'   => '',
 				'context'    => 'admin',
+				'extra'      => $extra,
 			],
 			30 * MINUTE_IN_SECONDS
 		);
@@ -211,7 +217,7 @@ final class StoreSelector {
 			'LogisticsSubType' => $subtype,
 			'IsCollection'     => 'cod' === (string) $order->get_payment_method() ? 'Y' : 'N',
 			'ServerReplyURL'   => add_query_arg( 'wc-api', 'moksafowo_ecpay_shipping_map_callback', home_url( '/' ) ),
-			'ExtraData'        => '',
+			'ExtraData'        => $extra,
 			'Device'           => '0',
 		];
 		$payload['CheckMacValue'] = Helper::generate_check_mac_value( $payload, $subtype );
@@ -230,7 +236,8 @@ final class StoreSelector {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- ECPay store-map callback; no WP nonce possible; source verified via MTN transient anti-tamper before any use; session-only write, no state mutation; all fields sanitized via wc_clean.
 		$posted = isset( $_POST ) ? wc_clean( wp_unslash( $_POST ) ) : array();
 
-		Helper::log( 'shipping map callback raw', [ 'data' => $posted ] );
+		// 確認是本站開過的地圖之前只記欄位名稱：任何人都能打這個網址。
+		Helper::log( 'shipping map callback', [ 'fields' => array_map( 'sanitize_key', array_keys( (array) $posted ) ) ] );
 
 		$mtn = isset( $posted['MerchantTradeNo'] ) ? wc_clean( wp_unslash( $posted['MerchantTradeNo'] ) ) : '';
 		if ( '' === $mtn ) {
@@ -240,7 +247,8 @@ final class StoreSelector {
 		}
 
 		$state = get_transient( self::STATE_PREFIX . $mtn ); // anti-tamper：confirm 我們有開過此 MTN
-		if ( ! is_array( $state ) ) {
+		$extra = isset( $posted['ExtraData'] ) ? (string) $posted['ExtraData'] : '';
+		if ( ! is_array( $state ) || ( isset( $state['extra'] ) && ! hash_equals( (string) $state['extra'], $extra ) ) ) {
 			Helper::warn( 'shipping map callback unknown MTN — rejected', [ 'mtn' => $mtn ] );
 			status_header( 403 );
 			echo 'Unknown trade';

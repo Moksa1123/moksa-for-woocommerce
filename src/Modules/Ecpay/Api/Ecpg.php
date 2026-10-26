@@ -88,7 +88,7 @@ final class Ecpg {
 	 * @return array<string,mixed>|null
 	 */
 	public static function decode_envelope( array $envelope ): ?array {
-		if ( (string) ( $envelope['MerchantID'] ?? '' ) !== Helper::merchant_id() ) {
+		if ( '' === Helper::merchant_id() || (string) ( $envelope['MerchantID'] ?? '' ) !== Helper::merchant_id() ) {
 			return null;
 		}
 		$data = self::decrypt( (string) ( $envelope['Data'] ?? '' ) );
@@ -181,7 +181,8 @@ final class Ecpg {
 
 	/** @return array<string,mixed>|null */
 	private static function decrypt( string $cipher ): ?array {
-		if ( '' === $cipher ) {
+		// 金鑰沒填時用空字串也解得開，任何人都能偽造通知。
+		if ( '' === $cipher || '' === Helper::hash_key() || '' === Helper::hash_iv() ) {
 			return null;
 		}
 		$plain = openssl_decrypt( $cipher, 'aes-128-cbc', Helper::hash_key(), 0, Helper::hash_iv() );

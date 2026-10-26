@@ -15,8 +15,6 @@ final class IpnHandler {
 	private const MAX_SITE_FAILS  = 30;
 	private const SITE_FAILS      = 'moksafowo_smilepay_mid_fails';
 	// 有 key 的訂單驗證失敗另外計：不擋通知（避免被人打滿後擋掉正常入帳），只讓信用卡授權改為待核對。
-	private const KEYED_FAILS = 'moksafowo_smilepay_keyed_mid_fails';
-	private const KEYED_ALERT = 10;
 
 	public static function handle_roturl(): void {
 		// SmilePay Roturl webhook: no WP nonce possible (external server cannot send one).
@@ -200,24 +198,23 @@ final class IpnHandler {
 				esc_html( sprintf( /* translators: %s: amount */ __( 'Authorized amount: %s', 'moksa-for-woocommerce' ), $amount ) ),
 				esc_html( sprintf( /* translators: %s: datetime */ __( 'Transaction time: %s', 'moksa-for-woocommerce' ), trim( $date . ' ' . $time ) ) )
 			);
-			$order->update_meta_data( Keys::SMILEPAY_PAY_AMOUNT, $amount );
-			$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $info );
-			$order->update_meta_data( Keys::SMILEPAY_PAY_PAID_AT, trim( $date . ' ' . $time ) );
-			// 瀏覽器重新整理會重送同一個結果，已付款就不再重複寫備註。
+			// 瀏覽器重新整理會重送同一個結果；已付款的單不再覆寫交易資料（後台核對、退款要看原本那筆）。
 			if ( ! $order->is_paid() ) {
-				$order->add_order_note(
+				$order->update_meta_data( Keys::SMILEPAY_PAY_AMOUNT, $amount );
+				$order->update_meta_data( Keys::SMILEPAY_PAY_INFO_HTML, $info );
+				$order->update_meta_data( Keys::SMILEPAY_PAY_PAID_AT, trim( $date . ' ' . $time ) );
+				$order->set_transaction_id( $smseid );
+				// 信用卡的回呼網址（含驗證 key）放在轉址到速買配的網址裡，顧客看得到；Mid_smilepay 又只是
+				// 位數加權和，看過一次合法回傳就能自己算。速買配沒有查單 API 可回頭確認，所以這則通知
+				// 無法證明真的授權成功：一律轉保留，請商家到速買配後台核對後再出貨。
+				$order->update_status(
+					'on-hold',
 					sprintf(
-					/* translators: %s: pay method */
-						__( 'SmilePay authorized the card payment (%s)', 'moksa-for-woocommerce' ),
+						/* translators: %s: pay method */
+						__( 'SmilePay reported that the card payment (%s) was authorized. SmilePay card results cannot be verified automatically, so confirm the authorization in the SmilePay back office, then change the order to Processing.', 'moksa-for-woocommerce' ),
 						$payment_title
 					)
 				);
-				if ( (int) get_transient( self::KEYED_FAILS ) >= self::KEYED_ALERT ) {
-					// 最近一小時有大量驗證失敗，可能有人在猜驗證碼：授權先不自動入帳。
-					$order->update_status( 'on-hold', __( 'Many SmilePay notices failed verification in the last hour, so this card authorization was not marked as paid automatically. Please confirm it in the SmilePay back office.', 'moksa-for-woocommerce' ) );
-				} else {
-					$order->payment_complete( $smseid );
-				}
 			}
 		} elseif ( $order->is_paid() ) {
 			// 已付款的單不因晚到或偽造的失敗通知被打回失敗，只留紀錄給商家核對。
@@ -293,8 +290,6 @@ final class IpnHandler {
 		Helper::warn( 'roturl Mid_smilepay mismatch', [ 'order_id' => $order_id ] );
 		if ( ! $keyed ) {
 			set_transient( self::SITE_FAILS, (int) get_transient( self::SITE_FAILS ) + 1, HOUR_IN_SECONDS );
-		} else {
-			set_transient( self::KEYED_FAILS, (int) get_transient( self::KEYED_FAILS ) + 1, HOUR_IN_SECONDS );
 		}
 		$order->update_meta_data( Keys::SMILEPAY_MID_FAILS, $fails + 1 );
 		if ( $fails + 1 === self::MAX_ORDER_FAILS ) {

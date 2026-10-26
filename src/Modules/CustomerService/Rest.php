@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * 安全設計（permission_callback 為 __return_true 的理由）：
  * 這四個端點提供顧客自助查單，必須允許未登入訪客存取，因此無法套用 is_user_logged_in()。
  * 替代閘門（每個端點都有各自的閘）：
- *   - /cs/verify：IP + 訂單號雙維度節流（Verify::attempt），5 次失敗後 IP 鎖定 15 分鐘；
+ *   - /cs/verify：訂單號 + 電話末三碼 + 帳單 email 全對才過；IP 與訂單雙維度節流（Verify::attempt）；
  *                 統一失敗訊息，無法枚舉訂單；完全唯讀。
  *   - /cs/order：必須帶 Verify::attempt 核發的時效 token（hash_equals 比對），否則拒絕；唯讀。
  *   - /cs/message：同上 token 閘；訊息長度上限 2000 字元；只寫入當次訂單對話 thread。
@@ -42,6 +42,11 @@ final class Rest {
 						'required'          => true,
 						'type'              => 'string',
 						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'email'  => array(
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_email',
 					),
 				),
 			)
@@ -155,7 +160,7 @@ final class Rest {
 		Threads::add_message( $thread_id, 'customer', $body );
 
 		$ai = null;
-		if ( AiReply::enabled() && AiReply::rate_ok() ) {
+		if ( AiReply::enabled() && AiReply::rate_ok( $order_id ) ) {
 			$ai = AiReply::generate( $order_id, $history, $body );
 		}
 		if ( null !== $ai ) {
@@ -229,13 +234,14 @@ final class Rest {
 	public static function verify( \WP_REST_Request $request ): \WP_REST_Response {
 		$order_ref = sanitize_text_field( (string) $request->get_param( 'order' ) );
 		$phone3    = sanitize_text_field( (string) $request->get_param( 'phone3' ) );
+		$email     = sanitize_email( (string) $request->get_param( 'email' ) );
 
-		$result = Verify::attempt( $order_ref, $phone3, self::ip() );
+		$result = Verify::attempt( $order_ref, $phone3, $email, self::ip() );
 		if ( empty( $result['ok'] ) ) {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
-					'message' => __( 'That order was not found, or the details did not match. Please check the order number and the last three digits of your billing phone, then try again.', 'moksa-for-woocommerce' ),
+					'message' => __( 'That order was not found, or the details did not match. Please check the order number, the last three digits of your billing phone and your billing email, then try again.', 'moksa-for-woocommerce' ),
 				),
 				200
 			);

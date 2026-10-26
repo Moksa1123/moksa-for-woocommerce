@@ -276,6 +276,9 @@ class PayuniPayment {
 
 		$hashkey = Credentials::hashkey();
 		$hashiv  = Credentials::hashiv();
+		if ( '' === $hashkey || '' === $hashiv ) {
+			return [];
+		}
 
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (EncryptInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$blob = @hex2bin( $encrypt_str );
@@ -301,6 +304,10 @@ class PayuniPayment {
 
 
 	public static function hash_info( string $encrypt_str = '' ) {
+		// 金鑰沒填時 HashInfo 只是公開密文的雜湊，任何人都算得出來：回傳不可能相符的值。
+		if ( '' === Credentials::hashkey() || '' === Credentials::hashiv() ) {
+			return 'NO-CREDENTIALS-' . wp_generate_password( 32, false );
+		}
 		return strtoupper( hash( 'sha256', Credentials::hashkey() . $encrypt_str . Credentials::hashiv() ) );
 	}
 
@@ -330,6 +337,24 @@ class PayuniPayment {
 		return $payuni_order_no;
 	}
 
+
+	/**
+	 * 通知帶來的 MerTradeNo 對應哪張訂單：只採用用 PAYUNi 付款、而且真的送出過這個編號的訂單
+	 * （編號是「訂單編號-第幾次送出」，序號不能超過這張訂單已送出的次數）。
+	 * 不然同一組 PAYUNi 帳號給兩個站用時，A 站的通知會套到 B 站同號的訂單上。
+	 */
+	public static function order_for_trade_no( string $payuni_order_no ): ?\WC_Order {
+		$order = wc_get_order( (int) self::parse_payuni_order_no_to_woo_order_id( $payuni_order_no ) );
+		if ( ! $order instanceof \WC_Order || 0 !== strpos( (string) $order->get_payment_method(), 'moksafowo_payuni_' ) ) {
+			return null;
+		}
+		if ( hash_equals( (string) $order->get_meta( OrderMeta::PAYUNI_ORDER_NO ), $payuni_order_no ) ) {
+			return $order;
+		}
+		$parts  = explode( '-', $payuni_order_no );
+		$serial = isset( $parts[1] ) && ctype_digit( $parts[1] ) ? (int) $parts[1] : 0;
+		return 2 === count( $parts ) && $serial >= 1 && $serial <= (int) $order->get_meta( OrderMeta::ORDER_SERIAL_NO ) ? $order : null;
+	}
 
 	public static function parse_payuni_order_no_to_woo_order_id( $payuni_order_no ) {
 

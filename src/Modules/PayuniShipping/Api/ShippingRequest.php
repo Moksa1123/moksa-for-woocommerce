@@ -183,6 +183,9 @@ class ShippingRequest {
 
 		$post_id = absint( wp_unslash( $_POST['post_id'] ) );
 		$order   = wc_get_order( $post_id );
+		if ( ! $order instanceof \WC_Order ) {
+			wp_send_json_error( __( 'The order could not be found.', 'moksa-for-woocommerce' ), 404 );
+		}
 
 		$response = self::query_order( $order );
 

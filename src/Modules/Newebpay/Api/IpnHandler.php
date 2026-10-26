@@ -118,6 +118,23 @@ final class IpnHandler {
 			exit;
 		}
 
+		// 已付款的單收到取號封包（沒有 PayTime，顧客瀏覽器拿得到可重送）或另一筆交易的成功通知：
+		// 照常處理會把訂單打回保留、覆寫交易編號（退款會用錯那筆）。只留備註。
+		$stored_trade = (string) $order->get_transaction_id();
+		if ( $order->is_paid() && ( '' === $pay_time || ( '' !== $stored_trade && '' !== $trade_no && $stored_trade !== $trade_no ) ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: status, 2: message */
+					__( 'NewebPay sent a %1$s notice (%2$s) for this already paid order. The order was not changed.', 'moksa-for-woocommerce' ),
+					$status,
+					'' !== $trade_no ? $trade_no : $message
+				)
+			);
+			$order->save();
+			echo '1|OK';
+			exit;
+		}
+
 		if ( '' !== $trade_no ) {
 			$order->update_meta_data( Keys::NEWEBPAY_TRADE_NO, $trade_no );
 			$order->set_transaction_id( $trade_no );

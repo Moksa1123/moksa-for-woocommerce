@@ -13,7 +13,7 @@ final class IpnHandler {
 
 	public static function handle(): void {
 		// Gateway shipping IPN: no WP nonce possible (external server cannot send one).
-		// Source authenticity verified via CheckMacValue SHA256 + hash_equals on line ~25 (Helper::verify_check_mac_value)
+		// Source authenticity verified via CheckMacValue (MD5, per ECPay logistics spec) + hash_equals on line ~25 (Helper::verify_check_mac_value)
 		// before any field is read or state changed. Raw array passed unmodified to verifier; map_deep sanitize follows on line ~32.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gateway shipping IPN; no WP nonce possible; source verified via CheckMacValue hash_equals before any use; sanitized via map_deep below.
 		$raw = $_POST;
@@ -58,6 +58,14 @@ final class IpnHandler {
 		$rtn_code     = (string) ( $posted['RtnCode'] ?? '' );
 		$rtn_msg      = (string) ( $posted['RtnMsg'] ?? '' );
 		$logistics_id = (string) ( $posted['AllPayLogisticsID'] ?? '' );
+		// 貨態通知一定帶貨態碼與物流交易編號。開選店地圖時本外掛也會替訪客簽一份同樣用 CheckMacValue
+		// 的參數，沒有這兩欄的就不是貨態通知，不能拿來動訂單。
+		if ( '' === $rtn_code || '' === $logistics_id ) {
+			Helper::warn( 'shipping IPN without RtnCode / AllPayLogisticsID — rejected', [ 'order_id' => $order_id ] );
+			status_header( 400 );
+			echo 'Not a status notice';
+			exit;
+		}
 
 		if ( '' !== $logistics_id ) {
 			$order->update_meta_data( Keys::ECPAY_LOGISTIC_ID, $logistics_id );

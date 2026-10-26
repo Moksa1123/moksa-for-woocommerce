@@ -29,7 +29,16 @@ final class AiReply {
 	/**
 	 * 全站每小時 AI 回覆上限（設定說明是控制用量與費用，不是每個訪客各自計算）。
 	 */
-	public static function rate_ok(): bool {
+	public static function rate_ok( int $order_id = 0 ): bool {
+		// 每張訂單每小時最多 5 則 AI 回覆：單一顧客（或開一堆待付款單的人）不能用光全站額度。
+		if ( $order_id > 0 ) {
+			$order_key   = 'moksafowo_cs_ai_rl_o' . $order_id;
+			$order_count = (int) get_transient( $order_key );
+			if ( $order_count >= 5 ) {
+				return false;
+			}
+			set_transient( $order_key, $order_count + 1, HOUR_IN_SECONDS );
+		}
 		$key   = 'moksafowo_cs_ai_rl_site';
 		$count = (int) get_transient( $key );
 		if ( $count >= self::rate_limit() ) {

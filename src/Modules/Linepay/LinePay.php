@@ -82,7 +82,7 @@ final class LinePay {
 		$order_id = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
-		if ( ! $order ) {
+		if ( ! $order instanceof \WC_Order || ! str_starts_with( (string) $order->get_payment_method(), 'moksafowo-linepay' ) ) {
 			wp_send_json_error( array( 'message' => __( 'That order could not be found.', 'moksa-for-woocommerce' ) ), 404 );
 		}
 

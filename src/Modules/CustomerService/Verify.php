@@ -7,7 +7,8 @@ namespace Moksafowo\Modules\CustomerService;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 顧客身分二次驗證 —— 訂單編號 + 帳單電話末三碼。
+ * 顧客身分驗證 —— 訂單編號 + 帳單電話末三碼 + 帳單 email。
+ * 末三碼只有 1000 組，攻擊者分散 IP 仍可慢慢猜；加上 email 才猜不到。
  *
  * 敵意環境(未登入訪客)安全核心:
  * - 末三碼僅 1000 組 → 以「IP + 訂單號」雙鍵節流,達上限即鎖定;另有只看訂單的總上限,換 IP 也繞不過。
@@ -35,7 +36,8 @@ final class Verify {
 	}
 
 	/**
-	 * 單一訂單在鎖定時段內的失敗總上限（不分 IP）。
+	 * 單一訂單 24 小時內的失敗總上限（不分 IP）。末三碼只有 1000 組，攻擊者換 IP 就能繞過
+	 * IP 節流，只剩這一道：以天為單位，猜中機率從每小時 1% 降到每天 1%。
 	 */
 	public static function max_order_attempts(): int {
 		return max( self::max_attempts() * 2, 10 );
@@ -47,10 +49,11 @@ final class Verify {
 	 *
 	 * @param string $order_ref 顧客輸入的訂單編號。
 	 * @param string $phone3    電話末三碼。
+	 * @param string $email     帳單 email。
 	 * @param string $ip        來源 IP。
 	 * @return array{ok:bool, token?:string, order_id?:int}
 	 */
-	public static function attempt( string $order_ref, string $phone3, string $ip ): array {
+	public static function attempt( string $order_ref, string $phone3, string $email, string $ip ): array {
 		$fail   = array( 'ok' => false );
 		$bucket = self::bucket_key( $ip, $order_ref );
 		$count  = (int) get_transient( $bucket );
@@ -79,15 +82,18 @@ final class Verify {
 			}
 			$order = wc_get_order( $order_id );
 			if ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() ) {
-				$phone = preg_replace( '/\D/', '', (string) $order->get_billing_phone() );
-				$in3   = preg_replace( '/\D/', '', $phone3 );
+				$phone   = preg_replace( '/\D/', '', (string) $order->get_billing_phone() );
+				$in3     = preg_replace( '/\D/', '', $phone3 );
+				$billing = strtolower( trim( (string) $order->get_billing_email() ) );
+				$given   = strtolower( trim( $email ) );
 				if ( strlen( (string) $phone ) >= 3 && 3 === strlen( (string) $in3 )
-					&& hash_equals( substr( (string) $phone, -3 ), (string) $in3 ) ) {
+					&& hash_equals( substr( (string) $phone, -3 ), (string) $in3 )
+					&& '' !== $billing && hash_equals( $billing, $given ) ) {
 					$ok = true;
 				}
 			}
 			if ( ! $ok ) {
-				set_transient( $order_bucket, $order_count + 1, self::lockout_seconds() );
+				set_transient( $order_bucket, $order_count + 1, max( DAY_IN_SECONDS, self::lockout_seconds() ) );
 			}
 			self::unlock( $order_id );
 		}
@@ -125,7 +131,8 @@ final class Verify {
 			return 0;
 		}
 		$order = wc_get_order( $id );
-		return ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() ) ? $id : 0;
+		// 區塊結帳填到一半的草稿單不算訂單，不能拿來查或留言。
+		return ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() && ! $order->has_status( 'checkout-draft' ) ) ? $id : 0;
 	}
 
 	/**
@@ -163,11 +170,21 @@ final class Verify {
 	}
 
 	private static function bucket_key( string $ip, string $ref ): string {
-		return 'moksafowo_cs_try_' . md5( $ip . '|' . preg_replace( '/\D/', '', $ref ) );
+		// 用解析後的訂單編號：0123、00123 跟 123 是同一張訂單，不能各自一個桶。
+		return 'moksafowo_cs_try_' . md5( self::ip_network( $ip ) . '|' . absint( preg_replace( '/\D/', '', $ref ) ) );
 	}
 
 	private static function ip_bucket_key( string $ip ): string {
-		return 'moksafowo_cs_ipthr_' . md5( $ip );
+		return 'moksafowo_cs_ipthr_' . md5( self::ip_network( $ip ) );
+	}
+
+	/** IPv6 一個用戶通常拿到整段 /64，逐一換位址就能繞過節流：以 /64 為單位計算。 */
+	private static function ip_network( string $ip ): string {
+		if ( false === filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
+			return $ip;
+		}
+		$bin = inet_pton( $ip );
+		return false === $bin ? $ip : bin2hex( substr( $bin, 0, 8 ) ) . '::/64';
 	}
 
 	private static function token_key( string $token ): string {

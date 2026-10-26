@@ -495,12 +495,18 @@ final class OrderMetaBox {
 			wp_send_json_error( [ 'message' => __( 'The shipping ID is missing.', 'moksa-for-woocommerce' ) ], 400 );
 		}
 
+		// 只查這張訂單自己的物流單：別張的查詢結果會被寫進這張訂單，貨態轉換也會套到這張。
 		$subtype = 'UNIMARTC2C';
+		$owned   = (string) $order->get_meta( Keys::ECPAY_LOGISTIC_ID ) === $logistics_id;
 		foreach ( CreateOrder::get_records( $order ) as $r ) {
 			if ( (string) ( $r['id'] ?? '' ) === $logistics_id ) {
 				$subtype = (string) ( $r['subtype'] ?? $subtype );
+				$owned   = true;
 				break;
 			}
+		}
+		if ( ! $owned ) {
+			wp_send_json_error( [ 'message' => __( 'That shipment could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
 		$result = Helper::query_logistics_trade_info( $logistics_id, $subtype );

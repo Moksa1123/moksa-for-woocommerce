@@ -253,6 +253,34 @@ final class Helper extends AbstractCredentialHelper {
 		return substr( $base, 0, 20 );
 	}
 
+	/** 記下送出的 MerchantTradeNo；重新付款會換新編號，先前取號的繳費通知還要對得到這張訂單。 */
+	public static function remember_mtn( \WC_Order $order, string $mtn ): void {
+		$order->update_meta_data( Keys::ECPAY_MERCHANT_TRADE_NO, $mtn );
+		$history = $order->get_meta( Keys::ECPAY_MTN_HISTORY );
+		$history = is_array( $history ) ? $history : [];
+		if ( ! in_array( $mtn, $history, true ) ) {
+			$history[] = $mtn;
+			$order->update_meta_data( Keys::ECPAY_MTN_HISTORY, array_slice( $history, -20 ) );
+		}
+	}
+
+	/**
+	 * 這張訂單是不是送出過這個 MerchantTradeNo。編號裡的訂單 ID 是解析出來的：同一組綠界帳號給
+	 * 兩個站用時，A 站的通知會對到 B 站同號的訂單。這版之前的訂單沒有歷史：重新付款過的單，
+	 * 先前取號的繳費通知對不上目前編號，只能照舊接受。
+	 */
+	public static function order_sent_mtn( \WC_Order $order, string $mtn ): bool {
+		$current = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
+		if ( '' !== $current && hash_equals( $current, $mtn ) ) {
+			return true;
+		}
+		$history = $order->get_meta( Keys::ECPAY_MTN_HISTORY );
+		if ( is_array( $history ) && [] !== $history ) {
+			return in_array( $mtn, $history, true );
+		}
+		return true;
+	}
+
 	public static function parse_order_id_from_merchant_trade_no( string $merchant_trade_no ): ?int {
 		$prefix = (string) get_option( 'moksafowo_ecpay_order_prefix', '' );
 		$prefix = preg_replace( '/[^A-Za-z0-9]/', '', $prefix ) ?? '';

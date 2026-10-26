@@ -381,7 +381,20 @@ final class PeriodHandler {
 			return;
 		}
 
-		if ( $success ) {
+		$paid = (int) ( $result['AuthAmt'] ?? 0 );
+		if ( $success && $paid !== (int) ceil( (float) $renewal->get_total() ) ) {
+			// 續訂金額被改過（例如商家調價）但委託金額是建立時固定的：不自動入帳，請商家核對。
+			$renewal->set_transaction_id( $trade_no );
+			$renewal->update_status(
+				'on-hold',
+				sprintf(
+					/* translators: 1: paid amount, 2: order total */
+					__( 'NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+					$paid,
+					$renewal->get_total()
+				)
+			);
+		} elseif ( $success ) {
 			$renewal->payment_complete( $trade_no );
 			$renewal->add_order_note(
 				sprintf(

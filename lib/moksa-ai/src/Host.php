@@ -177,7 +177,10 @@ final class Host {
 			return rest_ensure_response( array( 'error' => Registry::string( 'noPermission' ) ) );
 		}
 
-		delete_transient( $key );
+		// 刪除成功才算拿到這個 token：兩個請求同時確認時只有一個會執行（先讀後刪會兩個都執行）。
+		if ( ! delete_transient( $key ) ) {
+			return rest_ensure_response( array( 'error' => Registry::string( 'confirmStale' ) ) );
+		}
 
 		$ability  = (string) ( $data['ability'] ?? '' );
 		$handlers = Registry::destructive_handlers();

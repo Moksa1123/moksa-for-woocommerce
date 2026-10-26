@@ -47,10 +47,22 @@ final class Redactor {
 		'x-tappay-signature',
 		'sign',
 		'hmac',
+		'credithash',
+		'credittoken',
+		'regkey',
+		'verify_key',
+		'verifykey',
+		'password',
+		'pwd',
+		'token',
 	];
 
 	private const PII_KEYS = [
 		'email',
+		'mail',
+		'addr',
+		'barcode',
+		'carrier',
 		'phone',
 		'mobile',
 		'tel',

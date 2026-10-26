@@ -93,8 +93,9 @@ final class IpnHandler {
 			exit;
 		}
 
-		// 已付款訂單收到另一筆嘗試的非成功通知：只留備註，不覆寫 rec_trade_id（退款要用付款成功那筆）。
-		if ( $order->is_paid() && 0 !== (int) ( $payload['status'] ?? -1 ) ) {
+		// 已付款訂單收到另一筆交易的通知（非成功、或另一次也成功的扣款）：只留備註，不覆寫 rec_trade_id（退款要用付款成功那筆）。
+		$other_trade = '' !== $stored_trade && $stored_trade !== (string) ( $payload['rec_trade_id'] ?? '' );
+		if ( $order->is_paid() && ( 0 !== (int) ( $payload['status'] ?? -1 ) || $other_trade ) ) {
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: TapPay status code */
@@ -253,11 +254,16 @@ final class IpnHandler {
 		if ( '' === $order_number ) {
 			return null;
 		}
+		// 先用訂單上記下的 order_number 精確比對；解析出來的數字只在那張訂單送出的就是這個編號時才採用。
+		// 用了自訂訂單編號外掛時，編號的數字會對到另一張訂單的 ID。
 		$id = Helper::parse_order_id( $order_number );
 		if ( $id ) {
 			$order = wc_get_order( $id );
 			if ( $order instanceof \WC_Order ) {
-				return $order;
+				$sent = (string) $order->get_meta( Keys::TAPPAY_ORDER_NUMBER );
+				if ( '' !== $sent ? hash_equals( $sent, $order_number ) : Helper::build_order_number( $order ) === $order_number ) {
+					return $order;
+				}
 			}
 		}
 		$found = wc_get_orders(

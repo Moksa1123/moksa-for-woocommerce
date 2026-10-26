@@ -356,6 +356,8 @@ final class Keys {
 	public const TAPPAY_PENDING_CARD_KEY    = '_moksafowo_tappay_pending_card_key';    // 3D 驗證完成前暫存的卡片金鑰.
 	public const TAPPAY_PENDING_CARD_TOKEN  = '_moksafowo_tappay_pending_card_token';  // 3D 驗證完成前暫存的卡片代碼.
 
+	public const ECPAY_MTN_HISTORY = '_moksafowo_ecpay_mtn_history'; // 綠界全方位金流送出過的 MerchantTradeNo（通知只套用到送過該編號的訂單）.
+
 	// WPSubscription 訂閱（subscrpt_order 文章的 post meta）：由哪個付款方式續扣.
 	public const WPS_GATEWAY = '_moksafowo_wps_gateway';
 

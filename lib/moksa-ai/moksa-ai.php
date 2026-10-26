@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 // Bump this string when shipping a newer bundled launcher. Highest version wins the election.
 $GLOBALS['moksa_ai_pool'][] = array(
 	// 1.3.5:更新外掛等 iframe 頁不再載入對話按鈕。
-	'version' => '1.3.5',
+	'version' => '1.3.6',
 	'dir'     => __DIR__,
 );
 

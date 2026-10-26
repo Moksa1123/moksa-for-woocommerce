@@ -24,6 +24,9 @@ final class Crypto {
 	public static function decrypt( string $encrypt_str = '' ): array {
 		$key = Credentials::hashkey();
 		$iv  = Credentials::hashiv();
+		if ( '' === $key || '' === $iv ) {
+			return [];
+		}
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (EncryptInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$blob = @hex2bin( $encrypt_str );
 		if ( false === $blob ) {
@@ -47,6 +50,10 @@ final class Crypto {
 	}
 
 	public static function hash_info( string $encrypt_str = '' ): string {
+		// 金鑰沒填時 HashInfo 只是公開密文的雜湊，任何人都算得出來：回傳不可能相符的值。
+		if ( '' === Credentials::hashkey() || '' === Credentials::hashiv() ) {
+			return 'NO-CREDENTIALS-' . wp_generate_password( 32, false );
+		}
 		return strtoupper( hash( 'sha256', Credentials::hashkey() . $encrypt_str . Credentials::hashiv() ) );
 	}
 }

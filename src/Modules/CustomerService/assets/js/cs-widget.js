@@ -91,16 +91,22 @@
 		p.maxLength = 3;
 		p.setAttribute( 'inputmode', 'numeric' );
 		p.setAttribute( 'pattern', '[0-9]{3}' );
+		var m = el( 'input', 'moksafowo-cs-input' );
+		m.type = 'email';
+		m.placeholder = i.email_label;
+		m.setAttribute( 'aria-label', i.email_label );
+		m.setAttribute( 'autocomplete', 'email' );
 		var btn = el( 'button', 'moksafowo-cs-btn', i.submit );
 		btn.type = 'submit';
 		f.appendChild( o );
 		f.appendChild( p );
+		f.appendChild( m );
 		f.appendChild( btn );
 		f.addEventListener( 'submit', function ( ev ) {
 			ev.preventDefault();
 			btn.disabled = true;
 			btn.textContent = i.querying;
-			api( '/verify', { order: o.value, phone3: p.value }, function ( res ) {
+			api( '/verify', { order: o.value, phone3: p.value, email: m.value }, function ( res ) {
 				if ( res && res.ok ) {
 					setToken( res.token );
 					renderSummary( res.summary );

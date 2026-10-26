@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.19.0
+Stable tag: 1.19.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -160,6 +160,10 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.19.1 - 2026-10-26 =
+* Fixed: Security hardening for payment and shipping notifications, the storefront order lookup (which now also asks for the billing email) and Moksa AI confirmations. SmilePay card payments are now put on hold until you confirm them in the SmilePay back office.
+* Fixed: Customers can now see staff replies in storefront support.
 
 = 1.19.0 - 2026-10-26 =
 * New: WPSubscription renewals with PAYUNi credit card and NewebPay recurring payments.

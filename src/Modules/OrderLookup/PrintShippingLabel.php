@@ -59,10 +59,11 @@ final class PrintShippingLabel {
 			'2' === $paper ? 'A6' : 'A4'
 		);
 		if ( ! empty( $invalid ) ) {
+			// 只列數量：找不到的參照是模型給的原文，放進確認視窗可能夾帶誤導說明。
 			$summary .= ' ' . sprintf(
-				/* translators: %s: invalid refs */
-				__( '(not found and skipped: %s)', 'moksa-for-woocommerce' ),
-				implode( '、', $invalid )
+				/* translators: %d: number of order references that were not found */
+				_n( '(%d order was not found and will be skipped.)', '(%d orders were not found and will be skipped.)', count( $invalid ), 'moksa-for-woocommerce' ),
+				count( $invalid )
 			);
 		}
 

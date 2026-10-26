@@ -134,8 +134,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			throw new \Exception( esc_html__( 'Invalid order', 'moksa-for-woocommerce' ) );
 		}
 
-		$merchant_trade_no = Helper::generate_merchant_trade_no( (int) $order_id );
-		$order->update_meta_data( Keys::ECPAY_MERCHANT_TRADE_NO, $merchant_trade_no );
+		Helper::remember_mtn( $order, Helper::generate_merchant_trade_no( (int) $order_id ) );
 		$order->save();
 
 		return [
@@ -153,7 +152,7 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 		$merchant_trade_no = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
 		if ( '' === $merchant_trade_no ) {
 			$merchant_trade_no = Helper::generate_merchant_trade_no( $order_id );
-			$order->update_meta_data( Keys::ECPAY_MERCHANT_TRADE_NO, $merchant_trade_no );
+			Helper::remember_mtn( $order, $merchant_trade_no );
 			$order->save();
 		}
 

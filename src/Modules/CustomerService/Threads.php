@@ -12,13 +12,14 @@ defined( 'ABSPATH' ) || exit;
 final class Threads {
 
 	/**
-	 * 取該訂單目前 open 的對話,沒有就開一個。回傳 thread id。
+	 * 取該訂單進行中（待回覆或已回覆）的對話,沒有就開一個。回傳 thread id。
+	 * 店員回覆後狀態是 answered；只找 open 的話顧客看不到回覆、再留言又會開新對話。
 	 */
 	public static function open_or_get( int $order_id, string $customer_ref ): int {
 		global $wpdb;
 		$t = Schema::threads_table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		$id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", $t, $order_id ) );
+		$id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status IN ('open', 'answered') ORDER BY id DESC LIMIT 1", $t, $order_id ) );
 		if ( $id > 0 ) {
 			return $id;
 		}
@@ -95,12 +96,12 @@ final class Threads {
 	}
 
 	/**
-	 * 取訂單對應的 open thread id(顧客端 poll 用,不新建)。
+	 * 取訂單進行中的對話 id(顧客端 poll 用,不新建)。
 	 */
 	public static function thread_id_for_order( int $order_id ): int {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status = 'open' ORDER BY id DESC LIMIT 1", Schema::threads_table(), $order_id ) );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status IN ('open', 'answered') ORDER BY id DESC LIMIT 1", Schema::threads_table(), $order_id ) );
 	}
 
 	/**

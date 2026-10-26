@@ -258,7 +258,7 @@ final class Hub {
 			array(
 				'title' => __( 'Storefront support (customer self-service)', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
-				'desc'  => __( 'A floating window on the storefront where customers look up their order with an order number and the last three digits of their billing phone, and leave a message. It follows fixed rules and needs no AI key.', 'moksa-for-woocommerce' ),
+				'desc'  => __( 'A floating window on the storefront where customers look up their order with an order number, the last three digits of their billing phone and their billing email, and leave a message. It follows fixed rules and needs no AI key.', 'moksa-for-woocommerce' ),
 				'id'    => 'moksafowo_ai_hub_front',
 			),
 			array(

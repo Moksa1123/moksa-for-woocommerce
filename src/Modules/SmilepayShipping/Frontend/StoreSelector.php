@@ -145,7 +145,10 @@ final class StoreSelector {
 	public static function handle_admin_emap_callback(): void {
 		// SmilePay EMAP 回程：GET 導頁、協定無簽章。這裡不寫任何訂單／session 狀態，
 		// 只把門市畫回開啟它的訂單編輯頁；門市要等商家在後台按更新訂單才會存。
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! get_transient( self::ADMIN_STATE . get_current_user_id() ) ) {
+		// 開地圖時帶的 nonce 放在 tempvar，速買配會原樣帶回。
+		$tempvar = isset( $_GET['tempvar'] ) ? sanitize_text_field( wp_unslash( $_GET['tempvar'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- this value is the nonce, verified on the next line.
+		if ( ! current_user_can( 'edit_shop_orders' ) || ! get_transient( self::ADMIN_STATE . get_current_user_id() )
+			|| ! wp_verify_nonce( $tempvar, 'moksafowo_smilepay_emap_' . get_current_user_id() ) ) {
 			wp_die( esc_html__( 'You are not allowed to edit orders.', 'moksa-for-woocommerce' ), 403 );
 		}
 		delete_transient( self::ADMIN_STATE . get_current_user_id() );

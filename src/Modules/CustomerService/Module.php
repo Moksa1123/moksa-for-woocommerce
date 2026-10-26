@@ -21,7 +21,7 @@ final class Module extends AbstractModule {
 	}
 
 	public function label(): string {
-		return __( 'Storefront support — customers look up their own orders with an order number and the last three digits of their phone', 'moksa-for-woocommerce' );
+		return __( 'Storefront support — customers look up their own orders with an order number, the last three digits of their phone and their email', 'moksa-for-woocommerce' );
 	}
 
 	public function category(): string {
@@ -76,6 +76,7 @@ final class Module extends AbstractModule {
 					'bubble'      => __( 'Order lookup', 'moksa-for-woocommerce' ),
 					'order_label' => __( 'Order number', 'moksa-for-woocommerce' ),
 					'phone_label' => __( 'Last three digits of the billing phone', 'moksa-for-woocommerce' ),
+					'email_label' => __( 'Billing email', 'moksa-for-woocommerce' ),
 					'submit'      => __( 'Look up', 'moksa-for-woocommerce' ),
 					'querying'    => __( 'Looking that up…', 'moksa-for-woocommerce' ),
 					'again'       => __( 'Look up another order', 'moksa-for-woocommerce' ),
@@ -93,7 +94,7 @@ final class Module extends AbstractModule {
 					'track'       => __( 'Track shipment', 'moksa-for-woocommerce' ),
 					'invoice'     => __( 'E-invoice number', 'moksa-for-woocommerce' ),
 					'items'       => __( 'Items', 'moksa-for-woocommerce' ),
-					'hint'        => __( 'Enter your order number and the last three digits of your billing phone to check on your order.', 'moksa-for-woocommerce' ),
+					'hint'        => __( 'Enter your order number, the last three digits of your billing phone and your billing email to check on your order.', 'moksa-for-woocommerce' ),
 					'contact'     => __( 'Contact us', 'moksa-for-woocommerce' ),
 					'back'        => __( '← Back to the order', 'moksa-for-woocommerce' ),
 					'send'        => __( 'Send', 'moksa-for-woocommerce' ),

@@ -62,11 +62,18 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_trade_sha( string $trade_info, string $trade_sha ): bool {
+		// 金鑰沒填時用空字串也算得出簽章、解得開密文，任何人都能偽造貨態通知。
+		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
+			return false;
+		}
 		$expected = strtoupper( hash( 'sha256', 'HashKey=' . self::hash_key() . '&' . $trade_info . '&HashIV=' . self::hash_iv() ) );
 		return hash_equals( $expected, strtoupper( $trade_sha ) );
 	}
 
 	public static function decrypt_trade_info( string $trade_info ): ?array {
+		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
+			return null;
+		}
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (TradeInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
 		$bin = @hex2bin( $trade_info );
 		if ( false === $bin ) {
