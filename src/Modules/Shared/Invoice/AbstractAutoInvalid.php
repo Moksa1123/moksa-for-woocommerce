@@ -26,6 +26,17 @@ abstract class AbstractAutoInvalid {
 	}
 
 	public static function schedule( int $order_id ): void {
+		// 還沒開發票也沒排定開立就沒有東西可作廢（例如付款失敗後顧客重付成功）。
+		$order = wc_get_order( $order_id );
+		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+		$has_invoice   = static::is_real_invoice_number( (string) $order->get_meta( static::invoice_number_meta_key() ) );
+		$has_scheduled = '' !== static::scheduled_meta_key() && '' !== (string) $order->get_meta( static::scheduled_meta_key() );
+		if ( ! $has_invoice && ! $has_scheduled ) {
+			return;
+		}
+
 		if ( ! function_exists( 'as_schedule_single_action' ) ) {
 			static::run( $order_id );
 			return;

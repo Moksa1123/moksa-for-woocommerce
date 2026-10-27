@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.19.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.19.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-26T10:46:33+00:00\n"
+"POT-Creation-Date: 2026-10-27T13:41:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -6279,8 +6279,9 @@ msgid "ECPay shipping ID"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:99
-#: src/Modules/Linepay/Api/PaymentRequest.php:268
-#: src/Modules/Linepay/Api/PaymentRequest.php:687
+#: src/Modules/Linepay/Api/PaymentRequest.php:196
+#: src/Modules/Linepay/Api/PaymentRequest.php:275
+#: src/Modules/Linepay/Api/PaymentRequest.php:694
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:121
 #: src/Modules/Payuni/Api/PaymentRequest.php:539
 #: src/Modules/Payuni/Api/PaymentResponse.php:81
@@ -6545,84 +6546,90 @@ msgstr ""
 msgid "[LINE Pay] We received your order, but the payment did not go through. Please try paying again."
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:207
-#: src/Modules/Linepay/Api/PaymentRequest.php:291
+#. translators: %s: LINE Pay message
+#: src/Modules/Linepay/Api/PaymentRequest.php:195
+#, php-format
+msgid "LINE Pay declined the payment: %s"
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:216
+#: src/Modules/Linepay/Api/PaymentRequest.php:298
 msgid "The LINE Pay payment is authorized and awaiting confirmation"
 msgstr ""
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:267
+#: src/Modules/Linepay/Api/PaymentRequest.php:274
 #, php-format
 msgid "LINE Pay could not confirm the payment, so its status was checked: %s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:297
+#: src/Modules/Linepay/Api/PaymentRequest.php:304
 msgid "The LINE Pay payment was cancelled or has expired"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:303
+#: src/Modules/Linepay/Api/PaymentRequest.php:310
 msgid "The LINE Pay transaction failed"
 msgstr ""
 
 #. translators: %s: LINE Pay check status return code
-#: src/Modules/Linepay/Api/PaymentRequest.php:310
+#: src/Modules/Linepay/Api/PaymentRequest.php:317
 #, php-format
 msgid "LINE Pay could not confirm the payment (status code %s)"
 msgstr ""
 
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
-#: src/Modules/Linepay/Api/PaymentRequest.php:346
+#: src/Modules/Linepay/Api/PaymentRequest.php:353
 #: src/Modules/Payuni/Api/PaymentRequest.php:131
 #, php-format
 msgid "Unable to find order #%s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:465
+#: src/Modules/Linepay/Api/PaymentRequest.php:472
 msgid "no transaction_id is found"
 msgstr ""
 
 #. translators: 1: refund transaction id, 2: returnCode, 3: returnMessage
-#: src/Modules/Linepay/Api/PaymentRequest.php:542
+#: src/Modules/Linepay/Api/PaymentRequest.php:549
 #, php-format
 msgid "Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s"
 msgstr ""
 
 #. translators: %s: LINE Pay refund transaction id returned by API
-#: src/Modules/Linepay/Api/PaymentRequest.php:569
+#: src/Modules/Linepay/Api/PaymentRequest.php:576
 #, php-format
 msgid "LINE Pay refunded the payment (refund number %s)"
 msgstr ""
 
 #. translators:  %1$s is product name, %2$s is the order item count
-#: src/Modules/Linepay/Api/PaymentRequest.php:629
+#: src/Modules/Linepay/Api/PaymentRequest.php:636
 #, php-format
 msgid "%1$s and total %2$s products"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:677
+#: src/Modules/Linepay/Api/PaymentRequest.php:684
 msgid "After the payment request"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:678
+#: src/Modules/Linepay/Api/PaymentRequest.php:685
 msgid "Before confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:679
+#: src/Modules/Linepay/Api/PaymentRequest.php:686
 msgid "After confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:680
+#: src/Modules/Linepay/Api/PaymentRequest.php:687
 msgid "After the refund"
 msgstr ""
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:685
+#: src/Modules/Linepay/Api/PaymentRequest.php:692
 #, php-format
 msgid "LINE Pay payment status: %s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:688
+#: src/Modules/Linepay/Api/PaymentRequest.php:695
 msgid "Checked"
 msgstr ""
 
@@ -12163,36 +12170,36 @@ msgid "Invoice status looked up at %1$s — %2$s"
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:51
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:62
 #, php-format
 msgid "Automatic voiding of the %1$s invoice was cancelled because the order is no longer cancelled or refunded."
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:79
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:90
 #, php-format
 msgid "The scheduled %1$s invoice was cancelled because the order was refunded or cancelled."
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:84
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:95
 #, php-format
 msgid "The scheduled %1$s invoice could not be cancelled, or the schedule had already run — please check it in the %1$s dashboard."
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:94
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:105
 msgid "Order refunded (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:95
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:106
 msgid "Order cancelled (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:96
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:107
 msgid "Order failed (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:97
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:108
 msgid "Order status changed (voided automatically)"
 msgstr ""
 

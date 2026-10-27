@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-10-26 00:00+0800\n"
+"PO-Revision-Date: 2026-10-27 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -6280,8 +6280,9 @@ msgid "ECPay shipping ID"
 msgstr "綠界物流編號"
 
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:99
-#: src/Modules/Linepay/Api/PaymentRequest.php:268
-#: src/Modules/Linepay/Api/PaymentRequest.php:687
+#: src/Modules/Linepay/Api/PaymentRequest.php:196
+#: src/Modules/Linepay/Api/PaymentRequest.php:275
+#: src/Modules/Linepay/Api/PaymentRequest.php:694
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:121
 #: src/Modules/Payuni/Api/PaymentRequest.php:539
 #: src/Modules/Payuni/Api/PaymentResponse.php:81
@@ -6546,84 +6547,90 @@ msgstr "確認請款"
 msgid "[LINE Pay] We received your order, but the payment did not go through. Please try paying again."
 msgstr "[LINE Pay] 已收到訂單，但付款處理失敗，請重新付款。"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:207
-#: src/Modules/Linepay/Api/PaymentRequest.php:291
+#. translators: %s: LINE Pay message
+#: src/Modules/Linepay/Api/PaymentRequest.php:195
+#, php-format
+msgid "LINE Pay declined the payment: %s"
+msgstr "LINE Pay 拒絕這筆付款：%s"
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:216
+#: src/Modules/Linepay/Api/PaymentRequest.php:298
 msgid "The LINE Pay payment is authorized and awaiting confirmation"
 msgstr "LINE Pay 付款已授權，等待確認"
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:267
+#: src/Modules/Linepay/Api/PaymentRequest.php:274
 #, php-format
 msgid "LINE Pay could not confirm the payment, so its status was checked: %s"
 msgstr "LINE Pay 付款確認未成功，已查詢付款狀態：%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:297
+#: src/Modules/Linepay/Api/PaymentRequest.php:304
 msgid "The LINE Pay payment was cancelled or has expired"
 msgstr "LINE Pay 付款已取消或過期"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:303
+#: src/Modules/Linepay/Api/PaymentRequest.php:310
 msgid "The LINE Pay transaction failed"
 msgstr "LINE Pay 交易失敗"
 
 #. translators: %s: LINE Pay check status return code
-#: src/Modules/Linepay/Api/PaymentRequest.php:310
+#: src/Modules/Linepay/Api/PaymentRequest.php:317
 #, php-format
 msgid "LINE Pay could not confirm the payment (status code %s)"
 msgstr "LINE Pay 確認付款失敗（狀態碼 %s）"
 
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
-#: src/Modules/Linepay/Api/PaymentRequest.php:346
+#: src/Modules/Linepay/Api/PaymentRequest.php:353
 #: src/Modules/Payuni/Api/PaymentRequest.php:131
 #, php-format
 msgid "Unable to find order #%s"
 msgstr "找不到訂單 #%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:465
+#: src/Modules/Linepay/Api/PaymentRequest.php:472
 msgid "no transaction_id is found"
 msgstr "找不到 transaction_id"
 
 #. translators: 1: refund transaction id, 2: returnCode, 3: returnMessage
-#: src/Modules/Linepay/Api/PaymentRequest.php:542
+#: src/Modules/Linepay/Api/PaymentRequest.php:549
 #, php-format
 msgid "Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s"
 msgstr "透過 LINE Pay 退款失敗。退款交易編號：%1$s，returnCode：%2$s，returnMessage：%3$s"
 
 #. translators: %s: LINE Pay refund transaction id returned by API
-#: src/Modules/Linepay/Api/PaymentRequest.php:569
+#: src/Modules/Linepay/Api/PaymentRequest.php:576
 #, php-format
 msgid "LINE Pay refunded the payment (refund number %s)"
 msgstr "LINE Pay 退款成功（退款編號 %s）"
 
 #. translators:  %1$s is product name, %2$s is the order item count
-#: src/Modules/Linepay/Api/PaymentRequest.php:629
+#: src/Modules/Linepay/Api/PaymentRequest.php:636
 #, php-format
 msgid "%1$s and total %2$s products"
 msgstr "%1$s 等共 %2$s 項商品"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:677
+#: src/Modules/Linepay/Api/PaymentRequest.php:684
 msgid "After the payment request"
 msgstr "付款請求後"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:678
+#: src/Modules/Linepay/Api/PaymentRequest.php:685
 msgid "Before confirming the payment"
 msgstr "確認付款前"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:679
+#: src/Modules/Linepay/Api/PaymentRequest.php:686
 msgid "After confirming the payment"
 msgstr "確認付款後"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:680
+#: src/Modules/Linepay/Api/PaymentRequest.php:687
 msgid "After the refund"
 msgstr "退款後"
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:685
+#: src/Modules/Linepay/Api/PaymentRequest.php:692
 #, php-format
 msgid "LINE Pay payment status: %s"
 msgstr "LINE Pay 付款狀態：%s"
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:688
+#: src/Modules/Linepay/Api/PaymentRequest.php:695
 msgid "Checked"
 msgstr "查詢時機"
 
@@ -12161,36 +12168,36 @@ msgid "Invoice status looked up at %1$s — %2$s"
 msgstr "查詢 %1$s 發票狀態 — %2$s"
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:51
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:62
 #, php-format
 msgid "Automatic voiding of the %1$s invoice was cancelled because the order is no longer cancelled or refunded."
 msgstr "%1$s 發票自動作廢已取消（訂單已切回非取消 / 退款狀態）。"
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:79
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:90
 #, php-format
 msgid "The scheduled %1$s invoice was cancelled because the order was refunded or cancelled."
 msgstr "%1$s 發票延後開立排程已取消（訂單退款 / 取消）。"
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:84
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:95
 #, php-format
 msgid "The scheduled %1$s invoice could not be cancelled, or the schedule had already run — please check it in the %1$s dashboard."
 msgstr "%1$s 發票延後開立排程取消失敗或排程已過期 — 請手動確認 %1$s 後台。"
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:94
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:105
 msgid "Order refunded (voided automatically)"
 msgstr "訂單退款（自動作廢）"
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:95
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:106
 msgid "Order cancelled (voided automatically)"
 msgstr "訂單取消（自動作廢）"
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:96
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:107
 msgid "Order failed (voided automatically)"
 msgstr "訂單失敗（自動作廢）"
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:97
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:108
 msgid "Order status changed (voided automatically)"
 msgstr "訂單狀態變更（自動作廢）"
 

@@ -188,6 +188,15 @@ final class PaymentRequest {
 
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( '0000' !== $result->returnCode ) {
+				if ( $is_checkout ) {
+					$order->add_order_note(
+						\Moksafowo\Order\Note::build(
+							/* translators: %s: LINE Pay message */
+							sprintf( __( 'LINE Pay declined the payment: %s', 'moksa-for-woocommerce' ), (string) $result->returnMessage ),
+							[ __( 'Status code', 'moksa-for-woocommerce' ) => (string) $result->returnCode ]
+						)
+					);
+				}
 				throw new Exception( sprintf( 'Execute LINE Pay Confirm API failed. Return code: %s. Return Message: %s', $result->returnCode, $result->returnMessage ) );
 			}
 
@@ -220,8 +229,6 @@ final class PaymentRequest {
 			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 			$order->save();
 			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-
-			$this->check_payment_and_update_order_note( $order, 'Check payment status when confirmed' );
 
 			if ( $is_checkout ) {
 				WC()->cart->empty_cart();
