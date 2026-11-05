@@ -44,6 +44,7 @@ final class OrderMetaBox {
 
 		ob_start();
 		echo '<table style="width:100%;font-size:12px;table-layout:fixed;">';
+		echo '<tr><th style="text-align:left;">' . esc_html__( 'Payment method', 'moksa-for-woocommerce' ) . '</th><td>' . esc_html__( 'LINE Pay', 'moksa-for-woocommerce' ) . '</td></tr>';
 		// 交易序號空的時候藏起那一列（#order-id 仍要留給 JS 讀），狀態空的時候說明還沒付款。
 		$txn = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 		echo '<tr' . ( '' === $txn ? ' style="display:none;"' : '' ) . '><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">' . esc_html__( 'Transaction ID', 'moksa-for-woocommerce' ) . '</div></th><td style="word-break:break-all;">' . esc_html( $txn ) . '</td></tr>';
