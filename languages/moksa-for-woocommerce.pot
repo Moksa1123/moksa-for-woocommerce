@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.19.1\n"
+"Project-Id-Version: Moksa for WooCommerce 1.19.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-27T13:41:48+00:00\n"
+"POT-Creation-Date: 2026-11-05T06:08:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -3263,6 +3263,7 @@ msgid "Order total"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:88
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:47
 #: src/Modules/Paynow/Settings/SettingsTab.php:125
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:130
@@ -3484,7 +3485,7 @@ msgid "The action failed:"
 msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:215
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:51
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:52
 msgid "Transaction status"
 msgstr ""
 
@@ -5500,17 +5501,12 @@ msgstr ""
 msgid "Print A4"
 msgstr ""
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:275
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:183
-msgid "A4"
-msgstr ""
-
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:281
 msgid "Print A6 label"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:281
-msgid "A6"
+msgid "Print A6"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:286
@@ -6520,7 +6516,31 @@ msgstr ""
 msgid "Authorized (awaiting capture)"
 msgstr ""
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:49
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:47
+#: src/Modules/Linepay/Gateways/Credit.php:26
+#: src/Modules/Linepay/Settings/settings-fields.php:17
+#: src/Modules/Linepay/Settings/SettingsTab.php:16
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
+#: src/Modules/Newebpay/Module.php:39
+#: src/Modules/Newebpay/PaymentTypeCatalog.php:22
+#: src/Modules/OrderLookup/ChannelOps.php:39
+#: src/Modules/OrderLookup/PaymentMethodOps.php:113
+#: src/Modules/OrderLookup/PaymentMethodOps.php:114
+#: src/Modules/Payuni/Module.php:47
+#: src/Modules/Payuni/Settings/SettingsTab.php:121
+#: src/Modules/Payuni/Utils/PayType.php:33
+#: src/Modules/Shared/Admin/CardRenderers.php:238
+#: src/Modules/Shared/Admin/CardRenderers.php:246
+#: src/Modules/ShoplinePayments/Api/Helper.php:36
+#: src/Modules/ShoplinePayments/Module.php:33
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:119
+#: src/Settings/SettingsPage.php:204
+#: assets/blocks/build/methods/linepay/index.js:1
+#: src/Modules/Linepay/assets/js/blocks/linepay.js:7
+msgid "LINE Pay"
+msgstr ""
+
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:50
 #: src/Modules/Newebpay/Module.php:139
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
@@ -6530,15 +6550,15 @@ msgstr ""
 msgid "Transaction ID"
 msgstr ""
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:53
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:54
 msgid "Not paid yet — waiting for the customer to finish paying with LINE Pay."
 msgstr ""
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:57
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:58
 msgid "Payment actions"
 msgstr ""
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:57
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:58
 msgid "Confirm capture"
 msgstr ""
 
@@ -6635,29 +6655,6 @@ msgstr ""
 
 #: src/Modules/Linepay/Api/PaymentResponse.php:44
 msgid "Unable to process callback."
-msgstr ""
-
-#: src/Modules/Linepay/Gateways/Credit.php:26
-#: src/Modules/Linepay/Settings/settings-fields.php:17
-#: src/Modules/Linepay/Settings/SettingsTab.php:16
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
-#: src/Modules/Newebpay/Module.php:39
-#: src/Modules/Newebpay/PaymentTypeCatalog.php:22
-#: src/Modules/OrderLookup/ChannelOps.php:39
-#: src/Modules/OrderLookup/PaymentMethodOps.php:113
-#: src/Modules/OrderLookup/PaymentMethodOps.php:114
-#: src/Modules/Payuni/Module.php:47
-#: src/Modules/Payuni/Settings/SettingsTab.php:121
-#: src/Modules/Payuni/Utils/PayType.php:33
-#: src/Modules/Shared/Admin/CardRenderers.php:238
-#: src/Modules/Shared/Admin/CardRenderers.php:246
-#: src/Modules/ShoplinePayments/Api/Helper.php:36
-#: src/Modules/ShoplinePayments/Module.php:33
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:119
-#: src/Settings/SettingsPage.php:204
-#: assets/blocks/build/methods/linepay/index.js:1
-#: src/Modules/Linepay/assets/js/blocks/linepay.js:7
-msgid "LINE Pay"
 msgstr ""
 
 #: src/Modules/Linepay/Gateways/Credit.php:27
@@ -11309,6 +11306,10 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:180
 msgid "Convenience store label format"
+msgstr ""
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:183
+msgid "A4"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:184

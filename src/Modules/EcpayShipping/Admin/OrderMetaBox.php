@@ -272,13 +272,13 @@ final class OrderMetaBox {
 	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="1"
-								title="<?php esc_attr_e( 'Print A4', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'A4', 'moksa-for-woocommerce' ); ?></button>
+								title="<?php esc_attr_e( 'Print A4', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'Print A4', 'moksa-for-woocommerce' ); ?></button>
 							<?php if ( $show_a6 ) : ?>
 							<button type="button"
 	class="button button-small moksafowo-ecpay-shipping-print"
 								data-logistics-id="<?php echo esc_attr( $id ); ?>"
 								data-mode="2"
-								title="<?php esc_attr_e( 'Print A6 label', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'A6', 'moksa-for-woocommerce' ); ?></button>
+								title="<?php esc_attr_e( 'Print A6 label', 'moksa-for-woocommerce' ); ?>"><?php esc_html_e( 'Print A6', 'moksa-for-woocommerce' ); ?></button>
 							<?php endif; ?>
 							<button type="button"
 	class="button button-small moksafowo-ecpay-shipping-query"

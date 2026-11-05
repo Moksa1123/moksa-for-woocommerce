@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.19.3
+Stable tag: 1.19.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -160,6 +160,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.19.4 - 2026-11-05 =
+* Fixed: The ECPay shipment print buttons on the order screen now read "Print A4" and "Print A6", so they are easy to find.
 
 = 1.19.3 - 2026-11-05 =
 * Fixed: The LINE Pay payment card on the order screen now shows the payment method, like the other payment providers.

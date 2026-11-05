@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-10-27 00:00+0800\n"
+"PO-Revision-Date: 2026-11-05 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -3264,6 +3264,7 @@ msgid "Order total"
 msgstr "訂單金額"
 
 #: src/Modules/CustomerService/Module.php:88
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:47
 #: src/Modules/Paynow/Settings/SettingsTab.php:125
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:130
@@ -3485,7 +3486,7 @@ msgid "The action failed:"
 msgstr "操作失敗："
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:215
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:51
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:52
 msgid "Transaction status"
 msgstr "交易狀態"
 
@@ -5501,18 +5502,13 @@ msgstr "狀態："
 msgid "Print A4"
 msgstr "列印 A4"
 
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:275
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:183
-msgid "A4"
-msgstr "A4 版型"
-
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:281
 msgid "Print A6 label"
 msgstr "列印 A6 標籤機"
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:281
-msgid "A6"
-msgstr "A6"
+msgid "Print A6"
+msgstr "列印 A6"
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:286
 msgid "Ask ECPay for the current status of this shipment"
@@ -6521,7 +6517,31 @@ msgstr "已預授權（待請款）"
 msgid "Authorized (awaiting capture)"
 msgstr "已授權（待請款）"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:49
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:47
+#: src/Modules/Linepay/Gateways/Credit.php:26
+#: src/Modules/Linepay/Settings/settings-fields.php:17
+#: src/Modules/Linepay/Settings/SettingsTab.php:16
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
+#: src/Modules/Newebpay/Module.php:39
+#: src/Modules/Newebpay/PaymentTypeCatalog.php:22
+#: src/Modules/OrderLookup/ChannelOps.php:39
+#: src/Modules/OrderLookup/PaymentMethodOps.php:113
+#: src/Modules/OrderLookup/PaymentMethodOps.php:114
+#: src/Modules/Payuni/Module.php:47
+#: src/Modules/Payuni/Settings/SettingsTab.php:121
+#: src/Modules/Payuni/Utils/PayType.php:33
+#: src/Modules/Shared/Admin/CardRenderers.php:238
+#: src/Modules/Shared/Admin/CardRenderers.php:246
+#: src/Modules/ShoplinePayments/Api/Helper.php:36
+#: src/Modules/ShoplinePayments/Module.php:33
+#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:119
+#: src/Settings/SettingsPage.php:204
+#: assets/blocks/build/methods/linepay/index.js:1
+#: src/Modules/Linepay/assets/js/blocks/linepay.js:7
+msgid "LINE Pay"
+msgstr "LINE Pay"
+
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:50
 #: src/Modules/Newebpay/Module.php:139
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
@@ -6531,15 +6551,15 @@ msgstr "已授權（待請款）"
 msgid "Transaction ID"
 msgstr "交易編號"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:53
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:54
 msgid "Not paid yet — waiting for the customer to finish paying with LINE Pay."
 msgstr "尚未付款，等待顧客在 LINE Pay 完成付款。"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:57
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:58
 msgid "Payment actions"
 msgstr "付款動作"
 
-#: src/Modules/Linepay/Admin/OrderMetaBox.php:57
+#: src/Modules/Linepay/Admin/OrderMetaBox.php:58
 msgid "Confirm capture"
 msgstr "確認請款"
 
@@ -6637,29 +6657,6 @@ msgstr "查詢時機"
 #: src/Modules/Linepay/Api/PaymentResponse.php:44
 msgid "Unable to process callback."
 msgstr "無法處理 callback。"
-
-#: src/Modules/Linepay/Gateways/Credit.php:26
-#: src/Modules/Linepay/Settings/settings-fields.php:17
-#: src/Modules/Linepay/Settings/SettingsTab.php:16
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
-#: src/Modules/Newebpay/Module.php:39
-#: src/Modules/Newebpay/PaymentTypeCatalog.php:22
-#: src/Modules/OrderLookup/ChannelOps.php:39
-#: src/Modules/OrderLookup/PaymentMethodOps.php:113
-#: src/Modules/OrderLookup/PaymentMethodOps.php:114
-#: src/Modules/Payuni/Module.php:47
-#: src/Modules/Payuni/Settings/SettingsTab.php:121
-#: src/Modules/Payuni/Utils/PayType.php:33
-#: src/Modules/Shared/Admin/CardRenderers.php:238
-#: src/Modules/Shared/Admin/CardRenderers.php:246
-#: src/Modules/ShoplinePayments/Api/Helper.php:36
-#: src/Modules/ShoplinePayments/Module.php:33
-#: src/Modules/ShoplinePayments/Settings/SettingsTab.php:119
-#: src/Settings/SettingsPage.php:204
-#: assets/blocks/build/methods/linepay/index.js:1
-#: src/Modules/Linepay/assets/js/blocks/linepay.js:7
-msgid "LINE Pay"
-msgstr "LINE Pay"
 
 #: src/Modules/Linepay/Gateways/Credit.php:27
 msgid "Check out with LINE Pay."
@@ -11309,6 +11306,10 @@ msgstr "預設 1 = 列印標籤後隔天出貨。"
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:180
 msgid "Convenience store label format"
 msgstr "超商標籤版型"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:183
+msgid "A4"
+msgstr "A4 版型"
 
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:184
 msgid "Portrait (B2C only)"
