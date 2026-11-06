@@ -193,12 +193,12 @@ final class Issue {
 			if ( $qty <= 0 || 0.0 === $line_total ) {
 				continue;
 			}
-			$unit_price     = round( $line_total / max( $qty, 1 ), 0 );
-			$amount         = (int) round( $line_total, 0 );
+			$amount = (int) round( $line_total, 0 );
+			$unit_price     = rtrim( rtrim( number_format( $amount / max( $qty, 1 ), 7, '.', '' ), '0' ), '.' );
 			$items[]        = [
 				'Description' => mb_substr( (string) $item->get_name(), 0, 256 ),
 				'Quantity'    => (string) $qty,
-				'UnitPrice'   => (string) (int) $unit_price,
+				'UnitPrice'   => $unit_price,
 				'Amount'      => (string) $amount,
 				'Remark'      => '',
 				'TaxType'     => 1,
@@ -258,6 +258,7 @@ final class Issue {
 			'TaxRate'              => '0.05',
 			'TaxAmount'            => $tax_amount,
 			'TotalAmount'          => $total,
+			'DetailAmountRound'    => 1,
 		];
 	}
 }
