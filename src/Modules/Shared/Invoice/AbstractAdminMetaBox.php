@@ -320,7 +320,7 @@ abstract class AbstractAdminMetaBox {
 		}
 		// 後台手動挑的發票欄位 → 存回訂單 meta（受設定限制），再交給各 provider 的 Issue 開立。
 		AdminIssueForm::save( $order, static::option_prefix() );
-		$result = call_user_func( static::issue_callable(), $order );
+		$result = \Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, static::provider_key(), (array) call_user_func( static::issue_callable(), $order ) );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 

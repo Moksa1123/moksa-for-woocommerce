@@ -123,6 +123,6 @@ final class Module extends AbstractModule {
 			$order->save();
 			return;
 		}
-		Issue::run( $order );
+		\Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, 'amego', Issue::run( $order ) );
 	}
 }

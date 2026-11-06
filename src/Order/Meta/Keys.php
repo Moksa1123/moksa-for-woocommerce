@@ -15,6 +15,7 @@ final class Keys {
 	public const SHIPPING_LABEL_NUMBER       = '_moksafowo_shipping_label_number';
 	public const SHIPPING_LABEL_PROVIDER     = '_moksafowo_shipping_label_provider';
 	public const SHIPPING_LABEL_PRINTED_AT   = '_moksafowo_shipping_label_printed_at';
+	public const SHIPPING_LAST_ERROR         = '_moksafowo_shipping_last_error';  // { provider, message, time }，建單成功即刪除.
 
 	public const INVOICE_TYPE         = '_moksafowo_invoice_type';            // b2c_carrier|b2c_donate|b2b|paper.
 	public const INVOICE_BUYER_UBN    = '_moksafowo_invoice_buyer_ubn';
@@ -23,6 +24,7 @@ final class Keys {
 	public const INVOICE_CARRIER_NUM  = '_moksafowo_invoice_carrier_num';
 	public const INVOICE_LOVE_CODE    = '_moksafowo_invoice_love_code';
 	public const INVOICE_PROVIDER     = '_moksafowo_invoice_provider';        // ecpay|ezpay|paynow.
+	public const INVOICE_LAST_ERROR   = '_moksafowo_invoice_last_error';      // { provider, message, time }，開立成功即刪除.
 
 	// 取號類付款（ATM/CVS/Barcode）「付款資訊 email 已寄出」旗標 — 共用於 5 家金流的 IpnHandler
 	// 避免顧客 IPN 短時間多次（webhook retry / dual-IPN）觸發重發 email。

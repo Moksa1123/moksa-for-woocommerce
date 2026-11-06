@@ -4,10 +4,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\OrderLookup;
 
-use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder as EcpayCreate;
-use Moksafowo\Modules\NewebpayShipping\Operations\CreateShipment as NewebpayCreate;
-use Moksafowo\Modules\PayuniShipping\Operations\CreateOrderUnified as PayuniCreate;
-use Moksafowo\Modules\SmilepayShipping\Operations\CreateOrder as SmilepayCreate;
+use Moksafowo\Modules\Shipping\Admin\ShipmentCreator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,17 +18,10 @@ final class ShipmentOps {
 	const CAP = 'manage_woocommerce';
 
 	/**
-	 * provider => [ CreateClass, 顯示名 ]。
-	 *
-	 * @return array<string, array{0:class-string, 1:string}>
+	 * @return array<string, array{0: class-string|null, 1: string}>
 	 */
 	private static function providers(): array {
-		return array(
-			'ecpay'    => array( EcpayCreate::class, __( 'ECPay', 'moksa-for-woocommerce' ) ),
-			'payuni'   => array( PayuniCreate::class, __( 'PAYUNi', 'moksa-for-woocommerce' ) ),
-			'newebpay' => array( NewebpayCreate::class, __( 'NewebPay', 'moksa-for-woocommerce' ) ),
-			'smilepay' => array( SmilepayCreate::class, __( 'SmilePay', 'moksa-for-woocommerce' ) ),
-		);
+		return ShipmentCreator::providers();
 	}
 
 	private static function order_from( $args ): ?\WC_Order {
@@ -42,54 +32,15 @@ final class ShipmentOps {
 	}
 
 	private static function resolve_provider( \WC_Order $order ): string {
-		foreach ( $order->get_shipping_methods() as $m ) {
-			if ( preg_match( '/^moksafowo_(ecpay|payuni|newebpay|smilepay)_shipping_/', (string) $m->get_method_id(), $mm ) ) {
-				return $mm[1];
-			}
-		}
-		return '';
+		return ShipmentCreator::provider_for( $order );
 	}
 
 	/**
-	 * 實際建單。PayUni 走 ShippingRequest 完整入口(同時支援 unified 多溫層 + 個別溫層),
-	 * 它回 void,故以「建單後是否新出現物流單號」判定成敗;其餘 provider 走各自 Create*::run。
-	 *
-	 * @param string    $provider provider slug。
-	 * @param \WC_Order $order    訂單。
 	 * @return array{ok:bool, message?:string}
 	 */
 	private static function create_for( string $provider, \WC_Order $order ): array {
-		if ( 'payuni' === $provider ) {
-			$class = 'Moksafowo\\Modules\\PayuniShipping\\Api\\ShippingRequest';
-			if ( ! class_exists( $class ) ) {
-				return array(
-					'ok'      => false,
-					'message' => __( 'The PAYUNi shipping module is not enabled.', 'moksa-for-woocommerce' ),
-				);
-			}
-			$before = SearchableKeys::field_value( $order, 'shipping' );
-			call_user_func( array( $class, 'moksafowo_payuni_create_shipping' ), $order );
-			$after = SearchableKeys::field_value( wc_get_order( $order->get_id() ), 'shipping' );
-			if ( '' !== $after && $after !== $before ) {
-				return array(
-					'ok'      => true,
-					'message' => 'OK',
-				);
-			}
-			return array(
-				'ok'      => false,
-				'message' => __( 'PAYUNi did not return a tracking number. This is usually a settings or order data problem — see the order notes for details.', 'moksa-for-woocommerce' ),
-			);
-		}
-
-		$map = self::providers();
-		if ( ! isset( $map[ $provider ] ) ) {
-			return array(
-				'ok'      => false,
-				'message' => __( 'Unsupported carrier.', 'moksa-for-woocommerce' ),
-			);
-		}
-		return (array) call_user_func( array( $map[ $provider ][0], 'run' ), $order );
+		unset( $provider );
+		return ShipmentCreator::create( $order );
 	}
 
 	/**

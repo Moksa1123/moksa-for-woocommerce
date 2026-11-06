@@ -261,7 +261,7 @@ final class OrderMetaBox {
 		// 開立前再存一次（與「更新」一致），確保用的是畫面上的值。
 		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice' );
 
-		$result = Issue::run( $order );
+		$result = \Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, 'ecpay', Issue::run( $order ) );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 

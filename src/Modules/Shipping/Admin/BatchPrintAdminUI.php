@@ -85,7 +85,7 @@ final class BatchPrintAdminUI {
 			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
-		echo wp_kses_post( self::format_label_no( self::find_label_no( $order ) ) );
+		echo wp_kses_post( self::label_cell( $order ) );
 	}
 
 	public static function render_column_classic( string $column, int $post_id ): void {
@@ -102,7 +102,7 @@ final class BatchPrintAdminUI {
 			printf( '<span class="moksafowo-shipping-method" title="%s">%s</span>', esc_attr( $label ), esc_html( $label ) );
 			return;
 		}
-		echo wp_kses_post( self::format_label_no( self::find_label_no( $order ) ) );
+		echo wp_kses_post( self::label_cell( $order ) );
 	}
 
 	private static function find_method_label( \WC_Order $order ): string {
@@ -126,6 +126,17 @@ final class BatchPrintAdminUI {
 		return '';
 	}
 
+	private static function label_cell( \WC_Order $order ): string {
+		$no = self::find_label_no( $order );
+		if ( '' === $no ) {
+			$button = ListCreateButton::render_cell( $order );
+			if ( '' !== $button ) {
+				return $button;
+			}
+		}
+		return self::format_label_no( $no );
+	}
+
 	private static function format_label_no( string $no ): string {
 		if ( '' === $no ) {
 			return '—';
@@ -133,7 +144,7 @@ final class BatchPrintAdminUI {
 		return '<span style="font-family:monospace;word-break:break-all;">' . esc_html( $no ) . '</span>';
 	}
 
-	private static function find_label_no( \WC_Order $order ): string {
+	public static function find_label_no( \WC_Order $order ): string {
 		// 先用各家物流登記的追蹤資料（跟物流通知信同一份），四家都有，而且是拿得去查的號碼。
 		foreach ( $order->get_shipping_methods() as $method ) {
 			$entries = (array) apply_filters( 'moksafowo_shipping_tracking_entries', [], $order, (string) $method->get_method_id() );

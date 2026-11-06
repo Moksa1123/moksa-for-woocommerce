@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.19.5
+Stable tag: 1.20.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -160,6 +160,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.20.0 - 2026-11-06 =
+* New: The orders list now has "Issue invoice" and "Create shipment" buttons for orders that still need them, and shows why the last attempt failed.
 
 = 1.19.5 - 2026-11-06 =
 * Fixed: Amego e-invoices are no longer rejected when a discounted line total does not divide evenly by its quantity.

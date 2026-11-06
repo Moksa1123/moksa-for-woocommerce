@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.19.3\n"
+"Project-Id-Version: Moksa for WooCommerce 1.19.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-05T06:08:45+00:00\n"
+"POT-Creation-Date: 2026-11-06T11:41:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -117,10 +117,10 @@ msgstr ""
 #: src/Modules/OrderLookup/QueryPayment.php:52
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:36
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:69
-#: src/Modules/OrderLookup/ShipmentOps.php:101
-#: src/Modules/OrderLookup/ShipmentOps.php:142
-#: src/Modules/OrderLookup/ShipmentOps.php:200
-#: src/Modules/OrderLookup/ShipmentOps.php:259
+#: src/Modules/OrderLookup/ShipmentOps.php:52
+#: src/Modules/OrderLookup/ShipmentOps.php:93
+#: src/Modules/OrderLookup/ShipmentOps.php:151
+#: src/Modules/OrderLookup/ShipmentOps.php:210
 #: src/Modules/OrderLookup/ShipmentRecordOps.php:30
 #: src/Modules/OrderLookup/ShipmentRecordOps.php:67
 #: src/Modules/OrderLookup/ShipmentRecordOps.php:163
@@ -252,12 +252,13 @@ msgstr ""
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:332
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:344
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:386
-#: src/Modules/Shared/Invoice/OrderListColumn.php:104
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:284
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:376
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:427
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:494
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:557
+#: src/Modules/Shared/Invoice/OrderListColumn.php:113
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:295
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:387
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:438
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:505
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:568
+#: src/Modules/Shipping/Admin/ListCreateButton.php:57
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:35
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -2571,7 +2572,7 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:117
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:179
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:186
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:223
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:234
 msgid "Cancel"
 msgstr ""
 
@@ -2805,7 +2806,7 @@ msgstr ""
 
 #: src/Modules/AmegoInvoice/Operations/Issue.php:20
 #: src/Modules/EcpayInvoice/Operations/Issue.php:21
-#: src/Modules/Shared/Invoice/OrderListColumn.php:117
+#: src/Modules/Shared/Invoice/OrderListColumn.php:126
 msgid "This order already has an invoice."
 msgstr ""
 
@@ -3236,7 +3237,7 @@ msgid "Look up another order"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:83
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:262
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:273
 msgid "Close"
 msgstr ""
 
@@ -3252,7 +3253,7 @@ msgid "Unpaid"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:86
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:217
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:228
 #: src/Modules/Shipping/Statuses/Registrar.php:153
 msgid "Order status"
 msgstr ""
@@ -3308,7 +3309,7 @@ msgstr ""
 #: src/Modules/CustomerService/Module.php:91
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:61
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:66
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:216
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:227
 msgid "Shipping method"
 msgstr ""
 
@@ -3737,7 +3738,7 @@ msgstr ""
 #: src/Modules/OrderLookup/PaymentStatus.php:29
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
-#: src/Modules/OrderLookup/ShipmentOps.php:105
+#: src/Modules/OrderLookup/ShipmentOps.php:56
 #: src/Modules/OrderLookup/ShipmentRecordOps.php:168
 #: src/Modules/OrderLookup/TrackingLookup.php:67
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:76
@@ -3745,7 +3746,8 @@ msgstr ""
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
 #: src/Modules/Shared/Admin/PaymentQuery.php:77
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:391
-#: src/Modules/Shared/Invoice/OrderListColumn.php:109
+#: src/Modules/Shared/Invoice/OrderListColumn.php:118
+#: src/Modules/Shipping/Admin/ListCreateButton.php:62
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
 msgid "The order could not be found."
 msgstr ""
@@ -4159,7 +4161,7 @@ msgstr ""
 #: src/Modules/Ecpay/PaymentTypeCatalog.php:13
 #: src/Modules/EcpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:42
-#: src/Modules/OrderLookup/ShipmentOps.php:30
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:24
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:89
 #: assets/blocks/build/methods/ecpay/index.js:1
 msgid "ECPay"
@@ -4935,7 +4937,7 @@ msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:225
-#: src/Modules/Shared/Invoice/OrderListColumn.php:171
+#: src/Modules/Shared/Invoice/OrderListColumn.php:180
 msgid "Issue invoice"
 msgstr ""
 
@@ -4964,7 +4966,7 @@ msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:268
-#: src/Modules/Shared/Invoice/OrderListColumn.php:72
+#: src/Modules/Shared/Invoice/OrderListColumn.php:81
 msgid "Issuing…"
 msgstr ""
 
@@ -5275,7 +5277,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
-#: src/Modules/Shared/Invoice/OrderListColumn.php:132
+#: src/Modules/Shared/Invoice/OrderListColumn.php:141
 #: src/Settings/SettingsPage.php:598
 msgid "Invoice number"
 msgstr ""
@@ -5304,7 +5306,7 @@ msgstr ""
 #: src/Modules/PaynowInvoice/Operations/Query.php:46
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:119
 #: src/Modules/Payuni/Gateways/GatewayBase.php:149
-#: src/Modules/Shared/Invoice/OrderListColumn.php:182
+#: src/Modules/Shared/Invoice/OrderListColumn.php:200
 msgid "Voided"
 msgstr ""
 
@@ -5522,6 +5524,7 @@ msgid "Delete"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:301
+#: src/Modules/Shipping/Admin/ListCreateButton.php:33
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:168
 msgid "Create shipment"
 msgstr ""
@@ -5552,6 +5555,7 @@ msgid "The browser blocked the new window. Please allow pop-ups for this site."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:337
+#: src/Modules/Shipping/Admin/ListCreateButton.php:105
 msgid "Creating…"
 msgstr ""
 
@@ -5716,7 +5720,7 @@ msgstr ""
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:157
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:156
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:132
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:215
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:226
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:117
 msgid "Recipient"
 msgstr ""
@@ -5840,7 +5844,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Providers/SevenEleven/C2CUnified.php:58
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:59
 #: src/Modules/PayuniShipping/Utils/GoodsType.php:16
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:236
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:247
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:35
 #: src/Modules/Shipping/Temp/ProductTemp.php:104
 #: src/Modules/SmilepayShipping/Methods/Tcat.php:43
@@ -5855,7 +5859,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Providers/SevenEleven/C2CUnified.php:59
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:61
 #: src/Modules/PayuniShipping/Utils/GoodsType.php:18
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:238
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:249
 #: src/Modules/Shipping/Temp/ProductTemp.php:103
 #: src/Modules/SmilepayShipping/Methods/Tcat.php:45
 #: src/Modules/SmilepayShipping/Methods/TcatFreeze.php:36
@@ -5923,7 +5927,7 @@ msgstr ""
 #: src/Modules/EcpayShipping/Methods/HomeTcat.php:51
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:60
 #: src/Modules/PayuniShipping/Utils/GoodsType.php:20
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:237
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:248
 #: src/Modules/Shipping/Temp/ProductTemp.php:102
 #: src/Modules/SmilepayShipping/Methods/Tcat.php:44
 #: src/Modules/SmilepayShipping/Methods/TcatRefrige.php:36
@@ -7476,7 +7480,7 @@ msgid "The shared QR code standard covering wallets such as JKOPAY, PXPay Plus a
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/Unified.php:58
-#: src/Modules/OrderLookup/ShipmentOps.php:32
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:26
 #: assets/blocks/build/methods/newebpay/index.js:1
 msgid "NewebPay"
 msgstr ""
@@ -8617,12 +8621,12 @@ msgstr ""
 
 #: src/Modules/OrderLookup/ChannelOps.php:43
 #: src/Modules/OrderLookup/PaymentMethodOps.php:26
-#: src/Modules/OrderLookup/ShipmentOps.php:31
 #: src/Modules/Payuni/Gateways/GatewayBase.php:168
 #: src/Modules/Payuni/Gateways/Unified.php:58
 #: src/Modules/Payuni/Module.php:27
 #: src/Modules/Payuni/Settings/SettingsTab.php:23
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:12
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:25
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:90
 #: src/Settings/SettingsPage.php:213
 #: assets/blocks/build/methods/payuni/index.js:1
@@ -8832,9 +8836,9 @@ msgid "✅ The %2$s issuing options are now %1$s: %3$s."
 msgstr ""
 
 #: src/Modules/OrderLookup/InvoiceOps.php:44
-#: src/Modules/OrderLookup/ShipmentOps.php:33
 #: src/Modules/Shared/Admin/CardRenderers.php:376
 #: src/Modules/Shared/Admin/CardRenderers.php:391
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:27
 #: src/Modules/Smilepay/Module.php:21
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:20
 #: src/Modules/SmilepayInvoice/Operations/AutoInvalid.php:20
@@ -9137,84 +9141,73 @@ msgstr ""
 msgid "T-Cat tracking number"
 msgstr ""
 
-#: src/Modules/OrderLookup/ShipmentOps.php:67
-msgid "The PAYUNi shipping module is not enabled."
-msgstr ""
-
-#: src/Modules/OrderLookup/ShipmentOps.php:81
-msgid "PAYUNi did not return a tracking number. This is usually a settings or order data problem — see the order notes for details."
-msgstr ""
-
-#: src/Modules/OrderLookup/ShipmentOps.php:89
-msgid "Unsupported carrier."
-msgstr ""
-
-#: src/Modules/OrderLookup/ShipmentOps.php:110
+#: src/Modules/OrderLookup/ShipmentOps.php:61
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:74
 msgid "The shipping method on this order does not support creating a shipment automatically."
 msgstr ""
 
 #. translators: 1: order number, 2: provider name
-#: src/Modules/OrderLookup/ShipmentOps.php:116
+#: src/Modules/OrderLookup/ShipmentOps.php:67
 #, php-format
 msgid "Create a shipment for order #%1$s with %2$s."
 msgstr ""
 
 #. translators: %s: existing shipping number
-#: src/Modules/OrderLookup/ShipmentOps.php:123
+#: src/Modules/OrderLookup/ShipmentOps.php:74
 #, php-format
 msgid "(Note: this order already has tracking number %s, so another shipment may be added.)"
 msgstr ""
 
-#: src/Modules/OrderLookup/ShipmentOps.php:148
+#: src/Modules/OrderLookup/ShipmentOps.php:99
 msgid "The order or the carrier could not be found."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/ShipmentOps.php:154
+#: src/Modules/OrderLookup/ShipmentOps.php:105
 #, php-format
 msgid "Could not create the shipment: %s"
 msgstr ""
 
 #. translators: %s: shipping number
-#: src/Modules/OrderLookup/ShipmentOps.php:161
+#: src/Modules/OrderLookup/ShipmentOps.php:112
 #, php-format
 msgid ", tracking number %s"
 msgstr ""
 
 #. translators: 1: order number, 2: shipping number suffix(可能為空)
-#: src/Modules/OrderLookup/ShipmentOps.php:165
+#: src/Modules/OrderLookup/ShipmentOps.php:116
 #, php-format
 msgid "✅ A shipment was created for order #%1$s%2$s."
 msgstr ""
 
-#: src/Modules/OrderLookup/ShipmentOps.php:204
+#: src/Modules/OrderLookup/ShipmentOps.php:155
 msgid "No orders were given to create shipments for."
 msgstr ""
 
-#: src/Modules/OrderLookup/ShipmentOps.php:228
+#: src/Modules/OrderLookup/ShipmentOps.php:179
 msgid "None of the orders can have a shipment created; the shipping method must belong to a supported carrier."
 msgstr ""
 
 #. translators: 1: count, 2: order numbers
-#: src/Modules/OrderLookup/ShipmentOps.php:235
+#: src/Modules/OrderLookup/ShipmentOps.php:186
 #, php-format
 msgid "Create shipments for %1$d orders (%2$s)."
 msgstr ""
 
 #. translators: %s: skipped refs
-#: src/Modules/OrderLookup/ShipmentOps.php:242
+#: src/Modules/OrderLookup/ShipmentOps.php:193
 #, php-format
 msgid "(skipped because no shipment could be created: %s)"
 msgstr ""
 
 #. translators: 1: success, 2: total, 3: order:tracking list
-#: src/Modules/OrderLookup/ShipmentOps.php:283
+#: src/Modules/OrderLookup/ShipmentOps.php:234
 #, php-format
 msgid "✅ Shipments were created for %1$d of %2$d orders: %3$s."
 msgstr ""
 
 #. translators: %s: failed order numbers
-#: src/Modules/OrderLookup/ShipmentOps.php:291
+#: src/Modules/OrderLookup/ShipmentOps.php:242
 #, php-format
 msgid "⚠️ Failed: %s."
 msgstr ""
@@ -9712,7 +9705,7 @@ msgstr ""
 
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:118
 #: src/Modules/Payuni/Gateways/GatewayBase.php:147
-#: src/Modules/Shared/Invoice/OrderListColumn.php:128
+#: src/Modules/Shared/Invoice/OrderListColumn.php:137
 msgid "Issuing failed"
 msgstr ""
 
@@ -10879,7 +10872,8 @@ msgid "Update failed"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:61
-#: src/Modules/Shared/Invoice/OrderListColumn.php:73
+#: src/Modules/Shared/Invoice/OrderListColumn.php:82
+#: src/Modules/Shipping/Admin/ListCreateButton.php:106
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:39
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:196
 msgid "The request failed. Please try again."
@@ -10897,7 +10891,7 @@ msgid "Open the store map"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/StoreSelector.php:231
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:224
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:235
 msgid "Loading…"
 msgstr ""
 
@@ -11963,6 +11957,11 @@ msgstr ""
 msgid "Card brand:"
 msgstr ""
 
+#: src/Modules/Shared/Admin/LastError.php:37
+#: src/Modules/Shipping/Admin/ListCreateButton.php:81
+msgid "Unknown error"
+msgstr ""
+
 #: src/Modules/Shared/Admin/OrderInfoLayout.php:26
 msgid "Payments / shipping / e-invoicing"
 msgstr ""
@@ -12292,16 +12291,24 @@ msgstr ""
 msgid "Mobile barcode (/ followed by 7 uppercase letters or digits)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/OrderListColumn.php:114
+#: src/Modules/Shared/Invoice/OrderListColumn.php:123
 msgid "No e-invoice service that supports manual issuing is enabled."
 msgstr ""
 
-#: src/Modules/Shared/Invoice/OrderListColumn.php:120
+#: src/Modules/Shared/Invoice/OrderListColumn.php:129
 msgid "This order has not been paid yet."
 msgstr ""
 
-#: src/Modules/Shared/Invoice/OrderListColumn.php:164
+#: src/Modules/Shared/Invoice/OrderListColumn.php:173
 msgid "Not required (zero total)"
+msgstr ""
+
+#. translators: %s: error message from the e-invoice service
+#. translators: %s: error message from the shipping carrier
+#: src/Modules/Shared/Invoice/OrderListColumn.php:188
+#: src/Modules/Shipping/Admin/ListCreateButton.php:41
+#, php-format
+msgid "Failed: %s"
 msgstr ""
 
 #: src/Modules/Shipping/Admin/AbstractAdminActions.php:48
@@ -12309,120 +12316,120 @@ msgstr ""
 msgid "You do not have permission to do this"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:213
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:224
 msgid "Bulk print"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:214
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:225
 msgid "Orders"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:218
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:229
 msgid "Printable"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:219
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:230
 msgid "There are no printable orders."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:220
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:231
 msgid "Select at least one."
 msgstr ""
 
 #. translators: %d: number of selected orders to print
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:222
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:233
 #, php-format
 msgid "Print (%d)"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:225
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:236
 msgid "Loading failed."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:226
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:237
 msgid "✓"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:227
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:238
 msgid "—"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:228
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:267
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:239
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:278
 msgid "Paper:"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:229
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:269
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:240
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:280
 msgid "A4 standard"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:230
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:270
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:241
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:281
 msgid "A6 label printer"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:231
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:242
 msgid "(not supported by this carrier)"
 msgstr ""
 
 #. translators: %s: paper size such as A4
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:233
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:244
 #, php-format
 msgid "(%s not supported)"
 msgstr ""
 
 #. translators: %d: number of parcels
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:235
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:246
 #, php-format
 msgid "%d parcels"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:289
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:381
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:300
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:392
 msgid "That shipping module could not be found."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:386
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:397
 msgid "Select at least one order."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:392
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:403
 msgid "There is nothing to print."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:434
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:445
 msgid "No order was specified."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:453
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:464
 msgid "The selected orders have no printable shipping labels — the shipments may not have been created yet."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:484
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:495
 msgid "Print shipping labels (carrier detected automatically)"
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:543
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:554
 msgid "None of the selected orders has a printable label for this carrier, so all of them were skipped."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:550
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:554
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:561
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:565
 msgid "The print link has expired. Please try again."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:562
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:573
 msgid "There is nothing to print, or the link has expired."
 msgstr ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:581
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:585
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:592
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:596
 msgid "Bulk print shipping labels"
 msgstr ""
 
 #. translators: 1: number of orders printed, 2: number of print pages
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:589
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:600
 #, php-format
 msgid "%1$d order sent to print (%2$d print pages)."
 msgid_plural "%1$d orders sent to print (%2$d print pages)."
@@ -12430,7 +12437,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of orders without a shipment
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:593
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:604
 #, php-format
 msgid "%d order skipped because its shipment has not been created yet."
 msgid_plural "%d orders skipped because their shipments have not been created yet."
@@ -12438,19 +12445,19 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of orders shipped by another carrier
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:598
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:609
 #, php-format
 msgid "%d order skipped because it uses another carrier."
 msgid_plural "%d orders skipped because they use another carrier."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:604
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:615
 msgid "Click the buttons below to open each label — this stops the browser from blocking pop-ups:"
 msgstr ""
 
 #. translators: %d: label sequence number
-#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:607
+#: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:618
 #, php-format
 msgid "Print label %d"
 msgstr ""
@@ -12508,6 +12515,34 @@ msgstr ""
 
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:411
 msgid "You can close this window and go back to the order — remember to update the order to keep the change."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ListCreateButton.php:65
+msgid "This order already has a shipment. Refresh the page to see it."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ListCreateButton.php:68
+msgid "Shipments can only be created for orders that are processing or on hold."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ListCreateButton.php:74
+msgid "A shipment is already being created for this order. Please wait a moment."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ListCreateButton.php:85
+msgid "Created — awaiting tracking number"
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:91
+msgid "The PAYUNi shipping module is not enabled."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:105
+msgid "PAYUNi did not return a tracking number. This is usually a settings or order data problem — see the order notes for details."
+msgstr ""
+
+#: src/Modules/Shipping/Admin/ShipmentCreator.php:113
+msgid "Unsupported carrier."
 msgstr ""
 
 #: src/Modules/Shipping/Admin/ShipmentRecords.php:89
@@ -12853,8 +12888,8 @@ msgstr ""
 msgid "Attributes: <code>temp_1</code> = ambient base, <code>temp_2</code> = chilled base, <code>temp_3</code> = frozen base, <code>cool</code> = added when anything needs refrigeration, <code>cool_2</code> = extra for chilled, <code>cool_3</code> = extra for frozen, <code>qty</code> = per item, <code>weight</code> = per kilogram."
 msgstr ""
 
-#: src/Modules/Shipping/Module.php:78
-#: src/Modules/Shipping/Module.php:89
+#: src/Modules/Shipping/Module.php:79
+#: src/Modules/Shipping/Module.php:90
 #: src/Modules/Shipping/Tracking/TrackingLink.php:241
 msgid "Copied"
 msgstr ""

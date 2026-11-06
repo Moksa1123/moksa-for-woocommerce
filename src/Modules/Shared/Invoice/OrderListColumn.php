@@ -3,12 +3,15 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Shared\Invoice;
 
+use Moksafowo\Modules\Shared\Admin\LastError;
+use Moksafowo\Order\Meta\Keys;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * 訂單列表的「發票號碼」欄。任何一個發票模組啟用時才掛上；
  * 用標準欄位註冊，商家可從「顯示項目設定」自行隱藏。
- * 開立時機設成「手動」的發票服務，已付款、還沒開過的訂單在這欄直接有「開立發票」按鈕。
+ * 已付款、還沒有發票的訂單在這欄直接有「開立發票」按鈕；上次開立失敗的會附上原因。
  */
 final class OrderListColumn {
 
@@ -21,9 +24,6 @@ final class OrderListColumn {
 	/** @var array<string,array{when_option:string,issue:callable}> */
 	private static array $issuers = [];
 
-	/**
-	 * 發票模組在 admin 開機時登記自己；只有開立時機選「手動」的才會出現按鈕。
-	 */
 	public static function register_manual_issuer( string $provider, string $when_option, callable $issue ): void {
 		self::$issuers[ $provider ] = [
 			'when_option' => $when_option,
@@ -45,19 +45,28 @@ final class OrderListColumn {
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 	}
 
-	private static function manual_issuer(): string {
+	/**
+	 * 這張訂單該由哪一家開：上次失敗的那家 → 結帳時記下的那家 → 開立時機設手動的那家 → 第一個啟用的。
+	 */
+	private static function issuer_for( \WC_Order $order ): string {
+		$last = LastError::get( $order, Keys::INVOICE_LAST_ERROR );
+		foreach ( [ $last['provider'] ?? '', (string) $order->get_meta( Keys::INVOICE_PROVIDER ) ] as $provider ) {
+			if ( '' !== $provider && isset( self::$issuers[ $provider ] ) ) {
+				return $provider;
+			}
+		}
 		foreach ( self::$issuers as $provider => $issuer ) {
 			if ( 'manual' === get_option( $issuer['when_option'], 'paid' ) ) {
 				return $provider;
 			}
 		}
-		return '';
+		return (string) ( array_key_first( self::$issuers ) ?? '' );
 	}
 
 	public static function enqueue( string $hook ): void {
 		$screen    = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		$is_orders = 'woocommerce_page_wc-orders' === $hook || ( $screen && 'edit-shop_order' === $screen->id );
-		if ( ! $is_orders || '' === self::manual_issuer() ) {
+		if ( ! $is_orders || empty( self::$issuers ) ) {
 			return;
 		}
 		wp_register_script( 'moksafowo-invoice-list-issue', false, [], MOKSAFOWO_VERSION, true );
@@ -109,7 +118,7 @@ JS;
 			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
 		// 三種擋下的原因分開說，商家才知道要做什麼。
-		$provider = self::manual_issuer();
+		$provider = self::issuer_for( $order );
 		if ( '' === $provider ) {
 			wp_send_json_error( [ 'message' => __( 'No e-invoice service that supports manual issuing is enabled.', 'moksa-for-woocommerce' ) ] );
 		}
@@ -119,7 +128,7 @@ JS;
 		if ( ! $order->is_paid() ) {
 			wp_send_json_error( [ 'message' => __( 'This order has not been paid yet.', 'moksa-for-woocommerce' ) ] );
 		}
-		$result = (array) call_user_func( self::$issuers[ $provider ]['issue'], $order );
+		$result = LastError::record( $order, Keys::INVOICE_LAST_ERROR, $provider, (array) call_user_func( self::$issuers[ $provider ]['issue'], $order ) );
 		$fresh  = wc_get_order( $order->get_id() );
 		$number = $fresh instanceof \WC_Order ? InvoiceNumber::of( $fresh )['number'] : '';
 		if ( ! empty( $result['ok'] ) && '' !== $number ) {
@@ -164,12 +173,21 @@ JS;
 				echo '<small>' . esc_html__( 'Not required (zero total)', 'moksa-for-woocommerce' ) . '</small>';
 				return;
 			}
-			if ( $order instanceof \WC_Order && $order->is_paid() && '' !== self::manual_issuer() ) {
+			if ( $order instanceof \WC_Order && $order->is_paid() && '' !== self::issuer_for( $order ) ) {
 				printf(
 					'<button type="button" class="button button-small moksafowo-invoice-list-issue" data-order-id="%1$d">%2$s</button>',
 					(int) $order->get_id(),
 					esc_html__( 'Issue invoice', 'moksa-for-woocommerce' )
 				);
+				$last = LastError::get( $order, Keys::INVOICE_LAST_ERROR );
+				if ( null !== $last ) {
+					printf(
+						'<small class="moksafowo-invoice-list-error" style="display:block;color:#b32d2e;" title="%1$s">%2$s</small>',
+						esc_attr( $last['message'] ),
+						/* translators: %s: error message from the e-invoice service */
+						esc_html( sprintf( __( 'Failed: %s', 'moksa-for-woocommerce' ), mb_strimwidth( $last['message'], 0, 40, '…' ) ) )
+					);
+				}
 				return;
 			}
 			echo '&ndash;';

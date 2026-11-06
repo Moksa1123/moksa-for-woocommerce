@@ -20,6 +20,7 @@ final class Module {
 		Webhook\StatusReconciler::init();
 		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::SHIPPING_COMMON ) ) {
 			BatchPrintAdminUI::init();
+			Admin\ListCreateButton::init();
 		}
 		ShippingCardSection::init();
 		AddFee::init();
