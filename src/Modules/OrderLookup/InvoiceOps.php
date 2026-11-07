@@ -103,6 +103,11 @@ final class InvoiceOps {
 		if ( '' === $provider ) {
 			return new \WP_Error( 'moksafowo_ai_no_invoice_module', __( 'No e-invoice module is enabled.', 'moksa-for-woocommerce' ) );
 		}
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
+		if ( null !== $legacy ) {
+			/* translators: 1: invoice number, 2: plugin name */
+			return new \WP_Error( 'moksafowo_ai_legacy_invoice', sprintf( __( 'This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one.', 'moksa-for-woocommerce' ), $legacy['number'], $legacy['source'] ) );
+		}
 		$map      = self::providers();
 		$existing = (string) $order->get_meta( $map[ $provider ][2] );
 

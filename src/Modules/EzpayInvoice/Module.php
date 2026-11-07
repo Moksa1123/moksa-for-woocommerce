@@ -117,6 +117,9 @@ final class Module extends AbstractModule {
 			$order->save();
 			return;
 		}
+		if ( \Moksafowo\Modules\Shared\Compat\LegacyOrderData::skip_issue_if_invoiced( $order ) ) {
+			return;
+		}
 		\Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, 'ezpay', Issue::run( $order ) );
 	}
 }

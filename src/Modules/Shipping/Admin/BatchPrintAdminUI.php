@@ -169,7 +169,7 @@ final class BatchPrintAdminUI {
 			return $payuni_ship_no;
 		}
 		// PAYUNi 的物流交易序號（S00…）是 PAYUNi 內部編號，不是物流編號；還沒取得物流編號就留空。
-		return '';
+		return \Moksafowo\Modules\Shared\Compat\LegacyOrderData::tracking_no( $order );
 	}
 
 	/**

@@ -320,6 +320,11 @@ abstract class AbstractAdminMetaBox {
 		}
 		// 後台手動挑的發票欄位 → 存回訂單 meta（受設定限制），再交給各 provider 的 Issue 開立。
 		AdminIssueForm::save( $order, static::option_prefix() );
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
+		if ( null !== $legacy ) {
+			/* translators: 1: invoice number, 2: plugin name */
+			wp_send_json_error( [ 'message' => sprintf( __( 'This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one.', 'moksa-for-woocommerce' ), $legacy['number'], $legacy['source'] ) ] );
+		}
 		$result = \Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, static::provider_key(), (array) call_user_func( static::issue_callable(), $order ) );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}

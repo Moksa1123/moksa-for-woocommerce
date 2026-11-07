@@ -61,7 +61,7 @@ final class ShipmentOps {
 			return new \WP_Error( 'moksafowo_ai_no_shipping', __( 'The shipping method on this order does not support creating a shipment automatically.', 'moksa-for-woocommerce' ) );
 		}
 
-		$existing = SearchableKeys::field_value( $order, 'shipping' );
+		$existing = ShipmentCreator::shipment_ref( $order );
 		$summary  = sprintf(
 			/* translators: 1: order number, 2: provider name */
 			__( 'Create a shipment for order #%1$s with %2$s.', 'moksa-for-woocommerce' ),

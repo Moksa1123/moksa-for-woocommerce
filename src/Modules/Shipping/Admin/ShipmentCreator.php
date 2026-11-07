@@ -60,7 +60,7 @@ final class ShipmentCreator {
 				return $value;
 			}
 		}
-		return '';
+		return \Moksafowo\Modules\Shared\Compat\LegacyOrderData::tracking_no( $order );
 	}
 
 	/**

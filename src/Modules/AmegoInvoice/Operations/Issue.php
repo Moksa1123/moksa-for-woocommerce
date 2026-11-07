@@ -193,7 +193,7 @@ final class Issue {
 			if ( $qty <= 0 || 0.0 === $line_total ) {
 				continue;
 			}
-			$amount = (int) round( $line_total, 0 );
+			$amount         = (int) round( $line_total, 0 );
 			$unit_price     = rtrim( rtrim( number_format( $amount / max( $qty, 1 ), 7, '.', '' ), '0' ), '.' );
 			$items[]        = [
 				'Description' => mb_substr( (string) $item->get_name(), 0, 256 ),

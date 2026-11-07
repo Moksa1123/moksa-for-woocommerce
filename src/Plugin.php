@@ -103,6 +103,7 @@ final class Plugin {
 		if ( is_admin() ) {
 			Modules\Shared\Admin\CardRenderers::boot();
 			Modules\Shared\Admin\PaymentQuery::boot();
+			Modules\Shared\Compat\LegacyOrderCards::init();
 			// Hub 一律 boot —— 它自己決定要不要出現在側邊欄（見 Hub::menu()）。
 			// 不 boot 的話頁面連路由都沒有，使用者點到舊連結會拿到誤導的權限錯誤。
 			Modules\AiAssistant\Admin\Hub::boot();

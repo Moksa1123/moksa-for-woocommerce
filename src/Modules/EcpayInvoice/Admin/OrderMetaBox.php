@@ -261,6 +261,11 @@ final class OrderMetaBox {
 		// 開立前再存一次（與「更新」一致），確保用的是畫面上的值。
 		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice' );
 
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
+		if ( null !== $legacy ) {
+			/* translators: 1: invoice number, 2: plugin name */
+			wp_send_json_error( [ 'message' => sprintf( __( 'This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one.', 'moksa-for-woocommerce' ), $legacy['number'], $legacy['source'] ) ] );
+		}
 		$result = \Moksafowo\Modules\Shared\Admin\LastError::record( $order, Keys::INVOICE_LAST_ERROR, 'ecpay', Issue::run( $order ) );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
