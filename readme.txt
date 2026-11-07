@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.20.1
+Stable tag: 1.21.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -160,6 +160,9 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.21.0 - 2026-11-07 =
+* New: For orders from RY Tools or the official ECPay plugin, you can void the old ECPay invoice from the order screen, see the pickup store in the shipping address, and switch RY order statuses to Moksa statuses in bulk.
 
 = 1.20.1 - 2026-11-07 =
 * Fixed: Orders invoiced or shipped by RY Tools or the official ECPay plugin are no longer invoiced or shipped again, keep their RY order statuses, and show the old invoice and tracking numbers. Voiding those old invoices still has to be done in the original service.

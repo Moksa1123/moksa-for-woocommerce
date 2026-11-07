@@ -17,14 +17,16 @@ final class Keys {
 	public const SHIPPING_LABEL_PRINTED_AT   = '_moksafowo_shipping_label_printed_at';
 	public const SHIPPING_LAST_ERROR         = '_moksafowo_shipping_last_error';  // { provider, message, time }，建單成功即刪除.
 
-	public const INVOICE_TYPE         = '_moksafowo_invoice_type';            // b2c_carrier|b2c_donate|b2b|paper.
-	public const INVOICE_BUYER_UBN    = '_moksafowo_invoice_buyer_ubn';
-	public const INVOICE_BUYER_NAME   = '_moksafowo_invoice_buyer_name';
-	public const INVOICE_CARRIER_TYPE = '_moksafowo_invoice_carrier_type';
-	public const INVOICE_CARRIER_NUM  = '_moksafowo_invoice_carrier_num';
-	public const INVOICE_LOVE_CODE    = '_moksafowo_invoice_love_code';
-	public const INVOICE_PROVIDER     = '_moksafowo_invoice_provider';        // ecpay|ezpay|paynow.
-	public const INVOICE_LAST_ERROR   = '_moksafowo_invoice_last_error';      // { provider, message, time }，開立成功即刪除.
+	public const INVOICE_TYPE               = '_moksafowo_invoice_type';            // b2c_carrier|b2c_donate|b2b|paper.
+	public const INVOICE_BUYER_UBN          = '_moksafowo_invoice_buyer_ubn';
+	public const INVOICE_BUYER_NAME         = '_moksafowo_invoice_buyer_name';
+	public const INVOICE_CARRIER_TYPE       = '_moksafowo_invoice_carrier_type';
+	public const INVOICE_CARRIER_NUM        = '_moksafowo_invoice_carrier_num';
+	public const INVOICE_LOVE_CODE          = '_moksafowo_invoice_love_code';
+	public const INVOICE_PROVIDER           = '_moksafowo_invoice_provider';        // ecpay|ezpay|paynow.
+	public const INVOICE_LAST_ERROR         = '_moksafowo_invoice_last_error';      // { provider, message, time }，開立成功即刪除.
+	public const LEGACY_INVOICE_VOIDED_AT   = '_moksafowo_legacy_invoice_voided_at';   // 舊外掛開的發票由 Moksa 作廢的時間（舊外掛的 meta 不改）.
+	public const LEGACY_INVOICE_VOID_REASON = '_moksafowo_legacy_invoice_void_reason';
 
 	// 取號類付款（ATM/CVS/Barcode）「付款資訊 email 已寄出」旗標 — 共用於 5 家金流的 IpnHandler
 	// 避免顧客 IPN 短時間多次（webhook retry / dual-IPN）觸發重發 email。

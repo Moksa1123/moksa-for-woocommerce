@@ -55,6 +55,7 @@ final class Module extends AbstractModule {
 			Admin\OrderMetaBox::init();
 			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::init();
 			\Moksafowo\Modules\Shared\Invoice\OrderListColumn::register_manual_issuer( 'ecpay', 'moksafowo_ecpay_invoice_issue_when', [ Operations\Issue::class, 'run' ] );
+			Operations\LegacyInvalid::init();
 		}
 
 		$when = (string) get_option( 'moksafowo_ecpay_invoice_issue_when', 'paid' );

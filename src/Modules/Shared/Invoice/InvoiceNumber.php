@@ -56,12 +56,15 @@ final class InvoiceNumber {
 			$voided = '' === $voided ? $number : $voided;
 		}
 
-		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice_number( $order );
-		if ( '' !== $legacy ) {
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice_record( $order );
+		if ( null !== $legacy && ! $legacy['voided'] ) {
 			return [
-				'number' => $legacy,
+				'number' => $legacy['number'],
 				'voided' => false,
 			];
+		}
+		if ( null !== $legacy && '' === $voided ) {
+			$voided = $legacy['number'];
 		}
 
 		return [

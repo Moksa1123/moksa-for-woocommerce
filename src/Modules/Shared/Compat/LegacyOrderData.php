@@ -12,31 +12,46 @@ defined( 'ABSPATH' ) || exit;
 final class LegacyOrderData {
 
 	/**
-	 * 舊外掛開立、而且沒有作廢的發票。綠界官方作廢時會清空號碼；RY 作廢時刪除號碼，
-	 * 0 元／負數／延後開立則寫入 zero、negative、delay，這三種都不是發票。
+	 * 舊外掛開立的發票，含之後在 Moksa 作廢的（voided=true）。綠界官方在自己那邊作廢時會清空號碼；
+	 * RY 作廢時刪除號碼，0 元／負數／延後開立則寫入 zero、negative、delay，這三種都不是發票。
 	 *
-	 * @return array{number: string, date: string, random: string, source: string}|null
+	 * @return array{number: string, date: string, random: string, source: string, source_key: string, voided: bool}|null
 	 */
-	public static function invoice( \WC_Order $order ): ?array {
+	public static function invoice_record( \WC_Order $order ): ?array {
+		$voided = '' !== (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::LEGACY_INVOICE_VOIDED_AT );
 		$number = trim( (string) $order->get_meta( '_wooecpay_invoice_no' ) );
 		if ( '' !== $number ) {
 			return [
-				'number' => $number,
-				'date'   => (string) $order->get_meta( '_wooecpay_invoice_date' ),
-				'random' => (string) $order->get_meta( '_wooecpay_invoice_random_number' ),
-				'source' => __( 'ECPay official plugin', 'moksa-for-woocommerce' ),
+				'number'     => $number,
+				'date'       => (string) $order->get_meta( '_wooecpay_invoice_date' ),
+				'random'     => (string) $order->get_meta( '_wooecpay_invoice_random_number' ),
+				'source'     => __( 'ECPay official plugin', 'moksa-for-woocommerce' ),
+				'source_key' => 'ecpay_official',
+				'voided'     => $voided,
 			];
 		}
 		$number = trim( (string) $order->get_meta( '_invoice_number' ) );
 		if ( '' !== $number && ! in_array( $number, [ 'zero', 'negative', 'delay' ], true ) ) {
 			return [
-				'number' => $number,
-				'date'   => (string) $order->get_meta( '_invoice_date' ),
-				'random' => (string) $order->get_meta( '_invoice_random_number' ),
-				'source' => __( 'RY Tools', 'moksa-for-woocommerce' ),
+				'number'     => $number,
+				'date'       => (string) $order->get_meta( '_invoice_date' ),
+				'random'     => (string) $order->get_meta( '_invoice_random_number' ),
+				'source'     => __( 'RY Tools', 'moksa-for-woocommerce' ),
+				'source_key' => 'ry',
+				'voided'     => $voided,
 			];
 		}
 		return null;
+	}
+
+	/**
+	 * 舊外掛開立、目前仍有效的發票。
+	 *
+	 * @return array{number: string, date: string, random: string, source: string, source_key: string, voided: bool}|null
+	 */
+	public static function invoice( \WC_Order $order ): ?array {
+		$record = self::invoice_record( $order );
+		return ( null !== $record && ! $record['voided'] ) ? $record : null;
 	}
 
 	public static function invoice_number( \WC_Order $order ): string {

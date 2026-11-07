@@ -18,6 +18,7 @@ final class Module {
 	public static function boot(): void {
 		Registrar::init();
 		Statuses\LegacyStatuses::init();
+		\Moksafowo\Modules\Shared\Compat\LegacyStoreAddress::init();
 		Webhook\StatusReconciler::init();
 		if ( \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::SHIPPING_COMMON ) ) {
 			BatchPrintAdminUI::init();

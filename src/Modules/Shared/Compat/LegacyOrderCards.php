@@ -14,6 +14,60 @@ final class LegacyOrderCards {
 	public static function init(): void {
 		\Moksafowo\Modules\Shared\Admin\OrderInfoLayout::boot();
 		add_filter( 'moksafowo_order_info_cards', [ __CLASS__, 'add' ], 99, 2 );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
+	}
+
+	/**
+	 * 只有綠界官方開的舊發票能從這裡作廢：Moksa 的綠界發票模組要開著，用的是同一組綠界帳號。
+	 *
+	 * @param array<string,mixed> $invoice LegacyOrderData::invoice_record() 的回傳。
+	 */
+	private static function can_void( array $invoice ): bool {
+		return ! $invoice['voided']
+			&& 'ecpay_official' === $invoice['source_key']
+			&& 'yes' === get_option( 'moksafowo_ecpay_invoice_enabled', 'no' )
+			&& \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID );
+	}
+
+	public static function enqueue( string $hook ): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders' ], true ) ) {
+			return;
+		}
+		if ( 'yes' !== get_option( 'moksafowo_ecpay_invoice_enabled', 'no' ) ) {
+			return;
+		}
+		wp_register_script( 'moksafowo-legacy-invoice-void', false, [], MOKSAFOWO_VERSION, true );
+		wp_enqueue_script( 'moksafowo-legacy-invoice-void' );
+		wp_add_inline_script(
+			'moksafowo-legacy-invoice-void',
+			'window.moksafowoLegacyVoid=' . wp_json_encode(
+				[
+					'ajax'    => admin_url( 'admin-ajax.php' ),
+					'action'  => 'moksafowo_ecpay_legacy_invoice_void',
+					'nonce'   => wp_create_nonce( 'moksafowo_ecpay_legacy_invoice_void' ),
+					'prompt'  => __( 'Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone.', 'moksa-for-woocommerce' ),
+					'working' => __( 'Voiding…', 'moksa-for-woocommerce' ),
+					'network' => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
+				]
+			) . ';' . <<<'JS'
+document.addEventListener('click',function(e){
+	var b=e.target.closest&&e.target.closest('.moksafowo-legacy-invoice-void');
+	if(!b){return;}
+	e.preventDefault();
+	if(b.disabled){return;}
+	var c=window.moksafowoLegacyVoid,reason=window.prompt(c.prompt,'');
+	if(reason===null||!reason.trim()){return;}
+	var label=b.textContent,fd=new FormData();
+	fd.append('action',c.action);fd.append('nonce',c.nonce);fd.append('order_id',b.getAttribute('data-order-id'));fd.append('reason',reason.trim());
+	b.disabled=true;b.textContent=c.working;
+	fetch(c.ajax,{method:'POST',body:fd,credentials:'same-origin'}).then(function(r){return r.json();}).then(function(r){
+		if(r&&r.success){location.reload();return;}
+		b.disabled=false;b.textContent=label;window.alert((r&&r.data&&r.data.message)||c.network);
+	}).catch(function(){b.disabled=false;b.textContent=label;window.alert(c.network);});
+});
+JS
+		);
 	}
 
 	/**
@@ -22,14 +76,29 @@ final class LegacyOrderCards {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public static function add( array $cards, \WC_Order $order ): array {
-		$invoice = LegacyOrderData::invoice( $order );
+		$invoice = LegacyOrderData::invoice_record( $order );
 		if ( null !== $invoice ) {
-			$rows  = [
+			$rows = [
 				__( 'Invoice number', 'moksa-for-woocommerce' ) => $invoice['number'],
 				__( 'Issued at', 'moksa-for-woocommerce' ) => $invoice['date'],
 				__( 'Random code', 'moksa-for-woocommerce' ) => $invoice['random'],
 			];
-			$cards = self::append( $cards, 'invoice', __( 'E-invoice', 'moksa-for-woocommerce' ), self::block( $invoice['source'], [ $rows ] ) );
+			if ( $invoice['voided'] ) {
+				$rows[ __( 'Status', 'moksa-for-woocommerce' ) ] = sprintf(
+					/* translators: %s: void time */
+					__( 'Voided in Moksa at %s', 'moksa-for-woocommerce' ),
+					(string) $order->get_meta( \Moksafowo\Order\Meta\Keys::LEGACY_INVOICE_VOIDED_AT )
+				);
+			}
+			$html = self::block( $invoice['source'], [ $rows ] );
+			if ( self::can_void( $invoice ) ) {
+				$html .= sprintf(
+					'<button type="button" class="button button-small moksafowo-legacy-invoice-void" data-order-id="%1$d">%2$s</button>',
+					(int) $order->get_id(),
+					esc_html__( 'Void this invoice', 'moksa-for-woocommerce' )
+				);
+			}
+			$cards = self::append( $cards, 'invoice', __( 'E-invoice', 'moksa-for-woocommerce' ), $html );
 		}
 
 		$tables = [];

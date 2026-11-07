@@ -234,6 +234,7 @@ msgstr "僅預覽：透過此連線不會做任何變更。"
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:276
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:292
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:312
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:27
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:407
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:425
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:461
@@ -260,6 +261,7 @@ msgstr "僅預覽：透過此連線不會做任何變更。"
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:505
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:568
 #: src/Modules/Shipping/Admin/ListCreateButton.php:57
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:67
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:35
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -2585,7 +2587,7 @@ msgstr "Amego"
 #: src/Modules/EcpayInvoice/Operations/Query.php:71
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:75
 #: src/Modules/EzpayInvoice/Operations/Query.php:76
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:30
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:84
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:53
 msgid "Random code"
 msgstr "隨機碼"
@@ -2861,7 +2863,7 @@ msgstr "Amego 發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 #: src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:22
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:52
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:77
 #: src/Modules/SmilepayInvoice/Operations/Issue.php:240
 msgid "Shipping"
@@ -3325,7 +3327,7 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:118
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:77
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:38
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:107
 #: src/Modules/Shared/Email/PersonalizationTags.php:55
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
 #: src/Settings/SettingsPage.php:605
@@ -3727,6 +3729,7 @@ msgstr "%s 訂單"
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:282
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:298
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:317
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:33
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:412
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:430
@@ -5013,12 +5016,14 @@ msgid "Citizen Digital Certificate (2 uppercase letters followed by 14 digits)"
 msgstr "自然人憑證（2 大寫字母 + 14 碼數字）"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:50
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:279
 msgid "Voiding…"
 msgstr "作廢中…"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:210
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:32
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:54
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:280
 msgid "Please enter a reason for voiding."
 msgstr "請輸入作廢原因。"
@@ -5177,12 +5182,12 @@ msgid "Allowance"
 msgstr "折讓單"
 
 #. translators: %d: delay days
-#: src/Modules/EcpayInvoice/Module.php:117
+#: src/Modules/EcpayInvoice/Module.php:118
 #, php-format
 msgid "The ECPay invoice is scheduled to be issued in %d days."
 msgstr "綠界發票排程於 %d 天後開立。"
 
-#: src/Modules/EcpayInvoice/Module.php:134
+#: src/Modules/EcpayInvoice/Module.php:135
 msgid "The scheduled ECPay invoice was cancelled because the order was cancelled, refunded or failed."
 msgstr "綠界發票排程取消（訂單已取消 / 退款 / 失敗）。"
 
@@ -5256,6 +5261,22 @@ msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 msgid "Other"
 msgstr "其他"
 
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:47
+msgid "This order has no invoice from the ECPay official plugin to void."
+msgstr "這張訂單沒有綠界官方外掛開的發票可以作廢。"
+
+#. translators: 1: invoice number, 2: error message
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:72
+#, php-format
+msgid "Invoice %1$s from the ECPay official plugin could not be voided: %2$s"
+msgstr "綠界官方外掛開的發票 %1$s 作廢失敗：%2$s"
+
+#. translators: 1: invoice number, 2: reason
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:88
+#, php-format
+msgid "Invoice %1$s from the ECPay official plugin was voided — reason: %2$s"
+msgstr "已作廢綠界官方外掛開的發票 %1$s，原因：%2$s"
+
 #: src/Modules/EcpayInvoice/Operations/Query.php:28
 #: src/Modules/EzpayInvoice/Operations/Query.php:31
 #: src/Modules/PaynowInvoice/Operations/Query.php:27
@@ -5287,7 +5308,7 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
 #: src/Modules/Payuni/Api/PaymentResponse.php:80
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:28
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:82
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
 #: src/Modules/Shared/Invoice/OrderListColumn.php:141
@@ -5299,7 +5320,7 @@ msgstr "發票號碼"
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 #: src/Modules/Payuni/Gateways/GatewayBase.php:123
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:29
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:83
 msgid "Issued at"
 msgstr "開立時間"
 
@@ -5724,7 +5745,7 @@ msgstr "查詢到的綠界物流狀態：狀態碼 %s"
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:159
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:93
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:47
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:116
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/block/moksa-cvs-arrived.php:36
 #: templates/emails/moksa-cvs-arrived.php:35
@@ -7964,7 +7985,7 @@ msgstr "勾選時一律在測試環境執行，不會真的出貨。這個頁面
 
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:26
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:102
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:39
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:108
 msgid "Shipping type"
 msgstr "物流類型"
 
@@ -10391,7 +10412,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr "PAYUNi 收銀台的顯示語言。"
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:80
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:32
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:101
 #: src/Modules/Shared/Email/PersonalizationTags.php:48
 #: src/Modules/Shared/Invoice/CheckoutAssets.php:35
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:183
@@ -10887,6 +10908,7 @@ msgid "Update failed"
 msgstr "更新失敗"
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:61
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:51
 #: src/Modules/Shared/Invoice/OrderListColumn.php:82
 #: src/Modules/Shipping/Admin/ListCreateButton.php:106
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:39
@@ -11742,7 +11764,8 @@ msgid "Awaiting payment"
 msgstr "等待付款"
 
 #: src/Modules/Pchomepay/Module.php:101
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:40
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:87
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:109
 #: src/Modules/ShoplinePayments/Module.php:146
 #: src/Modules/Tappay/Module.php:100
 msgid "Status"
@@ -12057,43 +12080,57 @@ msgstr "金流服務商回報："
 msgid "The payment status could not be looked up: "
 msgstr "查詢付款狀態失敗："
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:48
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:49
+msgid "Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone."
+msgstr "作廢原因（20 字以內）。送出後會立即在綠界作廢，無法復原。"
+
+#. translators: %s: void time
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:89
+#, php-format
+msgid "Voided in Moksa at %s"
+msgstr "已於 %s 在 Moksa 作廢"
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:98
+msgid "Void this invoice"
+msgstr "作廢這張發票"
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
 #: templates/emails/moksa-cvs-arrived.php:41
 #: templates/emails/plain/moksa-cvs-arrived.php:27
 msgid "Store address"
 msgstr "門市地址"
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:52
-#: src/Modules/Shared/Compat/LegacyOrderData.php:36
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
+#: src/Modules/Shared/Compat/LegacyOrderData.php:39
 msgid "RY Tools"
 msgstr "RY Tools"
 
 #. translators: %s: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:65
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:134
 #, php-format
 msgid "Recorded by the %s (read-only)"
 msgstr "%s留下的紀錄（唯讀）"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:27
-#: src/Modules/Shared/Compat/LegacyOrderData.php:99
+#: src/Modules/Shared/Compat/LegacyOrderData.php:28
+#: src/Modules/Shared/Compat/LegacyOrderData.php:114
 msgid "ECPay official plugin"
 msgstr "綠界官方外掛"
 
 #. translators: 1: invoice number, 2: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderData.php:57
+#: src/Modules/Shared/Compat/LegacyOrderData.php:72
 #, php-format
 msgid "No new invoice was issued: this order already has invoice %1$s, issued by the %2$s."
 msgstr "沒有開立新發票：這張訂單已經有%2$s開立的發票 %1$s。"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:73
+#: src/Modules/Shared/Compat/LegacyOrderData.php:88
 msgid "RY Tools (ECPay)"
 msgstr "RY Tools（綠界）"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:74
+#: src/Modules/Shared/Compat/LegacyOrderData.php:89
 msgid "RY Tools (NewebPay)"
 msgstr "RY Tools（藍新）"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:75
+#: src/Modules/Shared/Compat/LegacyOrderData.php:90
 msgid "RY Tools (SmilePay)"
 msgstr "RY Tools（速買配）"
 
@@ -12940,43 +12977,58 @@ msgstr "<code>[moksafowo_addfee weight=\"20\"]</code> — 每公斤 20 元"
 msgid "Attributes: <code>temp_1</code> = ambient base, <code>temp_2</code> = chilled base, <code>temp_3</code> = frozen base, <code>cool</code> = added when anything needs refrigeration, <code>cool_2</code> = extra for chilled, <code>cool_3</code> = extra for frozen, <code>qty</code> = per item, <code>weight</code> = per kilogram."
 msgstr "屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 base、<code>temp_3</code>=冷凍 base、<code>cool</code>=任一冷的就加、<code>cool_2</code>=冷藏額外加、<code>cool_3</code>=冷凍額外加、<code>qty</code>=每件加、<code>weight</code>=每公斤加。"
 
-#: src/Modules/Shipping/Module.php:80
-#: src/Modules/Shipping/Module.php:91
+#: src/Modules/Shipping/Module.php:81
+#: src/Modules/Shipping/Module.php:92
 #: src/Modules/Shipping/Tracking/TrackingLink.php:241
 msgid "Copied"
 msgstr "已複製"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:23
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:50
+msgid "Switch RY statuses to Moksa statuses"
+msgstr "將 RY 狀態轉成 Moksa 狀態"
+
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:78
+msgid "Switched from the RY Tools status (no email sent)."
+msgstr "由 RY Tools 的狀態轉換而來（未寄送通知信）。"
+
+#. translators: %d: number of orders
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:98
+#, php-format
+msgid "%d order was switched to a Moksa status."
+msgid_plural "%d orders were switched to Moksa statuses."
+msgstr[0] "已將 %d 筆訂單轉成 Moksa 狀態。"
+
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:108
 msgctxt "Order status"
 msgid "Awaiting pickup at store"
 msgstr "超商待取貨"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:24
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:109
 msgctxt "Order status"
 msgid "Not picked up at store"
 msgstr "超商逾期未取"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:25
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:110
 msgctxt "Order status"
 msgid "In transit"
 msgstr "運送中"
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:33
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:118
 #, php-format
 msgid "Awaiting pickup at store <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting pickup at store <span class=\"count\">(%s)</span>"
 msgstr[0] "超商待取貨 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:35
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:120
 #, php-format
 msgid "Not picked up at store <span class=\"count\">(%s)</span>"
 msgid_plural "Not picked up at store <span class=\"count\">(%s)</span>"
 msgstr[0] "超商逾期未取 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:37
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:122
 #, php-format
 msgid "In transit <span class=\"count\">(%s)</span>"
 msgid_plural "In transit <span class=\"count\">(%s)</span>"
