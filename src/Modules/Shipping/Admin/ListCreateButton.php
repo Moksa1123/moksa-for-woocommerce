@@ -44,6 +44,22 @@ final class ListCreateButton {
 		return $html;
 	}
 
+	/**
+	 * PAYUNi 7-11 建單後要先印標籤，寄件代碼才會回傳；這段期間列表沒有號碼可顯示，改放「列印標籤」。
+	 * 按鈕沿用訂單頁那顆的 class 與 data，由 PAYUNi 後台腳本處理。
+	 */
+	public static function render_print_cell( \WC_Order $order ): string {
+		if ( 'payuni' !== ShipmentCreator::provider_for( $order ) || '' === ShipmentCreator::shipment_ref( $order ) || ! current_user_can( self::CAPABILITY ) ) {
+			return '';
+		}
+		return sprintf(
+			'<button type="button" class="button button-small print-label" data-id="%1$d" data-service="%2$s" data-action="moksafowo_payuni_shipping_print_label">%3$s</button>',
+			(int) $order->get_id(),
+			esc_attr( (string) $order->get_meta( Keys::PAYUNI_SHIPPING_SHIP_TYPE ) ),
+			esc_html__( 'Print label', 'moksa-for-woocommerce' )
+		);
+	}
+
 	private static function can_create( \WC_Order $order ): bool {
 		return in_array( $order->get_status(), self::STATUSES, true )
 			&& '' === ShipmentCreator::shipment_ref( $order )

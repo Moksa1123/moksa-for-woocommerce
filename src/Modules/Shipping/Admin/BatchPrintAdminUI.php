@@ -130,6 +130,9 @@ final class BatchPrintAdminUI {
 		$no = self::find_label_no( $order );
 		if ( '' === $no ) {
 			$button = ListCreateButton::render_cell( $order );
+			if ( '' === $button ) {
+				$button = ListCreateButton::render_print_cell( $order );
+			}
 			if ( '' !== $button ) {
 				return $button;
 			}

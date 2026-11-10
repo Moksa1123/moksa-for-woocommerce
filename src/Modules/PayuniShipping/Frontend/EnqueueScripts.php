@@ -41,7 +41,7 @@ final class EnqueueScripts {
 
 	public static function admin(): void {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'woocommerce_page_wc-orders', 'woocommerce_page_wc-settings' ], true ) ) {
+		if ( ! $screen || ! in_array( $screen->id, [ 'shop_order', 'edit-shop_order', 'woocommerce_page_wc-orders', 'woocommerce_page_wc-settings' ], true ) ) {
 			return;
 		}
 		wp_enqueue_style( 'moksafowo-payuni-shipping-admin', MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/css/styles-admin.css', [], MOKSAFOWO_VERSION, 'all' );

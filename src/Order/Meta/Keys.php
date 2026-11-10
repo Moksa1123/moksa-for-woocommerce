@@ -218,9 +218,10 @@ final class Keys {
 	public const PAYUNI_CLOSE_TIME   = '_moksafowo_payuni_close_time';
 	public const PAYUNI_CLOSE_AUTH   = '_moksafowo_payuni_close_auth';   // BankSettleAuth
 
-	public const PAYUNI_SHIPPING_RECORDS  = '_moksafowo_payuni_shipping_records';
-	public const PAYUNI_SHIPPING_SNO      = '_moksafowo_payuni_shipping_sno';      // PayuniShipping fork OrderMeta::ShipNo 對應
-	public const PAYUNI_SHIPPING_TRADE_NO = '_moksafowo_payuni_shipping_trade_no'; // PayuniShipping fork OrderMeta::ShipTradeNo 對應
+	public const PAYUNI_SHIPPING_RECORDS   = '_moksafowo_payuni_shipping_records';
+	public const PAYUNI_SHIPPING_SNO       = '_moksafowo_payuni_shipping_sno';      // PayuniShipping fork OrderMeta::ShipNo 對應
+	public const PAYUNI_SHIPPING_SHIP_TYPE = '_moksafowo_payuni_shipping_ship_type'; // PayuniShipping OrderMeta::ShipType 對應（1=7-11、2=黑貓）
+	public const PAYUNI_SHIPPING_TRADE_NO  = '_moksafowo_payuni_shipping_trade_no'; // PayuniShipping fork OrderMeta::ShipTradeNo 對應
 
 	public const PAYUNI_EINVOICE_NO     = '_moksafowo_payuni_einvoice_no';
 	public const PAYUNI_EINVOICE_AMT    = '_moksafowo_payuni_einvoice_amt';
