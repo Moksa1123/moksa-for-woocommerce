@@ -99,7 +99,9 @@ final class IpnHandler {
 		}
 		$order->save();
 
+		// 沒有 key 的舊單只記貨態，不轉訂單狀態、不寄信。
 		if ( '' !== $wc_status
+			&& 'yes' === $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED )
 			&& \Moksafowo\Modules\Shipping\Statuses\StatusGuard::may_transition( $order->get_status(), $wc_status )
 			&& \Moksafowo\Modules\Shipping\Statuses\Registrar::is_usable( $wc_status ) ) {
 			$order->update_status(

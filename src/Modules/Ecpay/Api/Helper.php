@@ -266,8 +266,7 @@ final class Helper extends AbstractCredentialHelper {
 
 	/**
 	 * 這張訂單是不是送出過這個 MerchantTradeNo。編號裡的訂單 ID 是解析出來的：同一組綠界帳號給
-	 * 兩個站用時，A 站的通知會對到 B 站同號的訂單。這版之前的訂單沒有歷史：重新付款過的單，
-	 * 先前取號的繳費通知對不上目前編號，只能照舊接受。
+	 * 兩個站用時，A 站的通知會對到 B 站同號的訂單。
 	 */
 	public static function order_sent_mtn( \WC_Order $order, string $mtn ): bool {
 		$current = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
@@ -275,10 +274,7 @@ final class Helper extends AbstractCredentialHelper {
 			return true;
 		}
 		$history = $order->get_meta( Keys::ECPAY_MTN_HISTORY );
-		if ( is_array( $history ) && [] !== $history ) {
-			return in_array( $mtn, $history, true );
-		}
-		return true;
+		return is_array( $history ) && in_array( $mtn, $history, true );
 	}
 
 	public static function parse_order_id_from_merchant_trade_no( string $merchant_trade_no ): ?int {

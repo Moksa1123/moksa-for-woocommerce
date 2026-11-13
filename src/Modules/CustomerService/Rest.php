@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * 替代閘門（每個端點都有各自的閘）：
  *   - /cs/verify：訂單號 + 電話末三碼 + 帳單 email 全對才過；IP 與訂單雙維度節流（Verify::attempt）；
  *                 統一失敗訊息，無法枚舉訂單；完全唯讀。
- *   - /cs/order：必須帶 Verify::attempt 核發的時效 token（hash_equals 比對），否則拒絕；唯讀。
+ *   - /cs/order：必須帶 Verify::attempt 核發的時效 token（以雜湊後的 token 查 transient），否則拒絕；唯讀。
  *   - /cs/message：同上 token 閘；訊息長度上限 2000 字元；只寫入當次訂單對話 thread。
  *   - /cs/messages：同上 token 閘；唯讀輪詢。
  * 所有輸入皆透過 register_rest_route args.sanitize_callback 消毒後才進 callback。
@@ -138,9 +138,7 @@ final class Rest {
 			);
 		}
 		// 每張訂單每小時留言上限：token 有效 30 分鐘，沒有上限就能無限寫入對話並觸發通知信。
-		$rate_key = 'moksafowo_cs_msg_rl_' . $order_id;
-		$sent     = (int) get_transient( $rate_key );
-		if ( $sent >= 30 ) {
+		if ( ! RateLimit::take( 'moksafowo_cs_msg_rl_' . $order_id, 30, HOUR_IN_SECONDS ) ) {
 			return new \WP_REST_Response(
 				array(
 					'ok'      => false,
@@ -149,7 +147,6 @@ final class Rest {
 				200
 			);
 		}
-		set_transient( $rate_key, $sent + 1, HOUR_IN_SECONDS );
 
 		$body      = mb_substr( $body, 0, 2000 );
 		$order     = wc_get_order( $order_id );
@@ -160,7 +157,7 @@ final class Rest {
 		Threads::add_message( $thread_id, 'customer', $body );
 
 		$ai = null;
-		if ( AiReply::enabled() && AiReply::rate_ok( $order_id ) ) {
+		if ( AiReply::enabled() && AiReply::rate_ok( $order_id, self::ip() ) ) {
 			$ai = AiReply::generate( $order_id, $history, $body );
 		}
 		if ( null !== $ai ) {
@@ -296,6 +293,14 @@ final class Rest {
 
 	private static function ip(): string {
 		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-		return ( $ip && filter_var( $ip, FILTER_VALIDATE_IP ) ) ? $ip : '0.0.0.0';
+		$ip = ( $ip && filter_var( $ip, FILTER_VALIDATE_IP ) ) ? $ip : '0.0.0.0';
+		/**
+		 * 站台在反向代理或 CDN 後面、伺服器沒有把 REMOTE_ADDR 換成訪客 IP 時，用這個 filter 回傳真實 IP。
+		 * 只能信任自己代理加上的標頭。
+		 *
+		 * @param string $ip REMOTE_ADDR。
+		 */
+		$filtered = (string) apply_filters( 'moksafowo_customer_service_client_ip', $ip );
+		return filter_var( $filtered, FILTER_VALIDATE_IP ) ? $filtered : $ip;
 	}
 }

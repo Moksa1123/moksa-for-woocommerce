@@ -67,18 +67,26 @@ final class IpnHandler {
 			exit;
 		}
 
-		if ( '' !== $logistics_id ) {
-			$order->update_meta_data( Keys::ECPAY_LOGISTIC_ID, $logistics_id );
-		}
-
-		// 同一包同一個貨態被重送時不重寫備註、不重跑轉換（同補查）。
-		$previous = null;
+		// 只接受這張訂單自己建過的物流單：物流交易編號與廠商交易編號都要對得上。
+		$record = null;
 		foreach ( CreateOrder::get_records( $order ) as $r ) {
-			if ( '' !== $logistics_id && (string) ( $r['id'] ?? '' ) === $logistics_id ) {
-				$previous = (string) ( $r['rtn_code'] ?? '' );
+			$record_mtn = (string) ( $r['mtn'] ?? '' );
+			if ( (string) ( $r['id'] ?? '' ) === $logistics_id && ( '' === $record_mtn || $record_mtn === $merchant_trade_no ) ) {
+				$record = $r;
 				break;
 			}
 		}
+		if ( null === $record ) {
+			Helper::warn( 'shipping IPN for a shipment this order never created — rejected', [ 'order_id' => $order_id ] );
+			status_header( 400 );
+			echo 'Unknown shipment';
+			exit;
+		}
+
+		$order->update_meta_data( Keys::ECPAY_LOGISTIC_ID, $logistics_id );
+
+		// 同一包同一個貨態被重送時不重寫備註、不重跑轉換（同補查）。
+		$previous = (string) ( $record['rtn_code'] ?? '' );
 		CreateOrder::update_record_status( $order, $logistics_id, $rtn_code, $rtn_msg );
 		if ( $previous === $rtn_code ) {
 			$order->save();

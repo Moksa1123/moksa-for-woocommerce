@@ -78,7 +78,7 @@ final class Period {
 	 * @return array{Status:string,Message:string,Result:array<string,mixed>}|null
 	 */
 	public static function decode( string $hex ): ?array {
-		$data = Helper::decrypt_trade_info( trim( $hex ) );
+		$data = Helper::decrypt_trade_info( trim( $hex ), true );
 		if ( ! is_array( $data ) ) {
 			return null;
 		}

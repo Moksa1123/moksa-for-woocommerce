@@ -196,11 +196,14 @@ final class PeriodHandler {
 			return;
 		}
 
-		// 通知只能靠解密確認來源；再用委託單查詢（NPA-B053）核對委託確實在扣款中且首期已授權。
-		// 查詢 API 失敗（尚未開通等）時照收，不擋住正常訂單。
+		// 通知只能靠解密確認來源；再用委託單查詢（NPA-B053）核對委託確實在扣款中。查不到就不入帳。
 		$query = Period::query( $mer_order_no, $period_no );
+		if ( ! $query['ok'] ) {
+			self::hold_unconfirmed( $order, $period_no );
+			return;
+		}
 		// 剛建立時狀態可能還是 0（驗證未完成），只擋明確不成立的 2（驗證失敗）、3（終止）。
-		if ( $query['ok'] && in_array( (int) ( $query['data']['Status'] ?? -1 ), [ 2, 3 ], true ) ) {
+		if ( in_array( (int) ( $query['data']['Status'] ?? -1 ), [ 2, 3 ], true ) ) {
 			$order->update_status(
 				'on-hold',
 				sprintf(
@@ -298,6 +301,11 @@ final class PeriodHandler {
 				$order->save();
 			}
 			if ( $success && ! $order->is_paid() ) {
+				$query = Period::query( (string) ( $result['MerchantOrderNo'] ?? $order->get_meta( Keys::NEWEBPAY_PERIOD_ORDER_NO ) ), $period_no );
+				if ( ! $query['ok'] || (int) ( $query['data']['AlreadyTimes'] ?? 0 ) < 1 ) {
+					self::hold_unconfirmed( $order, $period_no );
+					return;
+				}
 				self::$syncing = true;
 				$order->payment_complete( $trade_no );
 				self::$syncing = false;
@@ -474,13 +482,24 @@ final class PeriodHandler {
 		}
 	}
 
-	/** 每期通知只能靠解密確認來源；再用委託單查詢（NPA-B053）核對已授權期數，查不到時照收。 */
+	/** 每期通知只能靠解密確認來源；再用委託單查詢（NPA-B053）核對已授權期數，查不到就不採信。 */
 	private static function confirmed_by_query( \WC_Subscription $subscription, int $times ): bool {
 		$query = Period::query( (string) $subscription->get_meta( Keys::NEWEBPAY_PERIOD_ORDER_NO ), (string) $subscription->get_meta( Keys::NEWEBPAY_PERIOD_NO ) );
-		if ( ! $query['ok'] ) {
-			return true;
+		return $query['ok'] && (int) ( $query['data']['AlreadyTimes'] ?? 0 ) >= $times;
+	}
+
+	private static function hold_unconfirmed( \WC_Order $order, string $period_no ): void {
+		if ( $order->has_status( 'on-hold' ) ) {
+			return;
 		}
-		return (int) ( $query['data']['AlreadyTimes'] ?? 0 ) >= $times;
+		$order->update_status(
+			'on-hold',
+			sprintf(
+				/* translators: %s: NewebPay mandate number */
+				__( 'NewebPay could not confirm recurring payment mandate %s, so this order was not marked as paid. Check it in the NewebPay dashboard before fulfilling the order.', 'moksa-for-woocommerce' ),
+				$period_no
+			)
+		);
 	}
 
 	/** 訂單（或它的訂閱）登記的委託單號。 */

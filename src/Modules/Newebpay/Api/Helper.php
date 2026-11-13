@@ -162,7 +162,11 @@ final class Helper extends AbstractCredentialHelper {
 		return bin2hex( $cipher );
 	}
 
-	public static function decrypt_trade_info( string $hex ): ?array {
+	/**
+	 * @param string $hex    十六進位密文。
+	 * @param bool   $strict 只接受正確的 PKCS7 padding 與 JSON；沒有另附雜湊的密文（定期定額）要用這個。
+	 */
+	public static function decrypt_trade_info( string $hex, bool $strict = false ): ?array {
 		// 定期定額通知只靠加密證明來源；金鑰沒填時用空字串也解得開，任何人都能偽造。
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return null;
@@ -184,12 +188,17 @@ final class Helper extends AbstractCredentialHelper {
 		}
 		$slast  = ord( substr( $plain, -1 ) );
 		$slastc = chr( $slast );
-		if ( preg_match( '/' . preg_quote( $slastc, '/' ) . '{' . $slast . '}$/', $plain ) ) {
+		if ( $slast > 0 && $slast <= 32 && preg_match( '/' . preg_quote( $slastc, '/' ) . '{' . $slast . '}$/', $plain ) ) {
 			$plain = substr( $plain, 0, -$slast );
+		} elseif ( $strict ) {
+			return null;
 		}
 		$json = json_decode( $plain, true );
 		if ( is_array( $json ) ) {
 			return $json;
+		}
+		if ( $strict ) {
+			return null;
 		}
 		parse_str( $plain, $out );
 		return is_array( $out ) ? $out : null;

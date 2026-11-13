@@ -54,33 +54,29 @@ final class Verify {
 	 * @return array{ok:bool, token?:string, order_id?:int}
 	 */
 	public static function attempt( string $order_ref, string $phone3, string $email, string $ip ): array {
-		$fail   = array( 'ok' => false );
-		$bucket = self::bucket_key( $ip, $order_ref );
-		$count  = (int) get_transient( $bucket );
-
+		$fail      = array( 'ok' => false );
+		$bucket    = self::bucket_key( $ip, $order_ref );
 		$ip_bucket = self::ip_bucket_key( $ip );
-		$ip_count  = (int) get_transient( $ip_bucket );
-		if ( $ip_count >= self::max_ip_attempts() ) {
+
+		// 先佔名額、成功再退回：並發請求不能一起讀到同一個還沒滿的計數。
+		if ( ! RateLimit::take( $ip_bucket, self::max_ip_attempts(), HOUR_IN_SECONDS ) ) {
 			return $fail;
 		}
-
-		if ( $count >= self::max_attempts() ) {
+		$count = (int) get_transient( $bucket );
+		if ( ! RateLimit::take( $bucket, self::max_attempts(), self::lockout_seconds() ) ) {
+			RateLimit::release( $ip_bucket, HOUR_IN_SECONDS );
 			return $fail;
 		}
 
 		$ok       = false;
 		$order_id = self::resolve_order_id( $order_ref );
-		if ( $order_id > 0 ) {
-			if ( ! self::lock( $order_id ) ) {
-				return $fail;
-			}
+		if ( $order_id > 0 && self::lock( $order_id ) ) {
 			$order_bucket = self::order_bucket_key( $order_id );
 			$order_count  = (int) get_transient( $order_bucket );
-			if ( $order_count >= self::max_order_attempts() ) {
-				self::unlock( $order_id );
-				return $fail;
-			}
-			$order = wc_get_order( $order_id );
+			// 訂單總上限擋的是換 IP 猜；但只要有人故意打錯就會鎖住真顧客。沒在這張單上錯過的 IP
+			// 仍給一次機會，猜的人每換一個 IP 也只多一次。
+			$blocked = $order_count >= self::max_order_attempts() && $count > 0;
+			$order   = $blocked ? null : wc_get_order( $order_id );
 			if ( $order instanceof \WC_Order && 'shop_order' === $order->get_type() ) {
 				$phone   = preg_replace( '/\D/', '', (string) $order->get_billing_phone() );
 				$in3     = preg_replace( '/\D/', '', $phone3 );
@@ -92,17 +88,17 @@ final class Verify {
 					$ok = true;
 				}
 			}
-			if ( ! $ok ) {
+			if ( ! $ok && ! $blocked ) {
 				set_transient( $order_bucket, $order_count + 1, max( DAY_IN_SECONDS, self::lockout_seconds() ) );
 			}
 			self::unlock( $order_id );
 		}
 
 		if ( ! $ok ) {
-			set_transient( $bucket, $count + 1, self::lockout_seconds() );
-			set_transient( $ip_bucket, $ip_count + 1, HOUR_IN_SECONDS );
 			return $fail;
 		}
+		RateLimit::release( $bucket, self::lockout_seconds() );
+		RateLimit::release( $ip_bucket, HOUR_IN_SECONDS );
 
 		$token = wp_generate_password( 40, false );
 		set_transient( self::token_key( $token ), $order_id, self::TOKEN_TTL_MINUTES * MINUTE_IN_SECONDS );

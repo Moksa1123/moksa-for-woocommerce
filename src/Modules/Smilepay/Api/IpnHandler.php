@@ -75,12 +75,12 @@ final class IpnHandler {
 			$order->add_order_note(
 				sprintf(
 				/* translators: 1: reported amount, 2: order total */
-					__( 'SmilePay reported %1$s, which does not match the order total of %2$s. The order was marked as failed for you to check.', 'moksa-for-woocommerce' ),
+					__( 'SmilePay reported %1$s, which does not match the order total of %2$s. The order was put on hold for you to check.', 'moksa-for-woocommerce' ),
 					$amount,
 					(string) (int) ceil( (float) $order->get_total() )
 				)
 			);
-			$order->update_status( 'failed' );
+			$order->update_status( 'on-hold' );
 			$order->save();
 			self::die_status( __( 'Amount mismatch', 'moksa-for-woocommerce' ) );
 		}
@@ -88,6 +88,11 @@ final class IpnHandler {
 		// 取號時速買配已回傳這筆的金流追蹤碼（SmilePayNO），入帳通知的 Smseid 是同一個追蹤碼。
 		// 對不上就不自動入帳，交給商家到速買配後台核對（Mid_smilepay 只有約 73 種值，擋不住猜測）。
 		$issued_no = (string) $order->get_meta( Keys::SMILEPAY_PAY_SMILEPAY_NO );
+		$keyed     = 'yes' === $order->get_meta( Keys::SMILEPAY_CALLBACK_KEYED );
+		if ( '' === $issued_no && ! $keyed ) {
+			$order->update_status( 'on-hold', __( 'SmilePay sent a payment notice for this order, but it could not be fully verified. The order was not marked as paid; please check it in the SmilePay back office.', 'moksa-for-woocommerce' ) );
+			self::die_ok();
+		}
 		if ( '' !== $issued_no && $issued_no !== $smseid ) {
 			$order->update_status(
 				'on-hold',

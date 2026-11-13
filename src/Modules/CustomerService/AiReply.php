@@ -29,22 +29,26 @@ final class AiReply {
 	/**
 	 * 全站每小時 AI 回覆上限（設定說明是控制用量與費用，不是每個訪客各自計算）。
 	 */
-	public static function rate_ok( int $order_id = 0 ): bool {
-		// 每張訂單每小時最多 5 則 AI 回覆：單一顧客（或開一堆待付款單的人）不能用光全站額度。
+	public static function rate_ok( int $order_id = 0, string $ip = '' ): bool {
+		// 每張訂單、每個 IP 各自有上限：同一個人開幾張單也不能用光全站額度。
+		$taken = array();
+		$steps = array();
 		if ( $order_id > 0 ) {
-			$order_key   = 'moksafowo_cs_ai_rl_o' . $order_id;
-			$order_count = (int) get_transient( $order_key );
-			if ( $order_count >= 5 ) {
+			$steps[ 'moksafowo_cs_ai_rl_o' . $order_id ] = 5;
+		}
+		if ( '' !== $ip ) {
+			$steps[ 'moksafowo_cs_ai_rl_ip' . md5( $ip ) ] = 10;
+		}
+		$steps['moksafowo_cs_ai_rl_site'] = self::rate_limit();
+		foreach ( $steps as $key => $limit ) {
+			if ( ! RateLimit::take( $key, $limit, HOUR_IN_SECONDS ) ) {
+				foreach ( $taken as $done ) {
+					RateLimit::release( $done, HOUR_IN_SECONDS );
+				}
 				return false;
 			}
-			set_transient( $order_key, $order_count + 1, HOUR_IN_SECONDS );
+			$taken[] = $key;
 		}
-		$key   = 'moksafowo_cs_ai_rl_site';
-		$count = (int) get_transient( $key );
-		if ( $count >= self::rate_limit() ) {
-			return false;
-		}
-		set_transient( $key, $count + 1, HOUR_IN_SECONDS );
 		return true;
 	}
 

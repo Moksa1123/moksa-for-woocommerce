@@ -242,13 +242,10 @@ final class WpsPeriod {
 		}
 	}
 
-	/** 每期通知只能靠解密確認來源；再用委託單查詢核對已授權期數，查不到時照收。 */
+	/** 每期通知只能靠解密確認來源；再用委託單查詢核對已授權期數，查不到就不採信。 */
 	private static function confirmed_by_query( int $subscription_id, int $times ): bool {
 		$query = Period::query( (string) get_post_meta( $subscription_id, Keys::NEWEBPAY_PERIOD_ORDER_NO, true ), (string) get_post_meta( $subscription_id, Keys::NEWEBPAY_PERIOD_NO, true ) );
-		if ( ! $query['ok'] ) {
-			return true;
-		}
-		return (int) ( $query['data']['AlreadyTimes'] ?? 0 ) >= $times;
+		return $query['ok'] && (int) ( $query['data']['AlreadyTimes'] ?? 0 ) >= $times;
 	}
 
 	public static function terminate( $subscription_id ): void {
