@@ -278,8 +278,9 @@ final class BindHandler {
 					)
 				);
 			}
-			$order->payment_complete();
-			$order->add_order_note( __( 'The card was saved with ECPay for subscription renewals.', 'moksa-for-woocommerce' ) );
+			if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order ) ) {
+				$order->add_order_note( __( 'The card was saved with ECPay for subscription renewals.', 'moksa-for-woocommerce' ) );
+			}
 			return;
 		}
 
@@ -295,7 +296,9 @@ final class BindHandler {
 			);
 			return;
 		}
-		$order->payment_complete( $trade_no );
+		if ( ! \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {
+			return;
+		}
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: ECPay trade number, 2: card last four digits */

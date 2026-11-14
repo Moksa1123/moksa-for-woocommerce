@@ -258,7 +258,7 @@ final class PeriodHandler {
 		}
 
 		self::$syncing = true;
-		$order->payment_complete( $trade_no );
+		$completed     = \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $trade_no );
 		self::$syncing = false;
 		$order->add_order_note(
 			sprintf(
@@ -269,8 +269,9 @@ final class PeriodHandler {
 			)
 		);
 
+		// 取消後才收到首期款：委託留給商家決定，不替訂閱排下一期。
 		$dates = array_values( array_filter( array_map( 'trim', explode( ',', (string) ( $result['DateArray'] ?? '' ) ) ) ) );
-		if ( isset( $dates[1] ) ) {
+		if ( $completed && isset( $dates[1] ) ) {
 			foreach ( Subscriptions::subscriptions_for( $order ) as $subscription ) {
 				self::set_next_payment( $subscription, $dates[1] );
 			}
@@ -307,7 +308,7 @@ final class PeriodHandler {
 					return;
 				}
 				self::$syncing = true;
-				$order->payment_complete( $trade_no );
+				\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $trade_no );
 				self::$syncing = false;
 			}
 			return;
@@ -403,16 +404,17 @@ final class PeriodHandler {
 				)
 			);
 		} elseif ( $success ) {
-			$renewal->payment_complete( $trade_no );
-			$renewal->add_order_note(
-				sprintf(
-					/* translators: 1: payment number, 2: total payments, 3: NewebPay trade number */
-					__( 'NewebPay recurring payment %1$d of %2$d completed — trade number %3$s', 'moksa-for-woocommerce' ),
-					$times,
-					$total,
-					$trade_no
-				)
-			);
+			if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $renewal, $trade_no ) ) {
+				$renewal->add_order_note(
+					sprintf(
+						/* translators: 1: payment number, 2: total payments, 3: NewebPay trade number */
+						__( 'NewebPay recurring payment %1$d of %2$d completed — trade number %3$s', 'moksa-for-woocommerce' ),
+						$times,
+						$total,
+						$trade_no
+					)
+				);
+			}
 		} else {
 			// 授權失敗後藍新仍會照排程扣下一期（常見問題 A1），所以不終止委託。
 			$renewal->update_status(

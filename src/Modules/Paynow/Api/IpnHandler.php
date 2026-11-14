@@ -307,8 +307,7 @@ final class IpnHandler {
 
 		if ( $is_success ) {
 			// 重送的成功通知不再重複寫備註。
-			if ( ! $order->is_paid() ) {
-				$order->payment_complete( (string) $order->get_meta( Keys::PAYNOW_BUYSAFE_NO ) );
+			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $order->get_meta( Keys::PAYNOW_BUYSAFE_NO ) ) ) {
 				$order->add_order_note(
 					sprintf(
 					/* translators: %s: payment type */

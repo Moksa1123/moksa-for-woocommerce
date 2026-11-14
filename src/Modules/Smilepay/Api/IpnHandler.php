@@ -121,7 +121,7 @@ final class IpnHandler {
 		if ( 'T' !== $classif && 'O' !== $classif ) {
 			$order->add_order_note( __( 'The SmilePay payment code has been settled.', 'moksa-for-woocommerce' ) );
 		}
-		$order->payment_complete( $smseid );
+		\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $smseid );
 		$order->save();
 
 		\Moksafowo\Modules\Shared\Email\PaymentInfoEmailDispatcher::maybe_dispatch( $order );

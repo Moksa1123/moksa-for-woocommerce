@@ -15,6 +15,7 @@ CLAUDE.md
 MEMORY.md
 CHANGELOG.md
 CREDITS.md
+docs/
 
 # 區塊 JS 原始碼（發佈的是 assets/blocks/build/ 的產物）
 assets/blocks/src/

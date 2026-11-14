@@ -150,8 +150,7 @@ final class IpnHandler {
 		switch ( $notify_type ) {
 			case 'order_confirm':
 				// 重送的成功通知不再重複寫備註。
-				if ( ! $order->is_paid() ) {
-					$order->payment_complete( (string) ( $message['order_id'] ?? '' ) );
+				if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) ( $message['order_id'] ?? '' ) ) ) {
 					$order->add_order_note(
 						sprintf(
 						/* translators: 1: pay type, 2: amount */

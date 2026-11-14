@@ -119,8 +119,7 @@ final class IpnHandler {
 							$order->get_total()
 						)
 					);
-				} elseif ( ! $order->is_paid() ) {
-					$order->payment_complete( $trade_no );
+				} elseif ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {
 					$order->add_order_note(
 						sprintf(
 						/* translators: %s: 中文化的付款方式名稱 */

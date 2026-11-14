@@ -281,7 +281,7 @@ class PaymentResponse {
 				);
 				return;
 			}
-			$order->payment_complete( $decrypted_info['TradeNo'] );
+			\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $decrypted_info['TradeNo'] );
 		} elseif ( TradeStatus::CREDIT_VALID_OR_GET_NUMBER_SUCCESS === $trade_status && $order->has_status( 'pending' ) ) {
 			// ATM／超商代碼取號成功、AFTEE 審查通過，都還沒付款。停在「等待付款」會被 WC 依保留庫存時間自動取消，
 			// 但繳費帳號還有效好幾天。

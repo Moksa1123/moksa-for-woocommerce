@@ -222,7 +222,7 @@ final class PaymentRequest {
 				return true;
 			}
 
-			$order->payment_complete( $result->info->transactionId );
+			\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $result->info->transactionId );
 
 			$std_confirmed_amount = Currency::get_standardized( $confirmed_amount );
 			$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $std_confirmed_amount );
@@ -286,7 +286,7 @@ final class PaymentRequest {
 					// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $payment_detail->info->amount );
 					$order->save();
-					$order->payment_complete( $payment_detail->info->transactionId );
+					\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $payment_detail->info->transactionId );
 					// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				}
 				wp_safe_redirect( $this->get_return_url( $order ) );

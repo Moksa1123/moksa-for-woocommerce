@@ -164,8 +164,11 @@ final class WpsPeriod {
 		}
 
 		self::$syncing = true;
-		$renewal->payment_complete( $trade_no );
+		$completed     = \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $renewal, $trade_no );
 		self::$syncing = false;
+		if ( ! $completed ) {
+			return;
+		}
 		$renewal->add_order_note(
 			/* translators: 1: payment number, 2: total payments, 3: NewebPay trade number */
 			sprintf( __( 'NewebPay recurring payment %1$d of %2$d completed — trade number %3$s', 'moksa-for-woocommerce' ), $times, $total, $trade_no )

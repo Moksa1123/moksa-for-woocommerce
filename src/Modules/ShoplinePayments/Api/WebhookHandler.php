@@ -290,8 +290,9 @@ final class WebhookHandler {
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
 					// 訂閱試用期首期 0 元只綁卡，SLP 以 1 元驗卡後自動取消，金額本來就對不上。
 					if ( 'CardBind' === (string) ( $data['payment']['paymentBehavior'] ?? '' ) && (float) $order->get_total() <= 0 ) {
-						$order->payment_complete( $txn );
-						$order->add_order_note( __( 'The card was saved with Shopline Payments for subscription renewals.', 'moksa-for-woocommerce' ) );
+						if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $txn ) ) {
+							$order->add_order_note( __( 'The card was saved with Shopline Payments for subscription renewals.', 'moksa-for-woocommerce' ) );
+						}
 						break;
 					}
 					// 金額以「元 × 100」表示。建立付款頁後訂單被改了金額，顧客用舊頁面付的金額會對不上。
@@ -315,7 +316,9 @@ final class WebhookHandler {
 						$order->update_status( 'on-hold', __( 'Shopline Payments reported a successful payment without an amount. Please check the payment in the Shopline Payments dashboard before fulfilling the order.', 'moksa-for-woocommerce' ) );
 						break;
 					}
-					$order->payment_complete( $txn );
+					if ( ! \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $txn ) ) {
+						break;
+					}
 					$method = (string) $order->get_meta( Keys::SLP_PAYMENT_METHOD );
 					$order->add_order_note(
 						'' !== $method

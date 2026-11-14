@@ -366,5 +366,8 @@ final class Keys {
 	// WPSubscription 訂閱（subscrpt_order 文章的 post meta）：由哪個付款方式續扣.
 	public const WPS_GATEWAY = '_moksafowo_wps_gateway';
 
+	// 取消後才收到付款而轉保留的訂單（之後同一張單的付款通知都不再自動入帳）.
+	public const PAID_AFTER_CANCEL = '_moksafowo_paid_after_cancel';
+
 	private function __construct() {}
 }

@@ -343,8 +343,7 @@ final class IpnHandler {
 			return;
 		}
 		if ( $paid ) {
-			if ( ! $order->is_paid() ) {
-				$order->payment_complete( $rec_trade_id );
+			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $rec_trade_id ) ) {
 				\Moksafowo\Modules\Tappay\SubscriptionRenewal::promote_pending_card( $order );
 				// 同一個通知網址也收 LINE Pay、街口等錢包付款，不能寫死「信用卡」；錢包沒有卡號末四碼，空值不印。
 				$order->add_order_note(

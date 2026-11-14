@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.21.1\n"
+"Project-Id-Version: Moksa for WooCommerce 1.21.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-13T04:48:34+00:00\n"
+"POT-Creation-Date: 2026-11-14T14:24:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -2796,11 +2796,11 @@ msgstr ""
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:110
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:135
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:160
-#: src/Modules/Paynow/Api/IpnHandler.php:343
+#: src/Modules/Paynow/Api/IpnHandler.php:342
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:154
 #: src/Modules/PaynowInvoice/Operations/Invalid.php:62
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:155
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:338
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:341
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:86
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
 #: src/Modules/Tappay/Gateways/Credit.php:344
@@ -3808,26 +3808,26 @@ msgid "The card was saved with ECPay for subscription renewals."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Ecpay/Api/BindHandler.php:291
+#: src/Modules/Ecpay/Api/BindHandler.php:292
 #: src/Modules/Ecpay/Api/IpnHandler.php:117
 #, php-format
 msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
 #. translators: 1: ECPay trade number, 2: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:302
+#: src/Modules/Ecpay/Api/BindHandler.php:305
 #, php-format
 msgid "ECPay card payment completed — trade number %1$s (card ending %2$s)"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Ecpay/Api/BindHandler.php:317
+#: src/Modules/Ecpay/Api/BindHandler.php:320
 #, php-format
 msgid "ECPay reported a card payment, but it could not be confirmed with ECPay (%s). Check the payment in the ECPay dashboard before shipping."
 msgstr ""
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:329
+#: src/Modules/Ecpay/Api/BindHandler.php:332
 #, php-format
 msgid "An ECPay payment notice did not match the transaction at ECPay (status %1$s, amount %2$d), so the order was not marked as paid."
 msgstr ""
@@ -3895,7 +3895,7 @@ msgstr ""
 
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
-#: src/Modules/Ecpay/Api/IpnHandler.php:127
+#: src/Modules/Ecpay/Api/IpnHandler.php:126
 #: src/Modules/Smilepay/Api/IpnHandler.php:202
 #: src/Modules/Smilepay/Api/IpnHandler.php:236
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:176
@@ -3904,13 +3904,13 @@ msgid "Payment method: %s"
 msgstr ""
 
 #. translators: 1: 中文化的付款方式名稱, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:136
+#: src/Modules/Ecpay/Api/IpnHandler.php:135
 #, php-format
 msgid "ECPay issued a payment code (%1$s, awaiting payment. Status code %2$s)"
 msgstr ""
 
 #. translators: 1: rtn message, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:152
+#: src/Modules/Ecpay/Api/IpnHandler.php:151
 #, php-format
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr ""
@@ -6584,7 +6584,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
 #: src/Modules/ShoplinePayments/Module.php:150
-#: src/Modules/Tappay/Api/IpnHandler.php:358
+#: src/Modules/Tappay/Api/IpnHandler.php:357
 #: src/Modules/Tappay/Module.php:102
 msgid "Transaction ID"
 msgstr ""
@@ -7048,7 +7048,7 @@ msgstr ""
 #. translators: 1: paid amount, 2: order total
 #: src/Modules/Newebpay/Api/IpnHandler.php:164
 #: src/Modules/Newebpay/Api/PeriodHandler.php:252
-#: src/Modules/Newebpay/Api/PeriodHandler.php:400
+#: src/Modules/Newebpay/Api/PeriodHandler.php:401
 #: src/Modules/Newebpay/Api/WpsPeriod.php:161
 #, php-format
 msgid "NewebPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
@@ -7059,25 +7059,25 @@ msgid "NewebPay store pickup order confirmed. The customer pays when collecting 
 msgstr ""
 
 #. translators: 1: payment type, 2: trade no
-#: src/Modules/Newebpay/Api/IpnHandler.php:187
+#: src/Modules/Newebpay/Api/IpnHandler.php:186
 #, php-format
 msgid "NewebPay payment completed — %1$s (transaction ID %2$s)"
 msgstr ""
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:199
+#: src/Modules/Newebpay/Api/IpnHandler.php:198
 #, php-format
 msgid "The NewebPay payment failed: %1$s (%2$s)"
 msgstr ""
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:253
+#: src/Modules/Newebpay/Api/IpnHandler.php:252
 #, php-format
 msgid "NewebPay could not issue the payment details: %1$s (%2$s)"
 msgstr ""
 
 #. translators: %s: payment type
-#: src/Modules/Newebpay/Api/IpnHandler.php:303
+#: src/Modules/Newebpay/Api/IpnHandler.php:302
 #, php-format
 msgid "NewebPay issued the %s payment details and is waiting for the customer to pay."
 msgstr ""
@@ -7115,102 +7115,102 @@ msgid "NewebPay recurring payment set up — mandate %1$s, %2$d payments schedul
 msgstr ""
 
 #. translators: %s: NewebPay order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:339
+#: src/Modules/Newebpay/Api/PeriodHandler.php:340
 #: src/Modules/Newebpay/Api/WpsPeriod.php:96
 #, php-format
 msgid "A NewebPay renewal notice (%s) did not match the mandate status at NewebPay, so no renewal order was created. Check the mandate in the NewebPay dashboard."
 msgstr ""
 
 #. translators: 1: payment number, 2: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:381
+#: src/Modules/Newebpay/Api/PeriodHandler.php:382
 #: src/Modules/Newebpay/Api/WpsPeriod.php:148
 #, php-format
 msgid "NewebPay charged payment %1$d (trade number %2$s) although this subscription was already cancelled. Refund this order and make sure the mandate is terminated in the NewebPay dashboard."
 msgstr ""
 
 #. translators: 1: payment number, 2: total payments, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:410
-#: src/Modules/Newebpay/Api/WpsPeriod.php:171
+#: src/Modules/Newebpay/Api/PeriodHandler.php:411
+#: src/Modules/Newebpay/Api/WpsPeriod.php:174
 #, php-format
 msgid "NewebPay recurring payment %1$d of %2$d completed — trade number %3$s"
 msgstr ""
 
 #. translators: 1: payment number, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:422
+#: src/Modules/Newebpay/Api/PeriodHandler.php:424
 #: src/Modules/Newebpay/Api/WpsPeriod.php:138
 #, php-format
 msgid "NewebPay recurring payment %1$d failed: %2$s. NewebPay will still try the next scheduled payment."
 msgstr ""
 
 #. translators: %d: number of payments
-#: src/Modules/Newebpay/Api/PeriodHandler.php:455
-#: src/Modules/Newebpay/Api/WpsPeriod.php:187
+#: src/Modules/Newebpay/Api/PeriodHandler.php:457
+#: src/Modules/Newebpay/Api/WpsPeriod.php:190
 #, php-format
 msgid "The NewebPay mandate has finished all %d payments, so nothing more will be charged. Ask the customer to subscribe again to continue."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:468
-#: src/Modules/Newebpay/Api/WpsPeriod.php:197
+#: src/Modules/Newebpay/Api/PeriodHandler.php:470
+#: src/Modules/Newebpay/Api/WpsPeriod.php:200
 msgid "NewebPay updated the card expiry date for this subscription. Payments continue as scheduled."
 msgstr ""
 
 #. translators: %s: NewebPay card status
-#: src/Modules/Newebpay/Api/PeriodHandler.php:478
+#: src/Modules/Newebpay/Api/PeriodHandler.php:480
 #, php-format
 msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). Ask the customer to subscribe again with another card."
 msgstr ""
 
 #. translators: %s: NewebPay mandate number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:499
+#: src/Modules/Newebpay/Api/PeriodHandler.php:501
 #, php-format
 msgid "NewebPay could not confirm recurring payment mandate %s, so this order was not marked as paid. Check it in the NewebPay dashboard before fulfilling the order."
 msgstr ""
 
 #. translators: 1: NewebPay mandate number, 2: result, 3: NewebPay trade number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:538
+#: src/Modules/Newebpay/Api/PeriodHandler.php:540
 #, php-format
 msgid "NewebPay created a second mandate (%1$s) for this order. Termination: %2$s. If it charged the card (trade number %3$s), refund that payment in the NewebPay dashboard."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:540
+#: src/Modules/Newebpay/Api/PeriodHandler.php:542
 msgid "done"
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:540
+#: src/Modules/Newebpay/Api/PeriodHandler.php:542
 msgid "failed"
 msgstr ""
 
 #. translators: %s: order number
-#: src/Modules/Newebpay/Api/PeriodHandler.php:553
+#: src/Modules/Newebpay/Api/PeriodHandler.php:555
 #, php-format
 msgid "[NewebPay] Order #%s needs a refund check"
 msgstr ""
 
 #. translators: %s: order edit URL
-#: src/Modules/Newebpay/Api/PeriodHandler.php:558
+#: src/Modules/Newebpay/Api/PeriodHandler.php:560
 #, php-format
 msgid "NewebPay charged a recurring payment that should not have been charged. Open the order, read the latest note and refund the payment in the NewebPay dashboard if needed: %s"
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:608
+#: src/Modules/Newebpay/Api/PeriodHandler.php:610
 msgid "This subscription cannot be reactivated because its NewebPay mandate has ended. Ask the customer to subscribe again."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/PeriodHandler.php:621
-#: src/Modules/Newebpay/Api/WpsPeriod.php:299
+#: src/Modules/Newebpay/Api/PeriodHandler.php:623
+#: src/Modules/Newebpay/Api/WpsPeriod.php:302
 msgid "The NewebPay mandate could not be restarted, so the subscription was put back on hold. Restart it in the NewebPay dashboard first."
 msgstr ""
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:672
-#: src/Modules/Newebpay/Api/WpsPeriod.php:323
+#: src/Modules/Newebpay/Api/PeriodHandler.php:674
+#: src/Modules/Newebpay/Api/WpsPeriod.php:326
 #, php-format
 msgid "NewebPay mandate updated (%1$s): %2$s"
 msgstr ""
 
 #. translators: 1: action, 2: NewebPay message
-#: src/Modules/Newebpay/Api/PeriodHandler.php:674
-#: src/Modules/Newebpay/Api/WpsPeriod.php:325
+#: src/Modules/Newebpay/Api/PeriodHandler.php:676
+#: src/Modules/Newebpay/Api/WpsPeriod.php:328
 #, php-format
 msgid "The NewebPay mandate could not be updated (%1$s): %2$s. Update it in the NewebPay dashboard so the customer is charged correctly."
 msgstr ""
@@ -7222,24 +7222,24 @@ msgid "NewebPay charged payment %1$d (trade number %2$s), but no renewal order c
 msgstr ""
 
 #. translators: %s: NewebPay card status
-#: src/Modules/Newebpay/Api/WpsPeriod.php:204
+#: src/Modules/Newebpay/Api/WpsPeriod.php:207
 #, php-format
 msgid "NewebPay stopped this recurring payment because the card can no longer be charged (%s). The subscription ends after the current period; ask the customer to subscribe again with another card."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/WpsPeriod.php:223
+#: src/Modules/Newebpay/Api/WpsPeriod.php:226
 msgid "The NewebPay mandate for this subscription has ended, so NewebPay will not charge this order. Ask the customer to pay it or to subscribe again."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/WpsPeriod.php:224
+#: src/Modules/Newebpay/Api/WpsPeriod.php:227
 msgid "NewebPay charges this renewal on its own schedule. The order is updated when NewebPay sends the payment notice."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/WpsPeriod.php:268
+#: src/Modules/Newebpay/Api/WpsPeriod.php:271
 msgid "This subscription is on hold, but NewebPay keeps charging the card because mandate status changes are not enabled. Cancel the subscription instead if the customer should not be charged."
 msgstr ""
 
-#: src/Modules/Newebpay/Api/WpsPeriod.php:286
+#: src/Modules/Newebpay/Api/WpsPeriod.php:289
 msgid "This subscription cannot be reactivated because its NewebPay mandate has ended, so it was set back to pending cancellation. Ask the customer to subscribe again."
 msgstr ""
 
@@ -7607,7 +7607,7 @@ msgid "This order has no NewebPay transaction to look up yet."
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:127
-#: src/Modules/Pchomepay/Api/IpnHandler.php:231
+#: src/Modules/Pchomepay/Api/IpnHandler.php:230
 #: src/Modules/Pchomepay/Module.php:92
 #: src/Modules/Shared/Admin/CardRenderers.php:510
 #: src/Modules/ShoplinePayments/Api/Helper.php:47
@@ -9172,7 +9172,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Modules/Tappay/Api/IpnHandler.php:359
+#: src/Modules/Tappay/Api/IpnHandler.php:358
 #: src/Settings/SettingsPage.php:640
 msgid "Last four card digits"
 msgstr ""
@@ -9365,19 +9365,19 @@ msgid "PayNow reported a payment of %1$s, which does not match the order total o
 msgstr ""
 
 #. translators: %s: payment type
-#: src/Modules/Paynow/Api/IpnHandler.php:315
+#: src/Modules/Paynow/Api/IpnHandler.php:314
 #, php-format
 msgid "PayNow payment completed — %s"
 msgstr ""
 
 #. translators: %s: payment type
-#: src/Modules/Paynow/Api/IpnHandler.php:330
+#: src/Modules/Paynow/Api/IpnHandler.php:329
 #, php-format
 msgid "PayNow issued the %s payment details and is waiting for the customer to pay."
 msgstr ""
 
 #. translators: 1: payment type, 2: error
-#: src/Modules/Paynow/Api/IpnHandler.php:341
+#: src/Modules/Paynow/Api/IpnHandler.php:340
 #, php-format
 msgid "The PayNow %1$s payment failed: %2$s"
 msgstr ""
@@ -11584,50 +11584,50 @@ msgid "PChomePay sent a “%1$s” notice (%2$s) for this already paid order. Th
 msgstr ""
 
 #. translators: 1: pay type, 2: amount
-#: src/Modules/Pchomepay/Api/IpnHandler.php:158
+#: src/Modules/Pchomepay/Api/IpnHandler.php:157
 #, php-format
 msgid "PChomePay payment completed — %1$s (NT$%2$s)"
 msgstr ""
 
 #. translators: %s: pay type
-#: src/Modules/Pchomepay/Api/IpnHandler.php:172
+#: src/Modules/Pchomepay/Api/IpnHandler.php:171
 #, php-format
 msgid "PChomePay issued the %s payment details and is waiting for the customer to pay."
 msgstr ""
 
-#: src/Modules/Pchomepay/Api/IpnHandler.php:179
+#: src/Modules/Pchomepay/Api/IpnHandler.php:178
 msgid "The PChomePay order expired without being paid."
 msgstr ""
 
 #. translators: %s: status code
-#: src/Modules/Pchomepay/Api/IpnHandler.php:187
+#: src/Modules/Pchomepay/Api/IpnHandler.php:186
 #, php-format
 msgid "The PChomePay payment failed (status code %s)."
 msgstr ""
 
 #. translators: 1: refund id, 2: amount
-#: src/Modules/Pchomepay/Api/IpnHandler.php:197
+#: src/Modules/Pchomepay/Api/IpnHandler.php:196
 #, php-format
 msgid "PChomePay refunded NT$%2$s — refund number %1$s"
 msgstr ""
 
 #. translators: %s: logistic stage
-#: src/Modules/Pchomepay/Api/IpnHandler.php:211
+#: src/Modules/Pchomepay/Api/IpnHandler.php:210
 #, php-format
 msgid "PChomePay shipping status update: %s"
 msgstr ""
 
 #. translators: %s: notify type
-#: src/Modules/Pchomepay/Api/IpnHandler.php:221
+#: src/Modules/Pchomepay/Api/IpnHandler.php:220
 #, php-format
 msgid "PChomePay notification: %s"
 msgstr ""
 
-#: src/Modules/Pchomepay/Api/IpnHandler.php:230
+#: src/Modules/Pchomepay/Api/IpnHandler.php:229
 msgid "Payment deadline passed"
 msgstr ""
 
-#: src/Modules/Pchomepay/Api/IpnHandler.php:232
+#: src/Modules/Pchomepay/Api/IpnHandler.php:231
 msgid "Payment details issued"
 msgstr ""
 
@@ -12230,6 +12230,12 @@ msgstr ""
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:69
 #: src/Modules/Tappay/Gateways/Credit.php:72
 msgid "The payment method description shown at checkout."
+msgstr ""
+
+#. translators: %s: payment method title
+#: src/Modules/Shared/Gateways/PaidOrder.php:35
+#, php-format
+msgid "%s reported a payment for this order after it was cancelled. The order was not marked as paid. Check the payment, then fulfil the order or refund the customer."
 msgstr ""
 
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:132
@@ -13258,50 +13264,50 @@ msgid "The card was saved with Shopline Payments for subscription renewals."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:305
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:306
 #, php-format
 msgid "Shopline Payments reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:315
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:316
 msgid "Shopline Payments reported a successful payment without an amount. Please check the payment in the Shopline Payments dashboard before fulfilling the order."
 msgstr ""
 
 #. translators: %s: payment method
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:324
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:327
 #, php-format
 msgid "The Shopline Payments payment completed (%s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:327
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:330
 msgid "The Shopline Payments payment completed."
 msgstr ""
 
 #. translators: %s: sub status
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:337
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:340
 #, php-format
 msgid "The Shopline Payments payment failed (%s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:346
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:349
 msgid "The Shopline Payments transaction expired before it completed."
 msgstr ""
 
 #. translators: %s: refund order id
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:354
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:357
 #, php-format
 msgid "Shopline Payments refunded the payment (refund number %s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:355
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:358
 msgid "No number"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:361
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:364
 msgid "The Shopline Payments refund failed. Please check the Shopline Payments dashboard."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:366
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:369
 msgid "The Shopline Payments transaction was cancelled before payment."
 msgstr ""
 
@@ -14402,21 +14408,21 @@ msgid "This transaction was refunded in the TapPay dashboard."
 msgstr ""
 
 #. translators: %s: payment method title
-#: src/Modules/Tappay/Api/IpnHandler.php:354
+#: src/Modules/Tappay/Api/IpnHandler.php:353
 #, php-format
 msgid "%s payment completed"
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:370
+#: src/Modules/Tappay/Api/IpnHandler.php:369
 msgid "TapPay is waiting for the payment to be confirmed."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:375
+#: src/Modules/Tappay/Api/IpnHandler.php:374
 msgid "The TapPay transaction was cancelled."
 msgstr ""
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Api/IpnHandler.php:385
+#: src/Modules/Tappay/Api/IpnHandler.php:384
 #: src/Modules/Tappay/Gateways/Credit.php:238
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"

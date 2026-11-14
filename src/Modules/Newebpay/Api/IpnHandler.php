@@ -179,8 +179,7 @@ final class IpnHandler {
 			}
 		} elseif ( 'SUCCESS' === $status ) {
 			// 重送的成功通知不再重複寫備註（已付款的單也不能掉進下面的失敗分支）。
-			if ( ! $order->is_paid() ) {
-				$order->payment_complete( $trade_no );
+			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {
 				$order->add_order_note(
 					sprintf(
 					/* translators: 1: payment type, 2: trade no */
