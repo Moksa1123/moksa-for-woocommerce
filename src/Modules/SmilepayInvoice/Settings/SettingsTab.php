@@ -44,6 +44,7 @@ final class SettingsTab {
 			[
 				'title'   => __( 'When to issue', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_smilepay_invoice_issue_when',
+				'desc'    => __( 'Cash on delivery and pay-at-pickup orders wait until the order is completed, so no invoice is issued for parcels that are never collected.', 'moksa-for-woocommerce' ),
 				'type'    => 'select',
 				'default' => 'paid',
 				'options' => [

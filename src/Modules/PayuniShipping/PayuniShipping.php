@@ -172,6 +172,7 @@ class PayuniShipping {
 		Webhook\Reconciler::init();
 		OrderEdit::init();
 		StoreSelector::init();
+		Frontstage::init();
 		Admin\OrderListHelper::init();
 		Operations\PrintProxy::init();
 
@@ -181,7 +182,10 @@ class PayuniShipping {
 			'moksafowo_cvs_shipping_method_ids',
 			static fn ( array $ids ): array => array_merge( $ids, array_keys( self::$cvs_methods ) )
 		);
-		add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
+		// 幕前模式門市在統一金流付款頁選，結帳頁不用選店、也不用驗門市。
+		if ( ! CreateMode::is_frontend() ) {
+			add_filter( \Moksafowo\Modules\Shipping\Admin\CvsStoreEditor::PROVIDERS_FILTER, [ __CLASS__, 'register_cvs_store_editor' ] );
+		}
 		Emails\EmailTrackingProvider::init();
 	}
 

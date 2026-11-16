@@ -58,7 +58,137 @@
 		'shipping_first_name', 'shipping_last_name',
 	];
 
+	// ---- 區塊結帳 ----------------------------------------------------------------
+	// 區塊結帳沒有 <form>，欄位存在 WooCommerce 的 wc/store/cart；它是打字後延遲一下才送到伺服器，
+	// 顧客填完馬上按「選擇門市」就整頁導走，伺服器還沒收到 → 回來全空（實測：綠界／速買配／PAYUNi 都會）。
+	// 離開前主動送一次（等它完成，最多 3 秒），另外在分頁暫存一份，回來時補回還是空的欄位。
+	var BLOCK_KEY = 'moksafowo_cvs_block_customer';
+
+	function cartStore() {
+		try {
+			return window.wp && window.wp.data ? window.wp.data.select( 'wc/store/cart' ) : null;
+		} catch ( e ) {
+			return null;
+		}
+	}
+
+	function blockCustomer() {
+		var store = cartStore();
+		if ( ! store || ! store.getCustomerData ) {
+			return null;
+		}
+		var d = store.getCustomerData() || {};
+		var billing = d.billingAddress || d.billingData || null;
+		if ( ! billing ) {
+			return null;
+		}
+		return { billing: billing, shipping: d.shippingAddress || {} };
+	}
+
+	function saveBlock() {
+		if ( form() ) {
+			return null; // 傳統結帳頁
+		}
+		var data = blockCustomer();
+		if ( ! data ) {
+			return null;
+		}
+		try {
+			window.sessionStorage.setItem( BLOCK_KEY, JSON.stringify( data ) );
+		} catch ( e ) { /* 無痕模式：只靠送伺服器 */ }
+		if ( ! window.wp || ! window.wp.apiFetch ) {
+			return null;
+		}
+		return window.wp.apiFetch( {
+			path: '/wc/store/v1/cart/update-customer',
+			method: 'POST',
+			data: { billing_address: data.billing, shipping_address: data.shipping },
+		} ).catch( function () {} );
+	}
+
+	// 回到結帳頁：伺服器那份若沒存到（送出失敗、太快），用分頁暫存補回「目前還是空的」欄位，不蓋掉顧客新填的。
+	function restoreBlock( tries ) {
+		var raw = null;
+		try {
+			raw = window.sessionStorage.getItem( BLOCK_KEY );
+		} catch ( e ) {
+			return;
+		}
+		if ( ! raw || form() ) {
+			return;
+		}
+		var now = blockCustomer();
+		if ( ! now ) {
+			if ( ( tries || 0 ) < 20 ) {
+				window.setTimeout( function () {
+					restoreBlock( ( tries || 0 ) + 1 );
+				}, 300 );
+			}
+			return;
+		}
+		var saved;
+		try {
+			saved = JSON.parse( raw );
+		} catch ( e ) {
+			saved = null;
+		}
+		clearBlock();
+		if ( ! saved ) {
+			return;
+		}
+		var dispatch = window.wp.data.dispatch( 'wc/store/cart' );
+		[ [ 'billing', 'setBillingAddress' ], [ 'shipping', 'setShippingAddress' ] ].forEach( function ( pair ) {
+			var from = saved[ pair[ 0 ] ] || {};
+			var cur = now[ pair[ 0 ] ] || {};
+			var patch = {};
+			var n = 0;
+			Object.keys( from ).forEach( function ( k ) {
+				if ( 'string' === typeof from[ k ] && '' !== from[ k ] && ! cur[ k ] ) {
+					patch[ k ] = from[ k ];
+					n++;
+				}
+			} );
+			if ( n && dispatch && 'function' === typeof dispatch[ pair[ 1 ] ] ) {
+				dispatch[ pair[ 1 ] ]( patch );
+			}
+		} );
+	}
+
+	function clearBlock() {
+		try {
+			window.sessionStorage.removeItem( BLOCK_KEY );
+		} catch ( e ) { /* noop */ }
+	}
+
+	// 離開結帳頁去選店：先存（傳統表單同步存；區塊等送到伺服器，最多 3 秒），再執行 go()。
+	function leave( go ) {
+		var done = false;
+		var finish = function () {
+			if ( ! done ) {
+				done = true;
+				go();
+			}
+		};
+		var pending = null;
+		try {
+			pending = save();
+		} catch ( e ) {
+			pending = null;
+		}
+		if ( pending && 'function' === typeof pending.then ) {
+			pending.then( finish, finish );
+			window.setTimeout( finish, 3000 );
+		} else {
+			finish();
+		}
+	}
+
 	function save() {
+		saveClassic();
+		return saveBlock();
+	}
+
+	function saveClassic() {
 		var f = form();
 		if ( ! f ) {
 			return;
@@ -176,9 +306,11 @@
 	function init() {
 		if ( document.body && document.body.classList.contains( 'woocommerce-order-received' ) ) {
 			clear();
+			clearBlock();
 			return;
 		}
 		restore();
+		restoreBlock( 0 );
 
 		// WC 重畫結帳區塊後欄位可能被換掉，重試幾次。updated_checkout 是 jQuery 自訂事件，
 		// 只有 jQuery 監聽得到。
@@ -202,6 +334,7 @@
 
 	window.moksafowoCvsFields = {
 		save: save,
+		leave: leave,
 		restore: restore,
 		clear: clear,
 	};

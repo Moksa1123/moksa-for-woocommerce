@@ -60,7 +60,7 @@ class OrderMetaBoxes {
 			} elseif ( $key === OrderMeta::TRADE_STATUS ) {
 				$trade_status = $order->get_meta( $key );
 				if ( isset( $trade_status ) ) {
-					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td><span class="moksafowo-payuni-trade-status-' . esc_attr( $trade_status ) . '">' . esc_html( TradeStatus::get_name( $trade_status, $payment_method ) ) . '</span></td></tr>';
+					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td><span class="moksafowo-payuni-trade-status-' . esc_attr( $trade_status ) . '">' . esc_html( TradeStatus::get_name( $trade_status, $payment_method, $order->get_meta( PayuniPayment::get_order_meta_key( $order, OrderMeta::PAY_TYPE ) ) ) ) . '</span></td></tr>';
 				} else {
 					echo '<tr><td><strong>' . esc_html( $value ) . '</strong></td><td></td></tr>';
 				}

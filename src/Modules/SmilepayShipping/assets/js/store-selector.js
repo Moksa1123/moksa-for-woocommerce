@@ -48,7 +48,15 @@
 			btn.addEventListener( 'click', function ( e ) {
 				e.preventDefault();
 				e.stopPropagation();
-				window.location.href = emapUrl;
+				// 先保住顧客已填的欄位再離開（共用層，跟其他物流商同一份）。
+				const go = function () {
+					window.location.href = emapUrl;
+				};
+				if ( window.moksafowoCvsFields && window.moksafowoCvsFields.leave ) {
+					window.moksafowoCvsFields.leave( go );
+				} else {
+					go();
+				}
 			} );
 		}
 	}

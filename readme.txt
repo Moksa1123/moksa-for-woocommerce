@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.22.0
+Stable tag: 1.23.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,12 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.23.0 - 2026-11-16 =
+* New: PAYUNi shipping can create the shipment on the PAYUNi payment page, together with the payment. PAYUNi has removed its separate shipping API, so this is now the default for new stores; stores already using PAYUNi shipping keep their current setting.
+* New: Customers can choose pay on pickup on the PAYUNi payment page (optional).
+* Changed: Cash on delivery and pay-at-pickup orders now get their e-invoice when the order is completed, not when it is placed.
+* Fixed: Guest checkout details (name, phone, email, address) are no longer lost after choosing a convenience store on the map.
+
 = 1.22.0 - 2026-11-15 =
 * New: Customer-service messages and the order-number search index now use WordPress data types instead of the plugin's own tables. Existing data moves over in the background.
 * Changed: Deleting the plugin removes its settings and saved card credentials, but keeps the payment, invoice and shipping numbers saved on your orders.
@@ -249,6 +255,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.23.0 =
+Stores already using PAYUNi shipping keep creating shipments the way they do now. You can switch to creating them on the PAYUNi payment page under PAYUNi shipping settings.
 
 = 1.22.0 =
 Customer-service messages and the order-number search index move to WordPress data types in the background after you update. Nothing to do; the old tables are kept so you can roll back.

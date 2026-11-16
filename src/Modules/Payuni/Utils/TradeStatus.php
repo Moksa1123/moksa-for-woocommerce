@@ -17,9 +17,13 @@ class TradeStatus {
 	const TBC                                = '8'; // 待確認
 	const UNPAID                             = '9'; // 未付款.
 
-	public static function get_name( $status_code, $payment_method ) {
+	public static function get_name( $status_code, $payment_method, $pay_type = '' ) {
 		switch ( $status_code ) {
 			case self::CREDIT_VALID_OR_GET_NUMBER_SUCCESS:
+				// 取貨付款／宅配到付：物流單建好了，錢在取貨時收。
+				if ( in_array( (int) $pay_type, array( PayType::C2C, PayType::DELIVERY ), true ) ) {
+					return _x( 'Pay on pickup', 'Trade Status', 'moksa-for-woocommerce' );
+				}
 				if ( $payment_method === Atm::GATEWAY_ID || $payment_method === Cvs::GATEWAY_ID ) {
 					return _x( 'Payment Number Taken', 'Trade Status', 'moksa-for-woocommerce' );
 				} elseif ( $payment_method === Aftee::GATEWAY_ID ) {

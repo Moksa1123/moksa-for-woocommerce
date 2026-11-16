@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\EzpayInvoice;
 
+use Moksafowo\Modules\Shared\Invoice\PayOnDelivery;
 use Moksafowo\Modules\AbstractModule;
 use Moksafowo\Modules\EzpayInvoice\Operations\Issue;
 use Moksafowo\Order\Meta\Keys;
@@ -61,6 +62,8 @@ final class Module extends AbstractModule {
 		if ( 'paid' === $when ) {
 			add_action( 'woocommerce_payment_complete', [ __CLASS__, 'maybe_issue' ], 30 );
 			add_action( 'woocommerce_order_status_processing', [ __CLASS__, 'maybe_issue' ], 30 );
+			// 取貨付款的訂單等完成才開（Shared\Invoice\PayOnDelivery）。
+			add_action( 'woocommerce_order_status_completed', [ __CLASS__, 'maybe_issue' ], 30 );
 		} elseif ( 'completed' === $when ) {
 			add_action( 'woocommerce_order_status_completed', [ __CLASS__, 'maybe_issue' ], 30 );
 		}
@@ -78,6 +81,14 @@ final class Module extends AbstractModule {
 	public static function maybe_issue( int $order_id ): void {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+		$when = (string) get_option( 'moksafowo_ezpay_invoice_issue_when', 'paid' );
+		if ( PayOnDelivery::should_wait( $order, $when ) ) {
+			return;
+		}
+		// 付款完成模式下，訂單完成只補開取貨付款的訂單；其他訂單付款時已處理過。
+		if ( 'paid' === $when && 'woocommerce_order_status_completed' === current_action() && ! PayOnDelivery::is_pay_on_delivery( $order ) ) {
 			return;
 		}
 		if ( $order->get_meta( Keys::EZPAY_INVOICE_NUMBER ) ) {

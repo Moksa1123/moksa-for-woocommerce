@@ -54,6 +54,10 @@ class ShippingRequest {
 		if ( ! $has_payuni ) {
 			return;
 		}
+		// 付款頁一起建單的訂單，物流單已由 PAYUNi 建好，不再呼叫建單 API。
+		if ( 'yes' === $order->get_meta( \Moksafowo\Modules\PayuniShipping\Frontstage::ORDER_FLAG ) ) {
+			return;
+		}
 		if ( function_exists( 'as_schedule_single_action' ) ) {
 			as_schedule_single_action( time(), self::ASYNC_CREATE_HOOK, [ $id ], 'moksa-for-woocommerce' );
 		} else {

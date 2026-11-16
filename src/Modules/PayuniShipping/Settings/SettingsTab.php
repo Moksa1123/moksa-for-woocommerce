@@ -71,6 +71,24 @@ class SettingsTab extends \WC_Settings_Page {
 					'id'      => 'moksafowo_payuni_shipping_debug_log_enabled',
 				),
 				array(
+					'title'   => __( 'How shipments are created', 'moksa-for-woocommerce' ),
+					'type'    => 'select',
+					'options' => array(
+						\Moksafowo\Modules\PayuniShipping\CreateMode::FRONTEND => __( 'On the PAYUNi payment page, together with the payment (recommended)', 'moksa-for-woocommerce' ),
+						\Moksafowo\Modules\PayuniShipping\CreateMode::BACKEND  => __( 'By this site through the PAYUNi shipping API, after the order is paid', 'moksa-for-woocommerce' ),
+					),
+					'default' => \Moksafowo\Modules\PayuniShipping\CreateMode::FRONTEND,
+					'desc'    => __( 'Payment page: the customer picks the 7-ELEVEN store on the PAYUNi payment page and the shipment is created with the payment, so PAYUNi shipping can only be paid with PAYUNi. Shipping API: the customer picks the store at checkout and this site creates the shipment after payment; PAYUNi has to enable this for your store and has removed these APIs from its documentation, so use it only if it already works for you.', 'moksa-for-woocommerce' ),
+					'id'      => \Moksafowo\Modules\PayuniShipping\CreateMode::OPTION,
+				),
+				array(
+					'title'   => __( 'Pay on pickup on the payment page', 'moksa-for-woocommerce' ),
+					'type'    => 'checkbox',
+					'default' => 'no',
+					'desc'    => __( 'When shipments are created on the payment page, also offer pay on pickup there. Only the single PAYUNi entry point shows it; the order is ready to ship right away and the invoice waits until the order is completed.', 'moksa-for-woocommerce' ),
+					'id'      => \Moksafowo\Modules\PayuniShipping\Frontstage::COD_OPTION,
+				),
+				array(
 					'title'    => __( 'Store picker layout', 'moksa-for-woocommerce' ),
 					'type'     => 'select',
 					'desc_tip' => __( 'Pick to suit your theme — one column for narrow checkout layouts, two columns for wider ones.', 'moksa-for-woocommerce' ),

@@ -55,11 +55,23 @@ class PaymentResponse {
 		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi NotifyURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
-		$status          = $decrypted_info['Status'];
-		$payuni_order_no = $decrypted_info['MerTradeNo'];
-		$message         = $decrypted_info['Message'];
-		$pay_type        = $decrypted_info['PaymentType'];
-		$trade_no        = $decrypted_info['TradeNo'];
+		$decrypted_info = is_array( $decrypted_info ) ? $decrypted_info : array();
+
+		// 付款頁一起建的物流單，貨態／列印通知可能送到付款的通知網址（帶 ApiType），不是付款結果，交給統一物流處理。
+		// 放在找訂單之前：物流處理用物流序號自己找訂單，物流通知不一定帶商店訂單編號。
+		if ( '' !== (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
+			/**
+			 * 付款通知網址收到的物流通知（已驗章、已解密）。
+			 *
+			 * @param array<string,mixed> $decrypted_info 解密後的通知。
+			 */
+			do_action( 'moksafowo_payuni_payment_logistics_notify', $decrypted_info );
+			status_header( 200 );
+			echo 'OK';
+			exit;
+		}
+
+		$payuni_order_no = (string) ( $decrypted_info['MerTradeNo'] ?? '' );
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $payuni_order_no );
 		$order        = PayuniPayment::order_for_trade_no( (string) $payuni_order_no );
@@ -123,11 +135,11 @@ class PaymentResponse {
 		$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 		PayuniPayment::log( 'PAYUNi ReturnURL response decrypted:' . wc_print_r( PaymentRequest::redact_for_log( $decrypted_info ), true ) );
 
-		$status   = $decrypted_info['Status'];
-		$order_id = $decrypted_info['MerTradeNo'];
-		$message  = $decrypted_info['Message'];
-		$pay_type = $decrypted_info['PaymentType'];
-		$trade_no = $decrypted_info['TradeNo'];
+		$status   = ( $decrypted_info['Status'] ?? '' );
+		$order_id = ( $decrypted_info['MerTradeNo'] ?? '' );
+		$message  = ( $decrypted_info['Message'] ?? '' );
+		$pay_type = ( $decrypted_info['PaymentType'] ?? '' );
+		$trade_no = ( $decrypted_info['TradeNo'] ?? '' );
 
 		$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $order_id );
 		$order        = PayuniPayment::order_for_trade_no( (string) $order_id );
@@ -168,14 +180,14 @@ class PaymentResponse {
 
 	private static function save_payuni_order_data( $order, $decrypted_info ) {
 
-		$pay_type = $decrypted_info['PaymentType'];
+		$pay_type = ( $decrypted_info['PaymentType'] ?? '' );
 
-		$order->update_meta_data( OrderMeta::STATUS, $decrypted_info['Status'] );
-		$order->update_meta_data( OrderMeta::MESSAGE, $decrypted_info['Message'] );
-		$order->update_meta_data( OrderMeta::PAYUNI_ORDER_NO, $decrypted_info['MerTradeNo'] );
-		$order->update_meta_data( OrderMeta::UNI_NO, $decrypted_info['TradeNo'] );
-		$order->update_meta_data( OrderMeta::TRADE_STATUS, $decrypted_info['TradeStatus'] );
-		$order->update_meta_data( OrderMeta::TRADE_AMOUNT, $decrypted_info['TradeAmt'] );
+		$order->update_meta_data( OrderMeta::STATUS, ( $decrypted_info['Status'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::MESSAGE, ( $decrypted_info['Message'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::PAYUNI_ORDER_NO, ( $decrypted_info['MerTradeNo'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::UNI_NO, ( $decrypted_info['TradeNo'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::TRADE_STATUS, ( $decrypted_info['TradeStatus'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::TRADE_AMOUNT, ( $decrypted_info['TradeAmt'] ?? '' ) );
 		$order->update_meta_data( OrderMeta::PAY_TYPE, $pay_type );
 
 		self::update_order_meta( $order, $decrypted_info, OrderMeta::CREDIT_REST_CODE, 'ResCode' );
@@ -254,9 +266,23 @@ class PaymentResponse {
 	}
 
 	private static function update_order_meta_and_order_status( $order, $decrypted_info ) {
-		$trade_status = $decrypted_info['TradeStatus'];
+		$trade_status = ( $decrypted_info['TradeStatus'] ?? '' );
 
 		self::save_payuni_order_data( $order, $decrypted_info );
+
+		/**
+		 * 付款結果寫進訂單之前：付款頁一起建的物流單號、門市在這則通知裡，統一物流從這裡存。
+		 *
+		 * @param \WC_Order           $order          訂單。
+		 * @param array<string,mixed> $decrypted_info 解密後的通知。
+		 */
+		do_action( 'moksafowo_payuni_payment_result', $order, $decrypted_info );
+		if ( in_array( (int) ( $decrypted_info['PaymentType'] ?? 0 ), array( PayType::C2C, PayType::DELIVERY ), true )
+			&& 'SUCCESS' === (string) ( $decrypted_info['Status'] ?? '' )
+			&& TradeStatus::CREDIT_VALID_OR_GET_NUMBER_SUCCESS === (string) $trade_status ) {
+			// 取貨付款／宅配到付：錢在取貨時才收，付款結果不是「已付款」，交給統一物流把訂單轉成待出貨。
+			return;
+		}
 
 		if ( TradeStatus::PAID === $trade_status ) {
 			$paid_amt = (int) ( $decrypted_info['TradeAmt'] ?? 0 );
@@ -274,7 +300,7 @@ class PaymentResponse {
 				);
 				return;
 			}
-			\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $decrypted_info['TradeNo'] );
+			\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) ( $decrypted_info['TradeNo'] ?? '' ) );
 		} elseif ( TradeStatus::CREDIT_VALID_OR_GET_NUMBER_SUCCESS === $trade_status && $order->has_status( 'pending' ) ) {
 			// ATM／超商代碼取號成功、AFTEE 審查通過，都還沒付款。停在「等待付款」會被 WC 依保留庫存時間自動取消，
 			// 但繳費帳號還有效好幾天。
@@ -291,12 +317,12 @@ class PaymentResponse {
 	}
 
 	private static function save_einvoice_data( $order, $decrypted_info ) {
-		$order->update_meta_data( OrderMeta::EINVOICE_NO, $decrypted_info['InvoiceNo'] );
-		$order->update_meta_data( OrderMeta::EINVOICE_AMT, $decrypted_info['TradeAmt'] );
-		$order->update_meta_data( OrderMeta::EINVOICE_TIME, $decrypted_info['InvoiceTime'] );
-		$order->update_meta_data( OrderMeta::EINVOICE_TYPE, $decrypted_info['InvoiceNotifyType'] );
-		$order->update_meta_data( OrderMeta::EINVOICE_INFO, $decrypted_info['InvoiceInfo'] );
-		$order->update_meta_data( OrderMeta::EINVOICE_STATUS, $decrypted_info['InvoiceStatus'] );
+		$order->update_meta_data( OrderMeta::EINVOICE_NO, ( $decrypted_info['InvoiceNo'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::EINVOICE_AMT, ( $decrypted_info['TradeAmt'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::EINVOICE_TIME, ( $decrypted_info['InvoiceTime'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::EINVOICE_TYPE, ( $decrypted_info['InvoiceNotifyType'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::EINVOICE_INFO, ( $decrypted_info['InvoiceInfo'] ?? '' ) );
+		$order->update_meta_data( OrderMeta::EINVOICE_STATUS, ( $decrypted_info['InvoiceStatus'] ?? '' ) );
 		$order->save();
 	}
 

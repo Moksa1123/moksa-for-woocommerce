@@ -57,6 +57,7 @@ final class Module extends AbstractModule {
 			Vault::wrap_option( $opt );
 		}
 
+		CreateMode::ensure();
 		PayuniShipping::init();
 	}
 }

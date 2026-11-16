@@ -27,7 +27,11 @@ class StoreSelector {
 
 		self::get_instance();
 
-		add_action( 'woocommerce_review_order_after_shipping', array( self::get_instance(), 'display_store_selector_after_shipping' ) );
+		// 幕前模式門市在統一金流付款頁選，結帳頁不顯示選店（傳統與區塊結帳）。
+		$pick_on_checkout = ! \Moksafowo\Modules\PayuniShipping\CreateMode::is_frontend();
+		if ( $pick_on_checkout ) {
+			add_action( 'woocommerce_review_order_after_shipping', array( self::get_instance(), 'display_store_selector_after_shipping' ) );
+		}
 
 		// nopriv 必要：guest checkout 也要能開地圖；各 handler 以 nonce + session 綁定驗源
 		add_action( 'wp_ajax_moksafowo_payuni_open_store_map', array( __CLASS__, 'ajax_open_store_map' ) );
@@ -72,7 +76,9 @@ class StoreSelector {
 		// 而且 Classic 結帳原本完全沒有伺服器端消費者，只靠 callback 那份 best-effort
 		// session（跨站 POST 可能換 session，註解自己也標了不可靠）。
 		add_action( 'template_redirect', array( __CLASS__, 'consume_token_early' ), 5 );
-		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+		if ( $pick_on_checkout ) {
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+		}
 
 		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'modify_billing_fields_for_cvs' ), 110 );
 		add_filter( 'woocommerce_get_country_locale', array( __CLASS__, 'relax_tw_locale_for_cvs' ), 200 );

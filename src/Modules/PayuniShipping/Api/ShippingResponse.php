@@ -52,7 +52,46 @@ class ShippingResponse {
 		}
 		PayuniShipping::log( 'PAYUNi 7-11 notify decrypted: ShipTradeNo=' . ( $decrypted_info['ShipTradeNo'] ?? '?' ) . ', Status=' . ( $decrypted_info['ShipStatus'] ?? '?' ) );
 
-		if ( 'SUCCESS' === $decrypted_info['Status'] ) {
+		if ( is_array( $decrypted_info ) ) {
+			self::handle_711( $decrypted_info );
+		}
+	}
+
+	public static function moksafowo_payuni_tcat_receive_update() {
+		// PAYUNi shipping TCat webhook: no WP nonce possible (external server cannot send one).
+		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
+		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
+		$posted = wc_clean( Input::all_post() );
+
+		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
+		$posted_hash  = array_key_exists( 'HashInfo', $posted ) ? $posted['HashInfo'] : '';
+
+		// SECURITY: HashInfo 必須在解密前驗章，防止偽造貨態通知
+		if ( '' === $encrypt_info || '' === $posted_hash || ! hash_equals( PayuniShipping::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
+			PayuniShipping::log( 'TCat notify HashInfo mismatch — rejected.' );
+			status_header( 403 );
+			return;
+		}
+
+		$decrypted_info = PayuniShipping::decrypt( $encrypt_info );
+		if ( is_array( $decrypted_info ) ) {
+			$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
+		}
+		PayuniShipping::log( 'PAYUNi TCat notify decrypted: ShipTradeNo=' . ( $decrypted_info['ShipTradeNo'] ?? '?' ) . ', Status=' . ( $decrypted_info['ShipStatus'] ?? '?' ) );
+
+		if ( is_array( $decrypted_info ) ) {
+			self::handle_tcat( $decrypted_info );
+		}
+		exit;
+	}
+
+	/**
+	 * 7-11 貨態／列印通知（已驗章、已解密）。付款頁一起建的物流單，貨態可能送到付款的通知網址，也走這裡。
+	 *
+	 * @param array<string, mixed> $decrypted_info 解密後的通知。
+	 */
+	public static function handle_711( array $decrypted_info ): void {
+		if ( 'SUCCESS' === (string) ( $decrypted_info['Status'] ?? '' ) ) {
 
 			if ( ! array_key_exists( 'ApiType', $decrypted_info ) ) {
 				// 建單成功後 PAYUNi 會先送一則不帶 ApiType 的建單確認，建單當下已處理過。
@@ -61,15 +100,15 @@ class ShippingResponse {
 				return;
 			}
 
-			if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
+			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
 				if ( $order instanceof \WC_Order ) {
 
 					if ( array_key_exists( 'ShipStatus', $decrypted_info ) ) {
 						$order->update_meta_data( OrderMeta::ShipStatus, $decrypted_info['ShipStatus'] );
-						$order->update_meta_data( OrderMeta::ShipStatusDesc, $decrypted_info['ShipStatusDesc'] );
-						$order->update_meta_data( OrderMeta::ShipStatusTime, $decrypted_info['ShipStatusTime'] );
+						$order->update_meta_data( OrderMeta::ShipStatusDesc, (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ) );
+						$order->update_meta_data( OrderMeta::ShipStatusTime, (string) ( $decrypted_info['ShipStatusTime'] ?? '' ) );
 						self::update_record(
 							$order,
 							(string) $decrypted_info['ShipTradeNo'],
@@ -81,7 +120,7 @@ class ShippingResponse {
 						);
 						$order->save();
 
-						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, (string) $decrypted_info['ShipStatus'], (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ) );
 						// 狀態有變時 mapper 已寫一則備註；沒變才補這則。
 						if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
 							$order->add_order_note( self::status_note( $decrypted_info ) );
@@ -128,29 +167,13 @@ class ShippingResponse {
 		}
 	}
 
-	public static function moksafowo_payuni_tcat_receive_update() {
-		// PAYUNi shipping TCat webhook: no WP nonce possible (external server cannot send one).
-		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
-		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
-		$posted = wc_clean( Input::all_post() );
-
-		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
-		$posted_hash  = array_key_exists( 'HashInfo', $posted ) ? $posted['HashInfo'] : '';
-
-		// SECURITY: HashInfo 必須在解密前驗章，防止偽造貨態通知
-		if ( '' === $encrypt_info || '' === $posted_hash || ! hash_equals( PayuniShipping::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
-			PayuniShipping::log( 'TCat notify HashInfo mismatch — rejected.' );
-			status_header( 403 );
-			return;
-		}
-
-		$decrypted_info = PayuniShipping::decrypt( $encrypt_info );
-		if ( is_array( $decrypted_info ) ) {
-			$decrypted_info = map_deep( $decrypted_info, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
-		}
-		PayuniShipping::log( 'PAYUNi TCat notify decrypted: ShipTradeNo=' . ( $decrypted_info['ShipTradeNo'] ?? '?' ) . ', Status=' . ( $decrypted_info['ShipStatus'] ?? '?' ) );
-
-		if ( 'SUCCESS' === $decrypted_info['Status'] ) {
+	/**
+	 * 黑貓貨態／列印通知（已驗章、已解密）。
+	 *
+	 * @param array<string, mixed> $decrypted_info 解密後的通知。
+	 */
+	public static function handle_tcat( array $decrypted_info ): void {
+		if ( 'SUCCESS' === (string) ( $decrypted_info['Status'] ?? '' ) ) {
 
 			if ( ! array_key_exists( 'ApiType', $decrypted_info ) ) {
 				// 建單成功後 PAYUNi 會先送一則不帶 ApiType 的建單確認，建單當下已處理過。
@@ -159,7 +182,7 @@ class ShippingResponse {
 				return;
 			}
 
-			if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
+			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
 				if ( $order instanceof \WC_Order ) {
@@ -167,8 +190,8 @@ class ShippingResponse {
 					if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
 						$order->update_meta_data( OrderMeta::ShipNo, $decrypted_info['OBTNumber'] );
 						$order->update_meta_data( OrderMeta::ShipStatus, $decrypted_info['ShipStatus'] );
-						$order->update_meta_data( OrderMeta::ShipStatusDesc, $decrypted_info['ShipStatusDesc'] );
-						$order->update_meta_data( OrderMeta::ShipStatusTime, $decrypted_info['ShipStatusTime'] );
+						$order->update_meta_data( OrderMeta::ShipStatusDesc, (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ) );
+						$order->update_meta_data( OrderMeta::ShipStatusTime, (string) ( $decrypted_info['ShipStatusTime'] ?? '' ) );
 					}
 
 					if ( array_key_exists( 'FileNo', $decrypted_info ) ) {
@@ -178,7 +201,7 @@ class ShippingResponse {
 
 					if ( array_key_exists( 'ShipStatus', $decrypted_info ) ) {
 
-						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, $decrypted_info['ShipStatus'], $decrypted_info['ShipStatusDesc'] );
+						do_action( 'moksafowo_payuni_update_shipping_order_status', $order, (string) $decrypted_info['ShipStatus'], (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ) );
 						// 狀態有變時 mapper 已寫一則備註；沒變才補這則。
 						if ( ! \Moksafowo\Modules\Shipping\Webhook\AbstractStatusMapper::wrote_note( $order ) ) {
 							$order->add_order_note( self::status_note( $decrypted_info ) );
@@ -192,7 +215,7 @@ class ShippingResponse {
 				$json_data = $raw_json !== '' ? json_decode( $raw_json, true ) : null;
 				if ( ! is_array( $json_data ) || ! isset( $json_data[0] ) || ! is_array( $json_data[0] ) ) {
 					PayuniShipping::log( 'PAYUNi NotifyURL tcat print: JsonData parse failed' );
-					exit;
+					return;
 				}
 				// json_decode does not sanitize — deep-sanitize before any use.
 				$json_data    = map_deep( $json_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
@@ -220,7 +243,6 @@ class ShippingResponse {
 		} else {
 			PayuniShipping::log( 'PAYUNi NotifyURL response fail:' . wc_print_r( $decrypted_info, true ) );
 		}
-		exit;
 	}
 
 	/**

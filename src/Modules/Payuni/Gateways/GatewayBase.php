@@ -102,7 +102,7 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 				} elseif ( $order_meta_key === OrderMeta::TRADE_STATUS ) {
 					$trade_status = $order->get_meta( $order_meta_key );
 					if ( isset( $trade_status ) ) {
-						echo '<td>' . esc_html( TradeStatus::get_name( $trade_status, $order->get_payment_method() ) ) . '</td></tr>';
+						echo '<td>' . esc_html( TradeStatus::get_name( $trade_status, $order->get_payment_method(), $order->get_meta( PayuniPayment::get_order_meta_key( $order, OrderMeta::PAY_TYPE ) ) ) ) . '</td></tr>';
 					} else {
 						echo '<td>' . esc_html( $trade_status ) . '</td></tr>';
 					}
@@ -200,6 +200,12 @@ abstract class GatewayBase extends \WC_Payment_Gateway {
 			$trade_status     = $order->get_meta( $trade_status_key );
 
 			PayuniPayment::log( 'imcompleete payment message: ' . $this->incomplete_payment_message );
+
+			// 取貨付款／宅配到付：不是付款失敗，提醒取貨時付款。
+			$pay_type = (int) $order->get_meta( PayuniPayment::get_order_meta_key( $order, OrderMeta::PAY_TYPE ) );
+			if ( in_array( $pay_type, array( \Moksafowo\Modules\Payuni\Utils\PayType::C2C, \Moksafowo\Modules\Payuni\Utils\PayType::DELIVERY ), true ) && ! $order->has_status( array( 'failed', 'cancelled' ) ) ) {
+				return '<span class="moksafowo-payuni-pay-on-pickup-message">' . esc_html__( 'We have received your order. Please pay when you collect your parcel.', 'moksa-for-woocommerce' ) . '</span>';
+			}
 
 			if ( 'pending' === $order->get_status() || TradeStatus::PAID !== $trade_status ) {
 				if ( empty( $this->incomplete_payment_message ) ) {

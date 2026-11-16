@@ -81,6 +81,7 @@ final class SettingsTab {
 			[
 				'title'   => __( 'When to issue', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_ecpay_invoice_issue_when',
+				'desc'    => __( 'Cash on delivery and pay-at-pickup orders wait until the order is completed, so no invoice is issued for parcels that are never collected.', 'moksa-for-woocommerce' ),
 				'type'    => 'select',
 				'options' => [
 					'paid'      => __( 'As soon as payment completes (recommended)', 'moksa-for-woocommerce' ),
