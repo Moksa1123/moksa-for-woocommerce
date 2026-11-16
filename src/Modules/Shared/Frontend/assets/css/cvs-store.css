@@ -125,3 +125,71 @@
 		width: 100%;
 	}
 }
+
+/*
+ * 傳統結帳「您的訂單」表格（手機）：WC 用兩欄表格，運送方式清單被夾在右欄，台灣店家常見的
+ * 十幾種運送方式每個都斷成兩行（1.23.0 前就這樣）。表格的欄寬由其他列決定，單改這一列撐不開，
+ * 所以窄螢幕把整張表改成一列一列：一般列維持「左標題、右金額」，運送方式列改成標題在上、清單佔滿。
+ * 只在 600px 以下、只動結帳頁這張表；桌機不變。
+ */
+@media (max-width: 600px) {
+	.woocommerce-checkout-review-order-table,
+	.woocommerce-checkout-review-order-table thead,
+	.woocommerce-checkout-review-order-table tbody,
+	.woocommerce-checkout-review-order-table tfoot {
+		display: block;
+		width: 100%;
+	}
+	.woocommerce-checkout-review-order-table tr {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 12px;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+	}
+	.woocommerce-checkout-review-order-table thead tr:first-child {
+		border-top: 0;
+	}
+	.woocommerce-checkout-review-order-table tr > th,
+	.woocommerce-checkout-review-order-table tr > td {
+		display: block;
+		min-width: 0;
+	}
+	/* 佈景常用 .woocommerce table.shop_table tfoot th 之類畫格線，選擇器要比它具體才蓋得掉。 */
+	.woocommerce table.shop_table.woocommerce-checkout-review-order-table thead > tr > th,
+	.woocommerce table.shop_table.woocommerce-checkout-review-order-table tbody > tr > td,
+	.woocommerce table.shop_table.woocommerce-checkout-review-order-table tfoot > tr > th,
+	.woocommerce table.shop_table.woocommerce-checkout-review-order-table tfoot > tr > td {
+		border: 0;
+	}
+	.woocommerce-checkout-review-order-table tr > :last-child {
+		text-align: right;
+		flex-shrink: 0;
+		max-width: 60%;
+	}
+	.woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals,
+	.woocommerce-checkout-review-order-table tr[class*="moksafowo-"] {
+		flex-direction: column;
+		gap: 0;
+	}
+	.woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals > th,
+	.woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals > td,
+	.woocommerce-checkout-review-order-table tr[class*="moksafowo-"] > th,
+	.woocommerce-checkout-review-order-table tr[class*="moksafowo-"] > td {
+		width: 100%;
+		max-width: none;
+		box-sizing: border-box;
+		text-align: left;
+	}
+	.woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals > th {
+		padding-bottom: 0;
+	}
+	/* 有些佈景會在 td 前印出 data-title，標題已經在上面一行了 */
+	.woocommerce-checkout-review-order-table tr.woocommerce-shipping-totals > td::before {
+		content: none;
+	}
+	.woocommerce-checkout-review-order-table #shipping_method {
+		width: 100%;
+		margin-left: 0;
+	}
+}

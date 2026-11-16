@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.23.0
+Stable tag: 1.23.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -168,6 +168,9 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.23.1 - 2026-11-16 =
+* Fixed: On phones, the shipping options in the classic checkout order summary now use the full width instead of being squeezed into the right half.
 
 = 1.23.0 - 2026-11-16 =
 * New: PAYUNi shipping can create the shipment on the PAYUNi payment page, together with the payment. PAYUNi has removed its separate shipping API, so this is now the default for new stores; stores already using PAYUNi shipping keep their current setting.
