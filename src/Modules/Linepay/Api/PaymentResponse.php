@@ -7,6 +7,7 @@ use Exception;
 use Moksafowo\Modules\Linepay\Constants;
 use Moksafowo\Modules\Linepay\Gateways\Credit;
 use Moksafowo\Modules\Linepay\LinePay;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,12 +27,9 @@ final class PaymentResponse {
 			// LINE Pay redirects the customer browser back; no WP nonce is possible in this context.
 			// Source authenticity is verified via moksafowo_token (HMAC-derived, per-order callback token)
 			// on the hash_equals call immediately below before any state change occurs.
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- LINE Pay browser redirect callback; no WP nonce possible; source verified via moksafowo_token hash_equals on line below before any use.
-			$order_id = isset( $_GET['order_id'] ) ? absint( wp_unslash( $_GET['order_id'] ) ) : 0;
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same as above.
-			$request_type = isset( $_GET['request_type'] ) ? sanitize_text_field( wp_unslash( $_GET['request_type'] ) ) : '';
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same as above; token verified via hash_equals immediately below.
-			$posted_token = isset( $_GET['moksafowo_token'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_token'] ) ) : '';
+			$order_id     = absint( Input::get( 'order_id' ) );
+			$request_type = sanitize_text_field( Input::get( 'request_type' ) );
+			$posted_token = sanitize_text_field( Input::get( 'moksafowo_token' ) );
 
 			$expected_token = PaymentRequest::callback_token( $order_id, $request_type );
 			if ( '' === $posted_token || ! hash_equals( $expected_token, $posted_token ) ) {

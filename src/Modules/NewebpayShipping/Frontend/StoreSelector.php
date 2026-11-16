@@ -7,6 +7,7 @@ use Moksafowo\Modules\NewebpayShipping\Api\Helper;
 use Moksafowo\Modules\NewebpayShipping\Api\ShippingRequest;
 use Moksafowo\Modules\NewebpayShipping\Module;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -147,7 +148,7 @@ final class StoreSelector {
 	public static function ajax_open_map(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 
-		$method_id = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : '';
+		$method_id = sanitize_text_field( Input::post( 'shipping_method' ) );
 		if ( str_contains( $method_id, ':' ) ) {
 			$method_id = strstr( $method_id, ':', true );
 		}
@@ -177,7 +178,7 @@ final class StoreSelector {
 			$ship_type = (string) reset( $enabled ) ?: '1';
 		}
 		// referrer to redirect back to original checkout page
-		$referrer = isset( $_POST['referrer'] ) ? esc_url_raw( wp_unslash( $_POST['referrer'] ) ) : '';
+		$referrer = esc_url_raw( Input::post( 'referrer' ) );
 		set_transient( self::STATE_PREFIX . $mtn . '_ref', $referrer, 30 * MINUTE_IN_SECONDS );
 
 		$result = ShippingRequest::open_store_map(
@@ -251,8 +252,8 @@ final class StoreSelector {
 		// and MerchantOrderNo must match a STATE_PREFIX transient set when the map was opened.
 		// Raw EncryptData/HashData must be captured unmodified for signature verification; remaining
 		// fields are extracted from decrypted payload and sanitized via sanitize_text_field below.
-		$encrypted = isset( $_POST['EncryptData'] ) ? (string) wp_unslash( $_POST['EncryptData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Newebpay store-map callback; no WP nonce possible; raw kept for HashData SHA256 hash_equals (verified before decrypt); fields sanitized after decrypt.
-		$hash      = isset( $_POST['HashData'] ) ? (string) wp_unslash( $_POST['HashData'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- raw signature bytes, hash_equals verified before use.
+		$encrypted = Input::post( 'EncryptData' );
+		$hash      = Input::post( 'HashData' );
 		if ( '' === $encrypted || '' === $hash ) {
 			Helper::log( 'storeMap callback: missing EncryptData / HashData' );
 			status_header( 400 );
@@ -335,8 +336,7 @@ final class StoreSelector {
 		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token，且只兌換給開地圖的同一個 session。
-		$token = isset( $_GET[ self::TOKEN_QUERY ] ) ? sanitize_text_field( wp_unslash( $_GET[ self::TOKEN_QUERY ] ) ) : '';
+		$token = sanitize_text_field( Input::get( self::TOKEN_QUERY ) );
 		if ( '' === $token ) {
 			return;
 		}
@@ -361,7 +361,7 @@ final class StoreSelector {
 
 	public static function ajax_resolve_token(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-		$token = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+		$token = sanitize_text_field( Input::post( 'token' ) );
 		if ( '' === $token ) {
 			wp_send_json_error( [ 'message' => 'missing token' ] );
 		}

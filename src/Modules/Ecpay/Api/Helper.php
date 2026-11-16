@@ -293,13 +293,13 @@ final class Helper extends AbstractCredentialHelper {
 			}
 		}
 
-		$found = wc_get_orders(
+		$found = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_value' => $merchant_trade_no,
+				'limit'                            => 1,
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
+					'value' => $merchant_trade_no,
+				],
 			]
 		);
 		if ( ! empty( $found ) ) {

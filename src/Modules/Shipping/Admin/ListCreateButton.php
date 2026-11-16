@@ -5,6 +5,7 @@ namespace Moksafowo\Modules\Shipping\Admin;
 
 use Moksafowo\Modules\Shared\Admin\LastError;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -104,8 +105,7 @@ final class ListCreateButton {
 	public static function enqueue( string $hook ): void {
 		$screen    = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		$is_orders = 'woocommerce_page_wc-orders' === $hook || ( $screen && 'edit-shop_order' === $screen->id );
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
-		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
+		$action    = sanitize_key( Input::get( 'action' ) );
 		if ( ! $is_orders || in_array( $action, [ 'edit', 'new' ], true ) ) {
 			return;
 		}

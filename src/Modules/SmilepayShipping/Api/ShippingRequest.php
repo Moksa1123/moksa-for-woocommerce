@@ -45,8 +45,7 @@ final class ShippingRequest {
 		$body = (string) wp_remote_retrieve_body( $response );
 		Helper::log( 'SP_API response', [ 'body' => substr( $body, 0, 500 ) ] );
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
-		$xml = @simplexml_load_string( $body );
+		$xml = \Moksafowo\Http\Decode::xml( $body );
 		if ( ! $xml ) {
 			return [
 				'ok'      => false,
@@ -116,8 +115,7 @@ final class ShippingRequest {
 		}
 		$body = (string) wp_remote_retrieve_body( $response );
 		Helper::log( 'confirm_cvs response', [ 'body' => substr( $body, 0, 500 ) ] );
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
-		$xml = @simplexml_load_string( $body );
+		$xml = \Moksafowo\Http\Decode::xml( $body );
 		if ( ! $xml ) {
 			return [
 				'ok'      => false,
@@ -191,8 +189,7 @@ final class ShippingRequest {
 		}
 		$body = (string) wp_remote_retrieve_body( $response );
 		Helper::log( 'confirm_tcat response', [ 'body' => substr( $body, 0, 500 ) ] );
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
-		$xml = @simplexml_load_string( $body );
+		$xml = \Moksafowo\Http\Decode::xml( $body );
 		if ( ! $xml ) {
 			return [
 				'ok'      => false,

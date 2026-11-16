@@ -25,9 +25,9 @@ final class SalesSummary {
 		$input  = is_array( $input ) ? $input : array();
 		$period = isset( $input['period'] ) ? sanitize_key( (string) $input['period'] ) : 'this_month';
 
-		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested -- 刻意取站台時區的本地時戳：下方 today / this_month / last_month 等報表區間需以「站台當地日期」計算，改 UTC time() 會跨日錯位。
-		$now   = (int) current_time( 'timestamp' );
-		$today = gmdate( 'Y-m-d', $now );
+		// 報表區間以站台時區的日期為準。
+		$now   = new \DateTimeImmutable( 'now', wp_timezone() );
+		$today = $now->format( 'Y-m-d' );
 		$cfrom = isset( $input['date_from'] ) ? preg_replace( '/[^0-9\-]/', '', (string) $input['date_from'] ) : '';
 		$cto   = isset( $input['date_to'] ) ? preg_replace( '/[^0-9\-]/', '', (string) $input['date_to'] ) : '';
 
@@ -37,24 +37,24 @@ final class SalesSummary {
 				$to   = $today;
 				break;
 			case 'yesterday':
-				$from = gmdate( 'Y-m-d', $now - DAY_IN_SECONDS );
+				$from = $now->modify( '-1 day' )->format( 'Y-m-d' );
 				$to   = $from;
 				break;
 			case 'last_month':
-				$from = gmdate( 'Y-m-01', (int) strtotime( 'first day of last month', $now ) );
-				$to   = gmdate( 'Y-m-t', (int) strtotime( 'last day of last month', $now ) );
+				$from = $now->modify( 'first day of last month' )->format( 'Y-m-01' );
+				$to   = $now->modify( 'last day of last month' )->format( 'Y-m-t' );
 				break;
 			case 'this_year':
-				$from = gmdate( 'Y-01-01', $now );
+				$from = $now->format( 'Y-01-01' );
 				$to   = $today;
 				break;
 			case 'custom':
-				$from = '' !== $cfrom ? $cfrom : gmdate( 'Y-m-01', $now );
+				$from = '' !== $cfrom ? $cfrom : $now->format( 'Y-m-01' );
 				$to   = '' !== $cto ? $cto : $today;
 				break;
 			case 'this_month':
 			default:
-				$from = ( '' !== $cfrom ) ? $cfrom : gmdate( 'Y-m-01', $now );
+				$from = ( '' !== $cfrom ) ? $cfrom : $now->format( 'Y-m-01' );
 				$to   = ( '' !== $cto ) ? $cto : $today;
 				break;
 		}

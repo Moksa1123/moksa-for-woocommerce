@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Tappay\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -119,13 +120,10 @@ final class IpnHandler {
 		// 3DS browser redirect: no WP nonce possible (TapPay redirects the customer browser back here).
 		// These query params are used only to look up the order; authoritative payment status is fetched
 		// server-side from TapPay API (Client::query_by_*) below — no direct trust placed in query string values.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 3DS browser return; no WP nonce possible; order_number/rec_trade_id used only for lookup; authoritative status fetched server-side from TapPay API below.
-		$order_number = isset( $_GET['order_number'] ) ? sanitize_text_field( wp_unslash( $_GET['order_number'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same as above.
-		$rec_trade_id = isset( $_GET['rec_trade_id'] ) ? sanitize_text_field( wp_unslash( $_GET['rec_trade_id'] ) ) : '';
+		$order_number = sanitize_text_field( Input::get( 'order_number' ) );
+		$rec_trade_id = sanitize_text_field( Input::get( 'rec_trade_id' ) );
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- result token, verified below with hash_equals.
-		$token = isset( $_GET['k'] ) ? sanitize_text_field( wp_unslash( $_GET['k'] ) ) : '';
+		$token = sanitize_text_field( Input::get( 'k' ) );
 
 		$order = self::resolve_order( $order_number );
 		if ( ! $order instanceof \WC_Order || ! hash_equals( Helper::result_token( $order ), $token ) ) {
@@ -266,14 +264,14 @@ final class IpnHandler {
 				}
 			}
 		}
-		$found = wc_get_orders(
+		$found = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				'return'     => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'   => Keys::TAPPAY_ORDER_NUMBER,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_value' => $order_number,
+				'limit'                            => 1,
+				'return'                           => 'ids',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => Keys::TAPPAY_ORDER_NUMBER,
+					'value' => $order_number,
+				],
 			]
 		);
 		if ( empty( $found ) ) {

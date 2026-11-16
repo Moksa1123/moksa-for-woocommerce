@@ -71,7 +71,6 @@ final class PaymentRequest {
 				),
 			);
 
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 			$capture = (bool) apply_filters( 'moksafowo_linepay_payment_capture', true );
 			// 訂閱訂單改走自動付款：顧客授權後 confirm 會回 regKey，之後續扣不用顧客在場。
 			$pay_type = $this->gateway->supports( 'subscriptions' ) && Subscriptions::order_has_subscription( $order )
@@ -99,7 +98,6 @@ final class PaymentRequest {
 			$result = $this->execute( $url, $request_args );
 			LinePay::log( '[request] execute result: ' . wc_print_r( $result, true ) );
 
-			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( '0000' !== $result->returnCode ) {
 				throw new Exception( sprintf( 'Execute LINE Pay Request API failed. Return code: %s. Response message: %s', $result->returnCode, $result->returnMessage ) );
 			}
@@ -116,7 +114,6 @@ final class PaymentRequest {
 				'result'   => 'success',
 				'redirect' => $result->info->paymentUrl->web,
 			);
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		} catch ( Exception $e ) {
 
@@ -186,7 +183,6 @@ final class PaymentRequest {
 
 			$result = $this->execute( $url, $request_args, 40 );
 
-			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( '0000' !== $result->returnCode ) {
 				if ( $is_checkout ) {
 					$order->add_order_note(
@@ -228,7 +224,6 @@ final class PaymentRequest {
 			$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $std_confirmed_amount );
 			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 			$order->save();
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 			if ( $is_checkout ) {
 				WC()->cart->empty_cart();
@@ -247,7 +242,6 @@ final class PaymentRequest {
 			}
 
 			if ( $is_checkout ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 				do_action( 'moksafowo_linepay_process_confirm_failed', $order );
 			} else {
 				throw $e;
@@ -262,11 +256,9 @@ final class PaymentRequest {
 		try {
 
 			$check_status = $this->check( $order );
-			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$check_code = $check_status->returnCode;
-			$check_msg  = $check_status->returnMessage;
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$check_info = sprintf( '[confirm][order_id:%s] Check payment status when confirm failed, return code:%s, return message:%s', $order->get_id(), $check_code, $check_msg );
+			$check_code   = $check_status->returnCode;
+			$check_msg    = $check_status->returnMessage;
+			$check_info   = sprintf( '[confirm][order_id:%s] Check payment status when confirm failed, return code:%s, return message:%s', $order->get_id(), $check_code, $check_msg );
 			LinePay::log( $check_info );
 			$order->add_order_note(
 				\Moksafowo\Order\Note::build(
@@ -283,11 +275,9 @@ final class PaymentRequest {
 				if ( $payment_detail ) {
 					$order->update_meta_data( '_moksafowo_linepay_confirmed', true );
 					$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
-					// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $payment_detail->info->amount );
 					$order->save();
 					\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $payment_detail->info->transactionId );
-					// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				}
 				wp_safe_redirect( $this->get_return_url( $order ) );
 				exit;
@@ -388,7 +378,6 @@ final class PaymentRequest {
 			40
 		);
 		$result         = $this->execute( $url, $request_args, 40 );
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		if ( ! $result || '0000' !== $result->returnCode ) {
 			throw new Exception( esc_html( sprintf( 'Execute LINE Pay Capture API failed. Return code: %s. Return Message: %s', $result->returnCode ?? '', $result->returnMessage ?? '' ) ) );
 		}
@@ -396,7 +385,6 @@ final class PaymentRequest {
 		$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 		$order->save();
 		$order->payment_complete( $result->info->transactionId ?? $transaction_id );
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		return true;
 	}
 
@@ -437,7 +425,6 @@ final class PaymentRequest {
 		} catch ( Exception $e ) {
 			return false;
 		}
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
 		return isset( $result->returnCode ) && '0000' === $result->returnCode;
 	}
 
@@ -451,7 +438,6 @@ final class PaymentRequest {
 		$url          = Url::request_url( Constants::REQUEST_TYPE_DETAILS_BY_ORDER, array( 'order_id' => rawurlencode( $order_ref ) ) );
 		$request_args = $this->build_execute_request_args( $url, null, 20, 'GET' );
 		$result       = $this->execute( $url, $request_args, 20 );
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
 		if ( ! isset( $result->returnCode ) || '0000' !== $result->returnCode || empty( $result->info ) || ! is_array( $result->info ) ) {
 			return null;
 		}
@@ -460,7 +446,6 @@ final class PaymentRequest {
 				return $row;
 			}
 		}
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		return null;
 	}
 
@@ -532,17 +517,14 @@ final class PaymentRequest {
 		try {
 			$resp = $this->execute( $url, $request_args );
 
-			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			if ( '0000' !== $resp->returnCode ) {
 				return new WP_Error( 'error', sprintf( 'Execute LINE Pay Refund API failed. Return code: %s. Return Message: %s', $resp->returnCode, $resp->returnMessage ) );
 			}
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		} catch ( Exception $e ) {
 			LinePay::log( sprintf( '[refund][order_id:%s] refund error:%s', $order_id, $e->getMessage() ) );
 			return new WP_Error( 'error', $e->getMessage() );
 		}
 
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		if ( '0000' !== $resp->returnCode ) {
 			$msg = sprintf(
 				/* translators: 1: refund transaction id, 2: returnCode, 3: returnMessage */
@@ -577,7 +559,6 @@ final class PaymentRequest {
 				$resp->info->refundTransactionId
 			)
 		);
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		$this->check_payment_and_update_order_note( $order, 'Check payment status after refunded' );
 
@@ -594,14 +575,12 @@ final class PaymentRequest {
 
 		$http_status   = (int) $response['response']['code'];
 		$response_body = Signature::json_custom_decode( wp_remote_retrieve_body( $response ) );
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		$return_code = $response_body->returnCode;
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$return_code   = $response_body->returnCode;
 
 		// confirm 回應帶 regKey（自動付款金鑰），不寫進 log。
 		$logged = is_object( $response_body ) ? json_decode( (string) wp_json_encode( $response_body ) ) : $response_body;
-		if ( is_object( $logged ) && isset( $logged->info ) && is_object( $logged->info ) && isset( $logged->info->regKey ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
-			$logged->info->regKey = '[REDACTED]'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
+		if ( is_object( $logged ) && isset( $logged->info ) && is_object( $logged->info ) && isset( $logged->info->regKey ) ) {
+			$logged->info->regKey = '[REDACTED]';
 		}
 		LinePay::log( '[execute] http response code: ' . $http_status . ', response body: ' . wc_print_r( $logged, true ) );
 
@@ -629,7 +608,6 @@ final class PaymentRequest {
 
 			if ( count( $items ) > 1 ) {
 				$order_name = apply_filters(
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 					'moksafowo_linepay_checkout_product_name',
 					sprintf(
 						/* translators:  %1$s is product name, %2$s is the order item count */
@@ -650,7 +628,6 @@ final class PaymentRequest {
 			$thumbnail_image_urls = wp_get_attachment_image_src( get_post_thumbnail_id( $first_item->get_product_id() ) );
 
 			if ( isset( $thumbnail_image_urls[0] ) ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 				$product['imageUrl'] = apply_filters( 'moksafowo_linepay_checkout_product_image', $thumbnail_image_urls[0] );
 			}
 
@@ -671,14 +648,11 @@ final class PaymentRequest {
 	}
 
 	private function check_payment_and_update_order_note( $order, $context ): void {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 		if ( LinePay::$detail_payment_status_note_enabled || apply_filters( 'moksafowo_linepay_enable_detail_note', false ) ) {
 			$check_status = $this->check( $order );
-			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$check_code = $check_status->returnCode;
-			$check_msg  = $check_status->returnMessage;
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$check_info = sprintf( '[check][order_id:%s] %s, return code:%s, return message:%s', $order->get_id(), $context, $check_code, $check_msg );
+			$check_code   = $check_status->returnCode;
+			$check_msg    = $check_status->returnMessage;
+			$check_info   = sprintf( '[check][order_id:%s] %s, return code:%s, return message:%s', $order->get_id(), $context, $check_code, $check_msg );
 			LinePay::log( $check_info );
 			$steps = [
 				'Check payment status after requested' => __( 'After the payment request', 'moksa-for-woocommerce' ),
@@ -699,13 +673,13 @@ final class PaymentRequest {
 		}
 	}
 
-	public function get_return_url( $order = null ) {
-		if ( $order ) {
-			$return_url = $order->get_checkout_order_received_url();
-		} else {
-			$return_url = wc_get_endpoint_url( 'order-received', '', wc_get_checkout_url() );
+	/** 交給 LINE Pay 閘道（WC_Payment_Gateway::get_return_url）組網址，WC 的 woocommerce_get_return_url filter 由它套用。 */
+	public function get_return_url( \WC_Order $order ): string {
+		$gateway = wc_get_payment_gateway_by_order( $order );
+		if ( $gateway instanceof \WC_Payment_Gateway ) {
+			return $gateway->get_return_url( $order );
 		}
-		return apply_filters( 'woocommerce_get_return_url', $return_url, $order ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
+		return $order->get_checkout_order_received_url();
 	}
 
 	public static function callback_token( $order_id, $request_type ) {

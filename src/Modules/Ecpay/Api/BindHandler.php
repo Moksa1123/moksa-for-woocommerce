@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\Ecpay\Api;
 use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Ecpay\Gateways\CreditBind;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -77,11 +78,9 @@ final class BindHandler {
 	}
 
 	public static function create(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- 訪客的付款頁沒有登入 nonce；以訂單金鑰（order key）hash_equals 驗證身分，只能動自己那張未付款訂單。
-		$order_id  = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
-		$key       = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
-		$pay_token = isset( $_POST['pay_token'] ) ? sanitize_text_field( wp_unslash( $_POST['pay_token'] ) ) : '';
-		// phpcs:enable
+		$order_id  = absint( Input::post( 'order_id' ) );
+		$key       = sanitize_text_field( Input::post( 'key' ) );
+		$pay_token = sanitize_text_field( Input::post( 'pay_token' ) );
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || '' === $key || ! hash_equals( $order->get_order_key(), $key ) || CreditBind::GATEWAY_ID !== $order->get_payment_method() ) {
@@ -126,11 +125,10 @@ final class BindHandler {
 	}
 
 	public static function result(): void {
-		// phpcs:disable WordPress.Security.NonceVerification -- 綠界幕前導回，無法帶 nonce；內容是只有綠界與特店解得開的 AES 密文，另比對訂單金鑰。
-		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
-		$key      = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
-		$raw      = isset( $_POST['ResultData'] ) ? wp_unslash( $_POST['ResultData'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON 字串，解密後再逐欄消毒（Ecpg::decode_envelope）。
-		// phpcs:enable
+		$order_id = absint( Input::get( 'order_id' ) );
+		$key      = sanitize_text_field( Input::get( 'key' ) );
+		// JSON 字串，解密後再逐欄消毒（Ecpg::decode_envelope）。
+		$raw = Input::post( 'ResultData' );
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || '' === $key || ! hash_equals( $order->get_order_key(), $key ) ) {
@@ -361,14 +359,14 @@ final class BindHandler {
 		if ( $order instanceof \WC_Order && self::order_sent_mtn( $order, $mtn ) ) {
 			return $order;
 		}
-		$found = wc_get_orders(
+		$found = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				'return'     => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- 依特店交易編號反查訂單；HPOS meta 表有 meta_key 索引。
-				'meta_key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- 同上。
-				'meta_value' => $mtn,
+				'limit'                            => 1,
+				'return'                           => 'ids',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => Keys::ECPAY_MERCHANT_TRADE_NO,
+					'value' => $mtn,
+				],
 			]
 		);
 		$order = ! empty( $found ) ? wc_get_order( (int) $found[0] ) : null;

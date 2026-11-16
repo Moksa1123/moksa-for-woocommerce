@@ -10,6 +10,7 @@ use Moksafowo\Modules\Payuni\Gateways\CreditInstallment3;
 use Moksafowo\Modules\Payuni\Gateways\CreditInstallment30;
 use Moksafowo\Modules\Payuni\Gateways\CreditInstallment6;
 use Moksafowo\Modules\Payuni\Gateways\CreditInstallment9;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -235,10 +236,9 @@ class SettingsTab extends \WC_Settings_Page {
 			return;
 		}
 
-     // phpcs:disable WordPress.Security.NonceVerification.Recommended
-		$page    = ( array_key_exists( 'page', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-		$tab     = ( array_key_exists( 'tab', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
-		$section = ( array_key_exists( 'section', $_GET ) ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
+		$page    = sanitize_key( Input::get( 'page' ) );
+		$tab     = sanitize_key( Input::get( 'tab' ) );
+		$section = sanitize_key( Input::get( 'section' ) );
 
 		if ( 'wc-settings' === $page && 'payuni' === $tab ) {
 

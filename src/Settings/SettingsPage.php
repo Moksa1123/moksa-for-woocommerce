@@ -6,6 +6,7 @@ namespace Moksafowo\Settings;
 use Moksafowo\Plugin;
 use Moksafowo\Modules\OrderLookup\Index\Backfill;
 use Moksafowo\Modules\OrderLookup\Index\Table;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,7 +61,9 @@ final class SettingsPage extends \WC_Settings_Page {
 				max( $status['total'], $status['done'] )
 			);
 		} else {
-			$rows = Table::exists() ? Table::count_orders() : 0;
+			$rows = \Moksafowo\Modules\OrderLookup\Index\TermIndex::uses_terms()
+				? (int) $status['done']
+				: ( Table::exists() ? Table::count_orders() : 0 );
 			/* translators: %d: indexed order count */
 			$msg = sprintf( __( '%d orders indexed.', 'moksa-for-woocommerce' ), $rows );
 		}
@@ -76,15 +79,15 @@ final class SettingsPage extends \WC_Settings_Page {
 	}
 
 	public function enqueue_assets( string $hook ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- WordPress options.php submit; nonce '_wpnonce' verified by WP core.
 		if ( 'woocommerce_page_wc-settings' !== $hook ) {
 			return;
 		}
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		// 只判斷目前是哪個設定頁，決定載不載資源。
+		$tab = sanitize_key( Input::get( 'tab' ) );
 		if ( SettingsTab::TAB_ID !== $tab ) {
 			return;
 		}
-		$section = isset( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
+		$section = sanitize_key( Input::get( 'section' ) );
 
 		// 全 Moksa tab 共用視覺優化 — section 包成 card + 可收合（CSS/JS 走 enqueue）
 		$css_path = MOKSAFOWO_PLUGIN_DIR . 'assets/admin/settings-polish.css';
@@ -337,10 +340,7 @@ final class SettingsPage extends \WC_Settings_Page {
 		}
 
 		\WC_Admin_Settings::save_fields( $this->get_settings( $section ) );
-
-		// WC_Settings_Page::save() normally fires this so modules can persist
-		// custom field types; this class overrides save() so we fire it here.
-		do_action( 'woocommerce_update_options_' . $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
+		// woocommerce_update_options_{tab} 由 WC_Admin_Settings::save() 在 woocommerce_settings_save_{tab} 之後觸發，這裡不必再觸發一次。
 	}
 
 	private function advanced_fields(): array {

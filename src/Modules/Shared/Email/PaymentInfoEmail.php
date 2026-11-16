@@ -66,8 +66,7 @@ final class PaymentInfoEmail extends \WC_Email {
 	public function get_content_html(): string {
 		$rows = $this->object instanceof \WC_Order ? PaymentInfoBox::rows( $this->object ) : [];
 		ob_start();
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
-		echo wc_get_template_html(
+		wc_get_template(
 			'emails/email-header.php',
 			[
 				'email_heading' => $this->get_heading(),
@@ -77,8 +76,7 @@ final class PaymentInfoEmail extends \WC_Email {
 		echo '<p>' . esc_html__( 'Hi, your order has been placed. Please use the details below to pay before the deadline:', 'moksa-for-woocommerce' ) . '</p>';
 		echo wp_kses( PaymentInfoBox::render_html( $rows, false ), PaymentInfoBox::kses_allowlist() );
 		if ( $this->object instanceof \WC_Order ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
-			echo wc_get_template_html(
+			wc_get_template(
 				'emails/email-order-details.php',
 				[
 					'order'         => $this->object,
@@ -89,8 +87,7 @@ final class PaymentInfoEmail extends \WC_Email {
 			);
 		}
 		$this->render_additional_content_html();
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
-		echo wc_get_template_html( 'emails/email-footer.php', [] );
+		wc_get_template( 'emails/email-footer.php', [] );
 		return (string) ob_get_clean();
 	}
 
@@ -105,7 +102,16 @@ final class PaymentInfoEmail extends \WC_Email {
 		// 跟 HTML 版一樣附上訂單明細（訂單編號、應付金額、商品），顧客才對得上是哪一張。
 		if ( $this->object instanceof \WC_Order ) {
 			ob_start();
-			do_action( 'woocommerce_email_order_details', $this->object, false, true, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core email hook.
+			// 跟 HTML 版一樣直接套 WC 的訂單明細範本（純文字版）。
+			wc_get_template(
+				'emails/plain/email-order-details.php',
+				[
+					'order'         => $this->object,
+					'sent_to_admin' => false,
+					'plain_text'    => true,
+					'email'         => $this,
+				]
+			);
 			$lines[] = '';
 			$lines[] = trim( wp_strip_all_tags( (string) ob_get_clean() ) );
 		}
@@ -140,8 +146,7 @@ final class PaymentInfoEmail extends \WC_Email {
 		ob_start();
 		echo wp_kses( PaymentInfoBox::render_html( $rows ), PaymentInfoBox::kses_allowlist() );
 		if ( $this->object instanceof \WC_Order ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_get_template_html returns escaped WC template content.
-			echo wc_get_template_html(
+			wc_get_template(
 				'emails/email-order-details.php',
 				[
 					'order'         => $this->object,

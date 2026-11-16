@@ -84,7 +84,7 @@ final class Module extends AbstractGatewayModule {
 			return;
 		}
 
-		wp_register_script( 'moksafowo-slp-sdk', Api\Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- 官方 CDN SDK，版本由路徑 /v1/ 決定。
+		wp_register_script( 'moksafowo-slp-sdk', Api\Helper::SDK_URL, [], MOKSAFOWO_VERSION, true );
 		$path = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-slp-card.js';
 		wp_enqueue_script(
 			'moksafowo-slp-card',

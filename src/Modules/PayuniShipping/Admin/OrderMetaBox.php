@@ -53,8 +53,7 @@ class OrderMetaBox {
 		$ship_status_time = $order->get_meta( OrderMeta::ShipStatusTime );
 		$print_date       = $order->get_meta( OrderMeta::PrintDate );
 
-		$provider_query_url  = ( $ship_type === ShipType::SEVEN ) ? 'https://tracking.shopmore.com.tw/' : 'https://www.t-cat.com.tw/inquire/trace.aspx';
-		$provider_query_html = ( empty( $shipping_no ) ) ? '' : '<a href="' . esc_url( $provider_query_url ) . '" target="_blank"><span class="dashicons dashicons-search"></span></a>';
+		$provider_query_url = ( $ship_type === ShipType::SEVEN ) ? 'https://tracking.shopmore.com.tw/' : 'https://www.t-cat.com.tw/inquire/trace.aspx';
 
 		$oid = (int) $order->get_id();
 
@@ -73,8 +72,7 @@ class OrderMetaBox {
 		echo '<tr' . ( '' === $ship_trade_no ? ' style="display:none;"' : '' ) . '><th style="text-align:left;"><div id="order-id" data-order-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( 'Shipping transaction ID', 'moksa-for-woocommerce' ) . '</div></th><td>' . esc_html( $ship_trade_no ) . '</td></tr>';
 
 		if ( '' !== (string) $shipping_no ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $provider_query_html built locally with esc_url applied
-			echo '<tr><th style="text-align:left;">' . esc_html__( 'Tracking number', 'moksa-for-woocommerce' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . $provider_query_html . '</td></tr>';
+			echo '<tr><th style="text-align:left;">' . esc_html__( 'Tracking number', 'moksa-for-woocommerce' ) . '</th><td style="word-break:break-all;">' . esc_html( $shipping_no ) . '<a href="' . esc_url( $provider_query_url ) . '" target="_blank"><span class="dashicons dashicons-search"></span></a></td></tr>';
 		}
 
 		if ( $ship_type === ShipType::SEVEN ) {
@@ -110,9 +108,7 @@ class OrderMetaBox {
 			echo '<tr><th style="text-align:left;">' . esc_html__( 'Parcel size', 'moksa-for-woocommerce' ) . '</th><td>';
 			echo '<select id="package-spec-select" style="font-size:12px;height:24px;line-height:22px;padding:0 4px;margin:0;vertical-align:middle;box-sizing:border-box;max-width:140px;" data-order-id="' . esc_attr( (string) $oid ) . '" data-original-value="' . esc_attr( $package_spec ) . '">';
 			foreach ( $package_spec_options as $value => $label ) {
-				$selected = selected( $package_spec, $value, false );
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- selected() returns escaped HTML attribute
-				echo '<option value="' . esc_attr( $value ) . '"' . $selected . '>' . esc_html( $label ) . '</option>';
+				echo '<option value="' . esc_attr( $value ) . '"' . selected( $package_spec, $value, false ) . '>' . esc_html( $label ) . '</option>';
 			}
 			echo '</select>';
 			echo '</td></tr>';
@@ -143,9 +139,11 @@ class OrderMetaBox {
 		}
 
 		if ( ! empty( $shipping_no ) && $ship_type === ShipType::TCAT ) {
-			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_download_label">' . esc_html__( 'Download label', 'moksa-for-woocommerce' ) . '</button>';
+			$label_action = 'moksafowo_payuni_shipping_download_label';
+			$label_text   = __( 'Download label', 'moksa-for-woocommerce' );
 		} else {
-			$label_btn = '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="moksafowo_payuni_shipping_print_label">' . esc_html__( 'Print label', 'moksa-for-woocommerce' ) . '</button>';
+			$label_action = 'moksafowo_payuni_shipping_print_label';
+			$label_text   = __( 'Print label', 'moksa-for-woocommerce' );
 		}
 
 		// 依溫層拆成多包時，上面的單一欄位只鏡射最後一包；每一包另外列出來。
@@ -179,8 +177,7 @@ class OrderMetaBox {
 		echo '<tr id="moksafowo-payuni-action"><td colspan="2" style="padding-top:10px;">'
 			. '<div style="font-weight:600;margin-bottom:6px;">' . esc_html__( 'Shipment actions', 'moksa-for-woocommerce' ) . '</div>'
 			. '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label_btn built locally with esc_attr/esc_html applied
-			. $label_btn
+			. '<button class="button print-label" data-id="' . esc_attr( (string) $oid ) . '" data-service="' . esc_attr( (string) $ship_type ) . '" data-action="' . esc_attr( $label_action ) . '">' . esc_html( $label_text ) . '</button>'
 			. '<button class="button update-delivery-status" data-id="' . esc_attr( (string) $oid ) . '">' . esc_html__( 'Look up', 'moksa-for-woocommerce' ) . '</button>'
 			. '</div></td></tr>';
 		echo '</table>';

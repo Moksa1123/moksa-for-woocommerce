@@ -3,9 +3,8 @@
  * Plugin Name:        Moksa for WooCommerce
  * Plugin URI:         https://github.com/Moksa1123/moksa-for-woocommerce
  * Description:        Taiwan payment, shipping and e-invoice toolkit for WooCommerce. Enable the provider modules you need (ECPay, NewebPay, PAYUNi, SmilePay, LINE Pay, PayNow, PChomePay, TapPay, Shopline Payments, ezPay, AMEGO). HPOS-ready, Block Checkout-ready.
- * Version:            1.21.3
+ * Version:            1.22.0
  * Requires at least:  7.0
- * Tested up to:       7.1
  * Requires PHP:       8.2
  * Requires Plugins:   woocommerce
  * WC requires at least: 9.9
@@ -25,7 +24,7 @@ declare( strict_types=1 );
 defined( 'ABSPATH' ) || exit;
 
 /* Constants */
-const MOKSAFOWO_VERSION    = '1.21.3';
+const MOKSAFOWO_VERSION    = '1.22.0';
 const MOKSAFOWO_MIN_PHP    = '8.2';
 const MOKSAFOWO_MIN_WP     = '7.0';
 const MOKSAFOWO_MIN_WC     = '9.9';
@@ -38,9 +37,8 @@ define( 'MOKSAFOWO_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 /*
 Composer autoload */
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_autoload = MOKSAFOWO_PLUGIN_DIR . 'vendor/autoload.php';
-if ( ! file_exists( $mo_autoload ) ) {
+$moksafowo_autoload = MOKSAFOWO_PLUGIN_DIR . 'vendor/autoload.php';
+if ( ! file_exists( $moksafowo_autoload ) ) {
 	add_action(
 		'admin_notices',
 		static function (): void {
@@ -51,7 +49,7 @@ if ( ! file_exists( $mo_autoload ) ) {
 	);
 	return;
 }
-require_once $mo_autoload;
+require_once $moksafowo_autoload;
 
 /*
  * Moksa AI 共用層 —— 每個 Moksa 外掛都 bundle 一份，全站只有版本最高的那份會執行

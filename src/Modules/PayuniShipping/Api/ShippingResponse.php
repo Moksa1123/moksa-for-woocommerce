@@ -8,6 +8,7 @@ use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 use Moksafowo\Modules\PayuniShipping\PayuniShipping;
 use Moksafowo\Modules\PayuniShipping\Utils\LgsType;
 use Moksafowo\Modules\PayuniShipping\Utils\OrderMeta;
+use Moksafowo\Http\Input;
 
 class ShippingResponse {
 
@@ -33,8 +34,7 @@ class ShippingResponse {
 		// PAYUNi shipping 7-11 webhook: no WP nonce possible (external server cannot send one).
 		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
 		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi shipping IPN; no WP nonce possible; source verified via HashInfo hash_equals before decryption and any state change; sanitized via wc_clean and map_deep.
-		$posted = wc_clean( wp_unslash( $_POST ) );
+		$posted = wc_clean( Input::all_post() );
 
 		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
 		$posted_hash  = array_key_exists( 'HashInfo', $posted ) ? $posted['HashInfo'] : '';
@@ -132,8 +132,7 @@ class ShippingResponse {
 		// PAYUNi shipping TCat webhook: no WP nonce possible (external server cannot send one).
 		// Source authenticity verified via HashInfo (hash_equals, PayuniShipping::hash_info) before decryption.
 		// $_POST sanitized via wc_clean + wp_unslash before use; decrypted payload deep-sanitized via map_deep below.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi shipping IPN; no WP nonce possible; source verified via HashInfo hash_equals before decryption and any state change; sanitized via wc_clean and map_deep.
-		$posted = wc_clean( wp_unslash( $_POST ) );
+		$posted = wc_clean( Input::all_post() );
 
 		$encrypt_info = array_key_exists( 'EncryptInfo', $posted ) ? $posted['EncryptInfo'] : '';
 		$posted_hash  = array_key_exists( 'HashInfo', $posted ) ? $posted['HashInfo'] : '';
@@ -274,27 +273,31 @@ class ShippingResponse {
 		if ( '' === $no ) {
 			return null;
 		}
-		$ids = wc_get_orders(
+		$ids = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				'return'     => 'ids',
-				'type'       => 'shop_order',
+				'limit'                            => 1,
+				'return'                           => 'ids',
+				'type'                             => 'shop_order',
 				// 關掉自訂狀態區塊後，停在 moksa-* 的訂單不在預設 status 範圍內，通知會找不到單。
-				'status'     => 'all',
-				'meta_key'   => OrderMeta::ShipTradeNo, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
-				'meta_value' => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
+				'status'                           => 'all',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => OrderMeta::ShipTradeNo,
+					'value' => $no,
+				],
 			]
 		);
 		if ( empty( $ids ) ) {
-			$ids = wc_get_orders(
+			$ids = \Moksafowo\Order\Lookup::orders(
 				[
-					'limit'        => 5,
-					'return'       => 'ids',
-					'type'         => 'shop_order',
-					'status'       => 'all',
-					'meta_key'     => \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- IPN order resolution.
-					'meta_value'   => $no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- IPN order resolution.
-					'meta_compare' => 'LIKE',
+					'limit'                            => 5,
+					'return'                           => 'ids',
+					'type'                             => 'shop_order',
+					'status'                           => 'all',
+					\Moksafowo\Order\Lookup::QUERY_VAR => [
+						'key'     => \Moksafowo\Order\Meta\Keys::PAYUNI_SHIPPING_RECORDS,
+						'value'   => $no,
+						'compare' => 'LIKE',
+					],
 				]
 			);
 		}

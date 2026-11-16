@@ -68,7 +68,7 @@ final class Module extends AbstractGatewayModule {
 	 * @return array{ok:bool,message:string,lines:array<string,string>}
 	 */
 	public static function query_payment_status( \WC_Order $order ): array {
-		$oid = (string) $order->get_meta( Moksafowo\Order\Meta\Keys::PCHOMEPAY_ORDER_ID );
+		$oid = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::PCHOMEPAY_ORDER_ID );
 		if ( '' === $oid ) {
 			return [
 				'ok'      => false,

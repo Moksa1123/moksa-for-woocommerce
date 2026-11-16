@@ -2,6 +2,8 @@
 
 namespace Moksafowo\Modules\PayuniShipping\Settings;
 
+use Moksafowo\Http\Input;
+
 defined( 'ABSPATH' ) || exit;
 
 class SettingsTab extends \WC_Settings_Page {
@@ -270,15 +272,12 @@ class SettingsTab extends \WC_Settings_Page {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		$page = sanitize_key( Input::get( 'page' ) );
+		$tab  = sanitize_key( Input::get( 'tab' ) );
 
 		if ( 'wc-settings' === $page && 'payuni' === $tab ) {
 
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect dispatch on WC settings tab.
-			if ( empty( $_GET['section'] ) ) {
+			if ( '' === Input::get( 'section' ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=wc-settings&tab=payuni&section=shipping' ) );
 				exit;
 			}

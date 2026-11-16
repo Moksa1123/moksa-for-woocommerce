@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Smilepay\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,8 +21,7 @@ final class IpnHandler {
 		// SmilePay Roturl webhook: no WP nonce possible (external server cannot send one).
 		// All fields are sanitized at extraction below. Source authenticity verified via Mid_smilepay
 		// (hash_equals in self::verify_mid, line ~41) before any order state change.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay Roturl IPN; no WP nonce possible; all fields sanitized at capture; Mid_smilepay hash_equals verified before any state change.
-		$req = wp_unslash( $_REQUEST );
+		$req = array_merge( Input::all_get(), Input::all_post() );
 
 		$classif      = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';
 		$order_id     = isset( $req['Data_id'] ) ? absint( $req['Data_id'] ) : 0;
@@ -132,8 +132,7 @@ final class IpnHandler {
 	public static function handle_credit_roturl(): void {
 		// SmilePay credit Roturl webhook: no WP nonce possible (external server cannot send one).
 		// All fields sanitized at extraction; Mid_smilepay hash_equals (self::verify_mid) verified before any state change.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay credit Roturl IPN; no WP nonce possible; all fields sanitized at capture; Mid_smilepay hash_equals verified before any state change.
-		$req = wp_unslash( $_REQUEST );
+		$req = array_merge( Input::all_get(), Input::all_post() );
 
 		$classif       = isset( $req['Classif'] ) ? sanitize_text_field( (string) $req['Classif'] ) : '';
 		$response_id   = isset( $req['Response_id'] ) ? sanitize_text_field( (string) $req['Response_id'] ) : '';

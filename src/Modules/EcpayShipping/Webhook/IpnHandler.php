@@ -6,17 +6,16 @@ namespace Moksafowo\Modules\EcpayShipping\Webhook;
 use Moksafowo\Modules\EcpayShipping\Api\Helper;
 use Moksafowo\Modules\EcpayShipping\Operations\CreateOrder;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
 final class IpnHandler {
 
 	public static function handle(): void {
-		// Gateway shipping IPN: no WP nonce possible (external server cannot send one).
-		// Source authenticity verified via CheckMacValue (MD5, per ECPay logistics spec) + hash_equals on line ~25 (Helper::verify_check_mac_value)
-		// before any field is read or state changed. Raw array passed unmodified to verifier; map_deep sanitize follows on line ~32.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gateway shipping IPN; no WP nonce possible; source verified via CheckMacValue hash_equals before any use; sanitized via map_deep below.
-		$raw = $_POST;
+		// 綠界物流幕後通知帶不了 WP nonce：先用 CheckMacValue（MD5，hash_equals）驗過才讀任何欄位、才動訂單。
+		// 讀原始請求（未加反斜線），簽章才會跟綠界算的一致；驗過後下面逐欄清理。
+		$raw = Input::all_post();
 
 		if ( empty( $raw ) ) {
 			status_header( 400 );
@@ -32,7 +31,7 @@ final class IpnHandler {
 		}
 
 		$posted = array_map(
-			static fn( $v ) => is_string( $v ) ? sanitize_text_field( wp_unslash( $v ) ) : $v,
+			static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v,
 			$raw
 		);
 
@@ -129,14 +128,14 @@ final class IpnHandler {
 			}
 		}
 
-		$found = wc_get_orders(
+		$found = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				'status'     => 'all',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'   => Keys::ECPAY_LOGISTIC_MERCHANT_TRADE_NO,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_value' => $merchant_trade_no,
+				'limit'                            => 1,
+				'status'                           => 'all',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => Keys::ECPAY_LOGISTIC_MERCHANT_TRADE_NO,
+					'value' => $merchant_trade_no,
+				],
 			]
 		);
 		if ( ! empty( $found ) ) {
@@ -146,15 +145,15 @@ final class IpnHandler {
 
 		// Fallback：拆單 T1/T2 IPN 對不到單一欄位（只鏡射最後一包），直接在拆單紀錄裡找這個 MTN。
 		// 原本「最新 50 張有紀錄的訂單」會漏掉較舊的單（date_after 也不是 WC 支援的參數）。
-		$candidates = wc_get_orders(
+		$candidates = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'        => 5,
-				'status'       => 'all',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_key'     => Keys::ECPAY_LOGISTIC_RECORDS,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
-				'meta_value'   => $merchant_trade_no,
-				'meta_compare' => 'LIKE',
+				'limit'                            => 5,
+				'status'                           => 'all',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'     => Keys::ECPAY_LOGISTIC_RECORDS,
+					'value'   => $merchant_trade_no,
+					'compare' => 'LIKE',
+				],
 			]
 		);
 		foreach ( $candidates as $candidate ) {

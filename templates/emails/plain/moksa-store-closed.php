@@ -1,19 +1,21 @@
 <?php
 /**
  * moksa-store-closed plain-text email.
+ *
+ * @package Moksafowo
  */
+
 defined( 'ABSPATH' ) || exit;
 
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_store_name = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_name' );
+$moksafowo_store_name = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME );
 
-echo "= " . esc_html( wp_strip_all_tags( $email_heading ) ) . " =\n\n";
+echo '= ' . esc_html( wp_strip_all_tags( $email_heading ) ) . " =\n\n";
 /* translators: %s: customer first name */
 echo sprintf( esc_html__( 'Hi %s,', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) ) . "\n\n";
 echo sprintf(
 	/* translators: %s: convenience store name */
 	esc_html__( 'The pickup store you chose (%s) is temporarily closed for renovation, relocation or a change of store number. Please choose another pickup store as soon as possible.', 'moksa-for-woocommerce' ),
-	esc_html( $mo_store_name ?: __( 'Unknown store', 'moksa-for-woocommerce' ) )
+	esc_html( $moksafowo_store_name ?: __( 'Unknown store', 'moksa-for-woocommerce' ) )
 ) . "\n\n";
 echo esc_html__( 'If no new store is chosen in time, the parcel will be returned to the distribution center. Please reply to this email or contact us to choose another store.', 'moksa-for-woocommerce' ) . "\n\n";
 
@@ -28,5 +30,4 @@ if ( ! empty( $additional_content ) ) {
 	echo "\n----------------------------------------\n";
 }
 
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_strip_all_tags returns plain text safe for plaintext email body.
-echo "\n\n" . wp_strip_all_tags( wptexturize( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) ) );
+echo "\n\n" . esc_html( wp_strip_all_tags( wptexturize( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) ) ) );

@@ -117,9 +117,8 @@ abstract class AbstractAdminMetaBox {
 		$carrier_n  = (string) $order->get_meta( Keys::INVOICE_CARRIER_NUM );
 		$love_code  = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );
 
-		$key        = static::provider_key();
-		$prefix     = static::ajax_action_prefix();
-		$nonce_html = wp_nonce_field( static::nonce_action(), $prefix . '_nonce', true, false );
+		$key    = static::provider_key();
+		$prefix = static::ajax_action_prefix();
 
 		ob_start();
 		echo '<div class="moksafowo-invoice-meta" data-provider="' . esc_attr( $key ) . '" data-prefix="' . esc_attr( $prefix ) . '" data-order-id="' . esc_attr( (string) $order->get_id() ) . '">';
@@ -205,7 +204,7 @@ abstract class AbstractAdminMetaBox {
 		}
 
 		echo '<p class="moksafowo-inv-msg" style="margin:.4em 0 0;"></p>';
-		echo $nonce_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nonce_field returns escaped HTML.
+		wp_nonce_field( static::nonce_action(), $prefix . '_nonce' );
 		echo '</div>';
 
 		$cards[] = [
@@ -296,18 +295,18 @@ abstract class AbstractAdminMetaBox {
 
 	/** 「更新」按鈕 — 只把後台手動挑的欄位存回 meta（不開立），前端隨後重整確認。 */
 	public static function ajax_save(): void {
-		[ $order ] = self::ajax_authenticate();
-		$err       = AdminIssueForm::validate();
+		[ $order, $fields ] = self::ajax_authenticate();
+		$err                = AdminIssueForm::validate( $fields );
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
-		AdminIssueForm::save( $order, static::option_prefix() );
+		AdminIssueForm::save( $order, static::option_prefix(), $fields );
 		wp_send_json_success( [ 'message' => __( 'Updated.', 'moksa-for-woocommerce' ) ] );
 	}
 
 	public static function ajax_issue(): void {
-		[ $order ] = self::ajax_authenticate();
-		$err       = AdminIssueForm::validate();
+		[ $order, $fields ] = self::ajax_authenticate();
+		$err                = AdminIssueForm::validate( $fields );
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
@@ -319,7 +318,7 @@ abstract class AbstractAdminMetaBox {
 			$order->save();
 		}
 		// 後台手動挑的發票欄位 → 存回訂單 meta（受設定限制），再交給各 provider 的 Issue 開立。
-		AdminIssueForm::save( $order, static::option_prefix() );
+		AdminIssueForm::save( $order, static::option_prefix(), $fields );
 		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
 		if ( null !== $legacy ) {
 			/* translators: 1: invoice number, 2: plugin name */
@@ -330,25 +329,23 @@ abstract class AbstractAdminMetaBox {
 	}
 
 	public static function ajax_invalid(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
-		[ $order ] = self::ajax_authenticate();
+		[ $order, $fields ] = self::ajax_authenticate();
 		// 不可逆：跟 AI／MCP 能力用同一個權限門檻。
 		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
-		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$reason = (string) ( $fields['reason'] ?? '' );
 		$result = call_user_func( static::invalid_callable(), $order, $reason );
 		$result['ok'] ? wp_send_json_success( $result ) : wp_send_json_error( $result );
 	}
 
 	public static function ajax_allowance(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- AJAX handler; check_ajax_referer() called via self::ajax_authenticate() at method entry.
-		[ $order ] = self::ajax_authenticate();
+		[ $order, $fields ] = self::ajax_authenticate();
 		// 不可逆：跟 AI／MCP 能力用同一個權限門檻。
 		if ( ! \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_ALLOWANCE ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
-		$amount   = isset( $_POST['amount'] ) ? absint( wp_unslash( $_POST['amount'] ) ) : 0;
+		$amount   = absint( $fields['amount'] ?? 0 );
 		$callable = static::allowance_callable();
 		if ( null === $callable ) {
 			wp_send_json_error( [ 'message' => __( 'This service does not support allowances.', 'moksa-for-woocommerce' ) ] );
@@ -390,11 +387,13 @@ abstract class AbstractAdminMetaBox {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
-		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
+		// nonce 驗過才讀；各 handler 只用這裡交出的欄位，不再自己碰 $_POST。
+		$fields   = map_deep( wp_unslash( $_POST ), 'sanitize_text_field' );
+		$order_id = absint( $fields['order_id'] ?? 0 );
 		$order    = $order_id ? wc_get_order( $order_id ) : null;
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
-		return [ $order ];
+		return [ $order, $fields ];
 	}
 }

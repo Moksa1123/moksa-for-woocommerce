@@ -23,11 +23,10 @@ final class Backfill {
 	}
 
 	/**
-	 * 重建：清空索引 → 記錄總數 → 排第一批。
+	 * 重建：記錄總數 → 排第一批。寫進 taxonomy（TermIndex），全部跑完才把查單切過去；
+	 * 舊表不清空（還沒切換前查單仍用它，也留著回滾）。
 	 */
 	public static function start(): void {
-		Table::maybe_install();
-		Table::truncate();
 
 		$total = self::count_total();
 		update_option(
@@ -62,7 +61,7 @@ final class Backfill {
 		foreach ( $ids as $id ) {
 			$order = wc_get_order( $id );
 			if ( $order instanceof \WC_Order ) {
-				Table::replace_order( (int) $id, SearchableKeys::index_pairs( $order ) );
+				TermIndex::replace_order( (int) $id, SearchableKeys::index_pairs( $order ) );
 			}
 		}
 
@@ -74,7 +73,9 @@ final class Backfill {
 
 		if ( $still_running ) {
 			self::schedule( $page + 1 );
+			return;
 		}
+		update_option( TermIndex::STORAGE_OPTION, TermIndex::TERMS, false );
 	}
 
 	private static function schedule( int $page ): void {

@@ -29,7 +29,9 @@ final class Interstitial {
 	 * @param string   $script     要執行的 inline JS（auto submit 等）。
 	 */
 	public static function render( string $title, string $heading, array $paragraphs, string $forms_html, string $script ): void {
-		echo '<!DOCTYPE html><html ' . get_language_attributes( 'html' ) . '><head>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_language_attributes() is core-escaped.
+		echo '<!DOCTYPE html><html ';
+		language_attributes( 'html' );
+		echo '><head>';
 		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset', 'display' ) ) . '">';
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
 		echo '<title>' . esc_html( $title ) . '</title>';

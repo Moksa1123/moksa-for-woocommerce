@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Address;
 
+use Moksafowo\Http\Input;
+
 defined( 'ABSPATH' ) || exit;
 
 final class FieldManager {
@@ -253,11 +255,20 @@ final class FieldManager {
 		$tooltip = ! empty( $value['desc_tip'] )
 			? wc_help_tip( (string) $value['desc_tip'] )
 			: '';
+		// wc_help_tip() 產生的 span：保留鍵盤可聚焦與提示文字。
+		$tooltip_allow = [
+			'span' => [
+				'class'      => true,
+				'tabindex'   => true,
+				'aria-label' => true,
+				'data-tip'   => true,
+			],
+		];
 
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label><?php echo esc_html( $value['title'] ?? '' ); ?> <?php echo $tooltip; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
+				<label><?php echo esc_html( $value['title'] ?? '' ); ?> <?php echo wp_kses( $tooltip, $tooltip_allow ); ?></label>
 			</th>
 			<td class="forminp">
 				<input type="hidden" name="<?php echo esc_attr( self::OPTION_LAYOUT ); ?>" value="<?php echo esc_attr( (string) $json ); ?>" id="moksafowo-tw-field-layout-input" />
@@ -322,13 +333,8 @@ final class FieldManager {
 	}
 
 	public static function enqueue_admin_assets( string $hook ): void {
-		if ( ! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return;
-		}
-		if ( ! isset( $_GET['tab'] ) || 'moksa-for-woocommerce' !== $_GET['tab'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return;
-		}
-		if ( ! isset( $_GET['section'] ) || 'advanced' !== $_GET['section'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// 只判斷目前是哪個設定頁，不動任何狀態。
+		if ( 'wc-settings' !== Input::get( 'page' ) || 'moksa-for-woocommerce' !== Input::get( 'tab' ) || 'advanced' !== Input::get( 'section' ) ) {
 			return;
 		}
 

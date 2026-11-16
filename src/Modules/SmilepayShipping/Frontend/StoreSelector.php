@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\SmilepayShipping\Frontend;
 use Moksafowo\Modules\SmilepayShipping\Api\Helper;
 use Moksafowo\Modules\SmilepayShipping\Api\ShippingRequest;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -146,7 +147,7 @@ final class StoreSelector {
 		// SmilePay EMAP 回程：GET 導頁、協定無簽章。這裡不寫任何訂單／session 狀態，
 		// 只把門市畫回開啟它的訂單編輯頁；門市要等商家在後台按更新訂單才會存。
 		// 開地圖時帶的 nonce 放在 tempvar，速買配會原樣帶回。
-		$tempvar = isset( $_GET['tempvar'] ) ? sanitize_text_field( wp_unslash( $_GET['tempvar'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- this value is the nonce, verified on the next line.
+		$tempvar = sanitize_text_field( Input::get( 'tempvar' ) );
 		if ( ! current_user_can( 'edit_shop_orders' ) || ! get_transient( self::ADMIN_STATE . get_current_user_id() )
 			|| ! wp_verify_nonce( $tempvar, 'moksafowo_smilepay_emap_' . get_current_user_id() ) ) {
 			wp_die( esc_html__( 'You are not allowed to edit orders.', 'moksa-for-woocommerce' ), 403 );
@@ -154,9 +155,9 @@ final class StoreSelector {
 		delete_transient( self::ADMIN_STATE . get_current_user_id() );
 
 		$store = [
-			'id'      => isset( $_GET['storeid'] ) ? sanitize_text_field( wp_unslash( $_GET['storeid'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP redirect; no nonce possible (protocol limitation); guarded by capability + one-shot transient above; render-only, no state written.
-			'name'    => isset( $_GET['storename'] ) ? sanitize_text_field( wp_unslash( $_GET['storename'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- see above.
-			'address' => isset( $_GET['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_GET['storeaddress'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- see above.
+			'id'      => sanitize_text_field( Input::get( 'storeid' ) ),
+			'name'    => sanitize_text_field( Input::get( 'storename' ) ),
+			'address' => sanitize_text_field( Input::get( 'storeaddress' ) ),
 		];
 		if ( '' === $store['id'] ) {
 			wp_die( esc_html__( 'No pickup store has been chosen yet.', 'moksa-for-woocommerce' ), 400 );
@@ -171,13 +172,13 @@ final class StoreSelector {
 		// Guard: session-only write (no order state mutation here); storeid is validated to be non-empty
 		// before writing; all fields sanitized at capture via sanitize_text_field + wp_unslash.
 		// Order meta is written only at checkout via save_to_order(), which fires after WC checkout nonce check.
-		$store_id      = isset( $_REQUEST['storeid'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeid'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; no nonce/hash possible (protocol limitation); session-only write, sanitized; order meta written later under WC checkout nonce.
-		$store_name    = isset( $_REQUEST['storename'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storename'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
-		$store_address = isset( $_REQUEST['storeaddress'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['storeaddress'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay EMAP callback; session-only write, sanitized.
+		$store_id      = sanitize_text_field( Input::request( 'storeid' ) );
+		$store_name    = sanitize_text_field( Input::request( 'storename' ) );
+		$store_address = sanitize_text_field( Input::request( 'storeaddress' ) );
 
 		// tempvar 是開地圖時用 session 算出的值，速買配會原樣帶回（實測確認）。驗不過代表不是本人開的地圖，
 		// 例如跨站連結想換掉顧客 session 裡的取貨門市。
-		$tempvar = isset( $_REQUEST['tempvar'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tempvar'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- this value is the nonce, verified on the next line.
+		$tempvar = sanitize_text_field( Input::request( 'tempvar' ) );
 		if ( '' === $tempvar || ! hash_equals( \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::tag( 'smilepay-emap' ), $tempvar ) ) {
 			Helper::warn( 'EMAP callback tempvar invalid — ignored' );
 			wp_safe_redirect( wc_get_checkout_url() );

@@ -15,6 +15,7 @@ use Moksafowo\Modules\PayuniShipping\Utils\SingletonTrait;
 
 use Moksafowo\Modules\Shared\Frontend\Interstitial;
 use Moksafowo\Modules\Shipping\Admin\CvsStoreEditor;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -397,8 +398,7 @@ JS
 		// PAYUNi store-map callback: cross-site POST from PAYUNi; no WP nonce possible.
 		// Source authenticity verified via HashInfo hash_equals (PayuniShipping::hash_info) before decryption.
 		// All fields sanitized via wc_clean + wp_unslash at capture; MapJson content deep-sanitized via map_deep after json_decode.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PAYUNi store-map callback; no WP nonce possible; source verified via HashInfo hash_equals before any data use; all fields sanitized via wc_clean and map_deep.
-		$posted = wc_clean( wp_unslash( $_POST ) );
+		$posted = wc_clean( Input::all_post() );
 		// 驗章前只記欄位名稱：任何人都能打這個網址，內容不可信也可能夾帶偽造的 log 行。
 		PayuniShipping::log( 'PAYUNi store map return, fields: ' . implode( ',', array_map( 'sanitize_key', array_keys( (array) $posted ) ) ) );
 
@@ -439,7 +439,7 @@ JS
 		}
 
 		// PRIMARY: transient by token — PAYUNi cross-site POST 可能在新 session 跑，session key 不可靠
-		$incoming_token = isset( $_GET['moksafowo_token'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_token'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- PAYUNi store callback; HashInfo verified above; token is a one-shot transient lookup key, sanitized via sanitize_key.
+		$incoming_token = sanitize_key( Input::get( 'moksafowo_token' ) );
 		$state          = strlen( $incoming_token ) >= 16 ? get_transient( 'moksafowo_payuni_store_' . $incoming_token ) : false;
 
 		// 後台改門市：不碰 session、不碰訂單，直接把門市 postMessage 回訂單編輯頁讓商家確認後再存
@@ -511,8 +511,7 @@ JS
 		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token，且只兌換給開地圖的同一個 session。
-		$token = isset( $_GET['moksafowo_store'] ) ? sanitize_key( wp_unslash( $_GET['moksafowo_store'] ) ) : '';
+		$token = sanitize_key( Input::get( 'moksafowo_store' ) );
 		if ( strlen( $token ) < 16 ) {
 			return;
 		}
@@ -564,7 +563,9 @@ JS
 	public static function ajax_clear_store_data() {
 		check_ajax_referer( 'moksafowo_payuni_store_search', 'nonce' );
 
-		WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
+		if ( function_exists( 'WC' ) && WC()->session ) {
+			WC()->session->set( 'moksafowo_payuni_selected_store_data', null );
+		}
 
 		wp_send_json_success( array( 'message' => __( 'The store selection was cleared.', 'moksa-for-woocommerce' ) ) );
 	}
@@ -573,7 +574,6 @@ JS
 		// Bound to woocommerce_checkout_create_order / woocommerce_store_api_checkout_update_order_from_request.
 		// WC core has already verified the 'woocommerce-process-checkout-nonce' nonce in WC_Checkout::process_checkout()
 		// before this hook fires. $_POST fields used here are sanitized at point of use; JSON decoded then deep-sanitized.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce already verified by WC core before this hook fires; $_POST fields sanitized at use; JSON decoded then map_deep sanitized.
 		PayuniShipping::log( 'save_store_selection called with HPOS-compatible hook' );
 
 		$shipping_methods   = $order->get_shipping_methods();
@@ -626,9 +626,6 @@ JS
 				$order->update_meta_data( OrderMeta::TradeAmt, ShippingRequest::get_trade_amt( $order ) );
 			}
 		}
-
-		// save_store_selection runs on WC checkout save (woocommerce_checkout_create_order); WC core verified the checkout nonce upstream; values sanitized inline.
-		PayuniShipping::log( 'All POST data keys: ' . implode( ', ', array_map( 'sanitize_text_field', array_map( 'wp_unslash', array_keys( $_POST ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WC checkout nonce verified upstream; keys sanitized.
 
 		// 門市只採用伺服器 session 裡、經 PAYUNi 簽章驗證後寫入的那一筆；表單送來的門市欄位不採信。
 		$selected_store_id   = '';
@@ -904,8 +901,7 @@ JS
 
 	/** 傳統結帳的必填已由 modify_billing_fields_for_cvs + 前端腳本處理，這裡只管區塊結帳的 Store API。 */
 	private static function is_block_checkout_context(): bool {
-		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		return false !== strpos( rawurldecode( $uri ), '/wc/store/' );
+		return \Moksafowo\Http\StoreApi::is_request();
 	}
 
 	public static function modify_billing_fields_for_cvs( $fields ) {

@@ -16,6 +16,11 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Module extends AbstractModule {
 
+	/** 客服視窗顯示模式（moksafowo_customer_service_display_mode 存的值，不可改）。 */
+	public const DISPLAY_ALL     = 'all';
+	public const DISPLAY_INCLUDE = 'include';
+	public const DISPLAY_EXCLUDE = 'exclude';
+
 	public function slug(): string {
 		return 'customer_service';
 	}
@@ -38,7 +43,12 @@ final class Module extends AbstractModule {
 
 	public function boot(): void {
 		// 模組卡片（moksafowo_customer_service_enabled）是唯一的開關，見 AiAssistant\Module::boot()。
-		Schema::maybe_install();
+		ThreadPosts::boot();
+		// 舊自有表只在還沒搬完時需要；新站直接用 CPT，不建表。
+		if ( Storage::CPT !== Storage::mode() ) {
+			Schema::maybe_install();
+		}
+		Migration::boot();
 		add_action( 'rest_api_init', array( Rest::class, 'register' ) );
 		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
 	}
@@ -112,13 +122,13 @@ final class Module extends AbstractModule {
 	 * 頁面顯示規則:全部 / 僅指定頁面 / 排除指定頁面(以頁面 ID 清單)。
 	 */
 	private static function should_show(): bool {
-		$mode = (string) get_option( 'moksafowo_customer_service_display_mode', 'all' );
-		if ( 'all' === $mode ) {
+		$mode = (string) get_option( 'moksafowo_customer_service_display_mode', self::DISPLAY_ALL );
+		if ( self::DISPLAY_ALL === $mode ) {
 			return true;
 		}
 		$list    = array_filter( array_map( 'absint', explode( ',', (string) get_option( 'moksafowo_customer_service_pages', '' ) ) ) );
 		$current = (int) get_queried_object_id();
 		$in_list = $current > 0 && in_array( $current, $list, true );
-		return 'include' === $mode ? $in_list : ! $in_list;
+		return self::DISPLAY_INCLUDE === $mode ? $in_list : ! $in_list;
 	}
 }

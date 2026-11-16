@@ -164,14 +164,14 @@ final class WebhookHandler {
 					return $order;
 				}
 			}
-			$found = wc_get_orders(
+			$found = \Moksafowo\Order\Lookup::orders(
 				[
-					'limit'      => 1,
-					'return'     => 'ids',
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-					'meta_key'   => Keys::SLP_REFERENCE_ID,
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-					'meta_value' => $reference_id,
+					'limit'                            => 1,
+					'return'                           => 'ids',
+					\Moksafowo\Order\Lookup::QUERY_VAR => [
+						'key'   => Keys::SLP_REFERENCE_ID,
+						'value' => $reference_id,
+					],
 				]
 			);
 			if ( ! empty( $found ) ) {
@@ -191,14 +191,14 @@ final class WebhookHandler {
 			if ( '' === $value ) {
 				continue;
 			}
-			$found = wc_get_orders(
+			$found = \Moksafowo\Order\Lookup::orders(
 				[
-					'limit'      => 1,
-					'return'     => 'ids',
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-					'meta_key'   => $meta_key,
-					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-					'meta_value' => $value,
+					'limit'                            => 1,
+					'return'                           => 'ids',
+					\Moksafowo\Order\Lookup::QUERY_VAR => [
+						'key'   => $meta_key,
+						'value' => $value,
+					],
 				]
 			);
 			if ( ! empty( $found ) ) {

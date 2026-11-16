@@ -76,7 +76,6 @@ final class ResendPaymentEmail {
 			return new \WP_Error( 'moksafowo_ai_no_payinfo', __( 'This order has no payment details to resend.', 'moksa-for-woocommerce' ) );
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo 為本外掛前綴。
 		do_action( 'moksafowo_payment_info_email', $order->get_id() );
 		$order->add_order_note( __( 'Payment details email resent after confirmation in Moksa AI.', 'moksa-for-woocommerce' ) );
 		$order->save();

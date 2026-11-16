@@ -17,8 +17,6 @@ use Automattic\WooCommerce\Internal\EmailEditor\BlockEmailRenderer;
 
 defined( 'ABSPATH' ) || exit;
 
-// phpcs:disable Squiz.PHP.EmbeddedPhp.ContentBeforeOpen -- 避免產生多餘空行。
-// phpcs:disable Squiz.PHP.EmbeddedPhp.ContentAfterEnd -- 避免產生多餘空行。
 ?>
 
 <!-- wp:paragraph -->

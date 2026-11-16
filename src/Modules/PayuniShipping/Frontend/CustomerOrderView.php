@@ -184,7 +184,7 @@ final class CustomerOrderView {
 								</span>
 							<?php endif; ?>
 							<?php if ( null !== $tracking_info ) : ?>
-								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?>
+								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); ?>
 							<?php endif; ?>
 						</span>
 					</div>

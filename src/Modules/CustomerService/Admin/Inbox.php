@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\CustomerService\Admin;
 
 use Moksafowo\Modules\CustomerService\Threads;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,8 +29,7 @@ final class Inbox {
 		if ( ! current_user_can( self::CAP ) ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 唯讀的列表/檢視切換。
-		$thread_id = isset( $_GET['thread'] ) ? absint( wp_unslash( $_GET['thread'] ) ) : 0;
+		$thread_id = absint( Input::get( 'thread' ) );
 		if ( $thread_id > 0 ) {
 			self::render_thread( $thread_id, $page );
 		} else {

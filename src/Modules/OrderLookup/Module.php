@@ -8,6 +8,7 @@ use Moksafowo\Modules\AbstractModule;
 use Moksafowo\Modules\OrderLookup\Index\Backfill;
 use Moksafowo\Modules\OrderLookup\Index\Indexer;
 use Moksafowo\Modules\OrderLookup\Index\Table;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,8 +70,15 @@ final class Module extends AbstractModule {
 
 		Backfill::boot();
 		Indexer::boot();
-		if ( Table::is_enabled() ) {
+		Index\TermIndex::boot();
+		if ( Table::is_enabled() && ! Index\TermIndex::uses_terms() ) {
 			Table::maybe_install();
+		}
+		// 排程延到 init 之後（woocommerce_init 時 Action Scheduler 還沒準備好）。
+		if ( did_action( 'init' ) ) {
+			self::maybe_start_index_build();
+		} else {
+			add_action( 'init', [ self::class, 'maybe_start_index_build' ], 20 );
 		}
 		add_action( 'add_option_' . Table::ENABLED_OPTION, [ self::class, 'on_index_added' ], 10, 2 );
 		add_action( 'update_option_' . Table::ENABLED_OPTION, [ self::class, 'on_index_toggled' ], 10, 2 );
@@ -79,12 +87,29 @@ final class Module extends AbstractModule {
 	}
 
 	/**
+	 * 舊站：查單還在用舊表就背景重建一次 taxonomy 索引，建完由 Backfill 收尾時切換；
+	 * 停在「重建中」卻沒有排程（排程曾失敗）時重新開始。加鎖：升級後第一波並發請求只啟動一次。
+	 */
+	public static function maybe_start_index_build(): void {
+		if ( ! Table::is_enabled() || Index\TermIndex::uses_terms() ) {
+			return;
+		}
+		$running = ! empty( Backfill::status()['running'] );
+		if ( $running && ( ! function_exists( 'as_has_scheduled_action' ) || as_has_scheduled_action( Backfill::HOOK, null, 'moksa-for-woocommerce' ) ) ) {
+			return;
+		}
+		if ( ! \Moksafowo\Modules\Shared\Lock::acquire( 'moksafowo_order_index_start', 5 * MINUTE_IN_SECONDS ) ) {
+			return;
+		}
+		Backfill::start();
+	}
+
+	/**
 	 * @param mixed $option option 名稱。
 	 * @param mixed $value  新值。
 	 */
 	public static function on_index_added( $option, $value ): void {
 		if ( 'yes' === $value ) {
-			Table::maybe_install();
 			Backfill::start();
 		}
 	}
@@ -95,7 +120,6 @@ final class Module extends AbstractModule {
 	 */
 	public static function on_index_toggled( $old_value, $new_value ): void {
 		if ( 'yes' === $new_value && 'yes' !== $old_value ) {
-			Table::maybe_install();
 			Backfill::start();
 		}
 	}
@@ -110,11 +134,10 @@ final class Module extends AbstractModule {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
-		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce = sanitize_text_field( Input::get( '_wpnonce' ) );
 		if ( ! wp_verify_nonce( $nonce, 'moksafowo_rebuild_order_index' ) ) {
 			return;
 		}
-		Table::maybe_install();
 		Backfill::start();
 		wp_safe_redirect(
 			add_query_arg(
@@ -127,7 +150,7 @@ final class Module extends AbstractModule {
 	}
 
 	public static function maybe_rebuild_notice(): void {
-		if ( ! isset( $_GET['moksafowo_index_rebuilt'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 唯讀提示，無狀態變更。
+		if ( ! Input::has_get( 'moksafowo_index_rebuilt' ) ) {
 			return;
 		}
 		echo '<div class="notice notice-success is-dismissible"><p>'

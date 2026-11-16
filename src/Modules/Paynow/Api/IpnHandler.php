@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\Paynow\Api;
 use Moksafowo\Http\Response;
 use Moksafowo\Order\Lookup;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,8 +31,8 @@ final class IpnHandler {
 		// PayNow gateway IPN: no WP nonce possible (external server cannot send one).
 		// Source authenticity verified via PassCode (SHA1 + hash_equals, self::verify_pass_code) on line ~62
 		// before any order state change. All fields sanitized at capture via map_deep + sanitize_text_field.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- PayNow gateway IPN; no WP nonce possible; source verified via PassCode hash_equals before any state change; all fields sanitized at capture via map_deep.
-		$source = ! empty( $_POST ) ? wp_unslash( $_POST ) : wp_unslash( $_GET );
+		$post   = Input::all_post();
+		$source = [] !== $post ? $post : Input::all_get();
 
 		if ( empty( $source ) || ! is_array( $source ) ) {
 			Helper::warn( 'callback empty — rejected' );

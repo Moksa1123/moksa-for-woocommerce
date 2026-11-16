@@ -42,8 +42,7 @@ final class Request {
 		}
 
 		$raw = $resp->body;
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML response — malformed input returns false, validated below; @ suppresses the warning so the simplexml return value can be validated explicitly.
-		$xml = @simplexml_load_string( $raw );
+		$xml = \Moksafowo\Http\Decode::xml( $raw );
 		if ( ! is_object( $xml ) || false === strpos( $raw, '<SmilePay>' ) ) {
 			Helper::log( 'SPPayment parse fail', [ 'body' => substr( $raw, 0, 300 ) ] );
 			return [

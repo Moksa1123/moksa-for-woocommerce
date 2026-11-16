@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\Newebpay\Api;
 use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Newebpay\Gateways\CreditPeriod;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -47,11 +48,9 @@ final class PeriodHandler {
 	}
 
 	public static function handle_return(): void {
-		// phpcs:disable WordPress.Security.NonceVerification -- 藍新 Form Post 導回，無法帶 nonce；Period 只有持有金鑰的雙方解得開，另比對訂單金鑰。
-		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
-		$key      = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
-		$hex      = isset( $_POST['Period'] ) ? sanitize_text_field( wp_unslash( $_POST['Period'] ) ) : '';
-		// phpcs:enable
+		$order_id = absint( Input::get( 'order_id' ) );
+		$key      = sanitize_text_field( Input::get( 'key' ) );
+		$hex      = sanitize_text_field( Input::post( 'Period' ) );
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order || '' === $key || ! hash_equals( $order->get_order_key(), $key ) ) {
@@ -82,8 +81,7 @@ final class PeriodHandler {
 	}
 
 	public static function handle_notify(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- 藍新幕後通知，無 nonce；Period 為 AES 密文，解不開即拒絕。手冊註明可能以 multipart/form-data 送，$_POST 兩種都能讀。
-		$hex     = isset( $_POST['Period'] ) ? sanitize_text_field( wp_unslash( $_POST['Period'] ) ) : '';
+		$hex     = sanitize_text_field( Input::post( 'Period' ) );
 		$payload = '' !== $hex ? Period::decode( $hex ) : null;
 		if ( null === $payload ) {
 			Helper::log( 'period notify rejected: cannot decrypt' );
@@ -103,11 +101,9 @@ final class PeriodHandler {
 	 * @return array{Status:string,Message:string,Result:array<string,mixed>}|null
 	 */
 	private static function posted_failure( \WC_Order $order ): ?array {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- 同 handle_return：藍新 Form Post 導回；Result 為 AES 密文。
-		$status = isset( $_POST['Status'] ) ? sanitize_text_field( wp_unslash( $_POST['Status'] ) ) : '';
-		$hex    = isset( $_POST['Result'] ) ? sanitize_text_field( wp_unslash( $_POST['Result'] ) ) : '';
-		$msg    = isset( $_POST['Message'] ) ? sanitize_text_field( wp_unslash( $_POST['Message'] ) ) : '';
-		// phpcs:enable
+		$status = sanitize_text_field( Input::post( 'Status' ) );
+		$hex    = sanitize_text_field( Input::post( 'Result' ) );
+		$msg    = sanitize_text_field( Input::post( 'Message' ) );
 		if ( '' === $status || 'SUCCESS' === $status || '' === $hex || ! ctype_xdigit( $hex ) ) {
 			return null;
 		}

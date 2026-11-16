@@ -39,6 +39,13 @@ module.exports = {
 	plugins: [
 		// 換成 WC 版 DEWP：@woocommerce/* import 轉 wc.* 全域 + asset.php 自動列 wc-blocks-registry 等 dep
 		...defaultConfig.plugins.filter( ( p ) => p.constructor.name !== 'DependencyExtractionWebpackPlugin' ),
-		new WooCommerceDependencyExtractionWebpackPlugin(),
+		// WC 版 DEWP 3.x 底下的 WP DEWP 太舊，不認得 react/jsx-runtime，會把 React 18 的副本
+		// 打包進來（Plugin Check：inlined_react_jsx_runtime）。改從 WordPress 的 react-jsx-runtime 載入。
+		new WooCommerceDependencyExtractionWebpackPlugin( {
+			requestToExternal: ( request ) =>
+				'react/jsx-runtime' === request ? [ 'ReactJSXRuntime' ] : undefined,
+			requestToHandle: ( request ) =>
+				'react/jsx-runtime' === request ? 'react-jsx-runtime' : undefined,
+		} ),
 	],
 };

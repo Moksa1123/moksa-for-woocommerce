@@ -4,17 +4,16 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Ecpay\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
 final class IpnHandler {
 
 	public static function handle(): void {
-		// Gateway IPN: no WP nonce possible (external server cannot send one).
-		// Source authenticity verified via CheckMacValue SHA256 + hash_equals on line ~25 (Helper::verify_check_mac_value)
-		// before any field is read or state changed. Raw array passed unmodified to verifier; map_deep sanitize follows on line ~32.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gateway IPN; no WP nonce possible; source verified via CheckMacValue hash_equals before any use; sanitized via map_deep below.
-		$raw = $_POST;
+		// 綠界幕後通知帶不了 WP nonce：先用 CheckMacValue（hash_equals）驗過才讀任何欄位、才動訂單。
+		// 讀原始請求（未加反斜線），簽章才會跟綠界算的一致；驗過後下面逐欄清理。
+		$raw = Input::all_post();
 
 		if ( empty( $raw ) ) {
 			status_header( 400 );
@@ -30,7 +29,7 @@ final class IpnHandler {
 		}
 
 		$posted = array_map(
-			static fn( $v ) => is_string( $v ) ? sanitize_text_field( wp_unslash( $v ) ) : $v,
+			static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v,
 			$raw
 		);
 

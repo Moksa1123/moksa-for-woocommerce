@@ -10,9 +10,8 @@ defined( 'ABSPATH' ) || exit;
  * WooCommerce 運送區域(Shipping Zones)的個別運送方式查詢與啟用切換。
  *
  * 物流的「子方式」(7-11 取貨 / 黑貓常溫冷凍…)不是 plugin option,而是 WC 運送區域內的
- * 方式實例(instance)。啟用狀態存在 wp_woocommerce_shipping_zone_methods.is_enabled,
- * 無 ORM setter,WC 核心本身也是 $wpdb 改這張專用表 + bust shipping cache,故沿用。
- * 查詢唯讀;切換是破壞性(影響前台結帳可選的運送方式)→ 走人工確認關卡。
+ * 方式實例(instance)。啟用狀態存在 wp_woocommerce_shipping_zone_methods.is_enabled，WC 沒有
+ * 提供改它的 API，所以這裡全部唯讀：查詢，以及給商家運送區域頁的連結自己切換。
  */
 final class ShippingZoneOps {
 
@@ -110,10 +109,15 @@ final class ShippingZoneOps {
 	}
 
 	/**
-	 * @param mixed $args { method: string, enable: bool }。
+	 * 找出運送方式，回傳 WC 運送區域頁的連結，請商家自己按啟用／停用。
+	 *
+	 * WooCommerce 沒有提供改「啟用狀態」的 API（核心自己是直接寫 woocommerce_shipping_zone_methods
+	 * 表），本外掛不直接改那張表，所以 AI 這裡只負責找到、給連結。
+	 *
+	 * @param mixed $args { method: string, enable?: bool }。
 	 * @return array<string,mixed>|\WP_Error
 	 */
-	public static function toggle_prepare( $args ) {
+	public static function find_method( $args ) {
 		if ( ! current_user_can( self::CAP ) ) {
 			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
 		}
@@ -122,59 +126,34 @@ final class ShippingZoneOps {
 		if ( empty( $iids ) ) {
 			return new \WP_Error( 'moksafowo_ai_no_method', __( 'No matching shipping method was found. List the shipping zones first to confirm the name.', 'moksa-for-woocommerce' ) );
 		}
-		$enable = self::truthy( is_array( $args ) ? ( $args['enable'] ?? true ) : true );
-
-		$all    = self::all_methods();
-		$titles = array();
+		$all     = self::all_methods();
+		$methods = array();
+		$lines   = array();
 		foreach ( $iids as $iid ) {
-			$titles[] = ( $all[ $iid ]['title'] ?? '' ) . '(' . ( $all[ $iid ]['zone'] ?? '' ) . ')';
+			$info = $all[ $iid ] ?? null;
+			if ( null === $info ) {
+				continue;
+			}
+			$url       = admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . (int) $info['zone_id'] );
+			$methods[] = array(
+				'title'   => $info['title'],
+				'zone'    => $info['zone'],
+				'enabled' => $info['enabled'],
+				'url'     => $url,
+			);
+			$lines[]   = sprintf(
+				/* translators: 1: shipping method title, 2: zone name, 3: enabled/disabled, 4: link */
+				__( '%1$s (%2$s, currently %3$s): %4$s', 'moksa-for-woocommerce' ),
+				$info['title'],
+				$info['zone'],
+				$info['enabled'] ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
+				$url
+			);
 		}
 
 		return array(
-			'instance_ids' => $iids,
-			'enable'       => $enable,
-			'summary'      => sprintf(
-				/* translators: 1: enable/disable, 2: method titles */
-				__( '%1$s the shipping method: %2$s.', 'moksa-for-woocommerce' ),
-				$enable ? __( 'Enable', 'moksa-for-woocommerce' ) : __( 'Disable', 'moksa-for-woocommerce' ),
-				implode( '、', $titles )
-			),
-		);
-	}
-
-	/**
-	 * @param array<string,mixed> $params toggle_prepare() 的回傳。
-	 * @return string|\WP_Error
-	 */
-	public static function toggle_apply( array $params ) {
-		if ( ! current_user_can( self::CAP ) ) {
-			return new \WP_Error( 'moksafowo_ai_cap', __( 'This action requires the Manage WooCommerce permission.', 'moksa-for-woocommerce' ) );
-		}
-		$iids   = is_array( $params['instance_ids'] ?? null ) ? array_map( 'absint', $params['instance_ids'] ) : array();
-		$enable = ! empty( $params['enable'] );
-		$iids   = array_values( array_filter( $iids ) );
-		if ( empty( $iids ) ) {
-			return new \WP_Error( 'moksafowo_ai_bad_input', __( 'There is no shipping method to change.', 'moksa-for-woocommerce' ) );
-		}
-
-		global $wpdb;
-		$table = $wpdb->prefix . 'woocommerce_shipping_zone_methods';
-		$all   = self::all_methods();
-		$done  = array();
-		foreach ( $iids as $iid ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- WC 專用設定表,核心亦以 $wpdb 改 is_enabled;無 ORM setter。
-			$wpdb->update( $table, array( 'is_enabled' => $enable ? 1 : 0 ), array( 'instance_id' => $iid ) );
-			$done[] = $all[ $iid ]['title'] ?? ( '#' . $iid );
-		}
-		if ( class_exists( 'WC_Cache_Helper' ) ) {
-			\WC_Cache_Helper::get_transient_version( 'shipping', true );
-		}
-
-		return sprintf(
-			/* translators: 1: enable/disable, 2: method titles */
-			__( '✅ The shipping method is now %1$s: %2$s.', 'moksa-for-woocommerce' ),
-			$enable ? __( 'enabled', 'moksa-for-woocommerce' ) : __( 'disabled', 'moksa-for-woocommerce' ),
-			implode( '、', $done )
+			'methods' => $methods,
+			'summary' => __( 'Open the shipping zone below and switch the method on or off there:', 'moksa-for-woocommerce' ) . "\n" . implode( "\n", $lines ),
 		);
 	}
 }

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Shared\Invoice;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\CheckoutInput;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -384,33 +385,25 @@ final class InvoiceCheckoutFields {
 				return (string) $data[ $k ];
 			}
 		}
-		// 本方法只在 woocommerce_after_checkout_validation 內被呼叫 — Classic 由
-		// WC_Checkout::process_checkout() 先驗 checkout nonce，Block 由 Store API 認證層把關，
-		// 值一律 sanitize 後回傳。Block additional fields 帶 `additional_fields[moksafowo/invoice-...]`。
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- upstream WC checkout nonce / Store API auth verified before this validation callback fires.
-		if ( isset( $_POST['additional_fields'] ) && is_array( $_POST['additional_fields'] ) ) {
-			foreach ( $keys as $k ) {
-				$bare = preg_replace( '#^_#', '', $k ); // 拿掉 leading _（Block 沒有）
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above; sanitized at extraction.
-				if ( isset( $_POST['additional_fields'][ $bare ] ) ) {
-					// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above; sanitized at extraction.
-					return (string) sanitize_text_field( wp_unslash( $_POST['additional_fields'][ $bare ] ) );
-				}
+		// 本方法只在 woocommerce_after_checkout_validation 內被呼叫；CheckoutInput 會再驗一次結帳 nonce。
+		// Block additional fields 帶 `additional_fields[moksafowo/invoice-...]`。
+		$additional = CheckoutInput::post_array( 'additional_fields' );
+		foreach ( $keys as $k ) {
+			$bare = (string) preg_replace( '#^_#', '', $k ); // 拿掉 leading _（Block 沒有）
+			if ( isset( $additional[ $bare ] ) && is_string( $additional[ $bare ] ) ) {
+				return $additional[ $bare ];
 			}
 		}
 		// 最後 fallback 到 $_POST top-level（Classic 場景）。
 		foreach ( $keys as $k ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above; sanitized at extraction.
-			if ( isset( $_POST[ $k ] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above; sanitized at extraction.
-				return (string) sanitize_text_field( wp_unslash( $_POST[ $k ] ) );
+			if ( CheckoutInput::has( $k ) ) {
+				return CheckoutInput::post( $k );
 			}
 		}
 		return '';
 	}
 
 	public static function save_classic( \WC_Order $order, array $data ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- WC checkout submit nonce 'woocommerce-process-checkout-nonce' verified by WC core in WC_Checkout::process_checkout() before this callback fires.
 		$keys   = [
 			'moksafowo_invoice_type'         => Keys::INVOICE_TYPE,
 			'moksafowo_invoice_carrier_type' => Keys::INVOICE_CARRIER_TYPE,
@@ -421,11 +414,10 @@ final class InvoiceCheckoutFields {
 		];
 		$values = [];
 		foreach ( $keys as $field => $meta_key ) {
-			if ( isset( $_POST[ $field ] ) ) {
-				$values[ $field ] = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
+			if ( CheckoutInput::has( $field ) ) {
+				$values[ $field ] = CheckoutInput::post( $field );
 			}
 		}
-		// phpcs:enable
 		// 傳統結帳只用 display:none 藏欄位，值還在。顧客先填手機條碼再改會員載具、或先選公司再改個人，
 		// 舊值會一起存進訂單、開票時帶到。不屬於目前選擇的欄位一律存空值（區塊結帳由 WC 自己清）。
 		$type    = $values['moksafowo_invoice_type'] ?? '';

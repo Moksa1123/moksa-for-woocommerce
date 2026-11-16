@@ -155,7 +155,7 @@ final class OrderMetaBox {
 						);
 						if ( null !== $tracking_info ) :
 							?>
-							<div style="margin-top:6px;"><?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?></div>
+							<div style="margin-top:6px;"><?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); ?></div>
 						<?php endif; ?>
 					</div>
 					<?php endforeach; ?>

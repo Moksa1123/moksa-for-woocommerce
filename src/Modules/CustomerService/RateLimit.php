@@ -4,10 +4,12 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\CustomerService;
 
+use Moksafowo\Modules\Shared\Lock;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 原子計數：先讀再寫的 transient 在並發請求下會超出上限，這裡用資料庫鎖包住讀寫。
+ * 原子計數：先讀再寫的 transient 在並發請求下會超出上限，這裡用核心的原子鎖（Shared\Lock）包住讀寫。
  * 拿不到鎖時一律當作已達上限。
  */
 final class RateLimit {
@@ -36,30 +38,13 @@ final class RateLimit {
 		self::unlock( $key );
 	}
 
+	/** 搶不到就每 25ms 再試，最多 20 次；超過 10 秒的鎖視為殘留。 */
 	private static function lock( string $key ): bool {
-		global $wpdb;
-		$name = self::lock_name( $key );
-		for ( $i = 0; $i < 20; $i++ ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- atomic lock row; must bypass the options cache.
-			$got = $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (option_name, option_value, autoload) VALUES (%s, %s, %s)', $wpdb->options, $name, (string) time(), 'off' ) );
-			if ( 1 === $got ) {
-				return true;
-			}
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- reads the lock row written above.
-			$since = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name = %s', $wpdb->options, $name ) );
-			if ( $since > 0 && time() - $since > 10 ) {
-				self::unlock( $key );
-				continue;
-			}
-			usleep( 25000 );
-		}
-		return false;
+		return Lock::acquire_wait( self::lock_name( $key ), 10, 20, 25 );
 	}
 
 	private static function unlock( string $key ): void {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- releases the lock row written by lock().
-		$wpdb->delete( $wpdb->options, array( 'option_name' => self::lock_name( $key ) ) );
+		Lock::release( self::lock_name( $key ) );
 	}
 
 	private static function lock_name( string $key ): string {

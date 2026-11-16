@@ -7,6 +7,7 @@ use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\ShoplinePayments\Api\Client;
 use Moksafowo\Modules\ShoplinePayments\Api\Helper;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\CheckoutInput;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -109,8 +110,7 @@ final class CardGateway extends \WC_Payment_Gateway {
 			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WC 結帳在上游已驗 nonce；這裡只讀 SDK 產生的一次性 paySession。
-		$pay_session = isset( $_POST['moksafowo_slp_pay_session'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_slp_pay_session'] ) ) : '';
+		$pay_session = CheckoutInput::post( 'moksafowo_slp_pay_session' );
 		if ( '' === $pay_session ) {
 			wc_add_notice( __( 'The card details were not received. Please enter the card again.', 'moksa-for-woocommerce' ), 'error' );
 			return [

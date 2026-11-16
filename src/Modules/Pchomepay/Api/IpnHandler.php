@@ -5,6 +5,7 @@ namespace Moksafowo\Modules\Pchomepay\Api;
 
 use Moksafowo\Order\Lookup;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,10 +24,8 @@ final class IpnHandler {
 
 		// 匿名 webhook 無法帶 WP nonce — 走 PChomePay 固定來源 IP 白名單 + order_id 對應。
 		// notify_message 為 JSON 原文，sanitize 會破壞結構 — decode 後逐欄 sanitize（見下）。
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- IP-allowlisted webhook; fields sanitized after json_decode below.
-		$notify_type = isset( $_POST['notify_type'] ) ? sanitize_text_field( wp_unslash( $_POST['notify_type'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload; structure-preserving capture, decoded then deep-sanitized below.
-		$raw_message = isset( $_POST['notify_message'] ) ? wp_unslash( (string) $_POST['notify_message'] ) : '';
+		$notify_type = sanitize_text_field( Input::post( 'notify_type' ) );
+		$raw_message = Input::post( 'notify_message' );
 
 		if ( '' === $notify_type || '' === $raw_message ) {
 			Helper::log( 'webhook missing notify_type / notify_message' );

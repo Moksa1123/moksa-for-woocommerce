@@ -27,8 +27,7 @@ final class Crypto {
 		if ( '' === $key || '' === $iv ) {
 			return [];
 		}
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (EncryptInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
-		$blob = @hex2bin( $encrypt_str );
+		$blob = \Moksafowo\Http\Decode::hex( $encrypt_str );
 		if ( false === $blob ) {
 			return [];
 		}

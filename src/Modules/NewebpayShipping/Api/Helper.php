@@ -74,8 +74,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return null;
 		}
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (TradeInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
-		$bin = @hex2bin( $trade_info );
+		$bin = \Moksafowo\Http\Decode::hex( $trade_info );
 		if ( false === $bin ) {
 			return null;
 		}
@@ -99,14 +98,16 @@ final class Helper extends AbstractCredentialHelper {
 
 	public static function parse_order_id( string $merchant_order_no ): int {
 		// 建單時已把 MerchantOrderNo 存進訂單，直接用它找最準；解析字串會受前綴與訂單號位數影響。
-		$ids = wc_get_orders(
+		$ids = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => 1,
-				'return'     => 'ids',
-				'type'       => 'shop_order',
-				'status'     => 'all',
-				'meta_key'   => Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- one-off lookup per shipping notification.
-				'meta_value' => $merchant_order_no, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
+				'limit'                            => 1,
+				'return'                           => 'ids',
+				'type'                             => 'shop_order',
+				'status'                           => 'all',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
+					'key'   => Keys::NEWEBPAY_SHIPPING_MERCHANT_ORDER_NO,
+					'value' => $merchant_order_no,
+				],
 			]
 		);
 		if ( ! empty( $ids ) ) {

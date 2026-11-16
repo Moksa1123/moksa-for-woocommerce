@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\CustomerService;
 
+use Moksafowo\Modules\Shared\Lock;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -132,29 +134,14 @@ final class Verify {
 	}
 
 	/**
-	 * 以訂單為單位的互斥鎖。INSERT IGNORE 在 option_name 唯一索引上是原子的；
-	 * add_option() 遇到重複會改成更新，不能拿來當鎖。超過 30 秒的鎖視為殘留，清掉後這次仍回失敗。
+	 * 以訂單為單位的互斥鎖（核心的原子鎖，見 Shared\Lock）。超過 30 秒的鎖視為殘留，清掉後重搶。
 	 */
 	private static function lock( int $order_id ): bool {
-		global $wpdb;
-		$name = self::lock_name( $order_id );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- atomic lock row; must bypass the options cache.
-		$got = $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (option_name, option_value, autoload) VALUES (%s, %s, %s)', $wpdb->options, $name, (string) time(), 'off' ) );
-		if ( 1 === $got ) {
-			return true;
-		}
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- reads the lock row written above.
-		$since = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name = %s', $wpdb->options, $name ) );
-		if ( $since > 0 && time() - $since > 30 ) {
-			self::unlock( $order_id );
-		}
-		return false;
+		return Lock::acquire( self::lock_name( $order_id ), 30 );
 	}
 
 	private static function unlock( int $order_id ): void {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- releases the lock row written by lock().
-		$wpdb->delete( $wpdb->options, array( 'option_name' => self::lock_name( $order_id ) ) );
+		Lock::release( self::lock_name( $order_id ) );
 	}
 
 	private static function lock_name( int $order_id ): string {

@@ -8,37 +8,38 @@
  * @var bool     $sent_to_admin
  * @var bool     $plain_text
  * @var WC_Email $email
+ *
+ * @package Moksafowo
  */
 
 defined( 'ABSPATH' ) || exit;
 
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_store_name    = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_name' );
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_store_id      = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_id' );
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- mo_ is plugin owner prefix per CLAUDE.md.
-$mo_store_address = (string) $order->get_meta( '_moksafowo_shipping_cvs_store_address' );
+$moksafowo_store_name    = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_NAME );
+$moksafowo_store_id      = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ID );
+$moksafowo_store_address = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::SHIPPING_CVS_STORE_ADDRESS );
 
 do_action( 'woocommerce_email_header', $email_heading, $email );
 ?>
 
-<p><?php
+<p>
+<?php
 /* translators: %s: customer first name */
 printf( esc_html__( 'Hi %s,', 'moksa-for-woocommerce' ), esc_html( $order->get_billing_first_name() ) );
-?></p>
+?>
+</p>
 
 <p><strong><?php esc_html_e( 'Your parcel has arrived at the pickup store. Please bring your ID and collect it within 7 days.', 'moksa-for-woocommerce' ); ?></strong></p>
 
-<?php if ( $mo_store_name || $mo_store_id || $mo_store_address ) : ?>
+<?php if ( $moksafowo_store_name || $moksafowo_store_id || $moksafowo_store_address ) : ?>
 <table cellspacing="0" cellpadding="6" border="1" style="width:100%;border-collapse:collapse;margin-bottom:16px;">
-	<?php if ( $mo_store_name ) : ?>
-		<tr><th align="left"><?php esc_html_e( 'Pickup store', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $mo_store_name ); ?></td></tr>
+	<?php if ( $moksafowo_store_name ) : ?>
+		<tr><th align="left"><?php esc_html_e( 'Pickup store', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $moksafowo_store_name ); ?></td></tr>
 	<?php endif; ?>
-	<?php if ( $mo_store_id ) : ?>
-		<tr><th align="left"><?php esc_html_e( 'Store number', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $mo_store_id ); ?></td></tr>
+	<?php if ( $moksafowo_store_id ) : ?>
+		<tr><th align="left"><?php esc_html_e( 'Store number', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $moksafowo_store_id ); ?></td></tr>
 	<?php endif; ?>
-	<?php if ( $mo_store_address ) : ?>
-		<tr><th align="left"><?php esc_html_e( 'Store address', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $mo_store_address ); ?></td></tr>
+	<?php if ( $moksafowo_store_address ) : ?>
+		<tr><th align="left"><?php esc_html_e( 'Store address', 'moksa-for-woocommerce' ); ?></th><td><?php echo esc_html( $moksafowo_store_address ); ?></td></tr>
 	<?php endif; ?>
 </table>
 <?php endif; ?>
@@ -47,7 +48,6 @@ printf( esc_html__( 'Hi %s,', 'moksa-for-woocommerce' ), esc_html( $order->get_b
 
 <?php
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- mo_ is plugin owner prefix per CLAUDE.md.
 do_action( 'moksafowo_shipping_email_tracking_info', $order, false );
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );

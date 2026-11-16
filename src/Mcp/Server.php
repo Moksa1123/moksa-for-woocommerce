@@ -195,11 +195,14 @@ final class Server {
 			}
 			$meta = (array) $ability->get_meta();
 			$mcp  = isset( $meta['mcp'] ) && is_array( $meta['mcp'] ) ? $meta['mcp'] : array();
-			if ( array_key_exists( 'public', $mcp ) && ! $mcp['public'] ) {
-				continue;
-			}
-			$ann = isset( $meta['annotations'] ) && is_array( $meta['annotations'] ) ? $meta['annotations'] : array();
-			if ( ! empty( $ann['destructive'] ) && ! $expose_destructive ) {
+			$ann  = isset( $meta['annotations'] ) && is_array( $meta['annotations'] ) ? $meta['annotations'] : array();
+			if ( ! empty( $ann['destructive'] ) ) {
+				// 破壞性能力的 mcp.public 一律是 false，給第三方 MCP Adapter（WP 官方、WooCommerce）看，讓它們
+				// 不暴露。本外掛自己的 Server 改看商家的「暴露破壞性工具」開關，暴露時也只預覽、不執行。
+				if ( ! $expose_destructive ) {
+					continue;
+				}
+			} elseif ( array_key_exists( 'public', $mcp ) && ! $mcp['public'] ) {
 				continue;
 			}
 			$out[ $name ] = $ability;

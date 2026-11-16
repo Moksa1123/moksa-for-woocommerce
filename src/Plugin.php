@@ -61,6 +61,12 @@ final class Plugin {
 			return;
 		}
 
+		// 訂單 meta 反查的自訂查詢參數（Order\Lookup::orders() 查詢前也會再確認一次）。
+		Order\Lookup::register();
+		// 結帳欄位的 nonce 要在 WC 建立新帳號、換掉目前使用者之前驗（見 Http\CheckoutInput）。
+		add_action( 'woocommerce_checkout_process', [ Http\CheckoutInput::class, 'prime' ], 0 );
+		// 記下寫過的 option，解除安裝時照表刪（WP 沒有依前綴刪 option 的 API）。
+		Settings\OptionRegistry::boot();
 		add_action( 'woocommerce_init', [ $this, 'on_woocommerce_init' ] );
 		add_filter( 'plugin_action_links_' . MOKSAFOWO_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ] );
 		add_filter( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );

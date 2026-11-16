@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Shipping\Statuses;
 
+use Moksafowo\Http\Input;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -84,12 +86,10 @@ final class LegacyStatuses {
 	}
 
 	public static function notice(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only count from our own redirect.
-		if ( ! isset( $_GET['moksafowo_ry_converted'] ) ) {
+		if ( ! Input::has_get( 'moksafowo_ry_converted' ) ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only count from our own redirect.
-		$count = absint( wp_unslash( $_GET['moksafowo_ry_converted'] ) );
+		$count = absint( Input::get( 'moksafowo_ry_converted' ) );
 		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			esc_html(

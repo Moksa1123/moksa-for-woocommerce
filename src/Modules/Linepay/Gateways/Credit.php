@@ -18,8 +18,9 @@ class Credit extends WC_Payment_Gateway {
 
 	public function __construct() {
 
-		$this->id                 = Constants::ID;
-		$this->icon               = $this->get_icon();
+		$this->id = Constants::ID;
+		// 圖示交給 WC_Payment_Gateway::get_icon() 組 <img> 並套 woocommerce_gateway_icon filter。
+		$this->icon               = 'yes' === get_option( 'moksafowo_linepay_display_logo_enabled' ) ? MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' : '';
 		$this->title              = $this->get_option( 'title' );
 		$this->description        = $this->get_option( 'description' );
 		$this->has_fields         = false;
@@ -33,7 +34,6 @@ class Credit extends WC_Payment_Gateway {
 			'refunds',
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 		$this->supported_currencies = apply_filters( 'moksafowo_linepay_support_currencies', array( 'TWD' ) );
 
 		$this->init_form_fields();
@@ -60,20 +60,6 @@ class Credit extends WC_Payment_Gateway {
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_order_on_hold_message' ), 10, 2 );
 		add_action( 'woocommerce_order_details_before_order_table', array( $this, 'display_on_hold_message_on_order_details' ) );
-	}
-
-	public function get_icon() {
-
-		$icon_html = '';
-		if ( 'yes' === get_option( 'moksafowo_linepay_display_logo_enabled' ) ) {
-			$icon_html .= sprintf(
-				'<img src="%s" alt="%s" />',
-				esc_url( MOKSAFOWO_PLUGIN_URL . 'src/Modules/Linepay/assets/images/linepay-logo.png' ),
-				esc_attr__( 'LINE Pay Taiwan', 'moksa-for-woocommerce' )
-			);
-		}
-
-		return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WC core convention extension point.
 	}
 
 	public function init_form_fields(): void {

@@ -226,7 +226,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -286,7 +286,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -432,8 +432,8 @@ final class Ability {
 		wp_register_ability(
 			'moksa-for-woocommerce/toggle-shipping-method',
 			[
-				'label'               => __( 'Enable or disable a shipping method', 'moksa-for-woocommerce' ),
-				'description'         => __( 'Enable or disable one shipping method in a WooCommerce shipping zone, for example “SmilePay T-Cat ambient” or “ECPay 7-ELEVEN pickup”. Pass the method name directly. This is a destructive action because it changes what customers can choose at checkout — calling the tool only proposes it, and nothing takes effect until the user presses Confirm, so there is no need to ask for confirmation yourself.', 'moksa-for-woocommerce' ),
+				'label'               => __( 'Find where to enable or disable a shipping method', 'moksa-for-woocommerce' ),
+				'description'         => __( 'Find a shipping method in the WooCommerce shipping zones, for example “SmilePay T-Cat ambient” or “ECPay 7-ELEVEN pickup”, and return whether it is enabled plus a link to its shipping zone page. This tool does not change anything: WooCommerce has no API for switching a method on or off, so give the store owner the link and ask them to switch it there.', 'moksa-for-woocommerce' ),
 				'category'            => 'moksa-for-woocommerce',
 				'input_schema'        => [
 					'type'                 => 'object',
@@ -444,26 +444,40 @@ final class Ability {
 						],
 						'enable' => [
 							'type'        => 'boolean',
-							'description' => __( 'true to enable, false to disable', 'moksa-for-woocommerce' ),
+							'description' => __( 'What the store owner wants to do (true to enable, false to disable). Only used to phrase the answer; nothing is changed.', 'moksa-for-woocommerce' ),
 						],
 					],
-					'required'             => [ 'method', 'enable' ],
+					'required'             => [ 'method' ],
 					'additionalProperties' => false,
 				],
 				'output_schema'       => [
 					'type'       => 'object',
-					'properties' => [ 'summary' => [ 'type' => 'string' ] ],
+					'properties' => [
+						'summary' => [ 'type' => 'string' ],
+						'methods' => [
+							'type'  => 'array',
+							'items' => [
+								'type'       => 'object',
+								'properties' => [
+									'title'   => [ 'type' => 'string' ],
+									'zone'    => [ 'type' => 'string' ],
+									'enabled' => [ 'type' => 'boolean' ],
+									'url'     => [ 'type' => 'string' ],
+								],
+							],
+						],
+					],
 				],
-				'execute_callback'    => [ ShippingZoneOps::class, 'toggle_prepare' ],
+				'execute_callback'    => [ ShippingZoneOps::class, 'find_method' ],
 				'permission_callback' => static function (): bool {
 					return current_user_can( ShippingZoneOps::CAP );
 				},
 				'meta'                => [
 					'show_in_rest' => false,
 					'annotations'  => [
-						'readonly'    => false,
-						'destructive' => true,
-						'idempotent'  => false,
+						'readonly'    => true,
+						'destructive' => false,
+						'idempotent'  => true,
 					],
 					'mcp'          => [
 						'public' => true,
@@ -595,7 +609,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -726,7 +740,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -817,7 +831,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -863,7 +877,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1010,7 +1024,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1054,7 +1068,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1096,7 +1110,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1230,7 +1244,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1284,7 +1298,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1467,7 +1481,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1511,7 +1525,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1560,7 +1574,7 @@ final class Ability {
 						'idempotent'  => false,
 					],
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1591,15 +1605,8 @@ final class Ability {
 	private static $mcp_hidden = array();
 
 	/**
-	 * 是否允許破壞性能力暴露給外部 MCP。預設否 —— 對齊官方「公開 MCP 端點優先唯讀」建議。
-	 */
-	private static function expose_destructive(): bool {
-		return 'yes' === get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' );
-	}
-
-	/**
-	 * 註冊時 gate MCP 暴露：設定關閉時，把破壞性 moksa-for-woocommerce 能力的 meta.mcp.public 設為
-	 * false，並記錄供 deprecated WC endpoint 同步排除。
+	 * 註冊時 gate MCP 暴露：破壞性 moksa-for-woocommerce 能力的 meta.mcp.public 一律設為 false，
+	 * 並記錄供 deprecated WC endpoint 同步排除（1.22.0 起不再看「暴露破壞性工具」開關）。
 	 *
 	 * **核心不讀 `meta.mcp.public`** —— WP 7.1 的 Abilities API 對 `meta['mcp']` 零引用，
 	 * 核心的 `meta['public']` 只用來 seed `show_in_rest`，而我們每個 ability 都顯式寫了
@@ -1622,8 +1629,10 @@ final class Ability {
 		if ( ! is_string( $name ) || 0 !== strpos( $name, 'moksa-for-woocommerce/' ) || ! is_array( $args ) ) {
 			return $args;
 		}
+		// 1.22.0 起：破壞性能力對第三方 MCP（官方 Adapter、WooCommerce）一律不公開，不再看「暴露破壞性工具」
+		// 開關——那個開關只給本外掛自己的 MCP Server 用（暴露時也只預覽、不執行，見 Mcp\Server::abilities()）。
 		$destructive = ! empty( $args['meta']['annotations']['destructive'] );
-		if ( $destructive && ! self::expose_destructive() ) {
+		if ( $destructive ) {
 			$args['meta']['mcp']['public'] = false;
 			self::$mcp_hidden[ $name ]     = true;
 		}

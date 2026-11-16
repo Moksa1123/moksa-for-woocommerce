@@ -7,6 +7,7 @@ use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Modules\Tappay\Api\Client;
 use Moksafowo\Modules\Tappay\Api\Helper;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\CheckoutInput;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -120,12 +121,10 @@ final class Credit extends \WC_Payment_Gateway {
 			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
 		}
 
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC checkout 在上游已驗 nonce；此處僅讀前端取得的一次性 prime
-		$prime = isset( $_POST['moksafowo_tappay_prime'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_prime'] ) ) : '';
-		$bin   = isset( $_POST['moksafowo_tappay_bin'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_bin'] ) ) : '';
-		$last4 = isset( $_POST['moksafowo_tappay_last_four'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_last_four'] ) ) : '';
-		$bank  = isset( $_POST['moksafowo_tappay_issuer'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_issuer'] ) ) : '';
-		// phpcs:enable
+		$prime = CheckoutInput::post( 'moksafowo_tappay_prime' );
+		$bin   = CheckoutInput::post( 'moksafowo_tappay_bin' );
+		$last4 = CheckoutInput::post( 'moksafowo_tappay_last_four' );
+		$bank  = CheckoutInput::post( 'moksafowo_tappay_issuer' );
 
 		if ( '' === $prime ) {
 			wc_add_notice( __( 'TapPay did not return a payment token. Please enter the card details again.', 'moksa-for-woocommerce' ), 'error' );

@@ -31,19 +31,22 @@ class OrderEdit {
 
 	public static function moksafowo_payuni_shipping_cvs_fields( $shipping_fields ) {
 		global $theorder;
-		if ( empty( $theorder ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- read-only order context resolution; WC core verifies its own nonce before persisting.
-			if ( isset( $_POST['post_ID'] ) ) {
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.Security.NonceVerification.Missing -- WC core metabox callback injects $theorder; read-only context resolution, WC core save flow verifies its own nonce.
-				$theorder = wc_get_order( absint( wp_unslash( $_POST['post_ID'] ) ) );
-			} else {
+		$order = $theorder instanceof \WC_Order ? $theorder : null;
+		if ( null === $order ) {
+			// 儲存訂單時 WC 不設 $theorder：用 WC 訂單資料區塊自己的 nonce 驗過，才從表單取訂單編號。
+			$nonce = isset( $_POST['woocommerce_meta_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['woocommerce_meta_nonce'] ) ) : '';
+			if ( ! wp_verify_nonce( $nonce, 'woocommerce_save_data' ) || ! isset( $_POST['post_ID'] ) ) {
+				return $shipping_fields;
+			}
+			$order = wc_get_order( absint( wp_unslash( $_POST['post_ID'] ) ) );
+			if ( ! $order instanceof \WC_Order ) {
 				return $shipping_fields;
 			}
 		}
 
 		$shipping_method = false;
 
-		$items_shipping = $theorder->get_items( 'shipping' );
+		$items_shipping = $order->get_items( 'shipping' );
 		$items_shipping = array_shift( $items_shipping );
 
 		if ( $items_shipping ) {

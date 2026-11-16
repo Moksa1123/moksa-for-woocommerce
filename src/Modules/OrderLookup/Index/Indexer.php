@@ -21,6 +21,18 @@ final class Indexer {
 		add_action( 'woocommerce_after_order_object_save', [ self::class, 'on_save' ], 20, 1 );
 		add_action( 'woocommerce_delete_order', [ self::class, 'on_delete' ], 20, 1 );
 		add_action( 'woocommerce_trash_order', [ self::class, 'on_delete' ], 20, 1 );
+		// 傳統文章表：後台直接 wp_trash_post／wp_delete_post 時 WC 不會發上面那兩個 hook。
+		add_action( 'trashed_post', [ self::class, 'on_post_removed' ], 20, 1 );
+		add_action( 'deleted_post', [ self::class, 'on_post_removed' ], 20, 1 );
+	}
+
+	/**
+	 * @param mixed $post_id 文章 ID。
+	 */
+	public static function on_post_removed( $post_id ): void {
+		if ( 'shop_order' === get_post_type( absint( $post_id ) ) ) {
+			self::on_delete( $post_id );
+		}
 	}
 
 	/**
@@ -44,7 +56,12 @@ final class Indexer {
 			return;
 		}
 		$id = absint( $order_id );
-		if ( $id > 0 ) {
+		if ( $id <= 0 ) {
+			return;
+		}
+		// HPOS 刪單時 WP 不會自己清 term relationships。
+		TermIndex::delete_order( $id );
+		if ( ! TermIndex::uses_terms() ) {
 			Table::delete_order( $id );
 		}
 	}
@@ -54,6 +71,10 @@ final class Indexer {
 	 */
 	public static function reindex( \WC_Order $order ): void {
 		$pairs = SearchableKeys::index_pairs( $order );
-		Table::replace_order( (int) $order->get_id(), $pairs );
+		// taxonomy 一律更新（重建期間也不漏）；還沒切換前舊表也照寫，查單仍用它。
+		TermIndex::replace_order( (int) $order->get_id(), $pairs );
+		if ( ! TermIndex::uses_terms() ) {
+			Table::replace_order( (int) $order->get_id(), $pairs );
+		}
 	}
 }

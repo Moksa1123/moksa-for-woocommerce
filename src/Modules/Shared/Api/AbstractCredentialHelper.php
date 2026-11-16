@@ -26,7 +26,7 @@ abstract class AbstractCredentialHelper {
 	 * 商家多半沒開除錯 log，出事時才有線索可查。
 	 */
 	public static function warn( string $message, array $context = [] ): void {
-		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated by FILTER_VALIDATE_IP.
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) : false;
 		if ( false !== $ip ) {
 			$context['remote_ip'] = $ip;
 		}

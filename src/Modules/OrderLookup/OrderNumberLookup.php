@@ -38,7 +38,7 @@ final class OrderNumberLookup {
 		}
 
 		// 回填進行中索引還不完整，改走一般搜尋。
-		if ( Table::is_ready() && empty( Index\Backfill::status()['running'] ) ) {
+		if ( self::index_ready() ) {
 			return self::merge( $direct, self::resolve_via_index( $term, $limit ), $limit );
 		}
 
@@ -80,6 +80,14 @@ final class OrderNumberLookup {
 		return array_slice( $direct, 0, max( 1, $limit ) );
 	}
 
+	/** 索引可用：已啟用、沒在重建；用 taxonomy 時不需要舊表，還沒切換時要舊表存在。 */
+	private static function index_ready(): bool {
+		if ( ! Table::is_enabled() || ! empty( Index\Backfill::status()['running'] ) ) {
+			return false;
+		}
+		return Index\TermIndex::uses_terms() || Table::exists();
+	}
+
 	/**
 	 * 索引表查詢路徑。
 	 *
@@ -92,7 +100,9 @@ final class OrderNumberLookup {
 		if ( empty( $fields ) ) {
 			return [];
 		}
-		$ids = Table::search( $fields, $term, max( 1, $limit ) );
+		$ids = Index\TermIndex::uses_terms()
+			? Index\TermIndex::search( $fields, $term, max( 1, $limit ) )
+			: Table::search( $fields, $term, max( 1, $limit ) );
 		$out = [];
 		foreach ( $ids as $id ) {
 			$order = wc_get_order( $id );

@@ -73,7 +73,7 @@ final class Module extends AbstractGatewayModule {
 	 * @return array{ok:bool,message:string,lines:array<string,string>}
 	 */
 	public static function query_payment_status( \WC_Order $order ): array {
-		$rec = (string) $order->get_meta( Moksafowo\Order\Meta\Keys::TAPPAY_REC_TRADE_ID );
+		$rec = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::TAPPAY_REC_TRADE_ID );
 		$res = '' !== $rec
 			? Api\Client::query_by_rec_trade_id( $rec )
 			: Api\Client::query_by_order_number( Api\Helper::build_order_number( $order ) );
@@ -151,7 +151,7 @@ final class Module extends AbstractGatewayModule {
 			return;
 		}
 
-		wp_register_script( 'moksafowo-tappay-sdk', Helper::SDK_URL, [], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion,WordPress.WP.EnqueuedResourceParameters.NotInFooter
+		wp_register_script( 'moksafowo-tappay-sdk', Helper::SDK_URL, [], MOKSAFOWO_VERSION, true );
 
 		$path    = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-tappay-fields.js';
 		$version = file_exists( $path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $path ) : MOKSAFOWO_VERSION;

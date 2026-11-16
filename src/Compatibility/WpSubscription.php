@@ -189,14 +189,13 @@ final class WpSubscription {
 		if ( ! self::active() || '' === $value ) {
 			return false;
 		}
-		$ids = get_posts(
+		$ids = \Moksafowo\Order\Lookup::posts(
 			[
-				'post_type'      => 'subscrpt_order',
-				'post_status'    => [ 'active', 'pending', 'pe_cancelled', 'expired', 'on-hold' ],
-				'posts_per_page' => 5,
-				'fields'         => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- 撤銷前的一次性查詢。
-				'meta_query'     => [
+				'post_type'                        => 'subscrpt_order',
+				'post_status'                      => [ 'active', 'pending', 'pe_cancelled', 'expired', 'on-hold' ],
+				'posts_per_page'                   => 5,
+				'fields'                           => 'ids',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
 					[
 						'key'   => $meta_key,
 						'value' => $value,
@@ -330,11 +329,9 @@ final class WpSubscription {
 		update_post_meta( $subscription_id, '_subscrpt_order_id', $renewal->get_id() );
 		update_post_meta( $subscription_id, '_subscrpt_order_item_id', (int) $created['order_item_id'] );
 		Helper::clone_order_metadata( $renewal, $old_order );
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPSubscription's own hook, fired exactly as its Helper::create_renewal_order() does so its add-ons (coupons, limits) still run.
 		$renewal = apply_filters( 'subscrpt_before_saving_renewal_order', $renewal, $old_order, $subscription_id );
 		$renewal->calculate_totals();
 		$renewal->save();
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPSubscription's own hook, fired exactly as its Helper::create_renewal_order() does.
 		do_action( 'subscrpt_after_create_renew_order', $renewal, $old_order, $subscription_id, false );
 		$renewal = wc_get_order( $renewal->get_id() );
 		return $renewal instanceof \WC_Order ? $renewal : null;

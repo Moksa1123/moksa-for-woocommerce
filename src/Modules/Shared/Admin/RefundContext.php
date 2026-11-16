@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Shared\Admin;
 
+use Moksafowo\Http\Input;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -16,13 +18,11 @@ final class RefundContext {
 		if ( ! is_admin() ) {
 			return false;
 		}
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended,WordPress.Security.NonceVerification.Missing -- read-only routing check; the refund handler itself verifies its nonce.
 		if ( wp_doing_ajax() ) {
-			$action = isset( $_REQUEST['action'] ) ? sanitize_key( wp_unslash( $_REQUEST['action'] ) ) : '';
+			$action = sanitize_key( Input::request( 'action' ) );
 			return 'woocommerce_refund_line_items' === $action;
 		}
-		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.NonceVerification.Missing
+		$page = sanitize_key( Input::get( 'page' ) );
 		if ( 'wc-orders' === $page ) {
 			return true;
 		}

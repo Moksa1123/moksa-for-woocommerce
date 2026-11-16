@@ -235,11 +235,12 @@ final class OrderMetaBox {
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
-		$err = AdminIssueForm::validate();
+		$fields = map_deep( wp_unslash( $_POST ), 'sanitize_text_field' );
+		$err    = AdminIssueForm::validate( $fields );
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
-		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice' );
+		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice', $fields );
 		wp_send_json_success( [ 'message' => __( 'Updated.', 'moksa-for-woocommerce' ) ] );
 	}
 
@@ -254,12 +255,13 @@ final class OrderMetaBox {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found.', 'moksa-for-woocommerce' ) ], 404 );
 		}
 
-		$err = AdminIssueForm::validate();
+		$fields = map_deep( wp_unslash( $_POST ), 'sanitize_text_field' );
+		$err    = AdminIssueForm::validate( $fields );
 		if ( null !== $err ) {
 			wp_send_json_error( [ 'message' => $err ] );
 		}
 		// 開立前再存一次（與「更新」一致），確保用的是畫面上的值。
-		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice' );
+		AdminIssueForm::save( $order, 'moksafowo_ecpay_invoice', $fields );
 
 		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
 		if ( null !== $legacy ) {

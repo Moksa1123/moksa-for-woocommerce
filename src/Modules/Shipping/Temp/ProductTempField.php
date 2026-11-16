@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Shipping\Temp;
 
 use Moksafowo\Product\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -108,7 +109,7 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$current = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
+		$current = sanitize_text_field( Input::get( 'moksafowo_product_temp_filter' ) );
 		echo '<select name="moksafowo_product_temp_filter" id="moksafowo_product_temp_filter">';
 		echo '<option value="">' . esc_html__( 'All temperature zones', 'moksa-for-woocommerce' ) . '</option>';
 		foreach ( ProductTemp::options( false ) as $value => $label ) {
@@ -131,7 +132,7 @@ final class ProductTempField {
 		if ( ! $screen || 'edit-product' !== $screen->id ) {
 			return;
 		}
-		$raw = isset( $_GET['moksafowo_product_temp_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['moksafowo_product_temp_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin filter
+		$raw = sanitize_text_field( Input::get( 'moksafowo_product_temp_filter' ) );
 		if ( '' === $raw ) {
 			return;
 		}

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\NewebpayShipping\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,15 +17,13 @@ final class IpnHandler {
 		// Decoded payload is deep-sanitized via map_deep on line ~38 after decryption succeeds.
 		// NPA-B58 貨態通知送的是 EncryptData_／HashData_（與建單請求同格式），不是金流的 TradeInfo／TradeSha。
 		// 兩種都收：舊格式保留相容。
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- gateway shipping IPN; no WP nonce possible; source verified via SHA256 hash_equals before any use; decoded payload sanitized via map_deep after decryption.
-		$trade_info = isset( $_POST['EncryptData_'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['EncryptData_'] ) ) : '';
-		$trade_sha  = isset( $_POST['HashData_'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['HashData_'] ) ) : '';
+		$trade_info = sanitize_text_field( Input::post( 'EncryptData_' ) );
+		$trade_sha  = sanitize_text_field( Input::post( 'HashData_' ) );
 		if ( '' === $trade_info ) {
-			$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeInfo'] ) ) : '';
-			$trade_sha  = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['TradeSha'] ) ) : '';
+			$trade_info = sanitize_text_field( Input::post( 'TradeInfo' ) );
+			$trade_sha  = sanitize_text_field( Input::post( 'TradeSha' ) );
 		}
-		$post_status = isset( $_POST['Status'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['Status'] ) ) : '';
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$post_status = sanitize_text_field( Input::post( 'Status' ) );
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
 			Helper::log( 'missing TradeInfo / TradeSha' );

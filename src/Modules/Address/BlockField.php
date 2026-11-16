@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Address;
 
+use Moksafowo\Http\CheckoutInput;
+
 defined( 'ABSPATH' ) || exit;
 
 final class BlockField {
@@ -49,8 +51,7 @@ final class BlockField {
 		}
 
 		if ( doing_action( 'rest_api_init' ) ) {
-			$route = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-			if ( false === strpos( $route, '/wc/store/' ) ) {
+			if ( ! \Moksafowo\Http\StoreApi::is_request() ) {
 				return;
 			}
 		} elseif ( ! is_checkout() && ! is_cart() && ! is_wc_endpoint_url( 'edit-address' ) ) {
@@ -87,8 +88,7 @@ final class BlockField {
 	/** Store API 請求一律是區塊；前台則看結帳頁本身是不是區塊，且只限結帳頁。 */
 	private static function is_block_checkout_context(): bool {
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			$route = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-			return false !== strpos( $route, '/wc/store/' );
+			return \Moksafowo\Http\StoreApi::is_request();
 		}
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return false;
@@ -236,12 +236,10 @@ final class BlockField {
 			}
 		}
 		// Block Store API：additional_fields[moksafowo/district]
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- 讀值供驗證，下單流程自有 nonce
-		if ( isset( $_POST['additional_fields'] ) && is_array( $_POST['additional_fields'] ) ) {
-			$v = isset( $_POST['additional_fields'][ self::FIELD_ID ] ) ? sanitize_text_field( wp_unslash( $_POST['additional_fields'][ self::FIELD_ID ] ) ) : '';
-			if ( '' !== $v ) {
-				return explode( '|', $v, 2 )[0];
-			}
+		$fields = CheckoutInput::post_array( 'additional_fields' );
+		$v      = isset( $fields[ self::FIELD_ID ] ) && is_string( $fields[ self::FIELD_ID ] ) ? $fields[ self::FIELD_ID ] : '';
+		if ( '' !== $v ) {
+			return explode( '|', $v, 2 )[0];
 		}
 		// Block 下單時 fill_city_from_district 已把值寫進 customer/order city — 再撈一次 session customer。
 		if ( function_exists( 'WC' ) && WC()->customer ) {
@@ -254,7 +252,6 @@ final class BlockField {
 				return $b;
 			}
 		}
-		// phpcs:enable
 		return '';
 	}
 

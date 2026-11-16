@@ -60,8 +60,7 @@ final class PickupNotice {
 
 		nocache_headers();
 		header( 'Content-Type: text/html; charset=utf-8' );
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- build_html returns fully escaped HTML composed via esc_html/esc_attr internally
-		echo self::build_html( $orders );
+		self::render_html( $orders );
 		exit;
 	}
 
@@ -77,7 +76,7 @@ final class PickupNotice {
 		return '' !== $id;
 	}
 
-	private static function build_html( array $orders ): string {
+	private static function render_html( array $orders ): void {
 		$shop_name     = (string) get_bloginfo( 'name' );
 		$shop_address  = (string) ( get_option( 'woocommerce_store_address', '' ) );
 		$shop_city     = (string) ( get_option( 'woocommerce_store_city', '' ) );
@@ -114,7 +113,6 @@ CSS;
 		wp_enqueue_style( 'moksafowo-newebpay-pickup' );
 		wp_add_inline_style( 'moksafowo-newebpay-pickup', $pickup_css );
 
-		ob_start();
 		?>
 <!doctype html>
 <html lang="zh-Hant">
@@ -181,6 +179,5 @@ CSS;
 </body>
 </html>
 		<?php
-		return (string) ob_get_clean();
 	}
 }

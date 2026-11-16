@@ -8,6 +8,7 @@ use Moksafowo\Modules\AiAssistant\Config;
 use Moksafowo\Modules\CustomerService\Admin\Inbox;
 use Moksafowo\Modules\CustomerService\Schema;
 use Moksafowo\Modules\CustomerService\Threads;
+use Moksafowo\Modules\CustomerService\Module as CustomerServiceModule;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -78,6 +79,9 @@ final class Hub {
 		$visible = \Moksafowo\Plugin::instance()->modules()->is_enabled( 'ai_assistant' )
 			|| \Moksafowo\Plugin::instance()->modules()->is_enabled( 'customer_service' );
 
+		if ( $visible ) {
+			\Moksafowo\Modules\CustomerService\ThreadPosts::boot();
+		}
 		$unread = $visible ? Threads::count_unread() : 0;
 		$label  = Config::NAME;
 		if ( $unread > 0 ) {
@@ -112,7 +116,10 @@ final class Hub {
 			self::render_disabled_notice();
 			return;
 		}
-		Schema::maybe_install();
+		\Moksafowo\Modules\CustomerService\ThreadPosts::boot();
+		if ( \Moksafowo\Modules\CustomerService\Storage::CPT !== \Moksafowo\Modules\CustomerService\Storage::mode() ) {
+			Schema::maybe_install();
+		}
 		// 店員（edit_shop_orders）只處理客服訊息；MCP、破壞性工具、前台提示詞與防暴力參數只有店長能改。
 		$can_manage = current_user_can( 'manage_woocommerce' );
 		if ( $can_manage && isset( $_POST['moksafowo_ai_hub_save'] ) ) {
@@ -121,7 +128,6 @@ final class Hub {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'moksa-for-woocommerce' ) . '</p></div>';
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 唯讀的 tab 切換,無狀態變更。
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'settings';
 		if ( ! $can_manage ) {
 			$tab = 'inbox';
@@ -293,12 +299,11 @@ final class Hub {
 				'title'   => __( 'Where to show it', 'moksa-for-woocommerce' ),
 				'id'      => 'moksafowo_customer_service_display_mode',
 				'type'    => 'select',
-				'default' => 'all',
+				'default' => CustomerServiceModule::DISPLAY_ALL,
 				'options' => array(
-					'all'     => __( 'Every page', 'moksa-for-woocommerce' ),
-					'include' => __( 'Only the listed pages', 'moksa-for-woocommerce' ),
-					// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- select 選項鍵,非 get_posts 查詢參數。
-					'exclude' => __( 'Every page except the listed ones', 'moksa-for-woocommerce' ),
+					CustomerServiceModule::DISPLAY_ALL     => __( 'Every page', 'moksa-for-woocommerce' ),
+					CustomerServiceModule::DISPLAY_INCLUDE => __( 'Only the listed pages', 'moksa-for-woocommerce' ),
+					CustomerServiceModule::DISPLAY_EXCLUDE => __( 'Every page except the listed ones', 'moksa-for-woocommerce' ),
 				),
 			),
 			array(

@@ -130,27 +130,26 @@ final class AdminIssueForm {
 	/**
 	 * 後台手動開立欄位的格式 / 檢查碼驗證（更新 / 開立前都跑），回傳錯誤訊息或 null。
 	 * 用既有 Ubn::is_valid 與結帳同一套 regex，避免在 JS 重寫檢查碼演算法。
-	 * 呼叫端須已 check_ajax_referer。
+	 * $fields 由呼叫端在 check_ajax_referer 之後讀出並清理（見 AbstractAdminMetaBox::ajax_authenticate）。
 	 */
-	public static function validate(): ?string {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- nonce 已由呼叫端 ajax_save / ajax_issue 的 check_ajax_referer 驗證。
-		if ( ! isset( $_POST['inv_type'] ) ) {
+	public static function validate( array $fields ): ?string {
+		if ( ! isset( $fields['inv_type'] ) ) {
 			return null;
 		}
-		$type = sanitize_text_field( wp_unslash( $_POST['inv_type'] ) );
+		$type = sanitize_text_field( (string) $fields['inv_type'] );
 		if ( 'b2b' === $type ) {
-			$ubn = isset( $_POST['inv_ubn'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_ubn'] ) ) : '';
+			$ubn = isset( $fields['inv_ubn'] ) ? sanitize_text_field( (string) $fields['inv_ubn'] ) : '';
 			if ( ! Ubn::is_valid( $ubn ) ) {
 				return __( 'The tax ID format or check digit is not valid (it must be 8 digits with a valid check digit).', 'moksa-for-woocommerce' );
 			}
 		} elseif ( 'b2c_donate' === $type ) {
-			$code = isset( $_POST['inv_donate'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_donate'] ) ) : '';
+			$code = isset( $fields['inv_donate'] ) ? sanitize_text_field( (string) $fields['inv_donate'] ) : '';
 			if ( ! preg_match( '/^([xX]\d{2,6}|\d{3,7})$/', $code ) ) {
 				return __( 'Invalid love code (it must be 3 to 7 digits).', 'moksa-for-woocommerce' );
 			}
 		} elseif ( 'b2c_carrier' === $type ) {
-			$carrier = isset( $_POST['inv_carrier'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier'] ) ) : '';
-			$cnum    = isset( $_POST['inv_carrier_num'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier_num'] ) ) : '';
+			$carrier = isset( $fields['inv_carrier'] ) ? sanitize_text_field( (string) $fields['inv_carrier'] ) : '';
+			$cnum    = isset( $fields['inv_carrier_num'] ) ? sanitize_text_field( (string) $fields['inv_carrier_num'] ) : '';
 			if ( 'mobile' === $carrier && ! preg_match( '#^/[0-9A-Z+\-.]{7}$#', $cnum ) ) {
 				return __( 'Invalid mobile barcode (it must start with / followed by 7 characters from 0-9, A-Z, ., + and -).', 'moksa-for-woocommerce' );
 			}
@@ -158,33 +157,30 @@ final class AdminIssueForm {
 				return __( 'Invalid Citizen Digital Certificate (it must be 2 uppercase letters followed by 14 digits).', 'moksa-for-woocommerce' );
 			}
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		return null;
 	}
 
 	/**
 	 * 把後台手動表單挑的欄位寫回訂單 meta（受設定限制）。
-	 * 呼叫端（ajax_issue）須已 check_ajax_referer + 權限驗證。
+	 * 呼叫端（ajax_issue）須已 check_ajax_referer + 權限驗證，$fields 為驗證後讀出的欄位。
 	 */
-	public static function save( \WC_Order $order, string $option_prefix ): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- nonce 已由呼叫端 ajax_issue 的 check_ajax_referer 驗證。
-		if ( ! isset( $_POST['inv_type'] ) ) {
+	public static function save( \WC_Order $order, string $option_prefix, array $fields ): void {
+		if ( ! isset( $fields['inv_type'] ) ) {
 			return; // 舊版按鈕沒帶欄位 → 沿用結帳既有 meta，不動
 		}
 		$enabled_types    = InvoiceChannels::enabled_types( $option_prefix );
 		$enabled_carriers = InvoiceChannels::enabled_carriers( $option_prefix );
 
-		$type = sanitize_text_field( wp_unslash( $_POST['inv_type'] ) );
+		$type = sanitize_text_field( (string) $fields['inv_type'] );
 		if ( ! in_array( $type, $enabled_types, true ) ) {
 			$type = 'b2c_carrier'; // 被停用 / 非法 → 退回個人
 		}
 
-		$carrier = isset( $_POST['inv_carrier'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier'] ) ) : '';
-		$cnum    = isset( $_POST['inv_carrier_num'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_carrier_num'] ) ) : '';
-		$ubn     = isset( $_POST['inv_ubn'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_ubn'] ) ) : '';
-		$name    = isset( $_POST['inv_name'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_name'] ) ) : '';
-		$donate  = isset( $_POST['inv_donate'] ) ? sanitize_text_field( wp_unslash( $_POST['inv_donate'] ) ) : '';
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$carrier = isset( $fields['inv_carrier'] ) ? sanitize_text_field( (string) $fields['inv_carrier'] ) : '';
+		$cnum    = isset( $fields['inv_carrier_num'] ) ? sanitize_text_field( (string) $fields['inv_carrier_num'] ) : '';
+		$ubn     = isset( $fields['inv_ubn'] ) ? sanitize_text_field( (string) $fields['inv_ubn'] ) : '';
+		$name    = isset( $fields['inv_name'] ) ? sanitize_text_field( (string) $fields['inv_name'] ) : '';
+		$donate  = isset( $fields['inv_donate'] ) ? sanitize_text_field( (string) $fields['inv_donate'] ) : '';
 
 		$order->update_meta_data( Keys::INVOICE_TYPE, $type );
 

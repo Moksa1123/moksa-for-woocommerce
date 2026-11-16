@@ -175,7 +175,7 @@ final class ShippingCardSection {
 				}
 				$tracking_info = TrackingLink::for_payuni_record( $r );
 				if ( null !== $tracking_info ) {
-					echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
+					echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>';
 				}
 				echo '</div>';
 				echo '</details>';
@@ -227,7 +227,7 @@ final class ShippingCardSection {
 			]
 		);
 		if ( null !== $tracking_info ) {
-			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
+			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>';
 		}
 		return (string) ob_get_clean();
 	}
@@ -269,7 +269,7 @@ final class ShippingCardSection {
 				]
 			);
 			if ( null !== $tracking_info ) {
-				echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
+				echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>';
 			}
 		}
 		// 顯示是哪家超商；C2C／B2C 只當附註。
@@ -372,7 +372,7 @@ final class ShippingCardSection {
 			]
 		);
 		if ( null !== $tracking_info ) {
-			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above.
+			echo '<div style="margin-top:8px;">' . wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ) . '</div>';
 		}
 		if ( '' === $smseid && '' === $store_id ) {
 			echo '<p style="color:#646970;font-size:12px;margin-bottom:10px;">';

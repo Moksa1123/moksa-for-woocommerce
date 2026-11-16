@@ -157,9 +157,8 @@ final class Request {
 		$code = (int) wp_remote_retrieve_response_code( $resp );
 		$xml  = (string) wp_remote_retrieve_body( $resp );
 
-		$doc = new \DOMDocument();
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote XML; a parse failure returns false and is handled below.
-		$loaded = '' !== $xml && @$doc->loadXML( $xml, LIBXML_NONET );
+		$doc    = new \DOMDocument();
+		$loaded = \Moksafowo\Http\Decode::xml_dom( $doc, $xml );
 		if ( ! $loaded ) {
 			return [
 				'ok'      => false,

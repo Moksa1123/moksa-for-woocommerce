@@ -53,12 +53,11 @@ abstract class AbstractAdminActions {
 	}
 
 	public function find_unprinted_orders( ?string $kind = null, ?string $carrier = null ): array {
-		$orders = wc_get_orders(
+		$orders = \Moksafowo\Order\Lookup::orders(
 			[
-				'limit'      => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
-				'status'     => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Order meta lookup required for IPN/order resolution; HPOS table has meta_key index.
-				'meta_query' => [
+				'limit'                            => apply_filters( 'moksafowo_shipping_bulk_query_limit', 100 ),
+				'status'                           => apply_filters( 'moksafowo_shipping_bulk_query_statuses', [ 'processing', 'on-hold' ] ),
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
 					[
 						'key'     => $this->provider->meta_key_trade_no(),
 						'value'   => '',

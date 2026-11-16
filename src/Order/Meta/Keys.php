@@ -369,5 +369,24 @@ final class Keys {
 	// 取消後才收到付款而轉保留的訂單（之後同一張單的付款通知都不再自動入帳）.
 	public const PAID_AFTER_CANCEL = '_moksafowo_paid_after_cancel';
 
+	/**
+	 * 可以拿來再次扣款的卡片憑證。解除安裝時只清這些（使用者 2026-11-15 決定：交易紀錄保留、憑證清掉），
+	 * 外掛移除後它們已沒有用途，留著只是風險。新增會記住卡片的金流時要加進來。
+	 */
+	public const PAYMENT_CREDENTIALS = [
+		self::ECPAY_BIND_CARD_ID,
+		self::ECPAY_BIND_MEMBER_ID,
+		self::LINEPAY_REGKEY,
+		self::PAYUNI_CREDIT_TOKEN_ID,
+		self::PAYUNI_CREDIT_TOKEN_LIFE,
+		self::PCHOMEPAY_CARD_NO_TOKEN,
+		self::SLP_CUSTOMER_ID,
+		self::SLP_INSTRUMENT_ID,
+		self::TAPPAY_CARD_KEY,
+		self::TAPPAY_CARD_TOKEN,
+		self::TAPPAY_PENDING_CARD_KEY,
+		self::TAPPAY_PENDING_CARD_TOKEN,
+	];
+
 	private function __construct() {}
 }

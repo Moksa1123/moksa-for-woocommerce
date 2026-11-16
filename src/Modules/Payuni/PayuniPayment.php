@@ -211,15 +211,14 @@ class PayuniPayment {
 
 
 	public function moksafowo_payuni_ajax_query_payment() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- AJAX handler; wp_verify_nonce() called at method entry; nonce token raw read is intentional.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ), 403 );
 		}
-		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( wc_clean( wp_unslash( $_POST['security'] ) ), 'moksafowo-payuni-query' ) ) {
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'moksafowo-payuni-query' ) ) {
 			wp_send_json_error( array( 'message' => __( 'The security check failed. Please refresh the page and try again.', 'moksa-for-woocommerce' ) ), 403 );
 		}
 
-		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+		$order_id = isset( $_POST['order_id'] ) ? absint( wp_unslash( $_POST['order_id'] ) ) : 0;
 		$order    = $order_id ? wc_get_order( $order_id ) : false;
 
 		if ( ! $order ) {
@@ -280,8 +279,7 @@ class PayuniPayment {
 			return [];
 		}
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (EncryptInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
-		$blob = @hex2bin( $encrypt_str );
+		$blob = \Moksafowo\Http\Decode::hex( $encrypt_str );
 		if ( false === $blob ) {
 			return [];
 		}

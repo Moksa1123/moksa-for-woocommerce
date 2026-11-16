@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Newebpay\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,10 +15,8 @@ final class IpnHandler {
 		// Source authenticity verified via TradeSha (SHA256 + hash_equals, Helper::verify_trade_sha) on line ~28
 		// before any decryption or state change. TradeInfo is AES-encrypted hex; sanitize_text_field is idempotent on hex.
 		// Decoded payload is deep-sanitized via map_deep on line ~43 after decryption succeeds.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- gateway IPN; no WP nonce possible; source verified via TradeSha hash_equals before any use; decoded payload sanitized via map_deep after decryption.
-		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeInfo'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- same as above.
-		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
+		$trade_info = sanitize_text_field( Input::post( 'TradeInfo' ) );
+		$trade_sha  = sanitize_text_field( Input::post( 'TradeSha' ) );
 
 		if ( '' === $trade_info || '' === $trade_sha ) {
 			Helper::warn( 'IPN missing TradeInfo / TradeSha — rejected' );
@@ -219,10 +218,8 @@ final class IpnHandler {
 	public static function handle_customer(): void {
 		// Browser form post from NewebPay: no WP nonce possible. Authenticity verified via TradeSha (hash_equals)
 		// before decryption; the decoded payload is deep-sanitized right after.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above.
-		$trade_info = isset( $_POST['TradeInfo'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeInfo'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above.
-		$trade_sha = isset( $_POST['TradeSha'] ) ? sanitize_text_field( wp_unslash( $_POST['TradeSha'] ) ) : '';
+		$trade_info = sanitize_text_field( Input::post( 'TradeInfo' ) );
+		$trade_sha  = sanitize_text_field( Input::post( 'TradeSha' ) );
 
 		$decoded = ( '' !== $trade_info && Helper::verify_trade_sha( $trade_info, $trade_sha ) ) ? Helper::decrypt_trade_info( $trade_info ) : null;
 		if ( null === $decoded ) {

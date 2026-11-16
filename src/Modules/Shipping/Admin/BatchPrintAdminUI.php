@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\Shipping\Admin;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -188,8 +189,7 @@ final class BatchPrintAdminUI {
 		if ( 'woocommerce_page_wc-orders' !== $id ) {
 			return false;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
-		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
+		$action = sanitize_key( Input::get( 'action' ) );
 		return ! in_array( $action, [ 'edit', 'new' ], true );
 	}
 
@@ -297,7 +297,7 @@ final class BatchPrintAdminUI {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
-		$key      = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		$key      = sanitize_key( Input::post( 'provider' ) );
 		$provider = BatchPrintRegistry::get( $key );
 		if ( null === $provider ) {
 			wp_send_json_error( [ 'message' => __( 'That shipping module could not be found.', 'moksa-for-woocommerce' ) ], 404 );
@@ -389,7 +389,7 @@ final class BatchPrintAdminUI {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_send_json_error( [ 'message' => __( 'You do not have permission to do this.', 'moksa-for-woocommerce' ) ], 403 );
 		}
-		$key      = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		$key      = sanitize_key( Input::post( 'provider' ) );
 		$provider = BatchPrintRegistry::get( $key );
 		if ( null === $provider ) {
 			wp_send_json_error( [ 'message' => __( 'That shipping module could not be found.', 'moksa-for-woocommerce' ) ], 404 );
@@ -559,11 +559,11 @@ final class BatchPrintAdminUI {
 	}
 
 	public static function render_print_output(): void {
-		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
+		$token = sanitize_text_field( Input::get( 'token' ) );
 		if ( '' === $token ) {
 			wp_die( esc_html__( 'The print link has expired. Please try again.', 'moksa-for-woocommerce' ), 403 );
 		}
-		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce = sanitize_text_field( Input::get( '_wpnonce' ) );
 		if ( ! wp_verify_nonce( $nonce, 'moksafowo_bp_print_' . $token ) ) {
 			wp_die( esc_html__( 'The print link has expired. Please try again.', 'moksa-for-woocommerce' ), 403 );
 		}

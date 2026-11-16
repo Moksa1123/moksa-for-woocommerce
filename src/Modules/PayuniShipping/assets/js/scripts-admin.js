@@ -1,6 +1,19 @@
 (function( $ ) {
 	'use strict';
 
+	// 介面文字由 PHP 翻好傳進來（EnqueueScripts::admin 的 translations）；%s／%1$s／%2$s 依序代入。
+	function t( key, a, b ) {
+		var all = ( window.moksafowo_payuni_shipping && moksafowo_payuni_shipping.translations ) || {};
+		var s   = all[ key ] || key;
+		if ( undefined !== a ) {
+			s = s.replace( '%1$s', a ).replace( '%s', a );
+		}
+		if ( undefined !== b ) {
+			s = s.replace( '%2$s', b );
+		}
+		return s;
+	}
+
 	// 超商訂單隱藏街道地址欄的邏輯已移到共用層（Shipping/assets/js/admin-cvs-store.js），
 	// 四家物流一致，不再綁 PAYUNi 專屬的欄位 id。
 
@@ -117,7 +130,7 @@
 					// Show error message
 					var error_msg = data.result || 'Unknown error';
 					setTimeout(function() {
-						$('.package-spec-loading').html('<span style="color: #dc3232;" title="' + error_msg + '">' + moksafowo_payuni_shipping.translations.update_failed + '</span>');
+						$('.package-spec-loading').empty().append( $( '<span style="color: #dc3232;"></span>' ).attr( 'title', error_msg ).text( moksafowo_payuni_shipping.translations.update_failed ) );
 						setTimeout(function() {
 							$('.package-spec-loading').fadeOut(300, function() {
 								$(this).remove();
@@ -175,14 +188,14 @@
 			// Determine ship type name based on the value
 			var shipTypeName;
 			if (currentShipType == '2' || currentShipType == 'TCAT') {
-				shipTypeName = '黑貓宅配';
+				shipTypeName = t( 'ship_tcat' );
 			} else if (currentShipType == '1' || currentShipType == 'SEVEN') {
-				shipTypeName = '7-ELEVEN 超商';
+				shipTypeName = t( 'ship_711' );
 			} else {
 				// Fallback - if the value is unexpected
 				shipTypeName = currentShipType;
 			}
-			$modal.find('.moksafowo-payuni-modal-title').text('批次列印 ' + shipTypeName + ' 標籤');
+			$modal.find('.moksafowo-payuni-modal-title').text( t( 'batch_title', shipTypeName ) );
 			
 			// Reset modal state
 			$modal.find('.moksafowo-payuni-orders-loading').show();
@@ -219,7 +232,7 @@
 							filteredOrdersData = data.orders;
 							
 							// Update description
-							var description = data.ship_type_name + ' 訂單（最多顯示 50 筆）';
+							var description = t( 'list_desc', data.ship_type_name );
 							$modal.find('.moksafowo-payuni-orders-info .description').text(description);
 							
 							// Show filters for TCat orders only
@@ -241,22 +254,22 @@
 								// TCat orders - include package spec column
 								headerRow = '<tr>' +
 									'<th style="width: 40px;"><input type="checkbox" class="moksafowo-payuni-select-all" /></th>' +
-									'<th>訂單編號</th>' +
-									'<th>收件人</th>' +
-									'<th>運送方式</th>' +
-									'<th>狀態</th>' +
-									'<th>包裹規格</th>' +
-									'<th>物流查詢編號</th>' +
+									'<th>' + t( 'col_order' ) + '</th>' +
+									'<th>' + t( 'col_recipient' ) + '</th>' +
+									'<th>' + t( 'col_method' ) + '</th>' +
+									'<th>' + t( 'col_status' ) + '</th>' +
+									'<th>' + t( 'col_spec' ) + '</th>' +
+									'<th>' + t( 'col_tracking' ) + '</th>' +
 									'</tr>';
 							} else {
 								// CVS orders - no package spec column
 								headerRow = '<tr>' +
 									'<th style="width: 40px;"><input type="checkbox" class="moksafowo-payuni-select-all" /></th>' +
-									'<th>訂單編號</th>' +
-									'<th>收件人</th>' +
-									'<th>運送方式</th>' +
-									'<th>狀態</th>' +
-									'<th>物流查詢編號</th>' +
+									'<th>' + t( 'col_order' ) + '</th>' +
+									'<th>' + t( 'col_recipient' ) + '</th>' +
+									'<th>' + t( 'col_method' ) + '</th>' +
+									'<th>' + t( 'col_status' ) + '</th>' +
+									'<th>' + t( 'col_tracking' ) + '</th>' +
 									'</tr>';
 							}
 							thead.append(headerRow);
@@ -277,7 +290,7 @@
 								$modal.find('.moksafowo-payuni-orders-list').show();
 						} else {
 								// Show empty message when no printable orders are available
-								var emptyMsg = '沒有可列印的 ' + (data.ship_type_name || '') + ' 訂單';
+								var emptyMsg = t( 'none_to_print', data.ship_type_name || '' );
 								$modal.find('.moksafowo-payuni-orders-info .description').text(emptyMsg);
 								$modal.find('.moksafowo-payuni-orders-list').show();
 								$modal.find('.moksafowo-payuni-no-orders').show();
@@ -290,7 +303,7 @@
 					}
 				},
 				error: function() {
-					alert('載入訂單失敗，請稍後再試');
+					alert( t( 'load_failed' ) );
 					$modal.fadeOut();
 				}
 			});
@@ -485,7 +498,7 @@
 			tbody.empty();
 			
 			if (filteredOrdersData.length === 0) {
-				tbody.append('<tr><td colspan="7" style="text-align: center; padding: 20px;">沒有符合過濾條件的訂單</td></tr>');
+				tbody.append('<tr><td colspan="7" style="text-align: center; padding: 20px;">' + t( 'none_match' ) + '</td></tr>');
 				return;
 			}
 			
@@ -548,7 +561,7 @@
 			
 			// Clear and rebuild options
 			$specSelect.empty();
-			$specSelect.append('<option value="">全部</option>');
+			$specSelect.append( $( '<option value=""></option>' ).text( t( 'all' ) ) );
 			$specSelect.append('<option value="1">60cm</option>');
 			$specSelect.append('<option value="2">90cm</option>');
 			$specSelect.append('<option value="3">120cm</option>');
@@ -588,7 +601,7 @@
 				$modal.find('.moksafowo-payuni-clear-filter').show();
 				
 				// Show filtered count
-				var message = '已過濾：顯示 ' + filteredOrdersData.length + ' / ' + allOrdersData.length + ' 筆訂單';
+				var message = t( 'filtered', filteredOrdersData.length, allOrdersData.length );
 				$modal.find('.moksafowo-payuni-filter-message').text(message).show();
 			} else {
 				$modal.find('.moksafowo-payuni-clear-filter').hide();
@@ -649,7 +662,7 @@
 					}
 					
 					if (inconsistentOrders.length > 0) {
-						alert('批次列印黑貓宅配標籤時，所有訂單必須有相同的溫層和包裹規格。\n請使用過濾功能或重新選擇訂單。');
+						alert( t( 'tcat_same_spec' ) );
 						
 						// Re-enable button
 						$button.prop('disabled', false);
@@ -661,7 +674,7 @@
 			
 			// Disable button and show loading
 			$button.prop('disabled', true);
-			$button.html('<span class="spinner is-active" style="float: none; margin-top: 0; margin-right: 5px;"></span> 處理中...');
+			$button.html('<span class="spinner is-active" style="float: none; margin-top: 0; margin-right: 5px;"></span> ' + t( 'processing' ) );
 			
 			// Make AJAX request for batch print
 			$.ajax({
@@ -688,8 +701,8 @@
 							
 							// Show success message
 							var message = data.error_count > 0 
-								? '成功處理 ' + data.valid_count + ' 筆訂單，' + data.error_count + ' 筆失敗'
-								: '成功處理 ' + data.valid_count + ' 筆訂單';
+								? t( 'done_with_errors', data.valid_count, data.error_count )
+								: t( 'done', data.valid_count );
 							
 							// Create notice
 							var noticeHtml = '<div class="notice notice-success is-dismissible" style="margin-top: 20px;"><p>' + message + '</p></div>';
@@ -701,15 +714,15 @@
 							}, 5000);
 						} else {
 							// Popup was blocked
-							alert('瀏覽器阻擋了彈出視窗，請允許彈出視窗或點擊下方連結手動開啟：\n' + data.print_url);
+							alert( t( 'popup_blocked', data.print_url ) );
 							window.location.href = data.print_url;
 						}
 					} else {
-						alert('列印失敗：' + response.data);
+						alert( t( 'print_failed', response.data ) );
 					}
 				},
 				error: function() {
-					alert('發生錯誤，請稍後再試');
+					alert( t( 'generic_error' ) );
 				},
 				complete: function() {
 					$button.prop('disabled', false).html(originalText);

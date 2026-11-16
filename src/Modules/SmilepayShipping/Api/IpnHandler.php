@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace Moksafowo\Modules\SmilepayShipping\Api;
 
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,8 +14,7 @@ final class IpnHandler {
 		// SmilePay shipping IPN: no WP nonce possible (external server cannot send one).
 		// Source authenticity verified via Verify_key (hash_equals on line ~25) before any order state change.
 		// All string fields sanitized at extraction after BIG5→UTF-8 conversion.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- SmilePay shipping IPN; no WP nonce possible; per-order callback key (mfk) hash_equals and Smseid match verified before any state change; all fields sanitized at extraction.
-		$payload = wp_unslash( $_REQUEST );
+		$payload = array_merge( Input::all_get(), Input::all_post() );
 
 		// SmilePay 回傳 BIG5 編碼，強制轉 UTF-8
 		foreach ( $payload as $k => $v ) {

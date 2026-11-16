@@ -152,7 +152,7 @@ final class CreditBind extends AbstractMowcGateway {
 		$order->save();
 
 		// SDK 必須在 #ECPayPayment 之後載入（35554），所以放 footer。
-		wp_enqueue_script( 'moksafowo-ecpay-bind-sdk', Ecpg::sdk_url(), [ 'jquery' ], null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- 綠界官方 SDK，版本在路徑上。
+		wp_enqueue_script( 'moksafowo-ecpay-bind-sdk', Ecpg::sdk_url(), [ 'jquery' ], MOKSAFOWO_VERSION, true );
 		// 綠界 SDK 直接呼叫全域 $.ajax，WordPress 的 jQuery 是 noConflict 模式沒有 $；只在這個付款頁補上。
 		wp_add_inline_script( 'moksafowo-ecpay-bind-sdk', 'window.$ = window.$ || window.jQuery;', 'before' );
 		$path = MOKSAFOWO_PLUGIN_DIR . 'assets/public/moksafowo-ecpay-bind.js';

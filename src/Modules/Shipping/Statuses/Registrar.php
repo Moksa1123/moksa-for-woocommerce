@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace Moksafowo\Modules\Shipping\Statuses;
 
+use Moksafowo\Http\Input;
+
 defined( 'ABSPATH' ) || exit;
 
 final class Registrar {
@@ -94,8 +96,7 @@ final class Registrar {
 		if ( 'woocommerce_page_wc-settings' !== $hook ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only 畫面判斷，無狀態變更。
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		$tab = sanitize_key( Input::get( 'tab' ) );
 		if ( \Moksafowo\Settings\SettingsTab::TAB_ID !== $tab ) {
 			return;
 		}

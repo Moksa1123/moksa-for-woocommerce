@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\EcpayShipping\Frontend;
 use Moksafowo\Modules\EcpayShipping\Api\Helper;
 use Moksafowo\Modules\EcpayShipping\Module;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\Input;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -113,7 +114,7 @@ final class StoreSelector {
 	public static function ajax_open_map(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 
-		$method_id = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : '';
+		$method_id = sanitize_text_field( Input::post( 'shipping_method' ) );
 		if ( str_contains( $method_id, ':' ) ) { // 剝掉 :instance_id
 			$method_id = strstr( $method_id, ':', true );
 		}
@@ -133,7 +134,7 @@ final class StoreSelector {
 		$pending_id = self::pending_id();
 		$mtn        = Helper::generate_merchant_trade_no( $pending_id );
 
-		$referrer = isset( $_POST['referrer'] ) ? esc_url_raw( wp_unslash( $_POST['referrer'] ) ) : '';
+		$referrer = esc_url_raw( Input::post( 'referrer' ) );
 		// 選店回呼沒有簽章，只靠這次開地圖的一次性值辨識：MerchantTradeNo 只有 24 位元亂數，
 		// 另帶一組 ExtraData（綠界原樣回傳）讓回呼猜不到。
 		$extra = wp_generate_password( 20, false );
@@ -153,7 +154,7 @@ final class StoreSelector {
 			WC()->session->set( self::SESSION_PENDING_KEY, $mtn );
 		}
 
-		$payment       = isset( $_POST['payment_method'] ) ? sanitize_key( wp_unslash( $_POST['payment_method'] ) ) : '';
+		$payment       = sanitize_key( Input::post( 'payment_method' ) );
 		$is_collection = self::is_cod_enabled( $payment );
 		// MerchantID 必須對應 subtype 的憑證組：B2C 方式配 C2C 商號會讓 ECPay 退「找不到加密金鑰」
 		$subtype                  = $method->logistics_sub_type();
@@ -233,8 +234,7 @@ final class StoreSelector {
 		// Anti-tamper guard: MerchantTradeNo must match a transient set when the map was legitimately opened
 		// (STATE_PREFIX . $mtn transient, line ~180). Unknown MTN → 403 before any session write.
 		// All fields sanitized via wc_clean + wp_unslash at capture; only session/transient written (no order state mutation).
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- ECPay store-map callback; no WP nonce possible; source verified via MTN transient anti-tamper before any use; session-only write, no state mutation; all fields sanitized via wc_clean.
-		$posted = isset( $_POST ) ? wc_clean( wp_unslash( $_POST ) ) : array();
+		$posted = wc_clean( Input::all_post() );
 
 		// 確認是本站開過的地圖之前只記欄位名稱：任何人都能打這個網址。
 		Helper::log( 'shipping map callback', [ 'fields' => array_map( 'sanitize_key', array_keys( (array) $posted ) ) ] );
@@ -303,8 +303,7 @@ final class StoreSelector {
 		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- 一次性 token 本身即憑證，僅寫入請求者自己的 session。
-		$token = isset( $_GET[ self::TOKEN_QUERY ] ) ? sanitize_text_field( wp_unslash( $_GET[ self::TOKEN_QUERY ] ) ) : '';
+		$token = sanitize_text_field( Input::get( self::TOKEN_QUERY ) );
 		if ( '' === $token ) {
 			return;
 		}
@@ -330,7 +329,7 @@ final class StoreSelector {
 
 	public static function ajax_resolve_token(): void {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-		$token = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+		$token = sanitize_text_field( Input::post( 'token' ) );
 		if ( '' === $token ) {
 			wp_send_json_error( [ 'message' => 'missing token' ] );
 		}

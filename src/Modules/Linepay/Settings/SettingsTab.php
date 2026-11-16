@@ -34,7 +34,6 @@ class SettingsTab extends WC_Settings_Page {
 	public function get_settings( $current_section = '' ) {
 
 		$settings = apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- moksafowo_linepay_ is wpbrewer fork BC prefix per CLAUDE.md fork-then-patch.
 			'moksafowo_linepay_payment_settings',
 			array(
 				array(

@@ -6,6 +6,7 @@ namespace Moksafowo\Modules\Tappay\Gateways;
 use Moksafowo\Modules\Tappay\Api\Client;
 use Moksafowo\Modules\Tappay\Api\Helper;
 use Moksafowo\Order\Meta\Keys;
+use Moksafowo\Http\CheckoutInput;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -100,9 +101,7 @@ abstract class AbstractWalletGateway extends \WC_Payment_Gateway {
 			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
 		}
 
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WC checkout 在上游已驗 nonce；此處僅讀前端取得的一次性 prime
-		$prime = isset( $_POST['moksafowo_tappay_prime'] ) ? sanitize_text_field( wp_unslash( $_POST['moksafowo_tappay_prime'] ) ) : '';
-		// phpcs:enable
+		$prime = CheckoutInput::post( 'moksafowo_tappay_prime' );
 
 		if ( '' === $prime ) {
 			wc_add_notice(

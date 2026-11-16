@@ -33,11 +33,13 @@
     "scripts": {
         "lint": [
             "phpcs",
-            "bash scripts/check-meta-keys.sh"
+            "bash scripts/check-meta-keys.sh",
+            "@php scripts/check-class-refs.php"
         ],
         "lint:fix": "phpcbf",
         "test": "phpunit",
-        "check:meta-keys": "bash scripts/check-meta-keys.sh"
+        "check:meta-keys": "bash scripts/check-meta-keys.sh",
+        "check:class-refs": "@php scripts/check-class-refs.php"
     },
     "config": {
         "allow-plugins": {

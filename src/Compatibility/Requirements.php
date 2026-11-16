@@ -67,8 +67,9 @@ final class Requirements {
 		if ( class_exists( \WooCommerce::class ) ) {
 			return true;
 		}
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WP core filter name; reading actual active-plugins list to check if WooCommerce is active.
-		$active = (array) apply_filters( 'active_plugins', get_option( 'active_plugins', [] ) );
-		return in_array( 'woocommerce/woocommerce.php', $active, true );
+		if ( in_array( 'woocommerce/woocommerce.php', (array) get_option( 'active_plugins', [] ), true ) ) {
+			return true;
+		}
+		return is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', (array) get_site_option( 'active_sitewide_plugins', [] ) );
 	}
 }

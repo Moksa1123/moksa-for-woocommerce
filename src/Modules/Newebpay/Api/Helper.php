@@ -171,8 +171,7 @@ final class Helper extends AbstractCredentialHelper {
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return null;
 		}
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- remote hex (TradeInfo) — malformed input returns false, validated below; @ suppresses the warning so the hex2bin return value can be validated explicitly.
-		$bin = @hex2bin( $hex );
+		$bin = \Moksafowo\Http\Decode::hex( $hex );
 		if ( false === $bin ) {
 			return null;
 		}

@@ -138,9 +138,9 @@ final class StatusReconciler {
 					'compare' => 'EXISTS',
 				];
 			}
-			$query['meta_query'] = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- hourly cron, bounded by POOL.
+			$query[ \Moksafowo\Order\Lookup::QUERY_VAR ] = $meta_query;
 		}
-		$ids = wc_get_orders( $query );
+		$ids = \Moksafowo\Order\Lookup::orders( $query );
 		if ( empty( $ids ) ) {
 			return;
 		}

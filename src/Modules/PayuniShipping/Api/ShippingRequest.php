@@ -62,7 +62,6 @@ class ShippingRequest {
 	}
 
 	public static function moksafowo_payuni_create_shipping( $order = 0 ) {
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		if ( is_numeric( $order ) ) {
 			$order = wc_get_order( $order );
@@ -152,14 +151,12 @@ class ShippingRequest {
 			/* translators: %s: PAYUNi ship trade number */
 			$order->add_order_note( sprintf( __( 'PAYUNi shipment created, tracking number %s', 'moksa-for-woocommerce' ), $resp_info['ShipTradeNo'] ) );
 
-			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		} catch ( \Exception $e ) {
 			PayuniShipping::log( __( 'PAYUNi could not create the shipment:', 'moksa-for-woocommerce' ) . ' ' . $e->getMessage(), 'error' );
 		}
 	}
 
 	public static function moksafowo_payuni_ajax_query_delivery_status() {
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce
 		// only, allowing any logged-in user to query other people's orders.
@@ -244,7 +241,6 @@ class ShippingRequest {
 	}
 
 	public static function moksafowo_payuni_ajax_update_package_spec() {
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 
 		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce only.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
@@ -266,7 +262,7 @@ class ShippingRequest {
 		}
 
 		$order_id     = absint( wp_unslash( $_POST['order_id'] ) );
-		$package_spec = wc_clean( wp_unslash( $_POST['package_spec'] ) );
+		$package_spec = map_deep( wp_unslash( $_POST['package_spec'] ), 'sanitize_text_field' );
 		$order        = wc_get_order( $order_id );
 
 		if ( ! $order ) {
@@ -310,7 +306,6 @@ class ShippingRequest {
 	}
 
 	public static function moksafowo_payuni_print_label() {
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
 		// SECURITY: capability + nonce ALWAYS required. wpbr-payuni-shipping
 		// only checked the nonce when `security` was present in the URL, which
 		// meant an attacker could omit it and bypass verification entirely.
@@ -325,8 +320,8 @@ class ShippingRequest {
 			wp_die();
 		}
 
-		$order_ids = wc_clean( wp_unslash( $_GET['orderids'] ) );
-		$service   = wc_clean( wp_unslash( $_GET['service'] ) );
+		$order_ids = map_deep( wp_unslash( $_GET['orderids'] ), 'sanitize_text_field' );
+		$service   = map_deep( wp_unslash( $_GET['service'] ), 'sanitize_text_field' );
 
 		$api_url = '';
 		if ( ShipType::SEVEN === $service ) {
@@ -472,12 +467,9 @@ class ShippingRequest {
 			wp_die();
 
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	public static function moksafowo_payuni_download_label() {
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Gateway callback; values pass through hash verification before use.
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( esc_html__( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
@@ -491,8 +483,8 @@ class ShippingRequest {
 			wp_die();
 		}
 
-		$order_ids_param = wc_clean( wp_unslash( $_GET['orderids'] ) );
-		$service         = wc_clean( wp_unslash( $_GET['service'] ) );
+		$order_ids_param = map_deep( wp_unslash( $_GET['orderids'] ), 'sanitize_text_field' );
+		$service         = map_deep( wp_unslash( $_GET['service'] ), 'sanitize_text_field' );
 
 		if ( ShipType::TCAT !== $service ) {
 			esc_html_e( 'Unsupported Ship Type', 'moksa-for-woocommerce' );
@@ -659,7 +651,6 @@ class ShippingRequest {
 	}
 
 	public static function update_order_logistic_meta( $order, $resp_obj ) {
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		$order->update_meta_data( OrderMeta::ShipTradeNo, $resp_obj['ShipTradeNo'] );
 
@@ -705,7 +696,6 @@ class ShippingRequest {
 		ShippingResponse::store_numbers( $order, (array) $resp_obj );
 
 		$order->save();
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 	}
 
 	public static function moksafowo_payuni_get_api_order_address( $order ) {

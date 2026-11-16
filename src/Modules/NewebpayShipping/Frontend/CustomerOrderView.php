@@ -103,7 +103,7 @@ final class CustomerOrderView {
 						<span class="moksafowo-shipping-card__value" style="display:flex;flex-direction:column;gap:6px;">
 							<span class="moksafowo-shipping-card__code"><?php echo esc_html( $lgs_no ); ?></span>
 							<?php if ( null !== $tracking_info ) : ?>
-								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses-filtered above. ?>
+								<?php echo wp_kses( TrackingLink::render_button_html( $tracking_info ), TrackingLink::kses_allowlist() ); ?>
 							<?php endif; ?>
 						</span>
 					</div>

@@ -7,124 +7,70 @@ namespace Moksafowo\Modules\CustomerService;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 客服對話 / 訊息存取層(自有表)。
+ * 客服對話 / 訊息存取層。依儲存模式（Storage）轉給 CPT 實作或舊自有表實作，
+ * 呼叫端不用管資料存在哪裡；回傳的陣列形狀兩邊相同。
  */
 final class Threads {
 
-	/**
-	 * 取該訂單進行中（待回覆或已回覆）的對話,沒有就開一個。回傳 thread id。
-	 * 店員回覆後狀態是 answered；只找 open 的話顧客看不到回覆、再留言又會開新對話。
-	 */
 	public static function open_or_get( int $order_id, string $customer_ref ): int {
-		global $wpdb;
-		$t = Schema::threads_table();
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		$id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status IN ('open', 'answered') ORDER BY id DESC LIMIT 1", $t, $order_id ) );
-		if ( $id > 0 ) {
-			return $id;
-		}
-		$now = current_time( 'mysql' );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表插入。
-		$wpdb->insert(
-			$t,
-			array(
-				'order_id'     => $order_id,
-				'customer_ref' => $customer_ref,
-				'status'       => 'open',
-				'unread_staff' => 0,
-				'created_at'   => $now,
-				'updated_at'   => $now,
-			),
-			array( '%d', '%s', '%s', '%d', '%s', '%s' )
-		);
-		return (int) $wpdb->insert_id;
+		return Storage::uses_cpt() ? ThreadPosts::open_or_get( $order_id, $customer_ref ) : LegacyThreads::open_or_get( $order_id, $customer_ref );
 	}
 
 	public static function add_message( int $thread_id, string $sender, string $body ): int {
-		global $wpdb;
-		$now = current_time( 'mysql' );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表插入。
-		$wpdb->insert(
-			Schema::messages_table(),
-			array(
-				'thread_id'  => $thread_id,
-				'sender'     => $sender,
-				'body'       => $body,
-				'created_at' => $now,
-			),
-			array( '%d', '%s', '%s', '%s' )
-		);
-		$mid = (int) $wpdb->insert_id;
-
-		// 最後一則是顧客寫的就待回覆；店員或 AI 回了就是已回覆（結案的對話顧客再寫也會重新打開）。
-		$data = array(
-			'updated_at' => $now,
-			'status'     => 'customer' === $sender ? 'open' : 'answered',
-		);
-		if ( 'customer' === $sender ) {
-			$data['unread_staff'] = 1;
-		}
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表更新。
-		$wpdb->update( Schema::threads_table(), $data, array( 'id' => $thread_id ) );
-		return $mid;
+		return Storage::uses_cpt() ? ThreadPosts::add_message( $thread_id, $sender, $body ) : LegacyThreads::add_message( $thread_id, $sender, $body );
 	}
 
 	public static function set_status( int $thread_id, string $status ): void {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表更新。
-		$wpdb->update( Schema::threads_table(), array( 'status' => $status ), array( 'id' => $thread_id ) );
+		if ( Storage::uses_cpt() ) {
+			$row = ThreadPosts::get_thread( $thread_id );
+			if ( null !== $row ) {
+				ThreadPosts::set_status( (int) $row['id'], $status );
+			}
+			return;
+		}
+		LegacyThreads::set_status( $thread_id, $status );
 	}
 
 	/**
 	 * @return array<int, array<string,mixed>>
 	 */
 	public static function get_messages( int $thread_id ): array {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT id, sender, body, created_at FROM %i WHERE thread_id = %d ORDER BY id ASC', Schema::messages_table(), $thread_id ), ARRAY_A );
-		return is_array( $rows ) ? $rows : array();
+		if ( Storage::uses_cpt() ) {
+			$row = ThreadPosts::get_thread( $thread_id );
+			return null !== $row ? ThreadPosts::get_messages( (int) $row['id'] ) : array();
+		}
+		return LegacyThreads::get_messages( $thread_id );
 	}
 
 	/**
 	 * @return array<string,mixed>|null
 	 */
 	public static function get_thread( int $id ): ?array {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', Schema::threads_table(), $id ), ARRAY_A );
-		return is_array( $row ) ? $row : null;
+		return Storage::uses_cpt() ? ThreadPosts::get_thread( $id ) : LegacyThreads::get_thread( $id );
 	}
 
-	/**
-	 * 取訂單進行中的對話 id(顧客端 poll 用,不新建)。
-	 */
 	public static function thread_id_for_order( int $order_id ): int {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE order_id = %d AND status IN ('open', 'answered') ORDER BY id DESC LIMIT 1", Schema::threads_table(), $order_id ) );
+		return Storage::uses_cpt() ? ThreadPosts::thread_id_for_order( $order_id ) : LegacyThreads::thread_id_for_order( $order_id );
 	}
 
 	/**
-	 * 後台:近期對話清單。
-	 *
 	 * @return array<int, array<string,mixed>>
 	 */
 	public static function list_threads( int $limit = 50 ): array {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY updated_at DESC LIMIT %d', Schema::threads_table(), max( 1, $limit ) ), ARRAY_A );
-		return is_array( $rows ) ? $rows : array();
+		return Storage::uses_cpt() ? ThreadPosts::list_threads( $limit ) : LegacyThreads::list_threads( $limit );
 	}
 
 	public static function count_unread(): int {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表查詢。
-		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE unread_staff = 1', Schema::threads_table() ) );
+		return Storage::uses_cpt() ? ThreadPosts::count_unread() : LegacyThreads::count_unread();
 	}
 
 	public static function mark_staff_read( int $id ): void {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- 自有表更新。
-		$wpdb->update( Schema::threads_table(), array( 'unread_staff' => 0 ), array( 'id' => $id ) );
+		if ( Storage::uses_cpt() ) {
+			ThreadPosts::mark_staff_read( $id );
+			return;
+		}
+		LegacyThreads::mark_staff_read( $id );
 	}
+
+	private function __construct() {}
 }

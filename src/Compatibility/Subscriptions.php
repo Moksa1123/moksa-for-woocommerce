@@ -178,14 +178,13 @@ final class Subscriptions {
 		if ( ! self::active() || '' === $value ) {
 			return false;
 		}
-		$ids = wc_get_orders(
+		$ids = \Moksafowo\Order\Lookup::orders(
 			[
-				'type'       => 'shop_subscription',
-				'status'     => [ 'wc-active', 'wc-on-hold', 'wc-pending', 'wc-pending-cancel' ],
-				'limit'      => 5,
-				'return'     => 'ids',
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- 撤銷前的一次性查詢；HPOS meta 表有 meta_key 索引。
-				'meta_query' => [
+				'type'                             => 'shop_subscription',
+				'status'                           => [ 'wc-active', 'wc-on-hold', 'wc-pending', 'wc-pending-cancel' ],
+				'limit'                            => 5,
+				'return'                           => 'ids',
+				\Moksafowo\Order\Lookup::QUERY_VAR => [
 					[
 						'key'   => $meta_key,
 						'value' => $value,

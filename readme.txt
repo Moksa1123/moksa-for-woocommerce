@@ -4,12 +4,12 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.21.3
+Stable tag: 1.22.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
 WC requires at least: 9.9
-WC tested up to: 11.1
+WC tested up to: 11.3
 
 A Taiwan e-commerce toolkit for WooCommerce. Bundles Taiwanese payment, shipping and e-invoice integrations.
 
@@ -21,11 +21,11 @@ Enable only the providers you need from a single settings page — payment, ship
 
 HPOS-native, Block Checkout-native, PHP 8.2+ strict-typed, GPLv3, no premium gating.
 
-= Moksa AI assistant (new in 1.3.0) =
+= Moksa AI assistant =
 
-Built on the WordPress 7.0 AI Client, Moksa AI is an optional in-admin chat assistant that lets you run common store tasks in natural language: find orders by invoice / shipping / payment number, look up order details and counts, change order status (single or batch), add order notes, issue / void / allowance e-invoices, create and print shipping labels, and enable or disable modules, individual payment methods and invoice issuing methods. Every action that changes data first shows a summary and waits for your explicit confirmation before it runs. The assistant uses whichever AI provider you connect under Settings → Connectors — the plugin never handles your AI keys, refunds, or credentials.
+Built on the WordPress 7.0 AI Client, Moksa AI is an optional in-admin chat assistant that lets you run common store tasks in natural language: find orders by invoice / shipping / payment number, look up order details and counts, change order status (single or batch), add order notes, issue / void / allowance e-invoices, create and print shipping labels, and enable or disable modules, individual payment methods and invoice issuing methods. For shipping methods it finds the right one and gives you the link to switch it on or off. Every action that changes data first shows a summary and waits for your explicit confirmation before it runs. The assistant uses whichever AI provider you connect under Settings → Connectors — the plugin never handles your AI keys, refunds, or credentials.
 
-= WooCommerce Subscriptions (new in 1.18.0) =
+= WooCommerce Subscriptions =
 
 With [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/) installed, six payment methods can charge renewals automatically. Renewals need no extra setup once the method below is ready; what each one needs first:
 
@@ -38,7 +38,7 @@ With [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-su
 
 Customers need an account to subscribe. Payment results reach your store at /wc-api/ addresses, so make sure a firewall or security plugin does not block them.
 
-= WPSubscription (new in 1.19.0) =
+= WPSubscription =
 
 With [WPSubscription](https://wordpress.org/plugins/subscription/) installed, PAYUNi credit card and NewebPay recurring payments can charge its renewals too, using the same settings as above. NewebPay recurring payments work for one subscription per order with no free trial, sign-up fee or shipping fee. A paid renewal reactivates the subscription straight away, so you can keep the order in Processing until it ships.
 
@@ -103,7 +103,7 @@ When an administrator actively uses the in-admin Moksa AI assistant, the typed q
 
 = MCP server (optional, off by default) =
 
-This plugin can optionally expose a standards-compliant, stateless MCP (Model Context Protocol) endpoint on **your own site** at `/wp-json/moksa-for-woocommerce/v1/mcp`, so a standard MCP client you control (for example mcp-remote or Claude) can look up orders and reports through the WordPress REST API. This is **not a Moksa service and is not a phone-home**: nothing is sent to Moksa, the endpoint only runs on your server and only exposes the plugin's own WordPress Abilities. It is **off by default** and must be turned on under WooCommerce → Moksa AI → Settings. Access requires authentication with a WordPress Application Password for a user that has the "edit orders" capability (use a dedicated, limited account). By default only read-only tools are exposed; order-changing tools stay hidden unless you also enable the separate "allow external AI to make changes" option, and every request is permission-checked on your server.
+This plugin can optionally expose a standards-compliant, stateless MCP (Model Context Protocol) endpoint on **your own site** at `/wp-json/moksa-for-woocommerce/v1/mcp`, so a standard MCP client you control (for example mcp-remote or Claude) can look up orders and reports through the WordPress REST API. This is **not a Moksa service and is not a phone-home**: nothing is sent to Moksa, the endpoint only runs on your server and only exposes the plugin's own WordPress Abilities. It is **off by default** and must be turned on under WooCommerce → Moksa AI → Settings. Access requires authentication with a WordPress Application Password for a user that has the "edit orders" capability (use a dedicated, limited account). By default only read-only tools are exposed. Turning on the separate "Allow external AI to make changes (MCP)" option also lists order-changing tools, but over MCP they only preview the change and never apply it; changes are made only in the WordPress admin, through Moksa AI, after you confirm. Every request is permission-checked on your server.
 
 == Installation ==
 
@@ -123,11 +123,11 @@ This plugin can optionally expose a standards-compliant, stateless MCP (Model Co
 
 = Does it work with the Block-based Checkout? =
 
-Yes. Every payment method ships an `AbstractPaymentMethodType` + React component, and the convenience-store picker / invoice fields render inside the Checkout block.
+Yes. All payment methods, the convenience-store picker and the e-invoice fields work in the Checkout block as well as in the classic checkout.
 
 = Is it HPOS-compatible? =
 
-Yes. All order meta uses `$order->update_meta_data()` / `$order->save()`, never `update_post_meta()`.
+Yes. It works with both High-Performance Order Storage (HPOS) and the older posts-based order storage, and reads and writes order data only through the WooCommerce order API.
 
 = Does it work with WooCommerce Subscriptions? =
 
@@ -147,9 +147,17 @@ It is an optional in-admin chat assistant for managing orders, e-invoices, shipp
 
 = Can external AI tools connect to my store over MCP? =
 
-Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI → Settings → "Enable external MCP server"**. The plugin then serves a standards-compliant, stateless MCP (Model Context Protocol) endpoint at `/wp-json/moksa-for-woocommerce/v1/mcp` that any standard MCP client (for example mcp-remote or Claude) can connect to directly — no bridge required.
+Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI → Settings → "Enable the MCP server"**. The plugin then serves a standards-compliant, stateless MCP (Model Context Protocol) endpoint at `/wp-json/moksa-for-woocommerce/v1/mcp` that any standard MCP client (for example mcp-remote or Claude) can connect to directly — no bridge required.
 
-Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed; order-changing tools stay hidden unless you also enable the "allow external AI to make changes" option, and destructive actions still require in-store confirmation. Every request is permission-checked on the server.
+Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed. With "Allow external AI to make changes (MCP)" turned on, order-changing tools are listed too, but over MCP they only preview the change; to apply it, ask Moksa AI in the WordPress admin and confirm there. Every request is permission-checked on the server.
+
+= What happens to my data when I delete the plugin? =
+
+Deleting the plugin removes its settings, the customer-service messages and the order-number search index. The payment transaction IDs, e-invoice numbers, tracking numbers and pickup stores saved on your orders are kept, because they are part of your trading records. Saved card credentials that could charge a customer again (used for subscriptions) are removed from the orders.
+
+= I am upgrading from 1.21 or earlier. Do I need to do anything? =
+
+No. After the update, customer-service messages and the order-number search index move to the new storage in the background (you can follow it under WooCommerce > Status > Scheduled Actions). Until that finishes everything keeps working from the old tables, and the old tables are kept for now so you can go back to an earlier version.
 
 == Screenshots ==
 
@@ -160,6 +168,14 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.22.0 - 2026-11-15 =
+* New: Customer-service messages and the order-number search index now use WordPress data types instead of the plugin's own tables. Existing data moves over in the background.
+* Changed: Deleting the plugin removes its settings and saved card credentials, but keeps the payment, invoice and shipping numbers saved on your orders.
+* Changed: The AI assistant now finds a shipping method and gives you the link to switch it on or off, instead of changing it itself.
+* Fixed: ECPay payment and shipping notices that contain quotes are no longer rejected as having a bad signature.
+* Fixed: "Look up payment status" now works for PChomePay and TapPay orders.
+* Fixed: Block checkout payment scripts now use the React JSX runtime that ships with WordPress, so they keep working when WordPress moves to React 19.
 
 = 1.21.3 - 2026-11-14 =
 * Fixed: A payment notice for a cancelled order now puts the order on hold for you to check, instead of marking it as paid.
@@ -234,5 +250,5 @@ Authentication uses a WordPress Application Password for a user that has the "ed
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial public release.
+= 1.22.0 =
+Customer-service messages and the order-number search index move to WordPress data types in the background after you update. Nothing to do; the old tables are kept so you can roll back.

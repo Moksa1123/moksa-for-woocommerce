@@ -63,14 +63,12 @@ final class SubscriptionRenewal {
 			return;
 		}
 
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
 		$code    = (string) ( $result->returnCode ?? '' );
 		$message = (string) ( $result->returnMessage ?? '' );
 		if ( '0000' === $code ) {
 			self::complete( $renewal, (string) ( $result->info->transactionId ?? '' ) );
 			return;
 		}
-		// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		// 1172：這個 orderId 已經送過（前一次結果不明），以明細查詢為準。9000：LINE Pay 內部錯誤，結果不明。
 		if ( '1172' === $code || '9000' === $code || '' === $code ) {
@@ -128,7 +126,6 @@ final class SubscriptionRenewal {
 			$reached = false;
 		}
 		if ( null !== $found ) {
-			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- LINE Pay API 回應欄位.
 			self::complete( $renewal, (string) $found->transactionId );
 			return;
 		}

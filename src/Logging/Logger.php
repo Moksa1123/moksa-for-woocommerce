@@ -56,8 +56,8 @@ final class Logger {
 		}
 
 		if ( ! self::wc_logs_writable() ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- fallback path when WC logger directory not writable; intentional last-resort to PHP error log.
-			error_log( '[moksa-for-woocommerce-' . $source . '][' . $level . '] ' . $message );
+			// WC 的 log 目錄不能寫時，只在開了 WP_DEBUG 的站上留下警告。
+			wp_trigger_error( __METHOD__, '[moksa-for-woocommerce-' . $source . '][' . $level . '] ' . $message, E_USER_NOTICE );
 			return;
 		}
 
