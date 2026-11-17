@@ -362,7 +362,7 @@ final class BlockField {
 			'moksafowo-tw-district-block',
 			MOKSAFOWO_PLUGIN_URL . 'src/Modules/Address/assets/js/moksafowo-tw-district-block.js',
 			[],
-			MOKSAFOWO_VERSION,
+			MOKSAFOWO_VERSION . '.' . (string) filemtime( MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Address/assets/js/moksafowo-tw-district-block.js' ),
 			true
 		);
 

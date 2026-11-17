@@ -220,9 +220,55 @@
 		} );
 	}
 
+	/**
+	 * 前端驗證防呆（drpen 11-17 回報、測試站未重現）：勾「使用相同的地址接收帳單」、畫面上已沒有
+	 * 帳單欄位時，清掉殘留的 billing 錯誤。殘留錯誤指向不存在的欄位，按下單只會捲回上方、不送出也
+	 * 沒有訊息。帳單由 WC 用收件地址帶入，伺服器照常驗證。
+	 * （鄉鎮市區的錯誤不能這樣清：WC 按下單當下就驗證，錯誤擋下送出後才被清掉，變成按了沒反應。）
+	 */
+	const BILLING_ERROR = /^billing[_-]/;
+	function clearStaleErrors() {
+		const v = wp.data.select( 'wc/store/validation' );
+		const errors = v && typeof v.getValidationErrors === 'function' ? v.getValidationErrors() : null;
+		if ( ! errors ) {
+			return;
+		}
+		const keys = Object.keys( errors );
+		if ( ! keys.length ) {
+			return;
+		}
+		const checkout  = wp.data.select( 'wc/store/checkout' );
+		const sameAddr  = checkout && typeof checkout.getUseShippingAsBilling === 'function' && checkout.getUseShippingAsBilling();
+		const noBilling = ! document.querySelector( '.wc-block-components-address-form [id^="billing-"]' );
+		if ( ! sameAddr || ! noBilling ) {
+			return;
+		}
+		const stale = keys.filter( function ( k ) {
+			return BILLING_ERROR.test( k );
+		} );
+		if ( stale.length ) {
+			wp.data.dispatch( 'wc/store/validation' ).clearValidationErrors( stale );
+		}
+	}
+
+	function startValidationGuard( tries ) {
+		tries = tries || 0;
+		if ( ! window.wp || ! wp.data || ! wp.data.subscribe || ! wp.data.select( 'wc/store/validation' ) ) {
+			// WC 的資料 store 可能比這支晚註冊，最多等 10 秒。
+			if ( tries < 20 ) {
+				setTimeout( function () { startValidationGuard( tries + 1 ); }, 500 );
+			}
+			return;
+		}
+		wp.data.subscribe( clearStaleErrors, 'wc/store/validation' );
+		wp.data.subscribe( clearStaleErrors, 'wc/store/checkout' );
+		clearStaleErrors();
+	}
+
 	function start() {
 		attachListeners();
 		startStoreSubscribe();
+		startValidationGuard();
 		const root = document.querySelector( '.wp-block-woocommerce-checkout, .wc-block-components-checkout-form' );
 		if ( root ) {
 			new MutationObserver( schedule ).observe( root, { childList: true, subtree: true } );
