@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.23.1
+Stable tag: 1.23.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -168,6 +168,9 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.23.2 - 2026-11-17 =
+* Fixed: When PAYUNi shipping creates the shipment on the PAYUNi payment page, choosing 7-ELEVEN pickup now hides the address fields at checkout (classic and block checkout), the same as the other mode.
 
 = 1.23.1 - 2026-11-16 =
 * Fixed: On phones, the shipping options in the classic checkout order summary now use the full width instead of being squeezed into the right half.

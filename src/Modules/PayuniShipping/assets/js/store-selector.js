@@ -637,7 +637,7 @@
                 // Remove required attribute and validation
                 $input.prop('required', false);
                 $field.removeClass('validate-required');
-                $field.find('abbr.required').hide();
+                $field.find('.required').hide();
                 
                 // Hide the field. Don't fill placeholder values — PHP filter
                 // modify_billing_fields_for_cvs() already removes the required
@@ -673,12 +673,13 @@
                     $field.addClass('validate-required');
                     const $label = $field.find('label').first();
                     $label.find('.optional').remove();
-                    if (!$label.find('abbr.required').length) {
-                        $label.append(' <abbr class="required" title="required">*</abbr>');
+                    // WooCommerce 切換運送方式時自己會補 <span class="required">，已有就不要再加。
+                    if (!$label.find('.required').length) {
+                        $label.append(' <span class="required" aria-hidden="true">*</span>');
                     }
                 }
 
-                $field.find('abbr.required').show();
+                $field.find('.required').show();
 
                 // Belt-and-suspenders: clear any 'N/A' from older plugin versions
                 // that may have left it in DOM before this version's hide stopped

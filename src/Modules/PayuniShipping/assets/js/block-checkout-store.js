@@ -210,6 +210,10 @@
 			return;
 		}
 		setBodyCvsFlag( true );
+		// 幕前模式門市在統一金流付款頁選：結帳頁只藏地址欄，不顯示選店。
+		if ( cfg.pick_store === 'no' ) {
+			return;
+		}
 		const myId = ++renderRequestId;
 		fetchSelectedStore( function ( store ) {
 			if ( myId !== renderRequestId ) {

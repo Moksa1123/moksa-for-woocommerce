@@ -78,6 +78,9 @@ class StoreSelector {
 		add_action( 'template_redirect', array( __CLASS__, 'consume_token_early' ), 5 );
 		if ( $pick_on_checkout ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
+		} else {
+			// 幕前模式沒有 store-selector.js，「超商取貨隱藏帳單地址欄」要另外載入。
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_billing_toggle' ) );
 		}
 
 		add_filter( 'woocommerce_checkout_fields', array( __CLASS__, 'modify_billing_fields_for_cvs' ), 110 );
@@ -189,6 +192,53 @@ class StoreSelector {
 
 	public static function strip_na_customer_prop( $value ) {
 		return 'N/A' === $value ? '' : $value;
+	}
+
+	/**
+	 * 幕前模式結帳頁不選門市、不載 store-selector.js，但選超商取貨時地址欄一樣要藏：
+	 * - 區塊結帳：跟幕後一樣一律藏（送單時伺服器本來就清空地址），共用 block-checkout-store.js 但關掉選店。
+	 * - 傳統結帳：照「超商取貨隱藏帳單地址欄」設定，有勾才載入。
+	 */
+	public static function enqueue_billing_toggle(): void {
+		$post = get_post();
+		if ( ! WC()->cart || ! WC()->cart->needs_shipping() ) {
+			return;
+		}
+		if ( $post instanceof \WP_Post && has_block( 'woocommerce/checkout', $post ) ) {
+			$path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/block-checkout-store.js';
+			wp_enqueue_style( 'moksafowo-payuni-store-selector', MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/css/store-selector.css', array(), MOKSAFOWO_VERSION );
+			wp_enqueue_script(
+				'moksafowo-payuni-block-checkout-store',
+				MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/js/block-checkout-store.js',
+				array(),
+				file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION,
+				true
+			);
+			wp_localize_script(
+				'moksafowo-payuni-block-checkout-store',
+				'moksafowo_payuni_block',
+				array(
+					'cvs_method_prefix' => 'moksafowo_payuni_shipping_711',
+					'pick_store'        => 'no', // wp_localize_script 會把 false 轉成空字串，用字串。
+				)
+			);
+			return;
+		}
+		if ( get_option( 'moksafowo_payuni_shipping_hide_billing_address_fields', 'no' ) !== 'yes' ) {
+			return;
+		}
+		$is_classic = is_checkout() || ( $post instanceof \WP_Post && ( has_shortcode( $post->post_content, 'woocommerce_checkout' ) || has_block( 'woocommerce/classic-shortcode', $post ) ) );
+		if ( ! $is_classic ) {
+			return;
+		}
+		$path = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/PayuniShipping/assets/js/cvs-billing-toggle.js';
+		wp_enqueue_script(
+			'moksafowo-payuni-cvs-billing-toggle',
+			MOKSAFOWO_PLUGIN_URL . 'src/Modules/PayuniShipping/assets/js/cvs-billing-toggle.js',
+			array( 'jquery', 'wc-checkout' ),
+			file_exists( $path ) ? (string) filemtime( $path ) : MOKSAFOWO_VERSION,
+			true
+		);
 	}
 
 	public static function enqueue_scripts() {
