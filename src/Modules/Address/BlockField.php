@@ -42,6 +42,7 @@ final class BlockField {
 		// Lazy register — 只在 Store API request 或 frontend cart/checkout/edit-address 頁攤平 370 鄉鎮。
 		add_action( 'rest_api_init', [ __CLASS__, 'maybe_register_field' ] );
 		add_action( 'wp', [ __CLASS__, 'maybe_register_field' ] );
+		add_action( 'template_redirect', [ __CLASS__, 'drop_invalid_saved_district' ], 20 );
 	}
 
 	public static function maybe_register_field(): void {
@@ -255,15 +256,22 @@ final class BlockField {
 		return '';
 	}
 
-	public static function register_field(): void {
-		$cities = TwAddress::get_cities( 'TW' );
-		if ( ! is_array( $cities ) ) {
-			return;
+	/**
+	 * 鄉鎮下拉的選項：API 不支援動態 options，攤平全 370 鄉鎮一次列入；同名（如「東區」）加 |state 後綴。
+	 *
+	 * @return array<int,array{value:string,label:string}>
+	 */
+	private static function options(): array {
+		static $options = null;
+		if ( null !== $options ) {
+			return $options;
 		}
-
-		// API 不支援動態 options，攤平全 370 鄉鎮一次列入；同名（如「東區」）加 |state 後綴。
 		$options = [];
-		$seen    = [];
+		$cities  = TwAddress::get_cities( 'TW' );
+		if ( ! is_array( $cities ) ) {
+			return $options;
+		}
+		$seen = [];
 		foreach ( $cities as $state_key => $city_list ) {
 			foreach ( $city_list as $city ) {
 				$name = is_array( $city ) ? (string) $city[0] : (string) $city;
@@ -278,6 +286,49 @@ final class BlockField {
 					'label' => $name,
 				];
 			}
+		}
+		return $options;
+	}
+
+	/**
+	 * 會員資料裡存的鄉鎮值不在選單裡（舊版格式、手動匯入、其他外掛寫的）時清掉。
+	 * 區塊結帳會把它帶進表單，送出時 WC 回「提供的 moksafowo/district 無效」整筆擋下，
+	 * 即使選超商、欄位標「選填」也一樣（drpen 11-17 回報、測試站重現）。清掉後顧客重選即可。
+	 */
+	public static function drop_invalid_saved_district(): void {
+		if ( ! is_user_logged_in() || ! function_exists( 'WC' ) || ! ( is_checkout() || is_cart() ) ) {
+			return;
+		}
+		$valid = array_column( self::options(), 'value' );
+		if ( ! $valid ) {
+			return;
+		}
+		$keys = [ '_wc_shipping/' . self::FIELD_ID, '_wc_billing/' . self::FIELD_ID ];
+		// 工作階段裡的顧客（結帳頁讀這份）跟資料庫裡的會員資料各清一次。
+		$targets = [];
+		if ( WC()->customer instanceof \WC_Customer ) {
+			$targets[] = WC()->customer;
+		}
+		$targets[] = new \WC_Customer( get_current_user_id() );
+		foreach ( $targets as $customer ) {
+			$changed = false;
+			foreach ( $keys as $key ) {
+				$value = $customer->get_meta( $key, true, 'edit' );
+				if ( is_string( $value ) && '' !== $value && ! in_array( $value, $valid, true ) ) {
+					$customer->delete_meta_data( $key );
+					$changed = true;
+				}
+			}
+			if ( $changed ) {
+				$customer->save();
+			}
+		}
+	}
+
+	public static function register_field(): void {
+		$options = self::options();
+		if ( ! $options ) {
+			return;
 		}
 
 		woocommerce_register_additional_checkout_field(

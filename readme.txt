@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.23.3
+Stable tag: 1.23.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -168,6 +168,9 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.23.4 - 2026-11-17 =
+* Fixed: A district saved on a customer account that is no longer in the district list no longer blocks the block checkout. It is cleared so the customer can pick it again.
 
 = 1.23.3 - 2026-11-17 =
 * Fixed: In the block checkout, a logged-in customer who ticks "Use same address for billing" after a first failed attempt can place the order again. A leftover billing error used to stop the order with no message.
