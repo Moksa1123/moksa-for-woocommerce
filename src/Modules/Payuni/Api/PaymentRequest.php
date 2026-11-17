@@ -64,7 +64,8 @@ class PaymentRequest {
 				'MerTradeNo' => PayuniPayment::build_payuni_order_no( $order->get_id() ),
 				// 與其他金流一致無條件進位；回呼比對（PaymentResponse）接受 round 或 ceil。
 				'TradeAmt'   => (int) ceil( (float) $order->get_total() ),
-				'ProdDesc'   => implode( ';', $prod_desc ),
+				// 官方 ProdDesc 上限 550 字，購物車品項多時會被整筆退回。
+				'ProdDesc'   => mb_substr( implode( ';', $prod_desc ), 0, 500 ),
 				'ReturnURL'  => $this->gateway->return_url, // 前景通知網址付款完成返回指定網址 (感謝頁面).
 				'NotifyURL'  => $this->gateway->notify_url, // 幕後.
 				'UsrMail'    => $order->get_billing_email(), // 付款頁帶入 email.
@@ -262,8 +263,12 @@ class PaymentRequest {
 
 		$response = wp_remote_post( $url, $request_args );
 		if ( is_wp_error( $response ) ) {
+			// 原本回 false：WC 只把 WP_Error／Exception 當失敗，店長看不到原因。
+			// 連線中斷時統一金流那邊可能已經退了，提醒先查再重試，避免退兩次。
 			PayuniPayment::log( 'refund error:' . $response->get_error_message() );
-			return false;
+			$message = __( 'Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again.', 'moksa-for-woocommerce' );
+			$order->add_order_note( $message );
+			return new \WP_Error( 'process_refund_request', $message, array( 'order_id' => $order_id ) );
 		}
 
 		$response_body = wp_remote_retrieve_body( $response );

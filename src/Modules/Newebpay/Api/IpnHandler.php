@@ -176,6 +176,22 @@ final class IpnHandler {
 			if ( 'on-hold' !== $order->get_status() ) {
 				$order->update_status( 'on-hold', self::issued_note( $order, $payment_type ) );
 			}
+		} elseif ( 'SUCCESS' === $status && isset( $result['TradeStatus'] ) && '1' !== (string) $result['TradeStatus'] && ! $order->is_paid() ) {
+			// 先買後付（AFTEE、OPPAY）：官方 NDNF-1.2.6 p.52「請務必以 TradeStatus 判斷」，
+			// Status=SUCCESS 不代表已付款（0=未付款、1=付款成功、2=付款失敗）。
+			if ( '2' === (string) $result['TradeStatus'] ) {
+				$order->update_status(
+					'failed',
+					/* translators: %s: payment type */
+					sprintf( __( 'NewebPay reported that the %s payment failed.', 'moksa-for-woocommerce' ), self::payment_type_label( $payment_type ) )
+				);
+			} elseif ( 'on-hold' !== $order->get_status() ) {
+				$order->update_status(
+					'on-hold',
+					/* translators: %s: payment type */
+					sprintf( __( 'NewebPay has not confirmed the %s payment yet. Do not ship until it is paid.', 'moksa-for-woocommerce' ), self::payment_type_label( $payment_type ) )
+				);
+			}
 		} elseif ( 'SUCCESS' === $status ) {
 			// 重送的成功通知不再重複寫備註（已付款的單也不能掉進下面的失敗分支）。
 			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {

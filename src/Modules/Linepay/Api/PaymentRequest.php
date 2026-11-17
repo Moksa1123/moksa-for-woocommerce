@@ -537,14 +537,17 @@ final class PaymentRequest {
 			return new WP_Error( 'moksafowo_linepay_refund_failed', $msg );
 		}
 
-		$refund_ids = $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
+		$refund_ids = $order->get_meta( \Moksafowo\Order\Meta\Keys::LINEPAY_REFUND_TRANSACTION_ID );
+		// 舊資料可能是字串：對字串用 [] 會直接 Fatal，先轉成陣列。
 		if ( empty( $refund_ids ) ) {
 			$refund_ids = array();
+		} elseif ( ! is_array( $refund_ids ) ) {
+			$refund_ids = array( (string) $refund_ids );
 		}
 
 		LinePay::log( sprintf( '[refund][order_id:%s] refund transaction ids:%s', $order_id, wc_print_r( $refund_ids, true ) ) );
 		$refund_ids[] = $resp->info->refundTransactionId;
-		$order->update_meta_data( '_moksafowo_linepay_refund_transaction_id', $refund_ids );
+		$order->update_meta_data( \Moksafowo\Order\Meta\Keys::LINEPAY_REFUND_TRANSACTION_ID, $refund_ids );
 
 		if ( ! $is_partial_refund ) {
 			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_REFUNDED );

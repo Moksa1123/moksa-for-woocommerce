@@ -31,6 +31,56 @@ abstract class AbstractStatusMapper {
 	];
 
 	/**
+	 * 「包裹已回到賣家手上」的貨態代碼（賣家已取回退貨、已退回寄件人）。
+	 *
+	 * @return string[]
+	 */
+	protected function returned_to_seller_codes(): array {
+		return [];
+	}
+
+	/**
+	 * 包裹已回到賣家手上（使用者 11-17 決定）：
+	 * - 取貨付款、還沒收到錢 → 訂單改「已取消」（WC 取消時自動回補庫存）。
+	 * - 已付款 → 狀態照對應表（未取件），另留一次備註請店家決定退款或重寄。不自動退款。
+	 *
+	 * @return bool true＝已處理完（取消），不再照對應表改狀態。
+	 */
+	private function handle_returned_to_seller( \WC_Order $order, string $code ): bool {
+		if ( \Moksafowo\Modules\Shipping\Statuses\StatusGuard::is_terminal( $order->get_status() ) ) {
+			return false;
+		}
+		// 依溫層拆成多包時，要每一包都退回賣家才整張取消；有一包送達就只留備註。
+		$packages     = $this->package_codes( $order );
+		$all_returned = count( $packages ) <= 1 || ! array_diff( $packages, $this->returned_to_seller_codes() );
+		// 不看 date_paid：WC 的貨到付款一轉處理中就會填付款日期。取貨付款的包裹退回賣家＝客人沒取、也沒付。
+		if ( $all_returned && \Moksafowo\Modules\Shared\Invoice\PayOnDelivery::is_pay_on_delivery( $order ) ) {
+			self::$noted[ $order->get_id() ] = true;
+			$order->update_status(
+				'cancelled',
+				sprintf(
+					/* translators: %s: shipping status code */
+					__( 'The parcel was not collected and is back with the seller (status code %s). This pay-on-pickup order was never paid, so it was cancelled and the stock was restored.', 'moksa-for-woocommerce' ),
+					$code
+				)
+			);
+			return true;
+		}
+		if ( 'yes' !== $order->get_meta( '_moksafowo_returned_to_seller_noted' ) ) {
+			$order->update_meta_data( '_moksafowo_returned_to_seller_noted', 'yes' );
+			$order->save();
+			$order->add_order_note(
+				sprintf(
+					/* translators: %s: shipping status code */
+					__( 'The parcel is back with the seller (status code %s). This order was already paid: please contact the customer and either refund it (tick "Restock refunded items") or ship it again.', 'moksa-for-woocommerce' ),
+					$code
+				)
+			);
+		}
+		return false;
+	}
+
+	/**
 	 * 每一包目前的貨態代碼（依溫層拆單時一包一筆）。回傳空陣列表示單一包裹。
 	 *
 	 * @return string[]
@@ -75,6 +125,10 @@ abstract class AbstractStatusMapper {
 
 		do_action( "moksafowo_shipping_status_received_{$provider}_{$code}", $order, $desc );
 		do_action( 'moksafowo_shipping_status_received', $order, $code, $desc, $provider );
+
+		if ( in_array( $code, $this->returned_to_seller_codes(), true ) && $this->handle_returned_to_seller( $order, $code ) ) {
+			return;
+		}
 
 		$slug = $this->code_map()[ $code ] ?? null;
 		$slug = apply_filters( 'moksafowo_shipping_lgs_status_map', $slug, $code, $order, $provider );

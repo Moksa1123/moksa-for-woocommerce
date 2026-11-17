@@ -56,6 +56,11 @@ final class StatusMapper extends AbstractStatusMapper {
 		return 'payuni';
 	}
 
+	/** 56＝已轉宅配退回（C2C 退貨已宅配送回賣家）。統一物流沒有其他「賣家已取回」的代碼。 */
+	protected function returned_to_seller_codes(): array {
+		return [ '56' ];
+	}
+
 	/**
 	 * 商家在 PAYUNi 物流設定裡為某個貨態指定了訂單狀態時，以商家的為準。
 	 * 否則 priority 10 先依設定改一次、這裡再依預設表改回去，商家設定等於無效，

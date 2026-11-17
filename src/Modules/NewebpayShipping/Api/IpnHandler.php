@@ -20,6 +20,11 @@ final class IpnHandler {
 		$trade_info = sanitize_text_field( Input::post( 'EncryptData_' ) );
 		$trade_sha  = sanitize_text_field( Input::post( 'HashData_' ) );
 		if ( '' === $trade_info ) {
+			// 規格書寫有底線，官方範例 notify_url.php 讀的是沒底線的 EncryptData／HashData（NDNS p.29）。
+			$trade_info = sanitize_text_field( Input::post( 'EncryptData' ) );
+			$trade_sha  = sanitize_text_field( Input::post( 'HashData' ) );
+		}
+		if ( '' === $trade_info ) {
 			$trade_info = sanitize_text_field( Input::post( 'TradeInfo' ) );
 			$trade_sha  = sanitize_text_field( Input::post( 'TradeSha' ) );
 		}

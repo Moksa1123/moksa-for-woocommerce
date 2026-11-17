@@ -12,7 +12,7 @@ final class CvsOkmart extends AbstractCvsShippingMethod {
 	public function __construct( $instance_id = 0 ) {
 		$this->id                 = 'moksafowo_ecpay_shipping_cvs_okmart';
 		$this->method_title       = __( 'ECPay — OK Mart pickup', 'moksa-for-woocommerce' );
-		$this->method_description = __( 'ECPay OK Mart pickup.', 'moksa-for-woocommerce' );
+		$this->method_description = __( 'ECPay ended OK Mart store-to-store shipping on 1 July 2026, so this method is no longer offered at checkout. Existing orders still display normally.', 'moksa-for-woocommerce' );
 		parent::__construct( $instance_id );
 	}
 
@@ -29,10 +29,11 @@ final class CvsOkmart extends AbstractCvsShippingMethod {
 		return 'OKMARTC2C';
 	}
 
+	/**
+	 * 綠界 OK 超商店到店（OKMARTC2C）2026-07-01 終止服務、規格已移除（developers.ecpay.com.tw/36099）。
+	 * 結帳一律不提供：選了也選不了店、建不了物流單。類別保留註冊，運送區域設定與舊訂單照常顯示。
+	 */
 	public function is_available( $package ): bool {
-		if ( 'B2C' === get_option( 'moksafowo_ecpay_shipping_cvs_type', 'C2C' ) ) {
-			return false;
-		}
-		return parent::is_available( $package );
+		return false;
 	}
 }

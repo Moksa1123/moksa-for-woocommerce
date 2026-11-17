@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.22.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.23.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-16T11:04:18+00:00\n"
+"POT-Creation-Date: 2026-11-17T09:57:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -246,7 +246,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1366
 #: src/Modules/OrderLookup/AddOrderNote.php:25
-#: src/Modules/Payuni/PayuniPayment.php:215
+#: src/Modules/Payuni/PayuniPayment.php:216
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:72
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:335
@@ -274,17 +274,17 @@ msgstr ""
 msgid "Nothing was changed. Over MCP this tool only previews the change. To apply it, ask Moksa AI in the WordPress admin and confirm there."
 msgstr ""
 
-#: src/Modules/Address/BlockField.php:174
-#: src/Modules/Address/BlockField.php:197
+#: src/Modules/Address/BlockField.php:175
+#: src/Modules/Address/BlockField.php:198
 msgid "Please select a district for home delivery orders."
 msgstr ""
 
-#: src/Modules/Address/BlockField.php:286
+#: src/Modules/Address/BlockField.php:337
 msgid "District"
 msgstr ""
 
-#: src/Modules/Address/BlockField.php:292
-#: src/Modules/Address/BlockField.php:401
+#: src/Modules/Address/BlockField.php:343
+#: src/Modules/Address/BlockField.php:452
 #: src/Modules/Address/TwAddress.php:212
 #: src/Modules/Address/TwAddress.php:261
 msgid "Select…"
@@ -2901,7 +2901,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:19
 #: src/Modules/Paynow/Settings/SettingsTab.php:19
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:19
-#: src/Modules/Payuni/Settings/SettingsTab.php:164
+#: src/Modules/Payuni/Settings/SettingsTab.php:165
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:220
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:19
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:21
@@ -3328,7 +3328,7 @@ msgstr ""
 
 #: src/Modules/CustomerService/Module.php:102
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:197
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:118
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:123
 #: src/Modules/OrderLookup/SearchableKeys.php:100
 #: src/Modules/OrderLookup/SearchableKeys.php:106
 #: src/Modules/OrderLookup/SearchableKeys.php:112
@@ -3578,7 +3578,7 @@ msgstr ""
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:324
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:38
 #: src/Modules/Payuni/Utils/CloseStatus.php:19
-#: src/Modules/Shared/Admin/CardRenderers.php:651
+#: src/Modules/Shared/Admin/CardRenderers.php:666
 msgid "Captured"
 msgstr ""
 
@@ -3590,7 +3590,7 @@ msgstr ""
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:326
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:40
 #: src/Modules/Newebpay/Module.php:129
-#: src/Modules/Shared/Admin/CardRenderers.php:653
+#: src/Modules/Shared/Admin/CardRenderers.php:668
 #: src/Modules/ShoplinePayments/Api/Helper.php:51
 #: src/Modules/Tappay/Api/Helper.php:52
 msgid "Refunded"
@@ -3603,7 +3603,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:329
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:41
-#: src/Modules/Shared/Admin/CardRenderers.php:654
+#: src/Modules/Shared/Admin/CardRenderers.php:669
 msgid "Failed"
 msgstr ""
 
@@ -3919,8 +3919,12 @@ msgstr ""
 msgid "ECPay issued a payment code (%1$s, awaiting payment. Status code %2$s)"
 msgstr ""
 
+#: src/Modules/Ecpay/Api/IpnHandler.php:149
+msgid "ECPay is still confirming this payment (status code 10300066). Do not ship yet; the order will update when ECPay sends the final result."
+msgstr ""
+
 #. translators: 1: rtn message, 2: rtn code
-#: src/Modules/Ecpay/Api/IpnHandler.php:150
+#: src/Modules/Ecpay/Api/IpnHandler.php:159
 #, php-format
 msgid "ECPay payment failed: %1$s (status code %2$s)"
 msgstr ""
@@ -4178,7 +4182,7 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:42
 #: src/Modules/Shipping/Admin/ShipmentCreator.php:24
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:89
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:143
 #: assets/blocks/build/methods/ecpay/index.js:1
 msgid "ECPay"
 msgstr ""
@@ -4514,7 +4518,7 @@ msgstr ""
 #: src/Modules/Linepay/Settings/SettingsTab.php:83
 #: src/Modules/Newebpay/Settings/SettingsTab.php:13
 #: src/Modules/Paynow/Settings/SettingsTab.php:13
-#: src/Modules/Payuni/Settings/SettingsTab.php:158
+#: src/Modules/Payuni/Settings/SettingsTab.php:159
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:214
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:13
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:15
@@ -4530,7 +4534,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:25
 #: src/Modules/Newebpay/Settings/SettingsTab.php:23
-#: src/Modules/Payuni/Settings/SettingsTab.php:168
+#: src/Modules/Payuni/Settings/SettingsTab.php:169
 msgid "For use before going live. While this is ticked every transaction runs against the test environment and no money changes hands. Untick it once you go live."
 msgstr ""
 
@@ -4541,7 +4545,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:147
 #: src/Modules/Newebpay/Settings/SettingsTab.php:26
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:49
-#: src/Modules/Payuni/Settings/SettingsTab.php:172
+#: src/Modules/Payuni/Settings/SettingsTab.php:173
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:227
 #: src/Modules/Tappay/Settings/SettingsTab.php:44
 msgid "Test merchant ID"
@@ -4554,7 +4558,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:152
 #: src/Modules/Newebpay/Settings/SettingsTab.php:31
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:54
-#: src/Modules/Payuni/Settings/SettingsTab.php:177
+#: src/Modules/Payuni/Settings/SettingsTab.php:178
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:232
 msgid "Test hash key"
 msgstr ""
@@ -4566,7 +4570,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:158
 #: src/Modules/Newebpay/Settings/SettingsTab.php:36
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:59
-#: src/Modules/Payuni/Settings/SettingsTab.php:182
+#: src/Modules/Payuni/Settings/SettingsTab.php:183
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:237
 msgid "Test hash IV"
 msgstr ""
@@ -4578,7 +4582,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:175
 #: src/Modules/Newebpay/Settings/SettingsTab.php:41
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:75
-#: src/Modules/Payuni/Settings/SettingsTab.php:187
+#: src/Modules/Payuni/Settings/SettingsTab.php:188
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:242
 #: src/Modules/Tappay/Settings/SettingsTab.php:71
 msgid "Live merchant ID"
@@ -4591,7 +4595,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:180
 #: src/Modules/Newebpay/Settings/SettingsTab.php:46
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:80
-#: src/Modules/Payuni/Settings/SettingsTab.php:192
+#: src/Modules/Payuni/Settings/SettingsTab.php:193
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:247
 msgid "Live hash key"
 msgstr ""
@@ -4603,7 +4607,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:185
 #: src/Modules/Newebpay/Settings/SettingsTab.php:51
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:85
-#: src/Modules/Payuni/Settings/SettingsTab.php:197
+#: src/Modules/Payuni/Settings/SettingsTab.php:198
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:252
 msgid "Live hash IV"
 msgstr ""
@@ -4741,7 +4745,7 @@ msgstr ""
 #: src/Modules/Ecpay/Settings/SettingsTab.php:187
 #: src/Modules/Linepay/Settings/SettingsTab.php:125
 #: src/Modules/Newebpay/Settings/SettingsTab.php:183
-#: src/Modules/Payuni/Settings/SettingsTab.php:207
+#: src/Modules/Payuni/Settings/SettingsTab.php:208
 msgid "Subscriptions"
 msgstr ""
 
@@ -5645,7 +5649,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:351
 #: src/Modules/Linepay/LinePay.php:148
-#: src/Modules/Payuni/PayuniPayment.php:207
+#: src/Modules/Payuni/PayuniPayment.php:208
 #: src/Modules/Shared/Admin/PaymentQuery.php:134
 msgid "Connection error. Please try again later."
 msgstr ""
@@ -5751,12 +5755,12 @@ msgid "ECPay shipping status looked up: status code %s"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/CustomerOrderView.php:135
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:119
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:124
 #: src/Modules/NewebpayShipping/Frontend/CustomerOrderView.php:87
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:157
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:91
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
-#: src/Modules/PayuniShipping/Frontstage.php:324
+#: src/Modules/PayuniShipping/Frontstage.php:329
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:116
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/block/moksa-cvs-arrived.php:34
@@ -5839,15 +5843,15 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:91
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:84
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:235
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:273
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:872
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:285
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:323
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:922
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:101
 msgid "Change store"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Frontend/StoreSelector.php:92
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:274
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:324
 msgid "No store chosen yet"
 msgstr ""
 
@@ -5949,7 +5953,7 @@ msgid "Hi-Life"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/CvsOkmart.php:15
-msgid "ECPay OK Mart pickup."
+msgid "ECPay ended OK Mart store-to-store shipping on 1 July 2026, so this method is no longer offered at checkout. Existing orders still display normally."
 msgstr ""
 
 #: src/Modules/EcpayShipping/Methods/CvsOkmart.php:24
@@ -6317,9 +6321,10 @@ msgid "ECPay shipping status update"
 msgstr ""
 
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:104
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:117
+#: src/Modules/EcpayShipping/Webhook/StatusMapper.php:104
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:122
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:134
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:98
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:152
 msgid "Shipping status"
 msgstr ""
 
@@ -6330,14 +6335,14 @@ msgstr ""
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:106
 #: src/Modules/Linepay/Api/PaymentRequest.php:192
 #: src/Modules/Linepay/Api/PaymentRequest.php:267
-#: src/Modules/Linepay/Api/PaymentRequest.php:668
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:120
-#: src/Modules/Payuni/Api/PaymentRequest.php:539
+#: src/Modules/Linepay/Api/PaymentRequest.php:671
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:125
+#: src/Modules/Payuni/Api/PaymentRequest.php:544
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:272
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:289
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:99
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:153
 msgid "Status code"
 msgstr ""
 
@@ -6351,6 +6356,10 @@ msgstr ""
 #: src/Modules/EcpayShipping/Webhook/Reconciler.php:91
 #, php-format
 msgid "ECPay shipping status found by follow-up check: status code %s"
+msgstr ""
+
+#: src/Modules/EcpayShipping/Webhook/StatusMapper.php:103
+msgid "ECPay could not create this shipment (status code 4444). Please create the shipment again."
 msgstr ""
 
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:22
@@ -6495,7 +6504,7 @@ msgstr ""
 
 #: src/Modules/EzpayInvoice/Operations/Query.php:62
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:39
-#: src/Modules/Shared/Admin/CardRenderers.php:652
+#: src/Modules/Shared/Admin/CardRenderers.php:667
 #: src/Modules/ShoplinePayments/Api/Helper.php:49
 #: src/Modules/Tappay/Api/Helper.php:54
 msgid "Cancelled"
@@ -6560,12 +6569,12 @@ msgid "Apply for these at inv.ezpay.com.tw. They only work once ezPay has approv
 msgstr ""
 
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:36
-#: src/Modules/Shared/Admin/CardRenderers.php:649
+#: src/Modules/Shared/Admin/CardRenderers.php:664
 msgid "Pre-authorized (awaiting capture)"
 msgstr ""
 
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:37
-#: src/Modules/Shared/Admin/CardRenderers.php:650
+#: src/Modules/Shared/Admin/CardRenderers.php:665
 msgid "Authorized (awaiting capture)"
 msgstr ""
 
@@ -6653,7 +6662,7 @@ msgstr ""
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
 #: src/Modules/Linepay/Api/PaymentRequest.php:343
-#: src/Modules/Payuni/Api/PaymentRequest.php:131
+#: src/Modules/Payuni/Api/PaymentRequest.php:132
 #, php-format
 msgid "Unable to find order #%s"
 msgstr ""
@@ -6669,40 +6678,40 @@ msgid "Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s
 msgstr ""
 
 #. translators: %s: LINE Pay refund transaction id returned by API
-#: src/Modules/Linepay/Api/PaymentRequest.php:558
+#: src/Modules/Linepay/Api/PaymentRequest.php:561
 #, php-format
 msgid "LINE Pay refunded the payment (refund number %s)"
 msgstr ""
 
 #. translators:  %1$s is product name, %2$s is the order item count
-#: src/Modules/Linepay/Api/PaymentRequest.php:614
+#: src/Modules/Linepay/Api/PaymentRequest.php:617
 #, php-format
 msgid "%1$s and total %2$s products"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:658
+#: src/Modules/Linepay/Api/PaymentRequest.php:661
 msgid "After the payment request"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:659
+#: src/Modules/Linepay/Api/PaymentRequest.php:662
 msgid "Before confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:660
+#: src/Modules/Linepay/Api/PaymentRequest.php:663
 msgid "After confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:661
+#: src/Modules/Linepay/Api/PaymentRequest.php:664
 msgid "After the refund"
 msgstr ""
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:666
+#: src/Modules/Linepay/Api/PaymentRequest.php:669
 #, php-format
 msgid "LINE Pay payment status: %s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:669
+#: src/Modules/Linepay/Api/PaymentRequest.php:672
 msgid "Checked"
 msgstr ""
 
@@ -6725,7 +6734,7 @@ msgid "We have received your order, but it has not been paid. Please try paying 
 msgstr ""
 
 #: src/Modules/Linepay/LinePay.php:86
-#: src/Modules/Payuni/PayuniPayment.php:225
+#: src/Modules/Payuni/PayuniPayment.php:226
 msgid "That order could not be found."
 msgstr ""
 
@@ -6767,6 +6776,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/CreditRed.php:32
 #: src/Modules/Payuni/Gateways/ICash.php:32
 #: src/Modules/Payuni/Gateways/JKoPay.php:32
+#: src/Modules/Payuni/Gateways/PickupPay.php:48
 #: src/Modules/Payuni/Gateways/Unified.php:49
 #: src/Modules/Payuni/Settings/AfteeSetting.php:10
 #: src/Modules/Payuni/Settings/ApplePaySetting.php:10
@@ -6805,6 +6815,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/CreditRed.php:38
 #: src/Modules/Payuni/Gateways/ICash.php:38
 #: src/Modules/Payuni/Gateways/JKoPay.php:38
+#: src/Modules/Payuni/Gateways/PickupPay.php:54
 #: src/Modules/Payuni/Gateways/Unified.php:56
 #: src/Modules/Payuni/Settings/AfteeSetting.php:16
 #: src/Modules/Payuni/Settings/ApplePaySetting.php:16
@@ -6856,6 +6867,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/CreditRed.php:43
 #: src/Modules/Payuni/Gateways/ICash.php:43
 #: src/Modules/Payuni/Gateways/JKoPay.php:43
+#: src/Modules/Payuni/Gateways/PickupPay.php:59
 #: src/Modules/Payuni/Gateways/Unified.php:61
 #: src/Modules/Payuni/Settings/AfteeSetting.php:23
 #: src/Modules/Payuni/Settings/ApplePaySetting.php:23
@@ -6964,7 +6976,7 @@ msgid "LINE Pay must approve automatic payments for your store before you turn t
 msgstr ""
 
 #: src/Modules/Linepay/Settings/SettingsTab.php:131
-#: src/Modules/Payuni/Settings/SettingsTab.php:213
+#: src/Modules/Payuni/Settings/SettingsTab.php:214
 msgid "Automatic renewals"
 msgstr ""
 
@@ -6973,7 +6985,7 @@ msgid "Charge WooCommerce Subscriptions renewals automatically with LINE Pay"
 msgstr ""
 
 #: src/Modules/Linepay/Settings/SettingsTab.php:161
-#: src/Modules/Payuni/Settings/SettingsTab.php:278
+#: src/Modules/Payuni/Settings/SettingsTab.php:279
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:330
 msgid "View logs"
 msgstr ""
@@ -7070,26 +7082,38 @@ msgstr ""
 msgid "NewebPay store pickup order confirmed. The customer pays when collecting the parcel."
 msgstr ""
 
+#. translators: %s: payment type
+#: src/Modules/Newebpay/Api/IpnHandler.php:186
+#, php-format
+msgid "NewebPay reported that the %s payment failed."
+msgstr ""
+
+#. translators: %s: payment type
+#: src/Modules/Newebpay/Api/IpnHandler.php:192
+#, php-format
+msgid "NewebPay has not confirmed the %s payment yet. Do not ship until it is paid."
+msgstr ""
+
 #. translators: 1: payment type, 2: trade no
-#: src/Modules/Newebpay/Api/IpnHandler.php:185
+#: src/Modules/Newebpay/Api/IpnHandler.php:201
 #, php-format
 msgid "NewebPay payment completed — %1$s (transaction ID %2$s)"
 msgstr ""
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:197
+#: src/Modules/Newebpay/Api/IpnHandler.php:213
 #, php-format
 msgid "The NewebPay payment failed: %1$s (%2$s)"
 msgstr ""
 
 #. translators: 1: status, 2: message
-#: src/Modules/Newebpay/Api/IpnHandler.php:249
+#: src/Modules/Newebpay/Api/IpnHandler.php:265
 #, php-format
 msgid "NewebPay could not issue the payment details: %1$s (%2$s)"
 msgstr ""
 
 #. translators: %s: payment type
-#: src/Modules/Newebpay/Api/IpnHandler.php:299
+#: src/Modules/Newebpay/Api/IpnHandler.php:315
 #, php-format
 msgid "NewebPay issued the %s payment details and is waiting for the customer to pay."
 msgstr ""
@@ -7430,32 +7454,32 @@ msgid "Allowed instalment plans"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:39
-#: src/Modules/Payuni/Settings/SettingsTab.php:137
+#: src/Modules/Payuni/Settings/SettingsTab.php:138
 msgid "3 instalments"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:40
-#: src/Modules/Payuni/Settings/SettingsTab.php:138
+#: src/Modules/Payuni/Settings/SettingsTab.php:139
 msgid "6 instalments"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:41
-#: src/Modules/Payuni/Settings/SettingsTab.php:140
+#: src/Modules/Payuni/Settings/SettingsTab.php:141
 msgid "12 instalments"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:42
-#: src/Modules/Payuni/Settings/SettingsTab.php:141
+#: src/Modules/Payuni/Settings/SettingsTab.php:142
 msgid "18 instalments"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:43
-#: src/Modules/Payuni/Settings/SettingsTab.php:142
+#: src/Modules/Payuni/Settings/SettingsTab.php:143
 msgid "24 instalments"
 msgstr ""
 
 #: src/Modules/Newebpay/Gateways/CreditInstallment.php:44
-#: src/Modules/Payuni/Settings/SettingsTab.php:143
+#: src/Modules/Payuni/Settings/SettingsTab.php:144
 msgid "30 instalments"
 msgstr ""
 
@@ -7636,7 +7660,7 @@ msgid "Trade status"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:136
-#: src/Modules/Payuni/Api/PaymentRequest.php:522
+#: src/Modules/Payuni/Api/PaymentRequest.php:527
 #: src/Modules/Payuni/Api/PaymentResponse.php:173
 #: src/Modules/Pchomepay/Module.php:102
 #: src/Modules/ShoplinePayments/Module.php:149
@@ -7644,7 +7668,7 @@ msgid "Payment type"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:137
-#: src/Modules/Payuni/Api/PaymentRequest.php:523
+#: src/Modules/Payuni/Api/PaymentRequest.php:528
 #: src/Modules/Pchomepay/Module.php:103
 #: src/Modules/ShoplinePayments/Module.php:148
 #: src/Modules/Tappay/Module.php:101
@@ -7652,7 +7676,7 @@ msgid "Amount"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:138
-#: src/Modules/Payuni/Api/PaymentRequest.php:524
+#: src/Modules/Payuni/Api/PaymentRequest.php:529
 #: src/Modules/Payuni/Gateways/Aftee.php:55
 #: src/Modules/Payuni/Gateways/Atm.php:57
 #: src/Modules/Pchomepay/Module.php:104
@@ -7716,7 +7740,7 @@ msgstr ""
 msgid "Lets subscriptions be paused and resumed. Only tick this after NewebPay approves it, otherwise a paused subscription keeps being charged. Cancelling always tries to stop the mandate; if that fails you get an email and must stop it in the NewebPay dashboard."
 msgstr ""
 
-#: src/Modules/NewebpayShipping/Api/IpnHandler.php:115
+#: src/Modules/NewebpayShipping/Api/IpnHandler.php:120
 msgid "NewebPay shipping status update"
 msgstr ""
 
@@ -7747,8 +7771,8 @@ msgid "Choose a convenience store:"
 msgstr ""
 
 #: src/Modules/NewebpayShipping/Frontend/StoreSelector.php:86
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:236
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:876
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:286
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:926
 #: src/Modules/SmilepayShipping/Frontend/StoreSelector.php:102
 msgid "No pickup store chosen yet"
 msgstr ""
@@ -8684,7 +8708,7 @@ msgstr ""
 #: src/Modules/Payuni/Settings/SettingsTab.php:24
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:14
 #: src/Modules/Shipping/Admin/ShipmentCreator.php:25
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:90
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:144
 #: src/Settings/SettingsPage.php:216
 #: assets/blocks/build/methods/payuni/index.js:1
 msgid "PAYUNi"
@@ -9759,87 +9783,91 @@ msgstr ""
 msgid "Issuing failed"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:105
+#: src/Modules/Payuni/Api/PaymentRequest.php:106
 msgid "Redirecting..."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:147
+#: src/Modules/Payuni/Api/PaymentRequest.php:148
 #, php-format
 msgid "The refund amount for order #%s should be the same as the order total for installment payment."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:162
+#: src/Modules/Payuni/Api/PaymentRequest.php:163
 #, php-format
 msgid "Unable to find transaction id for order #%s"
 msgstr ""
 
 #. translators: %s: order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:175
+#: src/Modules/Payuni/Api/PaymentRequest.php:176
 #, php-format
 msgid "The order status could not be checked before refunding (order #%s)."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:193
+#: src/Modules/Payuni/Api/PaymentRequest.php:194
 msgid "This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:201
+#: src/Modules/Payuni/Api/PaymentRequest.php:202
 msgid "This card payment has not been captured yet, so it can only be cancelled in full. Refund the full amount, or wait until it is captured to make a partial refund."
 msgstr ""
 
 #. translators: %s: PAYUNi settlement status
-#: src/Modules/Payuni/Api/PaymentRequest.php:221
+#: src/Modules/Payuni/Api/PaymentRequest.php:222
 #, php-format
 msgid "This order cannot be refunded in its current state (PAYUNi settlement status: %s)"
 msgstr ""
 
 #. translators: 1: trade status, 2: close status
-#: src/Modules/Payuni/Api/PaymentRequest.php:225
+#: src/Modules/Payuni/Api/PaymentRequest.php:226
 #, php-format
 msgid "This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)"
 msgstr ""
 
 #. translators:  %s is the TradeStatus of the order
-#: src/Modules/Payuni/Api/PaymentRequest.php:238
+#: src/Modules/Payuni/Api/PaymentRequest.php:239
 #, php-format
 msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr ""
 
+#: src/Modules/Payuni/Api/PaymentRequest.php:269
+msgid "Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again."
+msgstr ""
+
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:281
+#: src/Modules/Payuni/Api/PaymentRequest.php:286
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr ""
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:285
+#: src/Modules/Payuni/Api/PaymentRequest.php:290
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:494
+#: src/Modules/Payuni/Api/PaymentRequest.php:499
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr ""
 
 #. translators: %s: transaction status
-#: src/Modules/Payuni/Api/PaymentRequest.php:520
+#: src/Modules/Payuni/Api/PaymentRequest.php:525
 #, php-format
 msgid "PAYUNi transaction lookup: %s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:525
+#: src/Modules/Payuni/Api/PaymentRequest.php:530
 msgid "Settlement status"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:526
+#: src/Modules/Payuni/Api/PaymentRequest.php:531
 #: src/Modules/Payuni/Api/PaymentResponse.php:175
 msgid "PAYUNi transaction ID"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:538
+#: src/Modules/Payuni/Api/PaymentRequest.php:543
 #, php-format
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr ""
@@ -10094,8 +10122,8 @@ msgid "Pay with the code at any 7-ELEVEN, FamilyMart, Hi-Life or OK Mart store."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Cvs.php:55
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:832
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:841
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:882
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:891
 msgid "Convenience store"
 msgstr ""
 
@@ -10195,6 +10223,30 @@ msgctxt "LINE Pay"
 msgid "Payment number"
 msgstr ""
 
+#: src/Modules/Payuni/Gateways/PickupPay.php:31
+msgid "PAYUNi pay on pickup (7-ELEVEN)"
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/PickupPay.php:32
+msgid "The customer pays when collecting the parcel at 7-ELEVEN. Only offered with PAYUNi 7-ELEVEN shipping when the shipment is created on the PAYUNi payment page. Your PAYUNi account must have pay on pickup enabled."
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/PickupPay.php:33
+msgid "Place order"
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/PickupPay.php:50
+msgid "Enable PAYUNi pay on pickup"
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/PickupPay.php:56
+msgid "Pay on pickup at 7-ELEVEN"
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/PickupPay.php:61
+msgid "Choose your pickup store on the next page and pay when you collect the parcel."
+msgstr ""
+
 #: src/Modules/Payuni/Gateways/SamsungPay.php:20
 msgid "PAYUNi Samsung Pay"
 msgstr ""
@@ -10270,64 +10322,64 @@ msgstr ""
 msgid "AFTEE pay later"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:128
+#: src/Modules/Payuni/PayuniPayment.php:129
 msgid "Trade No"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:129
+#: src/Modules/Payuni/PayuniPayment.php:130
 msgid "Trade Amount"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:130
+#: src/Modules/Payuni/PayuniPayment.php:131
 msgid "Trade Status"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:131
+#: src/Modules/Payuni/PayuniPayment.php:132
 msgid "Message"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:132
+#: src/Modules/Payuni/PayuniPayment.php:133
 msgid "Paid At"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:133
+#: src/Modules/Payuni/PayuniPayment.php:134
 msgid "Close Status"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:134
+#: src/Modules/Payuni/PayuniPayment.php:135
 msgid "Close Time"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:135
+#: src/Modules/Payuni/PayuniPayment.php:136
 msgid "Close Auth"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:136
+#: src/Modules/Payuni/PayuniPayment.php:137
 msgid "Refund No"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:137
+#: src/Modules/Payuni/PayuniPayment.php:138
 msgid "Refund Amount"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:138
+#: src/Modules/Payuni/PayuniPayment.php:139
 msgid "Refund Time"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:218
+#: src/Modules/Payuni/PayuniPayment.php:219
 msgid "The security check failed. Please refresh the page and try again."
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:235
+#: src/Modules/Payuni/PayuniPayment.php:236
 msgid "The PAYUNi order lookup succeeded."
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:241
+#: src/Modules/Payuni/PayuniPayment.php:242
 msgid "The PAYUNi order lookup failed. See the order notes for details."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Payuni/PayuniPayment.php:247
+#: src/Modules/Payuni/PayuniPayment.php:248
 #, php-format
 msgid "The PAYUNi order lookup failed: %s"
 msgstr ""
@@ -10454,37 +10506,41 @@ msgstr ""
 msgid "iCash"
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:128
+#: src/Modules/Payuni/Settings/SettingsTab.php:127
+msgid "Pay on pickup at 7-ELEVEN (needs PAYUNi shipping created on the payment page)"
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:129
 msgid "Only the ticked payment methods are offered. When they are listed separately, each one also has to be enabled under WooCommerce → Settings → Payments. In combined display mode this list decides which methods the PAYUNi payment page offers; leave it empty to let the PAYUNi dashboard decide."
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:132
+#: src/Modules/Payuni/Settings/SettingsTab.php:133
 msgid "Enabled instalment plans"
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:139
+#: src/Modules/Payuni/Settings/SettingsTab.php:140
 msgid "9 instalments"
 msgstr ""
 
 #. translators: %s = link to WC payment settings
-#: src/Modules/Payuni/Settings/SettingsTab.php:147
+#: src/Modules/Payuni/Settings/SettingsTab.php:148
 #, php-format
 msgid "Each plan you tick becomes its own payment method, which you still need to enable individually in the payment method settings. %s"
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:160
+#: src/Modules/Payuni/Settings/SettingsTab.php:161
 msgid "Copy these from the PAYUNi dashboard under Member area → Integration settings."
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:209
+#: src/Modules/Payuni/Settings/SettingsTab.php:210
 msgid "PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on."
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:216
+#: src/Modules/Payuni/Settings/SettingsTab.php:217
 msgid "Charge subscription renewals (WooCommerce Subscriptions or WPSubscription) automatically with saved cards"
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:283
+#: src/Modules/Payuni/Settings/SettingsTab.php:284
 msgid "Go to Payment Settings"
 msgstr ""
 
@@ -10676,7 +10732,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:72
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:271
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:288
-#: src/Modules/PayuniShipping/Frontstage.php:323
+#: src/Modules/PayuniShipping/Frontstage.php:328
 msgid "Shipping transaction ID"
 msgstr ""
 
@@ -11024,111 +11080,111 @@ msgstr ""
 msgid "Something went wrong. Please try again later."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:234
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:272
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:275
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:877
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:284
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:322
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:325
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:927
 msgid "Choose a store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:237
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:287
 msgid "Open the store map"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:238
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:288
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:238
 msgid "Loading…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:239
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:277
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:289
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:327
 msgid "Loading failed. Please try again later"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:240
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:290
 msgid "Store chosen"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:241
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:291
 msgid "Store number:"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:276
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:326
 msgid "Redirecting…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:278
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:328
 msgid "Store number: "
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:279
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:329
 msgid "Different recipient?"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:280
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:330
 msgid "Ship to a different address?"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:295
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:345
 msgid "The cart is empty or the session has expired."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:300
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:350
 msgid "The chosen shipping method does not match the cart."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:304
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:363
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:354
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:413
 msgid "Please choose a convenience store pickup method"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:472
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:479
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:522
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:529
 msgid "Returning to checkout…"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:473
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:523
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:405
 #: src/Modules/Shipping/Admin/CvsStoreEditor.php:406
 msgid "Store selected"
 msgstr ""
 
 #. translators: %s: store name
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:476
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:526
 #, php-format
 msgid "Store chosen: %s"
 msgstr ""
 
 #. translators: %s: store address
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:478
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:528
 #, php-format
 msgid "Store address: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:507
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:557
 msgid "No store has been chosen yet."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:547
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:597
 msgid "This store selection link is no longer valid."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:553
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:556
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:603
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:606
 msgid "The store selection has expired. Please choose the store again."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:576
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:626
 msgid "The store selection was cleared."
 msgstr ""
 
 #. translators: %s: convenience store ID
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:866
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:916
 #, php-format
 msgid "Store number: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:868
+#: src/Modules/PayuniShipping/Frontend/StoreSelector.php:918
 msgid "Outlying islands"
 msgstr ""
 
@@ -11136,29 +11192,29 @@ msgstr ""
 msgid "The recipient's phone number is not valid. Please enter a working mobile or landline number."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontstage.php:214
+#: src/Modules/PayuniShipping/Frontstage.php:219
 msgid "PAYUNi shipping is booked together with the PAYUNi payment, so please choose a PAYUNi payment method."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontstage.php:217
+#: src/Modules/PayuniShipping/Frontstage.php:222
 msgid "PAYUNi can only ship one temperature type per payment. Please place separate orders for ambient and chilled or frozen items."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontstage.php:321
+#: src/Modules/PayuniShipping/Frontstage.php:326
 msgid "PAYUNi created the shipment with the payment."
 msgstr ""
 
 #. translators: 1: amount collected on pickup, 2: order total
-#: src/Modules/PayuniShipping/Frontstage.php:338
+#: src/Modules/PayuniShipping/Frontstage.php:343
 #, php-format
 msgid "PAYUNi will collect %1$s on pickup, which does not match the order total of %2$s. Please check before shipping."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontstage.php:345
+#: src/Modules/PayuniShipping/Frontstage.php:350
 msgid "The customer will pay on pickup. The order is ready to ship."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Frontstage.php:364
+#: src/Modules/PayuniShipping/Frontstage.php:369
 msgid "The payment went through, but PAYUNi did not return a shipment for this order. Please create the shipment in the PAYUNi merchant dashboard."
 msgstr ""
 
@@ -13351,8 +13407,20 @@ msgstr ""
 msgid "Open %s tracking"
 msgstr ""
 
+#. translators: %s: shipping status code
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:63
+#, php-format
+msgid "The parcel was not collected and is back with the seller (status code %s). This pay-on-pickup order was never paid, so it was cancelled and the stock was restored."
+msgstr ""
+
+#. translators: %s: shipping status code
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:75
+#, php-format
+msgid "The parcel is back with the seller (status code %s). This order was already paid: please contact the customer and either refund it (tick \"Restock refunded items\") or ship it again."
+msgstr ""
+
 #. translators: %s: provider label
-#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:96
+#: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:150
 #, php-format
 msgid "%s shipping status update"
 msgstr ""

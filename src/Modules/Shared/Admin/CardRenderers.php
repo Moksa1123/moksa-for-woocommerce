@@ -230,7 +230,7 @@ final class CardRenderers {
 		$pay_type  = '';
 		$auth_amt  = (string) $order->get_meta( '_moksafowo_linepay_transaction_balanced_amount' );
 		$auth_at   = '';
-		$refund_tx = (string) $order->get_meta( '_moksafowo_linepay_refund_transaction_id' );
+		$refund_tx = self::linepay_refund_ids_text( $order->get_meta( \Moksafowo\Order\Meta\Keys::LINEPAY_REFUND_TRANSACTION_ID ) );
 
 		// 沒任何 LinePay 交易資料 → 顯示「尚未付款」（含 checkout-draft 訂單）
 		if ( '' === $tx && '' === $status ) {
@@ -642,6 +642,21 @@ final class CardRenderers {
 		echo '</p>';
 		echo '</div>';
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * LINE Pay 退款交易編號：退款時每筆累加成陣列（Linepay\Api\PaymentRequest::do_refund），
+	 * 舊資料可能是字串。原本直接轉字串，陣列會顯示成「Array」並丟 PHP 警告。
+	 *
+	 * @param mixed $meta 訂單 meta 值。
+	 */
+	public static function linepay_refund_ids_text( $meta ): string {
+		$ids = is_array( $meta ) ? $meta : array( $meta );
+		$ids = array_filter(
+			array_map( static fn ( $id ): string => is_scalar( $id ) ? trim( (string) $id ) : '', $ids ),
+			static fn ( string $id ): bool => '' !== $id
+		);
+		return implode( ', ', $ids );
 	}
 
 	private static function linepay_status_label( string $raw ): string {

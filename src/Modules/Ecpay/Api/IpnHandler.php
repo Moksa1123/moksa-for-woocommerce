@@ -143,6 +143,15 @@ final class IpnHandler {
 					$order->add_order_note( $note );
 				}
 			}
+		} elseif ( 10300066 === $rtn_code ) {
+			// 官方：10300066＝付款結果待確認，不可出貨也不是失敗（標失敗會釋放庫存、顧客以為要重付）。
+			// 之後綠界會再送 RtnCode=1 或失敗通知。
+			$note = __( 'ECPay is still confirming this payment (status code 10300066). Do not ship yet; the order will update when ECPay sends the final result.', 'moksa-for-woocommerce' );
+			if ( ! $order->is_paid() && 'on-hold' !== $order->get_status() ) {
+				$order->update_status( 'on-hold', $note );
+			} else {
+				$order->add_order_note( $note );
+			}
 		} else {
 			$msg  = $posted['RtnMsg'] ?? '';
 			$note = sprintf(

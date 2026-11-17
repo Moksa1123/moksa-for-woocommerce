@@ -25,6 +25,7 @@ const PAYUNI_IDS = [
 	'moksafowo_payuni_icash',
 	'moksafowo_payuni_jkopay',
 	'moksafowo_payuni_credit_red',
+	'moksafowo_payuni_pickup_pay', // 取貨付款（統一物流幕前、7-ELEVEN）
 	'moksafowo_payuni_installment_3',
 	'moksafowo_payuni_installment_6',
 	'moksafowo_payuni_installment_9',

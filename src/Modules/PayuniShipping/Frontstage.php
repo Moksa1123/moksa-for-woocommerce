@@ -146,6 +146,11 @@ final class Frontstage {
 		if ( 'yes' === get_option( self::COD_OPTION, 'no' ) && \Moksafowo\Modules\Payuni\Gateways\Unified::GATEWAY_ID === $order->get_payment_method() ) {
 			$args['Ship'] = 1;
 		}
+		// 「取貨付款」獨立按鈕：只帶 Ship、不帶 ShipTag → 付款頁只剩取貨付款（官方 UPP 物流參數備註 2）。
+		if ( \Moksafowo\Modules\Payuni\Gateways\PickupPay::GATEWAY_ID === $order->get_payment_method() && MethodIdPredicates::needs_cvs( $method_id ) ) {
+			$args['Ship'] = 1;
+			unset( $args['ShipTag'] );
+		}
 
 		$order->update_meta_data( OrderMeta::LgsType, $args['LgsType'] );
 		$order->update_meta_data( OrderMeta::GoodsType, $goods_type );

@@ -90,6 +90,20 @@ final class StatusMapper extends AbstractStatusMapper {
 
 	public static function init(): void {
 		add_action( 'moksafowo_ecpay_shipping_status_received', [ __CLASS__, 'handle_legacy_action' ], 20, 3 );
+		add_action( 'moksafowo_shipping_status_received_ecpay_4444', [ __CLASS__, 'note_create_failed' ], 10, 2 );
+	}
+
+	/**
+	 * 4444＝訂單建立失敗（綠界 2026 新增貨態）：沒有對應的訂單狀態，原本只會靜靜忽略，
+	 * 店家以為已出貨。留一則明確的備註請店家重新建立物流單。
+	 */
+	public static function note_create_failed( \WC_Order $order, string $desc = '' ): void {
+		$order->add_order_note(
+			\Moksafowo\Order\Note::build(
+				__( 'ECPay could not create this shipment (status code 4444). Please create the shipment again.', 'moksa-for-woocommerce' ),
+				'' !== $desc ? [ __( 'Shipping status', 'moksa-for-woocommerce' ) => $desc ] : []
+			)
+		);
 	}
 
 	public static function handle_legacy_action( \WC_Order $order, string $code, string $msg ): void {
@@ -98,6 +112,10 @@ final class StatusMapper extends AbstractStatusMapper {
 
 	protected function provider_slug(): string {
 		return 'ecpay';
+	}
+
+	protected function returned_to_seller_codes(): array {
+		return [ '2044', '2070', '3023', '3310' ];
 	}
 
 	protected function package_codes( \WC_Order $order ): array {

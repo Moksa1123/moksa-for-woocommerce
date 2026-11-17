@@ -124,6 +124,7 @@ class SettingsTab extends \WC_Settings_Page {
 						'moksafowo_payuni_icash'      => __( 'iCash', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_jkopay'     => __( 'JKOPAY', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_credit_red' => __( 'Credit card reward points', 'moksa-for-woocommerce' ),
+						'moksafowo_payuni_pickup_pay' => __( 'Pay on pickup at 7-ELEVEN (needs PAYUNi shipping created on the payment page)', 'moksa-for-woocommerce' ),
 					),
 					'desc'    => __( 'Only the ticked payment methods are offered. When they are listed separately, each one also has to be enabled under WooCommerce → Settings → Payments. In combined display mode this list decides which methods the PAYUNi payment page offers; leave it empty to let the PAYUNi dashboard decide.', 'moksa-for-woocommerce' ),
 					'id'      => 'moksafowo_payuni_enabled_methods',

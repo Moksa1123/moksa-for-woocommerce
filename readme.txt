@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.23.4
+Stable tag: 1.23.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -168,6 +168,13 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.23.5 - 2026-11-17 =
+* New: PAYUNi "Pay on pickup at 7-ELEVEN" can be offered as its own payment button when PAYUNi shipping is created on the payment page.
+* New: When a pay-on-pickup parcel comes back to the seller, the order is cancelled and the stock restored; paid orders get a note to refund or re-ship.
+* Fixed: ECPay "payment pending confirmation" and NewebPay buy-now-pay-later results that are not yet paid are no longer treated as failed or paid.
+* Fixed: ECPay OK Mart store-to-store (ended by ECPay) is no longer offered; ECPay shipment status 4444 now leaves a note; shipment lookups use the current API version.
+* Fixed: PAYUNi refunds report a connection error instead of failing silently, and LINE Pay refund numbers display correctly.
 
 = 1.23.4 - 2026-11-17 =
 * Fixed: A district saved on a customer account that is no longer in the district list no longer blocks the block checkout. It is cleared so the customer can pick it again.
