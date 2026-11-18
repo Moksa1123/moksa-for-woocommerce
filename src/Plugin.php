@@ -67,6 +67,8 @@ final class Plugin {
 		add_action( 'woocommerce_checkout_process', [ Http\CheckoutInput::class, 'prime' ], 0 );
 		// 記下寫過的 option，解除安裝時照表刪（WP 沒有依前綴刪 option 的 API）。
 		Settings\OptionRegistry::boot();
+		// 設定頁金鑰欄位不印明文（已設定＋更換，留空不變）。
+		Settings\SecretFields::boot();
 		add_action( 'woocommerce_init', [ $this, 'on_woocommerce_init' ] );
 		add_filter( 'plugin_action_links_' . MOKSAFOWO_PLUGIN_BASENAME, [ $this, 'plugin_action_links' ] );
 		add_filter( 'plugin_row_meta', [ $this, 'plugin_row_meta' ], 10, 2 );

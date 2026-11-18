@@ -91,20 +91,21 @@ class PayuniPayment {
 		PaymentResponse::init();
 
 		self::$allowed_payments = array(
-			Unified::GATEWAY_ID            => '\Moksafowo\Modules\Payuni\Gateways\Unified',
-			Credit::GATEWAY_ID             => '\Moksafowo\Modules\Payuni\Gateways\Credit',
-			Cvs::GATEWAY_ID                => '\Moksafowo\Modules\Payuni\Gateways\Cvs',
-			Atm::GATEWAY_ID                => '\Moksafowo\Modules\Payuni\Gateways\Atm',
-			Aftee::GATEWAY_ID              => '\Moksafowo\Modules\Payuni\Gateways\Aftee',
-			ApplePay::GATEWAY_ID           => '\Moksafowo\Modules\Payuni\Gateways\ApplePay',
-			GooglePay::GATEWAY_ID          => '\Moksafowo\Modules\Payuni\Gateways\GooglePay',
-			SamsungPay::GATEWAY_ID         => '\Moksafowo\Modules\Payuni\Gateways\SamsungPay',
-			LinePay::GATEWAY_ID            => '\Moksafowo\Modules\Payuni\Gateways\LinePay',
-			CreditUnionPay::GATEWAY_ID     => '\Moksafowo\Modules\Payuni\Gateways\CreditUnionPay',
-			ICash::GATEWAY_ID              => '\Moksafowo\Modules\Payuni\Gateways\ICash',
-			JKoPay::GATEWAY_ID             => '\Moksafowo\Modules\Payuni\Gateways\JKoPay',
-			CreditRed::GATEWAY_ID          => '\Moksafowo\Modules\Payuni\Gateways\CreditRed',
-			Gateways\PickupPay::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\PickupPay',
+			Unified::GATEWAY_ID             => '\Moksafowo\Modules\Payuni\Gateways\Unified',
+			Credit::GATEWAY_ID              => '\Moksafowo\Modules\Payuni\Gateways\Credit',
+			Cvs::GATEWAY_ID                 => '\Moksafowo\Modules\Payuni\Gateways\Cvs',
+			Atm::GATEWAY_ID                 => '\Moksafowo\Modules\Payuni\Gateways\Atm',
+			Aftee::GATEWAY_ID               => '\Moksafowo\Modules\Payuni\Gateways\Aftee',
+			ApplePay::GATEWAY_ID            => '\Moksafowo\Modules\Payuni\Gateways\ApplePay',
+			GooglePay::GATEWAY_ID           => '\Moksafowo\Modules\Payuni\Gateways\GooglePay',
+			SamsungPay::GATEWAY_ID          => '\Moksafowo\Modules\Payuni\Gateways\SamsungPay',
+			LinePay::GATEWAY_ID             => '\Moksafowo\Modules\Payuni\Gateways\LinePay',
+			CreditUnionPay::GATEWAY_ID      => '\Moksafowo\Modules\Payuni\Gateways\CreditUnionPay',
+			ICash::GATEWAY_ID               => '\Moksafowo\Modules\Payuni\Gateways\ICash',
+			JKoPay::GATEWAY_ID              => '\Moksafowo\Modules\Payuni\Gateways\JKoPay',
+			CreditRed::GATEWAY_ID           => '\Moksafowo\Modules\Payuni\Gateways\CreditRed',
+			Gateways\PickupPay::GATEWAY_ID  => '\Moksafowo\Modules\Payuni\Gateways\PickupPay',
+			Gateways\ClickToPay::GATEWAY_ID => '\Moksafowo\Modules\Payuni\Gateways\ClickToPay',
 		);
 
 		$number_of_payments = get_option( 'moksafowo_payuni_payment_installment_number_of_payments', array() );

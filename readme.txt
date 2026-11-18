@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.23.5
+Stable tag: 1.23.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -168,6 +168,11 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.23.6 - 2026-11-18 =
+* New: PAYUNi Click to Pay can be offered as its own payment button (turn it on in the PAYUNi merchant dashboard first).
+* Fixed: The AI assistant no longer changes the declared output types of abilities from other plugins (for example Novamira or FluentCRM).
+* Fixed: Saved payment, shipping and invoice keys are no longer printed in the settings page source; leave the field empty to keep the current key.
 
 = 1.23.5 - 2026-11-17 =
 * New: PAYUNi "Pay on pickup at 7-ELEVEN" can be offered as its own payment button when PAYUNi shipping is created on the payment page.

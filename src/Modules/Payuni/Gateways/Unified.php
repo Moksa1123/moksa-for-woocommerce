@@ -22,6 +22,7 @@ final class Unified extends GatewayBase {
 		'moksafowo_payuni_applepay'   => 'ApplePay',
 		'moksafowo_payuni_googlepay'  => 'GooglePay',
 		'moksafowo_payuni_samsungpay' => 'SamsungPay',
+		'moksafowo_payuni_clicktopay' => 'ClickToPay',
 	);
 
 	public function __construct() {

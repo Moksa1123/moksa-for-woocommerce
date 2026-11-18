@@ -148,7 +148,7 @@ class SettingsTab extends WC_Settings_Page {
 	public function output(): void {
 		global $current_section;
 		$settings = $this->get_settings( $current_section );
-		WC_Admin_Settings::output_fields( $settings );
+		WC_Admin_Settings::output_fields( \Moksafowo\Settings\SecretFields::mask( $settings ) );
 	}
 
 	public function save(): void {

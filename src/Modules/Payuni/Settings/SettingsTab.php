@@ -119,6 +119,7 @@ class SettingsTab extends \WC_Settings_Page {
 						'moksafowo_payuni_applepay'   => __( 'Apple Pay', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_googlepay'  => __( 'Google Pay', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_samsungpay' => __( 'Samsung Pay', 'moksa-for-woocommerce' ),
+						'moksafowo_payuni_clicktopay' => __( 'Click to Pay (turn it on in the PAYUNi dashboard first)', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_linepay'    => __( 'LINE Pay', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_unionpay'   => __( 'UnionPay', 'moksa-for-woocommerce' ),
 						'moksafowo_payuni_icash'      => __( 'iCash', 'moksa-for-woocommerce' ),
@@ -259,7 +260,7 @@ class SettingsTab extends \WC_Settings_Page {
 		}
 
 		$settings = $this->get_settings( $current_section );
-		\WC_Admin_Settings::output_fields( $settings );
+		\WC_Admin_Settings::output_fields( \Moksafowo\Settings\SecretFields::mask( $settings ) );
 	}
 
 

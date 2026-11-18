@@ -326,7 +326,7 @@ final class SettingsPage extends \WC_Settings_Page {
 
 		Ui::open_shell();
 		$this->render_subsection_banner( $section );
-		\WC_Admin_Settings::output_fields( $this->get_settings( $section ) );
+		\WC_Admin_Settings::output_fields( SecretFields::mask( $this->get_settings( $section ) ) );
 		Ui::close_shell();
 	}
 

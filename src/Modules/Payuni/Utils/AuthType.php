@@ -12,6 +12,7 @@ class AuthType {
 	const GOOGLEPAY   = '5'; // Google Pay.
 	const SAMSUNGPAY  = '6'; // Samsung Pay.
 	const UNIPAY      = '7'; // 銀聯
+	const CLICKTOPAY  = '8'; // Click to Pay（官方 UPP／交易查詢 AuthType=8）。
 
 	public static function get_type( $type ) {
 		switch ( $type ) {
@@ -29,6 +30,8 @@ class AuthType {
 				return 'Samsung Pay';
 			case self::UNIPAY:
 				return __( 'UnionPay', 'moksa-for-woocommerce' );
+			case self::CLICKTOPAY:
+				return 'Click to Pay';
 			default:
 				return __( 'Unknown authorisation type', 'moksa-for-woocommerce' );
 		}
