@@ -539,6 +539,23 @@ final class SettingsPage extends \WC_Settings_Page {
 			],
 
 			[
+				'title' => __( 'Default country', 'moksa-for-woocommerce' ),
+				'type'  => 'title',
+				'id'    => 'moksafowo_single_country_section',
+			],
+			[
+				'title'   => __( 'Single-country stores', 'moksa-for-woocommerce' ),
+				'id'      => \Moksafowo\Modules\Address\SingleCountryDefault::OPTION,
+				'type'    => 'checkbox',
+				'default' => 'yes',
+				'desc'    => __( 'If you sell or ship to only one country and the WooCommerce default customer location is left empty, start new customers in that country so shipping options show at checkout. Saved customer addresses are never changed.', 'moksa-for-woocommerce' ),
+			],
+			[
+				'type' => 'sectionend',
+				'id'   => 'moksafowo_single_country_section',
+			],
+
+			[
 				'title' => __( 'My Account', 'moksa-for-woocommerce' ),
 				'type'  => 'title',
 				'id'    => 'moksafowo_myaccount_section',

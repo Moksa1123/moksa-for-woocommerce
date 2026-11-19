@@ -61,6 +61,10 @@ final class Plugin {
 			return;
 		}
 
+		// 只寄一國的店補預設國家。要在這裡掛：前台頁面的顧客物件在 woocommerce_init 之前
+		// （WC::init 裡的 wc_load_cart）就建好了，掛在 woocommerce_init 會來不及。
+		Modules\Address\SingleCountryDefault::init();
+
 		// 訂單 meta 反查的自訂查詢參數（Order\Lookup::orders() 查詢前也會再確認一次）。
 		Order\Lookup::register();
 		// 結帳欄位的 nonce 要在 WC 建立新帳號、換掉目前使用者之前驗（見 Http\CheckoutInput）。
