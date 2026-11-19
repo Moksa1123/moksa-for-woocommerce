@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.23.7\n"
+"Project-Id-Version: Moksa for WooCommerce 1.25.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-19T09:08:38+00:00\n"
+"POT-Creation-Date: 2026-11-19T13:14:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -64,6 +64,20 @@ msgstr ""
 #: src/Compatibility/Requirements.php:40
 #, php-format
 msgid "Moksa requires WooCommerce %1$s or higher. You are running %2$s."
+msgstr ""
+
+#: src/Compatibility/Subscriptions.php:133
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:452
+msgid "Your new card was saved. Your subscription will renew with it."
+msgstr ""
+
+#: src/Compatibility/Subscriptions.php:135
+msgid "ECPay is still confirming the new card. Check this page again in a few minutes."
+msgstr ""
+
+#: src/Compatibility/Subscriptions.php:137
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:454
+msgid "The new card was not saved, so your subscription keeps using the current payment method. Please try again or contact the store."
 msgstr ""
 
 #: src/Compatibility/WpSubscription.php:284
@@ -2799,10 +2813,10 @@ msgstr ""
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:154
 #: src/Modules/PaynowInvoice/Operations/Invalid.php:62
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:167
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:341
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:464
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:86
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
-#: src/Modules/Tappay/Gateways/Credit.php:343
+#: src/Modules/Tappay/Gateways/Credit.php:375
 msgid "No reason given"
 msgstr ""
 
@@ -3488,11 +3502,11 @@ msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:198
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:74
-#: src/Modules/Ecpay/Gateways/CreditBind.php:198
+#: src/Modules/Ecpay/Gateways/CreditBind.php:302
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:108
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:30
-#: src/Modules/Tappay/Gateways/Credit.php:304
+#: src/Modules/Tappay/Gateways/Credit.php:336
 msgid "The refund amount must be greater than 0."
 msgstr ""
 
@@ -3510,7 +3524,7 @@ msgid "Authorized amount"
 msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:232
-#: src/Modules/Payuni/Api/PaymentRequest.php:334
+#: src/Modules/Payuni/Api/PaymentRequest.php:367
 msgid "Captured amount"
 msgstr ""
 
@@ -3721,20 +3735,21 @@ msgid "Payment information"
 msgstr ""
 
 #. translators: %s: site name
-#: src/Modules/Ecpay/Api/BindHandler.php:75
+#: src/Modules/Ecpay/Api/BindHandler.php:84
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:194
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:365
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:143
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:187
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:128
-#: src/Modules/Tappay/Gateways/Credit.php:443
+#: src/Modules/Tappay/Gateways/Credit.php:477
 #, php-format
 msgid "%s order"
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:87
+#: src/Modules/Ecpay/Api/BindHandler.php:96
+#: src/Modules/Ecpay/Api/BindHandler.php:101
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
-#: src/Modules/Ecpay/Gateways/CreditBind.php:194
+#: src/Modules/Ecpay/Gateways/CreditBind.php:298
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:255
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:284
@@ -3771,76 +3786,119 @@ msgstr ""
 msgid "The order could not be found."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:93
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:115
+#: src/Modules/Ecpay/Api/BindHandler.php:107
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:145
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:358
 msgid "The card details were not received. Please enter the card again."
 msgstr ""
 
+#: src/Modules/Ecpay/Api/BindHandler.php:111
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:362
+#: src/Modules/Tappay/Gateways/Credit.php:165
+msgid "You have changed or tried to change your card too many times today. Please try again tomorrow or contact the store."
+msgstr ""
+
 #. translators: %s: ECPay message
-#: src/Modules/Ecpay/Api/BindHandler.php:108
+#: src/Modules/Ecpay/Api/BindHandler.php:126
 #, php-format
 msgid "ECPay could not save the card: %s"
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:112
-#: src/Modules/Ecpay/Api/BindHandler.php:120
-#: src/Modules/Ecpay/Api/BindHandler.php:153
-#: src/Modules/Ecpay/Gateways/CreditBind.php:177
+#: src/Modules/Ecpay/Api/BindHandler.php:130
+#: src/Modules/Ecpay/Api/BindHandler.php:138
+#: src/Modules/Ecpay/Api/BindHandler.php:191
+#: src/Modules/Ecpay/Gateways/CreditBind.php:266
 #: src/Modules/Newebpay/Api/PeriodHandler.php:76
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:50
 #: src/Modules/ShoplinePayments/Module.php:108
 msgid "The card payment did not go through. Please check the card and try again."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:119
+#: src/Modules/Ecpay/Api/BindHandler.php:137
 msgid "ECPay returned a payment that belongs to another order, so this order was not marked as paid."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:206
+#: src/Modules/Ecpay/Api/BindHandler.php:246
 msgid "ECPay sent a simulated payment notice from its merchant dashboard. The order was not marked as paid."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:218
+#: src/Modules/Ecpay/Api/BindHandler.php:258
 msgid "ECPay is still confirming this card payment. Check the payment in the ECPay dashboard before shipping."
 msgstr ""
 
 #. translators: 1: ECPay message, 2: code
-#: src/Modules/Ecpay/Api/BindHandler.php:225
+#: src/Modules/Ecpay/Api/BindHandler.php:265
 #, php-format
 msgid "The ECPay card payment failed: %1$s (code %2$d)"
 msgstr ""
 
 #. translators: 1: amount, 2: ECPay message
-#: src/Modules/Ecpay/Api/BindHandler.php:273
+#: src/Modules/Ecpay/Api/BindHandler.php:313
 #, php-format
 msgid "The card was saved, but the NT$%1$d card check could not be cancelled automatically: %2$s. Cancel it in the ECPay dashboard."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:280
+#: src/Modules/Ecpay/Api/BindHandler.php:320
 msgid "The card was saved with ECPay for subscription renewals."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Ecpay/Api/BindHandler.php:290
+#: src/Modules/Ecpay/Api/BindHandler.php:330
 #: src/Modules/Ecpay/Api/IpnHandler.php:116
 #, php-format
 msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
 #. translators: 1: ECPay trade number, 2: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:303
+#: src/Modules/Ecpay/Api/BindHandler.php:343
 #, php-format
 msgid "ECPay card payment completed — trade number %1$s (card ending %2$s)"
 msgstr ""
 
+#. translators: 1: ECPay message, 2: code
+#: src/Modules/Ecpay/Api/BindHandler.php:386
+#, php-format
+msgid "The customer tried to change the card, but ECPay could not check the new card: %1$s (code %2$d). The subscription still uses the current payment method."
+msgstr ""
+
+#. translators: 1: ECPay status, 2: amount
+#: src/Modules/Ecpay/Api/BindHandler.php:404
+#, php-format
+msgid "A card change result from ECPay could not be confirmed (status %1$s, amount %2$d), so the subscription still uses the current payment method."
+msgstr ""
+
+#: src/Modules/Ecpay/Api/BindHandler.php:417
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:277
+msgid "A card change finished after this subscription ended, so the card was not saved."
+msgstr ""
+
+#. translators: %s: card last four digits
+#: src/Modules/Ecpay/Api/BindHandler.php:435
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:306
+#, php-format
+msgid "The customer changed the card for this subscription. Renewals now use the card ending %s."
+msgstr ""
+
+#. translators: 1: amount, 2: ECPay message, 3: ECPay trade number
+#: src/Modules/Ecpay/Api/BindHandler.php:453
+#, php-format
+msgid "The NT$%1$d card check could not be cancelled automatically: %2$s. Cancel trade %3$s in the ECPay dashboard before it is captured."
+msgstr ""
+
+#. translators: %s: subscription number
+#: src/Modules/Ecpay/Api/BindHandler.php:461
+#, php-format
+msgid "A card check needs to be cancelled (subscription #%s)"
+msgstr ""
+
 #. translators: %s: error message
-#: src/Modules/Ecpay/Api/BindHandler.php:318
+#: src/Modules/Ecpay/Api/BindHandler.php:475
 #, php-format
 msgid "ECPay reported a card payment, but it could not be confirmed with ECPay (%s). Check the payment in the ECPay dashboard before shipping."
 msgstr ""
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:330
+#: src/Modules/Ecpay/Api/BindHandler.php:487
 #, php-format
 msgid "An ECPay payment notice did not match the transaction at ECPay (status %1$s, amount %2$d), so the order was not marked as paid."
 msgstr ""
@@ -3882,7 +3940,7 @@ msgid "AES decryption failed."
 msgstr ""
 
 #: src/Modules/Ecpay/Api/Helper.php:183
-#: src/Modules/Ecpay/Gateways/CreditBind.php:203
+#: src/Modules/Ecpay/Gateways/CreditBind.php:307
 msgid "No ECPay transaction ID was found, so the refund cannot be made here. Please refund it in the ECPay dashboard."
 msgstr ""
 
@@ -3996,17 +4054,17 @@ msgid "This order was paid offline (%s) and ECPay has no automatic refund for it
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:87
-#: src/Modules/Ecpay/Gateways/CreditBind.php:212
+#: src/Modules/Ecpay/Gateways/CreditBind.php:316
 msgid "This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:102
-#: src/Modules/Ecpay/Gateways/CreditBind.php:227
+#: src/Modules/Ecpay/Gateways/CreditBind.php:331
 msgid "The capture was cancelled but the authorization could not be voided, so the capture was requested again. Nothing has changed."
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:104
-#: src/Modules/Ecpay/Gateways/CreditBind.php:229
+#: src/Modules/Ecpay/Gateways/CreditBind.php:333
 msgid "The capture was cancelled but the authorization could not be voided or captured again. This payment is now not captured: handle it in the ECPay dashboard."
 msgstr ""
 
@@ -4018,25 +4076,25 @@ msgstr ""
 
 #. translators: 1: amount, 2: ECPay message, 3: code
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:131
-#: src/Modules/Ecpay/Gateways/CreditBind.php:237
+#: src/Modules/Ecpay/Gateways/CreditBind.php:341
 #, php-format
 msgid "The ECPay refund of NT$%1$d failed: %2$s (code %3$d)"
 msgstr ""
 
 #. translators: 1: amount, 2: reason
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:143
-#: src/Modules/Ecpay/Gateways/CreditBind.php:250
+#: src/Modules/Ecpay/Gateways/CreditBind.php:354
 #, php-format
 msgid "ECPay refunded NT$%1$d. Reason: %2$s"
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:145
-#: src/Modules/Ecpay/Gateways/CreditBind.php:252
+#: src/Modules/Ecpay/Gateways/CreditBind.php:356
 msgid "(not given)"
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:154
-#: src/Modules/Ecpay/Gateways/CreditBind.php:89
+#: src/Modules/Ecpay/Gateways/CreditBind.php:132
 msgid "Invalid order"
 msgstr ""
 
@@ -4093,28 +4151,54 @@ msgstr ""
 msgid "Customers enter their card on an ECPay card form on your site, and the card is saved so WooCommerce Subscriptions renewals are charged automatically. ECPay must enable card binding for your store first, and daily automatic capture must be turned on in the ECPay dashboard, otherwise the payments are never captured."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:110
+#: src/Modules/Ecpay/Gateways/CreditBind.php:138
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:127
+msgid "This subscription could not be found."
+msgstr ""
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:183
 msgid "Please log in to save a card for your subscription."
 msgstr ""
 
+#: src/Modules/Ecpay/Gateways/CreditBind.php:190
+msgid "This card change page has been opened too many times. Please start again from “Change payment”."
+msgstr ""
+
 #. translators: %s: error message
-#: src/Modules/Ecpay/Gateways/CreditBind.php:142
+#: src/Modules/Ecpay/Gateways/CreditBind.php:225
 #, php-format
 msgid "The ECPay card form could not be opened: %s"
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:146
-#: src/Modules/Ecpay/Gateways/CreditBind.php:176
+#: src/Modules/Ecpay/Gateways/CreditBind.php:229
+#: src/Modules/Ecpay/Gateways/CreditBind.php:265
 #: src/Modules/ShoplinePayments/Blocks/ShoplinePaymentsBlocksMethod.php:49
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:326
 #: src/Modules/ShoplinePayments/Module.php:107
 msgid "The card form could not be loaded. Please refresh the page or choose another payment method."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:183
+#: src/Modules/Ecpay/Gateways/CreditBind.php:273
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:333
+msgid "Change the card for this subscription"
+msgstr ""
+
+#. translators: %d: card check amount in NT$
+#: src/Modules/Ecpay/Gateways/CreditBind.php:279
+#, php-format
+msgid "Enter the new card below. To check the card, ECPay authorises NT$%d and the authorisation is cancelled right away, so you are not charged. Your subscription keeps using the current card until the new one is saved."
+msgstr ""
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:286
 msgid "Enter your card below. It will be saved with ECPay so your subscription renews automatically."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/CreditBind.php:186
+#: src/Modules/Ecpay/Gateways/CreditBind.php:290
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:337
+msgid "Save new card"
+msgstr ""
+
+#: src/Modules/Ecpay/Gateways/CreditBind.php:290
 msgid "Pay and save card"
 msgstr ""
 
@@ -4252,8 +4336,8 @@ msgstr ""
 #: src/Modules/Pchomepay/PaymentTypeCatalog.php:13
 #: src/Modules/Shared/Admin/CardRenderers.php:488
 #: src/Modules/ShoplinePayments/Api/Helper.php:33
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:52
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:69
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:54
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:71
 #: src/Modules/ShoplinePayments/Module.php:30
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:116
 #: src/Modules/Smilepay/Module.php:30
@@ -4285,7 +4369,7 @@ msgstr ""
 #: src/Modules/Newebpay/Settings/SettingsTab.php:160
 #: src/Modules/Payuni/Module.php:38
 #: src/Modules/Payuni/Settings/SettingsTab.php:117
-#: src/Modules/Payuni/Utils/PayType.php:25
+#: src/Modules/Payuni/Utils/PayType.php:26
 #: src/Modules/Shared/Admin/CardRenderers.php:494
 msgid "Convenience store code"
 msgstr ""
@@ -4353,6 +4437,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/JKoPay.php:40
 #: src/Modules/Payuni/Module.php:40
 #: src/Modules/Payuni/Settings/SettingsTab.php:126
+#: src/Modules/Payuni/Utils/PayType.php:38
 #: src/Modules/ShoplinePayments/Api/Helper.php:37
 #: src/Modules/ShoplinePayments/Module.php:34
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:120
@@ -4771,54 +4856,54 @@ msgid "Card check amount"
 msgstr ""
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:198
-msgid "For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
-msgstr ""
-
-#: src/Modules/Ecpay/SubscriptionRenewal.php:61
-msgid "ECPay renewal failed: no saved card is linked to this subscription."
+msgid "For a free trial or when a customer changes the card on a subscription, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract."
 msgstr ""
 
 #: src/Modules/Ecpay/SubscriptionRenewal.php:73
+msgid "ECPay renewal failed: no saved card is linked to this subscription."
+msgstr ""
+
+#: src/Modules/Ecpay/SubscriptionRenewal.php:85
 msgid "ECPay renewal skipped: this saved card was declined before, and ECPay does not allow charging it again. Ask the customer to pay this order and save a new card."
 msgstr ""
 
 #. translators: 1: ECPay merchant trade number, 2: message
-#: src/Modules/Ecpay/SubscriptionRenewal.php:109
+#: src/Modules/Ecpay/SubscriptionRenewal.php:121
 #, php-format
 msgid "The ECPay renewal charge (trade number %1$s) is not confirmed yet: %2$s. Check it in the ECPay dashboard before charging again."
 msgstr ""
 
 #. translators: 1: ECPay message, 2: code
-#: src/Modules/Ecpay/SubscriptionRenewal.php:127
+#: src/Modules/Ecpay/SubscriptionRenewal.php:139
 #, php-format
 msgid "The ECPay renewal charge failed: %1$s (code %2$d)."
 msgstr ""
 
 #. translators: 1: ECPay message, 2: code
-#: src/Modules/Ecpay/SubscriptionRenewal.php:146
+#: src/Modules/Ecpay/SubscriptionRenewal.php:158
 #, php-format
 msgid "The ECPay renewal charge was declined: %1$s (code %2$d). This card will not be charged again; ask the customer to pay this order and save a new card."
 msgstr ""
 
-#: src/Modules/Ecpay/SubscriptionRenewal.php:175
+#: src/Modules/Ecpay/SubscriptionRenewal.php:187
 msgid "The saved card was deleted from ECPay because no subscription uses it any more."
 msgstr ""
 
 #. translators: %s: ECPay message
-#: src/Modules/Ecpay/SubscriptionRenewal.php:177
+#: src/Modules/Ecpay/SubscriptionRenewal.php:189
 #, php-format
 msgid "The saved card could not be deleted from ECPay: %s"
 msgstr ""
 
-#: src/Modules/Ecpay/SubscriptionRenewal.php:186
+#: src/Modules/Ecpay/SubscriptionRenewal.php:198
 msgid "ECPay saved card ID (BindCardID)"
 msgstr ""
 
-#: src/Modules/Ecpay/SubscriptionRenewal.php:190
+#: src/Modules/Ecpay/SubscriptionRenewal.php:202
 msgid "ECPay member ID (MerchantMemberID)"
 msgstr ""
 
-#: src/Modules/Ecpay/SubscriptionRenewal.php:203
+#: src/Modules/Ecpay/SubscriptionRenewal.php:215
 msgid "Enter both the ECPay saved card ID and member ID."
 msgstr ""
 
@@ -5661,7 +5746,7 @@ msgid "The status could not be looked up: "
 msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:351
-#: src/Modules/Linepay/LinePay.php:148
+#: src/Modules/Linepay/LinePay.php:154
 #: src/Modules/Payuni/PayuniPayment.php:209
 #: src/Modules/Shared/Admin/PaymentQuery.php:134
 msgid "Connection error. Please try again later."
@@ -6348,9 +6433,9 @@ msgstr ""
 #: src/Modules/EcpayShipping/Webhook/IpnHandler.php:106
 #: src/Modules/Linepay/Api/PaymentRequest.php:192
 #: src/Modules/Linepay/Api/PaymentRequest.php:267
-#: src/Modules/Linepay/Api/PaymentRequest.php:671
+#: src/Modules/Linepay/Api/PaymentRequest.php:771
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:125
-#: src/Modules/Payuni/Api/PaymentRequest.php:669
+#: src/Modules/Payuni/Api/PaymentRequest.php:763
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:272
@@ -6603,7 +6688,7 @@ msgstr ""
 #: src/Modules/OrderLookup/PaymentMethodOps.php:114
 #: src/Modules/Payuni/Module.php:47
 #: src/Modules/Payuni/Settings/SettingsTab.php:123
-#: src/Modules/Payuni/Utils/PayType.php:33
+#: src/Modules/Payuni/Utils/PayType.php:34
 #: src/Modules/Shared/Admin/CardRenderers.php:238
 #: src/Modules/Shared/Admin/CardRenderers.php:246
 #: src/Modules/ShoplinePayments/Api/Helper.php:36
@@ -6675,56 +6760,95 @@ msgstr ""
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
 #: src/Modules/Linepay/Api/PaymentRequest.php:343
-#: src/Modules/Payuni/Api/PaymentRequest.php:132
+#: src/Modules/Payuni/Api/PaymentRequest.php:160
 #, php-format
 msgid "Unable to find order #%s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:457
+#: src/Modules/Linepay/Api/PaymentRequest.php:361
+msgid "This LINE Pay payment has not been completed, so there is nothing to refund through LINE Pay."
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:391
+#: src/Modules/Payuni/Api/PaymentRequest.php:393
+msgid "The refund amount is more than the payment amount."
+msgstr ""
+
+#. translators: %s: refund amount
+#: src/Modules/Linepay/Api/PaymentRequest.php:409
+#, php-format
+msgid "LINE Pay cancelled the authorisation for this refund of %s, so the customer is not charged."
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:423
+msgid "LINE Pay cancelled the whole payment after the capture failed, so the customer has not been charged anything for this order. Check the order and collect payment again if needed."
+msgstr ""
+
+#. translators: 1: refund amount, 2: amount captured
+#: src/Modules/Linepay/Api/PaymentRequest.php:436
+#, php-format
+msgid "For this refund of %1$s, LINE Pay captured only the remaining %2$s."
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:446
+msgid "Could not confirm the result with LINE Pay. LINE Pay may have already cancelled or captured this payment, so check it in the LINE Pay merchant center before trying again."
+msgstr ""
+
+#. translators: %s: LINE Pay error
+#: src/Modules/Linepay/Api/PaymentRequest.php:453
+#, php-format
+msgid "The LINE Pay payment is not captured yet, and cancelling or reducing it failed: %s"
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:469
+msgid "Nothing is left to capture on this order."
+msgstr ""
+
+#: src/Modules/Linepay/Api/PaymentRequest.php:557
 msgid "no transaction_id is found"
 msgstr ""
 
 #. translators: 1: refund transaction id, 2: returnCode, 3: returnMessage
-#: src/Modules/Linepay/Api/PaymentRequest.php:531
+#: src/Modules/Linepay/Api/PaymentRequest.php:631
 #, php-format
 msgid "Refund via LINE Pay failed. Refund transaction id: %1$s, returnCode: %2$s, returnMessage: %3$s"
 msgstr ""
 
 #. translators: %s: LINE Pay refund transaction id returned by API
-#: src/Modules/Linepay/Api/PaymentRequest.php:561
+#: src/Modules/Linepay/Api/PaymentRequest.php:661
 #, php-format
 msgid "LINE Pay refunded the payment (refund number %s)"
 msgstr ""
 
 #. translators:  %1$s is product name, %2$s is the order item count
-#: src/Modules/Linepay/Api/PaymentRequest.php:617
+#: src/Modules/Linepay/Api/PaymentRequest.php:717
 #, php-format
 msgid "%1$s and total %2$s products"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:661
+#: src/Modules/Linepay/Api/PaymentRequest.php:761
 msgid "After the payment request"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:662
+#: src/Modules/Linepay/Api/PaymentRequest.php:762
 msgid "Before confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:663
+#: src/Modules/Linepay/Api/PaymentRequest.php:763
 msgid "After confirming the payment"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:664
+#: src/Modules/Linepay/Api/PaymentRequest.php:764
 msgid "After the refund"
 msgstr ""
 
 #. translators: %s: LINE Pay message
-#: src/Modules/Linepay/Api/PaymentRequest.php:669
+#: src/Modules/Linepay/Api/PaymentRequest.php:769
 #, php-format
 msgid "LINE Pay payment status: %s"
 msgstr ""
 
-#: src/Modules/Linepay/Api/PaymentRequest.php:672
+#: src/Modules/Linepay/Api/PaymentRequest.php:772
 msgid "Checked"
 msgstr ""
 
@@ -6751,21 +6875,21 @@ msgstr ""
 msgid "That order could not be found."
 msgstr ""
 
-#: src/Modules/Linepay/LinePay.php:97
+#: src/Modules/Linepay/LinePay.php:103
 msgid "LINE Pay confirmed the payment"
 msgstr ""
 
-#: src/Modules/Linepay/LinePay.php:101
+#: src/Modules/Linepay/LinePay.php:107
 msgid "The payment was confirmed."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Linepay/LinePay.php:107
+#: src/Modules/Linepay/LinePay.php:113
 #, php-format
 msgid "LINE Pay could not confirm the payment: %s"
 msgstr ""
 
-#: src/Modules/Linepay/LinePay.php:147
+#: src/Modules/Linepay/LinePay.php:153
 msgid "Capture the payment on this LINE Pay order? This cannot be undone."
 msgstr ""
 
@@ -6818,11 +6942,11 @@ msgstr ""
 #: src/Modules/Payuni/Settings/LinePaySetting.php:12
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:12
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:46
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:62
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:64
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:38
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:71
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:55
-#: src/Modules/Tappay/Gateways/Credit.php:58
+#: src/Modules/Tappay/Gateways/Credit.php:60
 msgid "Enable this payment method"
 msgstr ""
 
@@ -6844,11 +6968,11 @@ msgstr ""
 #: src/Modules/Payuni/Settings/LinePaySetting.php:16
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:16
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:51
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:67
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:69
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:43
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:76
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:60
-#: src/Modules/Tappay/Gateways/Credit.php:63
+#: src/Modules/Tappay/Gateways/Credit.php:65
 msgid "Title"
 msgstr ""
 
@@ -6872,11 +6996,11 @@ msgstr ""
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:11
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:11
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:54
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:70
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:72
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:46
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:79
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:63
-#: src/Modules/Tappay/Gateways/Credit.php:66
+#: src/Modules/Tappay/Gateways/Credit.php:68
 msgid "The name customers see at checkout."
 msgstr ""
 
@@ -6898,11 +7022,11 @@ msgstr ""
 #: src/Modules/Payuni/Settings/LinePaySetting.php:23
 #: src/Modules/Payuni/Settings/SamsungPaySetting.php:23
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:58
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:74
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:76
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:50
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:83
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:67
-#: src/Modules/Tappay/Gateways/Credit.php:70
+#: src/Modules/Tappay/Gateways/Credit.php:72
 msgid "Description"
 msgstr ""
 
@@ -7305,7 +7429,7 @@ msgstr ""
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:99
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:20
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:40
-#: src/Modules/Tappay/Gateways/Credit.php:295
+#: src/Modules/Tappay/Gateways/Credit.php:327
 msgid "The order does not exist."
 msgstr ""
 
@@ -7421,14 +7545,14 @@ msgstr ""
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:76
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:110
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:120
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:70
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:48
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:141
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:284
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:101
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:234
-#: src/Modules/Tappay/Gateways/Credit.php:121
+#: src/Modules/Tappay/Gateways/Credit.php:136
 msgid "The order could not be found"
 msgstr ""
 
@@ -7650,7 +7774,7 @@ msgid "Credit card, ATM, convenience store, mobile payments, instalments and pay
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:32
-#: src/Modules/Payuni/Utils/PayType.php:23
+#: src/Modules/Payuni/Utils/PayType.php:24
 msgid "ATM"
 msgstr ""
 
@@ -7691,7 +7815,7 @@ msgstr ""
 #: src/Modules/Pchomepay/Module.php:92
 #: src/Modules/Shared/Admin/CardRenderers.php:510
 #: src/Modules/ShoplinePayments/Api/Helper.php:47
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:108
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:120
 msgid "Payment failed"
 msgstr ""
 
@@ -7704,7 +7828,8 @@ msgid "Trade status"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:136
-#: src/Modules/Payuni/Api/PaymentRequest.php:652
+#: src/Modules/Payuni/Api/PaymentRequest.php:420
+#: src/Modules/Payuni/Api/PaymentRequest.php:746
 #: src/Modules/Payuni/Api/PaymentResponse.php:173
 #: src/Modules/Pchomepay/Module.php:102
 #: src/Modules/ShoplinePayments/Module.php:149
@@ -7712,7 +7837,7 @@ msgid "Payment type"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:137
-#: src/Modules/Payuni/Api/PaymentRequest.php:653
+#: src/Modules/Payuni/Api/PaymentRequest.php:747
 #: src/Modules/Pchomepay/Module.php:103
 #: src/Modules/ShoplinePayments/Module.php:148
 #: src/Modules/Tappay/Module.php:101
@@ -7721,7 +7846,7 @@ msgid "Amount"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:138
-#: src/Modules/Payuni/Api/PaymentRequest.php:654
+#: src/Modules/Payuni/Api/PaymentRequest.php:748
 #: src/Modules/Payuni/Gateways/Aftee.php:55
 #: src/Modules/Payuni/Gateways/Atm.php:57
 #: src/Modules/Pchomepay/Module.php:104
@@ -9831,132 +9956,149 @@ msgstr ""
 msgid "Issuing failed"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:106
+#: src/Modules/Payuni/Api/PaymentRequest.php:132
 msgid "Redirecting..."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:148
+#: src/Modules/Payuni/Api/PaymentRequest.php:176
 #, php-format
 msgid "The refund amount for order #%s should be the same as the order total for installment payment."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:163
+#: src/Modules/Payuni/Api/PaymentRequest.php:191
 #, php-format
 msgid "Unable to find transaction id for order #%s"
 msgstr ""
 
 #. translators: %s: order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:176
+#: src/Modules/Payuni/Api/PaymentRequest.php:204
 #, php-format
 msgid "The order status could not be checked before refunding (order #%s)."
 msgstr ""
 
 #. translators:  %s is the TradeStatus of the order
-#: src/Modules/Payuni/Api/PaymentRequest.php:189
+#: src/Modules/Payuni/Api/PaymentRequest.php:217
 #, php-format
 msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:203
+#: src/Modules/Payuni/Api/PaymentRequest.php:235
 msgid "This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard."
 msgstr ""
 
 #. translators: 1: amount PAYUNi would still capture, 2: amount WooCommerce expects
-#: src/Modules/Payuni/Api/PaymentRequest.php:230
+#: src/Modules/Payuni/Api/PaymentRequest.php:262
 #, php-format
 msgid "PAYUNi and WooCommerce disagree on how much is left to capture (PAYUNi: %1$d, WooCommerce: %2$d), so nothing was sent. Check the transaction in the PAYUNi merchant dashboard and refund there if needed."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:236
+#: src/Modules/Payuni/Api/PaymentRequest.php:268
 msgid "The refund amount is more than PAYUNi can still refund for this card payment. Please check the transaction in the PAYUNi merchant dashboard."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:243
+#: src/Modules/Payuni/Api/PaymentRequest.php:275
 msgid "Installment and UnionPay card payments can only be refunded in full."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:256
+#: src/Modules/Payuni/Api/PaymentRequest.php:288
 msgid "PAYUNi cancelled the card authorisation, so the customer is not charged."
 msgstr ""
 
 #. translators: %s: amount that will be captured
-#: src/Modules/Payuni/Api/PaymentRequest.php:266
+#: src/Modules/Payuni/Api/PaymentRequest.php:298
 #, php-format
 msgid "PAYUNi will now capture only %s from the card."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:273
+#: src/Modules/Payuni/Api/PaymentRequest.php:305
 msgid "The capture request had already been cancelled. If PAYUNi still shows this payment as not captured, capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:284
+#: src/Modules/Payuni/Api/PaymentRequest.php:316
 msgid "The original capture request was sent again, so nothing has changed."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:285
+#: src/Modules/Payuni/Api/PaymentRequest.php:317
 msgid "The capture request was cancelled and could not be sent again. This payment is now not captured: capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:308
+#: src/Modules/Payuni/Api/PaymentRequest.php:341
 msgid "PAYUNi recorded it as a scheduled refund; it is refunded once the capture completes."
 msgstr ""
 
 #. translators: %s: PAYUNi settlement status
-#: src/Modules/Payuni/Api/PaymentRequest.php:314
+#: src/Modules/Payuni/Api/PaymentRequest.php:347
 #, php-format
 msgid "This order cannot be refunded in its current state (PAYUNi settlement status: %s)"
 msgstr ""
 
 #. translators: 1: trade status, 2: close status
-#: src/Modules/Payuni/Api/PaymentRequest.php:318
+#: src/Modules/Payuni/Api/PaymentRequest.php:351
 #, php-format
 msgid "This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)"
 msgstr ""
 
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:331
+#: src/Modules/Payuni/Api/PaymentRequest.php:364
+#: src/Modules/Payuni/Api/PaymentRequest.php:418
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:333
-#: src/Modules/Payuni/Api/PaymentRequest.php:655
+#: src/Modules/Payuni/Api/PaymentRequest.php:366
+#: src/Modules/Payuni/Api/PaymentRequest.php:749
 msgid "Settlement status"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:335
+#: src/Modules/Payuni/Api/PaymentRequest.php:368
 msgid "Note"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:406
+#: src/Modules/Payuni/Api/PaymentRequest.php:389
+msgid "The refund amount must be a whole number greater than 0."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:399
+msgid "icash Pay payments can only be refunded in full, in one go."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:421
+msgid "Refund number"
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:422
+msgid "Refunded at"
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:495
 msgid "Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again."
 msgstr ""
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:409
+#: src/Modules/Payuni/Api/PaymentRequest.php:498
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:622
+#: src/Modules/Payuni/Api/PaymentRequest.php:716
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr ""
 
 #. translators: %s: transaction status
-#: src/Modules/Payuni/Api/PaymentRequest.php:650
+#: src/Modules/Payuni/Api/PaymentRequest.php:744
 #, php-format
 msgid "PAYUNi transaction lookup: %s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:656
+#: src/Modules/Payuni/Api/PaymentRequest.php:750
 #: src/Modules/Payuni/Api/PaymentResponse.php:175
 msgid "PAYUNi transaction ID"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:668
+#: src/Modules/Payuni/Api/PaymentRequest.php:762
 #, php-format
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr ""
@@ -10739,27 +10881,27 @@ msgstr ""
 msgid "Not captured"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:21
+#: src/Modules/Payuni/Utils/PayType.php:22
 msgid "Credit Card"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:27
+#: src/Modules/Payuni/Utils/PayType.php:28
 msgid "C2C"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:29
+#: src/Modules/Payuni/Utils/PayType.php:30
 msgid "ICash"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:31
+#: src/Modules/Payuni/Utils/PayType.php:32
 msgid "AFTEE"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:35
+#: src/Modules/Payuni/Utils/PayType.php:36
 msgid "Delivery"
 msgstr ""
 
-#: src/Modules/Payuni/Utils/PayType.php:37
+#: src/Modules/Payuni/Utils/PayType.php:40
 msgid "Unknown Payment Type"
 msgstr ""
 
@@ -12534,11 +12676,11 @@ msgid "Open the payment page"
 msgstr ""
 
 #: src/Modules/Shared/Gateways/AbstractMowcGateway.php:61
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:77
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:79
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:53
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:86
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:70
-#: src/Modules/Tappay/Gateways/Credit.php:73
+#: src/Modules/Tappay/Gateways/Credit.php:75
 msgid "The payment method description shown at checkout."
 msgstr ""
 
@@ -13556,8 +13698,8 @@ msgid "Zingala instalments"
 msgstr ""
 
 #: src/Modules/ShoplinePayments/Api/Helper.php:48
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:109
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:110
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:121
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:122
 msgid "Expired"
 msgstr ""
 
@@ -13566,70 +13708,78 @@ msgid "Refund in progress"
 msgstr ""
 
 #. translators: 1: notice type, 2: raw event type
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:106
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:118
 #, php-format
 msgid "Shopline Payments sent a “%1$s” notice (%2$s) for this already paid order. The order was not changed."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:111
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:123
 msgid "Payment page created"
 msgstr ""
 
 #. translators: %s: Shopline Payments transaction ID
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:122
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:134
 #, php-format
 msgid "Shopline Payments reported another successful payment (transaction %s) for this already paid order. This may be a duplicate charge — check it in the Shopline Payments dashboard and refund it if needed."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:294
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:273
+msgid "The customer tried to change the card, but Shopline Payments could not check the new card. The subscription still uses the current payment method."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:286
+msgid "Shopline Payments reported a card change without the saved card details, so the subscription still uses the current payment method."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:417
 msgid "The card was saved with Shopline Payments for subscription renewals."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:306
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:429
 #, php-format
 msgid "Shopline Payments reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:316
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:439
 msgid "Shopline Payments reported a successful payment without an amount. Please check the payment in the Shopline Payments dashboard before fulfilling the order."
 msgstr ""
 
 #. translators: %s: payment method
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:327
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:450
 #, php-format
 msgid "The Shopline Payments payment completed (%s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:330
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:453
 msgid "The Shopline Payments payment completed."
 msgstr ""
 
 #. translators: %s: sub status
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:340
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:463
 #, php-format
 msgid "The Shopline Payments payment failed (%s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:349
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:472
 msgid "The Shopline Payments transaction expired before it completed."
 msgstr ""
 
 #. translators: %s: refund order id
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:357
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:480
 #, php-format
 msgid "Shopline Payments refunded the payment (refund number %s)."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:358
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:481
 msgid "No number"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:364
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:487
 msgid "The Shopline Payments refund failed. Please check the Shopline Payments dashboard."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:369
+#: src/Modules/ShoplinePayments/Api/WebhookHandler.php:492
 msgid "The Shopline Payments transaction was cancelled before payment."
 msgstr ""
 
@@ -13641,15 +13791,36 @@ msgstr ""
 msgid "Customers enter their card on your checkout page without being redirected. Required for WooCommerce Subscriptions renewals."
 msgstr ""
 
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:105
+msgid "You will enter the new card on the next page."
+msgstr ""
+
 #. translators: %s: error message
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:180
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:210
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:119
 #, php-format
 msgid "The Shopline Payments payment could not be created: %s"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:195
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:225
 msgid "Waiting for the customer to finish the Shopline Payments card payment."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:327
+msgid "The card could not be checked. Please check the card and try again."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:334
+msgid "Enter the new card below. To check the card, Shopline Payments authorises NT$1 and cancels it automatically, so you are not charged. Your subscription keeps using the current card until the new one is saved."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:351
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:355
+msgid "This page has expired. Please start the card change again."
+msgstr ""
+
+#: src/Modules/ShoplinePayments/Gateways/CardGateway.php:456
+msgid "Shopline Payments is still confirming the new card. Check this page again in a few minutes. Until then your subscription keeps using the current payment method."
 msgstr ""
 
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:22
@@ -13773,51 +13944,51 @@ msgstr ""
 msgid "Limits which methods are offered on the payment page. Leave blank for no limit. What actually appears depends on what Shopline Payments has activated for you."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:59
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:71
 msgid "The saved card was unbound from Shopline Payments because no subscription uses it any more."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:61
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:73
 #, php-format
 msgid "The saved card could not be unbound from Shopline Payments: %s"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:79
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:91
 msgid "Shopline Payments renewal failed: the saved card is missing, expired or no longer usable. Ask the customer to pay with a new card."
 msgstr ""
 
 #. translators: 1: merchant order number, 2: error message
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:152
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:164
 #, php-format
 msgid "The Shopline Payments renewal charge (order number %1$s) could not be confirmed: %2$s. Wait for the payment notice or check the Shopline Payments dashboard before charging again."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:165
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:177
 #, php-format
 msgid "The Shopline Payments renewal charge failed: %s"
 msgstr ""
 
 #. translators: %s: Shopline Payments transaction ID
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:177
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:189
 #, php-format
 msgid "Shopline Payments renewal charge completed — transaction ID %s"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:185
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:197
 msgid "Shopline Payments is still processing the renewal charge. The order will be updated when the result arrives."
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:230
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:242
 msgid "Shopline Payments customer ID"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:234
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:246
 msgid "Shopline Payments payment instrument ID"
 msgstr ""
 
-#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:246
+#: src/Modules/ShoplinePayments/SubscriptionRenewal.php:258
 msgid "Enter the Shopline Payments customer ID."
 msgstr ""
 
@@ -14745,7 +14916,7 @@ msgstr ""
 
 #. translators: 1: status code, 2: message
 #: src/Modules/Tappay/Api/IpnHandler.php:382
-#: src/Modules/Tappay/Gateways/Credit.php:237
+#: src/Modules/Tappay/Gateways/Credit.php:269
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
 msgstr ""
@@ -14771,7 +14942,7 @@ msgid "The payment could not be completed: %s"
 msgstr ""
 
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:246
-#: src/Modules/Tappay/Gateways/Credit.php:253
+#: src/Modules/Tappay/Gateways/Credit.php:285
 msgid "Waiting for the customer to finish the TapPay 3-D Secure check."
 msgstr ""
 
@@ -14789,7 +14960,7 @@ msgstr ""
 #. translators: 1: status code, 2: message
 #: src/Modules/Tappay/Gateways/AbstractDeviceWalletGateway.php:298
 #: src/Modules/Tappay/Gateways/AbstractWalletGateway.php:248
-#: src/Modules/Tappay/Gateways/Credit.php:330
+#: src/Modules/Tappay/Gateways/Credit.php:362
 #, php-format
 msgid "The TapPay refund failed (status code %1$d): %2$s"
 msgstr ""
@@ -14856,8 +15027,8 @@ msgid "From your Apple Developer account. You must also upload Apple's domain ve
 msgstr ""
 
 #: src/Modules/Tappay/Gateways/Credit.php:34
-#: src/Modules/Tappay/Gateways/Credit.php:48
-#: src/Modules/Tappay/Gateways/Credit.php:65
+#: src/Modules/Tappay/Gateways/Credit.php:50
+#: src/Modules/Tappay/Gateways/Credit.php:67
 msgid "TapPay credit card"
 msgstr ""
 
@@ -14865,59 +15036,75 @@ msgstr ""
 msgid "Secure card payments with 3-D Secure. Card details never pass through this site."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:49
-#: src/Modules/Tappay/Gateways/Credit.php:72
+#: src/Modules/Tappay/Gateways/Credit.php:51
+#: src/Modules/Tappay/Gateways/Credit.php:74
 msgid "Pay securely by card, handled by TapPay."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:97
+#: src/Modules/Tappay/Gateways/Credit.php:79
+msgid "Customers change cards themselves"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/Credit.php:81
+msgid "Let customers change the card on their subscriptions under My account"
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/Credit.php:83
+msgid "The new card is saved without 3-D Secure, so it could be misused to test stolen card numbers. Each customer can try at most 3 times a day. Not available when 3-D Secure is required. When off, change cards from the subscription edit screen instead."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/Credit.php:112
 msgid "Card number"
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:101
+#: src/Modules/Tappay/Gateways/Credit.php:116
 msgid "Expiry (MM / YY)"
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:105
+#: src/Modules/Tappay/Gateways/Credit.php:120
 msgid "CVC"
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:130
+#: src/Modules/Tappay/Gateways/Credit.php:145
 msgid "TapPay did not return a payment token. Please enter the card details again."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:141
+#: src/Modules/Tappay/Gateways/Credit.php:158
+msgid "Changing the card yourself is not available for this payment method. Please contact the store."
+msgstr ""
+
+#: src/Modules/Tappay/Gateways/Credit.php:173
 msgid "This store requires 3-D Secure, so a card cannot be saved without a payment. Please choose another payment method."
 msgstr ""
 
 #. translators: 1: rec_trade_id, 2: card last4
-#: src/Modules/Tappay/Gateways/Credit.php:275
+#: src/Modules/Tappay/Gateways/Credit.php:307
 #, php-format
 msgid "TapPay card payment completed — transaction ID %1$s (card ending %2$s)"
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:299
+#: src/Modules/Tappay/Gateways/Credit.php:331
 msgid "The order has no TapPay transaction ID."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:322
+#: src/Modules/Tappay/Gateways/Credit.php:354
 msgid "This payment has not been captured yet, so TapPay can only refund the full amount. Refund the full amount, or wait until the payment is captured."
 msgstr ""
 
 #. translators: 1: amount, 2: rec_trade_id, 3: reason
-#: src/Modules/Tappay/Gateways/Credit.php:340
+#: src/Modules/Tappay/Gateways/Credit.php:372
 #, php-format
 msgid "The TapPay refund of NT$%1$s was submitted (transaction ID %2$s) — %3$s"
 msgstr ""
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Gateways/Credit.php:380
+#: src/Modules/Tappay/Gateways/Credit.php:412
 #, php-format
 msgid "The card could not be saved with TapPay (status code %1$d): %2$s"
 msgstr ""
 
 #. translators: %s: card last four digits
-#: src/Modules/Tappay/Gateways/Credit.php:397
+#: src/Modules/Tappay/Gateways/Credit.php:429
 #, php-format
 msgid "Card ending %s saved with TapPay for subscription renewals."
 msgstr ""
@@ -15107,47 +15294,47 @@ msgstr ""
 msgid "Worth turning on: it shifts liability and cuts down on chargeback disputes. Customers are sent to their bank's verification page and returned here once it is done."
 msgstr ""
 
-#: src/Modules/Tappay/SubscriptionRenewal.php:82
+#: src/Modules/Tappay/SubscriptionRenewal.php:90
 msgid "The saved TapPay card was removed from TapPay because no subscription uses it any more."
 msgstr ""
 
 #. translators: %s: TapPay message
-#: src/Modules/Tappay/SubscriptionRenewal.php:84
+#: src/Modules/Tappay/SubscriptionRenewal.php:92
 #, php-format
 msgid "The saved TapPay card could not be removed from TapPay: %s"
 msgstr ""
 
-#: src/Modules/Tappay/SubscriptionRenewal.php:100
+#: src/Modules/Tappay/SubscriptionRenewal.php:108
 msgid "TapPay renewal failed: no saved card is linked to this subscription."
 msgstr ""
 
 #. translators: %s: TapPay order number
-#: src/Modules/Tappay/SubscriptionRenewal.php:155
+#: src/Modules/Tappay/SubscriptionRenewal.php:163
 #, php-format
 msgid "The TapPay renewal charge (order number %s) could not be confirmed. It will be checked again automatically; do not charge the customer again until then."
 msgstr ""
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/SubscriptionRenewal.php:169
+#: src/Modules/Tappay/SubscriptionRenewal.php:177
 #, php-format
 msgid "The TapPay renewal charge failed (status code %1$d): %2$s"
 msgstr ""
 
 #. translators: 1: amount, 2: rec_trade_id
-#: src/Modules/Tappay/SubscriptionRenewal.php:196
+#: src/Modules/Tappay/SubscriptionRenewal.php:204
 #, php-format
 msgid "TapPay renewal charge of NT$%1$s completed — transaction ID %2$s"
 msgstr ""
 
-#: src/Modules/Tappay/SubscriptionRenewal.php:211
+#: src/Modules/Tappay/SubscriptionRenewal.php:219
 msgid "TapPay card key"
 msgstr ""
 
-#: src/Modules/Tappay/SubscriptionRenewal.php:215
+#: src/Modules/Tappay/SubscriptionRenewal.php:223
 msgid "TapPay card token"
 msgstr ""
 
-#: src/Modules/Tappay/SubscriptionRenewal.php:229
+#: src/Modules/Tappay/SubscriptionRenewal.php:237
 msgid "Enter both the TapPay card key and card token."
 msgstr ""
 
@@ -15184,52 +15371,52 @@ msgstr ""
 msgid "Refunded through the payment provider"
 msgstr ""
 
-#: src/Refund/Guard.php:92
+#: src/Refund/Guard.php:95
 #: src/Refund/PendingPage.php:118
 #: src/Refund/PendingPage.php:190
 msgid "You do not have permission to refund orders."
 msgstr ""
 
-#: src/Refund/Guard.php:95
-#: src/Refund/Guard.php:347
+#: src/Refund/Guard.php:98
+#: src/Refund/Guard.php:350
 msgid "An earlier refund on this order has an unconfirmed result. Check it under WooCommerce > Refunds to review before refunding again."
 msgstr ""
 
-#: src/Refund/Guard.php:100
+#: src/Refund/Guard.php:103
 msgid "Enter the last 4 characters of the order number to confirm this refund."
 msgstr ""
 
-#: src/Refund/Guard.php:105
+#: src/Refund/Guard.php:108
 msgid "This refund was already sent, or the page has expired. Reload the order page and check the refunds before trying again."
 msgstr ""
 
-#: src/Refund/Guard.php:109
-#: src/Refund/Guard.php:351
+#: src/Refund/Guard.php:112
+#: src/Refund/Guard.php:354
 msgid "Another refund on this order is being processed. Wait a moment and reload the page."
 msgstr ""
 
 #. translators: 1: amount, 2: error message
-#: src/Refund/Guard.php:198
+#: src/Refund/Guard.php:201
 #, php-format
 msgid "The refund of %1$s did not go through: %2$s"
 msgstr ""
 
 #. translators: %s: amount
-#: src/Refund/Guard.php:219
+#: src/Refund/Guard.php:222
 #, php-format
 msgid "The refund of %s could not be confirmed with the payment provider (connection problem). It may have been refunded already. New refunds on this order are blocked until it is checked under WooCommerce > Refunds to review."
 msgstr ""
 
-#: src/Refund/Guard.php:249
+#: src/Refund/Guard.php:252
 msgid "To confirm, enter the last 4 characters of the order number"
 msgstr ""
 
-#: src/Refund/Guard.php:250
+#: src/Refund/Guard.php:253
 msgid "An earlier refund on this order has an unconfirmed result. Review it under WooCommerce > Refunds to review before refunding again."
 msgstr ""
 
 #. translators: %s: order number
-#: src/Refund/Guard.php:378
+#: src/Refund/Guard.php:382
 #, php-format
 msgid "A refund needs your attention (order #%s)"
 msgstr ""

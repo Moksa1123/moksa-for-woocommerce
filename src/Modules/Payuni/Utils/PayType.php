@@ -14,6 +14,7 @@ class PayType {
 	const AFTEE       = 7; // 後支付 (Aftee)
 	const LINEPAY     = 9; // LinePay
 	const DELIVERY    = 10; // 宅配到付
+	const JKOPAY      = 11; // 街口支付
 
 	public static function get_name( $pay_type ) {
 		switch ( $pay_type ) {
@@ -33,6 +34,8 @@ class PayType {
 				return __( 'LINE Pay', 'moksa-for-woocommerce' );
 			case self::DELIVERY:
 				return __( 'Delivery', 'moksa-for-woocommerce' );
+			case self::JKOPAY:
+				return __( 'JKOPAY', 'moksa-for-woocommerce' );
 			default:
 				return __( 'Unknown Payment Type', 'moksa-for-woocommerce' );
 		}

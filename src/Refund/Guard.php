@@ -42,6 +42,9 @@ final class Guard {
 
 	private static string $amount = '0';
 
+	/** @var array<int,bool> 這個請求裡金流已自己呼叫 flag() 的訂單（finish() 不再重複記一筆）。 */
+	private static array $flagged = [];
+
 	public static function init(): void {
 		add_action( 'wp_ajax_woocommerce_refund_line_items', [ __CLASS__, 'before_refund' ], 1 );
 		add_action( 'wp_ajax_' . self::AJAX_TOKEN, [ __CLASS__, 'ajax_new_token' ] );
@@ -199,7 +202,7 @@ final class Guard {
 			}
 		}
 
-		if ( ! self::$succeeded && '' !== self::$http_problem && self::$api_refund ) {
+		if ( ! self::$succeeded && '' !== self::$http_problem && self::$api_refund && empty( self::$flagged[ $order_id ] ) ) {
 			self::forget_order_cache( $order_id );
 			$order = wc_get_order( $order_id );
 			if ( $order instanceof \WC_Order ) {
@@ -361,8 +364,9 @@ final class Guard {
 	 * 跟結果未知一樣列進待處理、擋同單後續退款，並寄信給管理員。
 	 */
 	public static function flag( \WC_Order $order, string $amount, string $message ): void {
-		$list   = self::unknown_list( $order );
-		$list[] = [
+		self::$flagged[ $order->get_id() ] = true;
+		$list                              = self::unknown_list( $order );
+		$list[]                            = [
 			'amount'  => $amount,
 			'time'    => time(),
 			'user'    => get_current_user_id(),

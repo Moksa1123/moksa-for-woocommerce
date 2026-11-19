@@ -56,6 +56,12 @@ final class Keys {
 	public const ECPAY_BIND_MEMBER_ID    = '_moksafowo_ecpay_bind_member_id';    // 綁卡時的 MerchantMemberID（續扣必須相同）.
 	public const ECPAY_BIND_DECLINED     = '_moksafowo_ecpay_bind_declined';     // 這張綁定卡扣款被拒的時間；官方規定不可再授權同一 BindCardID.
 	public const ECPAY_BIND_MTN_HISTORY  = '_moksafowo_ecpay_bind_mtn_history';  // 綁卡付款頁送出過的 MerchantTradeNo（舊分頁完成付款時對得回訂單）.
+	// 顧客自行換卡（存在訂閱上；不在續扣憑證清單，不會被帶到續訂單）。
+	public const ECPAY_CHANGE_UNTIL  = '_moksafowo_ecpay_change_until';   // 換卡頁有效期限（時間戳）；過期就要重新從「變更付款方式」開始.
+	public const ECPAY_CHANGE_MEMBER = '_moksafowo_ecpay_change_member';  // 換卡用的 MerchantMemberID（綁卡成功前不動續扣憑證）.
+	public const ECPAY_CHANGE_MTNS   = '_moksafowo_ecpay_change_mtns';    // 換卡送出過的 MerchantTradeNo.
+	public const ECPAY_CHANGE_DONE   = '_moksafowo_ecpay_change_done';    // 已處理完的換卡 MerchantTradeNo（冪等）.
+	public const ECPAY_CHANGE_FORMS  = '_moksafowo_ecpay_change_forms';   // 這次換卡期限內開過幾次卡號表單（上限，防重新整理一直產生交易編號）.
 	// 取號類付款資訊（ATM 虛擬帳號 / CVS 繳費代碼 / 條碼）— 顧客需這些才能完成付款。
 	public const ECPAY_ATM_BANK_CODE              = '_moksafowo_ecpay_atm_bank_code';
 	public const ECPAY_ATM_V_ACCOUNT              = '_moksafowo_ecpay_atm_v_account';
@@ -332,6 +338,12 @@ final class Keys {
 	public const SLP_PROCESSED_EVENT_IDS = '_moksafowo_slp_processed_event_ids'; // webhook event.id 去重清單（array）.
 	public const SLP_CUSTOMER_ID         = '_moksafowo_slp_customer_id';         // SLP 會員 ID（快捷付款／定期扣款的 paymentCustomerId）.
 	public const SLP_INSTRUMENT_ID       = '_moksafowo_slp_instrument_id';       // 綁定的付款工具 ID（定期扣款用）.
+	// 顧客自行換卡（存在訂閱上；不在續扣憑證清單，不會被帶到續訂單）。
+	public const SLP_CHANGE_UNTIL  = '_moksafowo_slp_change_until'; // 換卡頁有效期限（時間戳）.
+	public const SLP_CHANGE_REFS   = '_moksafowo_slp_change_refs';  // 換卡送出過的 referenceOrderId.
+	public const SLP_CHANGE_DONE   = '_moksafowo_slp_change_done';  // 已處理完的換卡 referenceOrderId（冪等；成功、失敗都算）.
+	public const SLP_CHANGE_OK     = '_moksafowo_slp_change_ok';    // 最後一次換卡成功的 referenceOrderId（回到訂閱頁時顯示結果用）.
+	public const SLP_CHANGE_TRADES = '_moksafowo_slp_change_trades'; // 換卡 referenceOrderId => tradeOrderId（webhook 沒到時主動查）.
 
 	public const EZPAY_INVOICE_TRANS_NO  = '_moksafowo_ezpay_invoice_trans_no';
 	public const EZPAY_INVOICE_NUMBER    = '_moksafowo_ezpay_invoice_number';

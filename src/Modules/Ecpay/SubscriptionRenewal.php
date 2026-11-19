@@ -44,7 +44,19 @@ final class SubscriptionRenewal {
 		add_action( 'woocommerce_subscription_status_cancelled', [ self::class, 'revoke_on_end' ] );
 		add_action( 'woocommerce_subscription_status_expired', [ self::class, 'revoke_on_end' ] );
 		add_action( 'moksafowo_subscription_credentials_replaced', [ self::class, 'revoke_replaced' ], 10, 2 );
+		// 顧客自行換卡：綁卡成功才切換付款方式，換卡表單顯示在訂閱頁上方。
+		add_filter( 'moksafowo_subscription_delayed_change_gateways', [ self::class, 'delayed_change_gateway' ] );
+		add_action( 'woocommerce_account_view-subscription_endpoint', [ CreditBind::class, 'render_change_form' ], 5 );
+		add_action( 'template_redirect', [ Subscriptions::class, 'drop_premature_change_notice' ] );
+		add_action( 'template_redirect', [ Subscriptions::class, 'card_change_result_notice' ] );
 	}
+
+	public static function delayed_change_gateway( $ids ): array {
+		$ids   = (array) $ids;
+		$ids[] = CreditBind::GATEWAY_ID;
+		return $ids;
+	}
+
 
 	public static function copied_meta_keys( $keys ): array {
 		return array_merge( (array) $keys, self::CARD_META );

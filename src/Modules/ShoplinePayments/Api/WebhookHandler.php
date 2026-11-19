@@ -86,6 +86,18 @@ final class WebhookHandler {
 				self::reply( 200, 'order not found' );
 		}
 
+		// 顧客換卡的交易（referenceOrderId 是訂閱）：不能走一般付款流程（會把訂閱當成訂單入帳）。
+		if ( Subscriptions::is_changing_payment_method( $order ) ) {
+			if ( '' === $event_id || ! self::is_duplicate( $order, $event_id ) ) {
+				self::handle_change( $order, $type, $data );
+				if ( '' !== $event_id ) {
+					self::mark_processed( $order, $event_id );
+				}
+				$order->save();
+			}
+			self::reply( 200, 'ok' );
+		}
+
 		if ( '' !== $event_id && self::is_duplicate( $order, $event_id ) ) {
 			Helper::log(
 				'webhook duplicate event — skipped',
@@ -211,6 +223,117 @@ final class WebhookHandler {
 		return null;
 	}
 
+	/**
+	 * 顧客換卡的結果（已驗過簽章）。只認這個訂閱送出過的 referenceOrderId、CardBind、成功，
+	 * 而且要有 SLP 會員與付款工具；寫入新的續扣憑證後才把訂閱切到 SLP。
+	 * 1 元驗卡由 SLP 自動取消授權，不用另外處理。
+	 *
+	 * @param \WC_Order $subscription 訂閱。
+	 * @param string    $type         事件類型。
+	 * @param array     $data         事件 data。
+	 */
+	private static function handle_change( \WC_Order $subscription, string $type, array $data ): void {
+		$ref  = (string) ( $data['referenceId'] ?? $data['referenceOrderId'] ?? '' );
+		$sent = $subscription->get_meta( Keys::SLP_CHANGE_REFS );
+		if ( '' === $ref || ! is_array( $sent ) || ! in_array( $ref, $sent, true ) ) {
+			Helper::warn( 'card change webhook for a reference this subscription did not send — ignored', [ 'subscription_id' => $subscription->get_id() ] );
+			return;
+		}
+		if ( ! in_array( $type, [ 'trade.failed', 'trade.succeeded' ], true ) ) {
+			return;
+		}
+		// 同一筆事件可能同時重送兩次：只讓一個處理。
+		$lock = 'slp-change-' . $subscription->get_id();
+		if ( ! Subscriptions::lock( $lock ) ) {
+			return;
+		}
+		try {
+			$subscription = wc_get_order( $subscription->get_id() );
+			if ( $subscription instanceof \WC_Order ) {
+				self::apply_change( $subscription, $ref, $type, $data );
+			}
+		} finally {
+			Subscriptions::unlock( $lock );
+		}
+	}
+
+	private static function apply_change( \WC_Order $subscription, string $ref, string $type, array $data ): void {
+		$done = $subscription->get_meta( Keys::SLP_CHANGE_DONE );
+		$done = is_array( $done ) ? $done : [];
+		if ( in_array( $ref, $done, true ) ) {
+			return;
+		}
+		// 有結果了（成功或失敗）：這次換卡期限結束、這個編號不再處理。
+		$done[] = $ref;
+		$subscription->update_meta_data( Keys::SLP_CHANGE_DONE, array_slice( $done, -20 ) );
+		$subscription->delete_meta_data( Keys::SLP_CHANGE_UNTIL );
+		$subscription->save();
+
+		if ( 'trade.failed' === $type ) {
+			$subscription->add_order_note( __( 'The customer tried to change the card, but Shopline Payments could not check the new card. The subscription still uses the current payment method.', 'moksa-for-woocommerce' ) );
+			return;
+		}
+		if ( $subscription->has_status( [ 'cancelled', 'expired', 'pending-cancel', 'trash' ] ) ) {
+			$subscription->add_order_note( __( 'A card change finished after this subscription ended, so the card was not saved.', 'moksa-for-woocommerce' ) );
+			return;
+		}
+
+		$payment       = is_array( $data['payment'] ?? null ) ? $data['payment'] : [];
+		$card          = is_array( $payment['creditCard'] ?? null ) ? $payment['creditCard'] : [];
+		$customer_id   = (string) ( $data['order']['customer']['customerId'] ?? $data['customer']['customerId'] ?? $payment['paymentCustomerId'] ?? '' );
+		$instrument_id = (string) ( $payment['paymentInstrument']['paymentInstrumentId'] ?? '' );
+		if ( ! self::is_card_bind( $data ) || '' === $customer_id || '' === $instrument_id ) {
+			$subscription->add_order_note( __( 'Shopline Payments reported a card change without the saved card details, so the subscription still uses the current payment method.', 'moksa-for-woocommerce' ) );
+			return;
+		}
+
+		$last4 = (string) ( $card['last4'] ?? '' );
+		Subscriptions::store_payment_meta(
+			$subscription,
+			[
+				Keys::SLP_CUSTOMER_ID   => $customer_id,
+				Keys::SLP_INSTRUMENT_ID => $instrument_id,
+				Keys::SLP_CARD_LAST4    => $last4,
+			]
+		);
+		Subscriptions::finish_payment_method_change( $subscription, \Moksafowo\Modules\ShoplinePayments\Gateways\CardGateway::GATEWAY_ID );
+		$subscription = wc_get_order( $subscription->get_id() );
+		$subscription->update_meta_data( Keys::SLP_CHANGE_OK, $ref );
+		$subscription->save();
+		$subscription->add_order_note(
+			sprintf(
+				/* translators: %s: card last four digits */
+				__( 'The customer changed the card for this subscription. Renewals now use the card ending %s.', 'moksa-for-woocommerce' ),
+				$last4
+			)
+		);
+	}
+
+	/**
+	 * 純綁卡交易（CardBind，1 元驗卡）。文件寫 CardBind，沙箱實際回 cardBind（2026-11-19 實測），大小寫不拘。
+	 */
+	private static function is_card_bind( array $data ): bool {
+		return 0 === strcasecmp( (string) ( $data['payment']['paymentBehavior'] ?? '' ), 'CardBind' );
+	}
+
+	/**
+	 * 換卡：顧客回到訂閱頁時 webhook 還沒到（或商家沒設 webhook），向 SLP 查這筆交易（payment/get，
+	 * 回應 data 與 trade.* webhook 相同）再走同一套處理。用我們自己的 API 金鑰查，結果可信。
+	 */
+	public static function reconcile_change( \WC_Order $subscription, string $ref, string $trade_order_id ): void {
+		$resp = Client::get_payment( $trade_order_id );
+		$data = is_array( $resp['data'] ?? null ) ? map_deep( $resp['data'], static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v ) : [];
+		if ( ! $resp['ok'] || (string) ( $data['referenceOrderId'] ?? '' ) !== $ref ) {
+			return;
+		}
+		$status = (string) ( $data['status'] ?? '' );
+		if ( 'SUCCEEDED' === $status ) {
+			self::handle_change( $subscription, 'trade.succeeded', $data );
+		} elseif ( in_array( $status, [ 'FAILED', 'CANCELLED', 'EXPIRED' ], true ) ) {
+			self::handle_change( $subscription, 'trade.failed', $data );
+		}
+	}
+
 	private static function is_other_trade( \WC_Order $order, array $data ): bool {
 		$incoming = (string) ( self::first_payment_detail( $data )['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
 		$stored   = (string) $order->get_meta( Keys::SLP_TRADE_ORDER_ID );
@@ -289,7 +412,7 @@ final class WebhookHandler {
 					$payment = self::first_payment_detail( $data );
 					$txn     = (string) ( $payment['tradeOrderId'] ?? $data['tradeOrderId'] ?? '' );
 					// 訂閱試用期首期 0 元只綁卡，SLP 以 1 元驗卡後自動取消，金額本來就對不上。
-					if ( 'CardBind' === (string) ( $data['payment']['paymentBehavior'] ?? '' ) && (float) $order->get_total() <= 0 ) {
+					if ( self::is_card_bind( $data ) && (float) $order->get_total() <= 0 ) {
 						if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $txn ) ) {
 							$order->add_order_note( __( 'The card was saved with Shopline Payments for subscription renewals.', 'moksa-for-woocommerce' ) );
 						}

@@ -59,6 +59,85 @@ final class Subscriptions {
 			return;
 		}
 		add_filter( 'wc_subscriptions_object_data', [ self::class, 'filter_copied_meta' ], 10, 4 );
+		add_filter( 'woocommerce_subscriptions_update_payment_via_pay_shortcode', [ self::class, 'delay_payment_method_change' ], 10, 3 );
+	}
+
+	/**
+	 * 顧客在「變更付款方式」選了我們的信用卡：WCS 預設在綁卡「之前」就把訂閱改成新付款方式，
+	 * 綁卡失敗或顧客中途離開，訂閱會變成新付款方式卻沒有卡、續扣必定失敗。
+	 * 改成綁卡成功後由 finish_payment_method_change() 才切換。
+	 *
+	 * @param bool   $update             WCS 預設 true。
+	 * @param string $new_payment_method 新付款方式 ID。
+	 * @return bool
+	 */
+	public static function delay_payment_method_change( $update, $new_payment_method, $subscription = null ) {
+		/**
+		 * 綁卡成功才切換付款方式的金流（要自己呼叫 finish_payment_method_change）。
+		 *
+		 * @param string[] $gateway_ids
+		 */
+		$delayed = (array) apply_filters( 'moksafowo_subscription_delayed_change_gateways', [] );
+		return in_array( (string) $new_payment_method, $delayed, true ) ? false : $update;
+	}
+
+	/**
+	 * WCS 送出「變更付款方式」後就加上「付款方式已更新」，但綠界、SLP 換卡要等顧客在下一頁輸入卡號、
+	 * 驗卡成功才算。帶到換卡表單時拿掉那則訊息，免得顧客以為已經換好。
+	 * 這一步唯一的成功訊息就是 WCS 那則（不用 WCS 的翻譯字串比對：外掛不能呼叫別的 text domain）。
+	 */
+	public static function drop_premature_change_notice(): void {
+		$on_form = '1' === \Moksafowo\Http\Input::get( 'moksafowo_ecpay_card_change' ) || '1' === \Moksafowo\Http\Input::get( 'moksafowo_slp_card_change' );
+		if ( ! $on_form || ! function_exists( 'wc_get_notices' ) || ! WC()->session ) {
+			return;
+		}
+		$notices = wc_get_notices();
+		if ( empty( $notices['success'] ) ) {
+			return;
+		}
+		$notices['success'] = [];
+		wc_set_notices( $notices );
+	}
+
+	/** 綁卡成功：把訂閱的付款方式切到這個金流（續扣憑證要先用 store_payment_meta 寫好）。 */
+	public static function finish_payment_method_change( \WC_Order $subscription, string $gateway_id ): void {
+		if ( ! self::active() || ! wcs_is_subscription( $subscription ) || ! class_exists( 'WC_Subscriptions_Change_Payment_Gateway' ) ) {
+			return;
+		}
+		$fresh = wcs_get_subscription( $subscription->get_id() );
+		if ( ! $fresh ) {
+			return;
+		}
+		if ( $fresh->get_payment_method() === $gateway_id ) {
+			return; // 同一個付款方式只是換卡，不用切換（WCS 會多留一則「從 X 變更為 X」）。
+		}
+		\WC_Subscriptions_Change_Payment_Gateway::update_payment_method( $fresh, $gateway_id );
+		// 綠界通知、SLP webhook 不在結帳頁，WCS 查不到可用付款方式時會把標題寫成 ID，補成正式名稱。
+		$gateways = WC()->payment_gateways() ? WC()->payment_gateways()->payment_gateways() : [];
+		if ( isset( $gateways[ $gateway_id ] ) ) {
+			$fresh->set_payment_method_title( $gateways[ $gateway_id ]->get_title() );
+		}
+		$fresh->save();
+	}
+
+	/**
+	 * 換卡結果回到訂閱頁時顯示訊息。綠界的回傳（OrderResultURL、建立交易回應）不在顧客的 WC session 裡，
+	 * 訊息加不進去，所以改帶網址參數，回到前台頁面再加。
+	 */
+	public static function card_change_result_notice(): void {
+		$result = \Moksafowo\Http\Input::get( 'moksafowo_card_change_result' );
+		if ( '' === $result || ! function_exists( 'wc_add_notice' ) || ! WC()->session ) {
+			return;
+		}
+		if ( 'done' === $result ) {
+			wc_add_notice( __( 'Your new card was saved. Your subscription will renew with it.', 'moksa-for-woocommerce' ) );
+		} elseif ( 'pending' === $result ) {
+			wc_add_notice( __( 'ECPay is still confirming the new card. Check this page again in a few minutes.', 'moksa-for-woocommerce' ), 'notice' );
+		} else {
+			wc_add_notice( __( 'The new card was not saved, so your subscription keeps using the current payment method. Please try again or contact the store.', 'moksa-for-woocommerce' ), 'error' );
+		}
+		wp_safe_redirect( remove_query_arg( 'moksafowo_card_change_result' ) );
+		exit;
 	}
 
 	public static function filter_copied_meta( $data, $to, $from, $copy_type ) {
@@ -219,11 +298,34 @@ final class Subscriptions {
 			return true;
 		}
 		$since = (int) get_option( $option . '_t', 0 );
+		if ( 0 === $since ) {
+			// 剛被別人拿到、取得時間還沒寫入：不能當成逾時搶走（同時送很多請求會兩邊都拿到）。
+			// 補寫時間，萬一持有者在這之間當掉，鎖仍會照 TTL 逾時。
+			add_option( $option . '_t', (string) time(), '', false );
+			return false;
+		}
 		if ( time() - $since > $ttl ) {
 			// 上一個持有者當掉沒解鎖：清掉重搶，仍只有一個請求的 add_option 會成功。
 			delete_option( $option );
 			if ( add_option( $option, '1', '', false ) ) {
 				update_option( $option . '_t', (string) time(), false );
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 顧客自行換卡的次數上限：每位會員每個金流 24 小時內最多 $per_day 次（成功、失敗都算）。
+	 * 換卡會向發卡行驗卡，不限次數就能被拿來試盜來的卡號。
+	 * 每一次佔一個名額鎖（原子），24 小時後自動釋出。
+	 */
+	public static function take_card_change_slot( int $user_id, string $gateway, int $per_day = 3 ): bool {
+		if ( $user_id <= 0 ) {
+			return false;
+		}
+		for ( $n = 1; $n <= $per_day; $n++ ) {
+			if ( self::lock( 'card-change-' . $gateway . '-' . $user_id . '-' . $n, DAY_IN_SECONDS ) ) {
 				return true;
 			}
 		}

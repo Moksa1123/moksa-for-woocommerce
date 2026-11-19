@@ -48,6 +48,8 @@ final class CreditBind extends AbstractMowcGateway {
 					'subscription_reactivation',
 					'subscription_amount_changes',
 					'subscription_date_changes',
+					'subscription_payment_method_change',
+					'subscription_payment_method_change_customer',
 					'subscription_payment_method_change_admin',
 					'multiple_subscriptions',
 				]
@@ -56,12 +58,47 @@ final class CreditBind extends AbstractMowcGateway {
 		return $supports;
 	}
 
+	/** 換卡頁有效期限：從「變更付款方式」送出起 30 分鐘。 */
+	private const CHANGE_TTL = 1800;
+
+	/** 顧客換卡的驗卡金額（同試用期綁卡，成功後放棄授權）。 */
+	public static function verify_amount(): int {
+		return max( 1, (int) get_option( 'moksafowo_ecpay_bind_amount', '1' ) );
+	}
+
+	/** 這個訂閱有沒有進行中的顧客換卡（從「變更付款方式」送出後 30 分鐘內）。 */
+	public static function change_pending( \WC_Order $subscription ): bool {
+		return Subscriptions::is_changing_payment_method( $subscription )
+			&& (int) $subscription->get_meta( Keys::ECPAY_CHANGE_UNTIL ) > time();
+	}
+
 	protected function helper_has_credentials(): bool {
 		return Helper::has_credentials();
 	}
 
 	protected function register_receipt_action(): void {
 		add_action( 'woocommerce_receipt_' . $this->id, [ $this, 'render_bind_form' ] );
+	}
+
+	/**
+	 * 「我的帳號 → 訂閱 → 查看」帶 moksafowo_ecpay_card_change：顯示換卡表單。
+	 * 只給這個訂閱的會員本人、且在換卡有效期限內。
+	 *
+	 * @param mixed $subscription_id WCS 傳入的訂閱 ID。
+	 */
+	public static function render_change_form( $subscription_id ): void {
+		if ( '1' !== \Moksafowo\Http\Input::get( 'moksafowo_ecpay_card_change' ) || ! Subscriptions::active() ) {
+			return;
+		}
+		$subscription = wcs_get_subscription( absint( $subscription_id ) );
+		if ( ! $subscription || (int) $subscription->get_user_id() !== get_current_user_id() || ! self::change_pending( $subscription ) ) {
+			return;
+		}
+		$gateways = WC()->payment_gateways() ? WC()->payment_gateways()->payment_gateways() : [];
+		$gateway  = $gateways[ self::GATEWAY_ID ] ?? null;
+		if ( $gateway instanceof self ) {
+			$gateway->render_form( $subscription, true );
+		}
 	}
 
 
@@ -73,9 +110,15 @@ final class CreditBind extends AbstractMowcGateway {
 		if ( ! Subscriptions::active() || ! parent::is_available() ) {
 			return false;
 		}
+		// 「變更付款方式」表單送出時 WCS 在 wp_loaded 就查可用付款方式，那時還判斷不出 order-pay 頁。
+		// 這個旗標網址就能設起來，但只影響「列不列出來」；真正換卡由 process_payment 檢查訂閱與本人。
+		if ( class_exists( 'WC_Subscriptions_Change_Payment_Gateway' ) && ! empty( \WC_Subscriptions_Change_Payment_Gateway::$is_request_to_change_payment ) ) {
+			return true;
+		}
 		if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-pay' ) ) {
 			$order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
-			return $order instanceof \WC_Order && Subscriptions::order_has_subscription( $order );
+			// 「變更付款方式」頁的 order-pay 帶的是訂閱本身。
+			return $order instanceof \WC_Order && ( Subscriptions::is_changing_payment_method( $order ) || Subscriptions::order_has_subscription( $order ) );
 		}
 		if ( function_exists( 'wcs_cart_contains_renewal' ) && wcs_cart_contains_renewal() ) {
 			return true;
@@ -87,6 +130,27 @@ final class CreditBind extends AbstractMowcGateway {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
 			throw new \Exception( esc_html__( 'Invalid order', 'moksa-for-woocommerce' ) );
+		}
+		if ( Subscriptions::is_changing_payment_method( $order ) ) {
+			// 顧客換卡：先不動訂閱（Subscriptions::delay_payment_method_change），帶到換卡表單；
+			// 驗卡成功、綁卡完成才切換（BindHandler::apply_change_result）。
+			if ( (int) $order->get_user_id() !== get_current_user_id() ) {
+				wc_add_notice( __( 'This subscription could not be found.', 'moksa-for-woocommerce' ), 'error' );
+				return [
+					'result'   => 'failure',
+					'redirect' => '',
+				];
+			}
+			// 次數上限在真的送出卡號時才扣（BindHandler::create），這裡只開一個 30 分鐘的換卡期限。
+			// 「同時更新所有訂閱」要等綁卡成功才知道新卡，WCS 在這一步就會改其他訂閱，所以不支援。
+			unset( $_POST['update_all_subscriptions_payment_method'] );
+			$order->update_meta_data( Keys::ECPAY_CHANGE_UNTIL, (string) ( time() + self::CHANGE_TTL ) );
+			$order->update_meta_data( Keys::ECPAY_CHANGE_FORMS, '0' );
+			$order->save();
+			return [
+				'result'   => 'success',
+				'redirect' => add_query_arg( 'moksafowo_ecpay_card_change', '1', $order->get_view_order_url() ),
+			];
 		}
 		if ( function_exists( 'WC' ) && WC()->cart ) {
 			WC()->cart->empty_cart();
@@ -102,13 +166,32 @@ final class CreditBind extends AbstractMowcGateway {
 		if ( ! $order instanceof \WC_Order || $order->is_paid() ) {
 			return;
 		}
+		$this->render_form( $order, false );
+	}
 
+	/**
+	 * 綠界卡號表單（站內付 2.0 SDK）。
+	 *
+	 * @param \WC_Order $order  首期／重付的訂單，或換卡時的訂閱。
+	 * @param bool      $change 是不是顧客換卡（只驗卡綁卡，成功後放棄授權）。
+	 */
+	public function render_form( \WC_Order $order, bool $change ): void {
 		$merchant_trade_no = Helper::generate_merchant_trade_no( $order->get_id() );
 		$member_id         = BindHandler::member_id( $order );
-		$total             = (int) round( (float) $order->get_total() );
+		$total             = $change ? 0 : (int) round( (float) $order->get_total() );
 		if ( '' === $member_id ) {
 			echo '<p class="woocommerce-error">' . esc_html__( 'Please log in to save a card for your subscription.', 'moksa-for-woocommerce' ) . '</p>';
 			return;
+		}
+		if ( $change ) {
+			// 每開一次表單就向綠界拿一組新的交易編號：同一個換卡期限內最多 5 次，避免重新整理一直產生。
+			$forms = (int) $order->get_meta( Keys::ECPAY_CHANGE_FORMS );
+			if ( $forms >= 5 ) {
+				echo '<p class="woocommerce-error">' . esc_html__( 'This card change page has been opened too many times. Please start again from “Change payment”.', 'moksa-for-woocommerce' ) . '</p>';
+				return;
+			}
+			$order->update_meta_data( Keys::ECPAY_CHANGE_FORMS, (string) ( $forms + 1 ) );
+			$order->save();
 		}
 
 		$resp = Ecpg::get_binding_token(
@@ -120,7 +203,7 @@ final class CreditBind extends AbstractMowcGateway {
 					'MerchantTradeDate' => current_time( 'Y/m/d H:i:s' ),
 					'MerchantTradeNo'   => $merchant_trade_no,
 					// 這筆授權就是首期款；試用期 0 元時以「驗卡金額」授權綁卡，成功後放棄授權（BindHandler）。
-					'TotalAmount'       => $total > 0 ? $total : max( 1, (int) get_option( 'moksafowo_ecpay_bind_amount', '1' ) ),
+					'TotalAmount'       => $total > 0 ? $total : self::verify_amount(),
 					'TradeDesc'         => BindHandler::item_name( $order ),
 					'ItemName'          => BindHandler::item_name( $order ),
 					'ReturnURL'         => home_url( '/wc-api/moksafowo_ecpay_bind_notify' ),
@@ -147,8 +230,14 @@ final class CreditBind extends AbstractMowcGateway {
 			return;
 		}
 
-		BindHandler::remember_mtn( $order, $merchant_trade_no );
-		$order->update_meta_data( Keys::ECPAY_BIND_MEMBER_ID, $member_id );
+		if ( $change ) {
+			// 綁卡成功前不動訂閱的續扣憑證，換卡資料另外存。
+			BindHandler::remember_change_mtn( $order, $merchant_trade_no );
+			$order->update_meta_data( Keys::ECPAY_CHANGE_MEMBER, $member_id );
+		} else {
+			BindHandler::remember_mtn( $order, $merchant_trade_no );
+			$order->update_meta_data( Keys::ECPAY_BIND_MEMBER_ID, $member_id );
+		}
 		$order->save();
 
 		// SDK 必須在 #ECPayPayment 之後載入（35554），所以放 footer。
@@ -180,10 +269,25 @@ final class CreditBind extends AbstractMowcGateway {
 		);
 		?>
 		<div class="moksafowo-ecpay-bind">
-			<p><?php esc_html_e( 'Enter your card below. It will be saved with ECPay so your subscription renews automatically.', 'moksa-for-woocommerce' ); ?></p>
+			<?php if ( $change ) : ?>
+				<h3><?php esc_html_e( 'Change the card for this subscription', 'moksa-for-woocommerce' ); ?></h3>
+				<p>
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: %d: card check amount in NT$ */
+							__( 'Enter the new card below. To check the card, ECPay authorises NT$%d and the authorisation is cancelled right away, so you are not charged. Your subscription keeps using the current card until the new one is saved.', 'moksa-for-woocommerce' ),
+							self::verify_amount()
+						)
+					);
+					?>
+				</p>
+			<?php else : ?>
+				<p><?php esc_html_e( 'Enter your card below. It will be saved with ECPay so your subscription renews automatically.', 'moksa-for-woocommerce' ); ?></p>
+			<?php endif; ?>
 			<div id="ECPayPayment"></div>
 			<p class="moksafowo-ecpay-bind-error woocommerce-error" role="alert" style="display:none;"></p>
-			<button type="button" class="button alt moksafowo-ecpay-bind-submit"><?php esc_html_e( 'Pay and save card', 'moksa-for-woocommerce' ); ?></button>
+			<button type="button" class="button alt moksafowo-ecpay-bind-submit"><?php echo $change ? esc_html__( 'Save new card', 'moksa-for-woocommerce' ) : esc_html__( 'Pay and save card', 'moksa-for-woocommerce' ); ?></button>
 		</div>
 		<?php
 	}

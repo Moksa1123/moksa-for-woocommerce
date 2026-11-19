@@ -31,6 +31,9 @@ if ( ! $order || ! $order->get_meta( '_moksafowo_test' ) || 0 !== strpos( (strin
 	WP_CLI::error( '請給一張帶 _moksafowo_test、有交易編號的統一金流測試訂單。' );
 }
 
+$order->delete_meta_data( \Moksafowo\Order\Meta\Keys::REFUND_UNKNOWN );
+$order->save();
+
 $fail = 0;
 $ok   = static function ( bool $pass, string $label ) use ( &$fail ): void {
 	if ( $pass ) {
@@ -126,8 +129,15 @@ foreach ( $cases as $case ) {
 	$ok( $pass, $label . ( $pass ? '' : ' → 送出 [' . implode( ', ', $calls ) . '] 回 ' . ( is_wp_error( $result ) ? $result->get_error_message() : var_export( $result, true ) ) ) );
 }
 
+// 結果未知的兩案（取消授權斷線、退款斷線）要列進待處理。
+$unknown = \Moksafowo\Refund\Guard::unknown_list( wc_get_order( $order_id ) );
+$ok( 2 === count( $unknown ), '結果未知 → 列進待處理 2 筆（實際 ' . count( $unknown ) . '）' );
+
 $restore = wc_get_order( $order_id );
 $restore->set_total( $orig_total );
+$restore->delete_meta_data( \Moksafowo\Order\Meta\Keys::REFUND_UNKNOWN );
+$restore->delete_meta_data( \Moksafowo\Order\Meta\Keys::REFUND_OPEN );
 $restore->save();
+\Moksafowo\Refund\PendingPage::mark( $order_id, false );
 
 0 === $fail ? WP_CLI::success( '全部通過' ) : WP_CLI::error( "{$fail} 項未通過" );

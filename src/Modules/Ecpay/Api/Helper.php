@@ -70,8 +70,8 @@ final class Helper extends AbstractCredentialHelper {
 		return self::is_sandbox() ? self::ENDPOINT_SANDBOX_QUERY : self::ENDPOINT_PROD_QUERY;
 	}
 
-	public static function query_credit_trade( \WC_Order $order ) {
-		$mtn = (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
+	public static function query_credit_trade( \WC_Order $order, string $mtn = '' ) {
+		$mtn = '' !== $mtn ? $mtn : (string) $order->get_meta( Keys::ECPAY_MERCHANT_TRADE_NO );
 		if ( '' === $mtn ) {
 			return new \WP_Error( 'moksafowo_ecpay_query_no_mtn', __( 'The ECPay merchant trade number could not be found.', 'moksa-for-woocommerce' ) );
 		}

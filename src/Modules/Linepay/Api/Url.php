@@ -44,6 +44,9 @@ final class Url {
 			case Constants::REQUEST_TYPE_CAPTURE:
 				$uri = Constants::URI_CAPTURE;
 				break;
+			case Constants::REQUEST_TYPE_VOID:
+				$uri = Constants::URI_VOID;
+				break;
 			case Constants::REQUEST_TYPE_PREAPPROVED_PAY:
 				$uri = Constants::URI_PREAPPROVED_PAY;
 				break;

@@ -350,7 +350,16 @@ final class PaymentRequest {
 			);
 		}
 
+		// 先授權後請款、還沒請款：LINE Pay 不能退款，要取消授權或只請款剩下的金額。
+		if ( self::is_authorized_not_captured( $order ) ) {
+			return $this->refund_before_capture( $order, $std_refund_amount );
+		}
+
 		$transaction_id = $order->get_transaction_id();
+		if ( '' === (string) $transaction_id ) {
+			// 顧客授權了但還沒 confirm（或付款沒完成）：LINE Pay 那邊沒有已付款的交易可以退。
+			return new WP_Error( 'moksafowo_linepay_refund_failed', __( 'This LINE Pay payment has not been completed, so there is nothing to refund through LINE Pay.', 'moksa-for-woocommerce' ) );
+		}
 
 		$remaining_refund_amount = $order->get_remaining_refund_amount();
 		LinePay::log( 'remaining refund:' . $remaining_refund_amount );
@@ -359,17 +368,108 @@ final class PaymentRequest {
 		return $this->do_refund( $order, $transaction_id, $std_refund_amount, $is_partial_refund );
 	}
 
+	/** 先授權後請款、confirm 已完成授權、還沒請款。 */
+	public static function is_authorized_not_captured( \WC_Order $order ): bool {
+		return 'no' === $order->get_meta( '_moksafowo_linepay_capture' )
+			&& Constants::PAYMENT_STATUS_AUTHED === $order->get_meta( '_moksafowo_linepay_payment_status' )
+			&& wc_string_to_bool( $order->get_meta( Keys::LINEPAY_CONFIRMED ) );
+	}
+
+	/**
+	 * 還沒請款的退款（官方 online-api：已授權未請款只能 void 或 capture，不能 refund）。
+	 * WC 呼叫這裡時這筆退款已存檔，訂單總額−已退就是退完後該請款的金額：
+	 * 0 → 取消授權（void）；大於 0 → 只請款剩下的金額（capture 金額可以跟授權金額不同）。
+	 *
+	 * @param \WC_Order $order             訂單。
+	 * @param mixed     $std_refund_amount 這次退款金額（記備註用）。
+	 * @return true|WP_Error
+	 */
+	private function refund_before_capture( \WC_Order $order, $std_refund_amount ) {
+		$currency = $order->get_currency();
+		$left     = Currency::get_standardized( (float) $order->get_total() - (float) $order->get_total_refunded(), $currency );
+		if ( (float) $left < 0 ) {
+			return new WP_Error( 'moksafowo_linepay_refund_failed', __( 'The refund amount is more than the payment amount.', 'moksa-for-woocommerce' ) );
+		}
+
+		if ( 0.0 === (float) $left ) {
+			$url = Url::request_url( Constants::REQUEST_TYPE_VOID, array( 'transaction_id' => (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' ) ) );
+			try {
+				$resp = $this->execute( $url, $this->build_execute_request_args( $url, null ) );
+			} catch ( Exception $e ) {
+				// 斷線或 HTTP 不是 200：LINE Pay 可能已經取消授權，結果未知。
+				return $this->refund_before_capture_unknown( $order, $std_refund_amount, $e->getMessage() );
+			}
+			if ( '0000' !== (string) ( $resp->returnCode ?? '' ) ) {
+				return $this->refund_before_capture_failed( $order, sprintf( '%s %s', (string) ( $resp->returnCode ?? '' ), (string) ( $resp->returnMessage ?? '' ) ) );
+			}
+			$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
+			$order->save();
+			$order->add_order_note(
+				/* translators: %s: refund amount */
+				sprintf( __( 'LINE Pay cancelled the authorisation for this refund of %s, so the customer is not charged.', 'moksa-for-woocommerce' ), $std_refund_amount )
+			);
+			return true;
+		}
+
+		try {
+			$this->capture( $order, (string) $left );
+		} catch ( Exception $e ) {
+			// 官方：capture 回 1199、1280–1298 時這筆付款會被 LINE Pay 自動取消，跟 WC 的帳就對不上了。
+			$code = (int) $e->getCode();
+			if ( 1199 === $code || ( $code >= 1280 && $code <= 1298 ) ) {
+				// 整筆付款都取消了：狀態跟著改（請款按鈕不再出現），待處理清單記整筆金額。
+				$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CANCELLED );
+				$order->save();
+				$note = __( 'LINE Pay cancelled the whole payment after the capture failed, so the customer has not been charged anything for this order. Check the order and collect payment again if needed.', 'moksa-for-woocommerce' );
+				\Moksafowo\Refund\Guard::flag( $order, (string) $order->get_total(), $note );
+				return $this->refund_before_capture_failed( $order, $e->getMessage() . ' ' . $note );
+			}
+			if ( 0 === $code ) {
+				// 沒有 LINE Pay 的回應碼（斷線、HTTP 不是 200）：可能已經請款，結果未知。
+				return $this->refund_before_capture_unknown( $order, $std_refund_amount, $e->getMessage() );
+			}
+			return $this->refund_before_capture_failed( $order, $e->getMessage() );
+		}
+		$order->add_order_note(
+			sprintf(
+				/* translators: 1: refund amount, 2: amount captured */
+				__( 'For this refund of %1$s, LINE Pay captured only the remaining %2$s.', 'moksa-for-woocommerce' ),
+				$std_refund_amount,
+				$left
+			)
+		);
+		return true;
+	}
+
+	/** 取消授權／請款送出後不知道結果：擋後續退款與請款、列進待處理。 */
+	private function refund_before_capture_unknown( \WC_Order $order, $std_refund_amount, string $detail ): WP_Error {
+		$note = __( 'Could not confirm the result with LINE Pay. LINE Pay may have already cancelled or captured this payment, so check it in the LINE Pay merchant center before trying again.', 'moksa-for-woocommerce' );
+		\Moksafowo\Refund\Guard::flag( $order, (string) $std_refund_amount, $note );
+		return $this->refund_before_capture_failed( $order, $detail . ' ' . $note );
+	}
+
+	private function refund_before_capture_failed( \WC_Order $order, string $detail ): WP_Error {
+		/* translators: %s: LINE Pay error */
+		$msg = sprintf( __( 'The LINE Pay payment is not captured yet, and cancelling or reducing it failed: %s', 'moksa-for-woocommerce' ), $detail );
+		$order->add_order_note( $msg );
+		return new WP_Error( 'moksafowo_linepay_refund_failed', $msg );
+	}
+
 	/**
 	 * 先授權後請款的請款（/v3/payments/authorizations/{transactionId}/capture）。
+	 * 金額預設是訂單總額−已退（請款前在 WC 退過的部分不能再向顧客收）。
 	 *
-	 * @throws Exception When the capture request fails.
+	 * @throws Exception When the capture request fails（code 是 LINE Pay 的 returnCode）.
 	 */
-	public function capture( \WC_Order $order ): bool {
+	public function capture( \WC_Order $order, ?string $std_amount = null ): bool {
 		$transaction_id = (string) $order->get_meta( '_moksafowo_linepay_reserved_transaction_id' );
 		$currency       = $order->get_currency();
-		$std_amount     = Currency::get_standardized( $order->get_total(), $currency );
-		$url            = Url::request_url( Constants::REQUEST_TYPE_CAPTURE, array( 'transaction_id' => $transaction_id ) );
-		$request_args   = $this->build_execute_request_args(
+		$std_amount     = $std_amount ?? Currency::get_standardized( (float) $order->get_total() - (float) $order->get_total_refunded(), $currency );
+		if ( (float) $std_amount <= 0 ) {
+			throw new Exception( esc_html__( 'Nothing is left to capture on this order.', 'moksa-for-woocommerce' ) );
+		}
+		$url          = Url::request_url( Constants::REQUEST_TYPE_CAPTURE, array( 'transaction_id' => $transaction_id ) );
+		$request_args = $this->build_execute_request_args(
 			$url,
 			array(
 				'amount'   => $std_amount,
@@ -377,14 +477,14 @@ final class PaymentRequest {
 			),
 			40
 		);
-		$result         = $this->execute( $url, $request_args, 40 );
+		$result       = $this->execute( $url, $request_args, 40 );
 		if ( ! $result || '0000' !== $result->returnCode ) {
-			throw new Exception( esc_html( sprintf( 'Execute LINE Pay Capture API failed. Return code: %s. Return Message: %s', $result->returnCode ?? '', $result->returnMessage ?? '' ) ) );
+			throw new Exception( esc_html( sprintf( 'Execute LINE Pay Capture API failed. Return code: %s. Return Message: %s', $result->returnCode ?? '', $result->returnMessage ?? '' ) ), (int) ( $result->returnCode ?? 0 ) );
 		}
 		$order->update_meta_data( '_moksafowo_linepay_transaction_balanced_amount', $std_amount );
 		$order->update_meta_data( '_moksafowo_linepay_payment_status', Constants::PAYMENT_STATUS_CONFIRMED );
 		$order->save();
-		$order->payment_complete( $result->info->transactionId ?? $transaction_id );
+		\Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) ( $result->info->transactionId ?? $transaction_id ) );
 		return true;
 	}
 

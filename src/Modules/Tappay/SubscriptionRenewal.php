@@ -31,6 +31,14 @@ final class SubscriptionRenewal {
 		add_action( 'woocommerce_subscription_status_cancelled', [ self::class, 'revoke_on_end' ] );
 		add_action( 'woocommerce_subscription_status_expired', [ self::class, 'revoke_on_end' ] );
 		add_action( 'moksafowo_subscription_credentials_replaced', [ self::class, 'revoke_replaced' ], 10, 2 );
+		add_filter( 'moksafowo_subscription_delayed_change_gateways', [ self::class, 'delayed_change_gateway' ] );
+	}
+
+	/** 顧客換卡：綁卡成功才切換付款方式（Subscriptions::delay_payment_method_change）。 */
+	public static function delayed_change_gateway( $ids ): array {
+		$ids   = (array) $ids;
+		$ids[] = Credit::GATEWAY_ID;
+		return $ids;
 	}
 
 	/** 3D 驗證通過、訂單付款確認後，才把暫存的卡片憑證寫進訂閱。 */

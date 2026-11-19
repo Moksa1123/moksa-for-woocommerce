@@ -195,7 +195,7 @@ final class SettingsTab {
 					'type'              => 'number',
 					'default'           => '1',
 					'custom_attributes' => [ 'min' => '1' ],
-					'desc'              => __( 'For a free trial, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract.', 'moksa-for-woocommerce' ),
+					'desc'              => __( 'For a free trial or when a customer changes the card on a subscription, the card is checked with this amount and the authorization is then cancelled. It must be at least the minimum transaction amount in your ECPay contract.', 'moksa-for-woocommerce' ),
 				],
 				[
 					'type' => 'sectionend',

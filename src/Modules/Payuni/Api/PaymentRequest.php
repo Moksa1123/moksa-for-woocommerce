@@ -12,6 +12,32 @@ defined( 'ABSPATH' ) || exit;
 
 class PaymentRequest {
 
+	/**
+	 * 非信用卡的退款 API（trade/ 之後的路徑），依查單的 PaymentType。
+	 * 官方 docs.payuni.com.tw/web/#/7/<頁>：愛金卡 page 72（只能全額）、AFTEE page 84、
+	 * LINE Pay page 300、街口 page 377（全額或部分）；欄位都是 MerID、TradeNo、TradeAmt、Timestamp，Version 1.0。
+	 */
+	private const WALLET_REFUND_PATHS = [
+		PayType::ICASH   => 'common/refund/icash',
+		PayType::AFTEE   => 'common/refund/aftee',
+		PayType::LINEPAY => 'common/refund/linepay',
+		PayType::JKOPAY  => 'common/refund/jkopay',
+	];
+
+	/**
+	 * 這次退款金額（結果未知時記進待處理清單用）。
+	 *
+	 * @var string
+	 */
+	private static string $refund_amount = '';
+
+	/**
+	 * 這次退款已經列進待處理（refund_failed 不再重複記）。
+	 *
+	 * @var bool
+	 */
+	private static bool $refund_flagged = false;
+
 	protected $gateway;
 
 	public static function redact_for_log( $data ) {
@@ -123,7 +149,9 @@ class PaymentRequest {
 	}
 
 	public function refund( $order_id, $amount, $reason ) {
-		$order = wc_get_order( $order_id );
+		$order                = wc_get_order( $order_id );
+		self::$refund_amount  = (string) $amount;
+		self::$refund_flagged = false;
 
 		if ( false === $order ) {
 			return new \WP_Error(
@@ -196,8 +224,12 @@ class PaymentRequest {
 
 		$close_status = (string) ( $query_result['CloseStatus'] ?? '' );
 		if ( '' === $close_status ) {
-			// 只有信用卡類才有請款狀態；LINE Pay、AFTEE、iCash、街口等由單一入口付的款，
-			// 原本只會看到空白的「請款狀態：」拒絕訊息。
+			// 只有信用卡類才有請款狀態。愛金卡、AFTEE、LINE Pay、街口走各自的退款 API；
+			// 其他（ATM、超商代碼、取貨付款等）沒有退款 API，請店長到統一金流後台處理。
+			$wallet = self::WALLET_REFUND_PATHS[ (int) ( $query_result['PaymentType'] ?? 0 ) ] ?? '';
+			if ( '' !== $wallet ) {
+				return self::refund_wallet( $order, $wallet, $mer_id, (string) $transaction_id, $amount, $query_result );
+			}
 			return new \WP_Error(
 				'process_refund_request',
 				__( 'This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard.', 'moksa-for-woocommerce' )
@@ -287,6 +319,7 @@ class PaymentRequest {
 					if ( CloseStatus::CAPTURE_APPLING === $close_status && ( $result['unknown'] || empty( $restore['ok'] ) ) ) {
 						// 這筆現在可能沒有請款：列進待處理、擋後續退款、寄信，不能只留一則備註。
 						\Moksafowo\Refund\Guard::flag( $order, (string) $amount, $restore_note );
+						self::$refund_flagged = true;
 					}
 					return self::refund_failed( $order, $result, $restore_note );
 				}
@@ -340,11 +373,65 @@ class PaymentRequest {
 	}
 
 	/**
-	 * 呼叫 trade/close 或 trade/cancel（Version 1.0）。
+	 * 愛金卡、AFTEE、LINE Pay、街口退款（各自的 trade/common/refund/* API）。
 	 *
-	 * @param string              $path   close 或 cancel。
+	 * @param \WC_Order           $order          訂單。
+	 * @param string              $path           WALLET_REFUND_PATHS 的路徑。
+	 * @param string              $mer_id         商店代號。
+	 * @param string              $transaction_id UNi 序號。
+	 * @param mixed               $amount         這次退款金額。
+	 * @param array<string,mixed> $query_result   退款前查單結果。
+	 * @return true|\WP_Error
+	 */
+	private static function refund_wallet( \WC_Order $order, string $path, string $mer_id, string $transaction_id, $amount, array $query_result ) {
+		$amt = (int) round( (float) $amount );
+		if ( $amt <= 0 || abs( (float) $amount - $amt ) >= 0.01 ) {
+			return new \WP_Error( 'process_refund_request', __( 'The refund amount must be a whole number greater than 0.', 'moksa-for-woocommerce' ) );
+		}
+		$trade_amt = (int) round( (float) ( $query_result['TradeAmt'] ?? 0 ) );
+		if ( $trade_amt > 0 && $amt > $trade_amt ) {
+			return new \WP_Error( 'process_refund_request', __( 'The refund amount is more than the payment amount.', 'moksa-for-woocommerce' ) );
+		}
+		// 愛金卡只能全額（page 72）：WC 呼叫這裡時這筆退款已存檔，退完要剛好是 0，而且之前沒退過。
+		if ( 'common/refund/icash' === $path ) {
+			$left = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );
+			if ( 0 !== $left || ( $trade_amt > 0 && $amt !== $trade_amt ) ) {
+				return new \WP_Error( 'process_refund_request', __( 'icash Pay payments can only be refunded in full, in one go.', 'moksa-for-woocommerce' ) );
+			}
+		}
+
+		$result = self::call_trade_api(
+			$path,
+			[
+				'MerID'    => $mer_id,
+				'TradeNo'  => $transaction_id,
+				'TradeAmt' => $amt,
+			]
+		);
+		if ( ! $result['ok'] ) {
+			return self::refund_failed( $order, $result );
+		}
+
+		$order->add_order_note(
+			\Moksafowo\Order\Note::build(
+				/* translators: 1: refund amount, 2: PAYUNi message */
+				sprintf( __( 'PAYUNi refunded %1$s: %2$s', 'moksa-for-woocommerce' ), $amt, $result['message'] ),
+				[
+					__( 'Payment type', 'moksa-for-woocommerce' )  => PayType::get_name( (int) ( $query_result['PaymentType'] ?? 0 ) ),
+					__( 'Refund number', 'moksa-for-woocommerce' ) => (string) ( $result['data']['RefundNo'] ?? '' ),
+					__( 'Refunded at', 'moksa-for-woocommerce' )   => (string) ( $result['data']['RefundDT'] ?? '' ),
+				]
+			)
+		);
+		return true;
+	}
+
+	/**
+	 * 呼叫統一金流 trade/ 底下的 API（Version 1.0）：close、cancel、common/refund/*。
+	 *
+	 * @param string              $path   trade/ 之後的路徑。
 	 * @param array<string,mixed> $fields MerID、TradeNo 與該 API 的欄位（Timestamp 會自動加）。
-	 * @return array{ok:bool,unknown:bool,status:string,message:string}
+	 * @return array{ok:bool,unknown:bool,status:string,message:string,data:array<string,string>}
 	 */
 	private static function call_trade_api( string $path, array $fields ): array {
 		$fields['Timestamp'] = time();
@@ -373,6 +460,7 @@ class PaymentRequest {
 				'unknown' => true,
 				'status'  => '',
 				'message' => '',
+				'data'    => [],
 			];
 		}
 
@@ -390,6 +478,7 @@ class PaymentRequest {
 			'unknown' => '' === $status,
 			'status'  => $status,
 			'message' => $message,
+			'data'    => array_map( 'sanitize_text_field', array_filter( $decrypted, 'is_scalar' ) ),
 		];
 	}
 
@@ -412,6 +501,11 @@ class PaymentRequest {
 			$message .= ' ' . $extra;
 		}
 		$order->add_order_note( $message );
+		// 結果未知（斷線、空白或看不懂的回應）：統一金流可能已經處理，擋後續退款、列進待處理。
+		// Guard 只認得斷線和 5xx，200 空白回應或不經過後台按鈕（REST、MCP）的退款要在這裡記。
+		if ( $result['unknown'] && ! self::$refund_flagged ) {
+			\Moksafowo\Refund\Guard::flag( $order, self::$refund_amount, $message );
+		}
 		return new \WP_Error( 'process_refund_request', $message, array( 'order_id' => $order->get_id() ) );
 	}
 

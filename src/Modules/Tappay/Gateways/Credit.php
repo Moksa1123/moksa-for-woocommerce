@@ -34,16 +34,18 @@ final class Credit extends \WC_Payment_Gateway {
 		$this->method_title       = __( 'TapPay credit card', 'moksa-for-woocommerce' );
 		$this->method_description = __( 'Secure card payments with 3-D Secure. Card details never pass through this site.', 'moksa-for-woocommerce' );
 		$this->supports           = [ 'products', 'refunds' ];
-		if ( Subscriptions::active() ) {
-			$this->supports = array_merge( $this->supports, self::SUBSCRIPTION_FEATURES );
-			// 顧客換卡走 Bind Card（不經 3D 驗證）；商家要求 3D 驗證時不開放，只能後台換卡。
-			if ( Helper::three_domain_secure_enabled() ) {
-				$this->supports = array_values( array_diff( $this->supports, [ 'subscription_payment_method_change', 'subscription_payment_method_change_customer' ] ) );
-			}
-		}
 
 		$this->init_form_fields();
 		$this->init_settings();
+
+		if ( Subscriptions::active() ) {
+			$this->supports = array_merge( $this->supports, self::SUBSCRIPTION_FEATURES );
+			// 顧客換卡走 Bind Card（不經 3D 驗證），可能被拿來試卡號：預設關閉，商家打開才有；
+			// 商家要求 3D 驗證時一律不開放，只能後台換卡。
+			if ( ! self::customer_card_change_enabled() ) {
+				$this->supports = array_values( array_diff( $this->supports, [ 'subscription_payment_method_change', 'subscription_payment_method_change_customer' ] ) );
+			}
+		}
 
 		$this->title       = (string) $this->get_option( 'title', __( 'TapPay credit card', 'moksa-for-woocommerce' ) );
 		$this->description = (string) $this->get_option( 'description', __( 'Pay securely by card, handled by TapPay.', 'moksa-for-woocommerce' ) );
@@ -54,26 +56,39 @@ final class Credit extends \WC_Payment_Gateway {
 
 	public function init_form_fields(): void {
 		$this->form_fields = [
-			'enabled'     => [
+			'enabled'              => [
 				'title'   => __( 'Enable this payment method', 'moksa-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'default' => 'no',
 			],
-			'title'       => [
+			'title'                => [
 				'title'       => __( 'Title', 'moksa-for-woocommerce' ),
 				'type'        => 'text',
 				'default'     => __( 'TapPay credit card', 'moksa-for-woocommerce' ),
 				'description' => __( 'The name customers see at checkout.', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
-			'description' => [
+			'description'          => [
 				'title'       => __( 'Description', 'moksa-for-woocommerce' ),
 				'type'        => 'textarea',
 				'default'     => __( 'Pay securely by card, handled by TapPay.', 'moksa-for-woocommerce' ),
 				'description' => __( 'The payment method description shown at checkout.', 'moksa-for-woocommerce' ),
 				'desc_tip'    => true,
 			],
+			'customer_card_change' => [
+				'title'       => __( 'Customers change cards themselves', 'moksa-for-woocommerce' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Let customers change the card on their subscriptions under My account', 'moksa-for-woocommerce' ),
+				'default'     => 'no',
+				'description' => __( 'The new card is saved without 3-D Secure, so it could be misused to test stolen card numbers. Each customer can try at most 3 times a day. Not available when 3-D Secure is required. When off, change cards from the subscription edit screen instead.', 'moksa-for-woocommerce' ),
+			],
 		];
+	}
+
+	/** 顧客能不能在「我的帳號」自己換卡：商家打開、且沒要求 3D 驗證。 */
+	public static function customer_card_change_enabled(): bool {
+		$settings = get_option( 'woocommerce_' . self::GATEWAY_ID . '_settings', [] );
+		return is_array( $settings ) && 'yes' === ( $settings['customer_card_change'] ?? 'no' ) && ! Helper::three_domain_secure_enabled();
 	}
 
 	public function is_available(): bool {
@@ -137,6 +152,23 @@ final class Credit extends \WC_Payment_Gateway {
 		$for_subscription = Subscriptions::order_has_subscription( $order );
 		// 變更付款方式、或首期 0 元（試用期）：只綁卡，不扣款。
 		if ( $for_subscription && ( Subscriptions::is_changing_payment_method( $order ) || (float) $order->get_total() <= 0 ) ) {
+			if ( Subscriptions::is_changing_payment_method( $order ) ) {
+				// 不能只靠 supports 隱藏選項：直接 POST payment_method 也會進到這裡。
+				if ( ! self::customer_card_change_enabled() ) {
+					wc_add_notice( __( 'Changing the card yourself is not available for this payment method. Please contact the store.', 'moksa-for-woocommerce' ), 'error' );
+					return [
+						'result'   => 'failure',
+						'redirect' => '',
+					];
+				}
+				if ( ! Subscriptions::take_card_change_slot( get_current_user_id(), self::GATEWAY_ID ) ) {
+					wc_add_notice( __( 'You have changed or tried to change your card too many times today. Please try again tomorrow or contact the store.', 'moksa-for-woocommerce' ), 'error' );
+					return [
+						'result'   => 'failure',
+						'redirect' => '',
+					];
+				}
+			}
 			if ( Helper::three_domain_secure_enabled() ) {
 				wc_add_notice( __( 'This store requires 3-D Secure, so a card cannot be saved without a payment. Please choose another payment method.', 'moksa-for-woocommerce' ), 'error' );
 				return [
@@ -400,6 +432,8 @@ final class Credit extends \WC_Payment_Gateway {
 		);
 
 		if ( Subscriptions::is_changing_payment_method( $order ) ) {
+			// 綁卡成功才把訂閱切到 TapPay（WCS 預設會先切，見 Subscriptions::delay_payment_method_change）。
+			Subscriptions::finish_payment_method_change( $order, self::GATEWAY_ID );
 			return [
 				'result'   => 'success',
 				'redirect' => $order->get_view_order_url(),

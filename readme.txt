@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.24.0
+Stable tag: 1.25.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,14 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.25.0 - 2026-11-19 =
+* New: Customers can change the card on their ECPay or Shopline Payments subscriptions under My account. The new card is checked with a small authorisation that is cancelled right away, and the subscription switches only after the card is saved (at most 3 tries a day).
+* New: PAYUNi LINE Pay, AFTEE, icash Pay and JKOPAY payments can now be refunded from the order page.
+* Changed: TapPay card changes by customers are now off by default (they skip 3-D Secure); turn them on in the TapPay card settings.
+* Fixed: LINE Pay refunds of payments that were authorised but not yet captured now cancel the authorisation or capture only the remaining amount.
+* Fixed: Refunds whose result could not be confirmed are always listed under Refunds to review, including refunds made through the REST API.
+* Fixed: ECPay card saving failed when the customer's name contained digits, and Shopline Payments trial subscriptions could be put on hold after the card was saved.
+
 = 1.24.0 - 2026-11-19 =
 * New: Refunds are guarded: confirm with the last 4 characters of the order number, double clicks and parallel refunds on one order are blocked, and refunds whose result could not be confirmed are listed under WooCommerce > Refunds to review.
 * New: After a refund, the e-invoice is voided (full refund in the same filing period) or given an allowance (partial or later period); failures are retried, listed and emailed.
@@ -288,6 +296,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.25.0 =
+If you use ECPay saved cards, make sure the card check amount in the ECPay settings is at least the minimum transaction amount in your ECPay contract, otherwise saving cards fails. TapPay customer card changes are now off until you turn them on.
 
 = 1.24.0 =
 Refunds from the order page now ask for the last 4 characters of the order number. E-invoices follow refunds automatically only if your invoice settings already void automatically; otherwise they are listed under WooCommerce > Refunds to review.

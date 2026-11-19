@@ -86,6 +86,12 @@ final class LinePay {
 			wp_send_json_error( array( 'message' => __( 'That order could not be found.', 'moksa-for-woocommerce' ) ), 404 );
 		}
 
+		// 跟退款共用同一把訂單鎖：退款途中不能按請款；之前有結果未知的退款或請款，先處理完才能再請款。
+		$not_ready = \Moksafowo\Refund\Guard::not_ready( $order );
+		if ( null !== $not_ready ) {
+			wp_send_json_error( array( 'message' => $not_ready ), 409 );
+		}
+
 		$gateway = new Credit();
 		$request = new PaymentRequest( $gateway );
 
