@@ -106,6 +106,10 @@ final class Plugin {
 		Settings\SettingsTab::register();
 		Modules\Shipping\Module::boot();
 		Modules\Address\TwAddress::init();
+		// 退款關卡、發票連動、待處理清單：不分金流，所有退款都經過。
+		Refund\Guard::init();
+		Refund\InvoiceSync::init();
+		Refund\PendingPage::init();
 		Settings\MyAccountMenu::init();
 		// 區塊信件編輯器的個人化標籤。無條件掛：它只註冊一個 filter，
 		// 對應模組沒開時各標籤自然回空字串。
@@ -121,6 +125,9 @@ final class Plugin {
 			Modules\AiAssistant\Admin\Hub::boot();
 		}
 		add_action( 'rest_api_init', [ Mcp\Server::class, 'register' ] );
+		add_action( 'updated_option', [ Mcp\Server::class, 'bump_tools_generation' ] );
+		add_action( 'added_option', [ Mcp\Server::class, 'bump_tools_generation' ] );
+		add_action( 'deleted_option', [ Mcp\Server::class, 'bump_tools_generation' ] );
 		$this->modules->boot();
 	}
 
@@ -137,7 +144,7 @@ final class Plugin {
 	 *   就會留下 no（checkbox 預設沒勾），修好之後不能讓它突然關掉，統一設成 yes。
 	 */
 	private static function migrate_option_key_mismatches(): void {
-		if ( 'done' === get_option( 'moksafowo_option_keys_migrated_189', '' ) ) {
+		if ( 'done' === Support\FreshOption::get( 'moksafowo_option_keys_migrated_189', '' ) ) {
 			return;
 		}
 		foreach ( [ 'shipped', 'cvs_arrived', 'store_closed' ] as $x ) {
@@ -152,7 +159,7 @@ final class Plugin {
 	}
 
 	private static function migrate_ai_master_switch(): void {
-		if ( 'done' === get_option( 'moksafowo_ai_master_migrated', '' ) ) {
+		if ( 'done' === Support\FreshOption::get( 'moksafowo_ai_master_migrated', '' ) ) {
 			return;
 		}
 		$old = get_option( 'moksafowo_ai_enabled', null );

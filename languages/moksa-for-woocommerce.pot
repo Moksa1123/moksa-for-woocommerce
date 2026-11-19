@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.23.6\n"
+"Project-Id-Version: Moksa for WooCommerce 1.23.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-19T02:27:21+00:00\n"
+"POT-Creation-Date: 2026-11-19T09:08:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -106,12 +106,12 @@ msgstr ""
 #: src/Modules/OrderLookup/DonationOrgOps.php:97
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:168
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:214
-#: src/Modules/OrderLookup/InvoiceOps.php:96
-#: src/Modules/OrderLookup/InvoiceOps.php:143
-#: src/Modules/OrderLookup/InvoiceOps.php:173
-#: src/Modules/OrderLookup/InvoiceOps.php:218
-#: src/Modules/OrderLookup/InvoiceOps.php:247
-#: src/Modules/OrderLookup/InvoiceOps.php:307
+#: src/Modules/OrderLookup/InvoiceOps.php:116
+#: src/Modules/OrderLookup/InvoiceOps.php:163
+#: src/Modules/OrderLookup/InvoiceOps.php:193
+#: src/Modules/OrderLookup/InvoiceOps.php:238
+#: src/Modules/OrderLookup/InvoiceOps.php:267
+#: src/Modules/OrderLookup/InvoiceOps.php:327
 #: src/Modules/OrderLookup/PaymentMethodOps.php:276
 #: src/Modules/OrderLookup/PaymentMethodOps.php:334
 #: src/Modules/OrderLookup/QueryPayment.php:52
@@ -216,11 +216,11 @@ msgstr ""
 msgid "Unknown prompt: %s"
 msgstr ""
 
-#: src/Mcp/Server.php:265
+#: src/Mcp/Server.php:285
 msgid "Preview only: nothing is changed through this connection."
 msgstr ""
 
-#: src/Mcp/Server.php:320
+#: src/Mcp/Server.php:340
 #: src/Modules/AiAssistant/Module.php:118
 #: src/Modules/CustomerService/Admin/Inbox.php:147
 #: src/Modules/CustomerService/Admin/Inbox.php:171
@@ -266,11 +266,11 @@ msgstr ""
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: src/Mcp/Server.php:328
+#: src/Mcp/Server.php:348
 msgid "The tool failed to run. Please try again later."
 msgstr ""
 
-#: src/Mcp/Server.php:352
+#: src/Mcp/Server.php:372
 msgid "Nothing was changed. Over MCP this tool only previews the change. To apply it, ask Moksa AI in the WordPress admin and confirm there."
 msgstr ""
 
@@ -285,8 +285,8 @@ msgstr ""
 
 #: src/Modules/Address/BlockField.php:343
 #: src/Modules/Address/BlockField.php:452
-#: src/Modules/Address/TwAddress.php:215
-#: src/Modules/Address/TwAddress.php:264
+#: src/Modules/Address/TwAddress.php:212
+#: src/Modules/Address/TwAddress.php:261
 msgid "Select…"
 msgstr ""
 
@@ -2302,7 +2302,7 @@ msgid "Settings saved."
 msgstr ""
 
 #: src/Modules/AiAssistant/Admin/Hub.php:145
-#: src/Plugin.php:81
+#: src/Plugin.php:85
 msgid "Settings"
 msgstr ""
 
@@ -2500,7 +2500,7 @@ msgstr ""
 msgid "Keeps usage and cost in check. Once the limit is reached, messages are simply passed on."
 msgstr ""
 
-#: src/Modules/AiAssistant/Config.php:155
+#: src/Modules/AiAssistant/Config.php:157
 msgid "You are Moksa AI, the WooCommerce admin assistant for a Taiwanese online store. These are your tools: (1) find a single order by order number, e-invoice number, tracking number or payment transaction ID — when the user simply gives a number, such as “order 2855” or “status of 2855?”, treat it as an order number and use this tool; it is the right choice when all that is needed is a status or which order is meant; (2) get the full details of one order — items, totals, payment and shipping method, pickup store, invoice number and whether it has been issued, tracking number and payment transaction ID — use this for questions like “has the invoice been issued”, “what is the tracking number”, “which store is it going to” or “what did they buy”; (3) count orders and see the breakdown by status, or list the orders in one status (awaiting shipment is processing, awaiting payment is pending, finished is completed); (4) change an order status — update-order-status for one order, batch-update-order-status for several; (5) issue an e-invoice with issue-invoice; (6) void an e-invoice with void-invoice, which needs a reason; (7) print shipping labels with print-shipping-label, for one or more orders that already have shipments; (8) create a shipment with create-shipment, which books it with the carrier and returns a tracking number, after which the label can be printed. Tools 4 to 8 are only proposed: the user is asked to press Confirm before anything happens, so never ask for confirmation yourself. (9) add an order note with add-order-note (also only proposed and waits for confirmation); (10) list payment, shipping and e-invoice channels with list-channels (read-only); (11) enable or disable a channel with toggle-channel — pass the channel name such as “SmilePay shipping” directly, with no need to list them first (destructive, so it goes through confirmation); (12) add an invoice donation charity with add-donation-org, giving a name and love code (destructive, confirmed); (13) issue an invoice allowance with issue-allowance, giving an amount (destructive, confirmed); (14) get an advanced order list with list-orders, filtered by status, date range or payment method (read-only); (15) list a payment service's individual methods with list-payment-methods (read-only); (16) enable or disable those methods with toggle-payment-method, such as ECPay's one-off card payment or Apple Pay, passing the names directly (destructive, confirmed); (17) list invoice issuing options with list-invoice-channels (read-only); (18) enable or disable them with toggle-invoice-channel — member carrier, mobile barcode, Citizen Digital Certificate, paper, donation or tax ID (destructive, confirmed); (19) resend the payment details email with resend-payment-email, sending the ATM or convenience store details to the customer (destructive, confirmed); (20) get tracking links with get-tracking-link (read-only); (21) check payment status with get-payment-status — method, whether it is paid, transaction ID, last four card digits, ATM and convenience store details, with a live NewebPay query where applicable (read-only); (22) summarize the plugin settings with get-plugin-settings — which channels are on, test or production mode, when invoices are issued, which fields order lookup searches and whether AI is enabled, never credentials (read-only); (23) list shipping zones and methods with list-shipping-zones (read-only); (24) find a shipping method with toggle-shipping-method, naming it directly, such as “SmilePay T-Cat ambient” — it does not switch anything, because WooCommerce has no API for that; give the store owner the link it returns so they can switch the method on or off on the shipping zone page (read-only); (25) create shipments in bulk with batch-create-shipment (destructive, confirmed); (26) find a customer's orders with find-customer-orders by email, phone or name (read-only); (27) get revenue statistics with sales-summary — revenue, order count, status breakdown and average order value for a period, defaulting to this month (read-only). Tools 11 to 13, 16, 18, 19 and 25 are also only proposed and wait for confirmation. Always look up the real data with a tool before answering, then reply briefly and clearly in the language the merchant is using. Report only the orders that genuinely match the question, and never pad the answer with unrelated ones. If nothing is found, say so plainly rather than inventing anything. If asked for something the tools cannot do, such as printing many shipping labels at once or changing a great many statuses, do not simply say it is impossible — explain that it can be done by ticking the orders in the WooCommerce order list and using the bulk actions menu above, and that you can help with lookups and single status changes. If several things are asked at once, gather everything with the appropriate tools first, then combine the answers into a single reply. Always finish with text; never stop at a tool call without answering."
 msgstr ""
 
@@ -2792,13 +2792,13 @@ msgid "Amego invoice #%1$s was voided: %2$s"
 msgstr ""
 
 #: src/Modules/AmegoInvoice/Operations/Invalid.php:122
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:110
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:135
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:160
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:143
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:168
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:193
 #: src/Modules/Paynow/Api/IpnHandler.php:343
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:154
 #: src/Modules/PaynowInvoice/Operations/Invalid.php:62
-#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:155
+#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:167
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:341
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:86
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:255
@@ -2852,7 +2852,7 @@ msgstr ""
 
 #: src/Modules/AmegoInvoice/Operations/Issue.php:213
 #: src/Modules/EzpayInvoice/Operations/Issue.php:229
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:202
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:235
 #: src/Modules/PaynowInvoice/Operations/Issue.php:239
 #: src/Modules/PayuniShipping/Settings/SevenEleven/B2CFrozenFields.php:21
 #: src/Modules/PayuniShipping/Settings/SevenEleven/B2CNormalFields.php:25
@@ -2868,7 +2868,7 @@ msgid "Shipping"
 msgstr ""
 
 #: src/Modules/AmegoInvoice/Operations/Issue.php:227
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:213
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:246
 msgid "Tax and discount adjustments"
 msgstr ""
 
@@ -3240,7 +3240,7 @@ msgid "Look up"
 msgstr ""
 
 #: src/Modules/CustomerService/Module.php:91
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:186
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:194
 msgid "Looking that up…"
 msgstr ""
 
@@ -3443,50 +3443,50 @@ msgstr ""
 msgid "Invalid action."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:96
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:104
 msgid "Refunded from the ECPay card panel"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:105
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:161
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:113
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:169
 msgid "The action succeeded, but the latest status could not be fetched. Please refresh the page."
 msgstr ""
 
 #. translators: 1: action label, 2: error msg
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:117
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:125
 #, php-format
 msgid "ECPay %1$s failed: %2$s"
 msgstr ""
 
 #. translators: 1: action label, 2: ECPay msg, 3: code
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:130
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:138
 #, php-format
 msgid "ECPay %1$s failed: %2$s (code %3$d)"
 msgstr ""
 
 #. translators: 1: action label, 2: amount
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:142
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:150
 #, php-format
 msgid "ECPay %1$s succeeded (NT$%2$d)."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:153
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:161
 msgid "ECPay authorization cancelled"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:187
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:195
 msgid "Cancel this authorization? The hold on the customer's card is released and this cannot be undone."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:188
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:196
 msgid "Capture this payment? The customer's card will actually be charged."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:189
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:197
 msgid "Issue a refund? Amount:"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:190
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:198
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:74
 #: src/Modules/Ecpay/Gateways/CreditBind.php:198
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:39
@@ -3496,24 +3496,25 @@ msgstr ""
 msgid "The refund amount must be greater than 0."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:191
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:199
 msgid "The action failed:"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:215
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:223
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:52
 msgid "Transaction status"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:221
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:229
 msgid "Authorized amount"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:224
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:232
+#: src/Modules/Payuni/Api/PaymentRequest.php:334
 msgid "Captured amount"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:228
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:236
 #: src/Modules/Payuni/Gateways/ApplePay.php:61
 #: src/Modules/Payuni/Gateways/Credit.php:124
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:60
@@ -3523,71 +3524,71 @@ msgstr ""
 msgid "Authorized at"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:234
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:242
 msgid "Transaction history"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:253
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:261
 msgid "This payment is authorized but not captured. Capture it to charge the customer, or cancel the authorization to release the hold."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:256
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:315
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:108
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:264
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:323
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:113
 msgid "Cancel authorization"
 msgstr ""
 
 #. translators: %d: 請款金額
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:262
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:270
 #, php-format
 msgid "Capture NT$%d"
 msgstr ""
 
 #. translators: %d: 已請款金額
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:269
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:277
 #, php-format
 msgid "NT$%d captured. You can refund part or all of it."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:277
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:317
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:285
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:325
 #: src/Modules/EzpayInvoice/Operations/Issue.php:249
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:108
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:129
 #: src/Modules/PaynowInvoice/Operations/Issue.php:250
 #: src/Modules/Shipping/Statuses/Registrar.php:76
 #: src/Modules/SmilepayInvoice/Operations/Issue.php:259
 msgid "Refund"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:281
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:289
 msgid "No actions are available in this state."
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:288
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:296
 msgid "Check again"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:316
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:324
 msgid "Capture"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:323
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:331
 msgid "Authorized (not captured)"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:324
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:332
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:38
 #: src/Modules/Payuni/Utils/CloseStatus.php:19
 #: src/Modules/Shared/Admin/CardRenderers.php:666
 msgid "Captured"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:325
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:333
 #: src/Modules/Payuni/Utils/CloseStatus.php:23
 msgid "Capture in progress"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:326
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:334
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:40
 #: src/Modules/Newebpay/Module.php:129
 #: src/Modules/Shared/Admin/CardRenderers.php:668
@@ -3596,18 +3597,19 @@ msgstr ""
 msgid "Refunded"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:327
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:328
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:335
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:336
 msgid "Authorization cancelled"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:329
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:337
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:41
 #: src/Modules/Shared/Admin/CardRenderers.php:669
+#: src/Refund/PendingPage.php:109
 msgid "Failed"
 msgstr ""
 
-#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:331
+#: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:339
 msgid "Unknown"
 msgstr ""
 
@@ -3720,10 +3722,10 @@ msgstr ""
 
 #. translators: %s: site name
 #: src/Modules/Ecpay/Api/BindHandler.php:75
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:174
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:332
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:194
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:365
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:143
-#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:175
+#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:187
 #: src/Modules/ShoplinePayments/Gateways/TradePayload.php:128
 #: src/Modules/Tappay/Gateways/Credit.php:443
 #, php-format
@@ -3748,9 +3750,9 @@ msgstr ""
 #: src/Modules/OrderLookup/Ability.php:1376
 #: src/Modules/OrderLookup/AddOrderNote.php:32
 #: src/Modules/OrderLookup/ChangePickupStore.php:139
-#: src/Modules/OrderLookup/InvoiceOps.php:100
-#: src/Modules/OrderLookup/InvoiceOps.php:177
-#: src/Modules/OrderLookup/InvoiceOps.php:251
+#: src/Modules/OrderLookup/InvoiceOps.php:120
+#: src/Modules/OrderLookup/InvoiceOps.php:197
+#: src/Modules/OrderLookup/InvoiceOps.php:271
 #: src/Modules/OrderLookup/PaymentStatus.php:29
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
@@ -3765,6 +3767,7 @@ msgstr ""
 #: src/Modules/Shared/Invoice/OrderListColumn.php:118
 #: src/Modules/Shipping/Admin/ListCreateButton.php:79
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
+#: src/Refund/Abilities.php:117
 msgid "The order could not be found."
 msgstr ""
 
@@ -3992,42 +3995,52 @@ msgstr ""
 msgid "This order was paid offline (%s) and ECPay has no automatic refund for it. Please refund it in the ECPay dashboard."
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:86
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:87
 #: src/Modules/Ecpay/Gateways/CreditBind.php:212
 msgid "This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr ""
 
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:102
+#: src/Modules/Ecpay/Gateways/CreditBind.php:227
+msgid "The capture was cancelled but the authorization could not be voided, so the capture was requested again. Nothing has changed."
+msgstr ""
+
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:104
+#: src/Modules/Ecpay/Gateways/CreditBind.php:229
+msgid "The capture was cancelled but the authorization could not be voided or captured again. This payment is now not captured: handle it in the ECPay dashboard."
+msgstr ""
+
 #. translators: %s: error message
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:97
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:117
 #, php-format
 msgid "The ECPay refund failed: %s"
 msgstr ""
 
 #. translators: 1: amount, 2: ECPay message, 3: code
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:111
-#: src/Modules/Ecpay/Gateways/CreditBind.php:226
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:131
+#: src/Modules/Ecpay/Gateways/CreditBind.php:237
 #, php-format
 msgid "The ECPay refund of NT$%1$d failed: %2$s (code %3$d)"
 msgstr ""
 
 #. translators: 1: amount, 2: reason
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:123
-#: src/Modules/Ecpay/Gateways/CreditBind.php:239
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:143
+#: src/Modules/Ecpay/Gateways/CreditBind.php:250
 #, php-format
 msgid "ECPay refunded NT$%1$d. Reason: %2$s"
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:125
-#: src/Modules/Ecpay/Gateways/CreditBind.php:241
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:145
+#: src/Modules/Ecpay/Gateways/CreditBind.php:252
 msgid "(not given)"
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:134
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:154
 #: src/Modules/Ecpay/Gateways/CreditBind.php:89
 msgid "Invalid order"
 msgstr ""
 
-#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:213
+#: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:233
 msgid "Pay with ECPay"
 msgstr ""
 
@@ -4326,7 +4339,7 @@ msgstr ""
 #: src/Modules/Ecpay/Module.php:40
 #: src/Modules/Ecpay/PaymentTypeCatalog.php:49
 #: src/Modules/Ecpay/Settings/SettingsTab.php:174
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:174
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:207
 #: src/Modules/Newebpay/Module.php:44
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:27
 #: src/Modules/Newebpay/Settings/SettingsTab.php:170
@@ -4847,7 +4860,7 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:173
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:344
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
-#: src/Modules/OrderLookup/InvoiceOps.php:84
+#: src/Modules/OrderLookup/InvoiceOps.php:104
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 #: src/Modules/Shared/Admin/CardRenderers.php:333
@@ -5102,7 +5115,7 @@ msgstr ""
 
 #. translators: 1: invoice number, 2: plugin name
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:269
-#: src/Modules/OrderLookup/InvoiceOps.php:109
+#: src/Modules/OrderLookup/InvoiceOps.php:129
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:325
 #, php-format
 msgid "This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one."
@@ -5115,13 +5128,13 @@ msgid "Invoice status looked up at ECPay — %1$s %2$s"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:343
-#: src/Modules/OrderLookup/InvoiceOps.php:83
+#: src/Modules/OrderLookup/InvoiceOps.php:103
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:36
 msgid "Company (tax ID)"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:345
-#: src/Modules/OrderLookup/InvoiceOps.php:86
+#: src/Modules/OrderLookup/InvoiceOps.php:106
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:35
 msgid "Individual (carrier)"
 msgstr ""
@@ -5233,8 +5246,8 @@ msgid "ECPay allowance %s was voided"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:19
-#: src/Modules/OrderLookup/InvoiceOps.php:188
-#: src/Modules/OrderLookup/InvoiceOps.php:192
+#: src/Modules/OrderLookup/InvoiceOps.php:208
+#: src/Modules/OrderLookup/InvoiceOps.php:212
 msgid "This order has no invoice to void."
 msgstr ""
 
@@ -5438,7 +5451,7 @@ msgid "Member carrier (stored in the cloud, nothing to enter)"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:169
-#: src/Modules/OrderLookup/InvoiceOps.php:85
+#: src/Modules/OrderLookup/InvoiceOps.php:105
 #: src/Modules/Shared/Admin/CardRenderers.php:342
 #: src/Modules/Shared/Admin/CardRenderers.php:407
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:241
@@ -6337,7 +6350,7 @@ msgstr ""
 #: src/Modules/Linepay/Api/PaymentRequest.php:267
 #: src/Modules/Linepay/Api/PaymentRequest.php:671
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:125
-#: src/Modules/Payuni/Api/PaymentRequest.php:544
+#: src/Modules/Payuni/Api/PaymentRequest.php:669
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:272
@@ -6582,7 +6595,7 @@ msgstr ""
 #: src/Modules/Linepay/Gateways/Credit.php:27
 #: src/Modules/Linepay/Settings/settings-fields.php:17
 #: src/Modules/Linepay/Settings/SettingsTab.php:16
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:169
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:202
 #: src/Modules/Newebpay/Module.php:39
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:22
 #: src/Modules/OrderLookup/ChannelOps.php:39
@@ -7310,76 +7323,101 @@ msgstr ""
 msgid "Could not confirm the transaction status with NewebPay. Please try the refund again later."
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:79
+#. translators: 1: amount NewebPay would still capture, 2: amount WooCommerce expects
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:94
+#, php-format
+msgid "NewebPay and WooCommerce disagree on how much is left to capture (NewebPay: %1$d, WooCommerce: %2$d), so nothing was sent. Check the transaction in the NewebPay dashboard and refund there if needed."
+msgstr ""
+
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:97
+msgid "The refund amount is more than NewebPay can still refund for this card payment. Please check the transaction in the NewebPay dashboard."
+msgstr ""
+
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:100
 msgid "This NewebPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day."
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:82
-msgid "NewebPay is still capturing this card payment. Please refund it after capture completes, usually the next day."
-msgstr ""
-
 #. translators: %s: error message
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:102
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:106
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:135
 #, php-format
 msgid "The NewebPay refund failed: %s"
 msgstr ""
 
+#. translators: %d: amount still captured
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:115
+#, php-format
+msgid "Capture only NT$%d"
+msgstr ""
+
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:120
+msgid "The capture was cancelled but the next step failed, so the original capture was requested again. Nothing has changed."
+msgstr ""
+
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:122
+msgid "The capture was cancelled but could not be requested again. This payment is now not captured: handle it in the NewebPay dashboard."
+msgstr ""
+
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:131
+msgid "NewebPay is still capturing this card payment. Please refund it after capture completes, usually the next day."
+msgstr ""
+
 #. translators: 1: action, 2: amount, 3: reason
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:107
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:140
 #, php-format
 msgid "NewebPay %1$s succeeded (NT$%2$s) — %3$s"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:127
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:160
 #, php-format
 msgid "The NewebPay wallet refund failed: %s"
 msgstr ""
 
 #. translators: 1: payment type, 2: amount, 3: reason
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:132
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:165
 #, php-format
 msgid "NewebPay %1$s refunded NT$%2$s — %3$s"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:148
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:181
 msgid "Standard return"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:153
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:186
 #, php-format
 msgid "The AFTEE refund failed: %s"
 msgstr ""
 
 #. translators: 1: amount, 2: reason
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:158
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:191
 #, php-format
 msgid "AFTEE refunded NT$%1$s — %2$s"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:170
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:203
 #: src/Modules/Newebpay/Module.php:40
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:23
 #: src/Modules/Newebpay/Settings/SettingsTab.php:166
 msgid "E.SUN Wallet"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:171
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:204
 #: src/Modules/Newebpay/Module.php:41
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:24
 #: src/Modules/Newebpay/Settings/SettingsTab.php:167
 msgid "Taiwan Pay"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:173
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:206
 #: src/Modules/Newebpay/Module.php:43
 #: src/Modules/Newebpay/PaymentTypeCatalog.php:26
 #: src/Modules/Newebpay/Settings/SettingsTab.php:169
 msgid "Alipay"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:226
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:259
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:76
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
@@ -7394,7 +7432,7 @@ msgstr ""
 msgid "The order could not be found"
 msgstr ""
 
-#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:317
+#: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:350
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:150
 msgid "Pay with NewebPay"
 msgstr ""
@@ -7666,7 +7704,7 @@ msgid "Trade status"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:136
-#: src/Modules/Payuni/Api/PaymentRequest.php:527
+#: src/Modules/Payuni/Api/PaymentRequest.php:652
 #: src/Modules/Payuni/Api/PaymentResponse.php:173
 #: src/Modules/Pchomepay/Module.php:102
 #: src/Modules/ShoplinePayments/Module.php:149
@@ -7674,15 +7712,16 @@ msgid "Payment type"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:137
-#: src/Modules/Payuni/Api/PaymentRequest.php:528
+#: src/Modules/Payuni/Api/PaymentRequest.php:653
 #: src/Modules/Pchomepay/Module.php:103
 #: src/Modules/ShoplinePayments/Module.php:148
 #: src/Modules/Tappay/Module.php:101
+#: src/Refund/PendingPage.php:128
 msgid "Amount"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:138
-#: src/Modules/Payuni/Api/PaymentRequest.php:529
+#: src/Modules/Payuni/Api/PaymentRequest.php:654
 #: src/Modules/Payuni/Gateways/Aftee.php:55
 #: src/Modules/Payuni/Gateways/Atm.php:57
 #: src/Modules/Pchomepay/Module.php:104
@@ -8168,6 +8207,7 @@ msgstr ""
 #: src/Modules/OrderLookup/Ability.php:1267
 #: src/Modules/OrderLookup/Ability.php:1462
 #: src/Modules/OrderLookup/Ability.php:1502
+#: src/Refund/Abilities.php:74
 msgid "The order number, for example 2896"
 msgstr ""
 
@@ -8843,7 +8883,9 @@ msgid "The love code is not valid; it must be 3 to 7 digits."
 msgstr ""
 
 #: src/Modules/OrderLookup/DonationOrgOps.php:60
-#: src/Modules/OrderLookup/InvoiceOps.php:104
+#: src/Modules/OrderLookup/InvoiceOps.php:124
+#: src/Refund/InvoiceSync.php:79
+#: src/Refund/InvoiceSync.php:140
 msgid "No e-invoice module is enabled."
 msgstr ""
 
@@ -8933,98 +8975,98 @@ msgid "SmilePay"
 msgstr ""
 
 #. translators: 1: order number, 2: provider name, 3: invoice type
-#: src/Modules/OrderLookup/InvoiceOps.php:116
+#: src/Modules/OrderLookup/InvoiceOps.php:136
 #, php-format
 msgid "Issue an e-invoice for order #%1$s through %2$s, type %3$s."
 msgstr ""
 
 #. translators: %s: existing invoice number
-#: src/Modules/OrderLookup/InvoiceOps.php:124
+#: src/Modules/OrderLookup/InvoiceOps.php:144
 #, php-format
 msgid "(Note: this order already has invoice number %s. A new one is only issued if that has been voided.)"
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:149
-#: src/Modules/OrderLookup/InvoiceOps.php:225
+#: src/Modules/OrderLookup/InvoiceOps.php:169
+#: src/Modules/OrderLookup/InvoiceOps.php:245
 msgid "The order or the invoice service could not be found."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:155
+#: src/Modules/OrderLookup/InvoiceOps.php:175
 #, php-format
 msgid "Could not issue: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:160
+#: src/Modules/OrderLookup/InvoiceOps.php:180
 #, php-format
 msgid "✅ E-invoice %2$s was issued for order #%1$s through %3$s."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:182
+#: src/Modules/OrderLookup/InvoiceOps.php:202
 msgid "Please provide a reason for voiding."
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: provider, 4: reason
-#: src/Modules/OrderLookup/InvoiceOps.php:203
+#: src/Modules/OrderLookup/InvoiceOps.php:223
 #, php-format
 msgid "Void e-invoice %2$s on order #%1$s through %3$s. Reason: %4$s."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:231
+#: src/Modules/OrderLookup/InvoiceOps.php:251
 #, php-format
 msgid "Could not void: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number
-#: src/Modules/OrderLookup/InvoiceOps.php:235
+#: src/Modules/OrderLookup/InvoiceOps.php:255
 #, php-format
 msgid "✅ E-invoice %2$s on order #%1$s was voided."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:255
+#: src/Modules/OrderLookup/InvoiceOps.php:275
 msgid "Please provide an allowance amount greater than 0."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:261
+#: src/Modules/OrderLookup/InvoiceOps.php:281
 msgid "This order has no invoice."
 msgstr ""
 
 #. translators: %s: provider name
-#: src/Modules/OrderLookup/InvoiceOps.php:265
+#: src/Modules/OrderLookup/InvoiceOps.php:285
 #, php-format
 msgid "%s does not support allowances."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:269
+#: src/Modules/OrderLookup/InvoiceOps.php:289
 msgid "This order has no issued invoice to raise an allowance against."
 msgstr ""
 
 #. translators: 1: amount, 2: order total
-#: src/Modules/OrderLookup/InvoiceOps.php:277
+#: src/Modules/OrderLookup/InvoiceOps.php:297
 #, php-format
 msgid "The allowance amount %1$d is larger than the order total %2$d."
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: amount, 4: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:292
+#: src/Modules/OrderLookup/InvoiceOps.php:312
 #, php-format
 msgid "Issue an allowance of NT$%3$d against invoice %2$s on order #%1$s through %4$s."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:314
+#: src/Modules/OrderLookup/InvoiceOps.php:334
 msgid "The details are incomplete, so no allowance was issued."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:320
+#: src/Modules/OrderLookup/InvoiceOps.php:340
 #, php-format
 msgid "Could not issue the allowance: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: amount
-#: src/Modules/OrderLookup/InvoiceOps.php:324
+#: src/Modules/OrderLookup/InvoiceOps.php:344
 #, php-format
 msgid "✅ An allowance of NT$%2$d was issued for order #%1$s."
 msgstr ""
@@ -9042,7 +9084,7 @@ msgstr ""
 msgid "Find orders by invoice number, tracking number or payment transaction ID, from the order list and Ctrl+K"
 msgstr ""
 
-#: src/Modules/OrderLookup/Module.php:157
+#: src/Modules/OrderLookup/Module.php:158
 msgid "Rebuilding the order number index has started in the background."
 msgstr ""
 
@@ -9811,69 +9853,110 @@ msgstr ""
 msgid "The order status could not be checked before refunding (order #%s)."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:194
+#. translators:  %s is the TradeStatus of the order
+#: src/Modules/Payuni/Api/PaymentRequest.php:189
+#, php-format
+msgid "Unable to Refund this Order. TradeStatus:%s"
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:203
 msgid "This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:202
-msgid "This card payment has not been captured yet, so it can only be cancelled in full. Refund the full amount, or wait until it is captured to make a partial refund."
+#. translators: 1: amount PAYUNi would still capture, 2: amount WooCommerce expects
+#: src/Modules/Payuni/Api/PaymentRequest.php:230
+#, php-format
+msgid "PAYUNi and WooCommerce disagree on how much is left to capture (PAYUNi: %1$d, WooCommerce: %2$d), so nothing was sent. Check the transaction in the PAYUNi merchant dashboard and refund there if needed."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:236
+msgid "The refund amount is more than PAYUNi can still refund for this card payment. Please check the transaction in the PAYUNi merchant dashboard."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:243
+msgid "Installment and UnionPay card payments can only be refunded in full."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:256
+msgid "PAYUNi cancelled the card authorisation, so the customer is not charged."
+msgstr ""
+
+#. translators: %s: amount that will be captured
+#: src/Modules/Payuni/Api/PaymentRequest.php:266
+#, php-format
+msgid "PAYUNi will now capture only %s from the card."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:273
+msgid "The capture request had already been cancelled. If PAYUNi still shows this payment as not captured, capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:284
+msgid "The original capture request was sent again, so nothing has changed."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:285
+msgid "The capture request was cancelled and could not be sent again. This payment is now not captured: capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:308
+msgid "PAYUNi recorded it as a scheduled refund; it is refunded once the capture completes."
 msgstr ""
 
 #. translators: %s: PAYUNi settlement status
-#: src/Modules/Payuni/Api/PaymentRequest.php:222
+#: src/Modules/Payuni/Api/PaymentRequest.php:314
 #, php-format
 msgid "This order cannot be refunded in its current state (PAYUNi settlement status: %s)"
 msgstr ""
 
 #. translators: 1: trade status, 2: close status
-#: src/Modules/Payuni/Api/PaymentRequest.php:226
+#: src/Modules/Payuni/Api/PaymentRequest.php:318
 #, php-format
 msgid "This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)"
 msgstr ""
 
-#. translators:  %s is the TradeStatus of the order
-#: src/Modules/Payuni/Api/PaymentRequest.php:239
-#, php-format
-msgid "Unable to Refund this Order. TradeStatus:%s"
-msgstr ""
-
-#: src/Modules/Payuni/Api/PaymentRequest.php:269
-msgid "Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again."
-msgstr ""
-
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:286
+#: src/Modules/Payuni/Api/PaymentRequest.php:331
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr ""
 
+#: src/Modules/Payuni/Api/PaymentRequest.php:333
+#: src/Modules/Payuni/Api/PaymentRequest.php:655
+msgid "Settlement status"
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:335
+msgid "Note"
+msgstr ""
+
+#: src/Modules/Payuni/Api/PaymentRequest.php:406
+msgid "Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again."
+msgstr ""
+
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:290
+#: src/Modules/Payuni/Api/PaymentRequest.php:409
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:499
+#: src/Modules/Payuni/Api/PaymentRequest.php:622
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr ""
 
 #. translators: %s: transaction status
-#: src/Modules/Payuni/Api/PaymentRequest.php:525
+#: src/Modules/Payuni/Api/PaymentRequest.php:650
 #, php-format
 msgid "PAYUNi transaction lookup: %s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:530
-msgid "Settlement status"
-msgstr ""
-
-#: src/Modules/Payuni/Api/PaymentRequest.php:531
+#: src/Modules/Payuni/Api/PaymentRequest.php:656
 #: src/Modules/Payuni/Api/PaymentResponse.php:175
 msgid "PAYUNi transaction ID"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:543
+#: src/Modules/Payuni/Api/PaymentRequest.php:668
 #, php-format
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr ""
@@ -11045,6 +11128,7 @@ msgstr ""
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:109
 #: src/Modules/ShoplinePayments/Module.php:146
 #: src/Modules/Tappay/Module.php:100
+#: src/Refund/PendingPage.php:128
 msgid "Status"
 msgstr ""
 
@@ -11890,13 +11974,13 @@ msgid "Card instalment payments can only be refunded in full, in a single refund
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:143
+#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:155
 #, php-format
 msgid "The PChomePay refund failed: %s"
 msgstr ""
 
 #. translators: 1: amount, 2: refund id, 3: reason
-#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:152
+#: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:164
 #, php-format
 msgid "The PChomePay refund of NT$%1$s was submitted (refund number %2$s) — %3$s"
 msgstr ""
@@ -12503,36 +12587,36 @@ msgid "Invoice status looked up at %1$s — %2$s"
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:62
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:66
 #, php-format
 msgid "Automatic voiding of the %1$s invoice was cancelled because the order is no longer cancelled or refunded."
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:90
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:94
 #, php-format
 msgid "The scheduled %1$s invoice was cancelled because the order was refunded or cancelled."
 msgstr ""
 
 #. translators: 1: provider label
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:95
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:99
 #, php-format
 msgid "The scheduled %1$s invoice could not be cancelled, or the schedule had already run — please check it in the %1$s dashboard."
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:105
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:109
 msgid "Order refunded (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:106
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:110
 msgid "Order cancelled (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:107
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:111
 msgid "Order failed (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:108
+#: src/Modules/Shared/Invoice/AbstractAutoInvalid.php:112
 msgid "Order status changed (voided automatically)"
 msgstr ""
 
@@ -15067,8 +15151,224 @@ msgstr ""
 msgid "Enter both the TapPay card key and card token."
 msgstr ""
 
-#: src/Plugin.php:94
+#: src/Plugin.php:98
 msgid "GitHub"
+msgstr ""
+
+#: src/Refund/Abilities.php:39
+msgid "List refunds that need review"
+msgstr ""
+
+#: src/Refund/Abilities.php:40
+msgid "List orders with a refund that needs attention: a refund whose payment result could not be confirmed, or a refund whose e-invoice still has to be voided or given an allowance. Read-only; nothing is changed."
+msgstr ""
+
+#: src/Refund/Abilities.php:66
+msgid "Get the refund status of an order"
+msgstr ""
+
+#: src/Refund/Abilities.php:67
+msgid "Show every refund on one order: amount, whether the money was refunded through the payment provider or manually, and what happened to the e-invoice (voided, allowance issued, waiting, failed). Read-only."
+msgstr ""
+
+#: src/Refund/Abilities.php:132
+#: src/Refund/PendingPage.php:137
+msgid "Payment result unconfirmed"
+msgstr ""
+
+#: src/Refund/Abilities.php:139
+msgid "Refunded manually"
+msgstr ""
+
+#: src/Refund/Abilities.php:139
+msgid "Refunded through the payment provider"
+msgstr ""
+
+#: src/Refund/Guard.php:92
+#: src/Refund/PendingPage.php:118
+#: src/Refund/PendingPage.php:190
+msgid "You do not have permission to refund orders."
+msgstr ""
+
+#: src/Refund/Guard.php:95
+#: src/Refund/Guard.php:347
+msgid "An earlier refund on this order has an unconfirmed result. Check it under WooCommerce > Refunds to review before refunding again."
+msgstr ""
+
+#: src/Refund/Guard.php:100
+msgid "Enter the last 4 characters of the order number to confirm this refund."
+msgstr ""
+
+#: src/Refund/Guard.php:105
+msgid "This refund was already sent, or the page has expired. Reload the order page and check the refunds before trying again."
+msgstr ""
+
+#: src/Refund/Guard.php:109
+#: src/Refund/Guard.php:351
+msgid "Another refund on this order is being processed. Wait a moment and reload the page."
+msgstr ""
+
+#. translators: 1: amount, 2: error message
+#: src/Refund/Guard.php:198
+#, php-format
+msgid "The refund of %1$s did not go through: %2$s"
+msgstr ""
+
+#. translators: %s: amount
+#: src/Refund/Guard.php:219
+#, php-format
+msgid "The refund of %s could not be confirmed with the payment provider (connection problem). It may have been refunded already. New refunds on this order are blocked until it is checked under WooCommerce > Refunds to review."
+msgstr ""
+
+#: src/Refund/Guard.php:249
+msgid "To confirm, enter the last 4 characters of the order number"
+msgstr ""
+
+#: src/Refund/Guard.php:250
+msgid "An earlier refund on this order has an unconfirmed result. Review it under WooCommerce > Refunds to review before refunding again."
+msgstr ""
+
+#. translators: %s: order number
+#: src/Refund/Guard.php:378
+#, php-format
+msgid "A refund needs your attention (order #%s)"
+msgstr ""
+
+#: src/Refund/InvoiceSync.php:87
+msgid "The invoice was already voided."
+msgstr ""
+
+#: src/Refund/InvoiceSync.php:93
+msgid "The invoice has not been issued yet. When it is issued, make sure the amount reflects this refund."
+msgstr ""
+
+#: src/Refund/InvoiceSync.php:108
+msgid "This e-invoice service has no allowance API here. Issue the allowance in its dashboard."
+msgstr ""
+
+#. translators: 1: refund amount, 2: amount still available for allowances
+#: src/Refund/InvoiceSync.php:113
+#, php-format
+msgid "The allowance of NT$%1$d is more than the NT$%2$d left on the invoice."
+msgstr ""
+
+#. translators: %s: refund ID
+#: src/Refund/InvoiceSync.php:144
+#, php-format
+msgid "Refund #%s"
+msgstr ""
+
+#: src/Refund/InvoiceSync.php:164
+msgid "The scheduled invoice could not be cancelled. Check it in the e-invoice dashboard."
+msgstr ""
+
+#. translators: 1: refund ID, 2: error message
+#: src/Refund/InvoiceSync.php:274
+#, php-format
+msgid "The e-invoice step for refund #%1$s failed: %2$s. It is listed under WooCommerce > Refunds to review."
+msgstr ""
+
+#. translators: %s: order number
+#: src/Refund/InvoiceSync.php:282
+#, php-format
+msgid "Refund invoice needs attention (order #%s)"
+msgstr ""
+
+#. translators: 1: order number, 2: error message, 3: admin URL
+#: src/Refund/InvoiceSync.php:285
+#, php-format
+msgid ""
+"The e-invoice step for a refund on order #%1$s failed: %2$s\n"
+"\n"
+"The refund itself went through. Review it here: %3$s"
+msgstr ""
+
+#: src/Refund/PendingPage.php:31
+#: src/Refund/PendingPage.php:32
+#: src/Refund/PendingPage.php:120
+msgid "Refunds to review"
+msgstr ""
+
+#: src/Refund/PendingPage.php:105
+msgid "Invoice to void"
+msgstr ""
+
+#: src/Refund/PendingPage.php:106
+msgid "Allowance to issue"
+msgstr ""
+
+#: src/Refund/PendingPage.php:107
+msgid "Scheduled invoice to cancel"
+msgstr ""
+
+#: src/Refund/PendingPage.php:108
+msgid "Handle manually"
+msgstr ""
+
+#: src/Refund/PendingPage.php:110
+msgid "Done"
+msgstr ""
+
+#: src/Refund/PendingPage.php:111
+msgid "Not needed"
+msgstr ""
+
+#: src/Refund/PendingPage.php:121
+msgid "Refunds whose payment result could not be confirmed, and refunds whose e-invoice still needs voiding or an allowance. The money side of a refund is never undone because of the invoice."
+msgstr ""
+
+#: src/Refund/PendingPage.php:125
+msgid "Nothing to review."
+msgstr ""
+
+#: src/Refund/PendingPage.php:128
+msgid "Order"
+msgstr ""
+
+#: src/Refund/PendingPage.php:128
+msgid "Details"
+msgstr ""
+
+#: src/Refund/PendingPage.php:128
+msgid "Actions"
+msgstr ""
+
+#: src/Refund/PendingPage.php:137
+msgid "Check the payment provider dashboard: if the money was refunded there, record a manual refund on the order after confirming here."
+msgstr ""
+
+#: src/Refund/PendingPage.php:144
+msgid "Checked, unblock refunds"
+msgstr ""
+
+#: src/Refund/PendingPage.php:155
+msgid "Run the invoice step"
+msgstr ""
+
+#: src/Refund/PendingPage.php:164
+msgid "Mark as handled"
+msgstr ""
+
+#: src/Refund/PendingPage.php:182
+msgid "What did you find or do?"
+msgstr ""
+
+#. translators: 1: user name, 2: note
+#: src/Refund/PendingPage.php:204
+#, php-format
+msgid "Unconfirmed refund checked by %1$s: %2$s"
+msgstr ""
+
+#. translators: %d: number of orders
+#: src/Refund/PendingPage.php:248
+#, php-format
+msgid "%d order has a refund that needs review."
+msgid_plural "%d orders have refunds that need review."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Refund/PendingPage.php:250
+msgid "Review refunds"
 msgstr ""
 
 #: src/Settings/AdvancedSections.php:62
@@ -15093,10 +15393,6 @@ msgstr ""
 
 #: src/Settings/SecretFields.php:72
 msgid "For security the saved value is not shown. Leave it as is to keep it."
-msgstr ""
-
-#: src/Settings/SecretStore.php:226
-msgid "WordPress can now keep payment, shipping and invoice keys in its encrypted secret storage, but it is not set up on this site yet. Your keys keep working as before. To turn it on, follow the Secrets item under Tools → Site Health."
 msgstr ""
 
 #: src/Settings/SettingsPage.php:25

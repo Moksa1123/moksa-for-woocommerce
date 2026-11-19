@@ -133,8 +133,20 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 			);
 		}
 
-		$refund_id = 'R' . $order_id . substr( (string) time(), -6 );
+		// 退款編號由「訂單＋這筆之前已退金額＋這筆金額」組成：逾時後重送同一筆會是同一個編號，
+		// PChomePay 拒收重複編號，不會退兩次（原本用 time()，重試就變新單號）。WC 呼叫這裡時
+		// 這筆退款紀錄已經存了，所以「之前已退」要扣掉這筆。
+		$before = (int) round( (float) $order->get_total_refunded() ) - $amt;
+		// 明確失敗（PChomePay 有回應、拒絕）後同一筆可能被記成用過：失敗次數放進編號，下次換新號；
+		// 連線失敗（結果未知）不加，重送同號才會被拒收而不會退兩次。
+		$retry_key = Keys::PCHOMEPAY_REFUND_RETRY . max( 0, $before ) . '_' . $amt;
+		$retry     = (int) $order->get_meta( $retry_key );
+		$refund_id = 'R' . $order_id . '-' . max( 0, $before ) . '-' . $amt . ( $retry > 0 ? '-' . $retry : '' );
 		$result    = PaymentRequest::refund( $pchome_order_id, $refund_id, $amt );
+		if ( ! $result['ok'] && 'TRANSPORT' !== (string) ( $result['code'] ?? '' ) ) {
+			$order->update_meta_data( $retry_key, $retry + 1 );
+			$order->save();
+		}
 		if ( ! $result['ok'] ) {
 			return new \WP_Error(
 				'moksafowo_pchomepay_refund_fail',

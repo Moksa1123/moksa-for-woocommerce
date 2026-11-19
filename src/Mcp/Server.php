@@ -25,6 +25,19 @@ final class Server {
 	const ROUTE    = '/mcp';
 	const PROTOCOL = '2025-06-18';
 
+	const GEN_OPTION = 'moksafowo_mcp_tools_gen';
+
+	/**
+	 * 任何 moksafowo_*_enabled 選項一變（模組、金流方式、發票、物流開關），換掉 tools/list 快取的世代。
+	 *
+	 * @param string $option 選項名稱。
+	 */
+	public static function bump_tools_generation( string $option ): void {
+		if ( 0 === strpos( $option, 'moksafowo_' ) && '_enabled' === substr( $option, -8 ) ) {
+			update_option( self::GEN_OPTION, (string) time(), false );
+		}
+	}
+
 	public static function enabled(): bool {
 		// AI 模組卡片是總開關：模組關掉後 MCP 的設定也看不到，端點不能還開著。
 		return 'yes' === get_option( 'moksafowo_ai_mcp_server_enabled', 'no' )
@@ -214,15 +227,22 @@ final class Server {
 	 * @return array<int, array<string,mixed>>
 	 */
 	private static function tools(): array {
-		// 快取 key 帶上實際註冊的工具名單：模組開關會改變註冊了哪些工具，只看版本號會停在舊清單。
-		$abilities = self::abilities();
-		$key       = 'moksafowo_mcp_tools_' . md5( MOKSAFOWO_VERSION . '|' . get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' ) . '|' . implode( ',', array_keys( $abilities ) ) );
-		$cached    = get_transient( $key );
+		// 快取命中時完全不碰 Abilities 登錄：wp_get_abilities() 第一次呼叫會讓全站每個外掛註冊
+		// 自己的 ability（常是三位數），原本每次 tools/list 都先跑這個才查快取，11-17 一天 446 次
+		// 把資料庫打掛。key 改用版本＋破壞性開關＋各模組開關＋「設定世代」（任何 *_enabled 選項
+		// 一變就換，見 bump_tools_generation），模組或功能開關改了一樣會換新清單。
+		$modules = \Moksafowo\Plugin::instance()->modules();
+		$sig     = array();
+		foreach ( array_keys( $modules->all() ) as $slug ) {
+			$sig[] = $modules->is_enabled( $slug ) ? $slug : '';
+		}
+		$key    = 'moksafowo_mcp_tools_' . md5( MOKSAFOWO_VERSION . '|' . get_option( 'moksafowo_ai_mcp_expose_destructive', 'no' ) . '|' . implode( ',', $sig ) . '|' . (string) get_option( self::GEN_OPTION, '0' ) );
+		$cached = get_transient( $key );
 		if ( is_array( $cached ) && ! empty( $cached ) ) {
 			return $cached;
 		}
 		$tools = array();
-		foreach ( $abilities as $ability ) {
+		foreach ( self::abilities() as $ability ) {
 			$tools[] = self::tool_schema( $ability );
 		}
 		// 空清單不快取，模組剛打開時不會卡一整天。

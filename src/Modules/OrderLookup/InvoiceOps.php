@@ -71,6 +71,26 @@ final class InvoiceOps {
 		return '';
 	}
 
+	/**
+	 * 給退款連動用：這張單的發票商與作廢、折讓的實作類別。沒有啟用的發票模組回空陣列。
+	 *
+	 * @return array{slug?:string,invalid?:class-string,number_key?:string,label?:string,allowance?:?class-string}
+	 */
+	public static function provider_for( \WC_Order $order ): array {
+		$slug = self::resolve_provider( $order );
+		if ( '' === $slug ) {
+			return [];
+		}
+		$row = self::providers()[ $slug ];
+		return [
+			'slug'       => $slug,
+			'invalid'    => $row[1],
+			'number_key' => $row[2],
+			'label'      => $row[3],
+			'allowance'  => $row[4],
+		];
+	}
+
 	private static function order_from( $args ): ?\WC_Order {
 		$ref   = is_array( $args ) && isset( $args['order'] ) ? (string) $args['order'] : '';
 		$id    = absint( preg_replace( '/[^0-9]/', '', $ref ) );

@@ -61,6 +61,8 @@ final class Config {
 			'moksa-for-woocommerce/get-tracking-link',
 			'moksa-for-woocommerce/get-payment-status',
 			'moksa-for-woocommerce/query-payment',
+			'moksa-for-woocommerce/list-pending-refunds',
+			'moksa-for-woocommerce/get-refund-status',
 			'moksa-for-woocommerce/get-plugin-settings',
 			'moksa-for-woocommerce/list-shipping-zones',
 			'moksa-for-woocommerce/toggle-shipping-method',

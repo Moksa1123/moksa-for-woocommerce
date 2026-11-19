@@ -18,6 +18,13 @@ if ( ! function_exists( '__' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_timezone' ) ) {
+	// 退款發票跨期判斷用：測試固定台北時區。
+	function wp_timezone(): DateTimeZone {
+		return new DateTimeZone( 'Asia/Taipei' );
+	}
+}
+
 if ( ! function_exists( '_x' ) ) {
 	function _x( $text, $context, $domain = '' ) {
 		return $text;

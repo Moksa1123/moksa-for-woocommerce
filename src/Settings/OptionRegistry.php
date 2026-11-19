@@ -64,7 +64,7 @@ final class OptionRegistry {
 	}
 
 	public static function maybe_backfill(): void {
-		if ( 'yes' === get_option( self::BACKFILLED ) ) {
+		if ( 'yes' === \Moksafowo\Support\FreshOption::get( self::BACKFILLED ) ) {
 			return;
 		}
 		$found = array_filter( array_keys( wp_load_alloptions() ), static fn( $n ): bool => is_string( $n ) && self::ours( $n ) );

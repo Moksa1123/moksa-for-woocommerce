@@ -52,7 +52,8 @@ final class Migration {
 
 	public static function start(): void {
 		Storage::set( Storage::MIGRATING );
-		if ( false === get_option( self::CURSOR, false ) ) {
+		// 讀成不存在會把游標歸零、從頭再搬一次。
+		if ( false === \Moksafowo\Support\FreshOption::get( self::CURSOR, false ) ) {
 			update_option( self::CURSOR, 0, false );
 		}
 		self::schedule( self::HOOK );

@@ -72,31 +72,64 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 		if ( ! $query['ok'] ) {
 			return new \WP_Error( 'moksafowo_newebpay_query_fail', __( 'Could not confirm the transaction status with NewebPay. Please try the refund again later.', 'moksa-for-woocommerce' ) );
 		}
-		$close_status       = (string) ( $query['data']['CloseStatus'] ?? '' );
-		$auth_amt           = (int) ( $query['data']['Amt'] ?? \Moksafowo\Modules\Newebpay\Api\Helper::paid_amount( $order ) );
-		$is_authorized_only = '0' === $close_status;
-		if ( $is_authorized_only && $amt !== $auth_amt ) {
-			return new \WP_Error( 'moksafowo_newebpay_partial_before_capture', __( 'This NewebPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
-		}
-		if ( ! $is_authorized_only && '3' !== $close_status ) {
+		$api          = \Moksafowo\Modules\Newebpay\Api\PaymentRequest::class;
+		$close_status = (string) ( $query['data']['CloseStatus'] ?? '' );
+		$auth_amt     = (int) ( $query['data']['Amt'] ?? \Moksafowo\Modules\Newebpay\Api\Helper::paid_amount( $order ) );
+		$close_amt    = (int) ( $query['data']['CloseAmt'] ?? 0 );
+		$base         = $close_amt > 0 ? $close_amt : $auth_amt;
+		$ref          = [
+			'MerchantOrderNo' => $mtn,
+			'IndexType'       => 1,
+		];
+
+		// 官方「請退款/取消請退款」（B031–B033）：0 未請款、1 等待提送請款（先取消請款）→ 全額取消授權、
+		// 部分只請款剩下的金額（分期只能整筆）；3 請款完成 → 退款；2 請款處理中銀行在處理，不能動。
+		$is_authorized_only = in_array( $close_status, [ '0', '1' ], true );
+		if ( $is_authorized_only ) {
+			$remaining = $base - $amt;
+			// 以 WC 的帳為準（這筆退款已存檔）：對不上就停下，不能照藍新的數字請款而多扣顧客。
+			$expected = (int) round( (float) $order->get_total() - (float) $order->get_total_refunded() );
+			if ( $remaining >= 0 && $remaining !== $expected ) {
+				/* translators: 1: amount NewebPay would still capture, 2: amount WooCommerce expects */
+				return new \WP_Error( 'moksafowo_newebpay_amount_mismatch', sprintf( __( 'NewebPay and WooCommerce disagree on how much is left to capture (NewebPay: %1$d, WooCommerce: %2$d), so nothing was sent. Check the transaction in the NewebPay dashboard and refund there if needed.', 'moksa-for-woocommerce' ), $remaining, $expected ) );
+			}
+			if ( $remaining < 0 ) {
+				return new \WP_Error( 'moksafowo_newebpay_refund_too_much', __( 'The refund amount is more than NewebPay can still refund for this card payment. Please check the transaction in the NewebPay dashboard.', 'moksa-for-woocommerce' ) );
+			}
+			if ( $remaining > 0 && (int) ( $query['data']['Inst'] ?? 0 ) > 0 ) {
+				return new \WP_Error( 'moksafowo_newebpay_partial_before_capture', __( 'This NewebPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
+			}
+			if ( '1' === $close_status ) {
+				$step = $api::cancel_close( $ref + [ 'Amt' => $base ] );
+				if ( ! $step['ok'] ) {
+					/* translators: %s: error message */
+					return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( 'The NewebPay refund failed: %s', 'moksa-for-woocommerce' ), $step['message'] ) );
+				}
+			}
+			$result = 0 === $remaining
+				? $api::cancel( $ref + [ 'Amt' => $auth_amt ] )
+				: $api::close( $ref + [ 'Amt' => $remaining ] );
+			$label  = 0 === $remaining
+				? __( 'Cancel authorization', 'moksa-for-woocommerce' )
+				/* translators: %d: amount still captured */
+				: sprintf( __( 'Capture only NT$%d', 'moksa-for-woocommerce' ), $remaining );
+			if ( ! $result['ok'] && '1' === $close_status ) {
+				// 已取消請款、下一步失敗：把原請款送回去，避免這筆授權沒人請款。
+				$back = $api::close( $ref + [ 'Amt' => $base ] );
+				if ( $back['ok'] ) {
+					$order->add_order_note( __( 'The capture was cancelled but the next step failed, so the original capture was requested again. Nothing has changed.', 'moksa-for-woocommerce' ) );
+				} else {
+					$msg = __( 'The capture was cancelled but could not be requested again. This payment is now not captured: handle it in the NewebPay dashboard.', 'moksa-for-woocommerce' );
+					$order->add_order_note( $msg );
+					\Moksafowo\Refund\Guard::flag( $order, (string) $amt, $msg );
+				}
+			}
+		} elseif ( '3' === $close_status ) {
+			$result = $api::refund( $ref + [ 'Amt' => $amt ] );
+			$label  = __( 'Refund', 'moksa-for-woocommerce' );
+		} else {
 			return new \WP_Error( 'moksafowo_newebpay_capture_in_progress', __( 'NewebPay is still capturing this card payment. Please refund it after capture completes, usually the next day.', 'moksa-for-woocommerce' ) );
 		}
-
-		$result = $is_authorized_only
-			? \Moksafowo\Modules\Newebpay\Api\PaymentRequest::cancel(
-				[
-					'Amt'             => $amt,
-					'MerchantOrderNo' => $mtn,
-					'IndexType'       => 1,
-				]
-			)
-			: \Moksafowo\Modules\Newebpay\Api\PaymentRequest::refund(
-				[
-					'Amt'             => $amt,
-					'MerchantOrderNo' => $mtn,
-					'IndexType'       => 1,
-				]
-			);
 		if ( ! $result['ok'] ) {
 			/* translators: %s: error message */
 			return new \WP_Error( 'moksafowo_newebpay_card_refund_fail', sprintf( __( 'The NewebPay refund failed: %s', 'moksa-for-woocommerce' ), $result['message'] ) );
@@ -105,7 +138,7 @@ abstract class AbstractNewebpayGateway extends AbstractMowcGateway {
 			sprintf(
 			/* translators: 1: action, 2: amount, 3: reason */
 				__( 'NewebPay %1$s succeeded (NT$%2$s) — %3$s', 'moksa-for-woocommerce' ),
-				$is_authorized_only ? __( 'Cancel authorization', 'moksa-for-woocommerce' ) : __( 'Refund', 'moksa-for-woocommerce' ),
+				$label,
 				$amt,
 				$reason ?: __( 'No reason given', 'moksa-for-woocommerce' )
 			)

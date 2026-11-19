@@ -48,9 +48,13 @@ abstract class AbstractAutoInvalid {
 		as_schedule_single_action( time() + static::BUFFER_SECONDS, $hook, [ $order_id ], 'moksa-for-woocommerce' );
 	}
 
-	public static function run( int $order_id ): void {
+	public static function run( int $order_id, bool $from_refund_flow = false ): void {
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+		// 退款走過新流程（Refund\InvoiceSync）的單由它決定作廢或折讓，這裡不再依狀態自動作廢，避免重複。
+		if ( ! $from_refund_flow && 'refunded' === $order->get_status() && 'yes' === $order->get_meta( \Moksafowo\Order\Meta\Keys::REFUND_FLOW ) ) {
 			return;
 		}
 

@@ -56,6 +56,7 @@ final class Module extends AbstractModule {
 		$done = true;
 		add_action( 'wp_abilities_api_categories_init', [ Ability::class, 'register_category' ] );
 		add_action( 'wp_abilities_api_init', [ Ability::class, 'register' ] );
+		add_action( 'wp_abilities_api_init', [ \Moksafowo\Refund\Abilities::class, 'register' ] );
 		// gate_mcp_exposure 必須在 register 前掛，register 時才會 fire。
 		add_filter( 'wp_register_ability_args', [ Ability::class, 'gate_mcp_exposure' ], 10, 2 );
 		add_filter( 'woocommerce_mcp_include_ability', [ Ability::class, 'include_in_mcp' ], 10, 2 );

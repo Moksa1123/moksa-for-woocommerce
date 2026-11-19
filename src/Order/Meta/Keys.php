@@ -28,6 +28,20 @@ final class Keys {
 	public const LEGACY_INVOICE_VOIDED_AT   = '_moksafowo_legacy_invoice_voided_at';   // 舊外掛開的發票由 Moksa 作廢的時間（舊外掛的 meta 不改）.
 	public const LEGACY_INVOICE_VOID_REASON = '_moksafowo_legacy_invoice_void_reason';
 
+	// 退款紀錄（掛在 WC 退款物件 shop_order_refund 上）.
+	public const REFUND_STATE         = '_moksafowo_refund_state';          // gateway_done|manual_done|gateway_unknown.
+	public const REFUND_INVOICE_STATE = '_moksafowo_refund_invoice_state';  // none|todo_void|todo_allowance|todo_manual|done|failed|skipped.
+	public const REFUND_INVOICE_REF   = '_moksafowo_refund_invoice_ref';    // 作廢時間或折讓金額說明.
+	public const REFUND_INVOICE_ERROR = '_moksafowo_refund_invoice_error';  // 最後一次發票失敗原因.
+	public const REFUND_INVOICE_TRIES = '_moksafowo_refund_invoice_tries';
+	public const REFUND_AUDIT         = '_moksafowo_refund_audit';          // [{ step, user, time, source, ip_hash, result }].
+	// 訂單上：
+	public const REFUND_OPEN            = '_moksafowo_refund_open';           // 有待處理（結果未知／發票待處理或失敗）就是 yes.
+	public const REFUND_UNKNOWN         = '_moksafowo_refund_unknown';        // 金流結果未知的退款 [{ amount, time, user, message }]，處理前擋新的退款.
+	public const REFUND_FLOW            = '_moksafowo_refund_flow';           // 這張單有退款走過新流程（舊的狀態觸發作廢就不再動它）.
+	public const REFUND_ALLOWANCE_SUM   = '_moksafowo_refund_allowance_sum';  // 因退款開的折讓累計（ezPay 只記最後一筆時用）.
+	public const PCHOMEPAY_REFUND_RETRY = '_moksafowo_pchomepay_refund_retry_'; // 前綴＋「已退_金額」：明確失敗次數（換新退款編號用）.
+
 	// 取號類付款（ATM/CVS/Barcode）「付款資訊 email 已寄出」旗標 — 共用於 5 家金流的 IpnHandler
 	// 避免顧客 IPN 短時間多次（webhook retry / dual-IPN）觸發重發 email。
 	public const PAYMENT_INFO_EMAIL_SENT = '_moksafowo_payment_info_email_sent';

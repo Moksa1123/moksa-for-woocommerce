@@ -26,7 +26,7 @@ final class Schema {
 	}
 
 	public static function maybe_install(): void {
-		if ( get_option( self::DB_VERSION_OPTION ) === self::DB_VERSION && self::exists() ) {
+		if ( \Moksafowo\Support\FreshOption::get( self::DB_VERSION_OPTION ) === self::DB_VERSION && self::exists() ) {
 			return;
 		}
 		self::install();

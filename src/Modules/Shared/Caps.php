@@ -17,6 +17,7 @@ final class Caps {
 	public const INVOICE_ALLOWANCE = 'invoice_allowance';
 	public const CARD_REFUND       = 'card_refund';
 	public const SHIPMENT_DELETE   = 'shipment_delete';
+	public const REFUND            = 'refund';
 
 	public static function for( string $action ): string {
 		return (string) apply_filters( 'moksafowo_cap_' . $action, 'manage_woocommerce' );

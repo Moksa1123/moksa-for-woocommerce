@@ -74,22 +74,42 @@ abstract class AbstractEcpayGateway extends AbstractMowcGateway {
 			return new \WP_Error( 'moksafowo_ecpay_refund_amount', __( 'The refund amount must be greater than 0.', 'moksa-for-woocommerce' ) );
 		}
 
-		// 退刷（R）只能用在已關帳的交易；還沒關帳時只能整筆放棄授權（N），同 RY。
-		// 查不到狀態時照舊送 R，由綠界回錯誤訊息。
-		$action = 'R';
-		$query  = Helper::query_credit_trade( $order );
-		if ( ! is_wp_error( $query ) && 'Authorized' === (string) ( $query['RtnValue']['Status'] ?? '' ) ) {
-			$auth_amount = (int) ( $query['RtnValue']['Amount'] ?? 0 );
+		// 依請退款流程（35637）：已授權只能整筆放棄（N）；要關帳整筆先取消關帳（E）再放棄、部分用退刷；
+		// 已關帳用退刷（R）。查不到狀態時照舊送 R，由綠界回錯誤訊息。
+		$query       = Helper::query_credit_trade( $order );
+		$status      = is_wp_error( $query ) ? '' : (string) ( $query['RtnValue']['Status'] ?? '' );
+		$auth_amount = is_wp_error( $query ) ? 0 : (int) ( $query['RtnValue']['Amount'] ?? 0 );
+		$steps       = [ 'R' ];
+		if ( 'Authorized' === $status ) {
 			if ( $amount_int !== $auth_amount ) {
 				return new \WP_Error(
 					'moksafowo_ecpay_refund_before_capture',
 					__( 'This ECPay card payment has not been captured yet, so only the full amount can be refunded now (by cancelling the authorization). For a partial refund, try again after capture completes, usually the next day.', 'moksa-for-woocommerce' )
 				);
 			}
-			$action = 'N';
+			$steps = [ 'N' ];
+		} elseif ( 'To be captured' === $status && $auth_amount > 0 && $amount_int >= $auth_amount ) {
+			$steps = [ 'E', 'N' ];
 		}
 
-		$result = Helper::credit_action( $order, $action, $amount_int );
+		foreach ( $steps as $i => $action ) {
+			$result = Helper::credit_action( $order, $action, 'R' === $action ? $amount_int : $auth_amount );
+			$failed = is_wp_error( $result ) || 1 !== (int) ( $result['RtnCode'] ?? 0 );
+			if ( $failed && $i > 0 ) {
+				// 已取消關帳、放棄失敗：把關帳送回去，避免這筆授權沒人請款。
+				$back = Helper::credit_action( $order, 'C', $auth_amount );
+				if ( ! is_wp_error( $back ) && 1 === (int) ( $back['RtnCode'] ?? 0 ) ) {
+					$order->add_order_note( __( 'The capture was cancelled but the authorization could not be voided, so the capture was requested again. Nothing has changed.', 'moksa-for-woocommerce' ) );
+				} else {
+					$msg = __( 'The capture was cancelled but the authorization could not be voided or captured again. This payment is now not captured: handle it in the ECPay dashboard.', 'moksa-for-woocommerce' );
+					$order->add_order_note( $msg );
+					\Moksafowo\Refund\Guard::flag( $order, (string) $amount_int, $msg );
+				}
+			}
+			if ( $failed ) {
+				break;
+			}
+		}
 		if ( is_wp_error( $result ) ) {
 			$order->add_order_note(
 				sprintf(

@@ -86,6 +86,14 @@ final class CreditLifecycleBox {
 			wp_send_json_error( [ 'message' => __( 'The order could not be found, or it was not paid by card.', 'moksa-for-woocommerce' ) ] );
 		}
 
+		// 退刷、放棄授權都要過退款共通檢查：有結果未知的退款就擋、同一張單同時只跑一筆（拿鎖）。
+		if ( 'C' !== $action ) {
+			$problem = \Moksafowo\Refund\Guard::not_ready( $order );
+			if ( null !== $problem ) {
+				wp_send_json_error( [ 'message' => $problem ] );
+			}
+		}
+
 		// 退刷走 WC 退款：WC 會檢查可退餘額、寫進退款紀錄，再經閘道的 process_refund 送綠界，
 		// 不然這裡退過的錢 WC 不知道，還能從 WC 的退款按鈕再退一次。
 		if ( 'R' === $action ) {

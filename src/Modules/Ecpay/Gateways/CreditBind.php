@@ -218,8 +218,19 @@ final class CreditBind extends AbstractMowcGateway {
 			$steps = [ 'R' ];
 		}
 
-		foreach ( $steps as $action ) {
+		foreach ( $steps as $i => $action ) {
 			$result = Ecpg::do_action( $mtn, $trade_no, $action, $amount_int );
+			if ( ! $result['ok'] && $i > 0 ) {
+				// 已取消關帳（E）、放棄（N）失敗：把關帳送回去，避免這筆授權沒人請款。
+				$back = Ecpg::do_action( $mtn, $trade_no, 'C', $amount_int );
+				if ( $back['ok'] ) {
+					$order->add_order_note( __( 'The capture was cancelled but the authorization could not be voided, so the capture was requested again. Nothing has changed.', 'moksa-for-woocommerce' ) );
+				} else {
+					$msg = __( 'The capture was cancelled but the authorization could not be voided or captured again. This payment is now not captured: handle it in the ECPay dashboard.', 'moksa-for-woocommerce' );
+					$order->add_order_note( $msg );
+					\Moksafowo\Refund\Guard::flag( $order, (string) $amount_int, $msg );
+				}
+			}
 			if ( ! $result['ok'] ) {
 				$msg = sprintf(
 					/* translators: 1: amount, 2: ECPay message, 3: code */

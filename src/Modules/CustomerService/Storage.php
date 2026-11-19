@@ -19,7 +19,8 @@ final class Storage {
 	public const CPT       = 'cpt';
 
 	public static function mode(): string {
-		$mode = (string) get_option( self::OPTION, '' );
+		// 讀成不存在會重算：舊表還留著（給回滾用）就算回 legacy，已搬完的站會被切回舊表。
+		$mode = (string) \Moksafowo\Support\FreshOption::get( self::OPTION, '' );
 		if ( in_array( $mode, [ self::LEGACY, self::MIGRATING, self::CPT ], true ) ) {
 			return $mode;
 		}
