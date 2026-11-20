@@ -21,6 +21,15 @@ final class Issue {
 				'message' => __( 'This order already has an invoice.', 'moksa-for-woocommerce' ),
 			];
 		}
+		// 最後一道：舊外掛或外部系統（ERP）已開票的訂單，不管從哪個入口進來都不開。
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
+		if ( null !== $legacy ) {
+			return [
+				'ok'      => false,
+				/* translators: 1: invoice number or marker, 2: plugin or system name */
+				'message' => sprintf( __( 'This order already has invoice %1$s, issued by the %2$s, so it cannot be issued here.', 'moksa-for-woocommerce' ), $legacy['number'], $legacy['source'] ),
+			];
+		}
 
 		// Re-issue after void: clear old meta and generate a new RelateNumber (old number cannot be reused per ECPay spec).
 		if ( '' !== $existing && '' !== $voided ) {

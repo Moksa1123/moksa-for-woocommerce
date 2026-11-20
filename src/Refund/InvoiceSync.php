@@ -80,6 +80,29 @@ final class InvoiceSync {
 		}
 		$slug   = $p['slug'];
 		$number = (string) $order->get_meta( $p['number_key'] );
+		// 發票是換外掛前的舊外掛開的：Moksa 這邊沒有號碼，不能當成「還沒開」去取消排程，請店家在訂單頁處理。
+		$legacy = \Moksafowo\Modules\Shared\Compat\LegacyOrderData::invoice( $order );
+		if ( '' === $number && null !== $legacy && 'external' === $legacy['source_key'] ) {
+			return [
+				'todo_manual',
+				sprintf(
+					/* translators: %s: invoice number or marker */
+					__( 'The invoice (%s) was issued by an external system. Void it or issue the allowance in that system.', 'moksa-for-woocommerce' ),
+					$legacy['number']
+				),
+			];
+		}
+		if ( '' === $number && null !== $legacy ) {
+			return [
+				'todo_manual',
+				sprintf(
+					/* translators: 1: invoice number, 2: plugin name */
+					__( 'Invoice %1$s was issued by the %2$s. Void it or issue an allowance from the order page (ECPay invoices) or in the invoice service dashboard.', 'moksa-for-woocommerce' ),
+					$legacy['number'],
+					$legacy['source']
+				),
+			];
+		}
 		$full   = (float) $order->get_remaining_refund_amount() <= 0.0;
 		$amount = (int) round( (float) $refund->get_amount() );
 

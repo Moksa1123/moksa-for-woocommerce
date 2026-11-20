@@ -21,6 +21,8 @@ final class TwAddress {
 		if ( PhoneRule::enabled() ) {
 			PhoneValidator::init();
 		}
+		// 後台訂單的電話欄、單行地址：只是顯示，不跟地址工具的區塊開關連動。
+		AdminAddressDisplay::init();
 
 		// 欄位順序歸 TW_FIELD_LAYOUT 管，跟地址工具（TW_ADDRESS）是兩區，
 		// 所以不能被 TW_ADDRESS 的早退擋掉 —— 只開排序的站台一樣要吃到前台 CSS。
@@ -36,6 +38,7 @@ final class TwAddress {
 
 		if ( 'yes' === get_option( 'moksafowo_tw_address_dropdown_enabled', 'no' ) ) {
 			self::init_dropdown();
+			LegacyStateMap::init();
 		}
 		if ( 'yes' === get_option( 'moksafowo_tw_address_name_swap', 'no' ) ) {
 			self::init_name_swap();

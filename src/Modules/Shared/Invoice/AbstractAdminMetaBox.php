@@ -217,6 +217,9 @@ abstract class AbstractAdminMetaBox {
 
 	/** 手動開立 / 重新開立的可編輯表單 + 更新 / 開立按鈕（編輯態與作廢後重開共用）。 */
 	protected static function render_issue_controls( \WC_Order $order ): void {
+		if ( \Moksafowo\Modules\Shared\Compat\LegacyOrderData::render_issue_blocked( $order ) ) {
+			return;
+		}
 		AdminIssueForm::render( $order, static::option_prefix() );
 		echo '<p class="moksafowo-inv-dirty-hint" style="display:none;margin:.5em 0 0;color:#b26900;">' . esc_html__( 'The fields have changed. Save them with Update before issuing the invoice.', 'moksa-for-woocommerce' ) . '</p>';
 		echo '<p style="margin-top:.8em;">';

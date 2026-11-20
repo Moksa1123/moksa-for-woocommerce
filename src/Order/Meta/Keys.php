@@ -27,6 +27,9 @@ final class Keys {
 	public const INVOICE_LAST_ERROR         = '_moksafowo_invoice_last_error';      // { provider, message, time }，開立成功即刪除.
 	public const LEGACY_INVOICE_VOIDED_AT   = '_moksafowo_legacy_invoice_voided_at';   // 舊外掛開的發票由 Moksa 作廢的時間（舊外掛的 meta 不改）.
 	public const LEGACY_INVOICE_VOID_REASON = '_moksafowo_legacy_invoice_void_reason';
+	public const INVOICE_EXTERNAL           = '_moksafowo_invoice_external';           // 外部系統（例如 ERP、POS）已開票的標記，值是給人看的文字或號碼；有值就不開票，也不作廢折讓.
+	public const LEGACY_INVOICE_DATE        = '_moksafowo_legacy_invoice_date';        // 舊外掛沒存開立日期時，Moksa 從備註或綠界查到的日期（Y-m-d H:i:s）.
+	public const LEGACY_INVOICE_ALLOWANCES  = '_moksafowo_legacy_invoice_allowances';  // Moksa 對舊發票開的折讓 [{no, amount, voided}].
 
 	// 退款紀錄（掛在 WC 退款物件 shop_order_refund 上）.
 	public const REFUND_STATE         = '_moksafowo_refund_state';          // gateway_done|manual_done|gateway_unknown.

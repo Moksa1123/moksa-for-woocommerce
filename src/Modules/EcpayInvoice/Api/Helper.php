@@ -150,7 +150,8 @@ final class Helper extends AbstractCredentialHelper {
 			'invoice POST response',
 			[
 				'path' => $path,
-				'raw'  => $raw,
+				// GetIssueList 回明文，一次最多 200 張發票的買受人資料（含統編），不寫進 log。
+				'raw'  => '/B2CInvoice/GetIssueList' === $path ? '(' . strlen( $raw ) . ' bytes, not logged)' : $raw,
 			]
 		);
 
@@ -160,6 +161,17 @@ final class Helper extends AbstractCredentialHelper {
 				'ok'      => false,
 				'message' => 'unexpected response shape',
 				'raw'     => $raw,
+			];
+		}
+
+		// GetIssueList 的 Data 直接回 JSON 物件、沒有加密（2026-11-20 沙箱實測，文件寫加密字串）。
+		// 仍要外層 TransCode=1，才不會把任意格式的回應當成功。
+		if ( '/B2CInvoice/GetIssueList' === $path && is_array( $json['Data'] ) ) {
+			$decoded = 1 === (int) ( $json['TransCode'] ?? 0 ) ? map_deep( $json['Data'], 'sanitize_text_field' ) : null;
+			return [
+				'ok'      => is_array( $decoded ) && 1 === (int) ( $decoded['RtnCode'] ?? 0 ),
+				'message' => is_array( $decoded ) ? (string) ( $decoded['RtnMsg'] ?? '' ) : (string) ( $json['TransMsg'] ?? '' ),
+				'data'    => is_array( $decoded ) ? $decoded : [],
 			];
 		}
 

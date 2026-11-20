@@ -18,15 +18,15 @@ final class LegacyOrderCards {
 	}
 
 	/**
-	 * 只有綠界官方開的舊發票能從這裡作廢：Moksa 的綠界發票模組要開著，用的是同一組綠界帳號。
+	 * 綠界官方或 woomp 開的舊發票能從這裡作廢、折讓：Moksa 的綠界發票模組要開著，用的是同一組綠界帳號。
 	 *
 	 * @param array<string,mixed> $invoice LegacyOrderData::invoice_record() 的回傳。
+	 * @param string              $cap     Caps 常數。
 	 */
-	private static function can_void( array $invoice ): bool {
-		return ! $invoice['voided']
-			&& 'ecpay_official' === $invoice['source_key']
+	private static function can( array $invoice, string $cap ): bool {
+		return LegacyOrderData::ecpay_actionable( $invoice )
 			&& 'yes' === get_option( 'moksafowo_ecpay_invoice_enabled', 'no' )
-			&& \Moksafowo\Modules\Shared\Caps::user_can( \Moksafowo\Modules\Shared\Caps::INVOICE_VOID );
+			&& \Moksafowo\Modules\Shared\Caps::user_can( $cap );
 	}
 
 	public static function enqueue( string $hook ): void {
@@ -44,22 +44,43 @@ final class LegacyOrderCards {
 			'window.moksafowoLegacyVoid=' . wp_json_encode(
 				[
 					'ajax'    => admin_url( 'admin-ajax.php' ),
-					'action'  => 'moksafowo_ecpay_legacy_invoice_void',
-					'nonce'   => wp_create_nonce( 'moksafowo_ecpay_legacy_invoice_void' ),
-					'prompt'  => __( 'Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone.', 'moksa-for-woocommerce' ),
-					'working' => __( 'Voiding…', 'moksa-for-woocommerce' ),
+					'void'    => [
+						'action' => 'moksafowo_ecpay_legacy_invoice_void',
+						'nonce'  => wp_create_nonce( 'moksafowo_ecpay_legacy_invoice_void' ),
+						'field'  => 'reason',
+						'prompt' => __( 'Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone.', 'moksa-for-woocommerce' ),
+					],
+					'allow'   => [
+						'action' => 'moksafowo_ecpay_legacy_invoice_allowance',
+						'nonce'  => wp_create_nonce( 'moksafowo_ecpay_legacy_invoice_allowance' ),
+						'field'  => 'amount',
+						'prompt' => __( 'Allowance amount (whole NT dollars). The allowance is issued at ECPay right away.', 'moksa-for-woocommerce' ),
+					],
+					'unallow' => [
+						'action'  => 'moksafowo_ecpay_legacy_allowance_void',
+						'nonce'   => wp_create_nonce( 'moksafowo_ecpay_legacy_allowance_void' ),
+						'confirm' => __( 'Void this allowance at ECPay?', 'moksa-for-woocommerce' ),
+					],
+					'working' => __( 'Working…', 'moksa-for-woocommerce' ),
 					'network' => __( 'The request failed. Please try again.', 'moksa-for-woocommerce' ),
 				]
 			) . ';' . <<<'JS'
 document.addEventListener('click',function(e){
-	var b=e.target.closest&&e.target.closest('.moksafowo-legacy-invoice-void');
+	var b=e.target.closest&&e.target.closest('.moksafowo-legacy-invoice-void,.moksafowo-legacy-invoice-allow,.moksafowo-legacy-allowance-void');
 	if(!b){return;}
 	e.preventDefault();
 	if(b.disabled){return;}
-	var c=window.moksafowoLegacyVoid,reason=window.prompt(c.prompt,'');
-	if(reason===null||!reason.trim()){return;}
-	var label=b.textContent,fd=new FormData();
-	fd.append('action',c.action);fd.append('nonce',c.nonce);fd.append('order_id',b.getAttribute('data-order-id'));fd.append('reason',reason.trim());
+	var c=window.moksafowoLegacyVoid,fd=new FormData(),kind=b.classList.contains('moksafowo-legacy-invoice-allow')?'allow':(b.classList.contains('moksafowo-legacy-allowance-void')?'unallow':'void'),k=c[kind];
+	if(k.prompt){
+		var v=window.prompt(k.prompt,'');
+		if(v===null||!v.trim()){return;}
+		fd.append(k.field,v.trim());
+	}else{
+		if(!window.confirm(k.confirm)){return;}
+		fd.append('allowance_no',b.getAttribute('data-no'));
+	}
+	var label=b.textContent;
+	fd.append('action',k.action);fd.append('nonce',k.nonce);fd.append('order_id',b.getAttribute('data-order-id'));
 	b.disabled=true;b.textContent=c.working;
 	fetch(c.ajax,{method:'POST',body:fd,credentials:'same-origin'}).then(function(r){return r.json();}).then(function(r){
 		if(r&&r.success){location.reload();return;}
@@ -78,11 +99,23 @@ JS
 	public static function add( array $cards, \WC_Order $order ): array {
 		$invoice = LegacyOrderData::invoice_record( $order );
 		if ( null !== $invoice ) {
+			$date = '' !== $invoice['date'] || 'woomp' !== $invoice['source_key']
+				? $invoice['date']
+				: LegacyOrderData::woomp_issue_date( $order, $invoice['number'] );
 			$rows = [
 				__( 'Invoice number', 'moksa-for-woocommerce' ) => $invoice['number'],
-				__( 'Issued at', 'moksa-for-woocommerce' ) => $invoice['date'],
+				__( 'Issued at', 'moksa-for-woocommerce' ) => $date,
 				__( 'Random code', 'moksa-for-woocommerce' ) => $invoice['random'],
 			];
+			if ( 'woomp' === $invoice['source_key'] ) {
+				$rows += LegacyOrderData::woomp_buyer( $order );
+			}
+			$allowances = \Moksafowo\Modules\EcpayInvoice\Operations\LegacyAllowance::class;
+			$allowances = class_exists( $allowances ) ? $allowances::allowances( $order ) : [];
+			foreach ( $allowances as $a ) {
+				/* translators: %s: allowance number */
+				$rows[ sprintf( __( 'Allowance %s', 'moksa-for-woocommerce' ), (string) ( $a['no'] ?? '' ) ) ] = 'NT$' . (int) ( $a['amount'] ?? 0 ) . ( empty( $a['voided'] ) ? '' : ' ' . __( '(voided)', 'moksa-for-woocommerce' ) );
+			}
 			if ( $invoice['voided'] ) {
 				$rows[ __( 'Status', 'moksa-for-woocommerce' ) ] = sprintf(
 					/* translators: %s: void time */
@@ -91,7 +124,26 @@ JS
 				);
 			}
 			$html = self::block( $invoice['source'], [ $rows ] );
-			if ( self::can_void( $invoice ) ) {
+			$caps = \Moksafowo\Modules\Shared\Caps::class;
+			if ( self::can( $invoice, $caps::INVOICE_ALLOWANCE ) ) {
+				$html .= sprintf(
+					'<button type="button" class="button button-small moksafowo-legacy-invoice-allow" data-order-id="%1$d">%2$s</button> ',
+					(int) $order->get_id(),
+					esc_html__( 'Issue an allowance', 'moksa-for-woocommerce' )
+				);
+			}
+			if ( self::can( $invoice, $caps::INVOICE_VOID ) ) {
+				foreach ( $allowances as $a ) {
+					if ( empty( $a['voided'] ) ) {
+						$html .= sprintf(
+							'<button type="button" class="button button-small moksafowo-legacy-allowance-void" data-order-id="%1$d" data-no="%2$s">%3$s</button> ',
+							(int) $order->get_id(),
+							esc_attr( (string) ( $a['no'] ?? '' ) ),
+							/* translators: %s: allowance number */
+							esc_html( sprintf( __( 'Void allowance %s', 'moksa-for-woocommerce' ), (string) ( $a['no'] ?? '' ) ) )
+						);
+					}
+				}
 				$html .= sprintf(
 					'<button type="button" class="button button-small moksafowo-legacy-invoice-void" data-order-id="%1$d">%2$s</button>',
 					(int) $order->get_id(),

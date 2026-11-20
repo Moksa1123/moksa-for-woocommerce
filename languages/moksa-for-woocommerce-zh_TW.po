@@ -123,10 +123,10 @@ msgstr "近 30 天的訂單數與營收，依訂單狀態分列。"
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:214
 #: src/Modules/OrderLookup/InvoiceOps.php:116
 #: src/Modules/OrderLookup/InvoiceOps.php:163
-#: src/Modules/OrderLookup/InvoiceOps.php:193
-#: src/Modules/OrderLookup/InvoiceOps.php:238
-#: src/Modules/OrderLookup/InvoiceOps.php:267
-#: src/Modules/OrderLookup/InvoiceOps.php:327
+#: src/Modules/OrderLookup/InvoiceOps.php:199
+#: src/Modules/OrderLookup/InvoiceOps.php:244
+#: src/Modules/OrderLookup/InvoiceOps.php:273
+#: src/Modules/OrderLookup/InvoiceOps.php:333
 #: src/Modules/OrderLookup/PaymentMethodOps.php:276
 #: src/Modules/OrderLookup/PaymentMethodOps.php:334
 #: src/Modules/OrderLookup/QueryPayment.php:52
@@ -242,11 +242,12 @@ msgstr "僅預覽：透過此連線不會做任何變更。"
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:52
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:71
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:81
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:231
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:250
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:278
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:294
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:314
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:234
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:253
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:281
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:297
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:317
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:69
 #: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:27
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:407
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:425
@@ -264,9 +265,9 @@ msgstr "僅預覽：透過此連線不會做任何變更。"
 #: src/Modules/Payuni/PayuniPayment.php:217
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:72
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:335
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:346
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:388
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:338
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:349
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:391
 #: src/Modules/Shared/Invoice/OrderListColumn.php:113
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:298
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:390
@@ -274,7 +275,7 @@ msgstr "僅預覽：透過此連線不會做任何變更。"
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:508
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:571
 #: src/Modules/Shipping/Admin/ListCreateButton.php:74
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:69
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:82
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:35
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -289,6 +290,27 @@ msgstr "工具執行失敗，請稍後再試。"
 msgid "Nothing was changed. Over MCP this tool only previews the change. To apply it, ask Moksa AI in the WordPress admin and confirm there."
 msgstr "沒有做任何變更。透過 MCP 這個工具只會預覽變更內容；要實際套用，請在 WordPress 後台的 Moksa AI 提出並在那裡確認。"
 
+#: src/Modules/Address/AdminAddressDisplay.php:46
+#: src/Modules/Address/AdminAddressDisplay.php:50
+#: src/Modules/Address/FieldManager.php:107
+#: src/Modules/Address/FieldManager.php:131
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:148
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:126
+msgid "Phone"
+msgstr "電話"
+
+#. translators: %s: phone number
+#: src/Modules/Address/AdminAddressDisplay.php:75
+#, php-format
+msgid "Billing: %s"
+msgstr "帳單：%s"
+
+#. translators: %s: phone number
+#: src/Modules/Address/AdminAddressDisplay.php:79
+#, php-format
+msgid "Shipping: %s"
+msgstr "運送：%s"
+
 #: src/Modules/Address/BlockField.php:175
 #: src/Modules/Address/BlockField.php:198
 msgid "Please select a district for home delivery orders."
@@ -300,8 +322,8 @@ msgstr "鄉鎮市區"
 
 #: src/Modules/Address/BlockField.php:343
 #: src/Modules/Address/BlockField.php:452
-#: src/Modules/Address/TwAddress.php:212
-#: src/Modules/Address/TwAddress.php:261
+#: src/Modules/Address/TwAddress.php:215
+#: src/Modules/Address/TwAddress.php:264
 msgid "Select…"
 msgstr "請選擇…"
 
@@ -2253,9 +2275,10 @@ msgstr "姓氏"
 
 #: src/Modules/Address/FieldManager.php:100
 #: src/Modules/Address/FieldManager.php:119
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:171
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:174
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:231
+#: src/Modules/Shared/Compat/LegacyOrderData.php:128
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:234
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:98
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:141
 msgid "Company"
@@ -2285,13 +2308,6 @@ msgstr "鄉 / 鎮 / 區"
 msgid "Postcode"
 msgstr "郵遞區號"
 
-#: src/Modules/Address/FieldManager.php:107
-#: src/Modules/Address/FieldManager.php:131
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:148
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:126
-msgid "Phone"
-msgstr "電話"
-
 #: src/Modules/Address/FieldManager.php:108
 msgid "Email (billing only; a half-width field must sit next to another half-width field; classic checkout only)"
 msgstr "電子郵件（僅帳單；半寬欄位需與另一個半寬欄位相鄰；僅古典結帳）"
@@ -2299,6 +2315,30 @@ msgstr "電子郵件（僅帳單；半寬欄位需與另一個半寬欄位相鄰
 #: src/Modules/Address/FieldManager.php:125
 msgid "Apartment, suite, unit, etc."
 msgstr "公寓 / 套房 / 單位等"
+
+#: src/Modules/Address/LegacyStateMap.php:137
+msgid "Customers who switched from another plugin may have the county or city saved as Chinese text (for example 臺北市). This changes it to the code the Moksa dropdown uses, in customer profiles only. Orders are not changed."
+msgstr "從其他外掛換過來的商店，會員地址的縣市可能存成中文（例如「臺北市」）。這個工具會把它改成 Moksa 縣市下拉使用的代碼，只改會員資料，不改訂單。"
+
+#. translators: 1: number of customers, 2: number of address fields
+#: src/Modules/Address/LegacyStateMap.php:147
+#, php-format
+msgid "Customers to update now: %1$d (%2$d address fields)."
+msgstr "目前要更新的會員：%1$d 位（%2$d 個地址欄位）。"
+
+#: src/Modules/Address/LegacyStateMap.php:153
+msgid "Convert Taiwan county names in customer addresses"
+msgstr "轉換會員地址的台灣縣市名稱"
+
+#: src/Modules/Address/LegacyStateMap.php:154
+msgid "Convert"
+msgstr "轉換"
+
+#. translators: 1: number of customers, 2: number of address fields
+#: src/Modules/Address/LegacyStateMap.php:172
+#, php-format
+msgid "Updated %1$d customers (%2$d address fields)."
+msgstr "已更新 %1$d 位會員（%2$d 個地址欄位）。"
 
 #: src/Modules/Address/PhoneRule.php:75
 msgid "Enter a Taiwanese mobile number: 10 digits starting with 09 (for example 0912345678)."
@@ -2600,7 +2640,7 @@ msgstr "Amego"
 #: src/Modules/EcpayInvoice/Operations/Query.php:71
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:75
 #: src/Modules/EzpayInvoice/Operations/Query.php:76
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:84
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:108
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:53
 msgid "Random code"
 msgstr "隨機碼"
@@ -2654,7 +2694,7 @@ msgstr "B2B 三聯式"
 #: src/Modules/AmegoInvoice/Module.php:41
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:80
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:107
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:352
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:355
 #: src/Modules/EcpayInvoice/Module.php:39
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:155
 #: src/Modules/EzpayInvoice/Module.php:39
@@ -2667,7 +2707,7 @@ msgstr "B2B 三聯式"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 #: src/Modules/Shared/Admin/CardRenderers.php:340
 #: src/Modules/Shared/Admin/CardRenderers.php:405
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:239
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:242
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:51
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:152
 #: src/Modules/SmilepayInvoice/Module.php:39
@@ -2679,7 +2719,7 @@ msgstr "手機條碼"
 #: src/Modules/AmegoInvoice/Module.php:42
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:87
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:108
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:353
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:356
 #: src/Modules/EcpayInvoice/Module.php:40
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:162
 #: src/Modules/EzpayInvoice/Module.php:40
@@ -2693,7 +2733,7 @@ msgstr "手機條碼"
 #: src/Modules/Payuni/Gateways/GatewayBase.php:131
 #: src/Modules/Shared/Admin/CardRenderers.php:341
 #: src/Modules/Shared/Admin/CardRenderers.php:406
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:240
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:243
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:52
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:153
 #: src/Modules/SmilepayInvoice/Module.php:40
@@ -2755,6 +2795,7 @@ msgstr "Amego 折讓單 %1$s 開立成功（金額 NT$%2$d）"
 
 #: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:41
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:40
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:226
 msgid "This order has no allowance to void."
 msgstr "這張訂單沒有可作廢的折讓。"
 
@@ -2876,7 +2917,7 @@ msgstr "Amego 發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 #: src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:22
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:173
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:77
 #: src/Modules/SmilepayInvoice/Operations/Issue.php:240
 msgid "Shipping"
@@ -3023,7 +3064,7 @@ msgstr "開放的個人載具"
 
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:94
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:109
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:354
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:357
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:95
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:110
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:34
@@ -3319,7 +3360,7 @@ msgstr "付款方式"
 #: src/Modules/Shared/Email/PersonalizationTags.php:98
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:643
+#: src/Settings/SettingsPage.php:658
 msgid "ATM virtual account"
 msgstr "ATM 虛擬帳號"
 
@@ -3329,7 +3370,7 @@ msgstr "ATM 虛擬帳號"
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
 #: src/Modules/Shared/Email/PersonalizationTags.php:99
-#: src/Settings/SettingsPage.php:650
+#: src/Settings/SettingsPage.php:665
 msgid "Convenience store payment code"
 msgstr "超商繳費代碼"
 
@@ -3351,10 +3392,10 @@ msgstr "運送方式"
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:75
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:73
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:107
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:159
 #: src/Modules/Shared/Email/PersonalizationTags.php:55
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:622
+#: src/Settings/SettingsPage.php:637
 msgid "Tracking number"
 msgstr "物流單號"
 
@@ -3567,6 +3608,7 @@ msgstr "已請款 NT$%d，可部分或全額退款。"
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:285
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:325
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:147
 #: src/Modules/EzpayInvoice/Operations/Issue.php:249
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:129
 #: src/Modules/PaynowInvoice/Operations/Issue.php:250
@@ -3751,11 +3793,13 @@ msgstr "%s 訂單"
 #: src/Modules/Ecpay/Api/BindHandler.php:101
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
 #: src/Modules/Ecpay/Gateways/CreditBind.php:298
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:255
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:284
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:300
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:319
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:239
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:258
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:287
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:303
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:322
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:73
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:98
 #: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:33
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:412
@@ -3767,8 +3811,8 @@ msgstr "%s 訂單"
 #: src/Modules/OrderLookup/AddOrderNote.php:32
 #: src/Modules/OrderLookup/ChangePickupStore.php:139
 #: src/Modules/OrderLookup/InvoiceOps.php:120
-#: src/Modules/OrderLookup/InvoiceOps.php:197
-#: src/Modules/OrderLookup/InvoiceOps.php:271
+#: src/Modules/OrderLookup/InvoiceOps.php:203
+#: src/Modules/OrderLookup/InvoiceOps.php:277
 #: src/Modules/OrderLookup/PaymentStatus.php:29
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
@@ -3779,7 +3823,7 @@ msgstr "%s 訂單"
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:188
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
 #: src/Modules/Shared/Admin/PaymentQuery.php:77
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:395
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:398
 #: src/Modules/Shared/Invoice/OrderListColumn.php:118
 #: src/Modules/Shipping/Admin/ListCreateButton.php:79
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
@@ -4943,14 +4987,15 @@ msgid "Company tax ID"
 msgstr "公司統編"
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:79
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:173
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:344
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:176
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:347
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
 #: src/Modules/OrderLookup/InvoiceOps.php:104
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 #: src/Modules/Shared/Admin/CardRenderers.php:333
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:232
+#: src/Modules/Shared/Compat/LegacyOrderData.php:129
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:235
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:37
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:99
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:142
@@ -5044,231 +5089,232 @@ msgstr "已排程：將於 %s 自動開立發票。現在手動開立的話，�
 msgid "Invoice details"
 msgstr "發票資訊"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:158
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:221
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
 msgid "The fields have changed. Save them with Update before issuing the invoice."
 msgstr "欄位已修改，請先按「更新」儲存並確認後再開立。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:160
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:223
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:163
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:226
 msgid "Update"
 msgstr "更新"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:164
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:227
 #: src/Modules/Shared/Invoice/OrderListColumn.php:180
 msgid "Issue invoice"
 msgstr "開立發票"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:169
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:230
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:172
+#: src/Modules/Shared/Compat/LegacyOrderData.php:127
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:233
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:97
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:140
 msgid "Individual"
 msgstr "個人"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:198
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:58
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:273
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:276
 msgid "Updating…"
 msgstr "更新中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:199
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:274
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:202
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:277
 msgid "Updated. The invoice can now be issued."
 msgstr "已更新，可開立發票。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:200
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:275
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:203
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:278
 msgid "Could not update:"
 msgstr "更新失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:267
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:204
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:270
 #: src/Modules/Shared/Invoice/OrderListColumn.php:81
 msgid "Issuing…"
 msgstr "開立中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:202
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:268
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:205
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:271
 msgid "The invoice was issued."
 msgstr "發票已開立。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:203
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:269
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:206
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:272
 msgid "Could not issue:"
 msgstr "開立失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:204
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:270
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:207
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:273
 msgid "Please choose a charity, or enter a love code."
 msgstr "請選擇捐贈單位（或輸入愛心碼）。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:205
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:271
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:208
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:274
 msgid "Please enter a tax ID."
 msgstr "請輸入統一編號。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:206
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:272
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:275
 msgid "Please enter a carrier number."
 msgstr "請輸入載具編號。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:207
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:276
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:210
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:279
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:72
 msgid "Mobile barcode (/ followed by 7 characters from 0-9, A-Z, ., + and -)"
 msgstr "手機條碼（/ 開頭 + 7 碼，限 0-9 A-Z . + -）"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:208
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:277
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:211
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:280
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:74
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:511
 msgid "Citizen Digital Certificate (2 uppercase letters followed by 14 digits)"
 msgstr "自然人憑證（2 大寫字母 + 14 碼數字）"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:50
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:278
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:212
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:281
 msgid "Voiding…"
 msgstr "作廢中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:210
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:213
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:32
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:54
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:279
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:55
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:282
 msgid "Please enter a reason for voiding."
 msgstr "請輸入作廢原因。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:211
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:214
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:25
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:280
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:283
 msgid "The invoice was voided."
 msgstr "發票已作廢。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:212
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:281
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:215
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:284
 msgid "Could not void:"
 msgstr "作廢失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:213
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:282
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:216
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:285
 msgid "Issuing the allowance…"
 msgstr "折讓中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:214
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:283
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:217
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:286
 msgid "Please enter an allowance amount."
 msgstr "請輸入折讓金額。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:215
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:284
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:218
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:287
 msgid "The allowance was issued."
 msgstr "折讓單已開立。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:216
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:285
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:219
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:288
 msgid "Could not issue the allowance:"
 msgstr "折讓失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:217
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:220
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:347
 #: src/Modules/Shared/Admin/PaymentQuery.php:131
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:286
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:289
 msgid "Looking up…"
 msgstr "查詢中…"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:218
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:287
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:221
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:290
 msgid "Looked up. See the order notes for what the provider reported."
 msgstr "查詢完成，服務商回報的內容已寫進訂單備註。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:219
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:288
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:222
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:291
 msgid "Could not look up:"
 msgstr "查詢失敗："
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:220
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:223
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:350
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:289
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:292
 msgid "Something went wrong. Please try again later, or check the logs."
 msgstr "未知錯誤，請稍後再試或查看記錄。"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:244
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:304
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:247
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:307
 msgid "Updated."
 msgstr "已更新。"
 
 #. translators: 1: invoice number, 2: plugin name
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:269
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:272
 #: src/Modules/OrderLookup/InvoiceOps.php:129
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:325
+#: src/Modules/OrderLookup/InvoiceOps.php:176
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:328
 #, php-format
 msgid "This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one."
 msgstr "這張訂單已經有%2$s開立的發票 %1$s。需要重開的話，請先到原本的地方作廢。"
 
 #. translators: 1: status sentence, 2: the invoice details returned by ECPay
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:331
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:334
 #, php-format
 msgid "Invoice status looked up at ECPay — %1$s %2$s"
 msgstr "查詢綠界發票狀態 — %1$s %2$s"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:343
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:346
 #: src/Modules/OrderLookup/InvoiceOps.php:103
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:36
 msgid "Company (tax ID)"
 msgstr "公司(統編)"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:345
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:348
 #: src/Modules/OrderLookup/InvoiceOps.php:106
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:35
 msgid "Individual (carrier)"
 msgstr "個人（載具）"
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:355
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:358
 #: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:19
 #: src/Modules/EcpayInvoice/Module.php:41
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:31
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:242
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:245
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:50
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:149
 msgid "Member carrier"
 msgstr "會員載具"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:200
+#: src/Modules/EcpayInvoice/Api/Helper.php:212
 msgid "Please enter a mobile barcode."
 msgstr "請輸入手機條碼。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:208
+#: src/Modules/EcpayInvoice/Api/Helper.php:220
 msgid "Invalid mobile barcode. It must start with / followed by 7 letters, digits, +, - or . characters."
 msgstr "手機條碼格式錯誤（需 / 開頭 + 7 碼字母/數字/+ - .）。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:228
+#: src/Modules/EcpayInvoice/Api/Helper.php:240
 msgid "The Ministry of Finance system is under maintenance, so the carrier was not verified."
 msgstr "財政部系統維護中，已跳過載具驗證。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:237
-#: src/Modules/EcpayInvoice/Api/Helper.php:302
+#: src/Modules/EcpayInvoice/Api/Helper.php:249
+#: src/Modules/EcpayInvoice/Api/Helper.php:314
 msgid "Verification failed."
 msgstr "驗證失敗。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:247
+#: src/Modules/EcpayInvoice/Api/Helper.php:259
 msgid "That mobile barcode does not exist. Please check it and try again."
 msgstr "此手機條碼不存在，請確認是否輸入正確。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:266
+#: src/Modules/EcpayInvoice/Api/Helper.php:278
 msgid "Please enter a love code."
 msgstr "請輸入愛心碼。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:274
+#: src/Modules/EcpayInvoice/Api/Helper.php:286
 msgid "Invalid love code. It must be 3 to 7 digits, or an X followed by 2 to 6 digits."
 msgstr "愛心碼格式錯誤（需 3-7 碼數字，或 X + 2-6 碼數字）。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:293
+#: src/Modules/EcpayInvoice/Api/Helper.php:305
 msgid "The Ministry of Finance system is under maintenance, so the love code was not verified."
 msgstr "財政部系統維護中，已跳過愛心碼驗證。"
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:312
+#: src/Modules/EcpayInvoice/Api/Helper.php:324
 msgid "That love code does not exist. Please check it and try again."
 msgstr "此愛心碼不存在，請確認是否輸入正確。"
 
@@ -5294,12 +5340,12 @@ msgid "Allowance"
 msgstr "折讓單"
 
 #. translators: %d: delay days
-#: src/Modules/EcpayInvoice/Module.php:129
+#: src/Modules/EcpayInvoice/Module.php:130
 #, php-format
 msgid "The ECPay invoice is scheduled to be issued in %d days."
 msgstr "綠界發票排程於 %d 天後開立。"
 
-#: src/Modules/EcpayInvoice/Module.php:146
+#: src/Modules/EcpayInvoice/Module.php:147
 msgid "The scheduled ECPay invoice was cancelled because the order was cancelled, refunded or failed."
 msgstr "綠界發票排程取消（訂單已取消 / 退款 / 失敗）。"
 
@@ -5321,19 +5367,21 @@ msgstr "綠界折讓單 %1$s 開立成功（金額 %2$d）"
 
 #. translators: 1: allowance number, 2: error message
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:57
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:242
 #, php-format
 msgid "ECPay allowance %1$s could not be voided: %2$s"
 msgstr "綠界折讓 %1$s 作廢失敗：%2$s"
 
 #. translators: %s: allowance number
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:80
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:263
 #, php-format
 msgid "ECPay allowance %s was voided"
 msgstr "綠界折讓 %s 已作廢"
 
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:19
-#: src/Modules/OrderLookup/InvoiceOps.php:208
-#: src/Modules/OrderLookup/InvoiceOps.php:212
+#: src/Modules/OrderLookup/InvoiceOps.php:214
+#: src/Modules/OrderLookup/InvoiceOps.php:218
 msgid "This order has no invoice to void."
 msgstr "此訂單沒有可作廢的發票。"
 
@@ -5349,23 +5397,30 @@ msgstr "綠界發票作廢失敗：%s"
 msgid "ECPay invoice %1$s was voided — reason: %2$s"
 msgstr "綠界發票 %1$s 已作廢 — 原因：%2$s"
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:93
+#. translators: 1: invoice number or marker, 2: plugin or system name
+#: src/Modules/EcpayInvoice/Operations/Issue.php:30
+#: src/Modules/Shared/Compat/LegacyOrderData.php:171
+#, php-format
+msgid "This order already has invoice %1$s, issued by the %2$s, so it cannot be issued here."
+msgstr "這張訂單已有%2$s開立的發票 %1$s，不能在這裡開立。"
+
+#: src/Modules/EcpayInvoice/Operations/Issue.php:102
 msgid "A printed invoice needs the buyer’s address, but this order has no billing or shipping address. Add an address to the order and issue the invoice again."
 msgstr "紙本發票要印買受人地址，但這張訂單沒有帳單或運送地址。請先在訂單補上地址再開立。"
 
 #. translators: %s: error message
-#: src/Modules/EcpayInvoice/Operations/Issue.php:129
+#: src/Modules/EcpayInvoice/Operations/Issue.php:138
 #, php-format
 msgid "The ECPay invoice could not be issued: %s"
 msgstr "綠界發票開立失敗：%s"
 
 #. translators: 1: invoice number, 2: random
-#: src/Modules/EcpayInvoice/Operations/Issue.php:152
+#: src/Modules/EcpayInvoice/Operations/Issue.php:161
 #, php-format
 msgid "ECPay invoice issued — number %1$s, random code %2$s"
 msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:216
+#: src/Modules/EcpayInvoice/Operations/Issue.php:225
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:195
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:182
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
@@ -5373,21 +5428,66 @@ msgstr "綠界發票已開立 — 號碼 %1$s 隨機碼 %2$s"
 msgid "Other"
 msgstr "其他"
 
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:47
-msgid "This order has no invoice from the ECPay official plugin to void."
-msgstr "這張訂單沒有綠界官方外掛開的發票可以作廢。"
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:90
+msgid "Another invoice action is running on this order. Please try again in a moment."
+msgstr "這張訂單有其他發票動作正在進行，請稍後再試。"
 
-#. translators: 1: invoice number, 2: error message
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:72
-#, php-format
-msgid "Invoice %1$s from the ECPay official plugin could not be voided: %2$s"
-msgstr "綠界官方外掛開的發票 %1$s 作廢失敗：%2$s"
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:115
+msgid "This order has no ECPay invoice from an earlier plugin that can take an allowance here."
+msgstr "這張訂單沒有可以在這裡折讓的舊外掛綠界發票。"
 
-#. translators: 1: invoice number, 2: reason
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:88
+#. translators: %d: amount still available for allowances
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:123
 #, php-format
-msgid "Invoice %1$s from the ECPay official plugin was voided — reason: %2$s"
-msgstr "已作廢綠界官方外掛開的發票 %1$s，原因：%2$s"
+msgid "Enter an allowance amount between 1 and %d."
+msgstr "請輸入 1 到 %d 之間的折讓金額。"
+
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:130
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:70
+msgid "The issue date of this invoice could not be found, and ECPay needs it. Handle this invoice in the ECPay dashboard instead."
+msgstr "找不到這張發票的開立日期，綠界需要這個日期。請改到綠界後台處理這張發票。"
+
+#. translators: 1: invoice number, 2: plugin name, 3: error message
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:161
+#, php-format
+msgid "The allowance on invoice %1$s from the %2$s failed: %3$s"
+msgstr "%2$s開立的發票 %1$s 折讓失敗：%3$s"
+
+#. translators: 1: amount, 2: invoice number
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:179
+#, php-format
+msgid "ECPay accepted an allowance of %1$d on invoice %2$s but returned no allowance number. Check it in the ECPay dashboard."
+msgstr "綠界接受了發票 %2$s 金額 %1$d 的折讓，但沒有回傳折讓單號，請到綠界後台確認。"
+
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:186
+msgid "ECPay returned no allowance number. Check the allowance in the ECPay dashboard."
+msgstr "綠界沒有回傳折讓單號，請到綠界後台確認這筆折讓。"
+
+#. translators: 1: allowance number, 2: amount, 3: invoice number
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:199
+#, php-format
+msgid "ECPay allowance %1$s was issued for %2$d on invoice %3$s"
+msgstr "已在發票 %3$s 開立綠界折讓 %1$s，金額 %2$d"
+
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:48
+msgid "This order has no ECPay invoice from an earlier plugin that can be voided here."
+msgstr "這張訂單沒有可以在這裡作廢的舊外掛綠界發票。"
+
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:61
+msgid "This invoice has allowances. Void the allowances first."
+msgstr "這張發票有折讓，請先作廢折讓。"
+
+#. translators: 1: invoice number, 2: plugin name, 3: error message
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:86
+#, php-format
+msgid "Invoice %1$s from the %2$s could not be voided: %3$s"
+msgstr "%2$s開立的發票 %1$s 作廢失敗：%3$s"
+
+#. translators: 1: invoice number, 2: plugin name, 3: reason
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:103
+#, php-format
+msgid "Invoice %1$s from the %2$s was voided — reason: %3$s"
+msgstr "%2$s開立的發票 %1$s 已作廢，原因：%3$s"
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:28
 #: src/Modules/EzpayInvoice/Operations/Query.php:31
@@ -5420,11 +5520,11 @@ msgstr "這張發票在綠界仍有效。"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
 #: src/Modules/Payuni/Api/PaymentResponse.php:89
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:82
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:106
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
 #: src/Modules/Shared/Invoice/OrderListColumn.php:141
-#: src/Settings/SettingsPage.php:615
+#: src/Settings/SettingsPage.php:630
 msgid "Invoice number"
 msgstr "發票號碼"
 
@@ -5432,7 +5532,7 @@ msgstr "發票號碼"
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 #: src/Modules/Payuni/Gateways/GatewayBase.php:123
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:83
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:107
 msgid "Issued at"
 msgstr "開立時間"
 
@@ -5540,7 +5640,7 @@ msgstr "會員載具（雲端，免輸入）"
 #: src/Modules/OrderLookup/InvoiceOps.php:105
 #: src/Modules/Shared/Admin/CardRenderers.php:342
 #: src/Modules/Shared/Admin/CardRenderers.php:407
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:241
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:244
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:53
 msgid "Paper"
 msgstr "紙本"
@@ -5860,7 +5960,7 @@ msgstr "查詢到的綠界物流狀態：狀態碼 %s"
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:91
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/PayuniShipping/Frontstage.php:329
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:116
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:168
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/block/moksa-cvs-arrived.php:34
 #: templates/emails/moksa-cvs-arrived.php:36
@@ -8197,7 +8297,7 @@ msgstr "勾選時一律在測試環境執行，不會真的出貨。這個頁面
 
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:26
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:100
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:108
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:160
 msgid "Shipping type"
 msgstr "物流類型"
 
@@ -9009,7 +9109,7 @@ msgstr "愛心碼格式不正確(應為 3-7 碼數字)。"
 #: src/Modules/OrderLookup/DonationOrgOps.php:60
 #: src/Modules/OrderLookup/InvoiceOps.php:124
 #: src/Refund/InvoiceSync.php:79
-#: src/Refund/InvoiceSync.php:140
+#: src/Refund/InvoiceSync.php:163
 msgid "No e-invoice module is enabled."
 msgstr "沒有啟用任何電子發票模組。"
 
@@ -9111,86 +9211,86 @@ msgid "(Note: this order already has invoice number %s. A new one is only issued
 msgstr "(注意：此訂單已有發票號 %s，若已作廢才會重開。)"
 
 #: src/Modules/OrderLookup/InvoiceOps.php:169
-#: src/Modules/OrderLookup/InvoiceOps.php:245
+#: src/Modules/OrderLookup/InvoiceOps.php:251
 msgid "The order or the invoice service could not be found."
 msgstr "找不到訂單或發票商。"
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:175
+#: src/Modules/OrderLookup/InvoiceOps.php:181
 #, php-format
 msgid "Could not issue: %s"
 msgstr "開立失敗：%s"
 
 #. translators: 1: order number, 2: invoice number, 3: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:180
+#: src/Modules/OrderLookup/InvoiceOps.php:186
 #, php-format
 msgid "✅ E-invoice %2$s was issued for order #%1$s through %3$s."
 msgstr "✅ 已為訂單 #%1$s 開立電子發票：%2$s(發票商：%3$s)。"
 
-#: src/Modules/OrderLookup/InvoiceOps.php:202
+#: src/Modules/OrderLookup/InvoiceOps.php:208
 msgid "Please provide a reason for voiding."
 msgstr "請提供作廢原因。"
 
 #. translators: 1: order number, 2: invoice number, 3: provider, 4: reason
-#: src/Modules/OrderLookup/InvoiceOps.php:223
+#: src/Modules/OrderLookup/InvoiceOps.php:229
 #, php-format
 msgid "Void e-invoice %2$s on order #%1$s through %3$s. Reason: %4$s."
 msgstr "作廢訂單 #%1$s 的電子發票 %2$s(發票商：%3$s)，原因：%4$s。"
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:251
+#: src/Modules/OrderLookup/InvoiceOps.php:257
 #, php-format
 msgid "Could not void: %s"
 msgstr "作廢失敗：%s"
 
 #. translators: 1: order number, 2: invoice number
-#: src/Modules/OrderLookup/InvoiceOps.php:255
+#: src/Modules/OrderLookup/InvoiceOps.php:261
 #, php-format
 msgid "✅ E-invoice %2$s on order #%1$s was voided."
 msgstr "✅ 已作廢訂單 #%1$s 的電子發票 %2$s。"
 
-#: src/Modules/OrderLookup/InvoiceOps.php:275
+#: src/Modules/OrderLookup/InvoiceOps.php:281
 msgid "Please provide an allowance amount greater than 0."
 msgstr "請提供大於 0 的折讓金額。"
 
-#: src/Modules/OrderLookup/InvoiceOps.php:281
+#: src/Modules/OrderLookup/InvoiceOps.php:287
 msgid "This order has no invoice."
 msgstr "此訂單沒有發票記錄。"
 
 #. translators: %s: provider name
-#: src/Modules/OrderLookup/InvoiceOps.php:285
+#: src/Modules/OrderLookup/InvoiceOps.php:291
 #, php-format
 msgid "%s does not support allowances."
 msgstr "%s 不支援折讓單。"
 
-#: src/Modules/OrderLookup/InvoiceOps.php:289
+#: src/Modules/OrderLookup/InvoiceOps.php:295
 msgid "This order has no issued invoice to raise an allowance against."
 msgstr "此訂單沒有已開立的發票可折讓。"
 
 #. translators: 1: amount, 2: order total
-#: src/Modules/OrderLookup/InvoiceOps.php:297
+#: src/Modules/OrderLookup/InvoiceOps.php:303
 #, php-format
 msgid "The allowance amount %1$d is larger than the order total %2$d."
 msgstr "折讓金額 %1$d 超過訂單金額 %2$d。"
 
 #. translators: 1: order number, 2: invoice number, 3: amount, 4: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:312
+#: src/Modules/OrderLookup/InvoiceOps.php:318
 #, php-format
 msgid "Issue an allowance of NT$%3$d against invoice %2$s on order #%1$s through %4$s."
 msgstr "為訂單 #%1$s 的發票 %2$s 開立折讓單，金額 NT$%3$d(發票商：%4$s)。"
 
-#: src/Modules/OrderLookup/InvoiceOps.php:334
+#: src/Modules/OrderLookup/InvoiceOps.php:340
 msgid "The details are incomplete, so no allowance was issued."
 msgstr "資料不完整，無法開立折讓單。"
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:340
+#: src/Modules/OrderLookup/InvoiceOps.php:346
 #, php-format
 msgid "Could not issue the allowance: %s"
 msgstr "折讓失敗：%s"
 
 #. translators: 1: order number, 2: amount
-#: src/Modules/OrderLookup/InvoiceOps.php:344
+#: src/Modules/OrderLookup/InvoiceOps.php:350
 #, php-format
 msgid "✅ An allowance of NT$%2$d was issued for order #%1$s."
 msgstr "✅ 已為訂單 #%1$s 開立 NT$%2$d 折讓單。"
@@ -9200,7 +9300,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr "訂單查號搜尋 — 發票號 / 物流單號 / 金流交易編號"
 
 #: src/Modules/OrderLookup/Module.php:37
-#: src/Settings/SettingsPage.php:599
+#: src/Settings/SettingsPage.php:614
 msgid "Order number lookup"
 msgstr "訂單查號搜尋"
 
@@ -9359,17 +9459,18 @@ msgstr "訂單 #%1$s · %2$s · %3$s · %4$s"
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:629
+#: src/Settings/SettingsPage.php:644
 msgid "Payment transaction ID"
 msgstr "金流交易編號"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:160
 #: src/Modules/OrderLookup/SearchableKeys.php:259
+#: src/Modules/Shared/Compat/LegacyOrderData.php:136
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:114
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:226
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:527
-#: src/Settings/SettingsPage.php:636
+#: src/Settings/SettingsPage.php:651
 msgid "Tax ID"
 msgstr "統一編號"
 
@@ -9383,13 +9484,13 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
 #: src/Modules/Tappay/Api/IpnHandler.php:356
-#: src/Settings/SettingsPage.php:657
+#: src/Settings/SettingsPage.php:672
 msgid "Last four card digits"
 msgstr "卡末四碼"
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:664
+#: src/Settings/SettingsPage.php:679
 msgid "T-Cat tracking number"
 msgstr "黑貓物流單號"
 
@@ -9924,6 +10025,7 @@ msgid "Live member password (mem_password)"
 msgstr "正式會員密碼（mem_password）"
 
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Shared/Compat/LegacyOrderData.php:133
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:86
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:101
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:190
@@ -10731,7 +10833,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr "PAYUNi 收銀台的顯示語言。"
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:81
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:101
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:153
 #: src/Modules/Shared/Email/PersonalizationTags.php:48
 #: src/Modules/Shared/Invoice/CheckoutAssets.php:35
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:184
@@ -11243,7 +11345,7 @@ msgid "Update failed"
 msgstr "更新失敗"
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:61
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:51
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:65
 #: src/Modules/Shared/Invoice/OrderListColumn.php:82
 #: src/Modules/Shipping/Admin/ListCreateButton.php:122
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:39
@@ -11265,8 +11367,8 @@ msgstr "%s 訂單（最多顯示 50 筆）"
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:71
 #: src/Modules/Pchomepay/Module.php:101
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:87
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:109
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:120
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:161
 #: src/Modules/ShoplinePayments/Module.php:146
 #: src/Modules/Tappay/Module.php:100
 #: src/Refund/PendingPage.php:128
@@ -12539,57 +12641,129 @@ msgstr "金流服務商回報："
 msgid "The payment status could not be looked up: "
 msgstr "查詢付款狀態失敗："
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:49
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:51
 msgid "Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone."
 msgstr "作廢原因（20 字以內）。送出後會立即在綠界作廢，無法復原。"
 
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:57
+msgid "Allowance amount (whole NT dollars). The allowance is issued at ECPay right away."
+msgstr "折讓金額（新台幣整數）。送出後會立即在綠界開立折讓。"
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:62
+msgid "Void this allowance at ECPay?"
+msgstr "要在綠界作廢這張折讓嗎？"
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:64
+msgid "Working…"
+msgstr "處理中…"
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+#, php-format
+msgid "Allowance %s"
+msgstr "折讓 %s"
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+msgid "(voided)"
+msgstr "（已作廢）"
+
 #. translators: %s: void time
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:89
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:122
 #, php-format
 msgid "Voided in Moksa at %s"
 msgstr "已於 %s 在 Moksa 作廢"
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:98
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:132
+msgid "Issue an allowance"
+msgstr "開立折讓"
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:143
+#, php-format
+msgid "Void allowance %s"
+msgstr "作廢折讓 %s"
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:150
 msgid "Void this invoice"
 msgstr "作廢這張發票"
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:169
 #: templates/emails/moksa-cvs-arrived.php:42
 #: templates/emails/plain/moksa-cvs-arrived.php:26
 msgid "Store address"
 msgstr "門市地址"
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
-#: src/Modules/Shared/Compat/LegacyOrderData.php:39
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:173
+#: src/Modules/Shared/Compat/LegacyOrderData.php:75
 msgid "RY Tools"
 msgstr "RY Tools"
 
 #. translators: %s: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:134
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:186
 #, php-format
 msgid "Recorded by the %s (read-only)"
 msgstr "%s留下的紀錄（唯讀）"
 
 #: src/Modules/Shared/Compat/LegacyOrderData.php:28
-#: src/Modules/Shared/Compat/LegacyOrderData.php:114
+#: src/Modules/Shared/Compat/LegacyOrderData.php:55
+msgid "external system"
+msgstr "外部系統"
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:40
+#: src/Modules/Shared/Compat/LegacyOrderData.php:236
 msgid "ECPay official plugin"
 msgstr "綠界官方外掛"
 
+#: src/Modules/Shared/Compat/LegacyOrderData.php:64
+msgid "woomp plugin"
+msgstr "woomp 外掛"
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:137
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:106
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:115
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:235
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:538
+msgid "Company name"
+msgstr "公司抬頭"
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:139
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:118
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:122
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:125
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:259
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:271
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:564
+msgid "Donation code"
+msgstr "愛心碼"
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:141
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
+msgid "Carrier"
+msgstr "物流商"
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:142
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:70
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:110
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:215
+msgid "Carrier number"
+msgstr "載具編號"
+
 #. translators: 1: invoice number, 2: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderData.php:72
+#: src/Modules/Shared/Compat/LegacyOrderData.php:194
 #, php-format
 msgid "No new invoice was issued: this order already has invoice %1$s, issued by the %2$s."
 msgstr "沒有開立新發票：這張訂單已經有%2$s開立的發票 %1$s。"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:88
+#: src/Modules/Shared/Compat/LegacyOrderData.php:210
 msgid "RY Tools (ECPay)"
 msgstr "RY Tools（綠界）"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:89
+#: src/Modules/Shared/Compat/LegacyOrderData.php:211
 msgid "RY Tools (NewebPay)"
 msgstr "RY Tools（藍新）"
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:90
+#: src/Modules/Shared/Compat/LegacyOrderData.php:212
 msgid "RY Tools (SmilePay)"
 msgstr "RY Tools（速買配）"
 
@@ -12712,16 +12886,16 @@ msgstr "訂單金額為 0 或負，未開立發票。"
 msgid "%s invoice details"
 msgstr "%s 發票資訊"
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:351
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:354
 msgid "This service does not support allowances."
 msgstr "此 provider 不支援折讓。"
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:362
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:365
 msgid "This service does not support looking invoices up."
 msgstr "這個服務商不支援發票查詢。"
 
 #. translators: 1: provider name, 2: the details returned by the provider
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:374
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:377
 #, php-format
 msgid "Invoice status looked up at %1$s — %2$s"
 msgstr "查詢 %1$s 發票狀態 — %2$s"
@@ -12760,33 +12934,11 @@ msgstr "訂單失敗（自動作廢）"
 msgid "Order status changed (voided automatically)"
 msgstr "訂單狀態變更（自動作廢）"
 
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:70
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:110
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:215
-msgid "Carrier number"
-msgstr "載具編號"
-
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:93
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:203
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:482
 msgid "Carrier type"
 msgstr "載具類型"
-
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:106
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:115
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:235
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:538
-msgid "Company name"
-msgstr "公司抬頭"
-
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:118
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:122
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:125
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:259
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:271
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:564
-msgid "Donation code"
-msgstr "愛心碼"
 
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:123
 msgid "3–7 digit love code"
@@ -13248,10 +13400,6 @@ msgstr "【重要】請重新選擇取件門市（訂單 #{order_number}）"
 msgid "Store closed — please choose another pickup store"
 msgstr "門市關轉，請重新選擇取件門市"
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
-msgid "Carrier"
-msgstr "物流商"
-
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:67
 msgid "Tracking link"
 msgstr "查詢連結"
@@ -13448,56 +13596,80 @@ msgstr "屬性：<code>temp_1</code>=常溫 base、<code>temp_2</code>=冷藏 ba
 msgid "Copied"
 msgstr "已複製"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:52
-msgid "Switch RY statuses to Moksa statuses"
-msgstr "將 RY 狀態轉成 Moksa 狀態"
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:65
+msgid "Switch earlier plugin statuses to Moksa statuses"
+msgstr "把舊外掛的狀態轉成 Moksa 狀態"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:80
-msgid "Switched from the RY Tools status (no email sent)."
-msgstr "由 RY Tools 的狀態轉換而來（未寄送通知信）。"
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:94
+msgid "Switched from an earlier plugin's status (no email sent)."
+msgstr "已從舊外掛的狀態轉換（未寄信）。"
 
 #. translators: %d: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:98
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:115
 #, php-format
 msgid "%d order was switched to a Moksa status."
 msgid_plural "%d orders were switched to Moksa statuses."
 msgstr[0] "已將 %d 筆訂單轉成 Moksa 狀態。"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:108
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:125
 msgctxt "Order status"
 msgid "Awaiting pickup at store"
 msgstr "超商待取貨"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:109
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:126
 msgctxt "Order status"
 msgid "Not picked up at store"
 msgstr "超商逾期未取"
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:110
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:127
 msgctxt "Order status"
 msgid "In transit"
 msgstr "運送中"
 
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:128
+msgctxt "Order status"
+msgid "Shipped (woomp)"
+msgstr "已出貨（woomp）"
+
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:129
+msgctxt "Order status"
+msgid "Out for delivery (woomp)"
+msgstr "配送中（woomp）"
+
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:118
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:137
 #, php-format
 msgid "Awaiting pickup at store <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting pickup at store <span class=\"count\">(%s)</span>"
 msgstr[0] "超商待取貨 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:120
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:139
 #, php-format
 msgid "Not picked up at store <span class=\"count\">(%s)</span>"
 msgid_plural "Not picked up at store <span class=\"count\">(%s)</span>"
 msgstr[0] "超商逾期未取 <span class=\"count\">(%s)</span>"
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:122
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:141
 #, php-format
 msgid "In transit <span class=\"count\">(%s)</span>"
 msgid_plural "In transit <span class=\"count\">(%s)</span>"
 msgstr[0] "運送中 <span class=\"count\">(%s)</span>"
+
+#. translators: %s: number of orders
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:143
+#, php-format
+msgid "Shipped (woomp) <span class=\"count\">(%s)</span>"
+msgid_plural "Shipped (woomp) <span class=\"count\">(%s)</span>"
+msgstr[0] "已出貨（woomp） <span class=\"count\">(%s)</span>"
+
+#. translators: %s: number of orders
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:145
+#, php-format
+msgid "Out for delivery (woomp) <span class=\"count\">(%s)</span>"
+msgid_plural "Out for delivery (woomp) <span class=\"count\">(%s)</span>"
+msgstr[0] "配送中（woomp） <span class=\"count\">(%s)</span>"
 
 #: src/Modules/Shipping/Statuses/Registrar.php:69
 #: src/Modules/ShoplinePayments/Api/Helper.php:45
@@ -15408,48 +15580,60 @@ msgstr "這張訂單先前有一筆退款結果未確認，請先到「WooCommer
 msgid "A refund needs your attention (order #%s)"
 msgstr "有一筆退款需要你處理（訂單 #%s）"
 
-#: src/Refund/InvoiceSync.php:87
+#. translators: %s: invoice number or marker
+#: src/Refund/InvoiceSync.php:90
+#, php-format
+msgid "The invoice (%s) was issued by an external system. Void it or issue the allowance in that system."
+msgstr "發票（%s）是外部系統開立的，請到那個系統作廢或折讓。"
+
+#. translators: 1: invoice number, 2: plugin name
+#: src/Refund/InvoiceSync.php:100
+#, php-format
+msgid "Invoice %1$s was issued by the %2$s. Void it or issue an allowance from the order page (ECPay invoices) or in the invoice service dashboard."
+msgstr "發票 %1$s 是%2$s開立的。請在訂單頁（綠界發票）或發票服務後台作廢或折讓。"
+
+#: src/Refund/InvoiceSync.php:110
 msgid "The invoice was already voided."
 msgstr "發票已經作廢。"
 
-#: src/Refund/InvoiceSync.php:93
+#: src/Refund/InvoiceSync.php:116
 msgid "The invoice has not been issued yet. When it is issued, make sure the amount reflects this refund."
 msgstr "發票還沒開立。開立時請確認金額有扣掉這筆退款。"
 
-#: src/Refund/InvoiceSync.php:108
+#: src/Refund/InvoiceSync.php:131
 msgid "This e-invoice service has no allowance API here. Issue the allowance in its dashboard."
 msgstr "這家發票服務在這裡沒有折讓功能，請到它的後台開立折讓。"
 
 #. translators: 1: refund amount, 2: amount still available for allowances
-#: src/Refund/InvoiceSync.php:113
+#: src/Refund/InvoiceSync.php:136
 #, php-format
 msgid "The allowance of NT$%1$d is more than the NT$%2$d left on the invoice."
 msgstr "折讓 NT$%1$d 超過發票剩下可折讓的 NT$%2$d。"
 
 #. translators: %s: refund ID
-#: src/Refund/InvoiceSync.php:144
+#: src/Refund/InvoiceSync.php:167
 #, php-format
 msgid "Refund #%s"
 msgstr "退款 #%s"
 
-#: src/Refund/InvoiceSync.php:164
+#: src/Refund/InvoiceSync.php:187
 msgid "The scheduled invoice could not be cancelled. Check it in the e-invoice dashboard."
 msgstr "排程中的發票沒辦法取消，請到發票後台確認。"
 
 #. translators: 1: refund ID, 2: error message
-#: src/Refund/InvoiceSync.php:274
+#: src/Refund/InvoiceSync.php:297
 #, php-format
 msgid "The e-invoice step for refund #%1$s failed: %2$s. It is listed under WooCommerce > Refunds to review."
 msgstr "退款 #%1$s 的發票處理失敗：%2$s。已列在「WooCommerce > 退款待處理」。"
 
 #. translators: %s: order number
-#: src/Refund/InvoiceSync.php:282
+#: src/Refund/InvoiceSync.php:305
 #, php-format
 msgid "Refund invoice needs attention (order #%s)"
 msgstr "退款的發票需要處理（訂單 #%s）"
 
 #. translators: 1: order number, 2: error message, 3: admin URL
-#: src/Refund/InvoiceSync.php:285
+#: src/Refund/InvoiceSync.php:308
 #, php-format
 msgid "The e-invoice step for a refund on order #%1$s failed: %2$s\n\nThe refund itself went through. Review it here: %3$s"
 msgstr "訂單 #%1$s 一筆退款的發票處理失敗：%2$s\n\n退款本身已完成。請到這裡處理：%3$s"
@@ -15761,113 +15945,125 @@ msgstr "台灣手機格式檢查"
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr "檢查電話是否為台灣手機號碼 —— 09 開頭共 10 碼。檢查前會先清掉連字號、空白與 +886 國碼，所以顧客輸入 0912-345-678 或 +886912345678 都會通過，訂單裡統一存成 0912345678。市話不接受。"
 
-#: src/Settings/SettingsPage.php:542
+#: src/Settings/SettingsPage.php:537
+msgid "Order screens"
+msgstr "訂單畫面"
+
+#: src/Settings/SettingsPage.php:540
+msgid "Add a Phone column to the order list, with the billing and shipping phone numbers"
+msgstr "訂單列表加「電話」欄，顯示帳單與運送電話"
+
+#: src/Settings/SettingsPage.php:547
+msgid "On the order edit screen, show Taiwan addresses on one line after the name (display only — emails and saved data are unchanged)"
+msgstr "訂單編輯頁的台灣地址在姓名下併成一行（只改顯示，信件與存的資料不變）"
+
+#: src/Settings/SettingsPage.php:557
 msgid "Default country"
 msgstr "預設國家"
 
-#: src/Settings/SettingsPage.php:547
+#: src/Settings/SettingsPage.php:562
 msgid "Single-country stores"
 msgstr "只賣一國的商店"
 
-#: src/Settings/SettingsPage.php:551
+#: src/Settings/SettingsPage.php:566
 msgid "If you sell or ship to only one country and the WooCommerce default customer location is left empty, start new customers in that country so shipping options show at checkout. Saved customer addresses are never changed."
 msgstr "銷售或運送國家只有一國，且 WooCommerce「預設顧客位置」沒設定時，新顧客的國家自動帶入那一國，結帳頁才會出現運送方式。已存的顧客地址不會被改。"
 
-#: src/Settings/SettingsPage.php:559
+#: src/Settings/SettingsPage.php:574
 msgid "My Account"
 msgstr "我的帳號"
 
-#: src/Settings/SettingsPage.php:564
+#: src/Settings/SettingsPage.php:579
 msgid "Hide Downloads"
 msgstr "隱藏「下載」"
 
-#: src/Settings/SettingsPage.php:567
+#: src/Settings/SettingsPage.php:582
 msgid "Remove \"Downloads\" from the My Account menu that customers see. Useful when you do not sell downloadable products."
 msgstr "把顧客「我的帳號」選單裡的「下載」拿掉。沒有販售可下載商品時適用。"
 
-#: src/Settings/SettingsPage.php:577
+#: src/Settings/SettingsPage.php:592
 msgid "Taiwan field order and widths"
 msgstr "台灣欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:579
+#: src/Settings/SettingsPage.php:594
 msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
 msgstr "拖曳重排欄位、選 50% 或 100% 寬度。這一區獨立運作，不需要開啟上方的台灣地址工具。"
 
-#: src/Settings/SettingsPage.php:584
+#: src/Settings/SettingsPage.php:599
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr "關掉後結帳欄位維持 WooCommerce 預設的順序與寬度。您排好的版面會保留，重新打開就回來。"
 
-#: src/Settings/SettingsPage.php:587
+#: src/Settings/SettingsPage.php:602
 msgid "Field order and width"
 msgstr "欄位順序與寬度"
 
-#: src/Settings/SettingsPage.php:589
+#: src/Settings/SettingsPage.php:604
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr "半寬欄位需兩兩配對才會並排（例：姓氏 50% + 名字 50% → 同一行）。落單的 50% 會自動退回 100%。傳統與區塊結帳皆適用。（電子郵件例外：區塊結帳把它放在獨立的「聯絡資訊」步驟，移動它只會改到古典結帳。）"
 
-#: src/Settings/SettingsPage.php:601
+#: src/Settings/SettingsPage.php:616
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr "讓 WooCommerce 訂單搜尋框與 Ctrl+K 命令面板認得台灣特有號碼。只搜尋已啟用模組的號碼。"
 
-#: src/Settings/SettingsPage.php:605
+#: src/Settings/SettingsPage.php:620
 msgid "Enable order number lookup"
 msgstr "啟用訂單查號搜尋"
 
-#: src/Settings/SettingsPage.php:609
+#: src/Settings/SettingsPage.php:624
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr "開啟後，可在訂單列表搜尋框與命令面板用下列號碼查訂單。"
 
-#: src/Settings/SettingsPage.php:614
+#: src/Settings/SettingsPage.php:629
 msgid "Number types to search"
 msgstr "搜尋號碼類型"
 
-#: src/Settings/SettingsPage.php:669
+#: src/Settings/SettingsPage.php:684
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr "勾選要納入搜尋的號碼類型。欄位越多搜尋越慢，常用的勾起來即可。"
 
-#: src/Settings/SettingsPage.php:672
+#: src/Settings/SettingsPage.php:687
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr "加速索引（大量訂單建議開啟）"
 
-#: src/Settings/SettingsPage.php:676
+#: src/Settings/SettingsPage.php:691
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr "把可搜尋號碼建到專用索引表，訂單量大時查號更快。開啟後會在背景自動建立索引。"
 
-#: src/Settings/SettingsPage.php:716
+#: src/Settings/SettingsPage.php:731
 msgid "Payment modules"
 msgstr "金流模組"
 
-#: src/Settings/SettingsPage.php:717
+#: src/Settings/SettingsPage.php:732
 msgid "Shipping modules"
 msgstr "物流模組"
 
-#: src/Settings/SettingsPage.php:718
+#: src/Settings/SettingsPage.php:733
 msgid "E-invoice modules"
 msgstr "電子發票模組"
 
-#: src/Settings/SettingsPage.php:719
+#: src/Settings/SettingsPage.php:734
 msgid "Checkout tools"
 msgstr "結帳工具"
 
-#: src/Settings/SettingsPage.php:720
+#: src/Settings/SettingsPage.php:735
 msgid "Tools"
 msgstr "工具"
 
-#: src/Settings/SettingsPage.php:727
+#: src/Settings/SettingsPage.php:742
 msgid "Moksa — Taiwan toolkit"
 msgstr "Moksa — 台灣工具包"
 
-#: src/Settings/SettingsPage.php:728
+#: src/Settings/SettingsPage.php:743
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr "啟用您需要的模組。金流、物流、發票可自由搭配組合。"
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:776
+#: src/Settings/SettingsPage.php:791
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr "此模組目前已停用，下方設定不會生效。請至 %s 啟用後再設定。"
 
-#: src/Settings/SettingsPage.php:777
+#: src/Settings/SettingsPage.php:792
 msgid "Module overview"
 msgstr "模組總覽"
 

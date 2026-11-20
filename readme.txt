@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.25.0
+Stable tag: 1.26.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,12 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.26.0 - 2026-11-20 =
+* New: Moving from woomp: ECPay invoices issued by woomp are recognised, so no second invoice is issued for those orders, and they can be voided or given an allowance from the order page. woomp's Shipped and Out for delivery order statuses stay visible and can be switched to Moksa statuses in bulk.
+* New: Orders whose invoice was issued by another system (for example an ERP) can be marked with the `_moksafowo_invoice_external` order field: no invoice is issued for them and refunds never void or credit that invoice.
+* New: A tool under WooCommerce > Status > Tools converts Taiwan county names saved in Chinese in customer addresses to the dropdown values; it shows how many customers will change before you run it. Orders are not changed.
+* New: Optional Phone column in the order list, and one-line Taiwan addresses on the order edit screen.
+
 = 1.25.0 - 2026-11-19 =
 * New: Customers can change the card on their ECPay or Shopline Payments subscriptions under My account. The new card is checked with a small authorisation that is cancelled right away, and the subscription switches only after the card is saved (at most 3 tries a day).
 * New: PAYUNi LINE Pay, AFTEE, icash Pay and JKOPAY payments can now be refunded from the order page.
@@ -296,6 +302,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.26.0 =
+Adds a migration path from woomp (invoices, order statuses and Taiwan county names). Nothing changes for existing data until you use the new tools.
 
 = 1.25.0 =
 If you use ECPay saved cards, make sure the card check amount in the ECPay settings is at least the minimum transaction amount in your ECPay contract, otherwise saving cards fails. TapPay customer card changes are now off until you turn them on.

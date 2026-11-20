@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.25.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.26.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-19T13:14:24+00:00\n"
+"POT-Creation-Date: 2026-11-19T20:27:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -122,10 +122,10 @@ msgstr ""
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:214
 #: src/Modules/OrderLookup/InvoiceOps.php:116
 #: src/Modules/OrderLookup/InvoiceOps.php:163
-#: src/Modules/OrderLookup/InvoiceOps.php:193
-#: src/Modules/OrderLookup/InvoiceOps.php:238
-#: src/Modules/OrderLookup/InvoiceOps.php:267
-#: src/Modules/OrderLookup/InvoiceOps.php:327
+#: src/Modules/OrderLookup/InvoiceOps.php:199
+#: src/Modules/OrderLookup/InvoiceOps.php:244
+#: src/Modules/OrderLookup/InvoiceOps.php:273
+#: src/Modules/OrderLookup/InvoiceOps.php:333
 #: src/Modules/OrderLookup/PaymentMethodOps.php:276
 #: src/Modules/OrderLookup/PaymentMethodOps.php:334
 #: src/Modules/OrderLookup/QueryPayment.php:52
@@ -241,11 +241,12 @@ msgstr ""
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:52
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:71
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:81
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:231
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:250
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:278
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:294
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:314
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:234
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:253
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:281
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:297
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:317
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:69
 #: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:27
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:407
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:425
@@ -263,9 +264,9 @@ msgstr ""
 #: src/Modules/Payuni/PayuniPayment.php:217
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:72
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:335
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:346
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:388
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:338
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:349
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:391
 #: src/Modules/Shared/Invoice/OrderListColumn.php:113
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:298
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:390
@@ -273,7 +274,7 @@ msgstr ""
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:508
 #: src/Modules/Shipping/Admin/BatchPrintAdminUI.php:571
 #: src/Modules/Shipping/Admin/ListCreateButton.php:74
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:69
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:82
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:35
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:127
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:193
@@ -288,6 +289,27 @@ msgstr ""
 msgid "Nothing was changed. Over MCP this tool only previews the change. To apply it, ask Moksa AI in the WordPress admin and confirm there."
 msgstr ""
 
+#: src/Modules/Address/AdminAddressDisplay.php:46
+#: src/Modules/Address/AdminAddressDisplay.php:50
+#: src/Modules/Address/FieldManager.php:107
+#: src/Modules/Address/FieldManager.php:131
+#: src/Modules/EcpayShipping/Settings/SettingsTab.php:148
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:126
+msgid "Phone"
+msgstr ""
+
+#. translators: %s: phone number
+#: src/Modules/Address/AdminAddressDisplay.php:75
+#, php-format
+msgid "Billing: %s"
+msgstr ""
+
+#. translators: %s: phone number
+#: src/Modules/Address/AdminAddressDisplay.php:79
+#, php-format
+msgid "Shipping: %s"
+msgstr ""
+
 #: src/Modules/Address/BlockField.php:175
 #: src/Modules/Address/BlockField.php:198
 msgid "Please select a district for home delivery orders."
@@ -299,8 +321,8 @@ msgstr ""
 
 #: src/Modules/Address/BlockField.php:343
 #: src/Modules/Address/BlockField.php:452
-#: src/Modules/Address/TwAddress.php:212
-#: src/Modules/Address/TwAddress.php:261
+#: src/Modules/Address/TwAddress.php:215
+#: src/Modules/Address/TwAddress.php:264
 msgid "Select…"
 msgstr ""
 
@@ -2252,9 +2274,10 @@ msgstr ""
 
 #: src/Modules/Address/FieldManager.php:100
 #: src/Modules/Address/FieldManager.php:119
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:171
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:174
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:110
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:231
+#: src/Modules/Shared/Compat/LegacyOrderData.php:128
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:234
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:98
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:141
 msgid "Company"
@@ -2284,19 +2307,36 @@ msgstr ""
 msgid "Postcode"
 msgstr ""
 
-#: src/Modules/Address/FieldManager.php:107
-#: src/Modules/Address/FieldManager.php:131
-#: src/Modules/EcpayShipping/Settings/SettingsTab.php:148
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:126
-msgid "Phone"
-msgstr ""
-
 #: src/Modules/Address/FieldManager.php:108
 msgid "Email (billing only; a half-width field must sit next to another half-width field; classic checkout only)"
 msgstr ""
 
 #: src/Modules/Address/FieldManager.php:125
 msgid "Apartment, suite, unit, etc."
+msgstr ""
+
+#: src/Modules/Address/LegacyStateMap.php:137
+msgid "Customers who switched from another plugin may have the county or city saved as Chinese text (for example 臺北市). This changes it to the code the Moksa dropdown uses, in customer profiles only. Orders are not changed."
+msgstr ""
+
+#. translators: 1: number of customers, 2: number of address fields
+#: src/Modules/Address/LegacyStateMap.php:147
+#, php-format
+msgid "Customers to update now: %1$d (%2$d address fields)."
+msgstr ""
+
+#: src/Modules/Address/LegacyStateMap.php:153
+msgid "Convert Taiwan county names in customer addresses"
+msgstr ""
+
+#: src/Modules/Address/LegacyStateMap.php:154
+msgid "Convert"
+msgstr ""
+
+#. translators: 1: number of customers, 2: number of address fields
+#: src/Modules/Address/LegacyStateMap.php:172
+#, php-format
+msgid "Updated %1$d customers (%2$d address fields)."
 msgstr ""
 
 #: src/Modules/Address/PhoneRule.php:75
@@ -2599,7 +2639,7 @@ msgstr ""
 #: src/Modules/EcpayInvoice/Operations/Query.php:71
 #: src/Modules/EzpayInvoice/Admin/OrderMetaBox.php:75
 #: src/Modules/EzpayInvoice/Operations/Query.php:76
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:84
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:108
 #: src/Modules/SmilepayInvoice/Admin/OrderMetaBox.php:53
 msgid "Random code"
 msgstr ""
@@ -2653,7 +2693,7 @@ msgstr ""
 #: src/Modules/AmegoInvoice/Module.php:41
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:80
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:107
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:352
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:355
 #: src/Modules/EcpayInvoice/Module.php:39
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:155
 #: src/Modules/EzpayInvoice/Module.php:39
@@ -2666,7 +2706,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:106
 #: src/Modules/Shared/Admin/CardRenderers.php:340
 #: src/Modules/Shared/Admin/CardRenderers.php:405
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:239
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:242
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:51
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:152
 #: src/Modules/SmilepayInvoice/Module.php:39
@@ -2678,7 +2718,7 @@ msgstr ""
 #: src/Modules/AmegoInvoice/Module.php:42
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:87
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:108
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:353
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:356
 #: src/Modules/EcpayInvoice/Module.php:40
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:162
 #: src/Modules/EzpayInvoice/Module.php:40
@@ -2692,7 +2732,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GatewayBase.php:131
 #: src/Modules/Shared/Admin/CardRenderers.php:341
 #: src/Modules/Shared/Admin/CardRenderers.php:406
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:240
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:243
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:52
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:153
 #: src/Modules/SmilepayInvoice/Module.php:40
@@ -2754,6 +2794,7 @@ msgstr ""
 
 #: src/Modules/AmegoInvoice/Operations/AllowanceInvalid.php:41
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:40
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:226
 msgid "This order has no allowance to void."
 msgstr ""
 
@@ -2875,7 +2916,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Settings/TCat/HDFrozenFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDNormalFields.php:22
 #: src/Modules/PayuniShipping/Settings/TCat/HDRefrigeratedFields.php:22
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:173
 #: src/Modules/Shipping/Methods/AbstractShippingMethod.php:77
 #: src/Modules/SmilepayInvoice/Operations/Issue.php:240
 msgid "Shipping"
@@ -3022,7 +3063,7 @@ msgstr ""
 
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:94
 #: src/Modules/AmegoInvoice/Settings/SettingsTab.php:109
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:354
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:357
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:95
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:110
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:34
@@ -3318,7 +3359,7 @@ msgstr ""
 #: src/Modules/Shared/Email/PersonalizationTags.php:98
 #: src/Modules/Smilepay/Module.php:32
 #: src/Modules/Smilepay/Settings/SettingsTab.php:138
-#: src/Settings/SettingsPage.php:643
+#: src/Settings/SettingsPage.php:658
 msgid "ATM virtual account"
 msgstr ""
 
@@ -3328,7 +3369,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:261
 #: src/Modules/Pchomepay/Frontend/CustomerPaymentInfo.php:52
 #: src/Modules/Shared/Email/PersonalizationTags.php:99
-#: src/Settings/SettingsPage.php:650
+#: src/Settings/SettingsPage.php:665
 msgid "Convenience store payment code"
 msgstr ""
 
@@ -3350,10 +3391,10 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:257
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:75
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:73
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:107
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:159
 #: src/Modules/Shared/Email/PersonalizationTags.php:55
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:66
-#: src/Settings/SettingsPage.php:622
+#: src/Settings/SettingsPage.php:637
 msgid "Tracking number"
 msgstr ""
 
@@ -3566,6 +3607,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:285
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:325
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:147
 #: src/Modules/EzpayInvoice/Operations/Issue.php:249
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:129
 #: src/Modules/PaynowInvoice/Operations/Issue.php:250
@@ -3750,11 +3792,13 @@ msgstr ""
 #: src/Modules/Ecpay/Api/BindHandler.php:101
 #: src/Modules/Ecpay/Gateways/AbstractEcpayGateway.php:48
 #: src/Modules/Ecpay/Gateways/CreditBind.php:298
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:236
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:255
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:284
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:300
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:319
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:239
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:258
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:287
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:303
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:322
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:73
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:98
 #: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:33
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:341
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:412
@@ -3766,8 +3810,8 @@ msgstr ""
 #: src/Modules/OrderLookup/AddOrderNote.php:32
 #: src/Modules/OrderLookup/ChangePickupStore.php:139
 #: src/Modules/OrderLookup/InvoiceOps.php:120
-#: src/Modules/OrderLookup/InvoiceOps.php:197
-#: src/Modules/OrderLookup/InvoiceOps.php:271
+#: src/Modules/OrderLookup/InvoiceOps.php:203
+#: src/Modules/OrderLookup/InvoiceOps.php:277
 #: src/Modules/OrderLookup/PaymentStatus.php:29
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:40
 #: src/Modules/OrderLookup/ResendPaymentEmail.php:73
@@ -3778,7 +3822,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:188
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
 #: src/Modules/Shared/Admin/PaymentQuery.php:77
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:395
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:398
 #: src/Modules/Shared/Invoice/OrderListColumn.php:118
 #: src/Modules/Shipping/Admin/ListCreateButton.php:79
 #: src/Modules/SmilepayShipping/Operations/PrintProxy.php:134
@@ -4942,14 +4986,15 @@ msgid "Company tax ID"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:79
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:173
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:344
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:176
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:347
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:35
 #: src/Modules/OrderLookup/InvoiceOps.php:104
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:109
 #: src/Modules/Payuni/Gateways/GatewayBase.php:135
 #: src/Modules/Shared/Admin/CardRenderers.php:333
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:232
+#: src/Modules/Shared/Compat/LegacyOrderData.php:129
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:235
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:37
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:99
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:142
@@ -5043,231 +5088,232 @@ msgstr ""
 msgid "Invoice details"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:158
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:221
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
 msgid "The fields have changed. Save them with Update before issuing the invoice."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:160
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:223
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:163
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:226
 msgid "Update"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:161
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:224
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:164
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:227
 #: src/Modules/Shared/Invoice/OrderListColumn.php:180
 msgid "Issue invoice"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:169
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:230
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:172
+#: src/Modules/Shared/Compat/LegacyOrderData.php:127
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:233
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:97
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:140
 msgid "Individual"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:198
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:58
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:273
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:276
 msgid "Updating…"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:199
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:274
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:202
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:277
 msgid "Updated. The invoice can now be issued."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:200
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:275
-msgid "Could not update:"
-msgstr ""
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:201
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:267
-#: src/Modules/Shared/Invoice/OrderListColumn.php:81
-msgid "Issuing…"
-msgstr ""
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:202
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:268
-msgid "The invoice was issued."
-msgstr ""
-
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:203
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:269
-msgid "Could not issue:"
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:278
+msgid "Could not update:"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:204
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:270
-msgid "Please choose a charity, or enter a love code."
+#: src/Modules/Shared/Invoice/OrderListColumn.php:81
+msgid "Issuing…"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:205
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:271
-msgid "Please enter a tax ID."
+msgid "The invoice was issued."
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:206
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:272
-msgid "Please enter a carrier number."
+msgid "Could not issue:"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:207
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:276
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:273
+msgid "Please choose a charity, or enter a love code."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:208
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:274
+msgid "Please enter a tax ID."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:275
+msgid "Please enter a carrier number."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:210
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:279
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:72
 msgid "Mobile barcode (/ followed by 7 characters from 0-9, A-Z, ., + and -)"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:208
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:277
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:211
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:280
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:74
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:511
 msgid "Citizen Digital Certificate (2 uppercase letters followed by 14 digits)"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:209
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:50
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:278
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:212
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:281
 msgid "Voiding…"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:210
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:213
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:32
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:54
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:279
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:55
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:282
 msgid "Please enter a reason for voiding."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:211
-#: src/Modules/EcpayInvoice/Operations/Invalid.php:25
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:280
-msgid "The invoice was voided."
-msgstr ""
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:212
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:281
-msgid "Could not void:"
-msgstr ""
-
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:213
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:282
-msgid "Issuing the allowance…"
-msgstr ""
-
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:214
+#: src/Modules/EcpayInvoice/Operations/Invalid.php:25
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:283
-msgid "Please enter an allowance amount."
+msgid "The invoice was voided."
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:215
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:284
-msgid "The allowance was issued."
+msgid "Could not void:"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:216
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:285
-msgid "Could not issue the allowance:"
+msgid "Issuing the allowance…"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:217
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:347
-#: src/Modules/Shared/Admin/PaymentQuery.php:131
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:286
-msgid "Looking up…"
+msgid "Please enter an allowance amount."
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:218
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:287
-msgid "Looked up. See the order notes for what the provider reported."
+msgid "The allowance was issued."
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:219
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:288
-msgid "Could not look up:"
+msgid "Could not issue the allowance:"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:220
-#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:350
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:347
+#: src/Modules/Shared/Admin/PaymentQuery.php:131
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:289
+msgid "Looking up…"
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:221
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:290
+msgid "Looked up. See the order notes for what the provider reported."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:222
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:291
+msgid "Could not look up:"
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:223
+#: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:350
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:292
 msgid "Something went wrong. Please try again later, or check the logs."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:244
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:304
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:247
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:307
 msgid "Updated."
 msgstr ""
 
 #. translators: 1: invoice number, 2: plugin name
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:269
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:272
 #: src/Modules/OrderLookup/InvoiceOps.php:129
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:325
+#: src/Modules/OrderLookup/InvoiceOps.php:176
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:328
 #, php-format
 msgid "This order already has invoice %1$s, issued by the %2$s. Void it there first if you need a new one."
 msgstr ""
 
 #. translators: 1: status sentence, 2: the invoice details returned by ECPay
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:331
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:334
 #, php-format
 msgid "Invoice status looked up at ECPay — %1$s %2$s"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:343
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:346
 #: src/Modules/OrderLookup/InvoiceOps.php:103
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:36
 msgid "Company (tax ID)"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:345
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:348
 #: src/Modules/OrderLookup/InvoiceOps.php:106
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:35
 msgid "Individual (carrier)"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:355
+#: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:358
 #: src/Modules/EcpayInvoice/Frontend/CheckoutFields.php:19
 #: src/Modules/EcpayInvoice/Module.php:41
 #: src/Modules/OrderLookup/InvoiceChannelOps.php:31
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:242
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:245
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:50
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:149
 msgid "Member carrier"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:200
+#: src/Modules/EcpayInvoice/Api/Helper.php:212
 msgid "Please enter a mobile barcode."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:208
+#: src/Modules/EcpayInvoice/Api/Helper.php:220
 msgid "Invalid mobile barcode. It must start with / followed by 7 letters, digits, +, - or . characters."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:228
+#: src/Modules/EcpayInvoice/Api/Helper.php:240
 msgid "The Ministry of Finance system is under maintenance, so the carrier was not verified."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:237
-#: src/Modules/EcpayInvoice/Api/Helper.php:302
+#: src/Modules/EcpayInvoice/Api/Helper.php:249
+#: src/Modules/EcpayInvoice/Api/Helper.php:314
 msgid "Verification failed."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:247
+#: src/Modules/EcpayInvoice/Api/Helper.php:259
 msgid "That mobile barcode does not exist. Please check it and try again."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:266
+#: src/Modules/EcpayInvoice/Api/Helper.php:278
 msgid "Please enter a love code."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:274
+#: src/Modules/EcpayInvoice/Api/Helper.php:286
 msgid "Invalid love code. It must be 3 to 7 digits, or an X followed by 2 to 6 digits."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:293
+#: src/Modules/EcpayInvoice/Api/Helper.php:305
 msgid "The Ministry of Finance system is under maintenance, so the love code was not verified."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Api/Helper.php:312
+#: src/Modules/EcpayInvoice/Api/Helper.php:324
 msgid "That love code does not exist. Please check it and try again."
 msgstr ""
 
@@ -5293,12 +5339,12 @@ msgid "Allowance"
 msgstr ""
 
 #. translators: %d: delay days
-#: src/Modules/EcpayInvoice/Module.php:129
+#: src/Modules/EcpayInvoice/Module.php:130
 #, php-format
 msgid "The ECPay invoice is scheduled to be issued in %d days."
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Module.php:146
+#: src/Modules/EcpayInvoice/Module.php:147
 msgid "The scheduled ECPay invoice was cancelled because the order was cancelled, refunded or failed."
 msgstr ""
 
@@ -5320,19 +5366,21 @@ msgstr ""
 
 #. translators: 1: allowance number, 2: error message
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:57
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:242
 #, php-format
 msgid "ECPay allowance %1$s could not be voided: %2$s"
 msgstr ""
 
 #. translators: %s: allowance number
 #: src/Modules/EcpayInvoice/Operations/AllowanceInvalid.php:80
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:263
 #, php-format
 msgid "ECPay allowance %s was voided"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Invalid.php:19
-#: src/Modules/OrderLookup/InvoiceOps.php:208
-#: src/Modules/OrderLookup/InvoiceOps.php:212
+#: src/Modules/OrderLookup/InvoiceOps.php:214
+#: src/Modules/OrderLookup/InvoiceOps.php:218
 msgid "This order has no invoice to void."
 msgstr ""
 
@@ -5348,23 +5396,30 @@ msgstr ""
 msgid "ECPay invoice %1$s was voided — reason: %2$s"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:93
+#. translators: 1: invoice number or marker, 2: plugin or system name
+#: src/Modules/EcpayInvoice/Operations/Issue.php:30
+#: src/Modules/Shared/Compat/LegacyOrderData.php:171
+#, php-format
+msgid "This order already has invoice %1$s, issued by the %2$s, so it cannot be issued here."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Operations/Issue.php:102
 msgid "A printed invoice needs the buyer’s address, but this order has no billing or shipping address. Add an address to the order and issue the invoice again."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/EcpayInvoice/Operations/Issue.php:129
+#: src/Modules/EcpayInvoice/Operations/Issue.php:138
 #, php-format
 msgid "The ECPay invoice could not be issued: %s"
 msgstr ""
 
 #. translators: 1: invoice number, 2: random
-#: src/Modules/EcpayInvoice/Operations/Issue.php:152
+#: src/Modules/EcpayInvoice/Operations/Issue.php:161
 #, php-format
 msgid "ECPay invoice issued — number %1$s, random code %2$s"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Operations/Issue.php:216
+#: src/Modules/EcpayInvoice/Operations/Issue.php:225
 #: src/Modules/EcpayInvoice/Settings/SettingsTab.php:195
 #: src/Modules/EcpayShipping/Settings/SettingsTab.php:182
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:155
@@ -5372,20 +5427,65 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:47
-msgid "This order has no invoice from the ECPay official plugin to void."
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:90
+msgid "Another invoice action is running on this order. Please try again in a moment."
 msgstr ""
 
-#. translators: 1: invoice number, 2: error message
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:72
-#, php-format
-msgid "Invoice %1$s from the ECPay official plugin could not be voided: %2$s"
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:115
+msgid "This order has no ECPay invoice from an earlier plugin that can take an allowance here."
 msgstr ""
 
-#. translators: 1: invoice number, 2: reason
-#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:88
+#. translators: %d: amount still available for allowances
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:123
 #, php-format
-msgid "Invoice %1$s from the ECPay official plugin was voided — reason: %2$s"
+msgid "Enter an allowance amount between 1 and %d."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:130
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:70
+msgid "The issue date of this invoice could not be found, and ECPay needs it. Handle this invoice in the ECPay dashboard instead."
+msgstr ""
+
+#. translators: 1: invoice number, 2: plugin name, 3: error message
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:161
+#, php-format
+msgid "The allowance on invoice %1$s from the %2$s failed: %3$s"
+msgstr ""
+
+#. translators: 1: amount, 2: invoice number
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:179
+#, php-format
+msgid "ECPay accepted an allowance of %1$d on invoice %2$s but returned no allowance number. Check it in the ECPay dashboard."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:186
+msgid "ECPay returned no allowance number. Check the allowance in the ECPay dashboard."
+msgstr ""
+
+#. translators: 1: allowance number, 2: amount, 3: invoice number
+#: src/Modules/EcpayInvoice/Operations/LegacyAllowance.php:199
+#, php-format
+msgid "ECPay allowance %1$s was issued for %2$d on invoice %3$s"
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:48
+msgid "This order has no ECPay invoice from an earlier plugin that can be voided here."
+msgstr ""
+
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:61
+msgid "This invoice has allowances. Void the allowances first."
+msgstr ""
+
+#. translators: 1: invoice number, 2: plugin name, 3: error message
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:86
+#, php-format
+msgid "Invoice %1$s from the %2$s could not be voided: %3$s"
+msgstr ""
+
+#. translators: 1: invoice number, 2: plugin name, 3: reason
+#: src/Modules/EcpayInvoice/Operations/LegacyInvalid.php:103
+#, php-format
+msgid "Invoice %1$s from the %2$s was voided — reason: %3$s"
 msgstr ""
 
 #: src/Modules/EcpayInvoice/Operations/Query.php:28
@@ -5419,11 +5519,11 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:81
 #: src/Modules/Payuni/Api/PaymentResponse.php:89
 #: src/Modules/Payuni/Gateways/GatewayBase.php:121
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:82
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:106
 #: src/Modules/Shared/Email/PersonalizationTags.php:78
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:82
 #: src/Modules/Shared/Invoice/OrderListColumn.php:141
-#: src/Settings/SettingsPage.php:615
+#: src/Settings/SettingsPage.php:630
 msgid "Invoice number"
 msgstr ""
 
@@ -5431,7 +5531,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Operations/Query.php:74
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:83
 #: src/Modules/Payuni/Gateways/GatewayBase.php:123
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:83
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:107
 msgid "Issued at"
 msgstr ""
 
@@ -5539,7 +5639,7 @@ msgstr ""
 #: src/Modules/OrderLookup/InvoiceOps.php:105
 #: src/Modules/Shared/Admin/CardRenderers.php:342
 #: src/Modules/Shared/Admin/CardRenderers.php:407
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:241
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:244
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:53
 msgid "Paper"
 msgstr ""
@@ -5859,7 +5959,7 @@ msgstr ""
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:91
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:110
 #: src/Modules/PayuniShipping/Frontstage.php:329
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:116
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:168
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:95
 #: templates/emails/block/moksa-cvs-arrived.php:34
 #: templates/emails/moksa-cvs-arrived.php:36
@@ -8196,7 +8296,7 @@ msgstr ""
 
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:26
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:100
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:108
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:160
 msgid "Shipping type"
 msgstr ""
 
@@ -9010,7 +9110,7 @@ msgstr ""
 #: src/Modules/OrderLookup/DonationOrgOps.php:60
 #: src/Modules/OrderLookup/InvoiceOps.php:124
 #: src/Refund/InvoiceSync.php:79
-#: src/Refund/InvoiceSync.php:140
+#: src/Refund/InvoiceSync.php:163
 msgid "No e-invoice module is enabled."
 msgstr ""
 
@@ -9112,86 +9212,86 @@ msgid "(Note: this order already has invoice number %s. A new one is only issued
 msgstr ""
 
 #: src/Modules/OrderLookup/InvoiceOps.php:169
-#: src/Modules/OrderLookup/InvoiceOps.php:245
+#: src/Modules/OrderLookup/InvoiceOps.php:251
 msgid "The order or the invoice service could not be found."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:175
+#: src/Modules/OrderLookup/InvoiceOps.php:181
 #, php-format
 msgid "Could not issue: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:180
+#: src/Modules/OrderLookup/InvoiceOps.php:186
 #, php-format
 msgid "✅ E-invoice %2$s was issued for order #%1$s through %3$s."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:202
+#: src/Modules/OrderLookup/InvoiceOps.php:208
 msgid "Please provide a reason for voiding."
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: provider, 4: reason
-#: src/Modules/OrderLookup/InvoiceOps.php:223
+#: src/Modules/OrderLookup/InvoiceOps.php:229
 #, php-format
 msgid "Void e-invoice %2$s on order #%1$s through %3$s. Reason: %4$s."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:251
+#: src/Modules/OrderLookup/InvoiceOps.php:257
 #, php-format
 msgid "Could not void: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number
-#: src/Modules/OrderLookup/InvoiceOps.php:255
+#: src/Modules/OrderLookup/InvoiceOps.php:261
 #, php-format
 msgid "✅ E-invoice %2$s on order #%1$s was voided."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:275
+#: src/Modules/OrderLookup/InvoiceOps.php:281
 msgid "Please provide an allowance amount greater than 0."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:281
+#: src/Modules/OrderLookup/InvoiceOps.php:287
 msgid "This order has no invoice."
 msgstr ""
 
 #. translators: %s: provider name
-#: src/Modules/OrderLookup/InvoiceOps.php:285
+#: src/Modules/OrderLookup/InvoiceOps.php:291
 #, php-format
 msgid "%s does not support allowances."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:289
+#: src/Modules/OrderLookup/InvoiceOps.php:295
 msgid "This order has no issued invoice to raise an allowance against."
 msgstr ""
 
 #. translators: 1: amount, 2: order total
-#: src/Modules/OrderLookup/InvoiceOps.php:297
+#: src/Modules/OrderLookup/InvoiceOps.php:303
 #, php-format
 msgid "The allowance amount %1$d is larger than the order total %2$d."
 msgstr ""
 
 #. translators: 1: order number, 2: invoice number, 3: amount, 4: provider
-#: src/Modules/OrderLookup/InvoiceOps.php:312
+#: src/Modules/OrderLookup/InvoiceOps.php:318
 #, php-format
 msgid "Issue an allowance of NT$%3$d against invoice %2$s on order #%1$s through %4$s."
 msgstr ""
 
-#: src/Modules/OrderLookup/InvoiceOps.php:334
+#: src/Modules/OrderLookup/InvoiceOps.php:340
 msgid "The details are incomplete, so no allowance was issued."
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/OrderLookup/InvoiceOps.php:340
+#: src/Modules/OrderLookup/InvoiceOps.php:346
 #, php-format
 msgid "Could not issue the allowance: %s"
 msgstr ""
 
 #. translators: 1: order number, 2: amount
-#: src/Modules/OrderLookup/InvoiceOps.php:344
+#: src/Modules/OrderLookup/InvoiceOps.php:350
 #, php-format
 msgid "✅ An allowance of NT$%2$d was issued for order #%1$s."
 msgstr ""
@@ -9201,7 +9301,7 @@ msgid "Order number lookup — invoice, tracking and payment transaction numbers
 msgstr ""
 
 #: src/Modules/OrderLookup/Module.php:37
-#: src/Settings/SettingsPage.php:599
+#: src/Settings/SettingsPage.php:614
 msgid "Order number lookup"
 msgstr ""
 
@@ -9360,17 +9460,18 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:88
 #: src/Modules/OrderLookup/SearchableKeys.php:94
 #: src/Modules/OrderLookup/SearchableKeys.php:258
-#: src/Settings/SettingsPage.php:629
+#: src/Settings/SettingsPage.php:644
 msgid "Payment transaction ID"
 msgstr ""
 
 #: src/Modules/OrderLookup/SearchableKeys.php:160
 #: src/Modules/OrderLookup/SearchableKeys.php:259
+#: src/Modules/Shared/Compat/LegacyOrderData.php:136
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:103
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:114
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:226
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:527
-#: src/Settings/SettingsPage.php:636
+#: src/Settings/SettingsPage.php:651
 msgid "Tax ID"
 msgstr ""
 
@@ -9384,13 +9485,13 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
 #: src/Modules/Tappay/Api/IpnHandler.php:356
-#: src/Settings/SettingsPage.php:657
+#: src/Settings/SettingsPage.php:672
 msgid "Last four card digits"
 msgstr ""
 
 #: src/Modules/OrderLookup/SearchableKeys.php:214
 #: src/Modules/OrderLookup/SearchableKeys.php:263
-#: src/Settings/SettingsPage.php:664
+#: src/Settings/SettingsPage.php:679
 msgid "T-Cat tracking number"
 msgstr ""
 
@@ -9925,6 +10026,7 @@ msgid "Live member password (mem_password)"
 msgstr ""
 
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:95
+#: src/Modules/Shared/Compat/LegacyOrderData.php:133
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:86
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:101
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:190
@@ -10732,7 +10834,7 @@ msgid "The language the PAYUNi checkout is shown in."
 msgstr ""
 
 #: src/Modules/Payuni/Settings/SettingsTab.php:81
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:101
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:153
 #: src/Modules/Shared/Email/PersonalizationTags.php:48
 #: src/Modules/Shared/Invoice/CheckoutAssets.php:35
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:184
@@ -11244,7 +11346,7 @@ msgid "Update failed"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:61
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:51
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:65
 #: src/Modules/Shared/Invoice/OrderListColumn.php:82
 #: src/Modules/Shipping/Admin/ListCreateButton.php:122
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:39
@@ -11266,8 +11368,8 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:71
 #: src/Modules/Pchomepay/Module.php:101
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:87
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:109
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:120
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:161
 #: src/Modules/ShoplinePayments/Module.php:146
 #: src/Modules/Tappay/Module.php:100
 #: src/Refund/PendingPage.php:128
@@ -12541,57 +12643,129 @@ msgstr ""
 msgid "The payment status could not be looked up: "
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:49
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:51
 msgid "Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone."
 msgstr ""
 
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:57
+msgid "Allowance amount (whole NT dollars). The allowance is issued at ECPay right away."
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:62
+msgid "Void this allowance at ECPay?"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:64
+msgid "Working…"
+msgstr ""
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+#, php-format
+msgid "Allowance %s"
+msgstr ""
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+msgid "(voided)"
+msgstr ""
+
 #. translators: %s: void time
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:89
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:122
 #, php-format
 msgid "Voided in Moksa at %s"
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:98
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:132
+msgid "Issue an allowance"
+msgstr ""
+
+#. translators: %s: allowance number
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:143
+#, php-format
+msgid "Void allowance %s"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:150
 msgid "Void this invoice"
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:117
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:169
 #: templates/emails/moksa-cvs-arrived.php:42
 #: templates/emails/plain/moksa-cvs-arrived.php:26
 msgid "Store address"
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:121
-#: src/Modules/Shared/Compat/LegacyOrderData.php:39
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:173
+#: src/Modules/Shared/Compat/LegacyOrderData.php:75
 msgid "RY Tools"
 msgstr ""
 
 #. translators: %s: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderCards.php:134
+#: src/Modules/Shared/Compat/LegacyOrderCards.php:186
 #, php-format
 msgid "Recorded by the %s (read-only)"
 msgstr ""
 
 #: src/Modules/Shared/Compat/LegacyOrderData.php:28
-#: src/Modules/Shared/Compat/LegacyOrderData.php:114
+#: src/Modules/Shared/Compat/LegacyOrderData.php:55
+msgid "external system"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:40
+#: src/Modules/Shared/Compat/LegacyOrderData.php:236
 msgid "ECPay official plugin"
 msgstr ""
 
+#: src/Modules/Shared/Compat/LegacyOrderData.php:64
+msgid "woomp plugin"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:137
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:106
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:115
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:235
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:538
+msgid "Company name"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:139
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:118
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:122
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:125
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:259
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:271
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:564
+msgid "Donation code"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:141
+#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
+msgid "Carrier"
+msgstr ""
+
+#: src/Modules/Shared/Compat/LegacyOrderData.php:142
+#: src/Modules/Shared/Invoice/AdminIssueForm.php:70
+#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:110
+#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:215
+msgid "Carrier number"
+msgstr ""
+
 #. translators: 1: invoice number, 2: plugin name
-#: src/Modules/Shared/Compat/LegacyOrderData.php:72
+#: src/Modules/Shared/Compat/LegacyOrderData.php:194
 #, php-format
 msgid "No new invoice was issued: this order already has invoice %1$s, issued by the %2$s."
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:88
+#: src/Modules/Shared/Compat/LegacyOrderData.php:210
 msgid "RY Tools (ECPay)"
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:89
+#: src/Modules/Shared/Compat/LegacyOrderData.php:211
 msgid "RY Tools (NewebPay)"
 msgstr ""
 
-#: src/Modules/Shared/Compat/LegacyOrderData.php:90
+#: src/Modules/Shared/Compat/LegacyOrderData.php:212
 msgid "RY Tools (SmilePay)"
 msgstr ""
 
@@ -12714,16 +12888,16 @@ msgstr ""
 msgid "%s invoice details"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:351
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:354
 msgid "This service does not support allowances."
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:362
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:365
 msgid "This service does not support looking invoices up."
 msgstr ""
 
 #. translators: 1: provider name, 2: the details returned by the provider
-#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:374
+#: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:377
 #, php-format
 msgid "Invoice status looked up at %1$s — %2$s"
 msgstr ""
@@ -12762,32 +12936,10 @@ msgstr ""
 msgid "Order status changed (voided automatically)"
 msgstr ""
 
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:70
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:110
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:215
-msgid "Carrier number"
-msgstr ""
-
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:93
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:203
 #: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:482
 msgid "Carrier type"
-msgstr ""
-
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:106
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:115
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:235
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:538
-msgid "Company name"
-msgstr ""
-
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:118
-#: src/Modules/Shared/Invoice/AdminIssueForm.php:122
-#: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:125
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:259
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:271
-#: src/Modules/Shared/Invoice/InvoiceCheckoutFields.php:564
-msgid "Donation code"
 msgstr ""
 
 #: src/Modules/Shared/Invoice/AdminIssueForm.php:123
@@ -13253,10 +13405,6 @@ msgstr ""
 msgid "Store closed — please choose another pickup store"
 msgstr ""
 
-#: src/Modules/Shipping/Emails/EmailTrackingSection.php:65
-msgid "Carrier"
-msgstr ""
-
 #: src/Modules/Shipping/Emails/EmailTrackingSection.php:67
 msgid "Tracking link"
 msgstr ""
@@ -13453,39 +13601,49 @@ msgstr ""
 msgid "Copied"
 msgstr ""
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:52
-msgid "Switch RY statuses to Moksa statuses"
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:65
+msgid "Switch earlier plugin statuses to Moksa statuses"
 msgstr ""
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:80
-msgid "Switched from the RY Tools status (no email sent)."
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:94
+msgid "Switched from an earlier plugin's status (no email sent)."
 msgstr ""
 
 #. translators: %d: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:98
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:115
 #, php-format
 msgid "%d order was switched to a Moksa status."
 msgid_plural "%d orders were switched to Moksa statuses."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:108
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:125
 msgctxt "Order status"
 msgid "Awaiting pickup at store"
 msgstr ""
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:109
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:126
 msgctxt "Order status"
 msgid "Not picked up at store"
 msgstr ""
 
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:110
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:127
 msgctxt "Order status"
 msgid "In transit"
 msgstr ""
 
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:128
+msgctxt "Order status"
+msgid "Shipped (woomp)"
+msgstr ""
+
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:129
+msgctxt "Order status"
+msgid "Out for delivery (woomp)"
+msgstr ""
+
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:118
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:137
 #, php-format
 msgid "Awaiting pickup at store <span class=\"count\">(%s)</span>"
 msgid_plural "Awaiting pickup at store <span class=\"count\">(%s)</span>"
@@ -13493,7 +13651,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:120
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:139
 #, php-format
 msgid "Not picked up at store <span class=\"count\">(%s)</span>"
 msgid_plural "Not picked up at store <span class=\"count\">(%s)</span>"
@@ -13501,10 +13659,26 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of orders
-#: src/Modules/Shipping/Statuses/LegacyStatuses.php:122
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:141
 #, php-format
 msgid "In transit <span class=\"count\">(%s)</span>"
 msgid_plural "In transit <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of orders
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:143
+#, php-format
+msgid "Shipped (woomp) <span class=\"count\">(%s)</span>"
+msgid_plural "Shipped (woomp) <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of orders
+#: src/Modules/Shipping/Statuses/LegacyStatuses.php:145
+#, php-format
+msgid "Out for delivery (woomp) <span class=\"count\">(%s)</span>"
+msgid_plural "Out for delivery (woomp) <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -15421,48 +15595,60 @@ msgstr ""
 msgid "A refund needs your attention (order #%s)"
 msgstr ""
 
-#: src/Refund/InvoiceSync.php:87
+#. translators: %s: invoice number or marker
+#: src/Refund/InvoiceSync.php:90
+#, php-format
+msgid "The invoice (%s) was issued by an external system. Void it or issue the allowance in that system."
+msgstr ""
+
+#. translators: 1: invoice number, 2: plugin name
+#: src/Refund/InvoiceSync.php:100
+#, php-format
+msgid "Invoice %1$s was issued by the %2$s. Void it or issue an allowance from the order page (ECPay invoices) or in the invoice service dashboard."
+msgstr ""
+
+#: src/Refund/InvoiceSync.php:110
 msgid "The invoice was already voided."
 msgstr ""
 
-#: src/Refund/InvoiceSync.php:93
+#: src/Refund/InvoiceSync.php:116
 msgid "The invoice has not been issued yet. When it is issued, make sure the amount reflects this refund."
 msgstr ""
 
-#: src/Refund/InvoiceSync.php:108
+#: src/Refund/InvoiceSync.php:131
 msgid "This e-invoice service has no allowance API here. Issue the allowance in its dashboard."
 msgstr ""
 
 #. translators: 1: refund amount, 2: amount still available for allowances
-#: src/Refund/InvoiceSync.php:113
+#: src/Refund/InvoiceSync.php:136
 #, php-format
 msgid "The allowance of NT$%1$d is more than the NT$%2$d left on the invoice."
 msgstr ""
 
 #. translators: %s: refund ID
-#: src/Refund/InvoiceSync.php:144
+#: src/Refund/InvoiceSync.php:167
 #, php-format
 msgid "Refund #%s"
 msgstr ""
 
-#: src/Refund/InvoiceSync.php:164
+#: src/Refund/InvoiceSync.php:187
 msgid "The scheduled invoice could not be cancelled. Check it in the e-invoice dashboard."
 msgstr ""
 
 #. translators: 1: refund ID, 2: error message
-#: src/Refund/InvoiceSync.php:274
+#: src/Refund/InvoiceSync.php:297
 #, php-format
 msgid "The e-invoice step for refund #%1$s failed: %2$s. It is listed under WooCommerce > Refunds to review."
 msgstr ""
 
 #. translators: %s: order number
-#: src/Refund/InvoiceSync.php:282
+#: src/Refund/InvoiceSync.php:305
 #, php-format
 msgid "Refund invoice needs attention (order #%s)"
 msgstr ""
 
 #. translators: 1: order number, 2: error message, 3: admin URL
-#: src/Refund/InvoiceSync.php:285
+#: src/Refund/InvoiceSync.php:308
 #, php-format
 msgid ""
 "The e-invoice step for a refund on order #%1$s failed: %2$s\n"
@@ -15778,113 +15964,125 @@ msgstr ""
 msgid "Check the phone number is a Taiwanese mobile — 10 digits starting with 09. Dashes, spaces and a +886 country code are cleaned up before the check, so a customer typing 0912-345-678 or +886912345678 is accepted and the order stores 0912345678. Landlines are rejected."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:542
-msgid "Default country"
+#: src/Settings/SettingsPage.php:537
+msgid "Order screens"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:540
+msgid "Add a Phone column to the order list, with the billing and shipping phone numbers"
 msgstr ""
 
 #: src/Settings/SettingsPage.php:547
+msgid "On the order edit screen, show Taiwan addresses on one line after the name (display only — emails and saved data are unchanged)"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:557
+msgid "Default country"
+msgstr ""
+
+#: src/Settings/SettingsPage.php:562
 msgid "Single-country stores"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:551
+#: src/Settings/SettingsPage.php:566
 msgid "If you sell or ship to only one country and the WooCommerce default customer location is left empty, start new customers in that country so shipping options show at checkout. Saved customer addresses are never changed."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:559
+#: src/Settings/SettingsPage.php:574
 msgid "My Account"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:564
+#: src/Settings/SettingsPage.php:579
 msgid "Hide Downloads"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:567
+#: src/Settings/SettingsPage.php:582
 msgid "Remove \"Downloads\" from the My Account menu that customers see. Useful when you do not sell downloadable products."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:577
+#: src/Settings/SettingsPage.php:592
 msgid "Taiwan field order and widths"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:579
+#: src/Settings/SettingsPage.php:594
 msgid "Drag to reorder the fields and pick a 50% or 100% width. Works on its own — it does not need the Taiwan address tools above."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:584
+#: src/Settings/SettingsPage.php:599
 msgid "Turn this off to leave the checkout fields in the WooCommerce default order and width. Your layout is kept and comes back when you turn it on again."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:587
+#: src/Settings/SettingsPage.php:602
 msgid "Field order and width"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:589
+#: src/Settings/SettingsPage.php:604
 msgid "Half-width fields sit side by side only in pairs (for example Last name 50% + First name 50% on one row). A 50% field left on its own falls back to 100%. Applies to both classic and block checkout, except the email field: block checkout keeps it in its own Contact information step, so moving it only changes the classic checkout."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:601
+#: src/Settings/SettingsPage.php:616
 msgid "Let the WooCommerce order search box and the Ctrl+K command palette recognize Taiwan-specific numbers. Only numbers from enabled modules are searched."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:605
+#: src/Settings/SettingsPage.php:620
 msgid "Enable order number lookup"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:609
+#: src/Settings/SettingsPage.php:624
 msgid "Once enabled you can look up orders by the numbers below from the order list search box and the command palette."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:614
+#: src/Settings/SettingsPage.php:629
 msgid "Number types to search"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:669
+#: src/Settings/SettingsPage.php:684
 msgid "Tick the number types to include in the search. The more fields, the slower the search — tick only the ones you actually use."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:672
+#: src/Settings/SettingsPage.php:687
 msgid "Speed up with an index (recommended for stores with many orders)"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:676
+#: src/Settings/SettingsPage.php:691
 msgid "Store the searchable numbers in a dedicated index table so lookups stay fast as the store grows. The index is built in the background once enabled."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:716
+#: src/Settings/SettingsPage.php:731
 msgid "Payment modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:717
+#: src/Settings/SettingsPage.php:732
 msgid "Shipping modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:718
+#: src/Settings/SettingsPage.php:733
 msgid "E-invoice modules"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:719
+#: src/Settings/SettingsPage.php:734
 msgid "Checkout tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:720
+#: src/Settings/SettingsPage.php:735
 msgid "Tools"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:727
+#: src/Settings/SettingsPage.php:742
 msgid "Moksa — Taiwan toolkit"
 msgstr ""
 
-#: src/Settings/SettingsPage.php:728
+#: src/Settings/SettingsPage.php:743
 msgid "Enable the modules you need. Payment, shipping and e-invoicing can be mixed and matched freely."
 msgstr ""
 
 #. translators: %s is the link to module overview
-#: src/Settings/SettingsPage.php:776
+#: src/Settings/SettingsPage.php:791
 #, php-format
 msgid "This module is disabled, so the settings below have no effect. Enable it in %s first."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:777
+#: src/Settings/SettingsPage.php:792
 msgid "Module overview"
 msgstr ""
 

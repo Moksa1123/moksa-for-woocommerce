@@ -534,6 +534,21 @@ final class SettingsPage extends \WC_Settings_Page {
 				'default' => 'no',
 			],
 			[
+				'title'         => __( 'Order screens', 'moksa-for-woocommerce' ),
+				'id'            => \Moksafowo\Modules\Address\AdminAddressDisplay::OPTION_PHONE,
+				'type'          => 'checkbox',
+				'desc'          => __( 'Add a Phone column to the order list, with the billing and shipping phone numbers', 'moksa-for-woocommerce' ),
+				'default'       => 'no',
+				'checkboxgroup' => 'start',
+			],
+			[
+				'id'            => \Moksafowo\Modules\Address\AdminAddressDisplay::OPTION_ONE_LINE,
+				'type'          => 'checkbox',
+				'desc'          => __( 'On the order edit screen, show Taiwan addresses on one line after the name (display only — emails and saved data are unchanged)', 'moksa-for-woocommerce' ),
+				'default'       => 'no',
+				'checkboxgroup' => 'end',
+			],
+			[
 				'type' => 'sectionend',
 				'id'   => 'moksafowo_tw_phone_section',
 			],
