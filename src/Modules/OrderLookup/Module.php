@@ -75,12 +75,8 @@ final class Module extends AbstractModule {
 		if ( Table::is_enabled() && ! Index\TermIndex::uses_terms() ) {
 			Table::maybe_install();
 		}
-		// 排程延到 init 之後（woocommerce_init 時 Action Scheduler 還沒準備好）。
-		if ( did_action( 'init' ) ) {
-			self::maybe_start_index_build();
-		} else {
-			add_action( 'init', [ self::class, 'maybe_start_index_build' ], 20 );
-		}
+		// woocommerce_init 時 Action Scheduler 還沒準備好，等它好了再排。
+		\Moksafowo\Modules\Shared\Scheduler::when_ready( [ self::class, 'maybe_start_index_build' ] );
 		add_action( 'add_option_' . Table::ENABLED_OPTION, [ self::class, 'on_index_added' ], 10, 2 );
 		add_action( 'update_option_' . Table::ENABLED_OPTION, [ self::class, 'on_index_toggled' ], 10, 2 );
 		add_action( 'admin_init', [ self::class, 'maybe_handle_rebuild' ] );

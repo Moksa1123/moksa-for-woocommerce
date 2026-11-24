@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.26.1
+Stable tag: 1.26.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,10 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.26.2 - 2026-11-24 =
+* Fixed: Stores that used the order lookup index or customer messages before 1.22 now finish moving that data to the new storage in the background; the move never started before.
+* Fixed: The "add order note" ability is no longer exposed to MCP clients by default (for example through the MCP Adapter plugin), because it changes orders.
+
 = 1.26.1 - 2026-11-24 =
 * Fixed: Security: in test mode, ECPay and TapPay payments no longer mark orders as paid. They are put on hold with a note, and a warning shows in the admin while test mode is on.
 * Fixed: Security hardening for TapPay notices without an amount, SmilePay card callbacks and PAYUNi shipping logs (no customer details are logged).
@@ -306,6 +310,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.26.2 =
+Finishes moving older order lookup and customer message data to the new storage, and stops exposing the "add order note" ability to MCP clients by default.
 
 = 1.26.1 =
 Security fix. If ECPay or TapPay is still in test mode on a live store, turn it off: test-mode payments are now put on hold instead of being marked as paid.

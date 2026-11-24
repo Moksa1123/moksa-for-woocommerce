@@ -32,12 +32,8 @@ final class Migration {
 	public static function boot(): void {
 		add_action( self::HOOK, [ self::class, 'run_batch' ] );
 		add_action( self::CATCH_UP, [ self::class, 'catch_up' ] );
-		// 模組在 woocommerce_init 開機，那時 Action Scheduler 的資料儲存還沒初始化，排程會失敗；延到 init 之後。
-		if ( did_action( 'init' ) ) {
-			self::maybe_start();
-		} else {
-			add_action( 'init', [ self::class, 'maybe_start' ], 20 );
-		}
+		// 模組在 woocommerce_init 開機，那時 Action Scheduler 的資料儲存還沒初始化，排程會失敗。
+		\Moksafowo\Modules\Shared\Scheduler::when_ready( [ self::class, 'maybe_start' ] );
 	}
 
 	/** 舊站開始搬；停在「搬遷中」卻沒有排程（排程曾失敗、被清掉）時補排一次。 */

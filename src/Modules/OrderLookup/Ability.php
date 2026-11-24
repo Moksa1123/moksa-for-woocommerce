@@ -1346,8 +1346,9 @@ final class Ability {
 						'destructive' => false,
 						'idempotent'  => false,
 					],
+					// 會寫入訂單：不經任何 MCP 公開（本外掛、官方 MCP Adapter、WooCommerce 的都不列），只給站內 AI 助理（要使用者按確認）。
 					'mcp'          => [
-						'public' => true,
+						'public' => false,
 						'type'   => 'tool',
 					],
 				],
@@ -1634,7 +1635,10 @@ final class Ability {
 		$destructive = ! empty( $args['meta']['annotations']['destructive'] );
 		if ( $destructive ) {
 			$args['meta']['mcp']['public'] = false;
-			self::$mcp_hidden[ $name ]     = true;
+		}
+		// 註冊時就寫明不公開的（例如會寫入訂單的 add-order-note）也一併從 WooCommerce 的 MCP 排除。
+		if ( $destructive || false === ( $args['meta']['mcp']['public'] ?? null ) ) {
+			self::$mcp_hidden[ $name ] = true;
 		}
 		return $args;
 	}
