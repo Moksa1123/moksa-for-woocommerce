@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-19T20:27:54+00:00\n"
+"POT-Creation-Date: 2026-11-24T14:01:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -3882,67 +3882,67 @@ msgstr ""
 msgid "The card was saved, but the NT$%1$d card check could not be cancelled automatically: %2$s. Cancel it in the ECPay dashboard."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:320
+#: src/Modules/Ecpay/Api/BindHandler.php:321
 msgid "The card was saved with ECPay for subscription renewals."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Ecpay/Api/BindHandler.php:330
+#: src/Modules/Ecpay/Api/BindHandler.php:331
 #: src/Modules/Ecpay/Api/IpnHandler.php:116
 #, php-format
 msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
 #. translators: 1: ECPay trade number, 2: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:343
+#: src/Modules/Ecpay/Api/BindHandler.php:344
 #, php-format
 msgid "ECPay card payment completed — trade number %1$s (card ending %2$s)"
 msgstr ""
 
 #. translators: 1: ECPay message, 2: code
-#: src/Modules/Ecpay/Api/BindHandler.php:386
+#: src/Modules/Ecpay/Api/BindHandler.php:387
 #, php-format
 msgid "The customer tried to change the card, but ECPay could not check the new card: %1$s (code %2$d). The subscription still uses the current payment method."
 msgstr ""
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:404
+#: src/Modules/Ecpay/Api/BindHandler.php:405
 #, php-format
 msgid "A card change result from ECPay could not be confirmed (status %1$s, amount %2$d), so the subscription still uses the current payment method."
 msgstr ""
 
-#: src/Modules/Ecpay/Api/BindHandler.php:417
+#: src/Modules/Ecpay/Api/BindHandler.php:418
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:277
 msgid "A card change finished after this subscription ended, so the card was not saved."
 msgstr ""
 
 #. translators: %s: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:435
+#: src/Modules/Ecpay/Api/BindHandler.php:436
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:306
 #, php-format
 msgid "The customer changed the card for this subscription. Renewals now use the card ending %s."
 msgstr ""
 
 #. translators: 1: amount, 2: ECPay message, 3: ECPay trade number
-#: src/Modules/Ecpay/Api/BindHandler.php:453
+#: src/Modules/Ecpay/Api/BindHandler.php:454
 #, php-format
 msgid "The NT$%1$d card check could not be cancelled automatically: %2$s. Cancel trade %3$s in the ECPay dashboard before it is captured."
 msgstr ""
 
 #. translators: %s: subscription number
-#: src/Modules/Ecpay/Api/BindHandler.php:461
+#: src/Modules/Ecpay/Api/BindHandler.php:462
 #, php-format
 msgid "A card check needs to be cancelled (subscription #%s)"
 msgstr ""
 
 #. translators: %s: error message
-#: src/Modules/Ecpay/Api/BindHandler.php:475
+#: src/Modules/Ecpay/Api/BindHandler.php:476
 #, php-format
 msgid "ECPay reported a card payment, but it could not be confirmed with ECPay (%s). Check the payment in the ECPay dashboard before shipping."
 msgstr ""
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:487
+#: src/Modules/Ecpay/Api/BindHandler.php:488
 #, php-format
 msgid "An ECPay payment notice did not match the transaction at ECPay (status %1$s, amount %2$d), so the order was not marked as paid."
 msgstr ""
@@ -4011,8 +4011,8 @@ msgstr ""
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
 #: src/Modules/Ecpay/Api/IpnHandler.php:125
-#: src/Modules/Smilepay/Api/IpnHandler.php:201
-#: src/Modules/Smilepay/Api/IpnHandler.php:235
+#: src/Modules/Smilepay/Api/IpnHandler.php:204
+#: src/Modules/Smilepay/Api/IpnHandler.php:238
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:176
 #, php-format
 msgid "Payment method: %s"
@@ -4319,6 +4319,7 @@ msgid "Scan to pay with a TWQR wallet such as Taiwan Pay or E.SUN Wallet."
 msgstr ""
 
 #: src/Modules/Ecpay/Gateways/Unified.php:23
+#: src/Modules/Ecpay/Module.php:108
 #: src/Modules/Ecpay/PaymentTypeCatalog.php:13
 #: src/Modules/EcpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:42
@@ -6538,8 +6539,8 @@ msgstr ""
 #: src/Modules/Payuni/Api/PaymentRequest.php:763
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:272
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:289
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:282
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:299
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:153
 msgid "Status code"
 msgstr ""
@@ -6805,7 +6806,7 @@ msgstr ""
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
 #: src/Modules/ShoplinePayments/Module.php:150
-#: src/Modules/Tappay/Api/IpnHandler.php:355
+#: src/Modules/Tappay/Api/IpnHandler.php:361
 #: src/Modules/Tappay/Module.php:102
 msgid "Transaction ID"
 msgstr ""
@@ -7148,6 +7149,7 @@ msgstr ""
 #: src/Modules/Linepay/Settings/SettingsTab.php:28
 #: src/Modules/Paynow/Settings/SettingsTab.php:55
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:51
+#: src/Modules/Shared/Admin/SandboxNotice.php:47
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:52
 #: src/Modules/Tappay/Settings/SettingsTab.php:87
@@ -9007,6 +9009,7 @@ msgstr ""
 #: src/Modules/OrderLookup/ChannelOps.php:55
 #: src/Modules/OrderLookup/PaymentMethodOps.php:109
 #: src/Modules/Tappay/Module.php:22
+#: src/Modules/Tappay/Module.php:131
 #: src/Settings/SettingsPage.php:252
 msgid "TapPay"
 msgstr ""
@@ -9484,7 +9487,7 @@ msgstr ""
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Modules/Tappay/Api/IpnHandler.php:356
+#: src/Modules/Tappay/Api/IpnHandler.php:362
 #: src/Settings/SettingsPage.php:672
 msgid "Last four card digits"
 msgstr ""
@@ -11085,8 +11088,8 @@ msgid "Re-Create PAYUNi Shipping Order"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:72
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:271
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:288
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:281
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:298
 #: src/Modules/PayuniShipping/Frontstage.php:328
 msgid "Shipping transaction ID"
 msgstr ""
@@ -11121,7 +11124,7 @@ msgid "Amount to collect"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:135
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:273
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:283
 msgid "Status updated"
 msgstr ""
 
@@ -11257,22 +11260,22 @@ msgstr ""
 msgid "The PAYUNi shipment lookup failed: %s"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:264
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:274
 msgid "Received at the drop-off store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:265
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:275
 msgid "Waiting for the parcel to be dropped off"
 msgstr ""
 
 #. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:269
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:279
 #, php-format
 msgid "PAYUNi shipping status: %s"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:286
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:296
 #, php-format
 msgid "PAYUNi label print notice: %s"
 msgstr ""
@@ -12643,6 +12646,12 @@ msgstr ""
 msgid "The payment status could not be looked up: "
 msgstr ""
 
+#. translators: %s: payment provider name
+#: src/Modules/Shared/Admin/SandboxNotice.php:42
+#, php-format
+msgid "%s is in test mode. Payments reported in test mode are not real, so those orders are put on hold instead of being marked as paid. Turn off test mode before taking real payments."
+msgstr ""
+
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:51
 msgid "Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone."
 msgstr ""
@@ -12859,9 +12868,15 @@ msgid "The payment method description shown at checkout."
 msgstr ""
 
 #. translators: %s: payment method title
-#: src/Modules/Shared/Gateways/PaidOrder.php:51
+#: src/Modules/Shared/Gateways/PaidOrder.php:62
 #, php-format
 msgid "%s reported a payment for this order after it was cancelled. The order was not marked as paid. Check the payment, then fulfil the order or refund the customer."
+msgstr ""
+
+#. translators: %s: payment method title
+#: src/Modules/Shared/Gateways/PaidOrder.php:86
+#, php-format
+msgid "%s reported a successful payment while in test mode. Test payments are not real, so the order was not marked as paid. If this is a real order, turn off test mode in the payment settings and check the payment before fulfilling it."
 msgstr ""
 
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:131
@@ -14233,52 +14248,52 @@ msgid "Missing parameters"
 msgstr ""
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:188
+#: src/Modules/Smilepay/Api/IpnHandler.php:191
 #, php-format
 msgid "SmilePay authorized %1$s, which does not match the order total of %2$s. Please contact the store."
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:194
+#: src/Modules/Smilepay/Api/IpnHandler.php:197
 msgid "There is a problem with the order total. Please contact the store or place the order again."
 msgstr ""
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Api/IpnHandler.php:202
+#: src/Modules/Smilepay/Api/IpnHandler.php:205
 #, php-format
 msgid "Authorized amount: %s"
 msgstr ""
 
 #. translators: %s: datetime
-#: src/Modules/Smilepay/Api/IpnHandler.php:203
+#: src/Modules/Smilepay/Api/IpnHandler.php:206
 #, php-format
 msgid "Transaction time: %s"
 msgstr ""
 
 #. translators: %s: pay method
-#: src/Modules/Smilepay/Api/IpnHandler.php:218
+#: src/Modules/Smilepay/Api/IpnHandler.php:221
 #, php-format
 msgid "SmilePay reported that the card payment (%s) was authorized. SmilePay card results cannot be verified automatically, so confirm the authorization in the SmilePay back office, then change the order to Processing."
 msgstr ""
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:228
+#: src/Modules/Smilepay/Api/IpnHandler.php:231
 #, php-format
 msgid "SmilePay sent a failed-authorization notice for this already paid order. The order status was not changed; please check it in the SmilePay back office. Reason: %s"
 msgstr ""
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:236
+#: src/Modules/Smilepay/Api/IpnHandler.php:239
 #, php-format
 msgid "Authorization failed: %s"
 msgstr ""
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:242
+#: src/Modules/Smilepay/Api/IpnHandler.php:245
 #, php-format
 msgid "SmilePay could not authorize the card payment: %s"
 msgstr ""
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:300
+#: src/Modules/Smilepay/Api/IpnHandler.php:303
 msgid "Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually."
 msgstr ""
 
@@ -15033,63 +15048,67 @@ msgid "Used in test mode. Leave blank to use the test credit card Merchant ID."
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Tappay/Api/IpnHandler.php:65
+#: src/Modules/Tappay/Api/IpnHandler.php:70
 #, php-format
 msgid "TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
+#: src/Modules/Tappay/Api/IpnHandler.php:74
+msgid "TapPay reported a payment without an amount, so it could not be checked against the order total. The order was not marked as paid; please check the payment in the TapPay portal."
+msgstr ""
+
 #. translators: 1: transaction id in the notice, 2: transaction id stored on the order
-#: src/Modules/Tappay/Api/IpnHandler.php:87
+#: src/Modules/Tappay/Api/IpnHandler.php:93
 #, php-format
 msgid "TapPay sent a payment notice for transaction %1$s, but this order was charged as transaction %2$s. The order was not marked as paid; please check it in the TapPay portal."
 msgstr ""
 
 #. translators: %s: TapPay status code
-#: src/Modules/Tappay/Api/IpnHandler.php:103
+#: src/Modules/Tappay/Api/IpnHandler.php:109
 #, php-format
 msgid "TapPay sent a notice (status code %s) for this already paid order. The order was not changed."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:146
+#: src/Modules/Tappay/Api/IpnHandler.php:152
 msgid "Your payment is still being confirmed. We will update the order as soon as TapPay confirms it, so there is no need to pay again."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:156
+#: src/Modules/Tappay/Api/IpnHandler.php:162
 msgid "The 3-D Secure check did not finish, or the payment failed. Please try again."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:195
+#: src/Modules/Tappay/Api/IpnHandler.php:201
 msgid "The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:239
+#: src/Modules/Tappay/Api/IpnHandler.php:245
 msgid "TapPay still has no confirmed transaction for this order. Check it in the TapPay portal; if the customer was not charged, change this order to Failed so it can be paid again."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:332
+#: src/Modules/Tappay/Api/IpnHandler.php:338
 msgid "This transaction was partially refunded in the TapPay dashboard."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:333
+#: src/Modules/Tappay/Api/IpnHandler.php:339
 msgid "This transaction was refunded in the TapPay dashboard."
 msgstr ""
 
 #. translators: %s: payment method title
-#: src/Modules/Tappay/Api/IpnHandler.php:351
+#: src/Modules/Tappay/Api/IpnHandler.php:357
 #, php-format
 msgid "%s payment completed"
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:367
+#: src/Modules/Tappay/Api/IpnHandler.php:373
 msgid "TapPay is waiting for the payment to be confirmed."
 msgstr ""
 
-#: src/Modules/Tappay/Api/IpnHandler.php:372
+#: src/Modules/Tappay/Api/IpnHandler.php:378
 msgid "The TapPay transaction was cancelled."
 msgstr ""
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Api/IpnHandler.php:382
+#: src/Modules/Tappay/Api/IpnHandler.php:388
 #: src/Modules/Tappay/Gateways/Credit.php:269
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
@@ -15379,36 +15398,36 @@ msgstr ""
 msgid "Bank settlement"
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:174
+#: src/Modules/Tappay/Module.php:177
 msgid "Please fill in all the card details."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:175
+#: src/Modules/Tappay/Module.php:178
 msgid "No payment token was returned. Please check the card number."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:207
+#: src/Modules/Tappay/Module.php:210
 msgid "Payment service is unavailable. Please try again later."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:208
+#: src/Modules/Tappay/Module.php:211
 msgid "This payment method is not available on this store."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:209
-#: src/Modules/Tappay/Module.php:245
+#: src/Modules/Tappay/Module.php:212
+#: src/Modules/Tappay/Module.php:248
 msgid "Could not start the payment. Please try again."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:246
+#: src/Modules/Tappay/Module.php:249
 msgid "Please pay with the button above."
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:247
+#: src/Modules/Tappay/Module.php:250
 msgid "Pay with Apple Pay"
 msgstr ""
 
-#: src/Modules/Tappay/Module.php:248
+#: src/Modules/Tappay/Module.php:251
 msgid "Pay with Samsung Pay"
 msgstr ""
 
@@ -15766,6 +15785,10 @@ msgstr ""
 
 #: src/Settings/SecretFields.php:72
 msgid "For security the saved value is not shown. Leave it as is to keep it."
+msgstr ""
+
+#: src/Settings/SecretStore.php:226
+msgid "WordPress can now keep payment, shipping and invoice keys in its encrypted secret storage, but it is not set up on this site yet. Your keys keep working as before. To turn it on, follow the Secrets item under Tools → Site Health."
 msgstr ""
 
 #: src/Settings/SettingsPage.php:25

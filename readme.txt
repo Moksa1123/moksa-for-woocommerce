@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.26.0
+Stable tag: 1.26.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,10 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.26.1 - 2026-11-24 =
+* Fixed: Security: in test mode, ECPay and TapPay payments no longer mark orders as paid. They are put on hold with a note, and a warning shows in the admin while test mode is on.
+* Fixed: Security hardening for TapPay notices without an amount, SmilePay card callbacks and PAYUNi shipping logs (no customer details are logged).
+
 = 1.26.0 - 2026-11-20 =
 * New: Moving from woomp: ECPay invoices issued by woomp are recognised, so no second invoice is issued for those orders, and they can be voided or given an allowance from the order page. woomp's Shipped and Out for delivery order statuses stay visible and can be switched to Moksa statuses in bulk.
 * New: Orders whose invoice was issued by another system (for example an ERP) can be marked with the `_moksafowo_invoice_external` order field: no invoice is issued for them and refunds never void or credit that invoice.
@@ -302,6 +306,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.26.1 =
+Security fix. If ECPay or TapPay is still in test mode on a live store, turn it off: test-mode payments are now put on hold instead of being marked as paid.
 
 = 1.26.0 =
 Adds a migration path from woomp (invoices, order statuses and Taiwan county names). Nothing changes for existing data until you use the new tools.

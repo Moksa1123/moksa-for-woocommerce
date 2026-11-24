@@ -261,15 +261,17 @@ abstract class AbstractDeviceWalletGateway extends \WC_Payment_Gateway {
 			$order->update_meta_data( Keys::TAPPAY_AUTH_CODE, $auth_code );
 		}
 		$order->update_meta_data( Keys::TAPPAY_TRANSACTION_STATUS, '0' );
-		$order->add_order_note(
-			sprintf(
-				/* translators: 1: payment method name, 2: rec_trade_id */
-				__( '%1$s payment completed — transaction ID %2$s', 'moksa-for-woocommerce' ),
-				$this->default_title(),
-				$rec_trade_id
-			)
-		);
-		$order->payment_complete( $rec_trade_id );
+		// 測試模式的錢包付款不是真的收款，不入帳（見 PaidOrder::complete）。
+		if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $rec_trade_id, Helper::is_sandbox() ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: payment method name, 2: rec_trade_id */
+					__( '%1$s payment completed — transaction ID %2$s', 'moksa-for-woocommerce' ),
+					$this->default_title(),
+					$rec_trade_id
+				)
+			);
+		}
 		$order->save();
 
 		return [

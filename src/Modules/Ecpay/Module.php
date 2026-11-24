@@ -104,6 +104,9 @@ final class Module extends AbstractGatewayModule {
 		SubscriptionRenewal::boot();
 
 		if ( is_admin() ) {
+			if ( Api\Helper::is_sandbox() ) {
+				\Moksafowo\Modules\Shared\Admin\SandboxNotice::add( __( 'ECPay', 'moksa-for-woocommerce' ), $this->settings_section(), 'moksafowo_ecpay' );
+			}
 			Admin\OrderMetaBox::init();
 			Admin\CreditLifecycleBox::init();
 		}

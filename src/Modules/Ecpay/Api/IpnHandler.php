@@ -80,15 +80,12 @@ final class IpnHandler {
 		}
 
 		// 綠界後台「模擬付款」也會送 RtnCode=1，但 SimulatePaid=1 代表沒有真的收到款，不可出貨。
-		// 正式環境只留備註（同綠界官方外掛）；沙箱讓流程照跑，方便測試。
-		if ( 1 === $rtn_code && '1' === (string) ( $posted['SimulatePaid'] ?? '0' ) ) {
-			if ( ! Helper::is_sandbox() ) {
-				$order->add_order_note( __( 'ECPay sent a simulated payment notice from its merchant dashboard. No money was received, so the order was not marked as paid.', 'moksa-for-woocommerce' ) );
-				$order->save();
-				echo '1|OK';
-				exit;
-			}
-			$order->add_order_note( __( 'This is a simulated ECPay payment (test mode). No money was received.', 'moksa-for-woocommerce' ) );
+		// 正式環境只留備註（同綠界官方外掛）；沙箱讓流程照跑，但測試模式的付款一律轉保留（PaidOrder::complete），備註也寫在那裡。
+		if ( 1 === $rtn_code && '1' === (string) ( $posted['SimulatePaid'] ?? '0' ) && ! Helper::is_sandbox() ) {
+			$order->add_order_note( __( 'ECPay sent a simulated payment notice from its merchant dashboard. No money was received, so the order was not marked as paid.', 'moksa-for-woocommerce' ) );
+			$order->save();
+			echo '1|OK';
+			exit;
 		}
 
 		$order->update_meta_data( Keys::ECPAY_TRADE_NO, $trade_no );
@@ -118,7 +115,7 @@ final class IpnHandler {
 							$order->get_total()
 						)
 					);
-				} elseif ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {
+				} elseif ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no, Helper::is_sandbox() ) ) {
 					$order->add_order_note(
 						sprintf(
 						/* translators: %s: 中文化的付款方式名稱 */

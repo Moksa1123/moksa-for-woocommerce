@@ -398,6 +398,9 @@ final class Keys {
 	// 取消後才收到付款而轉保留的訂單（之後同一張單的付款通知都不再自動入帳）.
 	public const PAID_AFTER_CANCEL = '_moksafowo_paid_after_cancel';
 
+	// 測試模式收到付款成功通知而轉保留的訂單（測試環境沒有實際收款，不自動入帳）.
+	public const SANDBOX_PAYMENT_HELD = '_moksafowo_sandbox_payment_held';
+
 	/**
 	 * 可以拿來再次扣款的卡片憑證。解除安裝時只清這些（使用者 2026-11-15 決定：交易紀錄保留、憑證清掉），
 	 * 外掛移除後它們已沒有用途，留著只是風險。新增會記住卡片的金流時要加進來。

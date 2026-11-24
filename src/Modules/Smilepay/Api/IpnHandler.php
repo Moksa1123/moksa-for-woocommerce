@@ -171,7 +171,10 @@ final class IpnHandler {
 			$payment_title = $order->get_payment_method_title();
 		}
 
-		$order->update_meta_data( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
+		// 已付款的單不再覆寫速買配追蹤碼：回呼網址顧客看得到，可以拿來改掉自己已付款訂單的追蹤碼。
+		if ( ! $order->is_paid() ) {
+			$order->update_meta_data( Keys::SMILEPAY_PAY_SMILEPAY_NO, $smseid );
+		}
 
 		if ( 'A' === $classif && '1' === $response_id ) {
 			if ( ! $order->is_paid() && ! self::amount_matches( $order, $amount ) ) {

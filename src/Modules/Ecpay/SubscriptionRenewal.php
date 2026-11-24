@@ -127,7 +127,7 @@ final class SubscriptionRenewal {
 		}
 
 		if ( $resp['ok'] && '1' === (string) ( $data['OrderInfo']['TradeStatus'] ?? '' ) ) {
-			BindHandler::apply_result( $renewal, $data );
+			BindHandler::apply_result( $renewal, $data, false, true );
 			return;
 		}
 

@@ -300,15 +300,17 @@ final class Credit extends \WC_Payment_Gateway {
 			$order->update_meta_data( Keys::TAPPAY_AUTH_CODE, $auth_code );
 		}
 		$order->update_meta_data( Keys::TAPPAY_TRANSACTION_STATUS, '0' );
-		$order->payment_complete( $rec_trade_id );
-		$order->add_order_note(
-			sprintf(
-				/* translators: 1: rec_trade_id, 2: card last4 */
-				__( 'TapPay card payment completed — transaction ID %1$s (card ending %2$s)', 'moksa-for-woocommerce' ),
-				$rec_trade_id,
-				$last4
-			)
-		);
+		// 測試模式顧客用公開的測試卡號就能刷過，不入帳（見 PaidOrder::complete）。
+		if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, $rec_trade_id, Helper::is_sandbox() ) ) {
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: rec_trade_id, 2: card last4 */
+					__( 'TapPay card payment completed — transaction ID %1$s (card ending %2$s)', 'moksa-for-woocommerce' ),
+					$rec_trade_id,
+					$last4
+				)
+			);
+		}
 		$order->save();
 
 		if ( function_exists( 'WC' ) && WC()->cart ) {

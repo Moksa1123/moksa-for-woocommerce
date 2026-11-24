@@ -58,16 +58,29 @@ final class IpnHandler {
 			echo 'payment method mismatch';
 			exit;
 		}
-		// 成功通知的金額要跟訂單一致。
-		if ( 0 === (int) ( $payload['status'] ?? -1 ) && isset( $payload['amount'] ) && (int) $payload['amount'] !== (int) round( (float) $order->get_total() ) ) {
-			$note = sprintf(
-				/* translators: 1: paid amount, 2: order total */
-				__( 'TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
-				(int) $payload['amount'],
-				$order->get_total()
+		// 成功通知的金額要跟訂單一致；沒帶金額就沒辦法比對，當成不符（同 apply_status 的判斷：有 status 看 status，沒有才看 record_status）。
+		$reports_paid = array_key_exists( 'status', $payload )
+			? 0 === (int) $payload['status']
+			: in_array( (int) ( $payload['record_status'] ?? -1 ), [ 0, 1 ], true );
+		$has_amount   = isset( $payload['amount'] ) && '' !== (string) $payload['amount'];
+		if ( $reports_paid && ( ! $has_amount || (int) $payload['amount'] !== (int) round( (float) $order->get_total() ) ) ) {
+			$note = $has_amount
+				? sprintf(
+					/* translators: 1: paid amount, 2: order total */
+					__( 'TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order.', 'moksa-for-woocommerce' ),
+					(int) $payload['amount'],
+					$order->get_total()
+				)
+				: __( 'TapPay reported a payment without an amount, so it could not be checked against the order total. The order was not marked as paid; please check the payment in the TapPay portal.', 'moksa-for-woocommerce' );
+			Helper::warn(
+				'notify amount missing or mismatched — order not marked as paid',
+				[
+					'order_id' => $order->get_id(),
+					'amount'   => $has_amount ? (int) $payload['amount'] : null,
+				]
 			);
-			// 已付款的訂單不被另一筆通知打回保留中，只留備註。
-			if ( $order->is_paid() ) {
+			// 已付款的訂單不被另一筆通知打回保留中，只留備註；已經保留中時 update_status 不會寫備註。
+			if ( $order->is_paid() || $order->has_status( 'on-hold' ) ) {
 				$order->add_order_note( $note );
 			} else {
 				$order->update_status( 'on-hold', $note );
@@ -341,7 +354,7 @@ final class IpnHandler {
 			return;
 		}
 		if ( $paid ) {
-			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $rec_trade_id ) ) {
+			if ( ! $order->is_paid() && \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $rec_trade_id, Helper::is_sandbox() ) ) {
 				\Moksafowo\Modules\Tappay\SubscriptionRenewal::promote_pending_card( $order );
 				// 同一個通知網址也收 LINE Pay、街口等錢包付款，不能寫死「信用卡」；錢包沒有卡號末四碼，空值不印。
 				$order->add_order_note(

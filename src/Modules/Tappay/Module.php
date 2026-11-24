@@ -127,6 +127,9 @@ final class Module extends AbstractGatewayModule {
 
 	protected function boot_extras(): void {
 		SubscriptionRenewal::boot();
+		if ( is_admin() && Helper::is_sandbox() ) {
+			\Moksafowo\Modules\Shared\Admin\SandboxNotice::add( __( 'TapPay', 'moksa-for-woocommerce' ), $this->settings_section(), 'moksafowo_tappay' );
+		}
 		add_filter(
 			'moksafowo_payment_query_handlers',
 			static function ( array $h ): array {

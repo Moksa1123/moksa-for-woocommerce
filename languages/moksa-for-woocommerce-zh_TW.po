@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
-"PO-Revision-Date: 2026-11-19 00:00+0800\n"
+"PO-Revision-Date: 2026-11-24 00:00+0800\n"
 "Last-Translator: Moksa <support@moksaweb.com>\n"
 "Language-Team: Traditional Chinese (Taiwan)\n"
 "Language: zh_TW\n"
@@ -3883,67 +3883,67 @@ msgstr "綠界刷卡失敗：%1$s（代碼 %2$d）"
 msgid "The card was saved, but the NT$%1$d card check could not be cancelled automatically: %2$s. Cancel it in the ECPay dashboard."
 msgstr "卡片已綁定，但 NT$%1$d 的驗卡授權無法自動取消：%2$s。請到綠界廠商後台放棄這筆授權。"
 
-#: src/Modules/Ecpay/Api/BindHandler.php:320
+#: src/Modules/Ecpay/Api/BindHandler.php:321
 msgid "The card was saved with ECPay for subscription renewals."
 msgstr "已在綠界綁定信用卡，供訂閱續扣使用。"
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Ecpay/Api/BindHandler.php:330
+#: src/Modules/Ecpay/Api/BindHandler.php:331
 #: src/Modules/Ecpay/Api/IpnHandler.php:116
 #, php-format
 msgid "ECPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "綠界回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
 #. translators: 1: ECPay trade number, 2: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:343
+#: src/Modules/Ecpay/Api/BindHandler.php:344
 #, php-format
 msgid "ECPay card payment completed — trade number %1$s (card ending %2$s)"
 msgstr "綠界刷卡成功，交易編號 %1$s（卡號末四碼 %2$s）"
 
 #. translators: 1: ECPay message, 2: code
-#: src/Modules/Ecpay/Api/BindHandler.php:386
+#: src/Modules/Ecpay/Api/BindHandler.php:387
 #, php-format
 msgid "The customer tried to change the card, but ECPay could not check the new card: %1$s (code %2$d). The subscription still uses the current payment method."
 msgstr "顧客嘗試換卡，但綠界無法驗證新卡：%1$s（代碼 %2$d）。訂閱仍使用原本的付款方式。"
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:404
+#: src/Modules/Ecpay/Api/BindHandler.php:405
 #, php-format
 msgid "A card change result from ECPay could not be confirmed (status %1$s, amount %2$d), so the subscription still uses the current payment method."
 msgstr "無法向綠界確認換卡結果（狀態 %1$s，金額 %2$d），訂閱仍使用原本的付款方式。"
 
-#: src/Modules/Ecpay/Api/BindHandler.php:417
+#: src/Modules/Ecpay/Api/BindHandler.php:418
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:277
 msgid "A card change finished after this subscription ended, so the card was not saved."
 msgstr "換卡完成時這個訂閱已經結束，所以沒有儲存這張卡。"
 
 #. translators: %s: card last four digits
-#: src/Modules/Ecpay/Api/BindHandler.php:435
+#: src/Modules/Ecpay/Api/BindHandler.php:436
 #: src/Modules/ShoplinePayments/Api/WebhookHandler.php:306
 #, php-format
 msgid "The customer changed the card for this subscription. Renewals now use the card ending %s."
 msgstr "顧客已更換這個訂閱的信用卡，之後續扣改用末四碼 %s 的卡。"
 
 #. translators: 1: amount, 2: ECPay message, 3: ECPay trade number
-#: src/Modules/Ecpay/Api/BindHandler.php:453
+#: src/Modules/Ecpay/Api/BindHandler.php:454
 #, php-format
 msgid "The NT$%1$d card check could not be cancelled automatically: %2$s. Cancel trade %3$s in the ECPay dashboard before it is captured."
 msgstr "NT$%1$d 的驗卡授權無法自動取消：%2$s。請在請款前到綠界後台取消交易 %3$s。"
 
 #. translators: %s: subscription number
-#: src/Modules/Ecpay/Api/BindHandler.php:461
+#: src/Modules/Ecpay/Api/BindHandler.php:462
 #, php-format
 msgid "A card check needs to be cancelled (subscription #%s)"
 msgstr "有一筆驗卡授權需要取消（訂閱 #%s）"
 
 #. translators: %s: error message
-#: src/Modules/Ecpay/Api/BindHandler.php:475
+#: src/Modules/Ecpay/Api/BindHandler.php:476
 #, php-format
 msgid "ECPay reported a card payment, but it could not be confirmed with ECPay (%s). Check the payment in the ECPay dashboard before shipping."
 msgstr "綠界通知刷卡成功，但向綠界查詢時無法確認（%s）。請先到綠界廠商後台確認付款再出貨。"
 
 #. translators: 1: ECPay status, 2: amount
-#: src/Modules/Ecpay/Api/BindHandler.php:487
+#: src/Modules/Ecpay/Api/BindHandler.php:488
 #, php-format
 msgid "An ECPay payment notice did not match the transaction at ECPay (status %1$s, amount %2$d), so the order was not marked as paid."
 msgstr "綠界付款通知與綠界端的交易對不上（狀態 %1$s，金額 %2$d），訂單沒有標為已付款。"
@@ -4012,8 +4012,8 @@ msgstr "這是綠界模擬付款（測試模式），並未實際收到款項。
 #. translators: %s: 中文化的付款方式名稱
 #. translators: %s: pay method
 #: src/Modules/Ecpay/Api/IpnHandler.php:125
-#: src/Modules/Smilepay/Api/IpnHandler.php:201
-#: src/Modules/Smilepay/Api/IpnHandler.php:235
+#: src/Modules/Smilepay/Api/IpnHandler.php:204
+#: src/Modules/Smilepay/Api/IpnHandler.php:238
 #: src/Modules/Smilepay/Gateways/AbstractSmilepayGateway.php:176
 #, php-format
 msgid "Payment method: %s"
@@ -4320,6 +4320,7 @@ msgid "Scan to pay with a TWQR wallet such as Taiwan Pay or E.SUN Wallet."
 msgstr "使用台灣 Pay / 玉山 Wallet 等 TWQR 聯盟錢包掃碼付款。"
 
 #: src/Modules/Ecpay/Gateways/Unified.php:23
+#: src/Modules/Ecpay/Module.php:108
 #: src/Modules/Ecpay/PaymentTypeCatalog.php:13
 #: src/Modules/EcpayInvoice/Operations/AutoInvalid.php:20
 #: src/Modules/OrderLookup/InvoiceOps.php:42
@@ -6539,8 +6540,8 @@ msgstr "綠界物流編號"
 #: src/Modules/Payuni/Api/PaymentRequest.php:763
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:272
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:289
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:282
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:299
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:153
 msgid "Status code"
 msgstr "狀態碼"
@@ -6806,7 +6807,7 @@ msgstr "LINE Pay"
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:49
 #: src/Modules/Pchomepay/Module.php:105
 #: src/Modules/ShoplinePayments/Module.php:150
-#: src/Modules/Tappay/Api/IpnHandler.php:355
+#: src/Modules/Tappay/Api/IpnHandler.php:361
 #: src/Modules/Tappay/Module.php:102
 msgid "Transaction ID"
 msgstr "交易編號"
@@ -7149,6 +7150,7 @@ msgstr "顧客在結帳頁看到的說明（顯示在付款方式名稱下方）
 #: src/Modules/Linepay/Settings/SettingsTab.php:28
 #: src/Modules/Paynow/Settings/SettingsTab.php:55
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:51
+#: src/Modules/Shared/Admin/SandboxNotice.php:47
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:105
 #: src/Modules/Smilepay/Settings/SettingsTab.php:52
 #: src/Modules/Tappay/Settings/SettingsTab.php:87
@@ -9006,6 +9008,7 @@ msgstr "支付連付款"
 #: src/Modules/OrderLookup/ChannelOps.php:55
 #: src/Modules/OrderLookup/PaymentMethodOps.php:109
 #: src/Modules/Tappay/Module.php:22
+#: src/Modules/Tappay/Module.php:131
 #: src/Settings/SettingsPage.php:252
 msgid "TapPay"
 msgstr "TapPay 拍付"
@@ -9483,7 +9486,7 @@ msgstr "統一編號"
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
 #: src/Modules/Payuni/Gateways/TraitCreditInstallment.php:69
-#: src/Modules/Tappay/Api/IpnHandler.php:356
+#: src/Modules/Tappay/Api/IpnHandler.php:362
 #: src/Settings/SettingsPage.php:672
 msgid "Last four card digits"
 msgstr "卡末四碼"
@@ -11084,8 +11087,8 @@ msgid "Re-Create PAYUNi Shipping Order"
 msgstr "重新建立 PAYUNi 物流訂單"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:72
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:271
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:288
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:281
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:298
 #: src/Modules/PayuniShipping/Frontstage.php:328
 msgid "Shipping transaction ID"
 msgstr "物流交易編號"
@@ -11120,7 +11123,7 @@ msgid "Amount to collect"
 msgstr "代收金額"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:135
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:273
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:283
 msgid "Status updated"
 msgstr "狀態時間"
 
@@ -11256,22 +11259,22 @@ msgstr "PAYUNi 建立物流單失敗：%s"
 msgid "The PAYUNi shipment lookup failed: %s"
 msgstr "PAYUNi 物流單查詢失敗：%s"
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:264
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:274
 msgid "Received at the drop-off store"
 msgstr "門市已收件"
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:265
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:275
 msgid "Waiting for the parcel to be dropped off"
 msgstr "等待商店寄貨"
 
 #. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:269
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:279
 #, php-format
 msgid "PAYUNi shipping status: %s"
 msgstr "PAYUNi 貨態：%s"
 
 #. translators: %s: PAYUNi message
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:286
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:296
 #, php-format
 msgid "PAYUNi label print notice: %s"
 msgstr "PAYUNi 列印通知：%s"
@@ -12641,6 +12644,12 @@ msgstr "金流服務商回報："
 msgid "The payment status could not be looked up: "
 msgstr "查詢付款狀態失敗："
 
+#. translators: %s: payment provider name
+#: src/Modules/Shared/Admin/SandboxNotice.php:42
+#, php-format
+msgid "%s is in test mode. Payments reported in test mode are not real, so those orders are put on hold instead of being marked as paid. Turn off test mode before taking real payments."
+msgstr "%s 目前是測試模式。測試模式的付款不會實際收款，這些訂單會改成保留中，不會標成已付款。正式收款前請關掉測試模式。"
+
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:51
 msgid "Reason for voiding (up to 20 characters). The invoice is voided at ECPay right away and cannot be undone."
 msgstr "作廢原因（20 字以內）。送出後會立即在綠界作廢，無法復原。"
@@ -12857,10 +12866,16 @@ msgid "The payment method description shown at checkout."
 msgstr "結帳頁付款方式描述。"
 
 #. translators: %s: payment method title
-#: src/Modules/Shared/Gateways/PaidOrder.php:51
+#: src/Modules/Shared/Gateways/PaidOrder.php:62
 #, php-format
 msgid "%s reported a payment for this order after it was cancelled. The order was not marked as paid. Check the payment, then fulfil the order or refund the customer."
 msgstr "%s 在這筆訂單取消後才回報收到付款，訂單沒有改成已付款。請先核對款項，再決定出貨或退款給顧客。"
+
+#. translators: %s: payment method title
+#: src/Modules/Shared/Gateways/PaidOrder.php:86
+#, php-format
+msgid "%s reported a successful payment while in test mode. Test payments are not real, so the order was not marked as paid. If this is a real order, turn off test mode in the payment settings and check the payment before fulfilling it."
+msgstr "%s 在測試模式下回報付款成功。測試模式的付款不會實際收款，所以訂單沒有標成已付款。如果這是正式訂單，請到金流設定關掉測試模式，並確認款項後再出貨。"
 
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:131
 msgid "Invoice issued:"
@@ -14218,52 +14233,52 @@ msgid "Missing parameters"
 msgstr "缺乏參數"
 
 #. translators: 1: reported amount, 2: order total
-#: src/Modules/Smilepay/Api/IpnHandler.php:188
+#: src/Modules/Smilepay/Api/IpnHandler.php:191
 #, php-format
 msgid "SmilePay authorized %1$s, which does not match the order total of %2$s. Please contact the store."
 msgstr "SmilePay 授權金額 %1$s 與訂單金額 %2$s 不符，請聯絡商家。"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:194
+#: src/Modules/Smilepay/Api/IpnHandler.php:197
 msgid "There is a problem with the order total. Please contact the store or place the order again."
 msgstr "訂單金額有誤，請聯絡商家或重新下單。"
 
 #. translators: %s: amount
-#: src/Modules/Smilepay/Api/IpnHandler.php:202
+#: src/Modules/Smilepay/Api/IpnHandler.php:205
 #, php-format
 msgid "Authorized amount: %s"
 msgstr "授權金額：%s"
 
 #. translators: %s: datetime
-#: src/Modules/Smilepay/Api/IpnHandler.php:203
+#: src/Modules/Smilepay/Api/IpnHandler.php:206
 #, php-format
 msgid "Transaction time: %s"
 msgstr "交易時間：%s"
 
 #. translators: %s: pay method
-#: src/Modules/Smilepay/Api/IpnHandler.php:218
+#: src/Modules/Smilepay/Api/IpnHandler.php:221
 #, php-format
 msgid "SmilePay reported that the card payment (%s) was authorized. SmilePay card results cannot be verified automatically, so confirm the authorization in the SmilePay back office, then change the order to Processing."
 msgstr "速買配通知信用卡付款（%s）已授權。速買配的刷卡結果無法自動驗證真偽，請先到速買配後台確認授權，再把訂單改為處理中。"
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:228
+#: src/Modules/Smilepay/Api/IpnHandler.php:231
 #, php-format
 msgid "SmilePay sent a failed-authorization notice for this already paid order. The order status was not changed; please check it in the SmilePay back office. Reason: %s"
 msgstr "速買配對這張已付款的訂單送來授權失敗通知。訂單狀態沒有變更，請到速買配後台核對。原因：%s"
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:236
+#: src/Modules/Smilepay/Api/IpnHandler.php:239
 #, php-format
 msgid "Authorization failed: %s"
 msgstr "授權失敗：%s"
 
 #. translators: %s: reason
-#: src/Modules/Smilepay/Api/IpnHandler.php:242
+#: src/Modules/Smilepay/Api/IpnHandler.php:245
 #, php-format
 msgid "SmilePay could not authorize the card payment: %s"
 msgstr "SmilePay 信用卡授權失敗：%s"
 
-#: src/Modules/Smilepay/Api/IpnHandler.php:300
+#: src/Modules/Smilepay/Api/IpnHandler.php:303
 msgid "Several SmilePay payment notices for this order failed verification, so automatic payment confirmation has been stopped for it. Please check the payment in the SmilePay back office and update the order manually."
 msgstr "這張訂單有多筆速買配付款通知驗證失敗，已停止自動確認付款。請到速買配後台核對款項，再手動更新訂單狀態。"
 
@@ -15018,63 +15033,67 @@ msgid "Used in test mode. Leave blank to use the test credit card Merchant ID."
 msgstr "測試模式使用。留空則使用信用卡的測試 Merchant ID。"
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Tappay/Api/IpnHandler.php:65
+#: src/Modules/Tappay/Api/IpnHandler.php:70
 #, php-format
 msgid "TapPay reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr "TapPay 回報的付款金額 %1$s 與訂單金額 %2$s 不符，請先核對款項再出貨。"
 
+#: src/Modules/Tappay/Api/IpnHandler.php:74
+msgid "TapPay reported a payment without an amount, so it could not be checked against the order total. The order was not marked as paid; please check the payment in the TapPay portal."
+msgstr "TapPay 回報付款成功，但沒有帶金額，無法跟訂單金額比對。訂單沒有標成已付款，請到 TapPay 後台確認這筆付款。"
+
 #. translators: 1: transaction id in the notice, 2: transaction id stored on the order
-#: src/Modules/Tappay/Api/IpnHandler.php:87
+#: src/Modules/Tappay/Api/IpnHandler.php:93
 #, php-format
 msgid "TapPay sent a payment notice for transaction %1$s, but this order was charged as transaction %2$s. The order was not marked as paid; please check it in the TapPay portal."
 msgstr "TapPay 送來交易 %1$s 的付款通知，但這張訂單送出的交易是 %2$s。訂單未標為已付款，請到 TapPay 後台核對。"
 
 #. translators: %s: TapPay status code
-#: src/Modules/Tappay/Api/IpnHandler.php:103
+#: src/Modules/Tappay/Api/IpnHandler.php:109
 #, php-format
 msgid "TapPay sent a notice (status code %s) for this already paid order. The order was not changed."
 msgstr "已付款訂單收到 TapPay 通知（狀態碼 %s），訂單未變更。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:146
+#: src/Modules/Tappay/Api/IpnHandler.php:152
 msgid "Your payment is still being confirmed. We will update the order as soon as TapPay confirms it, so there is no need to pay again."
 msgstr "付款確認中，TapPay 確認後會自動更新訂單，請不要重複付款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:156
+#: src/Modules/Tappay/Api/IpnHandler.php:162
 msgid "The 3-D Secure check did not finish, or the payment failed. Please try again."
 msgstr "TapPay 3D 驗證未完成或付款失敗，請重新嘗試。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:195
+#: src/Modules/Tappay/Api/IpnHandler.php:201
 msgid "The TapPay transaction returned for this order does not match its order number or amount, so it was not used to mark the order as paid."
 msgstr "TapPay 回傳的交易與此訂單的訂單編號或金額不符，未據此將訂單標為已付款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:239
+#: src/Modules/Tappay/Api/IpnHandler.php:245
 msgid "TapPay still has no confirmed transaction for this order. Check it in the TapPay portal; if the customer was not charged, change this order to Failed so it can be paid again."
 msgstr "TapPay 仍查不到這張訂單已確認的交易。請到 TapPay 後台確認；若顧客沒有被扣款，請把訂單改為「失敗」以便重新付款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:332
+#: src/Modules/Tappay/Api/IpnHandler.php:338
 msgid "This transaction was partially refunded in the TapPay dashboard."
 msgstr "這筆交易已在 TapPay 後台部分退款。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:333
+#: src/Modules/Tappay/Api/IpnHandler.php:339
 msgid "This transaction was refunded in the TapPay dashboard."
 msgstr "TapPay 交易已於 TapPay 後台退款。"
 
 #. translators: %s: payment method title
-#: src/Modules/Tappay/Api/IpnHandler.php:351
+#: src/Modules/Tappay/Api/IpnHandler.php:357
 #, php-format
 msgid "%s payment completed"
 msgstr "%s 付款完成"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:367
+#: src/Modules/Tappay/Api/IpnHandler.php:373
 msgid "TapPay is waiting for the payment to be confirmed."
 msgstr "TapPay 正在等待付款確認。"
 
-#: src/Modules/Tappay/Api/IpnHandler.php:372
+#: src/Modules/Tappay/Api/IpnHandler.php:378
 msgid "The TapPay transaction was cancelled."
 msgstr "TapPay 交易已取消。"
 
 #. translators: 1: status code, 2: message
-#: src/Modules/Tappay/Api/IpnHandler.php:382
+#: src/Modules/Tappay/Api/IpnHandler.php:388
 #: src/Modules/Tappay/Gateways/Credit.php:269
 #, php-format
 msgid "The TapPay payment failed (status code %1$d): %2$s"
@@ -15364,36 +15383,36 @@ msgstr "收單行交易編號"
 msgid "Bank settlement"
 msgstr "銀行對帳結果"
 
-#: src/Modules/Tappay/Module.php:174
+#: src/Modules/Tappay/Module.php:177
 msgid "Please fill in all the card details."
 msgstr "請完整填寫信用卡資訊。"
 
-#: src/Modules/Tappay/Module.php:175
+#: src/Modules/Tappay/Module.php:178
 msgid "No payment token was returned. Please check the card number."
 msgstr "無法取得付款憑證，請確認卡號是否正確。"
 
-#: src/Modules/Tappay/Module.php:207
+#: src/Modules/Tappay/Module.php:210
 msgid "Payment service is unavailable. Please try again later."
 msgstr "付款服務目前無法使用，請稍後再試。"
 
-#: src/Modules/Tappay/Module.php:208
+#: src/Modules/Tappay/Module.php:211
 msgid "This payment method is not available on this store."
 msgstr "本店尚未開通這個付款方式。"
 
-#: src/Modules/Tappay/Module.php:209
-#: src/Modules/Tappay/Module.php:245
+#: src/Modules/Tappay/Module.php:212
+#: src/Modules/Tappay/Module.php:248
 msgid "Could not start the payment. Please try again."
 msgstr "無法開始付款，請再試一次。"
 
-#: src/Modules/Tappay/Module.php:246
+#: src/Modules/Tappay/Module.php:249
 msgid "Please pay with the button above."
 msgstr "請使用上方的付款按鈕付款。"
 
-#: src/Modules/Tappay/Module.php:247
+#: src/Modules/Tappay/Module.php:250
 msgid "Pay with Apple Pay"
 msgstr "使用 Apple Pay 付款"
 
-#: src/Modules/Tappay/Module.php:248
+#: src/Modules/Tappay/Module.php:251
 msgid "Pay with Samsung Pay"
 msgstr "使用 Samsung Pay 付款"
 
@@ -15748,6 +15767,10 @@ msgstr "清除"
 #: src/Settings/SecretFields.php:72
 msgid "For security the saved value is not shown. Leave it as is to keep it."
 msgstr "為了安全，不顯示已存的值。不動就維持原本的設定。"
+
+#: src/Settings/SecretStore.php:226
+msgid "WordPress can now keep payment, shipping and invoice keys in its encrypted secret storage, but it is not set up on this site yet. Your keys keep working as before. To turn it on, follow the Secrets item under Tools → Site Health."
+msgstr "WordPress 現在可以把金流、物流、發票的金鑰存進加密的秘密儲存，但這個網站還沒設定。你的金鑰照常運作。要啟用，請照「工具 → 網站健康狀態」裡的 Secrets 項目設定。"
 
 #: src/Settings/SettingsPage.php:25
 msgid "Moksa E-Commerce Tools"

@@ -222,7 +222,7 @@ final class BindHandler {
 	 * 從綠界主動送進來的（ReturnURL、OrderResultURL）只靠 AES 解密確認來源，入帳前再向綠界查一次
 	 * 這筆交易（查詢信用卡單筆明細，35662）核對狀態與金額；我們自己呼叫 API 拿到的回應不用再查。
 	 */
-	public static function apply_result( \WC_Order $order, array $data, bool $verify = false ): void {
+	public static function apply_result( \WC_Order $order, array $data, bool $verify = false, bool $renewal = false ): void {
 		// 建立交易回應、OrderResultURL、ReturnURL 可能同時到，只讓一個處理。
 		$lock = 'ecpay-bind-' . $order->get_id();
 		if ( ! Subscriptions::lock( $lock ) ) {
@@ -233,14 +233,17 @@ final class BindHandler {
 			if ( $fresh instanceof \WC_Order && Subscriptions::is_changing_payment_method( $fresh ) ) {
 				self::apply_change_result( $fresh, $data );
 			} elseif ( $fresh instanceof \WC_Order && ! $fresh->is_paid() ) {
-				self::apply_result_unlocked( $fresh, $data, $verify );
+				self::apply_result_unlocked( $fresh, $data, $verify, $renewal );
 			}
 		} finally {
 			Subscriptions::unlock( $lock );
 		}
 	}
 
-	private static function apply_result_unlocked( \WC_Order $order, array $data, bool $verify ): void {
+	private static function apply_result_unlocked( \WC_Order $order, array $data, bool $verify, bool $renewal ): void {
+		// 測試模式顧客用綠界公開的測試卡號就能付款成功，不入帳（見 PaidOrder::complete）；
+		// 續扣是排程用已綁的卡扣的，照常入帳。
+		$sandbox = Helper::is_sandbox() && ! $renewal;
 		// 廠商後台「模擬付款」不是真的收款（同既有 IpnHandler）。
 		if ( '1' === (string) ( $data['SimulatePaid'] ?? '0' ) ) {
 			$order->add_order_note( __( 'ECPay sent a simulated payment notice from its merchant dashboard. The order was not marked as paid.', 'moksa-for-woocommerce' ) );
@@ -316,7 +319,7 @@ final class BindHandler {
 					)
 				);
 			}
-			if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order ) ) {
+			if ( \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, '', $sandbox ) ) {
 				$order->add_order_note( __( 'The card was saved with ECPay for subscription renewals.', 'moksa-for-woocommerce' ) );
 			}
 			return;
@@ -334,7 +337,7 @@ final class BindHandler {
 			);
 			return;
 		}
-		if ( ! \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no ) ) {
+		if ( ! \Moksafowo\Modules\Shared\Gateways\PaidOrder::complete( $order, (string) $trade_no, $sandbox ) ) {
 			return;
 		}
 		$order->add_order_note(

@@ -127,9 +127,9 @@ class ShippingResponse {
 						}
 					}
 				}
-			} elseif ( 'Print' === $decrypted_info['ApiType'] ) {
+			} elseif ( 'Print' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				// 拆單時單一欄位只鏡射最後一包，其他包要從拆單紀錄找。
-				$order = self::find_order_by_ship_trade_no( (string) $decrypted_info['ShipTradeNo'] );
+				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
 				if ( $order instanceof \WC_Order ) {
 
@@ -137,8 +137,8 @@ class ShippingResponse {
 						$validation_no = array_key_exists( 'ValidationNo', $decrypted_info ) ? $decrypted_info['ValidationNo'] : '';
 						// 單一欄位只鏡射最新一包；拆單時其他包的號碼記在各自的紀錄裡。
 						if ( $order->get_meta( OrderMeta::ShipTradeNo ) === $decrypted_info['ShipTradeNo'] ) {
-							$order->update_meta_data( OrderMeta::PartnerId, $decrypted_info['PartnerId'] );
-							$order->update_meta_data( OrderMeta::ShipNo, self::build_ship_no( $decrypted_info['LgsType'], $decrypted_info['PartnerId'], $decrypted_info['Odno'], $validation_no ) );
+							$order->update_meta_data( OrderMeta::PartnerId, (string) ( $decrypted_info['PartnerId'] ?? '' ) );
+							$order->update_meta_data( OrderMeta::ShipNo, self::build_ship_no( (string) ( $decrypted_info['LgsType'] ?? '' ), (string) ( $decrypted_info['PartnerId'] ?? '' ), (string) $decrypted_info['Odno'], (string) $validation_no ) );
 							$order->update_meta_data( OrderMeta::Odno, $decrypted_info['Odno'] );
 							$order->update_meta_data( OrderMeta::ValidationNo, $validation_no );
 						}
@@ -160,11 +160,21 @@ class ShippingResponse {
 
 				}
 			} else {
-				PayuniShipping::log( 'PAYUNi NotifyURL response ApiType unknown:' . $decrypted_info['ApiType'] );
+				PayuniShipping::log( 'PAYUNi NotifyURL response ApiType unknown:' . (string) ( $decrypted_info['ApiType'] ?? '' ) );
 			}
 		} else {
-			PayuniShipping::log( 'PAYUNi NotifyURL response fail:' . wc_print_r( $decrypted_info, true ) );
+			PayuniShipping::log( 'PAYUNi NotifyURL response fail: ' . self::log_summary( $decrypted_info ) );
 		}
+	}
+
+	/**
+	 * 失敗通知只記交易序號、狀態、訊息。整包內容有收件人姓名、電話、地址，不寫進 log。
+	 *
+	 * @param array<string, mixed> $info 解密後的通知或列印結果。
+	 */
+	private static function log_summary( array $info ): string {
+		$pick = static fn( string $k ): string => is_scalar( $info[ $k ] ?? null ) ? (string) $info[ $k ] : '';
+		return sprintf( 'ShipTradeNo=%s Status=%s Message=%s', $pick( 'ShipTradeNo' ), $pick( 'Status' ), $pick( 'Message' ) );
 	}
 
 	/**
@@ -188,8 +198,8 @@ class ShippingResponse {
 				if ( $order instanceof \WC_Order ) {
 
 					if ( 'ShipStatus' === $decrypted_info['ApiType'] ) {
-						$order->update_meta_data( OrderMeta::ShipNo, $decrypted_info['OBTNumber'] );
-						$order->update_meta_data( OrderMeta::ShipStatus, $decrypted_info['ShipStatus'] );
+						$order->update_meta_data( OrderMeta::ShipNo, (string) ( $decrypted_info['OBTNumber'] ?? '' ) );
+						$order->update_meta_data( OrderMeta::ShipStatus, (string) ( $decrypted_info['ShipStatus'] ?? '' ) );
 						$order->update_meta_data( OrderMeta::ShipStatusDesc, (string) ( $decrypted_info['ShipStatusDesc'] ?? '' ) );
 						$order->update_meta_data( OrderMeta::ShipStatusTime, (string) ( $decrypted_info['ShipStatusTime'] ?? '' ) );
 					}
@@ -208,9 +218,9 @@ class ShippingResponse {
 						}
 					}
 				} else {
-					PayuniShipping::log( 'PAYUNi NotifyURL response fail: can not find order by ShipTradeNo:' . $decrypted_info['ShipTradeNo'] );
+					PayuniShipping::log( 'PAYUNi NotifyURL response fail: can not find order by ShipTradeNo:' . (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 				}
-			} elseif ( 'Print' === $decrypted_info['ApiType'] ) {
+			} elseif ( 'Print' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				$raw_json  = is_string( $decrypted_info['JsonData'] ?? null ) ? $decrypted_info['JsonData'] : '';
 				$json_data = $raw_json !== '' ? json_decode( $raw_json, true ) : null;
 				if ( ! is_array( $json_data ) || ! isset( $json_data[0] ) || ! is_array( $json_data[0] ) ) {
@@ -220,13 +230,13 @@ class ShippingResponse {
 				// json_decode does not sanitize — deep-sanitize before any use.
 				$json_data    = map_deep( $json_data, static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v );
 				$print_result = $json_data[0];
-				if ( 'SUCCESS' === $print_result['Status'] ) {
-					$ship_trade_no = (string) $print_result['ShipTradeNo'];
+				if ( 'SUCCESS' === (string) ( $print_result['Status'] ?? '' ) ) {
+					$ship_trade_no = (string) ( $print_result['ShipTradeNo'] ?? '' );
 					$order         = self::find_order_by_ship_trade_no( $ship_trade_no );
 
 					if ( $order instanceof \WC_Order ) {
-						$order->update_meta_data( OrderMeta::FileNo, $print_result['FileNo'] );
-						$order->update_meta_data( OrderMeta::PrintDate, $print_result['PrintDate'] );
+						$order->update_meta_data( OrderMeta::FileNo, (string) ( $print_result['FileNo'] ?? '' ) );
+						$order->update_meta_data( OrderMeta::PrintDate, (string) ( $print_result['PrintDate'] ?? '' ) );
 						$order->save();
 
 						$order->add_order_note(
@@ -237,11 +247,11 @@ class ShippingResponse {
 						PayuniShipping::log( 'PAYUNi NotifyURL response tcat print fail: can not find order by ShipTradeNo:' . $ship_trade_no );
 					}
 				} else {
-					PayuniShipping::log( 'PAYUNi NotifyURL response tcat print fail: ' . wc_print_r( $print_result, true ) );
+					PayuniShipping::log( 'PAYUNi NotifyURL response tcat print fail: ' . self::log_summary( $print_result ) );
 				}
 			}
 		} else {
-			PayuniShipping::log( 'PAYUNi NotifyURL response fail:' . wc_print_r( $decrypted_info, true ) );
+			PayuniShipping::log( 'PAYUNi NotifyURL response fail: ' . self::log_summary( $decrypted_info ) );
 		}
 	}
 
