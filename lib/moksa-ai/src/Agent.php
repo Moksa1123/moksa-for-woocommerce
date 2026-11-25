@@ -50,6 +50,13 @@ final class Agent {
 		foreach ( Registry::destructive_abilities() as $name ) {
 			$destructive[ \WP_AI_Client_Ability_Function_Resolver::ability_name_to_function_name( $name ) ] = $name;
 		}
+		// 自己標了破壞性的 ability 也攔下來走確認流程：沒有處理函式的會在 prepare_confirm 被拒絕，
+		// 不會交給 resolver 直接執行.
+		foreach ( $abilities as $name ) {
+			if ( Registry::marked_destructive( (string) $name ) ) {
+				$destructive[ \WP_AI_Client_Ability_Function_Resolver::ability_name_to_function_name( (string) $name ) ] = (string) $name;
+			}
+		}
 
 		$history = self::seed_history( $prior );
 		$current = $user_text;
@@ -63,8 +70,8 @@ final class Agent {
 			foreach ( $models as $model ) {
 				// wp_ai_client_prompt() 是 WordPress 7.0 才進核心的 AI Client 入口。本檔在最上方已用
 				// function_exists() 守住(6.9 站台不會走到這裡),但 Plugin Check 的靜態相容性掃描看不到
-				// 那道守衛,會把「直接呼叫」判成需要 7.0 的 ERROR。改用可變函式呼叫:行為完全相同,
-				// 靜態掃描不再誤判,外掛也維持 Requires at least: 6.9.
+				// 那道守衛,會把「直接呼叫」判成需要 7.0 的 ERROR。用可變函式呼叫:行為完全相同,
+				// 靜態掃描不會誤判,外掛也維持 Requires at least: 6.9.
 				$prompt  = 'wp_ai_client_prompt';
 				$builder = $prompt( $current )
 					->using_system_instruction( $system )
@@ -213,6 +220,10 @@ final class Agent {
 		if ( ! isset( $handlers[ $ability ]['prepare'] ) ) {
 			return self::err( Registry::string( 'unsupported' ) );
 		}
+		// 攔下來的呼叫沒經過 resolver，ability 自己的權限檢查要在這裡跑.
+		if ( ! Registry::permitted( $ability, $args ) ) {
+			return self::err( Registry::string( 'noPermission' ) );
+		}
 
 		$prepared = call_user_func( $handlers[ $ability ]['prepare'], $args );
 		if ( is_wp_error( $prepared ) ) {
@@ -228,6 +239,7 @@ final class Agent {
 			array(
 				'user'    => get_current_user_id(),
 				'ability' => $ability,
+				'args'    => $args,
 				'params'  => $prepared,
 			),
 			self::CONFIRM_TTL

@@ -100,6 +100,11 @@ class ShippingResponse {
 				return;
 			}
 
+			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) && self::is_return_notice( $decrypted_info ) ) {
+				self::handle_return_notice( $decrypted_info );
+				return;
+			}
+
 			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
@@ -192,6 +197,11 @@ class ShippingResponse {
 				return;
 			}
 
+			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) && self::is_return_notice( $decrypted_info ) ) {
+				self::handle_return_notice( $decrypted_info );
+				return;
+			}
+
 			if ( 'ShipStatus' === (string) ( $decrypted_info['ApiType'] ?? '' ) ) {
 				$order = self::find_order_by_ship_trade_no( (string) ( $decrypted_info['ShipTradeNo'] ?? '' ) );
 
@@ -256,8 +266,54 @@ class ShippingResponse {
 	}
 
 	/**
-	 * 依物流交易序號找訂單。拆單時單一欄位只存最後一包，其他包要從拆單紀錄找。
+	 * 退貨的貨態通知：7-11 退貨便（帶 RefundODNO）或黑貓逆物流（TradeType=2）。
+	 *
+	 * @param array<string, mixed> $info 解密後的通知。
 	 */
+	public static function is_return_notice( array $info ): bool {
+		return '' !== (string) ( $info['RefundODNO'] ?? '' )
+			|| 'C2B' === (string) ( $info['LgsType'] ?? '' )
+			|| '2' === (string) ( $info['TradeType'] ?? '' );
+	}
+
+	/**
+	 * 退貨貨態只寫備註：不更新出貨貨態，也不觸發出貨的訂單狀態對應，
+	 * 否則退貨送達會被當成出貨送達，把訂單改成已取貨或完成。
+	 * 退貨便通知沒有物流交易序號，對不回訂單，只記 log。
+	 *
+	 * @param array<string, mixed> $info 解密後的通知。
+	 */
+	private static function handle_return_notice( array $info ): void {
+		$ship_trade_no = (string) ( $info['ShipTradeNo'] ?? '' );
+		$order         = '' !== $ship_trade_no ? self::find_order_by_ship_trade_no( $ship_trade_no ) : null;
+		if ( ! $order instanceof \WC_Order ) {
+			PayuniShipping::log(
+				sprintf(
+					'PAYUNi return status notice without a matching order: LgsType=%s RefundODNO=%s ShipTradeNo=%s Status=%s',
+					(string) ( $info['LgsType'] ?? '' ),
+					(string) ( $info['RefundODNO'] ?? '' ),
+					$ship_trade_no,
+					(string) ( $info['ShipStatus'] ?? '' )
+				)
+			);
+			return;
+		}
+		$desc = (string) ( $info['ShipStatusDesc'] ?? '' );
+		$code = (string) ( $info['ShipStatus'] ?? '' );
+		$order->add_order_note(
+			\Moksafowo\Order\Note::build(
+				/* translators: %s: shipping status description */
+				sprintf( __( 'PAYUNi return shipment status: %s', 'moksa-for-woocommerce' ), '' !== $desc ? $desc : $code ),
+				[
+					__( 'Shipping transaction ID', 'moksa-for-woocommerce' ) => $ship_trade_no,
+					__( 'Return number', 'moksa-for-woocommerce' )           => (string) ( $info['OBTNumber'] ?? '' ),
+					__( 'Status code', 'moksa-for-woocommerce' )             => $code,
+					__( 'Status updated', 'moksa-for-woocommerce' )          => (string) ( $info['ShipStatusTime'] ?? '' ),
+				]
+			)
+		);
+	}
+
 	/**
 	 * 貨態通知備註：「PAYUNi 貨態：門市已收件」＋交易編號、狀態碼、時間。
 	 *
@@ -300,6 +356,9 @@ class ShippingResponse {
 		);
 	}
 
+	/**
+	 * 依物流交易序號找訂單。拆單時單一欄位只存最後一包，其他包要從拆單紀錄找。
+	 */
 	private static function find_order_by_ship_trade_no( string $no ): ?\WC_Order {
 		if ( '' === $no ) {
 			return null;

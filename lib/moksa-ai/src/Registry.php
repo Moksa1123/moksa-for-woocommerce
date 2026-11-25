@@ -73,6 +73,46 @@ final class Registry {
 	}
 
 	/**
+	 * Ability 自己標了破壞性（meta.annotations.destructive）嗎？
+	 * 這種 ability 一律走確認流程；沒有處理函式就拒絕，不會被直接執行.
+	 *
+	 * @param string $name Ability 名稱。
+	 */
+	public static function marked_destructive( string $name ): bool {
+		if ( ! function_exists( 'wp_get_ability' ) ) {
+			return false;
+		}
+		$ability = wp_get_ability( $name );
+		if ( ! is_object( $ability ) || ! method_exists( $ability, 'get_meta' ) ) {
+			return false;
+		}
+		$meta = (array) $ability->get_meta();
+		return isset( $meta['annotations'] ) && is_array( $meta['annotations'] ) && ! empty( $meta['annotations']['destructive'] );
+	}
+
+	/**
+	 * 目前使用者能不能用這組參數執行這個 ability（重跑 ability 自己的權限檢查）.
+	 * 找不到 ability（例如模組已關）或權限檢查沒有明確回 true，都算不行.
+	 *
+	 * @param string              $name Ability 名稱。
+	 * @param array<string,mixed> $args 參數。
+	 */
+	public static function permitted( string $name, array $args ): bool {
+		if ( ! function_exists( 'wp_get_ability' ) ) {
+			return false;
+		}
+		$ability = wp_get_ability( $name );
+		if ( ! is_object( $ability ) || ! method_exists( $ability, 'check_permissions' ) ) {
+			return false;
+		}
+		try {
+			return true === $ability->check_permissions( $args );
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+	}
+
+	/**
 	 * 系統提示。各外掛用 filter 追加自己領域的規則；共用層只給一句通用的骨架。
 	 */
 	public static function system_instruction(): string {

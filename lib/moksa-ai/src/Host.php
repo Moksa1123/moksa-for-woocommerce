@@ -164,6 +164,9 @@ final class Host {
 
 	/**
 	 * 使用者按「確認執行」後，驗證一次性 token 並真正執行破壞性動作。
+	 *
+	 * @param \WP_REST_Request $request 請求（帶 token）。
+	 * @throws \Throwable 處理函式丟出的例外照原樣往外丟（先回報 exception 結局）.
 	 */
 	public static function confirm( \WP_REST_Request $request ): \WP_REST_Response {
 		$token = (string) $request->get_param( 'token' );
@@ -174,6 +177,7 @@ final class Host {
 			return rest_ensure_response( array( 'error' => Registry::string( 'confirmStale' ) ) );
 		}
 		if ( (int) ( $data['user'] ?? 0 ) !== get_current_user_id() ) {
+			self::confirm_result( (string) ( $data['ability'] ?? '' ), 'denied' );
 			return rest_ensure_response( array( 'error' => Registry::string( 'noPermission' ) ) );
 		}
 
@@ -185,13 +189,30 @@ final class Host {
 		$ability  = (string) ( $data['ability'] ?? '' );
 		$handlers = Registry::destructive_handlers();
 		if ( ! isset( $handlers[ $ability ]['apply'] ) ) {
+			self::confirm_result( $ability, 'unsupported' );
 			return rest_ensure_response( array( 'error' => Registry::string( 'unsupported' ) ) );
 		}
+		// 提案到確認之間權限可能變了（角色被改、模組被關），執行前用原本的參數重跑 ability 的權限檢查.
+		if ( ! isset( $data['args'] ) || ! is_array( $data['args'] ) ) {
+			self::confirm_result( $ability, 'stale' );
+			return rest_ensure_response( array( 'error' => Registry::string( 'confirmStale' ) ) );
+		}
+		if ( ! Registry::permitted( $ability, $data['args'] ) ) {
+			self::confirm_result( $ability, 'denied' );
+			return rest_ensure_response( array( 'error' => Registry::string( 'noPermission' ) ) );
+		}
 
-		$result = call_user_func( $handlers[ $ability ]['apply'], (array) ( $data['params'] ?? array() ) );
+		try {
+			$result = call_user_func( $handlers[ $ability ]['apply'], (array) ( $data['params'] ?? array() ) );
+		} catch ( \Throwable $e ) {
+			self::confirm_result( $ability, 'exception' );
+			throw $e;
+		}
 		if ( is_wp_error( $result ) ) {
+			self::confirm_result( $ability, 'error' );
 			return rest_ensure_response( array( 'error' => $result->get_error_message() ) );
 		}
+		self::confirm_result( $ability, 'applied' );
 		if ( is_array( $result ) && isset( $result['print_url'] ) ) {
 			return rest_ensure_response(
 				array(
@@ -201,5 +222,22 @@ final class Host {
 			);
 		}
 		return rest_ensure_response( array( 'reply' => (string) $result ) );
+	}
+
+	/**
+	 * 通知外掛一次確認的結局，讓它們記錄誰在什麼時候確認了哪個破壞性動作.
+	 *
+	 * @param string $ability Ability 名稱。
+	 * @param string $outcome applied、error、exception、denied、unsupported、stale。
+	 */
+	private static function confirm_result( string $ability, string $outcome ): void {
+		/**
+		 * AI 對話窗的破壞性動作確認結束.
+		 *
+		 * @param string $ability Ability 名稱。
+		 * @param string $outcome applied、error、exception、denied、unsupported、stale。
+		 * @param int    $user_id 按確認的使用者。
+		 */
+		do_action( 'moksa_ai_confirm_result', $ability, $outcome, get_current_user_id() );
 	}
 }

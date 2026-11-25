@@ -6,11 +6,11 @@
  * 完全合法。但 Gemini 的 Schema proto 裡 `type` 是單一 enum，收到陣列會回
  * `Proto field is not repeating, cannot start list` 400 —— 而且是**整包 function
  * declarations 一起退**。也就是說任何一個外掛的 schema 寫了聯集型別，七個外掛的工具
- * 就全部不能用，對話窗連一次工具都呼叫不到。2026-08-10 實際發生過（優惠券外掛的
- * create/update/bulk-generate 帶了 30 個 `["number","null"]`，連查訂單都跟著掛）。
+ * 就全部不能用，對話窗連一次工具都呼叫不到（例如某支外掛的建立／更新工具帶了
+ * `["number","null"]`，連查訂單這種無關的工具也跟著不能用）。
  *
  * 所以這裡掛 `wp_register_ability_args`。只做一件事：把清單型的 `type` 塌成單一型別。
- * 不碰 enum、required、description，也不動任何非 `type` 的鍵。1.3.10 起只動 Moksa 自家
+ * 不碰 enum、required、description，也不動任何非 `type` 的鍵。只動 Moksa 自家
  * 命名空間的 input_schema；別人的 ability 與所有 output_schema 原封不動。
  *
  * @package Moksa\AI
@@ -58,7 +58,7 @@ final class SchemaCompat {
 		}
 		$hits = 0;
 		// 只收斂 input_schema：核心交給模型的只有它（using_abilities() 只送 get_input_schema()）。
-		// output_schema 是 WP 執行時驗證回傳用的，改了就跟實際回傳對不上（1.3.10，Novamira 事件）.
+		// output_schema 是 WP 執行時驗證回傳用的，改了就跟實際回傳對不上.
 		if ( isset( $args['input_schema'] ) && is_array( $args['input_schema'] ) ) {
 			$args['input_schema'] = self::collapse( $args['input_schema'], $hits );
 		}
@@ -72,7 +72,7 @@ final class SchemaCompat {
 	 * 只處理 Moksa 外掛自己的 ability（依名稱的命名空間）。
 	 *
 	 * 別人的 ability 不會交給 Moksa AI，改它們的宣告只會讓 WP 的驗證跟實際回傳對不上
-	 * （Novamira execute-ability 的多型別 output 被改成 string，FluentCRM 回物件就失敗）。
+	 * （例如多型別的 output 被塌成 string，回傳物件時就驗證失敗）。
 	 * 註冊途中不能讀 Registry（會觸發 Abilities API 的延遲註冊），所以用命名空間判斷。
 	 *
 	 * @param string              $name Ability 名稱。
@@ -80,7 +80,7 @@ final class SchemaCompat {
 	 */
 	private static function applies( string $name, array $args ): bool {
 		/**
-		 * 要收斂 input_schema 的 ability 命名空間（各外掛實際註冊的名稱，11-18 掃過）.
+		 * 要收斂 input_schema 的 ability 命名空間（各外掛實際註冊的名稱）.
 		 * 把別的外掛的 ability 加進 Moksa AI 工具清單時，也要把它的命名空間加進來，
 		 * 否則它的聯集型別會讓 Gemini 把整包工具退回。寫 'points' 或 'points/' 都可以.
 		 *
@@ -108,7 +108,7 @@ final class SchemaCompat {
 	 * 只對「真的交給 Moksa AI 當工具」的 ability 發提示.
 	 *
 	 * 自家命名空間下沒交給 Moksa AI 的 ability 也會被收斂 input，但對它們發 notice 只是洗版
-	 * （別人的 ability 1.3.10 起完全不動）。不能在註冊當下判斷：組工具清單的 filter 會去讀 Abilities API，註冊途中讀
+	 * （別人的 ability 完全不動）。不能在註冊當下判斷：組工具清單的 filter 會去讀 Abilities API，註冊途中讀
 	 * 會出錯；而且 Abilities API 是延遲註冊的 —— 這裡先讀清單，順便讓註冊跑完、pending 填滿.
 	 */
 	public static function flush_reports(): void {
@@ -177,8 +177,8 @@ final class SchemaCompat {
 
 	/**
 	 * 讓寫壞的外掛作者看得到。只在 WP_DEBUG 下出聲，正式站不吵。
-	 * 用 WP 6.4 起的 wp_trigger_error()：它本身只在 WP_DEBUG 開啟時觸發，
-	 * 不必用 error_log() 再靠 PHPCS 忽略註解消警告。舊版 WP 沒有這個函式就不出聲。
+	 * 用 wp_trigger_error()（WP 6.4+）：它本身只在 WP_DEBUG 開啟時觸發，
+	 * 不必用 error_log()。沒有這個函式的 WP 就不出聲。
 	 */
 	private static function report( string $name, int $hits ): void {
 		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG || ! function_exists( 'wp_trigger_error' ) ) {
