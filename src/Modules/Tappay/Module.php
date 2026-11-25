@@ -258,7 +258,7 @@ final class Module extends AbstractGatewayModule {
 	/**
 	 * 前端回報裝置支不支援某個行動支付，存進顧客自己的 session。
 	 *
-	 * 只寫 session、不碰訂單 —— 符合 nopriv handler 的安全邊界（CLAUDE.md §4）。
+	 * 只寫 session、不碰訂單 —— 符合 nopriv handler 的安全邊界。
 	 * 值只用來決定結帳頁要不要顯示該付款方式，被竄改的最壞後果是顧客自己
 	 * 看到一個按不下去的選項。
 	 */

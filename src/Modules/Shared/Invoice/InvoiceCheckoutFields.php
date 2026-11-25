@@ -47,7 +47,7 @@ final class InvoiceCheckoutFields {
 		self::register_block_fields();
 		add_action( 'woocommerce_set_additional_field_value', [ self::class, 'sync_block_field' ], 10, 4 );
 
-		// 載具真驗（僅 ECPay 注入，查財政部資料庫擋偽造載具）。
+		// 載具真驗（僅 ECPay 注入，查財政部資料庫確認載具存在）。
 		if ( null !== $cfg->carrier_api_validator ) {
 			add_action( 'woocommerce_after_checkout_validation', $cfg->carrier_api_validator, 20, 2 );
 		}

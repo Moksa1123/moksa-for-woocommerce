@@ -103,7 +103,7 @@ final class IpnHandler {
 				exit;
 			}
 		}
-		// 逾時 / 失敗通知不得打在 API 已確認完成付款的訂單上（防偽造取消已付款單）。
+		// 逾時 / 失敗通知不得打在 API 已確認完成付款的訂單上。
 		if ( in_array( $notify_type, [ 'order_expired', 'order_failed' ], true ) && 'S' === $api_status ) {
 			Helper::warn( 'webhook expire/fail rejected — API says paid', [ 'order_id' => $pchome_order_id ] );
 			status_header( 409 );

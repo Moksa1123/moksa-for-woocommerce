@@ -172,7 +172,7 @@ final class IpnHandler {
 			}
 		} elseif ( 'SUCCESS' === $status && '' === $pay_time ) {
 			// 取號完成（4.2.3）也是 Status=SUCCESS，但沒有 PayTime；付款完成（4.2.2）才有。
-			// 顧客瀏覽器拿得到取號封包，原本重送到這裡就會被當成已付款（同 RY 以 PayTime 判斷）。
+			// 所以沒有 PayTime 的一律不當成已付款（同 RY 以 PayTime 判斷）。
 			if ( 'on-hold' !== $order->get_status() ) {
 				$order->update_status( 'on-hold', self::issued_note( $order, $payment_type ) );
 			}

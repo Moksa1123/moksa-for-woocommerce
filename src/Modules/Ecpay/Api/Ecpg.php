@@ -181,7 +181,7 @@ final class Ecpg {
 
 	/** @return array<string,mixed>|null */
 	private static function decrypt( string $cipher ): ?array {
-		// 金鑰沒填時用空字串也解得開，任何人都能偽造通知。
+		// 金鑰沒填時不解密，一律視為無效通知。
 		if ( '' === $cipher || '' === Helper::hash_key() || '' === Helper::hash_iv() ) {
 			return null;
 		}

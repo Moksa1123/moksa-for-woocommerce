@@ -319,7 +319,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_check_mac_value( array $posted ): bool {
-		// 金鑰沒填時用空字串也算得出簽章，任何人都能偽造。
+		// 空金鑰也算得出簽章，所以金鑰沒填時一律驗章失敗。
 		if ( empty( $posted['CheckMacValue'] ) || '' === self::hash_key() || '' === self::hash_iv() ) {
 			return false;
 		}

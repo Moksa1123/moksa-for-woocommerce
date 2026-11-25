@@ -176,7 +176,7 @@ final class IpnHandler {
 	 * 返回頁與補查共用：前端跳轉的資料可能被改，狀態一律以伺服器查到的為準。
 	 */
 	private static function query_verified_record( \WC_Order $order, string $rec_trade_id = '' ): ?array {
-		// 網址上的 rec_trade_id 任何人都能改成自己另一筆成功交易的編號；訂單已存的優先。
+		// 網址上的 rec_trade_id 不可信；訂單已存的優先。
 		$stored_trade_id = (string) $order->get_meta( Keys::TAPPAY_REC_TRADE_ID );
 		if ( '' !== $stored_trade_id ) {
 			$rec_trade_id = $stored_trade_id;

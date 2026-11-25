@@ -811,8 +811,7 @@ final class SettingsPage extends \WC_Settings_Page {
 		$posted   = wp_unslash( $_POST );
 		foreach ( $registry->all() as $key => $class ) {
 			// 只寫「這一頁真的有卡片」的模組。沒渲染的模組不會有 POST 值，
-			// 照樣寫入等於每次按儲存就把它關掉 —— 訂單查號搜尋的開關在「進階設定」，
-			// 之前就是這樣被無聲關掉的（連帶讓 AI 助手失去全部工具）。
+			// 照樣寫入等於每次按儲存就把它關掉（例如訂單查號搜尋的開關在「進階設定」）。
 			if ( in_array( $key, self::OVERVIEW_EXCLUDED, true ) ) {
 				continue;
 			}

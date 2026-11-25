@@ -272,8 +272,8 @@
 			if ( e.target.closest( '#' + HOST_ID ) ) {
 				return;
 			}
-			// 只有點到「運送／取貨」切換或運費選項時才重畫；原本結帳區任何點擊都排三次重畫，
-			// 每次都打一個 admin-ajax。
+			// 只有點到「運送／取貨」切換或運費選項時才重畫，不要結帳區任何點擊都重畫
+			// （每次重畫都會打一個 admin-ajax）。
 			if ( e.target.closest( '.wc-block-checkout__shipping-method-option, .wc-block-components-shipping-rates-control' ) ) {
 				scheduleRender( 30 );
 				setTimeout( render, 600 );

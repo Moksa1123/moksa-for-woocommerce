@@ -1,7 +1,6 @@
 <?php
 /**
  * 存在 option 裡的金鑰清單：設定頁用它決定哪些欄位不印明文（SecretFields）。
- * WP 7.2 Secrets API 搬遷（SecretStore）因核心 11-17 撤回 API，移到分支 feature/wp-secrets。
  *
  * @package Moksafowo
  */

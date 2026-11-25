@@ -583,7 +583,7 @@ final class CardRenderers {
 		$net_color = $is_full ? '#d63638' : '#dba617';
 
 		// Batch fetch refund authors — 訂單編輯頁 callback 對每張卡（payment/invoice）都會
-		// fire render_refund_block，N refunds × M 卡 內原本 N×M 次 get_userdata；
+		// fire render_refund_block；為免 N refunds × M 卡 做 N×M 次 get_userdata，
 		// 此處 collect ids → 一次 get_users → keyed map，foreach 內 O(1) lookup
 		$author_ids = [];
 		foreach ( $refunds as $refund ) {
@@ -646,7 +646,7 @@ final class CardRenderers {
 
 	/**
 	 * LINE Pay 退款交易編號：退款時每筆累加成陣列（Linepay\Api\PaymentRequest::do_refund），
-	 * 舊資料可能是字串。原本直接轉字串，陣列會顯示成「Array」並丟 PHP 警告。
+	 * 舊資料可能是字串，兩種都要處理（陣列不能直接轉字串）。
 	 *
 	 * @param mixed $meta 訂單 meta 值。
 	 */

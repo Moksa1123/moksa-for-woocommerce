@@ -402,7 +402,7 @@ final class Keys {
 	public const SANDBOX_PAYMENT_HELD = '_moksafowo_sandbox_payment_held';
 
 	/**
-	 * 可以拿來再次扣款的卡片憑證。解除安裝時只清這些（使用者 2026-11-15 決定：交易紀錄保留、憑證清掉），
+	 * 可以拿來再次扣款的卡片憑證。解除安裝時只清這些（交易紀錄保留、憑證清掉），
 	 * 外掛移除後它們已沒有用途，留著只是風險。新增會記住卡片的金流時要加進來。
 	 */
 	public const PAYMENT_CREDENTIALS = [

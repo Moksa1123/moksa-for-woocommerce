@@ -53,8 +53,7 @@ do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, 
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 
 /**
- * 商家在信件設定頁填的「額外內容」。核心範本都印這一段，我們原本漏了，
- * 導致商家編輯了卻什麼都不會出現。
+ * 商家在信件設定頁填的「額外內容」。核心範本都印這一段，這裡也要印。
  */
 if ( ! empty( $additional_content ) ) {
 	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );

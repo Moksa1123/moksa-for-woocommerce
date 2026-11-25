@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * 付款請求帶 ClickToPay=1（官方 UPP 參數）；商店要先在統一金流後台「支付工具」開 Click to Pay。
  * 回傳 PaymentType=1（信用卡）、AuthType=8，付款結果、請款、退款都走信用卡流程，所以宣告 refunds。
- * 使用者 11-18 決定做獨立按鈕（同 Apple Pay／Google Pay／Samsung Pay），預設不啟用。
+ * 做成獨立按鈕（同 Apple Pay／Google Pay／Samsung Pay），預設不啟用。
  */
 final class ClickToPay extends GatewayBase {
 

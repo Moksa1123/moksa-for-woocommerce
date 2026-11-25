@@ -14,8 +14,8 @@ defined( 'ABSPATH' ) || exit;
 /**
  * 記下本外掛寫過的 option 名稱，解除安裝時照表 delete_option()。
  *
- * WordPress 沒有「依前綴列出 option」的 API，原本 uninstall.php 用 LIKE 直接刪 options 表。
- * 改成：核心每新增一個 option 都會觸發 added_option，名稱屬於本外掛就記進登記表。
+ * WordPress 沒有「依前綴列出 option」的 API，所以改用登記表：
+ * 核心每新增一個 option 都會觸發 added_option，名稱屬於本外掛就記進登記表。
  * 已經在用的站升級時補登一次：自動載入的從 wp_load_alloptions() 取，不自動載入的照下面
  * known_unautoloaded() 逐一確認存不存在。
  *

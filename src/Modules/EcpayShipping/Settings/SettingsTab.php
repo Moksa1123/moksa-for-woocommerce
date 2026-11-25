@@ -25,8 +25,6 @@ final class SettingsTab {
 				'desc'    => __( 'For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. Untick it once you go live.', 'moksa-for-woocommerce' ),
 			],
 			// 這個選項決定 7-11 / 全家 / 萊爾富 / OK 走哪一組物流代碼，四個 Method 都讀它。
-			// 早期版本有這個欄位，後來被移掉卻留下讀取端 —— 結果商家填了 B2C 憑證永遠用不到，
-			// 而且沒有任何 UI 可以切回來。補回設定頁。
 			[
 				'title'    => __( 'Convenience store account type', 'moksa-for-woocommerce' ),
 				'id'       => 'moksafowo_ecpay_shipping_cvs_type',

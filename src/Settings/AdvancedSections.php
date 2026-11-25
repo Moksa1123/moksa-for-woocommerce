@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * 預設一律 yes：既有站台升級後行為完全不變。
  *
- * ⚠️ 兩層開關的雷（見 CLAUDE.md §11 #14）：區塊開關關掉時，該區的子項一律視為關閉。
+ * ⚠️ 兩層開關：區塊開關關掉時，該區的子項一律視為關閉。
  * 子項自己的 get_option 不會知道這件事，所以**子項的判斷一定要先問過 is_on()**，
  * 否則會出現「子項打開了卻沒作用」，使用者只能猜。
  */
@@ -30,7 +30,7 @@ final class AdvancedSections {
 
 	/**
 	 * 訂單查號沿用既有的 moksafowo_order_lookup_enabled（它同時是模組開關），
-	 * 不另外開一個 —— 兩個開關管同一件事正是 #14 那個雷。
+	 * 不另外開一個，避免兩個開關管同一件事。
 	 */
 	private const CUSTOM_OPTIONS = [
 		self::ORDER_LOOKUP => 'moksafowo_order_lookup_enabled',

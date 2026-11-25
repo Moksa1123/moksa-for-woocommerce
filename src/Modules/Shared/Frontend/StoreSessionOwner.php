@@ -9,8 +9,7 @@ defined( 'ABSPATH' ) || exit;
  * 選店結果綁定「開地圖的那個瀏覽器」。
  *
  * 選店回呼是跨站導回，回呼當下不一定帶得到 session cookie，所以各家都先發一個 token、
- * 等顧客回到商店頁面時再兌換。token 若不綁定開地圖的人，攻擊者自己選完店後把帶 token 的
- * 連結傳給別人，就能改掉對方 session 裡的取貨門市。開地圖時記下 owner，兌換時比對。
+ * 等顧客回到商店頁面時再兌換。token 只給開地圖的人兌換：開地圖時記下 owner，兌換時比對。
  */
 final class StoreSessionOwner {
 

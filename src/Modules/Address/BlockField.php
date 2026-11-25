@@ -178,7 +178,7 @@ final class BlockField {
 
 
 	public static function enforce_district_block( \WC_Order $order, $request ): void {
-		// 不需運送（虛擬、下載商品）或寄到國外的訂單沒有台灣鄉鎮可選；原本照樣擋下，買課程、禮物卡都結不了帳。
+		// 不需運送（虛擬、下載商品）或寄到國外的訂單沒有台灣鄉鎮可選，不檢查。
 		if ( empty( $order->get_shipping_methods() ) ) {
 			return;
 		}
@@ -291,9 +291,9 @@ final class BlockField {
 	}
 
 	/**
-	 * 會員資料裡存的鄉鎮值不在選單裡（舊版格式、手動匯入、其他外掛寫的）時清掉。
+	 * 會員資料裡存的鄉鎮值不在選單裡（其他格式、手動匯入、其他外掛寫的）時清掉。
 	 * 區塊結帳會把它帶進表單，送出時 WC 回「提供的 moksafowo/district 無效」整筆擋下，
-	 * 即使選超商、欄位標「選填」也一樣（drpen 11-17 回報、測試站重現）。清掉後顧客重選即可。
+	 * 即使選超商、欄位標「選填」也一樣。清掉後顧客重選即可。
 	 */
 	public static function drop_invalid_saved_district(): void {
 		if ( ! is_user_logged_in() || ! function_exists( 'WC' ) || ! ( is_checkout() || is_cart() ) ) {

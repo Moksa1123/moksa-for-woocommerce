@@ -12,8 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * - AI 完全無工具 / 無操作權限(不 using_abilities)→ 純文字生成,無提權風險。
  * - 只注入「該顧客這筆訂單的去敏摘要 + 店家 FAQ」當依據;系統提示防 prompt injection。
  * - 必須:前台 AI 開關 + WP7 AI Client 都在。per-IP rate limit。
- *   （v1.5.1 前還要過 moksafowo_ai_enabled 總開關；那個 option 已廢除，模組卡片是唯一開關。
- *   這裡曾漏改，導致 1.5.1 之後新裝的站客服 AI 永遠不啟動。）
+ *   （模組卡片是唯一開關，不再看 moksafowo_ai_enabled。）
  */
 final class AiReply {
 

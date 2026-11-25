@@ -11,7 +11,7 @@ final class Helper extends AbstractCredentialHelper {
 
 	// ezPay 沙箱無公開測試帳號 — 商家須自行至 https://cinv.ezpay.com.tw 註冊取得自家
 	// 測試 MerchantID + HashKey + HashIV。文件 BDV/EZP_INVI 出現的範例值（3883991 等）
-	// 經 v0.5.21 實測為 KEY10006 取得商店申請資格失敗 — 不可用，已移除避免誤導。
+	// 會回 KEY10006 取得商店申請資格失敗，不可用。
 
 	public const BASE_SANDBOX = 'https://cinv.ezpay.com.tw';
 	public const BASE_PROD    = 'https://inv.ezpay.com.tw';
@@ -87,8 +87,7 @@ final class Helper extends AbstractCredentialHelper {
 		ksort( $args );
 		$plain = http_build_query( $args );
 		// Forward to plugin-wide Crypto\Aes：ezPay wire format（aes-256-cbc + bin2hex + 32-byte
-		// PKCS#7 pad block）跟 Crypto\Aes::encrypt_cbc_hex 100% 介面對上，原本 in-place 自寫
-		// pad + openssl_encrypt 的 implementation 改 forward 後消除重複。
+		// PKCS#7 pad block）跟 Crypto\Aes::encrypt_cbc_hex 介面一致，共用同一份實作。
 		return \Moksafowo\Crypto\Aes::encrypt_cbc_hex( $plain, self::hash_key(), self::hash_iv() );
 	}
 

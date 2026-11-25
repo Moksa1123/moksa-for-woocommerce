@@ -391,8 +391,7 @@ JS;
 		}
 
 		// failed 共用 cancelled；pending 共用 on-hold 的 option key。
-		// moksa-* 的 key 是 slug 直接 str_replace('-','_')，跟 render/save 那邊同一個算法 ——
-		// 這裡曾寫成 moksafowo_*，跟儲存的 key 對不上，顏色設定存了卻永遠不生效。
+		// moksa-* 的 key 是 slug 直接 str_replace('-','_')，必須跟 render/save 那邊同一個算法。
 		$defaults    = [
 			'processing'         => [ '#dbeafe', '#1e40af' ],
 			'completed'          => [ '#d1fae5', '#065f46' ],

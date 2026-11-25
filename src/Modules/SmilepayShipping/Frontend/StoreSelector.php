@@ -176,8 +176,7 @@ final class StoreSelector {
 		$store_name    = sanitize_text_field( Input::request( 'storename' ) );
 		$store_address = sanitize_text_field( Input::request( 'storeaddress' ) );
 
-		// tempvar 是開地圖時用 session 算出的值，速買配會原樣帶回（實測確認）。驗不過代表不是本人開的地圖，
-		// 例如跨站連結想換掉顧客 session 裡的取貨門市。
+		// tempvar 是開地圖時用 session 算出的值，速買配會原樣帶回。驗不過代表不是本人開的地圖，不採用。
 		$tempvar = sanitize_text_field( Input::request( 'tempvar' ) );
 		if ( '' === $tempvar || ! hash_equals( \Moksafowo\Modules\Shared\Frontend\StoreSessionOwner::tag( 'smilepay-emap' ), $tempvar ) ) {
 			Helper::warn( 'EMAP callback tempvar invalid — ignored' );

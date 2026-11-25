@@ -132,16 +132,15 @@ final class Plugin {
 	}
 
 	/**
-	 * v1.5.1 之前有第二層總開關 moksafowo_ai_enabled，兩個模組的 boot() 都會再檢查它。
-	 * 現在模組卡片是唯一開關，若舊站的總開關是關的，就把兩個模組一併關掉，維持原本的行為。
+	 * 舊的第二層總開關 moksafowo_ai_enabled 已廢除，模組卡片是唯一開關。
+	 * 若站上的總開關是關的，就把兩個模組一併關掉，維持原本的行為。
 	 */
 	/**
-	 * v1.8.9 修了兩組「設定頁存的 key」跟「程式讀的 key」對不上的問題：
-	 * - 物流狀態開關：設定頁存 moksafowo_shipping_status_moksafowo_<x>_enabled，
-	 *   Registrar 讀 moksafowo_shipping_status_moksa_<x>_enabled → 勾不勾都沒差。
-	 *   商家若真的關過某個狀態，值在舊 key 上，搬過來才不會升級後又冒出來。
-	 * - 郵遞區號自動帶入：設定從沒被 JS 讀過，一直都是開的。設定頁只要存過一次
-	 *   就會留下 no（checkbox 預設沒勾），修好之後不能讓它突然關掉，統一設成 yes。
+	 * 一次性搬遷兩組 option：
+	 * - 物流狀態開關：舊 key moksafowo_shipping_status_moksafowo_<x>_enabled 的值
+	 *   搬到 Registrar 讀的 moksafowo_shipping_status_moksa_<x>_enabled，商家關過的狀態維持關閉。
+	 * - 郵遞區號自動帶入：統一設成 yes。舊設定頁存的值從來沒被程式讀過，實際一直是自動帶入，
+	 *   所以這不是覆蓋商家的選擇，而是維持商家看到的行為。
 	 */
 	private static function migrate_option_key_mismatches(): void {
 		if ( 'done' === Support\FreshOption::get( 'moksafowo_option_keys_migrated_189', '' ) ) {

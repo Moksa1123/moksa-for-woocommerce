@@ -121,8 +121,7 @@ class PayuniShipping {
 		self::$hashiv  = Credentials::hashiv();
 
 		self::$log_enabled = wc_string_to_bool( get_option( 'moksafowo_payuni_shipping_debug_log_enabled', 'no' ) );
-		// 跟憑證用同一個開關。原本物流另有開關只決定 API 網址，憑證卻跟著金流的開關走，
-		// 兩邊不一致時（例如測試憑證打正式網址）地圖與建單一律失敗。
+		// 跟憑證用同一個開關，API 網址與憑證才不會一個測試、一個正式。
 		self::$testmode = Credentials::test_mode_enabled();
 		self::$api_url  = ( self::$testmode ) ? 'https://sandbox-api.payuni.com.tw/api' : 'https://api.payuni.com.tw/api';
 

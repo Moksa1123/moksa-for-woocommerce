@@ -164,7 +164,7 @@ final class Helper extends AbstractCredentialHelper {
 			];
 		}
 
-		// GetIssueList 的 Data 直接回 JSON 物件、沒有加密（2026-11-20 沙箱實測，文件寫加密字串）。
+		// GetIssueList 的 Data 直接回 JSON 物件、沒有加密（文件寫加密字串，實際回應不是）。
 		// 仍要外層 TransCode=1，才不會把任意格式的回應當成功。
 		if ( '/B2CInvoice/GetIssueList' === $path && is_array( $json['Data'] ) ) {
 			$decoded = 1 === (int) ( $json['TransCode'] ?? 0 ) ? map_deep( $json['Data'], 'sanitize_text_field' ) : null;

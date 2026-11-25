@@ -310,7 +310,7 @@ final class WebhookHandler {
 	}
 
 	/**
-	 * 純綁卡交易（CardBind，1 元驗卡）。文件寫 CardBind，沙箱實際回 cardBind（2026-11-19 實測），大小寫不拘。
+	 * 純綁卡交易（CardBind，1 元驗卡）。文件寫 CardBind，沙箱實際回 cardBind，大小寫不拘。
 	 */
 	private static function is_card_bind( array $data ): bool {
 		return 0 === strcasecmp( (string) ( $data['payment']['paymentBehavior'] ?? '' ), 'CardBind' );

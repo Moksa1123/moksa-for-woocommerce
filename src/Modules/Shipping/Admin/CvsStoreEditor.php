@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * open_map 回傳 [ 'api_url' => ..., 'form_data' => [...] ]（POST）
  * 或 [ 'url' => ... ]（GET）。地圖開在新視窗，選完由 render_return()
- * 用 postMessage 把門市推回訂單編輯頁，原本沒存的編輯不會被沖掉。
+ * 用 postMessage 把門市推回訂單編輯頁，頁面上還沒存的編輯不會被沖掉。
  */
 final class CvsStoreEditor {
 

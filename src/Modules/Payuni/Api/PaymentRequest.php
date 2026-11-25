@@ -662,7 +662,7 @@ class PaymentRequest {
 		$payuni_order_no_key = PayuniPayment::get_order_meta_key( $order, OrderMeta::PAYUNI_ORDER_NO );
 		$payuni_order_no     = $order->get_meta( $payuni_order_no_key );
 		if ( '' === (string) $payuni_order_no ) {
-			// 這版之前建立、又沒收到通知的訂單沒存 MerTradeNo，用序號還原（格式見 build_payuni_order_no）。
+			// 沒存 MerTradeNo 的訂單用序號還原（格式見 build_payuni_order_no）。
 			$serial          = (int) $order->get_meta( OrderMeta::ORDER_SERIAL_NO );
 			$payuni_order_no = $order->get_id() . '-' . max( 1, $serial );
 		}

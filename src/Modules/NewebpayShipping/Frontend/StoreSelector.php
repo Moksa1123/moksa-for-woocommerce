@@ -23,7 +23,7 @@ final class StoreSelector {
 		// 門市 token 在「渲染結帳頁的那個請求」裡就兌換掉，不要等頁面載入後再發 AJAX。
 		// 走 AJAX 會跟 WooCommerce 自己的 update_order_review 併發：對方在我們寫入前
 		// 載入 session、在 shutdown 存回，把門市蓋掉 —— 顧客明明選了卻顯示沒選，
-		// 再撞上「未選門市不准下單」就直接結不了帳。（ECPay v1.8.4 已修，這裡跟進。）
+		// 再撞上「未選門市不准下單」就直接結不了帳。（跟 ECPay 的做法相同。）
 		add_action( 'template_redirect', [ __CLASS__, 'consume_token_early' ], 5 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
 

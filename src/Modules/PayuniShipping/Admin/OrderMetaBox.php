@@ -76,7 +76,7 @@ class OrderMetaBox {
 		}
 
 		if ( $ship_type === ShipType::SEVEN ) {
-			// 原本這列標「門市代號」卻印 PartnerId（B2C 的廠商代號，已含在物流編號裡），顧客選的門市反而沒顯示。
+			// 「門市代號」顯示顧客選的門市，不是 PartnerId（B2C 的廠商代號，已含在物流編號裡）。
 			$store_id = (string) $order->get_meta( Keys::SHIPPING_CVS_STORE_ID );
 			if ( '' === $store_id ) {
 				$store_id = (string) $order->get_meta( OrderMeta::StoreId );

@@ -37,16 +37,16 @@ class PaymentResponse {
 		$posted_mer_id = sanitize_text_field( Input::post( 'MerID' ) );
 
 		if ( $mer_id !== $posted_mer_id ) {
-			PayuniPayment::log( 'PAYUNi received response MerID not found or not match. ' );
+			PayuniPayment::warn( 'PAYUNi received response MerID not found or not match. ' );
 			return;
 		}
 
 		$encrypt_info = sanitize_text_field( Input::post( 'EncryptInfo' ) );
 		$posted_hash  = sanitize_text_field( Input::post( 'HashInfo' ) );
 
-		// 必須在 decrypt 前驗 HashInfo — 否則被偽造的 EncryptInfo 會 silent fail at parse_str
+		// 必須在 decrypt 前驗 HashInfo：驗不過就不解密。
 		if ( '' === $posted_hash || ! hash_equals( PayuniPayment::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
-			PayuniPayment::log( 'PAYUNi notify HashInfo mismatch — request rejected.' );
+			PayuniPayment::warn( 'PAYUNi notify HashInfo mismatch — request rejected.' );
 			status_header( 403 );
 			return;
 		}
@@ -118,7 +118,7 @@ class PaymentResponse {
 		$posted_mer_id = sanitize_text_field( Input::post( 'MerID' ) );
 
 		if ( $mer_id !== $posted_mer_id ) {
-			PayuniPayment::log( 'PAYUNi received response MerID not found or not match. ' );
+			PayuniPayment::warn( 'PAYUNi received response MerID not found or not match. ' );
 			return;
 		}
 
@@ -126,7 +126,7 @@ class PaymentResponse {
 		$posted_hash  = sanitize_text_field( Input::post( 'HashInfo' ) );
 
 		if ( '' === $posted_hash || ! hash_equals( PayuniPayment::hash_info( $encrypt_info ), strtoupper( $posted_hash ) ) ) {
-			PayuniPayment::log( 'PAYUNi return HashInfo mismatch — request rejected.' );
+			PayuniPayment::warn( 'PAYUNi return HashInfo mismatch — request rejected.' );
 			status_header( 403 );
 			return;
 		}

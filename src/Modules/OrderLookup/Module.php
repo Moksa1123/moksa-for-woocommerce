@@ -85,7 +85,7 @@ final class Module extends AbstractModule {
 
 	/**
 	 * 舊站：查單還在用舊表就背景重建一次 taxonomy 索引，建完由 Backfill 收尾時切換；
-	 * 停在「重建中」卻沒有排程（排程曾失敗）時重新開始。加鎖：升級後第一波並發請求只啟動一次。
+	 * 停在「重建中」卻沒有排程時重新開始。加鎖：升級後第一波並發請求只啟動一次。
 	 */
 	public static function maybe_start_index_build(): void {
 		if ( ! Table::is_enabled() || Index\TermIndex::uses_terms() ) {

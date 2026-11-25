@@ -62,7 +62,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_trade_sha( string $trade_info, string $trade_sha ): bool {
-		// 金鑰沒填時用空字串也算得出簽章、解得開密文，任何人都能偽造貨態通知。
+		// 空金鑰也算得出簽章，所以金鑰沒填時一律驗章失敗。
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return false;
 		}

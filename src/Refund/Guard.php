@@ -310,7 +310,7 @@ final class Guard {
 		return isset( self::$locks[ 'moksafowo_lock_' . $kind . '_' . $order_id ] );
 	}
 
-	/** 繞過快取直接讀（有 Redis 時 notoptions 可能是舊的，見 SOP §3 G）。 */
+	/** 繞過快取直接讀（有 Redis 時 notoptions 可能是舊的）。 */
 	private static function fresh_option( string $name ) {
 		wp_cache_delete( $name, 'options' );
 		$notoptions = wp_cache_get( 'notoptions', 'options' );

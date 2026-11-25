@@ -114,7 +114,8 @@ final class Issue {
 			'CustomerID'         => '',
 			'CustomerIdentifier' => $is_b2b ? $buyer_ubn : '',
 			'CustomerName'       => mb_substr( $customer_name, 0, 60 ),
-			'CustomerAddr'       => mb_substr( $customer_addr, 0, 100 ),
+			// 地址只有列印紙本時才需要；不印就不送，避免把買家地址交給加值中心。
+			'CustomerAddr'       => $print ? mb_substr( $customer_addr, 0, 100 ) : '',
 			'CustomerPhone'      => $order->get_billing_phone(),
 			'CustomerEmail'      => $order->get_billing_email(),
 			'Print'              => $print ? '1' : '0',

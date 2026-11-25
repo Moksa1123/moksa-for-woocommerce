@@ -118,7 +118,7 @@ final class Helper extends AbstractCredentialHelper {
 			}
 		}
 
-		// 這版之前建立的訂單沒有單號清單，只能照舊用目前前綴解析。
+		// 沒有單號清單的訂單用目前前綴解析。
 		$parsed = self::parse_order_id( $mtn );
 		$order  = null !== $parsed ? wc_get_order( $parsed ) : false;
 		if ( ! $order instanceof \WC_Order ) {
@@ -167,7 +167,7 @@ final class Helper extends AbstractCredentialHelper {
 	 * @param bool   $strict 只接受正確的 PKCS7 padding 與 JSON；沒有另附雜湊的密文（定期定額）要用這個。
 	 */
 	public static function decrypt_trade_info( string $hex, bool $strict = false ): ?array {
-		// 定期定額通知只靠加密證明來源；金鑰沒填時用空字串也解得開，任何人都能偽造。
+		// 定期定額通知只靠加密證明來源；金鑰沒填時不解密，一律視為無效。
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return null;
 		}
@@ -213,7 +213,7 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	public static function verify_trade_sha( string $trade_info_hex, string $trade_sha ): bool {
-		// 金鑰沒填時用空字串也算得出簽章，任何人都能偽造。
+		// 空金鑰也算得出簽章，所以金鑰沒填時一律驗章失敗。
 		if ( '' === self::hash_key() || '' === self::hash_iv() ) {
 			return false;
 		}

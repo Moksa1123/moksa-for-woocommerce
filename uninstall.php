@@ -103,7 +103,7 @@ if ( class_exists( '\Moksafowo\Modules\OrderLookup\Index\TermIndex' ) ) {
 delete_metadata( 'user', 0, '_moksafowo_payment_member_id', '', true );
 
 /*
- * Order data is kept on purpose (store owner's decision, 2026-11-15): payment transaction IDs,
+ * Order data is kept on purpose: payment transaction IDs,
  * e-invoice numbers, tracking numbers and pickup stores on orders are the store's trading records
  * and must survive an accidental uninstall.
  *

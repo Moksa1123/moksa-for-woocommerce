@@ -47,7 +47,7 @@ final class IpnHandler {
 			status_header( 200 );
 			exit( '<Roturlstatus>key mismatch</Roturlstatus>' );
 		}
-		// 加上回呼 key 之前建立的物流單只能靠 Smseid 辨識；物流早就走完的舊單不再接受沒有 key 的通知。
+		// 沒有回呼 key 的物流單只能靠 Smseid 辨識；建立超過 60 天的單不接受沒有 key 的通知。
 		$created = $order->get_date_created();
 		if ( 'yes' !== $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) && ( ! $created || $created->getTimestamp() < time() - 60 * DAY_IN_SECONDS ) ) {
 			Helper::warn( 'IPN without callback key for an old order — rejected', [ 'order_id' => $order_id ] );
@@ -184,7 +184,7 @@ final class IpnHandler {
 			case 3:
 				return [ __( 'Collected by the customer', 'moksa-for-woocommerce' ), 'completed' ];
 			// 4~7 是「顧客沒取貨 → 包裹一路退回」的同一條鏈，整條停在未取件。
-			// 4 曾對到 cancelled，那會觸發 WC 自動回補庫存 —— 包裹還在路上就先加回可售量。
+			// 4 不能對到 cancelled：那會觸發 WC 自動回補庫存，包裹還在路上就先加回可售量。
 			case 4:
 				return [ __( 'Returned by the customer', 'moksa-for-woocommerce' ), 'moksa-unclaimed' ];
 			case 5:

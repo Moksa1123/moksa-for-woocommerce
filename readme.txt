@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.26.2
+Stable tag: 1.26.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -169,6 +169,10 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.26.3 - 2026-11-25 =
+* Fixed: Privacy: e-invoices (PayNow, ECPay, Amego, ezPay, SmilePay) only send the buyer's address when a paper or company invoice is issued. PayNow invoices also handle commas and line breaks in buyer details correctly.
+* Fixed: Rejected PAYUNi payment notices are always logged as warnings, even with the debug log off.
+
 = 1.26.2 - 2026-11-24 =
 * Fixed: Stores that used the order lookup index or customer messages before 1.22 now finish moving that data to the new storage in the background; the move never started before.
 * Fixed: The "add order note" ability is no longer exposed to MCP clients by default (for example through the MCP Adapter plugin), because it changes orders.
@@ -310,6 +314,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.26.3 =
+Privacy update for e-invoices: the buyer's address is only sent when a paper or company invoice is issued.
 
 = 1.26.2 =
 Finishes moving older order lookup and customer message data to the new storage, and stops exposing the "add order note" ability to MCP clients by default.

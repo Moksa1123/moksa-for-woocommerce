@@ -164,7 +164,7 @@ final class Issue {
 			'ItemAmt'         => [],
 
 			'BuyerName'       => '' !== $buyer_name ? $buyer_name : '',
-			'BuyerAddress'    => $buyer_address,
+			'BuyerAddress'    => '',           // 選填，只有紙本與統編發票才送（下面設定）
 			'BuyerEmail'      => $order->get_billing_email(),
 		];
 
@@ -190,16 +190,18 @@ final class Issue {
 						break;
 					case 'paper':
 					default:
-						$args['PrintFlag'] = 'Y';
+						$args['PrintFlag']    = 'Y';
+						$args['BuyerAddress'] = $buyer_address;
 						break;
 				}
 				break;
 			case 'b2b':
-				$args['Category']  = 'B2B';
-				$args['PrintFlag'] = 'Y';
-				$args['BuyerUBN']  = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
-				$buyer_company     = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
-				$args['BuyerName'] = '' !== $buyer_company ? $buyer_company : $args['BuyerUBN'];
+				$args['Category']     = 'B2B';
+				$args['PrintFlag']    = 'Y';
+				$args['BuyerAddress'] = $buyer_address;
+				$args['BuyerUBN']     = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
+				$buyer_company        = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
+				$args['BuyerName']    = '' !== $buyer_company ? $buyer_company : $args['BuyerUBN'];
 				break;
 			case 'b2c_donate':
 				$args['LoveCode'] = (string) $order->get_meta( Keys::INVOICE_LOVE_CODE );

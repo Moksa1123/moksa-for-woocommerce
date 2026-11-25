@@ -40,7 +40,7 @@ abstract class AbstractStatusMapper {
 	}
 
 	/**
-	 * 包裹已回到賣家手上（使用者 11-17 決定）：
+	 * 包裹已回到賣家手上：
 	 * - 取貨付款、還沒收到錢 → 訂單改「已取消」（WC 取消時自動回補庫存）。
 	 * - 已付款 → 狀態照對應表（未取件），另留一次備註請店家決定退款或重寄。不自動退款。
 	 *
@@ -166,7 +166,6 @@ abstract class AbstractStatusMapper {
 		do_action( "moksafowo_shipping_status_changed_{$slug}", $order, $provider, $code );
 
 		// moksa-* 自訂狀態走自家 email；WC 既有狀態走 WC 內建 email pipeline。
-		// 前綴曾是 mo-，改名成 moksa- 後這裡漏改，導致三封物流信從未觸發。
 		if ( str_starts_with( $slug, 'moksa-' ) ) {
 			do_action( 'moksafowo_shipping_status_' . $slug . '_notification', $order->get_id(), $order );
 		}

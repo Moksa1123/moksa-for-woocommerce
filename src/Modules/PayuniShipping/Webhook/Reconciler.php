@@ -14,8 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * PAYUNi 貨態補查 —— IPN 沒送達時的備援。
  *
  * 復用既有的 ShippingRequest::query_order()（後台「查詢」鈕也是打這支），
- * 但補上它缺的最後一步：把查回來的 ShipStatus 丟進 StatusMapper。手動查詢
- * 原本只寫備註與 meta，不會轉訂單狀態。
+ * 再把查回來的 ShipStatus 丟進 StatusMapper 轉訂單狀態。
  */
 final class Reconciler {
 

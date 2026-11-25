@@ -22,7 +22,7 @@ final class Helper extends AbstractCredentialHelper {
 	public const ENDPOINT_SANDBOX_MAP    = 'https://logistics-stage.ecpay.com.tw/Express/map';
 	public const ENDPOINT_PROD_MAP       = 'https://logistics.ecpay.com.tw/Express/map';
 	// 官方現行為 V5（developers.ecpay.com.tw/7418）。回應格式與 V2 相同（不帶前綴的 key=value），
-	// 欄位較多；我們只讀 LogisticsStatus，兩版都有（測試站沙箱 11-17 實測比對）。
+	// 欄位較多；我們只讀 LogisticsStatus，兩版都有。
 	public const ENDPOINT_SANDBOX_QUERY = 'https://logistics-stage.ecpay.com.tw/Helper/QueryLogisticsTradeInfo/V5';
 	public const ENDPOINT_PROD_QUERY    = 'https://logistics.ecpay.com.tw/Helper/QueryLogisticsTradeInfo/V5';
 
@@ -209,8 +209,7 @@ final class Helper extends AbstractCredentialHelper {
 		$signed = $posted;
 		unset( $signed['CheckMacValue'] );
 		$subtype = (string) ( $posted['LogisticsSubType'] ?? 'UNIMARTC2C' );
-		// 金鑰組由請求自帶的 LogisticsSubType 決定；沒設定的那組金鑰是空字串，任何人都能用空金鑰算出簽章。
-		// 該組沒有金鑰、或 MerchantID 不是該組的商店代號，一律拒絕。
+		// 金鑰組由請求自帶的 LogisticsSubType 決定。該組沒有金鑰、或 MerchantID 不是該組的商店代號，一律拒絕。
 		if ( '' === self::hash_key( $subtype ) || '' === self::hash_iv( $subtype )
 			|| (string) ( $posted['MerchantID'] ?? '' ) !== self::merchant_id( $subtype ) ) {
 			return false;

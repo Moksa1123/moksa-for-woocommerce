@@ -160,9 +160,7 @@ final class FieldManager {
 
 	/**
 	 * 欄位順序與寬度只有一個開關：「台灣欄位順序與寬度」那一區的「啟用這個區塊」。
-	 *
-	 * 以前還要再勾地址工具那區裡的「啟用台式欄位順序」才會生效 —— 兩層開關，
-	 * 而且第二層放在另一個區塊裡，商家在下方拖到天荒地老都不會有反應（CLAUDE.md §11 #14）。
+	 * 不要再加第二層開關：放在別的區塊的開關商家找不到，會以為設定沒生效。
 	 */
 	public static function layout_enabled(): bool {
 		return \Moksafowo\Settings\AdvancedSections::is_on( \Moksafowo\Settings\AdvancedSections::TW_FIELD_LAYOUT );

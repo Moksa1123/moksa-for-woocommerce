@@ -144,7 +144,6 @@ final class IpnHandler {
 		}
 
 		// Fallback：拆單 T1/T2 IPN 對不到單一欄位（只鏡射最後一包），直接在拆單紀錄裡找這個 MTN。
-		// 原本「最新 50 張有紀錄的訂單」會漏掉較舊的單（date_after 也不是 WC 支援的參數）。
 		$candidates = \Moksafowo\Order\Lookup::orders(
 			[
 				'limit'                            => 5,

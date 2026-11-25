@@ -94,8 +94,7 @@ final class StatusMapper extends AbstractStatusMapper {
 	}
 
 	/**
-	 * 4444＝訂單建立失敗（綠界 2026 新增貨態）：沒有對應的訂單狀態，原本只會靜靜忽略，
-	 * 店家以為已出貨。留一則明確的備註請店家重新建立物流單。
+	 * 4444＝訂單建立失敗：沒有對應的訂單狀態，留一則明確的備註請店家重新建立物流單。
 	 */
 	public static function note_create_failed( \WC_Order $order, string $desc = '' ): void {
 		$order->add_order_note(

@@ -134,7 +134,7 @@ abstract class AbstractPchomepayGateway extends AbstractMowcGateway {
 		}
 
 		// 退款編號由「訂單＋這筆之前已退金額＋這筆金額」組成：逾時後重送同一筆會是同一個編號，
-		// PChomePay 拒收重複編號，不會退兩次（原本用 time()，重試就變新單號）。WC 呼叫這裡時
+		// PChomePay 拒收重複編號，不會退兩次（不要用 time()，重試會變新單號）。WC 呼叫這裡時
 		// 這筆退款紀錄已經存了，所以「之前已退」要扣掉這筆。
 		$before = (int) round( (float) $order->get_total_refunded() ) - $amt;
 		// 明確失敗（PChomePay 有回應、拒絕）後同一筆可能被記成用過：失敗次數放進編號，下次換新號；

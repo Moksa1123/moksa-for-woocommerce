@@ -21,8 +21,7 @@ final class AdminActions extends AbstractAdminActions {
 					return 'PAYUNi'; }
 				public function meta_key_trade_no(): string {
 					return OrderMeta::ShipTradeNo; }
-				// 曾寫死 '_..._ship_no'，那個 key 不存在（實際是 OrderMeta::ShipNo = '_..._sno'），
-				// 「未列印訂單」的 NOT EXISTS 篩選因此永遠成立，印過的單也一直列在待印清單。
+				// 「未列印訂單」的 NOT EXISTS 篩選靠這個 key，必須是 OrderMeta::ShipNo（'_..._sno'）。
 				public function meta_key_ship_no(): string {
 					return OrderMeta::ShipNo; }
 				public function is_supported_method( string $method_id ): bool {

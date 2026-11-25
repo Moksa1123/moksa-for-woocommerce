@@ -6,9 +6,6 @@
  *
  * 做法：離開前把整份表單寫進 sessionStorage（跟著分頁走、關掉自動清），回來再填回去。
  * 存檔由共用的 submitForm() 觸發，所以四家物流商自動都有，不必各自接。
- *
- * 原本只有 PAYUNi 有這個機制（PayuniShipping/assets/js/save-fields.js），
- * 綠界／藍新／速買配都沒有；這裡是把它一般化後收成一份。
  */
 ( function ( window, document ) {
 	'use strict';
@@ -293,7 +290,7 @@
 
 		// 還原成功就把暫存清掉，這份資料只能生效一次。
 		// 不清的話，顧客回來後自己改了欄位，下一次 updated_checkout 會再還原一遍，
-		// 把他剛改的值蓋回舊的 —— 實測踩過。下次要去選店時 submitForm() 會重新存。
+		// 把他剛改的值蓋回舊的。下次要去選店時 submitForm() 會重新存。
 		clear();
 	}
 

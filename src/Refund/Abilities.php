@@ -9,7 +9,7 @@ use Moksafowo\Modules\Shared\Caps;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 退款第一版只開兩個唯讀 Ability（使用者 11-17 決定）：待處理清單、單張訂單的退款狀態。
+ * 退款只開兩個唯讀 Ability：待處理清單、單張訂單的退款狀態。
  * 不回卡號、金鑰、顧客個資；只回金額、狀態與說明。
  */
 final class Abilities {

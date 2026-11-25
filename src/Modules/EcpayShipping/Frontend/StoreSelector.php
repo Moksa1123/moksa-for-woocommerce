@@ -236,7 +236,7 @@ final class StoreSelector {
 		// All fields sanitized via wc_clean + wp_unslash at capture; only session/transient written (no order state mutation).
 		$posted = wc_clean( Input::all_post() );
 
-		// 確認是本站開過的地圖之前只記欄位名稱：任何人都能打這個網址。
+		// 確認是本站開過的地圖之前只記欄位名稱（內容尚未驗證）。
 		Helper::log( 'shipping map callback', [ 'fields' => array_map( 'sanitize_key', array_keys( (array) $posted ) ) ] );
 
 		$mtn = isset( $posted['MerchantTradeNo'] ) ? wc_clean( wp_unslash( $posted['MerchantTradeNo'] ) ) : '';

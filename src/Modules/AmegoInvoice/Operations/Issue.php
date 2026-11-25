@@ -242,7 +242,10 @@ final class Issue {
 			'OrderId'              => $order_id_str,
 			'BuyerIdentifier'      => $buyer_identifier,
 			'BuyerName'            => mb_substr( $buyer_name, 0, 60 ),
-			'BuyerAddress'         => mb_substr( $order->get_billing_address_1() . $order->get_billing_address_2(), 0, 100 ),
+			// 地址是選填，只有紙本與統編發票才送。
+			'BuyerAddress'         => ( $is_b2b || ( 'b2c_carrier' === $type && '' === $carrier_type ) )
+				? mb_substr( $order->get_billing_address_1() . $order->get_billing_address_2(), 0, 100 )
+				: '',
 			'BuyerTelephoneNumber' => preg_replace( '/[^0-9]/', '', (string) $order->get_billing_phone() ) ?? '',
 			'BuyerEmailAddress'    => (string) $order->get_billing_email(),
 			'MainRemark'           => '#' . $order->get_order_number(),

@@ -162,8 +162,7 @@ class ShippingRequest {
 
 	public static function moksafowo_payuni_ajax_query_delivery_status() {
 
-		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce
-		// only, allowing any logged-in user to query other people's orders.
+		// SECURITY: capability check first, then nonce; both are always required.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( __( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
@@ -246,7 +245,7 @@ class ShippingRequest {
 
 	public static function moksafowo_payuni_ajax_update_package_spec() {
 
-		// SECURITY: capability check before nonce — wpbr-payuni-shipping had nonce only.
+		// SECURITY: capability check first, then nonce; both are always required.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_send_json_error( __( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}
@@ -310,9 +309,8 @@ class ShippingRequest {
 	}
 
 	public static function moksafowo_payuni_print_label() {
-		// SECURITY: capability + nonce ALWAYS required. wpbr-payuni-shipping
-		// only checked the nonce when `security` was present in the URL, which
-		// meant an attacker could omit it and bypass verification entirely.
+		// SECURITY: capability + nonce are always required, whether or not
+		// `security` is present in the URL.
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 			wp_die( esc_html__( 'Permission denied.', 'moksa-for-woocommerce' ), 403 );
 		}

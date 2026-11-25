@@ -270,8 +270,8 @@ final class Module extends AbstractModule {
 	}
 
 	/**
-	 * 藍新超商取貨的到店簡訊靠收件人手機（UserTel 必填，09 開頭 10 碼）。原本這裡把電話改成選填，
-	 * 顧客不填也能結帳，到建單才被藍新拒絕。保留這個 filter 但不再放寬電話。
+	 * 藍新超商取貨的到店簡訊靠收件人手機（UserTel 必填，09 開頭 10 碼），所以電話維持必填，
+	 * 不在這裡放寬。保留這個 filter 但不改欄位。
 	 */
 	public static function relax_cvs_required_fields( array $fields ): array {
 		return $fields;

@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
  *
  * 注意：這只是換寫法，送進資料庫的 SQL 跟直接帶 meta_key／meta_value／meta_query 完全一樣，
  * 效能不變（HPOS 走 wc_orders_meta 的 meta_key_value 索引；傳統儲存走 postmeta 的 meta_key 索引）。
- * 使用者 2026-11-15 核准這個做法（見 docs/B批-資料庫查詢改寫設計.md §2E）。
  *
  * 一律經過 self::orders() 查詢：它保證 filter 已掛上。filter 沒掛上的話，WC 會忽略不認得的
  * 參數，等於沒有條件，反查就會抓到隨便一張單。

@@ -124,8 +124,7 @@ final class PaymentInfoEmail extends \WC_Email {
 	}
 
 	/**
-	 * 商家在信件設定頁填的「額外內容」。核心每封信都印這一段，這封原本漏了，
-	 * 商家編輯了不會有任何效果。
+	 * 商家在信件設定頁填的「額外內容」。核心每封信都印這一段，這封也要印。
 	 */
 	private function render_additional_content_html(): void {
 		$extra = (string) $this->get_additional_content();

@@ -116,8 +116,7 @@ final class TwAddress {
 
 	/**
 	 * 欄位順序是進階設定裡「獨立的一區」，閘門必須跟 FieldManager::init() 一模一樣：
-	 * 區塊開關 TW_FIELD_LAYOUT + 自身 toggle。以前這裡直接讀 toggle，於是
-	 * 「區塊關掉但 toggle 還開著」時 Classic 不排、Block 照排，兩邊行為對不上。
+	 * 區塊開關 TW_FIELD_LAYOUT + 自身 toggle，Classic 與 Block 兩邊行為才會一致。
 	 */
 	private static function field_layout_on(): bool {
 		return FieldManager::layout_enabled();
@@ -245,8 +244,7 @@ final class TwAddress {
 	}
 
 	/**
-	 * 「選好縣市區後自動帶入郵遞區號」設定。這個開關在設定頁存在很久，但兩支 JS 從來
-	 * 沒讀它 —— 一直都是無條件帶入，勾不勾都一樣。現在真的接上；預設 yes 維持原本行為。
+	 * 「選好縣市區後自動帶入郵遞區號」設定，兩支 JS 都讀它。預設 yes（自動帶入）。
 	 */
 	public static function postcode_autofill_enabled(): bool {
 		return 'yes' === get_option( 'moksafowo_tw_address_postcode_autofill', 'yes' );

@@ -228,8 +228,8 @@ final class Server {
 	 */
 	private static function tools(): array {
 		// 快取命中時完全不碰 Abilities 登錄：wp_get_abilities() 第一次呼叫會讓全站每個外掛註冊
-		// 自己的 ability（常是三位數），原本每次 tools/list 都先跑這個才查快取，11-17 一天 446 次
-		// 把資料庫打掛。key 改用版本＋破壞性開關＋各模組開關＋「設定世代」（任何 *_enabled 選項
+		// 自己的 ability（常是三位數），量大時很吃資料庫，所以先查快取。
+		// key 用版本＋破壞性開關＋各模組開關＋「設定世代」（任何 *_enabled 選項
 		// 一變就換，見 bump_tools_generation），模組或功能開關改了一樣會換新清單。
 		$modules = \Moksafowo\Plugin::instance()->modules();
 		$sig     = array();

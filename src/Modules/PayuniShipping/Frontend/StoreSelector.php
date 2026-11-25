@@ -73,8 +73,7 @@ class StoreSelector {
 		// 門市 token 在渲染結帳頁的那個請求就兌換掉，不要等頁面載入後再發 AJAX。
 		// 走 AJAX 會跟 WooCommerce 的 update_order_review 併發，對方會把門市蓋掉 ——
 		// 顧客明明選了卻顯示沒選，再撞上「未選門市不准下單」就結不了帳。
-		// 而且 Classic 結帳原本完全沒有伺服器端消費者，只靠 callback 那份 best-effort
-		// session（跨站 POST 可能換 session，註解自己也標了不可靠）。
+		// Classic 結帳也走這裡，不靠 callback 那份 best-effort session（跨站 POST 可能換 session）。
 		add_action( 'template_redirect', array( __CLASS__, 'consume_token_early' ), 5 );
 		if ( $pick_on_checkout ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
@@ -340,7 +339,7 @@ JS
 
 		$method_id = strpos( $shipping_method, ':' ) !== false ? explode( ':', $shipping_method )[0] : $shipping_method;
 
-		// payload 綁定 session 已選運送方式，防 nonce 持有者偽造任意 method_id
+		// 送來的運送方式必須是 session 裡已選的，否則拒絕
 		if ( ! function_exists( 'WC' ) || ! WC()->session || ! WC()->cart || WC()->cart->is_empty() ) {
 			wp_send_json_error( array( 'message' => __( 'The cart is empty or the session has expired.', 'moksa-for-woocommerce' ) ), 400 );
 		}
@@ -455,7 +454,7 @@ JS
 		// Source authenticity verified via HashInfo hash_equals (PayuniShipping::hash_info) before decryption.
 		// All fields sanitized via wc_clean + wp_unslash at capture; MapJson content deep-sanitized via map_deep after json_decode.
 		$posted = wc_clean( Input::all_post() );
-		// 驗章前只記欄位名稱：任何人都能打這個網址，內容不可信也可能夾帶偽造的 log 行。
+		// 驗章前只記欄位名稱：內容尚未驗證，不寫進 log。
 		PayuniShipping::log( 'PAYUNi store map return, fields: ' . implode( ',', array_map( 'sanitize_key', array_keys( (array) $posted ) ) ) );
 
 		$store_data = array();

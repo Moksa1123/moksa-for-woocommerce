@@ -22,8 +22,8 @@ final class StoreValidation {
 	}
 
 	/**
-	 * 區塊結帳不跑 woocommerce_checkout_process，收件電話原本完全沒驗；空的或錯的電話要到
-	 * 付款後建物流單才被 PAYUNi 退件。送單時用同一套規則擋下。
+	 * 區塊結帳不跑 woocommerce_checkout_process，收件電話在這裡驗：空的或錯的電話要到
+	 * 付款後建物流單才會被 PAYUNi 退件，所以送單時用同一套規則擋下。
 	 *
 	 * @param \WC_Order $order 訂單。
 	 * @throws \Automattic\WooCommerce\StoreApi\Exceptions\RouteException When the phone number is not valid.

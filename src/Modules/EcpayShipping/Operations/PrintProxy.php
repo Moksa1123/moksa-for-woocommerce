@@ -19,9 +19,7 @@ final class PrintProxy {
 	/**
 	 * 支援 A6 標籤機的物流子類型。其餘（TCAT / FAMI / HILIFE / OK）只有 A4。
 	 *
-	 * 這份清單原本在四個地方各寫一次，其中 Admin\OrderMetaBox 少了 UNIMART 與
-	 * UNIMARTFREEZE —— 那兩種明明送得出 A6，訂單頁卻沒有按鈕可按。集中成一份，
-	 * 之後只會有一個地方要改。
+	 * 各處都讀這一份清單，不要另外複製。
 	 */
 	public const A6_SUBTYPES = [ 'UNIMARTC2C', 'UNIMART', 'UNIMARTFREEZE', 'POST' ];
 

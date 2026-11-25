@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * 顧客身分驗證 —— 訂單編號 + 帳單電話末三碼 + 帳單 email。
- * 末三碼只有 1000 組，攻擊者分散 IP 仍可慢慢猜；加上 email 才猜不到。
+ * 末三碼只有 1000 組，單靠它不夠，所以再加上 email。
  *
  * 敵意環境(未登入訪客)安全核心:
  * - 末三碼僅 1000 組 → 以「IP + 訂單號」雙鍵節流,達上限即鎖定;另有只看訂單的總上限,換 IP 也繞不過。
@@ -31,15 +31,14 @@ final class Verify {
 	}
 
 	/**
-	 * 全局每 IP 每小時失敗上限 —— 防攻擊者逐一換訂單號繞過「IP+訂單號」桶。
+	 * 全局每 IP 每小時失敗上限，不分訂單號（補「IP+訂單號」桶）。
 	 */
 	public static function max_ip_attempts(): int {
 		return max( self::max_attempts() * 4, 30 );
 	}
 
 	/**
-	 * 單一訂單 24 小時內的失敗總上限（不分 IP）。末三碼只有 1000 組，攻擊者換 IP 就能繞過
-	 * IP 節流，只剩這一道：以天為單位，猜中機率從每小時 1% 降到每天 1%。
+	 * 單一訂單 24 小時內的失敗總上限（不分 IP，換 IP 也不會重置），以天為單位計算。
 	 */
 	public static function max_order_attempts(): int {
 		return max( self::max_attempts() * 2, 10 );
@@ -161,7 +160,7 @@ final class Verify {
 		return 'moksafowo_cs_ipthr_' . md5( self::ip_network( $ip ) );
 	}
 
-	/** IPv6 一個用戶通常拿到整段 /64，逐一換位址就能繞過節流：以 /64 為單位計算。 */
+	/** IPv6 一個用戶通常拿到整段 /64：節流以 /64 為單位計算，換段內位址不會重置。 */
 	private static function ip_network( string $ip ): string {
 		if ( false === filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
 			return $ip;

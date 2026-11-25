@@ -12,7 +12,7 @@ namespace Moksafowo\Settings;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * 金鑰欄位原本是 WooCommerce 的 text 欄位，值會原樣印在頁面原始碼裡。這裡把 SecretMap 列的欄位
+ * WooCommerce 的 text 欄位會把值原樣印在頁面原始碼裡，所以這裡把 SecretMap 列的金鑰欄位
  * 換成自己的欄位型別（輸出時呼叫 mask()），存檔時：
  * - 留空 → 不變（WooCommerce 的 sanitize 篩選回 null 就不存）。
  * - 勾「清除」（同名勾選框送出 CLEAR）→ 存空字串。

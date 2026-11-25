@@ -18,7 +18,7 @@ final class CreateOrder {
 
 
 	public static function run( \WC_Order $order ): array {
-		// 之後送出的回呼網址都帶每單 key；通知進來時據此驗證（這之前建的單沒有 key）。
+		// 送出的回呼網址都帶每單 key；通知進來時據此驗證。
 		if ( 'yes' !== $order->get_meta( Keys::SMILEPAY_SHIPPING_KEYED ) ) {
 			$order->update_meta_data( Keys::SMILEPAY_SHIPPING_KEYED, 'yes' );
 			$order->save();

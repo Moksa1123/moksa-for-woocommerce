@@ -34,8 +34,7 @@ abstract class AbstractShippingEmail extends \WC_Email {
 	}
 
 	/**
-	 * 這幾封信因為狀態 slug 前綴比對錯誤（比 `mo-`、實際是 `moksa-`）從未觸發過。
-	 * 修好觸發點後預設維持關閉，否則既有站台升級完就會突然開始寄信給顧客；
+	 * 這幾封信預設關閉，既有站台升級後才不會突然開始寄信給顧客；
 	 * 要用的商家自己到 WooCommerce → 設定 → 電子郵件裡打開。
 	 * 已自行存過設定的站台不受影響（存過的值優先於 default）。
 	 */

@@ -1607,7 +1607,7 @@ final class Ability {
 
 	/**
 	 * 註冊時 gate MCP 暴露：破壞性 moksa-for-woocommerce 能力的 meta.mcp.public 一律設為 false，
-	 * 並記錄供 deprecated WC endpoint 同步排除（1.22.0 起不再看「暴露破壞性工具」開關）。
+	 * 並記錄供 deprecated WC endpoint 同步排除（不看「暴露破壞性工具」開關）。
 	 *
 	 * **核心不讀 `meta.mcp.public`** —— WP 7.1 的 Abilities API 對 `meta['mcp']` 零引用，
 	 * 核心的 `meta['public']` 只用來 seed `show_in_rest`，而我們每個 ability 都顯式寫了
@@ -1630,7 +1630,7 @@ final class Ability {
 		if ( ! is_string( $name ) || 0 !== strpos( $name, 'moksa-for-woocommerce/' ) || ! is_array( $args ) ) {
 			return $args;
 		}
-		// 1.22.0 起：破壞性能力對第三方 MCP（官方 Adapter、WooCommerce）一律不公開，不再看「暴露破壞性工具」
+		// 破壞性能力對第三方 MCP（官方 Adapter、WooCommerce）一律不公開，不看「暴露破壞性工具」
 		// 開關——那個開關只給本外掛自己的 MCP Server 用（暴露時也只預覽、不執行，見 Mcp\Server::abilities()）。
 		$destructive = ! empty( $args['meta']['annotations']['destructive'] );
 		if ( $destructive ) {

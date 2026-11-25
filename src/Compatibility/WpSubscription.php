@@ -390,7 +390,7 @@ final class WpSubscription {
 			if ( ! in_array( $status, [ 'expired', 'pending', 'on-hold', 'on_hold' ], true ) && ! ( 'cancelled' === $status && $failed ) ) {
 				continue;
 			}
-			// 次數上限（Pro）原本在續訂單完成時才累加；改在這裡啟用就要在這裡加。
+			// 次數上限（Pro）的續訂次數在這裡啟用訂閱時累加。
 			if ( function_exists( 'subscrpt_pro_activated' ) && subscrpt_pro_activated() && class_exists( '\SpringDevs\SubscriptionPro\Illuminate\LimitChecker' ) ) {
 				\SpringDevs\SubscriptionPro\Illuminate\LimitChecker::increment_renewal_count( $subscription_id );
 			}

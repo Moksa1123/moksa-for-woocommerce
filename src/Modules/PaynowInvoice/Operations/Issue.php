@@ -184,11 +184,10 @@ final class Issue {
 		$buyer_name  = trim( $order->get_billing_last_name() . $order->get_billing_first_name() );
 		$buyer_email = (string) $order->get_billing_email();
 		$buyer_phone = preg_replace( '/[^0-9]/', '', (string) $order->get_billing_phone() ) ?? '';
-		$buyer_add   = $order->get_billing_address_1() . $order->get_billing_address_2();
-		// buyer_add 有值 PayNow 就會寄紙本；只有紙本（沒有載具）與統編發票要寄。其餘加 BRING 前綴：留地址、不寄送。
-		if ( '' !== $buyer_add && ! ( 'b2b' === $type || ( 'b2c_carrier' === $type && '' === $carrier_t ) ) ) {
-			$buyer_add = 'BRING ' . $buyer_add;
-		}
+		// buyer_add 有值 PayNow 就會寄紙本；只有紙本（沒有載具）與統編發票要寄。其餘不送地址（選填欄位，送了也沒用途）。
+		$buyer_add = ( 'b2b' === $type || ( 'b2c_carrier' === $type && '' === $carrier_t ) )
+			? $order->get_billing_address_1() . $order->get_billing_address_2()
+			: '';
 
 		if ( 'b2b' === $type ) {
 			$company    = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );
@@ -279,7 +278,8 @@ final class Issue {
 
 
 	private static function format_csv_row( array $fields ): string {
-		$escaped = array_map( static fn( string $f ): string => "'" . $f, $fields );
+		// PayNow 依逗號切欄位、每欄以單引號開頭：值裡的逗號、換行、單引號一律換成空白。
+		$escaped = array_map( static fn( string $f ): string => "'" . str_replace( [ ',', "\r", "\n", "'" ], ' ', $f ), $fields );
 		return implode( ',', $escaped );
 	}
 }

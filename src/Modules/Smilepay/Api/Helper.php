@@ -64,8 +64,8 @@ final class Helper extends AbstractCredentialHelper {
 	}
 
 	/**
-	 * 回呼網址上的訂單專屬 key。Mid_smilepay 的秘密只有 4 位參數碼，可能值不到百種，
-	 * 光靠它擋不住偽造；key 用站台密鑰簽，顧客就算知道自己的 order_key 也算不出來。
+	 * 回呼網址上的訂單專屬 key。Mid_smilepay 只有 4 位參數碼，不足以單獨驗證來源；
+	 * key 用站台密鑰簽，只知道 order_key 算不出來。
 	 */
 	/**
 	 * 回呼網址上的訂單專屬 key。依端點分開簽：信用卡的 key 會出現在顧客看得到的轉址網址上，

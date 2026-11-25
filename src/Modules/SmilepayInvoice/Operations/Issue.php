@@ -175,7 +175,7 @@ final class Issue {
 			'AllAmount'          => $total,
 
 			'Name'               => $buyer_name,
-			'Address'            => $buyer_address,
+			'Address'            => '',  // 選填，只有紙本與統編發票才送（下面設定）
 			'Phone'              => $order->get_billing_phone(),
 			'Email'              => $order->get_billing_email(),
 		];
@@ -200,10 +200,12 @@ final class Issue {
 						break;
 					case 'paper':
 					default:
+						$args['Address'] = $buyer_address;
 						break;
 				}
 				break;
 			case 'b2b':
+				$args['Address']  = $buyer_address;
 				$args['Buyer_id'] = (string) $order->get_meta( Keys::INVOICE_BUYER_UBN );
 				$args['UnitTAX']  = 'Y';
 				$buyer_company    = (string) $order->get_meta( Keys::INVOICE_BUYER_NAME );

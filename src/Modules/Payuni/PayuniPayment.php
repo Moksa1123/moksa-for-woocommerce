@@ -426,6 +426,20 @@ class PayuniPayment {
 	}
 
 
+	/**
+	 * 驗章失敗、商店代號不符這類「可能有人偽造」的事件：不受除錯開關影響，一律以 warning 記錄並附來源 IP。
+	 *
+	 * @param string $message 訊息（不含通知內容）。
+	 */
+	public static function warn( string $message ): void {
+		$context = [];
+		$ip      = isset( $_SERVER['REMOTE_ADDR'] ) ? filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) : false;
+		if ( false !== $ip ) {
+			$context['remote_ip'] = $ip;
+		}
+		\Moksafowo\Logging\Logger::warning( 'payuni-payment', $message, $context );
+	}
+
 	public static function log( $message, $level = 'info' ) {
 		if ( ! self::$log_enabled ) {
 			return;

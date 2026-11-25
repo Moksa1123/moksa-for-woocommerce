@@ -159,7 +159,7 @@ final class IpnHandler {
 			self::die_status( __( 'The order\'s payment method does not match', 'moksa-for-woocommerce' ) );
 		}
 
-		// 更新前已送出的信用卡單帶的是舊的（roturl）key，一併接受；反過來不行。
+		// 信用卡端點也接受 roturl key（較早建立的信用卡單帶的是這個）；反過來不行。
 		if ( ! self::authentic( $order, $req, $smseid, $mid_smilepay, [ 'credit', 'roturl' ] ) ) {
 			self::die_status( __( 'Mid_smilepay does not match', 'moksa-for-woocommerce' ) );
 		}
@@ -224,7 +224,7 @@ final class IpnHandler {
 				);
 			}
 		} elseif ( $order->is_paid() ) {
-			// 已付款的單不因晚到或偽造的失敗通知被打回失敗，只留紀錄給商家核對。
+			// 已付款的單不因晚到的失敗通知被打回失敗，只留紀錄給商家核對。
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: reason */
@@ -314,7 +314,7 @@ final class IpnHandler {
 			Helper::warn( 'roturl rejected — merchant Mid (參數碼) not configured; cannot verify callback origin' );
 			return false;
 		}
-		// 速買配不論成功失敗都以訂單金額計算（失敗通知的 Amount 是 0），也讓偽造者不能自選金額。
+		// 速買配不論成功失敗都以訂單金額計算（失敗通知的 Amount 是 0），金額以訂單為準。
 		$expected = Helper::calc_mid_smilepay( $mid, (string) (int) ceil( (float) $order->get_total() ), $smseid );
 		return hash_equals( $expected, $mid_smilepay );
 	}
