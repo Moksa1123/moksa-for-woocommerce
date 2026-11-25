@@ -98,18 +98,45 @@ final class Registry {
 	 * @param array<string,mixed> $args 參數。
 	 */
 	public static function permitted( string $name, array $args ): bool {
-		if ( ! function_exists( 'wp_get_ability' ) ) {
-			return false;
-		}
-		$ability = wp_get_ability( $name );
+		return true === self::check( $name, $args );
+	}
+
+	/**
+	 * 跟 permitted() 同一個判斷，但不行的時候說明原因.
+	 *
+	 * 權限沒過時才用 validate_input() 看參數本身合不合格：依物件判斷的權限函式（例如看 id）
+	 * 收到錯的參數也會回 false，這時回「參數錯誤」比「沒有權限」準確。驗證只在失敗時跑，
+	 * 不會擋掉權限已經通過的呼叫（參數格式由各 ability 的處理函式自己把關）.
+	 *
+	 * @param string              $name Ability 名稱。
+	 * @param array<string,mixed> $args 參數。
+	 * @return true|\WP_Error 錯誤碼：moksa_ai_unsupported（找不到 ability）、
+	 *                        moksa_ai_invalid_input（參數不合格）、moksa_ai_forbidden（沒有權限）。
+	 */
+	public static function check( string $name, array $args ) {
+		$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( $name ) : null;
 		if ( ! is_object( $ability ) || ! method_exists( $ability, 'check_permissions' ) ) {
-			return false;
+			return new \WP_Error( 'moksa_ai_unsupported', self::string( 'unsupported' ) );
 		}
 		try {
-			return true === $ability->check_permissions( $args );
+			$permission = $ability->check_permissions( $args );
 		} catch ( \Throwable $e ) {
-			return false;
+			$permission = false;
 		}
+		if ( true === $permission ) {
+			return true;
+		}
+		if ( method_exists( $ability, 'validate_input' ) ) {
+			try {
+				$valid = $ability->validate_input( $args );
+			} catch ( \Throwable $e ) {
+				$valid = true;
+			}
+			if ( is_wp_error( $valid ) ) {
+				return new \WP_Error( 'moksa_ai_invalid_input', $valid->get_error_message() );
+			}
+		}
+		return new \WP_Error( 'moksa_ai_forbidden', self::string( 'noPermission' ) );
 	}
 
 	/**

@@ -65,7 +65,14 @@ $before = $notes();
 \Moksafowo\Modules\PayuniShipping\Frontstage::route_logistics_notify( array( 'TradeType' => '2' ) + $base );
 wp_cache_flush();
 $o = wc_get_order( $order_id );
-$ok( '31' === (string) $o->get_meta( OrderMeta::ShipStatus ) && 'processing' === $o->get_status() && $notes() === $before + 1, '逆物流（付款通知網址轉來）：出貨貨態、訂單狀態不變，多一則備註' );
+$ok( '31' === (string) $o->get_meta( OrderMeta::ShipStatus ) && 'processing' === $o->get_status() && $notes() === $before, '逆物流同一則通知經付款通知網址重送：出貨貨態、訂單狀態不變，不重複備註' );
+
+// 1c. 逆物流貨態有變（經付款通知網址轉來）：多一則備註。
+$before = $notes();
+\Moksafowo\Modules\PayuniShipping\Frontstage::route_logistics_notify( array( 'TradeType' => '2', 'ShipStatus' => '51', 'ShipStatusTime' => '2026-11-25 13:00:00' ) + $base );
+wp_cache_flush();
+$o = wc_get_order( $order_id );
+$ok( '31' === (string) $o->get_meta( OrderMeta::ShipStatus ) && $notes() === $before + 1, '逆物流貨態變動（付款通知網址轉來）：多一則備註，出貨貨態不變' );
 
 // 3. 7-11 退貨便（沒有 ShipTradeNo）。
 $before = $notes();

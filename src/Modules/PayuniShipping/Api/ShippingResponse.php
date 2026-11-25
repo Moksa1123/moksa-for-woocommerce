@@ -277,40 +277,15 @@ class ShippingResponse {
 	}
 
 	/**
-	 * 退貨貨態只寫備註：不更新出貨貨態，也不觸發出貨的訂單狀態對應，
+	 * 退貨貨態只更新退貨紀錄並寫備註：不更新出貨貨態，也不觸發出貨的訂單狀態對應，
 	 * 否則退貨送達會被當成出貨送達，把訂單改成已取貨或完成。
-	 * 退貨便通知沒有物流交易序號，對不回訂單，只記 log。
 	 *
 	 * @param array<string, mixed> $info 解密後的通知。
 	 */
 	private static function handle_return_notice( array $info ): void {
-		$ship_trade_no = (string) ( $info['ShipTradeNo'] ?? '' );
-		$order         = '' !== $ship_trade_no ? self::find_order_by_ship_trade_no( $ship_trade_no ) : null;
-		if ( ! $order instanceof \WC_Order ) {
-			PayuniShipping::log(
-				sprintf(
-					'PAYUNi return status notice without a matching order: LgsType=%s RefundODNO=%s ShipTradeNo=%s Status=%s',
-					(string) ( $info['LgsType'] ?? '' ),
-					(string) ( $info['RefundODNO'] ?? '' ),
-					$ship_trade_no,
-					(string) ( $info['ShipStatus'] ?? '' )
-				)
-			);
-			return;
-		}
-		$desc = (string) ( $info['ShipStatusDesc'] ?? '' );
-		$code = (string) ( $info['ShipStatus'] ?? '' );
-		$order->add_order_note(
-			\Moksafowo\Order\Note::build(
-				/* translators: %s: shipping status description */
-				sprintf( __( 'PAYUNi return shipment status: %s', 'moksa-for-woocommerce' ), '' !== $desc ? $desc : $code ),
-				[
-					__( 'Shipping transaction ID', 'moksa-for-woocommerce' ) => $ship_trade_no,
-					__( 'Return number', 'moksa-for-woocommerce' )           => (string) ( $info['OBTNumber'] ?? '' ),
-					__( 'Status code', 'moksa-for-woocommerce' )             => $code,
-					__( 'Status updated', 'moksa-for-woocommerce' )          => (string) ( $info['ShipStatusTime'] ?? '' ),
-				]
-			)
+		\Moksafowo\Modules\PayuniShipping\Returns\Notice::handle(
+			$info,
+			static fn( string $no ): ?\WC_Order => self::find_order_by_ship_trade_no( $no )
 		);
 	}
 

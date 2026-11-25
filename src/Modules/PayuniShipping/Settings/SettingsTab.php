@@ -211,6 +211,31 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
+					'title' => __( 'Returns', 'moksa-for-woocommerce' ),
+					'type'  => 'title',
+					'desc'  => __( 'Create returns from the order page. PAYUNi must first enable the back-end logistics API for your store; 7-ELEVEN return codes also need 7-ELEVEN merchant shipping. Returns never change the order status or refund the customer.', 'moksa-for-woocommerce' ),
+					'id'    => 'moksafowo_payuni_return_settings',
+				),
+				array(
+					'title'   => __( '7-ELEVEN return codes', 'moksa-for-woocommerce' ),
+					'type'    => 'checkbox',
+					'default' => 'no',
+					'desc'    => __( 'Create a 12-digit return code that the customer enters at an ibon kiosk to send the parcel back.', 'moksa-for-woocommerce' ),
+					'id'      => \Moksafowo\Modules\PayuniShipping\Returns\Admin::OPTION_C2B,
+				),
+				array(
+					'title'   => __( 'T-Cat return pickups', 'moksa-for-woocommerce' ),
+					'type'    => 'checkbox',
+					'default' => 'no',
+					'desc'    => __( 'Book a T-Cat driver to collect the return from the customer.', 'moksa-for-woocommerce' ),
+					'id'      => \Moksafowo\Modules\PayuniShipping\Returns\Admin::OPTION_HOME,
+				),
+				array(
+					'type' => 'sectionend',
+					'id'   => 'moksafowo_payuni_return_settings',
+				),
+
+				array(
 					'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
 					'desc'  => __( 'Copy these from the PAYUNi dashboard under Member area → Integration settings. They are the same credentials the payment module uses.', 'moksa-for-woocommerce' ),

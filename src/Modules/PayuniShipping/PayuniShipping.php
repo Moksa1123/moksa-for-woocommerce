@@ -174,6 +174,8 @@ class PayuniShipping {
 		Frontstage::init();
 		Admin\OrderListHelper::init();
 		Operations\PrintProxy::init();
+		Returns\Admin::init();
+		Returns\CustomerView::init();
 
 		add_filter( 'moksafowo_shipping_batch_print_providers', [ __CLASS__, 'register_batch_print' ] );
 		// 依溫層分開的 7-11 方式沒有繼承共用超商類別，登記給地址模組判斷「超商不需要鄉鎮」。

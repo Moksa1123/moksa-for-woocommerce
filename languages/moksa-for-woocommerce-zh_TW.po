@@ -2958,7 +2958,7 @@ msgstr "AMEGO 光貿電子發票串接。已內建公開測試帳號，勾選測
 #: src/Modules/Paynow/Settings/SettingsTab.php:19
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:19
 #: src/Modules/Payuni/Settings/SettingsTab.php:166
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:220
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:245
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:19
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:21
 #: src/Modules/Smilepay/Settings/SettingsTab.php:19
@@ -3678,8 +3678,8 @@ msgstr "未知"
 #: src/Modules/Shared/Admin/CardRenderers.php:238
 #: src/Modules/Shared/Admin/CardRenderers.php:246
 #: src/Modules/Shared/Admin/CardRenderers.php:414
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:242
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:257
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:246
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:261
 msgid "Payment method:"
 msgstr "付款方式："
 
@@ -3773,7 +3773,7 @@ msgstr "全額退款"
 #: src/Modules/Linepay/Admin/OrderMetaBox.php:27
 #: src/Modules/Payuni/Admin/OrderMetaBoxes.php:33
 #: src/Modules/Shared/Admin/CardRenderers.php:73
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:211
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:215
 msgid "Payment information"
 msgstr "金流資訊"
 
@@ -3822,6 +3822,7 @@ msgstr "%s 訂單"
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:76
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:187
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
+#: src/Modules/PayuniShipping/Returns/Admin.php:338
 #: src/Modules/Shared/Admin/PaymentQuery.php:76
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:398
 #: src/Modules/Shared/Invoice/OrderListColumn.php:118
@@ -4659,7 +4660,7 @@ msgstr "無卡分期"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:13
 #: src/Modules/Paynow/Settings/SettingsTab.php:13
 #: src/Modules/Payuni/Settings/SettingsTab.php:160
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:214
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:239
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:13
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:15
 #: src/Modules/Smilepay/Settings/SettingsTab.php:13
@@ -4686,7 +4687,7 @@ msgstr "上線前用，勾選後所有交易走測試環境不會真扣款。上
 #: src/Modules/Newebpay/Settings/SettingsTab.php:26
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:49
 #: src/Modules/Payuni/Settings/SettingsTab.php:174
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:227
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:252
 #: src/Modules/Tappay/Settings/SettingsTab.php:44
 msgid "Test merchant ID"
 msgstr "測試 MerchantID"
@@ -4699,7 +4700,7 @@ msgstr "測試 MerchantID"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:31
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:54
 #: src/Modules/Payuni/Settings/SettingsTab.php:179
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:232
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:257
 msgid "Test hash key"
 msgstr "測試 HashKey"
 
@@ -4711,7 +4712,7 @@ msgstr "測試 HashKey"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:36
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:59
 #: src/Modules/Payuni/Settings/SettingsTab.php:184
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:237
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:262
 msgid "Test hash IV"
 msgstr "測試 HashIV"
 
@@ -4723,7 +4724,7 @@ msgstr "測試 HashIV"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:41
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:75
 #: src/Modules/Payuni/Settings/SettingsTab.php:189
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:242
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:267
 #: src/Modules/Tappay/Settings/SettingsTab.php:71
 msgid "Live merchant ID"
 msgstr "正式 MerchantID"
@@ -4736,7 +4737,7 @@ msgstr "正式 MerchantID"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:46
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:80
 #: src/Modules/Payuni/Settings/SettingsTab.php:194
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:247
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:272
 msgid "Live hash key"
 msgstr "正式 HashKey"
 
@@ -4748,7 +4749,7 @@ msgstr "正式 HashKey"
 #: src/Modules/Newebpay/Settings/SettingsTab.php:51
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:85
 #: src/Modules/Payuni/Settings/SettingsTab.php:199
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:252
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:277
 msgid "Live hash IV"
 msgstr "正式 HashIV"
 
@@ -5079,7 +5080,7 @@ msgstr "已排程：將於 %s 自動開立發票。現在手動開立的話，�
 
 #: src/Modules/EcpayInvoice/Admin/OrderMetaBox.php:149
 #: src/Modules/Shared/Admin/CardRenderers.php:96
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:213
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:217
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:44
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:61
 #: src/Modules/Shared/Invoice/CustomerInvoiceInfo.php:67
@@ -5707,7 +5708,7 @@ msgid "NT$%d"
 msgstr "NT$%d"
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:225
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:244
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:248
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:171
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:205
 msgid "Amount to collect:"
@@ -5786,7 +5787,7 @@ msgstr "重新建立物流單"
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:34
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:75
 #: src/Modules/PayuniShipping/Frontend/CustomerOrderView.php:79
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:212
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:216
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:89
 #: src/Modules/SmilepayShipping/Admin/OrderMetaBox.php:177
 #: src/Modules/SmilepayShipping/Frontend/CustomerOrderView.php:74
@@ -6536,9 +6537,9 @@ msgstr "綠界物流編號"
 #: src/Modules/Payuni/Api/PaymentRequest.php:763
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:310
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:337
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:354
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:312
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:329
+#: src/Modules/PayuniShipping/Returns/Notice.php:100
 #: src/Modules/Shipping/Webhook/AbstractStatusMapper.php:153
 msgid "Status code"
 msgstr "狀態碼"
@@ -7229,7 +7230,7 @@ msgstr "以 LINE Pay 自動扣 WooCommerce Subscriptions 的續訂款項"
 
 #: src/Modules/Linepay/Settings/SettingsTab.php:161
 #: src/Modules/Payuni/Settings/SettingsTab.php:280
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:330
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:355
 msgid "View logs"
 msgstr "檢視日誌"
 
@@ -11071,7 +11072,7 @@ msgstr "批次列印黑貓宅配標籤"
 
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:59
 #: src/Modules/PayuniShipping/Admin/OrderEdit.php:65
-#: src/Modules/PayuniShipping/PayuniShipping.php:377
+#: src/Modules/PayuniShipping/PayuniShipping.php:379
 msgid "Shipping Phone"
 msgstr "收件人電話"
 
@@ -11084,10 +11085,10 @@ msgid "Re-Create PAYUNi Shipping Order"
 msgstr "重新建立 PAYUNi 物流訂單"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:72
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:308
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:336
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:353
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:311
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:328
 #: src/Modules/PayuniShipping/Frontstage.php:328
+#: src/Modules/PayuniShipping/Returns/Notice.php:98
 msgid "Shipping transaction ID"
 msgstr "物流交易編號"
 
@@ -11109,6 +11110,7 @@ msgstr "商品類型"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:108
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:72
+#: src/Modules/PayuniShipping/Returns/Admin.php:231
 msgid "Parcel size"
 msgstr "包裹規格"
 
@@ -11121,8 +11123,9 @@ msgid "Amount to collect"
 msgstr "代收金額"
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:135
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:311
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:338
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:313
+#: src/Modules/PayuniShipping/Returns/Admin.php:154
+#: src/Modules/PayuniShipping/Returns/Notice.php:101
 msgid "Status updated"
 msgstr "狀態時間"
 
@@ -11171,11 +11174,15 @@ msgstr "PAYUNi 建立物流單失敗："
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:250
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:315
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:477
+#: src/Modules/PayuniShipping/Returns/Admin.php:255
+#: src/Modules/PayuniShipping/Returns/Admin.php:312
 msgid "Permission denied."
 msgstr "權限不足。"
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:173
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:256
+#: src/Modules/PayuniShipping/Returns/Admin.php:258
+#: src/Modules/PayuniShipping/Returns/Admin.php:315
 msgid "Invalid security token sent."
 msgstr "送出的安全權杖無效。"
 
@@ -11258,32 +11265,22 @@ msgstr "PAYUNi 建立物流單失敗：%s"
 msgid "The PAYUNi shipment lookup failed: %s"
 msgstr "PAYUNi 物流單查詢失敗：%s"
 
-#. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:306
-#, php-format
-msgid "PAYUNi return shipment status: %s"
-msgstr "PAYUNi 退貨貨態：%s"
-
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:309
-msgid "Return number"
-msgstr "退貨編號"
-
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:329
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:304
 msgid "Received at the drop-off store"
 msgstr "門市已收件"
 
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:330
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:305
 msgid "Waiting for the parcel to be dropped off"
 msgstr "等待商店寄貨"
 
 #. translators: %s: shipping status description
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:334
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:309
 #, php-format
 msgid "PAYUNi shipping status: %s"
 msgstr "PAYUNi 貨態：%s"
 
 #. translators: %s: PAYUNi message
-#: src/Modules/PayuniShipping/Api/ShippingResponse.php:351
+#: src/Modules/PayuniShipping/Api/ShippingResponse.php:326
 #, php-format
 msgid "PAYUNi label print notice: %s"
 msgstr "PAYUNi 列印通知：%s"
@@ -11357,6 +11354,7 @@ msgid "Update failed"
 msgstr "更新失敗"
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:61
+#: src/Modules/PayuniShipping/Returns/Admin.php:66
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:65
 #: src/Modules/Shared/Invoice/OrderListColumn.php:82
 #: src/Modules/Shipping/Admin/ListCreateButton.php:122
@@ -11378,6 +11376,9 @@ msgid "%s orders (up to 50 shown)"
 msgstr "%s 訂單（最多顯示 50 筆）"
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:71
+#: src/Modules/PayuniShipping/Returns/Admin.php:153
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:42
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:52
 #: src/Modules/Pchomepay/Module.php:101
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:120
 #: src/Modules/Shared/Compat/LegacyOrderCards.php:161
@@ -11682,63 +11683,63 @@ msgstr "正在列印 PAYUNi 物流標籤…"
 msgid "PAYUNi shipment created, number %s"
 msgstr "PAYUNi 物流單建立成功（單號 %s）"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:204
+#: src/Modules/PayuniShipping/PayuniShipping.php:206
 msgid "PAYUNi convenience store pickup"
 msgstr "PAYUNi 超商取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:226
+#: src/Modules/PayuniShipping/PayuniShipping.php:228
 msgid "PAYUNi 7-ELEVEN C2C pickup"
 msgstr "PAYUNi 7-11 C2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:227
+#: src/Modules/PayuniShipping/PayuniShipping.php:229
 msgid "PAYUNi 7-ELEVEN B2C pickup"
 msgstr "PAYUNi 7-11 B2C 取貨"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:228
+#: src/Modules/PayuniShipping/PayuniShipping.php:230
 msgid "PAYUNi 7-ELEVEN store-to-store ambient"
 msgstr "PAYUNi 7-11 店到店常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:229
+#: src/Modules/PayuniShipping/PayuniShipping.php:231
 msgid "PAYUNi 7-ELEVEN store-to-store frozen"
 msgstr "PAYUNi 7-11 店到店冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:230
+#: src/Modules/PayuniShipping/PayuniShipping.php:232
 msgid "PAYUNi 7-ELEVEN bulk ambient"
 msgstr "PAYUNi 7-11 大宗常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:231
+#: src/Modules/PayuniShipping/PayuniShipping.php:233
 msgid "PAYUNi 7-ELEVEN bulk frozen"
 msgstr "PAYUNi 7-11 大宗冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:234
+#: src/Modules/PayuniShipping/PayuniShipping.php:236
 msgid "PAYUNi T-Cat home delivery"
 msgstr "PAYUNi 黑貓宅配"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:235
+#: src/Modules/PayuniShipping/PayuniShipping.php:237
 msgid "PAYUNi T-Cat ambient"
 msgstr "PAYUNi 黑貓常溫"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:236
+#: src/Modules/PayuniShipping/PayuniShipping.php:238
 msgid "PAYUNi T-Cat frozen"
 msgstr "PAYUNi 黑貓冷凍"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:237
+#: src/Modules/PayuniShipping/PayuniShipping.php:239
 msgid "PAYUNi T-Cat chilled"
 msgstr "PAYUNi 黑貓冷藏"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:279
+#: src/Modules/PayuniShipping/PayuniShipping.php:281
 msgid "PAYUNi convenience store labels"
 msgstr "PAYUNi 超商標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:297
+#: src/Modules/PayuniShipping/PayuniShipping.php:299
 msgid "PAYUNi home delivery labels"
 msgstr "PAYUNi 宅配標籤"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:632
+#: src/Modules/PayuniShipping/PayuniShipping.php:634
 msgid "General Settings"
 msgstr "一般設定"
 
-#: src/Modules/PayuniShipping/PayuniShipping.php:633
+#: src/Modules/PayuniShipping/PayuniShipping.php:635
 msgid "Shipping Settings"
 msgstr "運送設定"
 
@@ -11793,6 +11794,340 @@ msgstr "PAYUNi — 黑貓宅配（多溫層）"
 #: src/Modules/PayuniShipping/Providers/TCat/HDUnified.php:21
 msgid "PAYUNi T-Cat delivery, covering ambient, chilled and frozen goods in one order."
 msgstr "PAYUNi 黑貓宅急便，支援常溫 / 冷藏 / 冷凍多溫層配送。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:65
+msgid "Sending to PAYUNi…"
+msgstr "正在送到統一金流…"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:67
+msgid "PAYUNi has no way to cancel a return once it is created. Create it now?"
+msgstr "統一金流建立後無法取消退貨。確定要建立嗎？"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:97
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:63
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:214
+msgid "Returns"
+msgstr "退貨"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:113
+msgid "No returns yet."
+msgstr "這張訂單還沒有退貨。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:138
+#: src/Modules/PayuniShipping/Returns/Admin.php:407
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:40
+#: src/Modules/PayuniShipping/Returns/Notice.php:97
+msgid "Return code"
+msgstr "退貨便代碼"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:139
+#: src/Modules/PayuniShipping/Returns/Admin.php:408
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:41
+msgid "Use before"
+msgstr "使用期限"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:140
+#: src/Modules/PayuniShipping/Returns/Admin.php:409
+msgid "Payment"
+msgstr "付款"
+
+#. translators: %s: amount collected at the store
+#: src/Modules/PayuniShipping/Returns/Admin.php:142
+#: src/Modules/PayuniShipping/Returns/Admin.php:411
+#, php-format
+msgid "Customer pays NT$%s at the store"
+msgstr "顧客在門市付 NT$%s"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:143
+#: src/Modules/PayuniShipping/Returns/Admin.php:178
+#: src/Modules/PayuniShipping/Returns/Admin.php:412
+msgid "Free for the customer"
+msgstr "顧客免付費"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:145
+#: src/Modules/PayuniShipping/Returns/Admin.php:534
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:51
+#: src/Modules/PayuniShipping/Returns/Notice.php:99
+msgid "Return number"
+msgstr "退貨編號"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:146
+#: src/Modules/PayuniShipping/Returns/Admin.php:213
+#: src/Modules/PayuniShipping/Returns/Admin.php:535
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:50
+msgid "Pickup date"
+msgstr "取件日"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:147
+msgid "Shipment number"
+msgstr "物流序號"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:151
+msgid "Not sent yet"
+msgstr "尚未寄出"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:157
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:38
+msgid "7-ELEVEN return code"
+msgstr "7-11 退貨便"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:157
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:48
+msgid "T-Cat return pickup"
+msgstr "黑貓收退件"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:166
+msgid "Check status"
+msgstr "查詢貨態"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:175
+msgid "Create a 7-ELEVEN return code"
+msgstr "建立 7-11 退貨便"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:177
+msgid "Return shipping fee"
+msgstr "退貨運費"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:179
+msgid "Customer pays at the store"
+msgstr "顧客在門市付費"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:181
+msgid "Amount the customer pays (NT$1–999)"
+msgstr "顧客要付的金額（NT$1～999）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:182
+msgid "Value of the returned goods (NT$1–20000)"
+msgstr "退貨商品價值（NT$1～20000）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:184
+msgid "Link to the original shipment (PAYUNi uses its recipient as the sender)"
+msgstr "對應原物流單（統一金流會用原單收件人當退貨人）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:186
+msgid "Customer name (up to 5 Chinese or 10 English characters)"
+msgstr "顧客姓名（最多 5 個中文字或 10 個英文字）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:187
+msgid "Email the return code to the customer"
+msgstr "寄信把退貨便代碼告訴顧客"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:188
+msgid "Create return code"
+msgstr "建立退貨便"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:207
+msgid "Book a T-Cat return pickup"
+msgstr "預約黑貓收退件"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:209
+msgid "Customer name"
+msgstr "顧客姓名"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:210
+msgid "Customer mobile (09…)"
+msgstr "顧客手機（09 開頭）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:211
+msgid "Pickup address"
+msgstr "取件地址"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:219
+#: src/Modules/PayuniShipping/Returns/Admin.php:536
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:182
+msgid "Delivery window"
+msgstr "配達時段"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:225
+msgid "Temperature"
+msgstr "溫層"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:242
+msgid "Item description (up to 10 Chinese characters)"
+msgstr "品名（最多 10 個中文字）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:243
+msgid "Note for the driver (optional)"
+msgstr "給司機的備註（選填）"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:244
+msgid "Email the pickup details to the customer"
+msgstr "寄信把取件資訊告訴顧客"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:245
+msgid "Book pickup"
+msgstr "預約取件"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:269
+msgid "This return type is not enabled."
+msgstr "這種退貨方式沒有開啟。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:272
+msgid "A return was just requested for this order. Wait two minutes, reload the page and check whether it was created before trying again."
+msgstr "這張訂單剛送出退貨。請等兩分鐘、重新整理頁面，確認有沒有建立成功再重試。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:280
+msgid "PAYUNi may have received the request. Check in the PAYUNi dashboard whether the return was created before trying again in two minutes."
+msgstr "統一金流可能已經收到這個請求。請先到統一金流後台確認有沒有建立，兩分鐘後再重試。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:322
+msgid "The return could not be found on this order."
+msgstr "這張訂單上找不到這筆退貨。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:355
+msgid "Enter an amount between NT$1 and NT$999 for the customer to pay."
+msgstr "請輸入顧客要付的金額，NT$1～999。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:358
+msgid "The value of the returned goods must be between NT$1 and NT$20000."
+msgstr "退貨商品價值要在 NT$1～20000 之間。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:362
+msgid "The customer name is too long: up to 5 Chinese or 10 English characters."
+msgstr "顧客姓名太長：最多 5 個中文字或 10 個英文字。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:365
+msgid "Enter the customer name."
+msgstr "請輸入顧客姓名。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:405
+msgid "Created a 7-ELEVEN return code with PAYUNi."
+msgstr "已在統一金流建立 7-11 退貨便。"
+
+#. translators: 1: 12-digit return code, 2: deadline
+#: src/Modules/PayuniShipping/Returns/Admin.php:421
+#, php-format
+msgid "Your 7-ELEVEN return code is %1$s. Before %2$s, enter this code at the ibon kiosk in any 7-ELEVEN store to print the return slip, then hand the parcel and the slip to the counter."
+msgstr "您的 7-11 退貨便代碼是 %1$s。請在 %2$s 前，到任一 7-11 門市的 ibon 輸入這組代碼印出退貨單，再把包裹和退貨單交給櫃檯。"
+
+#. translators: %s: amount
+#: src/Modules/PayuniShipping/Returns/Admin.php:427
+#, php-format
+msgid "You will pay NT$%s at the counter."
+msgstr "在櫃檯需付 NT$%s。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:451
+msgid "The item description is too long: up to 10 Chinese or 20 English characters."
+msgstr "品名太長：最多 10 個中文字或 20 個英文字。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:454
+msgid "The note for the driver is too long: up to 50 Chinese or 100 English characters."
+msgstr "給司機的備註太長：最多 50 個中文字或 100 個英文字。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:459
+msgid "Fill in the customer name, pickup address and item description."
+msgstr "請填寫顧客姓名、取件地址和品名。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:462
+msgid "The customer mobile must be 10 digits starting with 09."
+msgstr "顧客手機要是 09 開頭的 10 碼數字。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:465
+msgid "The pickup address is too long."
+msgstr "取件地址太長。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:468
+msgid "Choose a pickup date from the list."
+msgstr "請從清單選取件日。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:477
+msgid "Choose a parcel size. Chilled and frozen parcels cannot be 150cm."
+msgstr "請選包裹規格。冷藏、冷凍不能選 150 公分。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:532
+msgid "Booked a T-Cat return pickup with PAYUNi."
+msgstr "已在統一金流預約黑貓收退件。"
+
+#. translators: 1: pickup date, 2: time window, 3: return number
+#: src/Modules/PayuniShipping/Returns/Admin.php:546
+#, php-format
+msgid "T-Cat will collect your return on %1$s (%2$s). Return number: %3$s. Please have the parcel packed and ready."
+msgstr "黑貓會在 %1$s（%2$s）到府收退貨，退貨編號：%3$s。請先把包裹包好。"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:579
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:185
+msgid "Before 1 pm"
+msgstr "13:00 前"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:580
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:186
+msgid "14:00 - 18:00"
+msgstr "14:00 - 18:00"
+
+#: src/Modules/PayuniShipping/Returns/Admin.php:581
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:187
+msgid "No preference"
+msgstr "不指定"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:28
+msgid "This PAYUNi store has not been enabled for returns yet. Ask PAYUNi to enable the back-end logistics API (7-ELEVEN returns also need merchant shipping)."
+msgstr "這個統一金流商店還沒開通退貨。請向統一金流申請「物流幕後 API」（7-11 退貨便還要開通大宗寄倉）。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:29
+msgid "This PAYUNi store has not been enabled for T-Cat returns yet. Ask PAYUNi to enable back-end home delivery."
+msgstr "這個統一金流商店還沒開通黑貓退貨。請向統一金流申請宅配幕後交易。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:30
+msgid "PAYUNi could not find the original shipment for this return."
+msgstr "統一金流找不到這筆退貨的原物流單。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:31
+msgid "The original T-Cat shipment is past the return period."
+msgstr "原黑貓宅配單已超過可退貨期限。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:32
+msgid "The original T-Cat shipment cannot be returned in its current status."
+msgstr "原黑貓宅配單目前的狀態不能退貨。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:33
+msgid "PAYUNi could not verify the postcode of the address. Check the address and try again."
+msgstr "統一金流無法驗證地址的郵遞區號，請檢查地址後再試一次。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:66
+msgid "PAYUNi reported success but did not return a return code."
+msgstr "統一金流回報成功，但沒有回傳退貨便代碼。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:92
+msgid "PAYUNi reported success but did not return a shipment number."
+msgstr "統一金流回報成功，但沒有回傳物流序號。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:127
+msgid "The PAYUNi merchant ID is not set."
+msgstr "還沒設定統一金流商店代號。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:132
+msgid "The request to PAYUNi could not be encrypted. Check the PAYUNi credentials."
+msgstr "送給統一金流的資料無法加密，請檢查統一金流的金鑰設定。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:152
+msgid "Could not get a reply from PAYUNi."
+msgstr "沒有收到統一金流的回應。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:156
+msgid "PAYUNi returned an unexpected response."
+msgstr "統一金流回傳的內容無法辨識。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:166
+msgid "The PAYUNi response could not be verified."
+msgstr "統一金流的回應驗證失敗。"
+
+#: src/Modules/PayuniShipping/Returns/Api.php:181
+msgid "PAYUNi did not accept the request."
+msgstr "統一金流沒有接受這個請求。"
+
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:44
+msgid "Enter the code at the ibon kiosk in any 7-ELEVEN store to print the return slip, then hand the parcel and the slip to the counter."
+msgstr "請到任一 7-11 門市的 ibon 輸入代碼印出退貨單，再把包裹和退貨單交給櫃檯。"
+
+#: src/Modules/PayuniShipping/Returns/CustomerView.php:54
+msgid "Please have the parcel packed and ready for the driver."
+msgstr "請先把包裹包好，等司機來收。"
+
+#. translators: %s: shipping status description
+#: src/Modules/PayuniShipping/Returns/Notice.php:95
+#, php-format
+msgid "PAYUNi return shipment status: %s"
+msgstr "PAYUNi 退貨貨態：%s"
 
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:30
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:39
@@ -11892,22 +12227,6 @@ msgstr "到收件門市待取"
 msgid "Collected"
 msgstr "已取貨"
 
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:182
-msgid "Delivery window"
-msgstr "配達時段"
-
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:185
-msgid "Before 1 pm"
-msgstr "13:00 前"
-
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:186
-msgid "14:00 - 18:00"
-msgstr "14:00 - 18:00"
-
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:187
-msgid "No preference"
-msgstr "不指定"
-
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:193
 msgid "Expected dispatch date, in days after the label is printed"
 msgstr "預計出貨日（列印標籤後 N 天）"
@@ -11929,14 +12248,34 @@ msgid "Portrait (B2C only)"
 msgstr "直立式（僅 B2C 適用）"
 
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:216
+msgid "Create returns from the order page. PAYUNi must first enable the back-end logistics API for your store; 7-ELEVEN return codes also need 7-ELEVEN merchant shipping. Returns never change the order status or refund the customer."
+msgstr "在訂單頁建立退貨。要先請統一金流替商店開通「物流幕後 API」；7-11 退貨便還要開通 7-11 大宗寄倉。退貨不會改訂單狀態，也不會自動退款。"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:220
+msgid "7-ELEVEN return codes"
+msgstr "7-11 退貨便"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:223
+msgid "Create a 12-digit return code that the customer enters at an ibon kiosk to send the parcel back."
+msgstr "產生 12 碼退貨便代碼，顧客到 ibon 輸入後就能寄回包裹。"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:227
+msgid "T-Cat return pickups"
+msgstr "黑貓收退件"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:230
+msgid "Book a T-Cat driver to collect the return from the customer."
+msgstr "預約黑貓司機到顧客那邊收退件。"
+
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:241
 msgid "Copy these from the PAYUNi dashboard under Member area → Integration settings. They are the same credentials the payment module uses."
 msgstr "從 PAYUNi 後台「會員專區 → 整合設定」複製過來。跟金流憑證共用同一組。"
 
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:223
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:248
 msgid "For use before going live. While this is ticked every shipment runs against the test environment and nothing is really dispatched. This is the same switch as PAYUNi payments, so both always use the same environment."
 msgstr "上線前測試用。勾選時所有物流單都在測試環境建立，不會真的出貨。這個開關與 PAYUNi 金流共用，兩邊一律使用同一個環境。"
 
-#: src/Modules/PayuniShipping/Settings/SettingsTab.php:268
+#: src/Modules/PayuniShipping/Settings/SettingsTab.php:293
 msgid "No change"
 msgstr "不變更"
 
@@ -12577,43 +12916,43 @@ msgstr "未知錯誤"
 msgid "Payments / shipping / e-invoicing"
 msgstr "金流 / 物流 / 電子發票"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:238
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:242
 msgid "The customer pays at the counter when collecting the parcel from the convenience store."
 msgstr "顧客至超商取貨時於門市付款。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:239
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:243
 msgid "The customer pays the courier on delivery."
 msgstr "宅配送達時由顧客當場付款給宅配員。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:243
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:247
 msgid "Cash on delivery (COD)"
 msgstr "貨到付款（COD）"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:253
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:257
 msgid "This payment method is handled by this plugin, but there are no further details to show yet."
 msgstr "此付款方式由本外掛處理，但尚無額外詳情可顯示。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:254
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:258
 msgid "This payment method is not handled by this plugin, so there is no extra information to show."
 msgstr "此付款方式非由本外掛處理，無額外資訊可顯示。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:263
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:267
 msgid "Not paid yet."
 msgstr "尚未付款。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:269
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:273
 msgid "This order does not need shipping (virtual products or local pickup)."
 msgstr "此訂單無運送（虛擬商品 / 自取）。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:282
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:286
 msgid "This shipment is handled by this plugin, but there are no further details to show yet."
 msgstr "此物流由本外掛處理，但尚無額外詳情可顯示。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:283
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:287
 msgid "This shipping method is not handled by the plugin’s shipping modules."
 msgstr "此運送方式非由本外掛的物流模組處理。"
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:286
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:290
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:111
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:119
 #: src/Modules/Shipping/Admin/ShippingCardSection.php:256
@@ -12621,7 +12960,7 @@ msgstr "此運送方式非由本外掛的物流模組處理。"
 msgid "Shipping method:"
 msgstr "運送方式："
 
-#: src/Modules/Shared/Admin/OrderInfoLayout.php:293
+#: src/Modules/Shared/Admin/OrderInfoLayout.php:297
 msgid "No e-invoice module is enabled for this order."
 msgstr "此訂單未啟用電子發票模組。"
 

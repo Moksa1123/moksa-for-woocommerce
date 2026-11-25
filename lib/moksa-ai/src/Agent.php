@@ -221,8 +221,9 @@ final class Agent {
 			return self::err( Registry::string( 'unsupported' ) );
 		}
 		// 攔下來的呼叫沒經過 resolver，ability 自己的權限檢查要在這裡跑.
-		if ( ! Registry::permitted( $ability, $args ) ) {
-			return self::err( Registry::string( 'noPermission' ) );
+		$allowed = Registry::check( $ability, $args );
+		if ( is_wp_error( $allowed ) ) {
+			return self::err( $allowed->get_error_message() );
 		}
 
 		$prepared = call_user_func( $handlers[ $ability ]['prepare'], $args );

@@ -197,9 +197,11 @@ final class Host {
 			self::confirm_result( $ability, 'stale' );
 			return rest_ensure_response( array( 'error' => Registry::string( 'confirmStale' ) ) );
 		}
-		if ( ! Registry::permitted( $ability, $data['args'] ) ) {
-			self::confirm_result( $ability, 'denied' );
-			return rest_ensure_response( array( 'error' => Registry::string( 'noPermission' ) ) );
+		$allowed = Registry::check( $ability, $data['args'] );
+		if ( is_wp_error( $allowed ) ) {
+			// 找不到 ability 跟沒有權限一樣記成 denied；參數不合格另記 invalid_input.
+			self::confirm_result( $ability, 'moksa_ai_invalid_input' === $allowed->get_error_code() ? 'invalid_input' : 'denied' );
+			return rest_ensure_response( array( 'error' => $allowed->get_error_message() ) );
 		}
 
 		try {
@@ -228,14 +230,14 @@ final class Host {
 	 * 通知外掛一次確認的結局，讓它們記錄誰在什麼時候確認了哪個破壞性動作.
 	 *
 	 * @param string $ability Ability 名稱。
-	 * @param string $outcome applied、error、exception、denied、unsupported、stale。
+	 * @param string $outcome applied、error、exception、denied、invalid_input、unsupported、stale。
 	 */
 	private static function confirm_result( string $ability, string $outcome ): void {
 		/**
 		 * AI 對話窗的破壞性動作確認結束.
 		 *
 		 * @param string $ability Ability 名稱。
-		 * @param string $outcome applied、error、exception、denied、unsupported、stale。
+		 * @param string $outcome applied、error、exception、denied、invalid_input、unsupported、stale。
 		 * @param int    $user_id 按確認的使用者。
 		 */
 		do_action( 'moksa_ai_confirm_result', $ability, $outcome, get_current_user_id() );

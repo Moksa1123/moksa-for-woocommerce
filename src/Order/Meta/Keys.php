@@ -242,6 +242,8 @@ final class Keys {
 	public const PAYUNI_CLOSE_AUTH   = '_moksafowo_payuni_close_auth';   // BankSettleAuth
 
 	public const PAYUNI_SHIPPING_RECORDS   = '_moksafowo_payuni_shipping_records';
+	public const PAYUNI_RETURNS            = '_moksafowo_payuni_returns';           // 退貨紀錄陣列（7-11 退貨便、黑貓退貨）
+	public const PAYUNI_RETURN_REF         = '_moksafowo_payuni_return_ref';        // 每筆退貨一列，給貨態通知反查訂單
 	public const PAYUNI_SHIPPING_SNO       = '_moksafowo_payuni_shipping_sno';      // PayuniShipping fork OrderMeta::ShipNo 對應
 	public const PAYUNI_SHIPPING_SHIP_TYPE = '_moksafowo_payuni_shipping_ship_type'; // PayuniShipping OrderMeta::ShipType 對應（1=7-11、2=黑貓）
 	public const PAYUNI_SHIPPING_TRADE_NO  = '_moksafowo_payuni_shipping_trade_no'; // PayuniShipping fork OrderMeta::ShipTradeNo 對應

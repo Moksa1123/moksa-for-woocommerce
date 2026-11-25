@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.26.4
+Stable tag: 1.27.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -75,6 +75,7 @@ These run when a customer opens the convenience-store map at checkout (the store
 * **ECPay Logistics (綠界物流)** — 7-11 / FamilyMart / Hi-Life / OK / home delivery. Endpoints: logistics.ecpay.com.tw (test mode: logistics-stage.ecpay.com.tw). Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **NewebPay Logistics (藍新物流)** — CVS / home delivery. Endpoints: core.newebpay.com (test mode: ccore.newebpay.com). Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
 * **PAYUNi Logistics (統一物流)** — 7-11 / home delivery (incl. cold chain). Endpoints: api.payuni.com.tw (test mode: sandbox-api.payuni.com.tw). Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
+* **PAYUNi Logistics returns (統一物流退貨)** — optional, off by default. Same endpoints and policies as above. When you create a 7-ELEVEN return code from the order page, the customer's name, the value of the goods, the return fee and (if linked) the original shipment number are sent to PAYUNi. When you book a T-Cat return pickup, the customer's name, mobile number and pickup address, the item description, temperature, parcel size, pickup date and time window, your note for the driver, the original shipment number (if any) and your store's name, phone and address are sent to PAYUNi. Nothing is sent until you click the button on the order page.
 * **SmilePay Logistics (速買配物流)** — 7-11 / FamilyMart / home delivery. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname; see the SmilePay entry above — same operator as smilepay.net; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (single combined service & personal-data-protection document)
 
 = E-invoice (Taiwan electronic invoicing) =
@@ -151,6 +152,10 @@ Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI �
 
 Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed. With "Allow external AI to make changes (MCP)" turned on, order-changing tools are listed too, but over MCP they only preview the change; to apply it, ask Moksa AI in the WordPress admin and confirm there. Every request is permission-checked on the server.
 
+= How do PAYUNi returns work? =
+
+With PAYUNi shipping, you can create a 7-ELEVEN return code or book a T-Cat return pickup from the order page. First ask PAYUNi to enable the back-end logistics API for your store (7-ELEVEN return codes also need 7-ELEVEN merchant shipping), then turn on the return options under the PAYUNi shipping settings. The customer enters the 12-digit return code at an ibon kiosk to print the return slip; a T-Cat driver collects T-Cat returns from the address you enter. PAYUNi cannot cancel a return once it is created, and an unused 7-ELEVEN return code expires after its deadline. Returns never change the order status or refund the customer; return tracking updates are added as order notes.
+
 = What happens to my data when I delete the plugin? =
 
 Deleting the plugin removes its settings, the customer-service messages and the order-number search index. The payment transaction IDs, e-invoice numbers, tracking numbers and pickup stores saved on your orders are kept, because they are part of your trading records. Saved card credentials that could charge a customer again (used for subscriptions) are removed from the orders.
@@ -168,6 +173,10 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.27.0 - 2026-11-25 =
+* New: PAYUNi returns. Create a 7-ELEVEN return code or book a T-Cat return pickup from the order page, check the return status, and optionally email the details to the customer. Return details are shown on the customer's order page. Off by default; PAYUNi must enable the back-end logistics API for your store first.
+* Fixed: The AI assistant reports invalid action details as an input error instead of a permission error.
 
 = 1.26.4 - 2026-11-25 =
 * Fixed: PAYUNi return shipments (T-Cat returns and 7-ELEVEN return codes) no longer update the order's delivery status. Their status updates are added as order notes instead.
@@ -318,6 +327,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.27.0 =
+Adds PAYUNi returns (7-ELEVEN return codes and T-Cat return pickups), off by default.
 
 = 1.26.4 =
 Return shipments sent through PAYUNi no longer change the order's delivery status.

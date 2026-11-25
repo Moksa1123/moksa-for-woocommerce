@@ -141,6 +141,8 @@ final class OrderInfoLayout {
 				]
 			),
 			'label'    => array_merge( $common, [ 'for' => true ] ),
+			'details'  => array_merge( $common, [ 'open' => true ] ),
+			'summary'  => $common,
 			'input'    => array_merge(
 				$common,
 				$data,
@@ -154,6 +156,8 @@ final class OrderInfoLayout {
 					'checked'     => true,
 					'maxlength'   => true,
 					'size'        => true,
+					'min'         => true,
+					'max'         => true,
 				]
 			),
 			'select'   => array_merge(
