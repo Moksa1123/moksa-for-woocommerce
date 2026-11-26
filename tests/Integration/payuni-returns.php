@@ -138,6 +138,28 @@ $release->invoke( null, $order_id );
 $ok( true === $first && false === $second && true === $third && true === $stale, '建立鎖：重複拿不到、放掉可再拿、過期會清掉' );
 $ok( ! in_array( 'moksafowo_payuni_return_lock_' . $order_id . '.lock', \Moksafowo\Settings\OptionRegistry::names(), true ), '鎖不會記進解除安裝清單' );
 
+// 4c. 訂單頁卡片：退貨區塊接在物流卡片後面，原本的物流資訊還在。
+$order = wc_get_order( $order_id );
+$item  = new WC_Order_Item_Shipping();
+$item->set_method_id( 'moksafowo_payuni_shipping_711' );
+$item->set_method_title( 'TEST' );
+$order->add_item( $item );
+$order->save();
+$cards    = \Moksafowo\Modules\PayuniShipping\Returns\Admin::add_card(
+	array(
+		array(
+			'slot'  => 'shipping',
+			'title' => 'Shipping details',
+			'html'  => '<p>TEST-SHIPPING-CARD</p>',
+		),
+	),
+	wc_get_order( $order_id )
+);
+$shipping = array_values( array_filter( $cards, static fn( $c ) => 'shipping' === ( $c['slot'] ?? '' ) ) );
+$ok( 1 === count( $shipping ) && false !== strpos( $shipping[0]['html'], 'TEST-SHIPPING-CARD' ) && false !== strpos( $shipping[0]['html'], 'moksafowo-payuni-returns' ), '退貨區塊接在物流卡片後面，物流資訊沒被蓋掉' );
+$alone = \Moksafowo\Modules\PayuniShipping\Returns\Admin::add_card( array(), wc_get_order( $order_id ) );
+$ok( 1 === count( $alone ) && false !== strpos( $alone[0]['html'], 'moksafowo-payuni-returns' ), '沒有物流卡片時自己開一張' );
+
 // 5. 沙箱建立退貨便。
 if ( PayuniShipping::$testmode ) {
 	$before = $notes();

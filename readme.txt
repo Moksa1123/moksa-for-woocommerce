@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.27.0
+Stable tag: 1.27.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -174,6 +174,9 @@ No. After the update, customer-service messages and the order-number search inde
 
 == Changelog ==
 
+= 1.27.1 - 2026-11-26 =
+* Fixed: With PAYUNi returns turned on, the shipping details on the order page are shown again above the returns section.
+
 = 1.27.0 - 2026-11-25 =
 * New: PAYUNi returns. Create a 7-ELEVEN return code or book a T-Cat return pickup from the order page, check the return status, and optionally email the details to the customer. Return details are shown on the customer's order page. Off by default; PAYUNi must enable the back-end logistics API for your store first.
 * Fixed: The AI assistant reports invalid action details as an input error instead of a permission error.
@@ -327,6 +330,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.27.1 =
+Shows the PAYUNi shipping details on the order page again when returns are turned on.
 
 = 1.27.0 =
 Adds PAYUNi returns (7-ELEVEN return codes and T-Cat return pickups), off by default.

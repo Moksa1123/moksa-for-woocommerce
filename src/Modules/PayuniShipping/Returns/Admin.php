@@ -92,10 +92,19 @@ final class Admin {
 		if ( empty( $records ) && ! self::c2b_enabled() && ! self::home_enabled() ) {
 			return $cards;
 		}
+		$html = self::card_html( $order, $records );
+		// 同一個位置只顯示最後一張卡片，所以接在現有的物流卡片後面；沒有物流卡片時自己開一張。
+		foreach ( array_reverse( array_keys( $cards ) ) as $i ) {
+			if ( 'shipping' === ( $cards[ $i ]['slot'] ?? '' ) && '' !== (string) ( $cards[ $i ]['html'] ?? '' ) ) {
+				$heading             = '<p style="margin:12px 0 6px;padding-top:10px;border-top:1px solid #dcdcde;font-weight:600;">' . esc_html__( 'Returns', 'moksa-for-woocommerce' ) . '</p>';
+				$cards[ $i ]['html'] = (string) $cards[ $i ]['html'] . $heading . $html;
+				return $cards;
+			}
+		}
 		$cards[] = [
 			'slot'  => 'shipping',
 			'title' => __( 'Returns', 'moksa-for-woocommerce' ),
-			'html'  => self::card_html( $order, $records ),
+			'html'  => $html,
 		];
 		return $cards;
 	}
