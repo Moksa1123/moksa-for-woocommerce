@@ -68,6 +68,7 @@ final class Module extends AbstractModule {
 		PayuniPayment::init();
 		Frontend\CustomerPaymentInfo::init();
 		SubscriptionRenewal::boot();
+		Embed\Embed::init();
 
 		$ids = is_array( PayuniPayment::$allowed_payments ) ? array_keys( PayuniPayment::$allowed_payments ) : [];
 		$ids = array_values(

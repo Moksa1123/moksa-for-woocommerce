@@ -118,8 +118,9 @@ final class Registry {
 		if ( ! is_object( $ability ) || ! method_exists( $ability, 'check_permissions' ) ) {
 			return new \WP_Error( 'moksa_ai_unsupported', self::string( 'unsupported' ) );
 		}
+		$input = self::prepared( $ability, $args );
 		try {
-			$permission = $ability->check_permissions( $args );
+			$permission = $ability->check_permissions( $input );
 		} catch ( \Throwable $e ) {
 			$permission = false;
 		}
@@ -137,6 +138,29 @@ final class Registry {
 			}
 		}
 		return new \WP_Error( 'moksa_ai_forbidden', self::string( 'noPermission' ) );
+	}
+
+	/**
+	 * 權限函式要收到的參數.
+	 *
+	 * 有 prepare_input()（WP 7.2+）時，execute() 會先用它整理輸入（補預設、依 schema 轉型）才檢查權限，
+	 * check_permissions() 本身不整理；這裡照做，權限函式看到的參數才會跟真正執行時一樣。
+	 * 整理失敗就用原本的參數：驗證不在這裡擋，交給 check() 權限沒過時的判斷.
+	 *
+	 * @param object              $ability WP_Ability。
+	 * @param array<string,mixed> $args    參數。
+	 * @return mixed
+	 */
+	private static function prepared( $ability, array $args ) {
+		if ( ! method_exists( $ability, 'prepare_input' ) ) {
+			return $args;
+		}
+		try {
+			$input = $ability->prepare_input( $args );
+		} catch ( \Throwable $e ) {
+			return $args;
+		}
+		return is_wp_error( $input ) ? $args : $input;
 	}
 
 	/**

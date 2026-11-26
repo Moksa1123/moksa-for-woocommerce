@@ -62,6 +62,7 @@ class PaymentRequest {
 			'CreditHash',
 			'CreditLife',
 			'CreditToken',
+			'Token',
 		];
 		$copy             = $data;
 		foreach ( $sensitive as $k ) {
@@ -582,12 +583,12 @@ class PaymentRequest {
 	}
 
 	/**
-	 * 續扣也要開 PAYUNi 發票（p522 CarrierType／CarrierInfo／InvBuyerName）。首期在 UPP 頁由顧客填，
-	 * 續扣沒有顧客在場：有本外掛結帳發票欄位的資料就照用，否則開到 PAYUNi 會員載具（amego，以 UsrMail 為載具）。
+	 * 續扣與免跳轉授權也要開 PAYUNi 發票（CarrierType／CarrierInfo／InvBuyerName）。跳轉流程在 UPP 頁由顧客填，
+	 * 這兩種沒有那一頁：有本外掛結帳發票欄位的資料就照用，否則開到 PAYUNi 會員載具（amego，以 UsrMail 為載具）。
 	 *
 	 * @return array<string,string>
 	 */
-	private static function renewal_invoice_args( \WC_Order $order ): array {
+	public static function renewal_invoice_args( \WC_Order $order ): array {
 		$type    = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_TYPE );
 		$carrier = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_CARRIER_TYPE );
 		$number  = (string) $order->get_meta( \Moksafowo\Order\Meta\Keys::INVOICE_CARRIER_NUM );
@@ -731,6 +732,7 @@ class PaymentRequest {
 				$query_result['CloseStatus'] = $decrypted['Result'][0]['CloseStatus'];
 				$query_result['CloseAmt']    = $decrypted['Result'][0]['CloseAmt'] ?? '';
 				$query_result['AuthType']    = $decrypted['Result'][0]['AuthType'] ?? '';
+				$query_result['Card4No']     = $decrypted['Result'][0]['Card4No'] ?? '';
 			}
 
 			$woo_order_id = PayuniPayment::parse_payuni_order_no_to_woo_order_id( $query_result['MerTradeNo'] );

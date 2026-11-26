@@ -259,9 +259,15 @@ class PaymentResponse {
 		}
 	}
 
-	/** 幕後 API（訂閱續扣）同步回來的結果，照背景通知的方式寫進訂單。 */
-	public static function apply_backend_result( $order, array $decrypted_info ): void {
-		$order->add_order_note( self::payment_note( __( 'PAYUNi renewal charge', 'moksa-for-woocommerce' ), $decrypted_info ) );
+	/**
+	 * 幕後 API（訂閱續扣、免跳轉授權）同步回來的結果，照背景通知的方式寫進訂單。
+	 *
+	 * @param \WC_Order           $order          訂單。
+	 * @param array<string,mixed> $decrypted_info 已驗章、解密的結果。
+	 * @param string              $source         備註開頭的來源說明；空字串表示訂閱續扣。
+	 */
+	public static function apply_backend_result( $order, array $decrypted_info, string $source = '' ): void {
+		$order->add_order_note( self::payment_note( '' !== $source ? $source : __( 'PAYUNi renewal charge', 'moksa-for-woocommerce' ), $decrypted_info ) );
 		self::update_order_meta_and_order_status( $order, $decrypted_info );
 	}
 

@@ -34,6 +34,8 @@ class OrderMeta {
 	const CREDIT_RED_NO        = Keys::PAYUNI_CREDIT_RED_NO;
 	const CREDIT_TOKEN_ID      = Keys::PAYUNI_CREDIT_TOKEN_ID;
 	const CREDIT_TOKEN_LIFE    = Keys::PAYUNI_CREDIT_TOKEN_LIFE;
+	const EMBED                = Keys::PAYUNI_EMBED;
+	const EMBED_CREDIT_TOKEN   = Keys::PAYUNI_EMBED_CREDIT_TOKEN;
 
 	const AMT_PAY_NO      = Keys::PAYUNI_ATM_PAYNO;
 	const AMT_BANK_TYPE   = Keys::PAYUNI_ATM_BANKTYPE;

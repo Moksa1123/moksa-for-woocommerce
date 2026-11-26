@@ -216,6 +216,8 @@ final class Keys {
 	public const PAYUNI_CREDIT_RED_NO      = '_moksafowo_payuni_credit_red_no';      // 紅利序號
 	public const PAYUNI_CREDIT_TOKEN_ID    = '_moksafowo_payuni_credit_token_id';    // 信用卡記憶 token
 	public const PAYUNI_CREDIT_TOKEN_LIFE  = '_moksafowo_payuni_credit_token_life';
+	public const PAYUNI_EMBED              = '_moksafowo_payuni_embed';              // yes＝卡號在結帳頁輸入（免跳轉）
+	public const PAYUNI_EMBED_CREDIT_TOKEN = '_moksafowo_payuni_embed_credit_token'; // 免跳轉約定信用卡的付款人識別碼（查回 CreditHash 用）
 
 	public const PAYUNI_ATM_PAYNO      = '_moksafowo_payuni_atm_payno';
 	public const PAYUNI_ATM_BANKTYPE   = '_moksafowo_payuni_atm_banktype';

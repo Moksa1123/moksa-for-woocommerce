@@ -53,7 +53,37 @@ final class PayuniBlocksMethod extends AbstractPaymentMethodType {
 			wp_register_script( $handle, $build_url . 'index.js', $deps, $version, true );
 			wp_set_script_translations( $handle, 'moksa-for-woocommerce' );
 		}
-		return [ $handle ];
+		if ( ! $this->is_embed() ) {
+			return [ $handle ];
+		}
+		// 免跳轉信用卡：另一支手寫的區塊元件，依賴統一金流官方 SDK。
+		$embed      = 'moksafowo-payuni-embed-blocks';
+		$embed_path = MOKSAFOWO_PLUGIN_DIR . 'assets/blocks/build/methods/payuni-embed/index.js';
+		if ( ! wp_script_is( $embed, 'registered' ) ) {
+			$embed_asset = MOKSAFOWO_PLUGIN_DIR . 'assets/blocks/build/methods/payuni-embed/index.asset.php';
+			$embed_deps  = file_exists( $embed_asset ) ? ( ( require $embed_asset )['dependencies'] ?? [] ) : [];
+			\Moksafowo\Modules\Payuni\Embed\Embed::register_sdk();
+			wp_register_script(
+				$embed,
+				MOKSAFOWO_PLUGIN_URL . 'assets/blocks/build/methods/payuni-embed/index.js',
+				$embed_deps,
+				file_exists( $embed_path ) ? MOKSAFOWO_VERSION . '.' . filemtime( $embed_path ) : MOKSAFOWO_VERSION,
+				true
+			);
+			$css = MOKSAFOWO_PLUGIN_DIR . 'src/Modules/Payuni/assets/css/embed.css';
+			wp_enqueue_style(
+				'moksafowo-payuni-embed',
+				MOKSAFOWO_PLUGIN_URL . 'src/Modules/Payuni/assets/css/embed.css',
+				[],
+				file_exists( $css ) ? MOKSAFOWO_VERSION . '.' . filemtime( $css ) : MOKSAFOWO_VERSION
+			);
+		}
+		return [ $handle, $embed ];
+	}
+
+	/** 這個付款方式是開了免跳轉的統一金流信用卡。 */
+	private function is_embed(): bool {
+		return \Moksafowo\Modules\Payuni\Gateways\Credit::GATEWAY_ID === $this->name && \Moksafowo\Modules\Payuni\Embed\Embed::enabled();
 	}
 
 	public function get_payment_method_data(): array {
@@ -77,12 +107,18 @@ final class PayuniBlocksMethod extends AbstractPaymentMethodType {
 			}
 		}
 
-		return [
+		$data = [
 			'name'        => $this->name,
 			'title'       => $title,
 			'description' => $description,
 			'supports'    => $this->get_supported_features(),
 		];
+		if ( $this->is_embed() ) {
+			$data['embed'] = \Moksafowo\Modules\Payuni\Embed\Embed::client_config();
+			// 卡號欄位本身就說明了怎麼付；商家沒寫說明時不拿後台用的方法說明頂替。
+			$data['description'] = (string) ( $this->settings['description'] ?? '' );
+		}
+		return $data;
 	}
 
 	public function get_supported_features(): array {

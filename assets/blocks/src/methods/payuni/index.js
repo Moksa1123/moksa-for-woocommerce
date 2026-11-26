@@ -38,7 +38,8 @@ const PAYUNI_IDS = [
 
 PAYUNI_IDS.forEach( ( id ) => {
 	const settings = getPaymentMethodData( id );
-	if ( ! settings || ! settings.name ) {
+	// 免跳轉信用卡由 methods/payuni-embed（手寫元件）註冊。
+	if ( ! settings || ! settings.name || settings.embed ) {
 		return;
 	}
 

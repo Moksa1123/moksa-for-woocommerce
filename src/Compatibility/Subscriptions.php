@@ -202,7 +202,11 @@ final class Subscriptions {
 	 * 每位會員第一次用到時產生一組隨機值存在 user meta，之後固定沿用。沒有會員帳號時回空字串。
 	 */
 	public static function member_id( \WC_Order $order ): string {
-		$user_id = (int) $order->get_customer_id();
+		return self::member_id_for_user( (int) $order->get_customer_id() );
+	}
+
+	/** 同 member_id()，給還沒有訂單的時候（結帳頁先拿免跳轉 token）用。 */
+	public static function member_id_for_user( int $user_id ): string {
 		if ( $user_id <= 0 ) {
 			return '';
 		}

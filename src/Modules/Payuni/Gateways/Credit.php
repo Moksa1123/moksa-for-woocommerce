@@ -3,7 +3,10 @@ namespace Moksafowo\Modules\Payuni\Gateways;
 
 use Moksafowo\Compatibility\Subscriptions;
 use Moksafowo\Compatibility\WpSubscription;
+use Moksafowo\Http\CheckoutInput;
 use Moksafowo\Modules\Payuni\Api\PaymentRequest;
+use Moksafowo\Modules\Payuni\Embed\Embed;
+use Moksafowo\Modules\Payuni\Embed\Trade;
 use Moksafowo\Modules\Payuni\Utils\OrderMeta;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,6 +28,11 @@ class Credit extends GatewayBase {
 		);
 		$this->init_form_fields();
 		$this->init_settings();
+		if ( Embed::enabled() ) {
+			$this->has_fields         = true;
+			$this->order_button_text  = __( 'Place order', 'moksa-for-woocommerce' );
+			$this->method_description = __( 'Pay by credit card. The card details are entered on the checkout page in a PAYUNi form.', 'moksa-for-woocommerce' );
+		}
 
 		// 續扣走信用卡幕後 Token 交易；首期必須經 UPP 實際刷卡才拿得到 CreditHash，
 		// 所以不支援顧客自行換卡（那要另一筆付款），只開放後台改 CreditHash。
@@ -52,6 +60,64 @@ class Credit extends GatewayBase {
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 		add_filter( 'moksafowo_payuni_transaction_args_' . $this->id, array( $this, 'moksafowo_payuni_payment_credit_transaction_arrgs' ), 10, 2 );
+	}
+
+	/** 卡號欄位嵌在結帳頁（免跳轉）時才要渲染欄位。 */
+	public function payment_fields() {
+		if ( ! Embed::enabled() ) {
+			parent::payment_fields();
+			return;
+		}
+		if ( '' !== (string) $this->description ) {
+			echo wp_kses_post( wpautop( wptexturize( $this->description ) ) );
+		}
+		?>
+		<div class="moksafowo-payuni-embed" data-gateway="<?php echo esc_attr( $this->id ); ?>">
+			<p class="moksafowo-payuni-embed__status"><?php esc_html_e( 'Loading the card form…', 'moksa-for-woocommerce' ); ?></p>
+			<div class="moksafowo-payuni-embed__fields" style="display:none;">
+				<label class="moksafowo-payuni-embed__label"><?php esc_html_e( 'Card number', 'moksa-for-woocommerce' ); ?></label>
+				<div id="moksafowo-payuni-card-no" class="moksafowo-payuni-embed__field"></div>
+				<div class="moksafowo-payuni-embed__row">
+					<div>
+						<label class="moksafowo-payuni-embed__label"><?php esc_html_e( 'Expiry (MM / YY)', 'moksa-for-woocommerce' ); ?></label>
+						<div id="moksafowo-payuni-card-exp" class="moksafowo-payuni-embed__field"></div>
+					</div>
+					<div>
+						<label class="moksafowo-payuni-embed__label"><?php esc_html_e( 'CVC', 'moksa-for-woocommerce' ); ?></label>
+						<div id="moksafowo-payuni-card-cvc" class="moksafowo-payuni-embed__field"></div>
+					</div>
+				</div>
+				<div class="moksafowo-payuni-embed__agree" style="display:none;">
+					<div id="moksafowo-payuni-card-token-type"></div>
+					<p class="moksafowo-payuni-embed__agree-text"></p>
+				</div>
+			</div>
+			<p class="moksafowo-payuni-embed__error" role="alert" style="display:none;"></p>
+			<input type="hidden" name="moksafowo_payuni_embed_enc" value="" />
+			<input type="hidden" name="moksafowo_payuni_embed_hash" value="" />
+			<input type="hidden" name="moksafowo_payuni_embed_fallback" value="" />
+		</div>
+		<?php
+	}
+
+	public function process_payment( $order_id ) {
+		if ( ! Embed::enabled() ) {
+			return parent::process_payment( $order_id );
+		}
+		$order = wc_get_order( $order_id );
+		if ( ! $order instanceof \WC_Order ) {
+			throw new \Exception( esc_html__( 'The order could not be found', 'moksa-for-woocommerce' ) );
+		}
+		// 卡號表單載不出來時，顧客改走統一金流付款頁。
+		if ( '1' === CheckoutInput::post( 'moksafowo_payuni_embed_fallback' ) ) {
+			return parent::process_payment( $order_id );
+		}
+		return Trade::process(
+			$order,
+			$this,
+			CheckoutInput::post( 'moksafowo_payuni_embed_enc' ),
+			CheckoutInput::post( 'moksafowo_payuni_embed_hash' )
+		);
 	}
 
 	public function init_form_fields() {

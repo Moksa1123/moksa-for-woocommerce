@@ -4,7 +4,7 @@ Tags: woocommerce, taiwan, payment, shipping, invoice
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.27.1
+Stable tag: 1.28.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires Plugins: woocommerce
@@ -61,6 +61,7 @@ These run when a customer selects the gateway at checkout (to create the payment
 * **ECPay (綠界科技)** — credit card, ATM, CVS, barcode, installments, wallets. Endpoints: payment.ecpay.com.tw, ecpayment.ecpay.com.tw, ecpg.ecpay.com.tw (test mode: payment-stage.ecpay.com.tw, ecpayment-stage.ecpay.com.tw, ecpg-stage.ecpay.com.tw). The saved-card gateway for subscriptions loads ECPay's card form script from ecpg.ecpay.com.tw in the browser; card data goes straight to ECPay. Terms: https://support.ecpay.com.tw/10075/ — Privacy: https://www.ecpay.com.tw/CreditCard/Privacy
 * **NewebPay (藍新金流)** — credit card, ATM, CVS, barcode, wallets. Endpoints: core.newebpay.com (test mode: ccore.newebpay.com). Terms: https://www.newebpay.com/website/Page/content/new_service_policy — Privacy: https://www.newebpay.com/website/Page/content/privacy
 * **PAYUNi (統一金流)** — credit card, ATM, CVS, wallets. Endpoints: api.payuni.com.tw (test mode: sandbox-api.payuni.com.tw). Terms: https://www.payuni.com.tw/terms — Privacy: https://www.payuni.com.tw/privacy
+* **PAYUNi embedded card form (UNi Embed)** — optional, off by default. When you choose to take PAYUNi card payments on the checkout page, the checkout page loads PAYUNi's official card form script from vendor.payuni.com.tw (test mode: sandbox-vendor.payuni.com.tw), as PAYUNi requires. The card number, expiry date and CVC are typed into PAYUNi's own form and sent straight to PAYUNi; they never reach your site. Your site sends PAYUNi your site address to get a form token, then the order number, amount, item names, the customer's email and IP address, and the e-invoice details from checkout (when PAYUNi e-invoicing is on) to authorise the payment. Same terms and privacy policy as above.
 * **SmilePay (速買配)** — credit card, ATM, CVS, barcode. Endpoints: ssl.smse.com.tw (SmilePay's own API hostname — smse.com.tw and smilepay.net are both operated by the same company, 訊航科技 Shinhang Technology; its policies are published on the smilepay.net brand site; test mode uses the /api_test path on the same hostname). Terms: https://www.smilepay.net/em/servicepolicy.asp — Privacy: https://www.smilepay.net/em/servicepolicy.asp (SmilePay publishes a single combined service & personal-data-protection document, so both links point at that document)
 * **PayNow (立吉富)** — credit card, ATM, CVS, installments. Endpoints: www.paynow.com.tw (test mode: test.paynow.com.tw). Terms: https://www.paynow.com.tw/PayNowUserAgreement.aspx — Privacy: https://www.paynow.com.tw/safepolicy.aspx
 * **PChomePay (支付連)** — credit card, ATM, CVS, barcode. Endpoints: api.pchomepay.com.tw (test mode: sandbox-api.pchomepay.com.tw). Terms: https://www.pchomepay.com.tw/other/service_treaty — Privacy: https://web.pchomepay.com.tw/introduction/privacy
@@ -152,6 +153,10 @@ Yes, optional and off by default. Turn it on under **WooCommerce → Moksa AI �
 
 Authentication uses a WordPress Application Password for a user that has the "edit orders" capability; use a dedicated, limited account rather than an administrator. Connect your client to the endpoint with an `Authorization: Basic <base64 of username:application-password>` header. By default only read-only tools (look up orders, reports, settings overview) are exposed. With "Allow external AI to make changes (MCP)" turned on, order-changing tools are listed too, but over MCP they only preview the change; to apply it, ask Moksa AI in the WordPress admin and confirm there. Every request is permission-checked on the server.
 
+= Can customers enter their PAYUNi card details without leaving my site? =
+
+Yes. Ask PAYUNi to enable the embedded card form (UNi Embed) for your store, with your site address as the allowed domain and your server IP registered. Then, with the separate display style, set "Where customers enter the card" to "On the checkout page" in the PAYUNi payment settings and click "Test connection". Subscriptions also need PAYUNi's card agreement service. If the bank asks for 3-D Secure, the customer is sent to the bank's check and comes back. If the form cannot load, the customer can still pay on the PAYUNi payment page. Instalments and other PAYUNi payment methods still go to PAYUNi.
+
 = How do PAYUNi returns work? =
 
 With PAYUNi shipping, you can create a 7-ELEVEN return code or book a T-Cat return pickup from the order page. First ask PAYUNi to enable the back-end logistics API for your store (7-ELEVEN return codes also need 7-ELEVEN merchant shipping), then turn on the return options under the PAYUNi shipping settings. The customer enters the 12-digit return code at an ibon kiosk to print the return slip; a T-Cat driver collects T-Cat returns from the address you enter. PAYUNi cannot cancel a return once it is created, and an unused 7-ELEVEN return code expires after its deadline. Returns never change the order status or refund the customer; return tracking updates are added as order notes.
@@ -173,6 +178,10 @@ No. After the update, customer-service messages and the order-number search inde
 5. Issuing an e-invoice from the order screen, including carrier type and mobile barcode entry.
 
 == Changelog ==
+
+= 1.28.0 - 2026-11-26 =
+* New: PAYUNi credit card payments can take the card details on the checkout page (embedded PAYUNi form), including the first payment of subscriptions. Off by default; PAYUNi must enable the embedded card form for your store first.
+* Fixed: The AI assistant permission checks also work with WordPress 7.2.
 
 = 1.27.1 - 2026-11-26 =
 * Fixed: With PAYUNi returns turned on, the shipping details on the order page are shown again above the returns section.
@@ -330,6 +339,9 @@ No. After the update, customer-service messages and the order-number search inde
 * PAYUNi uncaptured card payments can be cancelled from the refund screen; refunds work for disabled payment methods; split shipments, PAYUNi printing, cash on delivery limits, checkout phone and invoice checks, SmilePay test mode and email fixes.
 
 == Upgrade Notice ==
+
+= 1.28.0 =
+Adds an optional embedded PAYUNi card form on the checkout page, off by default.
 
 = 1.27.1 =
 Shows the PAYUNi shipping details on the order page again when returns are turned on.

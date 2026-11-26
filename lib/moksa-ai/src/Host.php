@@ -223,6 +223,11 @@ final class Host {
 				)
 			);
 		}
+		// 處理函式可以回字串，或回帶 reply／message 文字的陣列.
+		if ( is_array( $result ) ) {
+			$text   = $result['reply'] ?? ( $result['message'] ?? '' );
+			$result = is_string( $text ) ? $text : '';
+		}
 		return rest_ensure_response( array( 'reply' => (string) $result ) );
 	}
 

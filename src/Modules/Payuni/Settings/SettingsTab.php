@@ -157,6 +157,35 @@ class SettingsTab extends \WC_Settings_Page {
 				),
 
 				array(
+					'title' => __( 'Credit card form', 'moksa-for-woocommerce' ),
+					'type'  => 'title',
+					'desc'  => __( 'Only for the separate display style. PAYUNi must enable the embedded card form (UNi Embed) for your store first, with your site address as the allowed domain and your server IP registered.', 'moksa-for-woocommerce' ),
+					'id'    => 'moksafowo_payuni_embed_setting',
+				),
+				array(
+					'title'   => __( 'Where customers enter the card', 'moksa-for-woocommerce' ),
+					'type'    => 'select',
+					'css'     => 'width: 400px;',
+					'options' => array(
+						'no'  => __( 'On the PAYUNi payment page (redirect)', 'moksa-for-woocommerce' ),
+						'yes' => __( 'On the checkout page (embedded PAYUNi form)', 'moksa-for-woocommerce' ),
+					),
+					'default' => 'no',
+					'desc'    => __( 'With the embedded form the customer stays on your site. If the form cannot load, the customer can still pay on the PAYUNi payment page. Instalments and other payment methods still go to PAYUNi.', 'moksa-for-woocommerce' ),
+					'id'      => \Moksafowo\Modules\Payuni\Embed\Embed::OPTION,
+				),
+				array(
+					'title' => __( 'Check the setup', 'moksa-for-woocommerce' ),
+					'type'  => 'moksafowo_payuni_embed_test',
+					'desc'  => __( 'Asks PAYUNi for a card form token without creating a transaction, to confirm the embedded form is enabled for this store and server.', 'moksa-for-woocommerce' ),
+					'id'    => 'moksafowo_payuni_embed_test',
+				),
+				array(
+					'type' => 'sectionend',
+					'id'   => 'moksafowo_payuni_embed_setting',
+				),
+
+				array(
 					'title' => __( 'Merchant credentials', 'moksa-for-woocommerce' ),
 					'type'  => 'title',
 					'desc'  => __( 'Copy these from the PAYUNi dashboard under Member area → Integration settings.', 'moksa-for-woocommerce' ),

@@ -1,0 +1,50 @@
+/* 統一金流免跳轉信用卡：iframe 容器要有高度，SDK 掛進來的輸入框才看得到。 */
+.moksafowo-payuni-embed {
+	margin-top: 8px;
+}
+.moksafowo-payuni-embed__label {
+	display: block;
+	margin: 8px 0 4px;
+	font-size: 14px;
+}
+.moksafowo-payuni-embed__field {
+	min-height: 44px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.moksafowo-payuni-embed__field iframe {
+	width: 100% !important;
+	min-height: 42px;
+	border: 0;
+}
+.moksafowo-payuni-embed__row {
+	display: flex;
+	gap: 12px;
+}
+.moksafowo-payuni-embed__row > div {
+	flex: 1 1 0;
+	min-width: 0;
+}
+.moksafowo-payuni-embed__agree {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin-top: 10px;
+	font-size: 13px;
+}
+.moksafowo-payuni-embed__agree-text {
+	margin: 0;
+}
+.moksafowo-payuni-embed__error {
+	margin: 8px 0 0;
+	color: #b32d2e;
+}
+.moksafowo-payuni-embed__fallback {
+	margin-top: 8px;
+}
+.moksafowo-payuni-embed__status {
+	color: #646970;
+}

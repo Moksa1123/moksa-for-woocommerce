@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa for WooCommerce 1.27.0\n"
+"Project-Id-Version: Moksa for WooCommerce 1.27.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-25T07:03:02+00:00\n"
+"POT-Creation-Date: 2026-11-26T09:55:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-for-woocommerce\n"
@@ -261,6 +261,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Operations/PickupNotice.php:43
 #: src/Modules/OrderLookup/Ability.php:1367
 #: src/Modules/OrderLookup/AddOrderNote.php:25
+#: src/Modules/Payuni/Embed/Embed.php:436
 #: src/Modules/Payuni/PayuniPayment.php:217
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:89
 #: src/Modules/Shared/Admin/PaymentQuery.php:71
@@ -2956,7 +2957,7 @@ msgstr ""
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:19
 #: src/Modules/Paynow/Settings/SettingsTab.php:19
 #: src/Modules/PaynowInvoice/Settings/SettingsTab.php:19
-#: src/Modules/Payuni/Settings/SettingsTab.php:166
+#: src/Modules/Payuni/Settings/SettingsTab.php:195
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:245
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:19
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:21
@@ -3565,13 +3566,13 @@ msgid "Authorized amount"
 msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:232
-#: src/Modules/Payuni/Api/PaymentRequest.php:367
+#: src/Modules/Payuni/Api/PaymentRequest.php:368
 msgid "Captured amount"
 msgstr ""
 
 #: src/Modules/Ecpay/Admin/CreditLifecycleBox.php:236
 #: src/Modules/Payuni/Gateways/ApplePay.php:61
-#: src/Modules/Payuni/Gateways/Credit.php:124
+#: src/Modules/Payuni/Gateways/Credit.php:190
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:60
 #: src/Modules/Payuni/Gateways/GooglePay.php:61
 #: src/Modules/Payuni/Gateways/SamsungPay.php:61
@@ -3821,7 +3822,7 @@ msgstr ""
 #: src/Modules/OrderLookup/UpdateOrderStatus.php:76
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:187
 #: src/Modules/PayuniShipping/Operations/PrintProxy.php:96
-#: src/Modules/PayuniShipping/Returns/Admin.php:338
+#: src/Modules/PayuniShipping/Returns/Admin.php:347
 #: src/Modules/Shared/Admin/PaymentQuery.php:76
 #: src/Modules/Shared/Invoice/AbstractAdminMetaBox.php:398
 #: src/Modules/Shared/Invoice/OrderListColumn.php:118
@@ -4658,7 +4659,7 @@ msgstr ""
 #: src/Modules/Linepay/Settings/SettingsTab.php:83
 #: src/Modules/Newebpay/Settings/SettingsTab.php:13
 #: src/Modules/Paynow/Settings/SettingsTab.php:13
-#: src/Modules/Payuni/Settings/SettingsTab.php:160
+#: src/Modules/Payuni/Settings/SettingsTab.php:189
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:239
 #: src/Modules/Pchomepay/Settings/SettingsTab.php:13
 #: src/Modules/ShoplinePayments/Settings/SettingsTab.php:15
@@ -4674,7 +4675,7 @@ msgstr ""
 
 #: src/Modules/Ecpay/Settings/SettingsTab.php:25
 #: src/Modules/Newebpay/Settings/SettingsTab.php:23
-#: src/Modules/Payuni/Settings/SettingsTab.php:170
+#: src/Modules/Payuni/Settings/SettingsTab.php:199
 msgid "For use before going live. While this is ticked every transaction runs against the test environment and no money changes hands. Untick it once you go live."
 msgstr ""
 
@@ -4685,7 +4686,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:147
 #: src/Modules/Newebpay/Settings/SettingsTab.php:26
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:49
-#: src/Modules/Payuni/Settings/SettingsTab.php:174
+#: src/Modules/Payuni/Settings/SettingsTab.php:203
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:252
 #: src/Modules/Tappay/Settings/SettingsTab.php:44
 msgid "Test merchant ID"
@@ -4698,7 +4699,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:152
 #: src/Modules/Newebpay/Settings/SettingsTab.php:31
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:54
-#: src/Modules/Payuni/Settings/SettingsTab.php:179
+#: src/Modules/Payuni/Settings/SettingsTab.php:208
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:257
 msgid "Test hash key"
 msgstr ""
@@ -4710,7 +4711,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:158
 #: src/Modules/Newebpay/Settings/SettingsTab.php:36
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:59
-#: src/Modules/Payuni/Settings/SettingsTab.php:184
+#: src/Modules/Payuni/Settings/SettingsTab.php:213
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:262
 msgid "Test hash IV"
 msgstr ""
@@ -4722,7 +4723,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:175
 #: src/Modules/Newebpay/Settings/SettingsTab.php:41
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:75
-#: src/Modules/Payuni/Settings/SettingsTab.php:189
+#: src/Modules/Payuni/Settings/SettingsTab.php:218
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:267
 #: src/Modules/Tappay/Settings/SettingsTab.php:71
 msgid "Live merchant ID"
@@ -4735,7 +4736,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:180
 #: src/Modules/Newebpay/Settings/SettingsTab.php:46
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:80
-#: src/Modules/Payuni/Settings/SettingsTab.php:194
+#: src/Modules/Payuni/Settings/SettingsTab.php:223
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:272
 msgid "Live hash key"
 msgstr ""
@@ -4747,7 +4748,7 @@ msgstr ""
 #: src/Modules/EzpayInvoice/Settings/SettingsTab.php:185
 #: src/Modules/Newebpay/Settings/SettingsTab.php:51
 #: src/Modules/NewebpayShipping/Settings/SettingsTab.php:85
-#: src/Modules/Payuni/Settings/SettingsTab.php:199
+#: src/Modules/Payuni/Settings/SettingsTab.php:228
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:277
 msgid "Live hash IV"
 msgstr ""
@@ -4885,7 +4886,7 @@ msgstr ""
 #: src/Modules/Ecpay/Settings/SettingsTab.php:187
 #: src/Modules/Linepay/Settings/SettingsTab.php:125
 #: src/Modules/Newebpay/Settings/SettingsTab.php:183
-#: src/Modules/Payuni/Settings/SettingsTab.php:209
+#: src/Modules/Payuni/Settings/SettingsTab.php:238
 msgid "Subscriptions"
 msgstr ""
 
@@ -5845,6 +5846,7 @@ msgstr ""
 
 #: src/Modules/EcpayShipping/Admin/OrderMetaBox.php:351
 #: src/Modules/Linepay/LinePay.php:154
+#: src/Modules/Payuni/Embed/Embed.php:422
 #: src/Modules/Payuni/PayuniPayment.php:209
 #: src/Modules/Shared/Admin/PaymentQuery.php:133
 msgid "Connection error. Please try again later."
@@ -6533,9 +6535,10 @@ msgstr ""
 #: src/Modules/Linepay/Api/PaymentRequest.php:267
 #: src/Modules/Linepay/Api/PaymentRequest.php:771
 #: src/Modules/NewebpayShipping/Api/IpnHandler.php:125
-#: src/Modules/Payuni/Api/PaymentRequest.php:763
+#: src/Modules/Payuni/Api/PaymentRequest.php:765
 #: src/Modules/Payuni/Api/PaymentResponse.php:90
 #: src/Modules/Payuni/Api/PaymentResponse.php:174
+#: src/Modules/Payuni/Embed/Trade.php:184
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:312
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:329
 #: src/Modules/PayuniShipping/Returns/Notice.php:100
@@ -6859,7 +6862,7 @@ msgstr ""
 #. translators: %s: WooCommerce order ID being refunded
 #. translators:  %s is the order id
 #: src/Modules/Linepay/Api/PaymentRequest.php:343
-#: src/Modules/Payuni/Api/PaymentRequest.php:160
+#: src/Modules/Payuni/Api/PaymentRequest.php:161
 #, php-format
 msgid "Unable to find order #%s"
 msgstr ""
@@ -6869,7 +6872,7 @@ msgid "This LINE Pay payment has not been completed, so there is nothing to refu
 msgstr ""
 
 #: src/Modules/Linepay/Api/PaymentRequest.php:391
-#: src/Modules/Payuni/Api/PaymentRequest.php:393
+#: src/Modules/Payuni/Api/PaymentRequest.php:394
 msgid "The refund amount is more than the payment amount."
 msgstr ""
 
@@ -6970,6 +6973,7 @@ msgid "We have received your order, but it has not been paid. Please try paying 
 msgstr ""
 
 #: src/Modules/Linepay/LinePay.php:86
+#: src/Modules/Payuni/Embed/Embed.php:174
 #: src/Modules/Payuni/PayuniPayment.php:227
 msgid "That order could not be found."
 msgstr ""
@@ -7219,7 +7223,7 @@ msgid "LINE Pay must approve automatic payments for your store before you turn t
 msgstr ""
 
 #: src/Modules/Linepay/Settings/SettingsTab.php:131
-#: src/Modules/Payuni/Settings/SettingsTab.php:215
+#: src/Modules/Payuni/Settings/SettingsTab.php:244
 msgid "Automatic renewals"
 msgstr ""
 
@@ -7228,7 +7232,7 @@ msgid "Charge WooCommerce Subscriptions renewals automatically with LINE Pay"
 msgstr ""
 
 #: src/Modules/Linepay/Settings/SettingsTab.php:161
-#: src/Modules/Payuni/Settings/SettingsTab.php:280
+#: src/Modules/Payuni/Settings/SettingsTab.php:309
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:355
 msgid "View logs"
 msgstr ""
@@ -7644,6 +7648,8 @@ msgstr ""
 #: src/Modules/Newebpay/Gateways/AbstractNewebpayGateway.php:259
 #: src/Modules/Newebpay/Gateways/CreditPeriod.php:76
 #: src/Modules/Paynow/Gateways/AbstractPaynowGateway.php:41
+#: src/Modules/Payuni/Embed/Trade.php:54
+#: src/Modules/Payuni/Gateways/Credit.php:109
 #: src/Modules/Pchomepay/Gateways/AbstractPchomepayGateway.php:33
 #: src/Modules/ShoplinePayments/Gateways/CardGateway.php:120
 #: src/Modules/ShoplinePayments/Gateways/SessionGateway.php:70
@@ -7928,8 +7934,8 @@ msgid "Trade status"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:136
-#: src/Modules/Payuni/Api/PaymentRequest.php:420
-#: src/Modules/Payuni/Api/PaymentRequest.php:746
+#: src/Modules/Payuni/Api/PaymentRequest.php:421
+#: src/Modules/Payuni/Api/PaymentRequest.php:748
 #: src/Modules/Payuni/Api/PaymentResponse.php:173
 #: src/Modules/Pchomepay/Module.php:102
 #: src/Modules/ShoplinePayments/Module.php:149
@@ -7937,7 +7943,7 @@ msgid "Payment type"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:137
-#: src/Modules/Payuni/Api/PaymentRequest.php:747
+#: src/Modules/Payuni/Api/PaymentRequest.php:749
 #: src/Modules/Pchomepay/Module.php:103
 #: src/Modules/ShoplinePayments/Module.php:148
 #: src/Modules/Tappay/Module.php:101
@@ -7946,7 +7952,7 @@ msgid "Amount"
 msgstr ""
 
 #: src/Modules/Newebpay/Module.php:138
-#: src/Modules/Payuni/Api/PaymentRequest.php:748
+#: src/Modules/Payuni/Api/PaymentRequest.php:750
 #: src/Modules/Payuni/Gateways/Aftee.php:55
 #: src/Modules/Payuni/Gateways/Atm.php:57
 #: src/Modules/Pchomepay/Module.php:104
@@ -9480,7 +9486,7 @@ msgstr ""
 #: src/Modules/OrderLookup/SearchableKeys.php:208
 #: src/Modules/OrderLookup/SearchableKeys.php:262
 #: src/Modules/Payuni/Gateways/ApplePay.php:63
-#: src/Modules/Payuni/Gateways/Credit.php:126
+#: src/Modules/Payuni/Gateways/Credit.php:192
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:62
 #: src/Modules/Payuni/Gateways/GooglePay.php:63
 #: src/Modules/Payuni/Gateways/SamsungPay.php:63
@@ -10059,149 +10065,149 @@ msgstr ""
 msgid "Issuing failed"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:132
+#: src/Modules/Payuni/Api/PaymentRequest.php:133
 msgid "Redirecting..."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:176
+#: src/Modules/Payuni/Api/PaymentRequest.php:177
 #, php-format
 msgid "The refund amount for order #%s should be the same as the order total for installment payment."
 msgstr ""
 
 #. translators:  %s is the order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:191
+#: src/Modules/Payuni/Api/PaymentRequest.php:192
 #, php-format
 msgid "Unable to find transaction id for order #%s"
 msgstr ""
 
 #. translators: %s: order id
-#: src/Modules/Payuni/Api/PaymentRequest.php:204
+#: src/Modules/Payuni/Api/PaymentRequest.php:205
 #, php-format
 msgid "The order status could not be checked before refunding (order #%s)."
 msgstr ""
 
 #. translators:  %s is the TradeStatus of the order
-#: src/Modules/Payuni/Api/PaymentRequest.php:217
+#: src/Modules/Payuni/Api/PaymentRequest.php:218
 #, php-format
 msgid "Unable to Refund this Order. TradeStatus:%s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:235
+#: src/Modules/Payuni/Api/PaymentRequest.php:236
 msgid "This payment type cannot be refunded from WooCommerce. Please refund it in the PAYUNi merchant dashboard."
 msgstr ""
 
 #. translators: 1: amount PAYUNi would still capture, 2: amount WooCommerce expects
-#: src/Modules/Payuni/Api/PaymentRequest.php:262
+#: src/Modules/Payuni/Api/PaymentRequest.php:263
 #, php-format
 msgid "PAYUNi and WooCommerce disagree on how much is left to capture (PAYUNi: %1$d, WooCommerce: %2$d), so nothing was sent. Check the transaction in the PAYUNi merchant dashboard and refund there if needed."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:268
+#: src/Modules/Payuni/Api/PaymentRequest.php:269
 msgid "The refund amount is more than PAYUNi can still refund for this card payment. Please check the transaction in the PAYUNi merchant dashboard."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:275
+#: src/Modules/Payuni/Api/PaymentRequest.php:276
 msgid "Installment and UnionPay card payments can only be refunded in full."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:288
+#: src/Modules/Payuni/Api/PaymentRequest.php:289
 msgid "PAYUNi cancelled the card authorisation, so the customer is not charged."
 msgstr ""
 
 #. translators: %s: amount that will be captured
-#: src/Modules/Payuni/Api/PaymentRequest.php:298
+#: src/Modules/Payuni/Api/PaymentRequest.php:299
 #, php-format
 msgid "PAYUNi will now capture only %s from the card."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:305
+#: src/Modules/Payuni/Api/PaymentRequest.php:306
 msgid "The capture request had already been cancelled. If PAYUNi still shows this payment as not captured, capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:316
+#: src/Modules/Payuni/Api/PaymentRequest.php:317
 msgid "The original capture request was sent again, so nothing has changed."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:317
+#: src/Modules/Payuni/Api/PaymentRequest.php:318
 msgid "The capture request was cancelled and could not be sent again. This payment is now not captured: capture or cancel it in the PAYUNi merchant dashboard within 3 days of payment."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:341
+#: src/Modules/Payuni/Api/PaymentRequest.php:342
 msgid "PAYUNi recorded it as a scheduled refund; it is refunded once the capture completes."
 msgstr ""
 
 #. translators: %s: PAYUNi settlement status
-#: src/Modules/Payuni/Api/PaymentRequest.php:347
+#: src/Modules/Payuni/Api/PaymentRequest.php:348
 #, php-format
 msgid "This order cannot be refunded in its current state (PAYUNi settlement status: %s)"
 msgstr ""
 
 #. translators: 1: trade status, 2: close status
-#: src/Modules/Payuni/Api/PaymentRequest.php:351
+#: src/Modules/Payuni/Api/PaymentRequest.php:352
 #, php-format
 msgid "This order cannot be refunded (transaction status: %1$s, settlement status: %2$s)"
 msgstr ""
 
 #. translators: 1: refund amount, 2: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:364
-#: src/Modules/Payuni/Api/PaymentRequest.php:418
+#: src/Modules/Payuni/Api/PaymentRequest.php:365
+#: src/Modules/Payuni/Api/PaymentRequest.php:419
 #, php-format
 msgid "PAYUNi refunded %1$s: %2$s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:366
-#: src/Modules/Payuni/Api/PaymentRequest.php:749
+#: src/Modules/Payuni/Api/PaymentRequest.php:367
+#: src/Modules/Payuni/Api/PaymentRequest.php:751
 msgid "Settlement status"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:368
+#: src/Modules/Payuni/Api/PaymentRequest.php:369
 msgid "Note"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:389
+#: src/Modules/Payuni/Api/PaymentRequest.php:390
 msgid "The refund amount must be a whole number greater than 0."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:399
+#: src/Modules/Payuni/Api/PaymentRequest.php:400
 msgid "icash Pay payments can only be refunded in full, in one go."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:421
+#: src/Modules/Payuni/Api/PaymentRequest.php:422
 msgid "Refund number"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:422
+#: src/Modules/Payuni/Api/PaymentRequest.php:423
 msgid "Refunded at"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:495
+#: src/Modules/Payuni/Api/PaymentRequest.php:496
 msgid "Could not reach PAYUNi to refund this order. PAYUNi may still have processed it, so please check the transaction in the PAYUNi merchant dashboard before trying again."
 msgstr ""
 
 #. translators: 1: PAYUNi error message, 2: status code
-#: src/Modules/Payuni/Api/PaymentRequest.php:498
+#: src/Modules/Payuni/Api/PaymentRequest.php:499
 #, php-format
 msgid "The PAYUNi refund failed: %1$s (status %2$s)"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:716
+#: src/Modules/Payuni/Api/PaymentRequest.php:717
 msgid "PAYUNi responded successfully but returned no order data."
 msgstr ""
 
 #. translators: %s: transaction status
-#: src/Modules/Payuni/Api/PaymentRequest.php:744
+#: src/Modules/Payuni/Api/PaymentRequest.php:746
 #, php-format
 msgid "PAYUNi transaction lookup: %s"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentRequest.php:750
+#: src/Modules/Payuni/Api/PaymentRequest.php:752
 #: src/Modules/Payuni/Api/PaymentResponse.php:175
 msgid "PAYUNi transaction ID"
 msgstr ""
 
 #. translators: %s: PAYUNi message
-#: src/Modules/Payuni/Api/PaymentRequest.php:762
+#: src/Modules/Payuni/Api/PaymentRequest.php:764
 #, php-format
 msgid "The PAYUNi transaction lookup failed: %s"
 msgstr ""
@@ -10230,18 +10236,193 @@ msgstr ""
 msgid "Store order number"
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:264
+#: src/Modules/Payuni/Api/PaymentResponse.php:270
 msgid "PAYUNi renewal charge"
 msgstr ""
 
 #. translators: 1: paid amount, 2: order total
-#: src/Modules/Payuni/Api/PaymentResponse.php:296
+#: src/Modules/Payuni/Api/PaymentResponse.php:302
 #, php-format
 msgid "PAYUNi reported a payment of %1$s, which does not match the order total of %2$s. Please check the payment before fulfilling the order."
 msgstr ""
 
-#: src/Modules/Payuni/Api/PaymentResponse.php:307
+#: src/Modules/Payuni/Api/PaymentResponse.php:313
 msgid "PAYUNi issued the payment details and is waiting for the customer to pay."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:164
+#: src/Modules/Payuni/Embed/Embed.php:439
+#: src/Modules/Payuni/PayuniPayment.php:220
+msgid "The security check failed. Please refresh the page and try again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:180
+#: src/Modules/Payuni/Embed/Embed.php:187
+msgid "Your session has expired. Please refresh the page."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:195
+msgid "Too many attempts. Please wait a few minutes and try again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:204
+#: src/Modules/Payuni/Embed/Embed.php:395
+msgid "The card form could not be loaded. You can still pay on the PAYUNi payment page."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:390
+#: src/Modules/Payuni/Gateways/Credit.php:78
+#: src/Modules/Tappay/Gateways/Credit.php:112
+msgid "Card number"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:391
+#: src/Modules/Payuni/Gateways/Credit.php:82
+#: src/Modules/Tappay/Gateways/Credit.php:116
+msgid "Expiry (MM / YY)"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:392
+#: src/Modules/Payuni/Gateways/Credit.php:86
+#: src/Modules/Tappay/Gateways/Credit.php:120
+msgid "CVC"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:393
+#: src/Modules/Payuni/Gateways/Credit.php:76
+msgid "Loading the card form…"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:394
+#: src/Modules/Tappay/Module.php:177
+msgid "Please fill in all the card details."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:396
+msgid "Pay on the PAYUNi payment page instead"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:397
+msgid "Please enter your card details again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:398
+#: src/Modules/Payuni/Embed/Trade.php:67
+msgid "The card details could not be sent to PAYUNi. Please check them and try again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:409
+msgid "Test connection"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:445
+msgid "Connected. The embedded card form is enabled for this store."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:449
+msgid "Saving cards for subscriptions is enabled too."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:458
+msgid "PAYUNi has not enabled the embedded card form for this store yet. Apply for it in the PAYUNi dashboard."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:459
+msgid "No allowed domain is set for the embedded card form. Add your site address in the PAYUNi dashboard."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:460
+msgid "No allowed server IP is set. Add your server IP in the PAYUNi dashboard."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:461
+msgid "This server's IP is not on the allowed list. Add it in the PAYUNi dashboard."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:462
+msgid "PAYUNi has not enabled saved cards (card agreements) for this store, so subscriptions cannot be paid with the embedded form yet."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Embed.php:468
+#: src/Modules/PayuniShipping/Returns/Api.php:152
+msgid "Could not get a reply from PAYUNi."
+msgstr ""
+
+#. translators: 1: PAYUNi message, 2: code
+#: src/Modules/Payuni/Embed/Embed.php:471
+#, php-format
+msgid "PAYUNi replied: %1$s (%2$s)"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:35
+msgid "This order is already being paid. Please wait a moment and check your order before trying again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:64
+msgid "The card form expired. Please enter your card details again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:72
+msgid "Your cart changed. Please enter your card details again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:76
+msgid "Card payments need an amount of at least NT$1."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:124
+msgid "PAYUNi did not return a readable result."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:128
+msgid "PAYUNi returned a different order number."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:134
+msgid "Waiting for the customer to finish the 3-D Secure check (PAYUNi embedded card form)."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:149
+#: src/Modules/Payuni/Embed/Trade.php:299
+msgid "PAYUNi payment (card entered at checkout)"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:178
+msgid "PAYUNi rejected the request"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:182
+msgid "The PAYUNi card payment did not go through."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:185
+#: src/Modules/Payuni/PayuniPayment.php:133
+msgid "Message"
+msgstr ""
+
+#. translators: 1: reason from PAYUNi or the bank, 2: code
+#: src/Modules/Payuni/Embed/Trade.php:192
+#, php-format
+msgid "The card payment did not go through: %1$s (%2$s). Please check the card details or use another card."
+msgstr ""
+
+#. translators: %s: reason
+#: src/Modules/Payuni/Embed/Trade.php:244
+#, php-format
+msgid "PAYUNi has not confirmed this card payment yet (%s). It will be checked again automatically; do not charge the customer again until then."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:288
+#: src/Modules/Payuni/SubscriptionRenewal.php:129
+msgid "Confirmed by transaction lookup"
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:307
+msgid "PAYUNi still has not confirmed this card payment. Check it in the PAYUNi dashboard before charging the customer again."
+msgstr ""
+
+#: src/Modules/Payuni/Embed/Trade.php:318
+msgid "The saved card for subscription renewals could not be found at PAYUNi. Renewals will fail until a card is linked to the subscription."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/Aftee.php:19
@@ -10266,7 +10447,7 @@ msgid "Pay quickly with Apple Pay, which needs Safari or an iOS device. The cust
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:59
-#: src/Modules/Payuni/Gateways/Credit.php:122
+#: src/Modules/Payuni/Gateways/Credit.php:188
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:58
 #: src/Modules/Payuni/Gateways/GooglePay.php:59
 #: src/Modules/Payuni/Gateways/SamsungPay.php:59
@@ -10275,7 +10456,7 @@ msgid "Authorization method"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:60
-#: src/Modules/Payuni/Gateways/Credit.php:123
+#: src/Modules/Payuni/Gateways/Credit.php:189
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:59
 #: src/Modules/Payuni/Gateways/GooglePay.php:60
 #: src/Modules/Payuni/Gateways/SamsungPay.php:60
@@ -10284,7 +10465,7 @@ msgid "Authorization date"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:62
-#: src/Modules/Payuni/Gateways/Credit.php:125
+#: src/Modules/Payuni/Gateways/Credit.php:191
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:61
 #: src/Modules/Payuni/Gateways/GooglePay.php:62
 #: src/Modules/Payuni/Gateways/SamsungPay.php:62
@@ -10292,7 +10473,7 @@ msgid "Bank authorization code"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:64
-#: src/Modules/Payuni/Gateways/Credit.php:127
+#: src/Modules/Payuni/Gateways/Credit.php:193
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:63
 #: src/Modules/Payuni/Gateways/GooglePay.php:64
 #: src/Modules/Payuni/Gateways/SamsungPay.php:64
@@ -10300,7 +10481,7 @@ msgid "Issuing bank"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:65
-#: src/Modules/Payuni/Gateways/Credit.php:128
+#: src/Modules/Payuni/Gateways/Credit.php:194
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:64
 #: src/Modules/Payuni/Gateways/GooglePay.php:65
 #: src/Modules/Payuni/Gateways/SamsungPay.php:65
@@ -10308,7 +10489,7 @@ msgid "Foreign card"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:66
-#: src/Modules/Payuni/Gateways/Credit.php:129
+#: src/Modules/Payuni/Gateways/Credit.php:195
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:65
 #: src/Modules/Payuni/Gateways/GooglePay.php:66
 #: src/Modules/Payuni/Gateways/SamsungPay.php:66
@@ -10316,7 +10497,7 @@ msgid "3-D Secure ECI"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:67
-#: src/Modules/Payuni/Gateways/Credit.php:130
+#: src/Modules/Payuni/Gateways/Credit.php:196
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:66
 #: src/Modules/Payuni/Gateways/GooglePay.php:67
 #: src/Modules/Payuni/Gateways/SamsungPay.php:67
@@ -10324,7 +10505,7 @@ msgid "Reward points redeemed"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:68
-#: src/Modules/Payuni/Gateways/Credit.php:131
+#: src/Modules/Payuni/Gateways/Credit.php:197
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:67
 #: src/Modules/Payuni/Gateways/GooglePay.php:68
 #: src/Modules/Payuni/Gateways/SamsungPay.php:68
@@ -10332,7 +10513,7 @@ msgid "Reward redemption ID"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:69
-#: src/Modules/Payuni/Gateways/Credit.php:132
+#: src/Modules/Payuni/Gateways/Credit.php:198
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:68
 #: src/Modules/Payuni/Gateways/GooglePay.php:69
 #: src/Modules/Payuni/Gateways/SamsungPay.php:69
@@ -10340,7 +10521,7 @@ msgid "Token ID"
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/ApplePay.php:70
-#: src/Modules/Payuni/Gateways/Credit.php:133
+#: src/Modules/Payuni/Gateways/Credit.php:199
 #: src/Modules/Payuni/Gateways/CreditUnionPay.php:69
 #: src/Modules/Payuni/Gateways/GooglePay.php:70
 #: src/Modules/Payuni/Gateways/SamsungPay.php:70
@@ -10399,12 +10580,21 @@ msgstr ""
 msgid "The message customers see on the order received page while the payment is still outstanding."
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/Credit.php:20
+#: src/Modules/Payuni/Gateways/Credit.php:23
 msgid "PAYUNi credit card"
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/Credit.php:21
+#: src/Modules/Payuni/Gateways/Credit.php:24
 msgid "Pay by credit card. The customer is redirected to the PAYUNi payment page."
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/Credit.php:33
+#: src/Modules/Payuni/Gateways/PickupPay.php:33
+msgid "Place order"
+msgstr ""
+
+#: src/Modules/Payuni/Gateways/Credit.php:34
+msgid "Pay by credit card. The card details are entered on the checkout page in a PAYUNi form."
 msgstr ""
 
 #: src/Modules/Payuni/Gateways/CreditInstallment3.php:17
@@ -10609,10 +10799,6 @@ msgstr ""
 msgid "The customer pays when collecting the parcel at 7-ELEVEN. Only offered with PAYUNi 7-ELEVEN shipping when the shipment is created on the PAYUNi payment page. Your PAYUNi account must have pay on pickup enabled."
 msgstr ""
 
-#: src/Modules/Payuni/Gateways/PickupPay.php:33
-msgid "Place order"
-msgstr ""
-
 #: src/Modules/Payuni/Gateways/PickupPay.php:50
 msgid "Enable PAYUNi pay on pickup"
 msgstr ""
@@ -10712,10 +10898,6 @@ msgstr ""
 msgid "Trade Status"
 msgstr ""
 
-#: src/Modules/Payuni/PayuniPayment.php:133
-msgid "Message"
-msgstr ""
-
 #: src/Modules/Payuni/PayuniPayment.php:134
 msgid "Paid At"
 msgstr ""
@@ -10742,10 +10924,6 @@ msgstr ""
 
 #: src/Modules/Payuni/PayuniPayment.php:140
 msgid "Refund Time"
-msgstr ""
-
-#: src/Modules/Payuni/PayuniPayment.php:220
-msgid "The security check failed. Please refresh the page and try again."
 msgstr ""
 
 #: src/Modules/Payuni/PayuniPayment.php:237
@@ -10884,19 +11062,51 @@ msgstr ""
 msgid "Each plan you tick becomes its own payment method, which you still need to enable individually in the payment method settings. %s"
 msgstr ""
 
+#: src/Modules/Payuni/Settings/SettingsTab.php:160
+msgid "Credit card form"
+msgstr ""
+
 #: src/Modules/Payuni/Settings/SettingsTab.php:162
+msgid "Only for the separate display style. PAYUNi must enable the embedded card form (UNi Embed) for your store first, with your site address as the allowed domain and your server IP registered."
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:166
+msgid "Where customers enter the card"
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:170
+msgid "On the PAYUNi payment page (redirect)"
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:171
+msgid "On the checkout page (embedded PAYUNi form)"
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:174
+msgid "With the embedded form the customer stays on your site. If the form cannot load, the customer can still pay on the PAYUNi payment page. Instalments and other payment methods still go to PAYUNi."
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:178
+msgid "Check the setup"
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:180
+msgid "Asks PAYUNi for a card form token without creating a transaction, to confirm the embedded form is enabled for this store and server."
+msgstr ""
+
+#: src/Modules/Payuni/Settings/SettingsTab.php:191
 msgid "Copy these from the PAYUNi dashboard under Member area → Integration settings."
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:211
+#: src/Modules/Payuni/Settings/SettingsTab.php:240
 msgid "PAYUNi must enable the card token and background authorization services for your store, with your server IP registered, before you turn this on."
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:218
+#: src/Modules/Payuni/Settings/SettingsTab.php:247
 msgid "Charge subscription renewals (WooCommerce Subscriptions or WPSubscription) automatically with saved cards"
 msgstr ""
 
-#: src/Modules/Payuni/Settings/SettingsTab.php:285
+#: src/Modules/Payuni/Settings/SettingsTab.php:314
 msgid "Go to Payment Settings"
 msgstr ""
 
@@ -10912,10 +11122,6 @@ msgstr ""
 
 #: src/Modules/Payuni/SubscriptionRenewal.php:100
 msgid "PAYUNi has not confirmed the renewal charge yet. It will be checked again automatically; do not charge the customer again until then."
-msgstr ""
-
-#: src/Modules/Payuni/SubscriptionRenewal.php:129
-msgid "Confirmed by transaction lookup"
 msgstr ""
 
 #: src/Modules/Payuni/SubscriptionRenewal.php:143
@@ -11111,7 +11317,7 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:108
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:72
-#: src/Modules/PayuniShipping/Returns/Admin.php:231
+#: src/Modules/PayuniShipping/Returns/Admin.php:240
 msgid "Parcel size"
 msgstr ""
 
@@ -11125,7 +11331,7 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Admin/OrderMetaBox.php:135
 #: src/Modules/PayuniShipping/Api/ShippingResponse.php:313
-#: src/Modules/PayuniShipping/Returns/Admin.php:154
+#: src/Modules/PayuniShipping/Returns/Admin.php:163
 #: src/Modules/PayuniShipping/Returns/Notice.php:101
 msgid "Status updated"
 msgstr ""
@@ -11175,15 +11381,15 @@ msgstr ""
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:250
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:315
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:477
-#: src/Modules/PayuniShipping/Returns/Admin.php:255
-#: src/Modules/PayuniShipping/Returns/Admin.php:312
+#: src/Modules/PayuniShipping/Returns/Admin.php:264
+#: src/Modules/PayuniShipping/Returns/Admin.php:321
 msgid "Permission denied."
 msgstr ""
 
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:173
 #: src/Modules/PayuniShipping/Api/ShippingRequest.php:256
-#: src/Modules/PayuniShipping/Returns/Admin.php:258
-#: src/Modules/PayuniShipping/Returns/Admin.php:315
+#: src/Modules/PayuniShipping/Returns/Admin.php:267
+#: src/Modules/PayuniShipping/Returns/Admin.php:324
 msgid "Invalid security token sent."
 msgstr ""
 
@@ -11377,7 +11583,7 @@ msgid "%s orders (up to 50 shown)"
 msgstr ""
 
 #: src/Modules/PayuniShipping/Frontend/EnqueueScripts.php:71
-#: src/Modules/PayuniShipping/Returns/Admin.php:153
+#: src/Modules/PayuniShipping/Returns/Admin.php:162
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:42
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:52
 #: src/Modules/Pchomepay/Module.php:101
@@ -11804,258 +12010,259 @@ msgstr ""
 msgid "PAYUNi has no way to cancel a return once it is created. Create it now?"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:97
+#: src/Modules/PayuniShipping/Returns/Admin.php:99
+#: src/Modules/PayuniShipping/Returns/Admin.php:106
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:63
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:214
 msgid "Returns"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:113
+#: src/Modules/PayuniShipping/Returns/Admin.php:122
 msgid "No returns yet."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:138
-#: src/Modules/PayuniShipping/Returns/Admin.php:407
+#: src/Modules/PayuniShipping/Returns/Admin.php:147
+#: src/Modules/PayuniShipping/Returns/Admin.php:416
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:40
 #: src/Modules/PayuniShipping/Returns/Notice.php:97
 msgid "Return code"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:139
-#: src/Modules/PayuniShipping/Returns/Admin.php:408
+#: src/Modules/PayuniShipping/Returns/Admin.php:148
+#: src/Modules/PayuniShipping/Returns/Admin.php:417
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:41
 msgid "Use before"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:140
-#: src/Modules/PayuniShipping/Returns/Admin.php:409
+#: src/Modules/PayuniShipping/Returns/Admin.php:149
+#: src/Modules/PayuniShipping/Returns/Admin.php:418
 msgid "Payment"
 msgstr ""
 
 #. translators: %s: amount collected at the store
-#: src/Modules/PayuniShipping/Returns/Admin.php:142
-#: src/Modules/PayuniShipping/Returns/Admin.php:411
+#: src/Modules/PayuniShipping/Returns/Admin.php:151
+#: src/Modules/PayuniShipping/Returns/Admin.php:420
 #, php-format
 msgid "Customer pays NT$%s at the store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:143
-#: src/Modules/PayuniShipping/Returns/Admin.php:178
-#: src/Modules/PayuniShipping/Returns/Admin.php:412
+#: src/Modules/PayuniShipping/Returns/Admin.php:152
+#: src/Modules/PayuniShipping/Returns/Admin.php:187
+#: src/Modules/PayuniShipping/Returns/Admin.php:421
 msgid "Free for the customer"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:145
-#: src/Modules/PayuniShipping/Returns/Admin.php:534
+#: src/Modules/PayuniShipping/Returns/Admin.php:154
+#: src/Modules/PayuniShipping/Returns/Admin.php:543
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:51
 #: src/Modules/PayuniShipping/Returns/Notice.php:99
 msgid "Return number"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:146
-#: src/Modules/PayuniShipping/Returns/Admin.php:213
-#: src/Modules/PayuniShipping/Returns/Admin.php:535
+#: src/Modules/PayuniShipping/Returns/Admin.php:155
+#: src/Modules/PayuniShipping/Returns/Admin.php:222
+#: src/Modules/PayuniShipping/Returns/Admin.php:544
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:50
 msgid "Pickup date"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:147
+#: src/Modules/PayuniShipping/Returns/Admin.php:156
 msgid "Shipment number"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:151
+#: src/Modules/PayuniShipping/Returns/Admin.php:160
 msgid "Not sent yet"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:157
+#: src/Modules/PayuniShipping/Returns/Admin.php:166
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:38
 msgid "7-ELEVEN return code"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:157
+#: src/Modules/PayuniShipping/Returns/Admin.php:166
 #: src/Modules/PayuniShipping/Returns/CustomerView.php:48
 msgid "T-Cat return pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:166
+#: src/Modules/PayuniShipping/Returns/Admin.php:175
 msgid "Check status"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:175
+#: src/Modules/PayuniShipping/Returns/Admin.php:184
 msgid "Create a 7-ELEVEN return code"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:177
+#: src/Modules/PayuniShipping/Returns/Admin.php:186
 msgid "Return shipping fee"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:179
+#: src/Modules/PayuniShipping/Returns/Admin.php:188
 msgid "Customer pays at the store"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:181
+#: src/Modules/PayuniShipping/Returns/Admin.php:190
 msgid "Amount the customer pays (NT$1–999)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:182
+#: src/Modules/PayuniShipping/Returns/Admin.php:191
 msgid "Value of the returned goods (NT$1–20000)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:184
+#: src/Modules/PayuniShipping/Returns/Admin.php:193
 msgid "Link to the original shipment (PAYUNi uses its recipient as the sender)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:186
+#: src/Modules/PayuniShipping/Returns/Admin.php:195
 msgid "Customer name (up to 5 Chinese or 10 English characters)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:187
+#: src/Modules/PayuniShipping/Returns/Admin.php:196
 msgid "Email the return code to the customer"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:188
+#: src/Modules/PayuniShipping/Returns/Admin.php:197
 msgid "Create return code"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:207
+#: src/Modules/PayuniShipping/Returns/Admin.php:216
 msgid "Book a T-Cat return pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:209
+#: src/Modules/PayuniShipping/Returns/Admin.php:218
 msgid "Customer name"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:210
+#: src/Modules/PayuniShipping/Returns/Admin.php:219
 msgid "Customer mobile (09…)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:211
+#: src/Modules/PayuniShipping/Returns/Admin.php:220
 msgid "Pickup address"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:219
-#: src/Modules/PayuniShipping/Returns/Admin.php:536
+#: src/Modules/PayuniShipping/Returns/Admin.php:228
+#: src/Modules/PayuniShipping/Returns/Admin.php:545
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:182
 msgid "Delivery window"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:225
+#: src/Modules/PayuniShipping/Returns/Admin.php:234
 msgid "Temperature"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:242
+#: src/Modules/PayuniShipping/Returns/Admin.php:251
 msgid "Item description (up to 10 Chinese characters)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:243
+#: src/Modules/PayuniShipping/Returns/Admin.php:252
 msgid "Note for the driver (optional)"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:244
+#: src/Modules/PayuniShipping/Returns/Admin.php:253
 msgid "Email the pickup details to the customer"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:245
+#: src/Modules/PayuniShipping/Returns/Admin.php:254
 msgid "Book pickup"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:269
+#: src/Modules/PayuniShipping/Returns/Admin.php:278
 msgid "This return type is not enabled."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:272
+#: src/Modules/PayuniShipping/Returns/Admin.php:281
 msgid "A return was just requested for this order. Wait two minutes, reload the page and check whether it was created before trying again."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:280
+#: src/Modules/PayuniShipping/Returns/Admin.php:289
 msgid "PAYUNi may have received the request. Check in the PAYUNi dashboard whether the return was created before trying again in two minutes."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:322
+#: src/Modules/PayuniShipping/Returns/Admin.php:331
 msgid "The return could not be found on this order."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:355
+#: src/Modules/PayuniShipping/Returns/Admin.php:364
 msgid "Enter an amount between NT$1 and NT$999 for the customer to pay."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:358
+#: src/Modules/PayuniShipping/Returns/Admin.php:367
 msgid "The value of the returned goods must be between NT$1 and NT$20000."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:362
+#: src/Modules/PayuniShipping/Returns/Admin.php:371
 msgid "The customer name is too long: up to 5 Chinese or 10 English characters."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:365
+#: src/Modules/PayuniShipping/Returns/Admin.php:374
 msgid "Enter the customer name."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:405
+#: src/Modules/PayuniShipping/Returns/Admin.php:414
 msgid "Created a 7-ELEVEN return code with PAYUNi."
 msgstr ""
 
 #. translators: 1: 12-digit return code, 2: deadline
-#: src/Modules/PayuniShipping/Returns/Admin.php:421
+#: src/Modules/PayuniShipping/Returns/Admin.php:430
 #, php-format
 msgid "Your 7-ELEVEN return code is %1$s. Before %2$s, enter this code at the ibon kiosk in any 7-ELEVEN store to print the return slip, then hand the parcel and the slip to the counter."
 msgstr ""
 
 #. translators: %s: amount
-#: src/Modules/PayuniShipping/Returns/Admin.php:427
+#: src/Modules/PayuniShipping/Returns/Admin.php:436
 #, php-format
 msgid "You will pay NT$%s at the counter."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:451
+#: src/Modules/PayuniShipping/Returns/Admin.php:460
 msgid "The item description is too long: up to 10 Chinese or 20 English characters."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:454
+#: src/Modules/PayuniShipping/Returns/Admin.php:463
 msgid "The note for the driver is too long: up to 50 Chinese or 100 English characters."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:459
+#: src/Modules/PayuniShipping/Returns/Admin.php:468
 msgid "Fill in the customer name, pickup address and item description."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:462
+#: src/Modules/PayuniShipping/Returns/Admin.php:471
 msgid "The customer mobile must be 10 digits starting with 09."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:465
+#: src/Modules/PayuniShipping/Returns/Admin.php:474
 msgid "The pickup address is too long."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:468
+#: src/Modules/PayuniShipping/Returns/Admin.php:477
 msgid "Choose a pickup date from the list."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:477
+#: src/Modules/PayuniShipping/Returns/Admin.php:486
 msgid "Choose a parcel size. Chilled and frozen parcels cannot be 150cm."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:532
+#: src/Modules/PayuniShipping/Returns/Admin.php:541
 msgid "Booked a T-Cat return pickup with PAYUNi."
 msgstr ""
 
 #. translators: 1: pickup date, 2: time window, 3: return number
-#: src/Modules/PayuniShipping/Returns/Admin.php:546
+#: src/Modules/PayuniShipping/Returns/Admin.php:555
 #, php-format
 msgid "T-Cat will collect your return on %1$s (%2$s). Return number: %3$s. Please have the parcel packed and ready."
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:579
+#: src/Modules/PayuniShipping/Returns/Admin.php:588
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:185
 msgid "Before 1 pm"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:580
+#: src/Modules/PayuniShipping/Returns/Admin.php:589
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:186
 msgid "14:00 - 18:00"
 msgstr ""
 
-#: src/Modules/PayuniShipping/Returns/Admin.php:581
+#: src/Modules/PayuniShipping/Returns/Admin.php:590
 #: src/Modules/PayuniShipping/Settings/SettingsTab.php:187
 msgid "No preference"
 msgstr ""
@@ -12098,10 +12305,6 @@ msgstr ""
 
 #: src/Modules/PayuniShipping/Returns/Api.php:132
 msgid "The request to PAYUNi could not be encrypted. Check the PAYUNi credentials."
-msgstr ""
-
-#: src/Modules/PayuniShipping/Returns/Api.php:152
-msgid "Could not get a reply from PAYUNi."
 msgstr ""
 
 #: src/Modules/PayuniShipping/Returns/Api.php:156
@@ -15594,18 +15797,6 @@ msgstr ""
 msgid "The new card is saved without 3-D Secure, so it could be misused to test stolen card numbers. Each customer can try at most 3 times a day. Not available when 3-D Secure is required. When off, change cards from the subscription edit screen instead."
 msgstr ""
 
-#: src/Modules/Tappay/Gateways/Credit.php:112
-msgid "Card number"
-msgstr ""
-
-#: src/Modules/Tappay/Gateways/Credit.php:116
-msgid "Expiry (MM / YY)"
-msgstr ""
-
-#: src/Modules/Tappay/Gateways/Credit.php:120
-msgid "CVC"
-msgstr ""
-
 #: src/Modules/Tappay/Gateways/Credit.php:145
 msgid "TapPay did not return a payment token. Please enter the card details again."
 msgstr ""
@@ -15744,10 +15935,6 @@ msgstr ""
 
 #: src/Modules/Tappay/Module.php:114
 msgid "Bank settlement"
-msgstr ""
-
-#: src/Modules/Tappay/Module.php:177
-msgid "Please fill in all the card details."
 msgstr ""
 
 #: src/Modules/Tappay/Module.php:178
